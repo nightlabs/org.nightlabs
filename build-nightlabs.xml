@@ -1,0 +1,27 @@
+<project name="IpanemaBoot" default="build" basedir=".">
+	<target name="build" 
+        description="Builds " >
+		<property name="distDir" value="dist"/>
+
+<!--
+		<taskdef name="setEclipseVar"
+		                 classname="com.nightlabs.ant.EclipseVar"
+		                 classpath="../com.nightlabs.ant/runtime/"/>
+		                 	
+		<setEclipseVar varName="LOG4J"/>
+-->
+
+    	<!-- Create the distribution directory -->	    
+<!--		<delete dir="${distDir}"/> -->
+		<mkdir dir="${distDir}"/>
+
+		<!-- Create DelegatingClassLoader jar -->	    
+	    <jar jarfile="${distDir}/DelegatingClassLoader.jar" basedir="bin">
+	    </jar>
+
+	    <!-- Copy libraries to libDir -->	
+<!--        <copy file="${LOG4J}" tofile="${distDir}/log4j.jar" />
+-->
+		<copy file="${distDir}/DelegatingClassLoader.jar" todir="../com.nightlabs.ipanema.base/lib" />
+  	</target>    
+</project>
