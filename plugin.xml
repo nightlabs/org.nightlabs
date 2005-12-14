@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+   id="com.nightlabs.editor2d"
+   name="Editor2D Plug-in"
+   version="1.0.0"
+   provider-name="NightLabs.com"
+   class="com.nightlabs.editor2d.EditorPlugin">
+   <runtime>
+      <library name="com.nightlabs.editor2d.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="org.eclipse.gef"/>
+      <import plugin="com.nightlabs.base"/>
+      <import plugin="org.holongate.j2d"/>
+      <import plugin="com.nightlabs.classsharing"/>
+      <import plugin="com.nightlabs.editor2d.viewer"/>
+      <import plugin="org.holongate.j2d.gef"/>
+   </requires>
+
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="com.nightlabs.ipanema.sun.category"
+            class="com.nightlabs.editor2d.views.LayerView"
+            icon="%icon.layer"
+            id="com.nightlabs.editor2d.views.LayerView"
+            name="%layer_view_name">
+	  </view>
+      <category
+            id="com.nightlabs.ipanema.sun.category"
+            name="Ipanema Sun"/>            
+   </extension>
+
+
+   
+</plugin>

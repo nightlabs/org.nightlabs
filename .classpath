@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="WORKSPACE/NightLabsEditor2D/dist/NightLabsEditor2D.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.holongate.draw2d"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.holongate.gef"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
