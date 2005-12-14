@@ -1,0 +1,17 @@
+<project name="com.nightlabs.ipanema.base" default="build" basedir=".">
+	<target name="build" >
+		<property name="libDir" value="lib"/>
+		
+		<taskdef name="setEclipseVar"
+		                 classname="com.nightlabs.ant.EclipseVar"
+		                 classpath="../com.nightlabs.ant/runtime/"/>
+		                 	
+    	<!-- Create the distribution directory -->	    
+		<delete dir="${libDir}"/>
+		<mkdir dir="${libDir}"/>
+		
+		
+	    <!-- Copy libraries to libDir -->	
+		<copy file="../NightLabsJDO/dist/NightLabsJDO.jar" toDir="${libDir}" /> 
+  	</target>    
+</project>
