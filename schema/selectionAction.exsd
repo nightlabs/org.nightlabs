@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="com.nightlabs.base">
+<schema targetNamespace="org.nightlabs.base">
 <annotation>
       <appInfo>
-         <meta.schema plugin="com.nightlabs.base" id="selectionAction" name="selectionAction"/>
+         <meta.schema plugin="org.nightlabs.base" id="selectionAction" name="selectionAction"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -116,7 +116,7 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  The fully qualified class name of an implementation of com.nightlabs.rcp.action.SelectionAction
+                  The fully qualified class name of an implementation of org.nightlabs.rcp.action.SelectionAction
                </documentation>
                <appInfo>
                   <meta.attribute kind="java"/>

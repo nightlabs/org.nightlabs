@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="com.nightlabs.base">
+<schema targetNamespace="org.nightlabs.base">
 <annotation>
       <appInfo>
-         <meta.schema plugin="com.nightlabs.base" id="ioFilterRegistry" name="ioFilterRegistry"/>
+         <meta.schema plugin="org.nightlabs.base" id="ioFilterRegistry" name="ioFilterRegistry"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]

@@ -215,8 +215,8 @@
 		<property name="libDir" value="lib"/>
 		
 		<taskdef name="setEclipseVar"
-		                 classname="com.nightlabs.ant.EclipseVar"
-		                 classpath="../com.nightlabs.ant/runtime/"/>
+		                 classname="org.nightlabs.ant.EclipseVar"
+		                 classpath="../org.nightlabs.ant/runtime/"/>
 		                 	
 		<setEclipseVar varName="LOG4J"/>
 		<setEclipseVar varName="XERCES"/>

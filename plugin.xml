@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin
-   id="com.nightlabs.base"
+   id="org.nightlabs.base"
    name="NightLabs Base plugin"
    version="1.0.0"
    provider-name="NightLabs.com"
-   class="com.nightlabs.base.NLBasePlugin">
+   class="org.nightlabs.base.NLBasePlugin">
    <runtime>
-      <library name="com.nightlabs.base.jar">
+      <library name="org.nightlabs.base.jar">
          <export name="*"/>
       </library>
       <library name="lib/NightLabsBase.jar">
@@ -46,7 +46,7 @@
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.ui.forms"/>
       <import plugin="org.eclipse.ui.views"/>
-      <import plugin="com.nightlabs.classsharing"/>
+      <import plugin="org.nightlabs.classsharing"/>
    </requires> 
    
 	<extension-point         
@@ -63,21 +63,21 @@
  <extension-point id="selectionAction" name="selectionAction" schema="schema/selectionAction.exsd"/>
  <extension-point id="ioFilterRegistry" name="ioFilterRegistry" schema="schema/ioFilterRegistry.exsd"/>
  <extension
-       point="com.nightlabs.base.exceptionhandler">
+       point="org.nightlabs.base.exceptionhandler">
     <exceptionHandler
-          class="com.nightlabs.rcp.exceptionhandler.ThrowableHandler"
+          class="org.nightlabs.rcp.exceptionhandler.ThrowableHandler"
           name="Default Handler for all Throwable s"
           targetType="java.lang.Throwable"/>
     <exceptionHandler
-          class="com.nightlabs.rcp.exceptionhandler.OutOfMemoryHandler"
+          class="org.nightlabs.rcp.exceptionhandler.OutOfMemoryHandler"
           name="Handler for OutOfMemoryError"
           targetType="java.lang.OutOfMemoryError"/>
  </extension>
  <extension
        point="org.eclipse.ui.elementFactories">
     <factory
-          class="com.nightlabs.rcp.io.FileEditorInputFactory"
-          id="com.nightlabs.rcp.io.FileEditorInputFactory"/>
+          class="org.nightlabs.rcp.io.FileEditorInputFactory"
+          id="org.nightlabs.rcp.io.FileEditorInputFactory"/>
  </extension>
    
 
