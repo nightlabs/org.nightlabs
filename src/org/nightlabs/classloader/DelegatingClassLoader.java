@@ -30,7 +30,7 @@
 /*
  * Created on 02.10.2004
  */
-package com.nightlabs.classloader;
+package org.nightlabs.classloader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -67,7 +67,7 @@ import java.util.jar.JarFile;
  *
  * The DelegatingClassLoader must be declared to be the system class loader of
  * the application. This is done by the VM parameter 
- * <tt>-Djava.system.class.loader=com.nightlabs.ipanema.classloader.boot.DelegatingClassLoader</tt>.
+ * <tt>-Djava.system.class.loader=org.nightlabs.ipanema.classloader.boot.DelegatingClassLoader</tt>.
  * <br/><br/>
  * For this to work, the project IpanemaBoot, which contains this class loader must
  * be defined to be part of the bootstrap class path. To define the bootstrap class
@@ -498,7 +498,7 @@ public class DelegatingClassLoader
 		}
 		try {
 	
-//			if (name.startsWith("com.nightlabs.")) log_debug("DelegatingClassLoader.findClass(\""+name+"\")");
+//			if (name.startsWith("org.nightlabs.")) log_debug("DelegatingClassLoader.findClass(\""+name+"\")");
 			Class foundClass = null;
 	
 			// first check the local repository (defined by path properties)

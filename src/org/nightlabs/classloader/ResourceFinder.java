@@ -32,13 +32,25 @@
  * 					by Alexander Bieber
  *
  */
-package com.nightlabs.classloader;
+package org.nightlabs.classloader;
 
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Alexander Bieber
  */
-public interface ClassLoaderDelegate extends ResourceFinder 
-{
-	public Class loadClass(String className);
+public interface ResourceFinder {
+	/**
+	 * This method must return a List (preferably a LinkedList for speed reasons) with instances of URL.
+	 * If returnAfterFoundFirst is true, it should immediately return, after it found one resource matching
+	 * the name. If it is false, it should search all JARs and directories and collect all resources that
+	 * match.
+	 *
+	 * @param name The name of the resource as it is given to the ClassLoader in findResource(...) and findResources(...)
+	 * @param returnAfterFoundFirst Whether to find only one resource [called by ClassLoader.findResource(...)] or all [called by ClassLoader.findResources(...)].
+	 * @return Returns <tt>null</tt> or a <tt>List</tt> of <tt>URL</tt> instances - preferably a <tt>LinkedList</tt>.
+	 * @throws IOException
+	 */
+	public List getResources(String name, boolean returnAfterFoundFirst) throws IOException;
 }

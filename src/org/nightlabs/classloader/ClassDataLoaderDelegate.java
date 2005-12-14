@@ -30,7 +30,7 @@
 /*
  * Created on 02.10.2004
  */
-package com.nightlabs.classloader;
+package org.nightlabs.classloader;
 
 import java.io.InputStream;
 import java.security.ProtectionDomain;
@@ -129,7 +129,7 @@ public interface ClassDataLoaderDelegate extends ResourceFinder
 	 * calls <tt>defineClass(...)</tt>; if null is returned, the next registered ClassLoaderDelegate
 	 * will be asked.
 	 *
-	 * @param name The fully qualified class name (e.g. "com.nightlabs.classloader.ClassLoaderDelegate")
+	 * @param name The fully qualified class name (e.g. "org.nightlabs.classloader.ClassLoaderDelegate")
 	 * @return Returns either an instance of ClassData defining the desired class or null. ClassData can
 	 * 	either contain a byte array or an InputStream. It must contain exactly one of them.
 	 */

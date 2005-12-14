@@ -5,8 +5,8 @@
 
 <!--
 		<taskdef name="setEclipseVar"
-		                 classname="com.nightlabs.ant.EclipseVar"
-		                 classpath="../com.nightlabs.ant/runtime/"/>
+		                 classname="org.nightlabs.ant.EclipseVar"
+		                 classpath="../org.nightlabs.ant/runtime/"/>
 		                 	
 		<setEclipseVar varName="LOG4J"/>
 -->
@@ -22,6 +22,6 @@
 	    <!-- Copy libraries to libDir -->	
 <!--        <copy file="${LOG4J}" tofile="${distDir}/log4j.jar" />
 -->
-		<copy file="${distDir}/DelegatingClassLoader.jar" todir="../com.nightlabs.classsharing/lib" />
+		<copy file="${distDir}/DelegatingClassLoader.jar" todir="../org.nightlabs.classsharing/lib" />
   	</target>    
 </project>
