@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.5//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_5.dtd">
+
+<nightlybuild>
+  <project name="com.nightlabs.base" category="NightLabsClient">
+    <ant path="com.nightlabs.base" file="build-nightlabs.xml" target="dist.plugin"/>
+    <requires/>
+<!--
+    <requires path="lib/NightLabsBase.jar"/>
+	<requires path="NightLabsBase/dist/NightLabsBase.jar"/>
+-->
+    <provides/>
+    
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/jboss-j2ee.jar"/>
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/activation.jar"/>
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/jbosssx.jar"/>
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/mailapi.jar"/>
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/smtp.jar"/>
+<!--
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/activation.jar"/>
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/mailapi.jar"/>
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/xercesImpl.jar"/>
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/log4j.jar"/>
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/commons-collections.jar"/>
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/commons-lang.jar"/>
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/commons-beanutils.jar"/>
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/commons-logging.jar"/>
+-->
+    <provides path="com.nightlabs.base" location="lib/log4j/jars/log4j-1.2.8.jar"/>
+    <provides path="com.nightlabs.base" location="lib/xerces/jars/xercesImpl-2.6.2.jar"/>
+    <provides path="com.nightlabs.base" location="lib/commons-beanutils/jars/commons-beanutils-1.7.0.jar"/>
+    <provides path="com.nightlabs.base" location="lib/commons-logging/jars/commons-logging-1.0.4.jar"/>
+    <provides path="com.nightlabs.base" location="lib/commons-collections/jars/commons-collections-3.1.jar"/>
+    <provides path="com.nightlabs.base" location="lib/commons-lang/jars/commons-lang-2.0.jar"/>
+    <provides path="com.nightlabs.base" location="lib/jboss/client/jbossall-client.jar"/>
+<!-- I assume, requires and provides should be the other way around
+    <provides path="com.nightlabs.base" location="NightLabsBase/dist/NightLabsBase.jar"/>
+-->
+    <provides path="com.nightlabs.base" location="com.nightlabs.base/lib/NightLabsBase.jar"/>
+    <provides path="/com.nightlabs.base/lib/NightLabsBase.jar" location="com.nightlabs.base/lib/NightLabsBase.jar"/>
+
+    <publishes description="..." location="com.nightlabs.base/dist/com.nightlabs.base_1.0.0.tar.gz"/>
+    <javadoc path="com.nightlabs.base/src"/>
+  </project>
+</nightlybuild>

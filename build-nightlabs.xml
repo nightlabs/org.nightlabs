@@ -1,0 +1,243 @@
+<!-- Generic eclipse/rcp-plugin ant build file
+     Author: marc [at] nightlabs [dot] de -->
+<project default="dist">
+
+	<!-- Initialize all needed properties -->
+  <target name="init">
+    <property file="build-nightlabs.properties"/>
+    <property file="build.properties"/>
+    <property file="META-INF/MANIFEST.MF"/>
+    <xmlproperty file="plugin.xml" collapseAttributes="true"/>
+
+    <!-- use magic regexp style to extract the plugins 
+         jar filename from build.properties. The filename
+         is given in the form "source.<filename> = <srcdir> -->
+    <loadfile
+      property="project.jar"
+      srcFile="build.properties">
+      <filterchain>
+        <tokenfilter>
+          <containsregex
+              pattern="^source\.(.+)\.jar.*$"
+              replace="\1.jar"/>
+        </tokenfilter>
+        <striplinebreaks/>
+      </filterchain>
+    </loadfile>    
+
+    <!-- get src.dir from build.properties -->
+    <loadfile
+      property="src.dir"
+      srcFile="build.properties">
+      <filterchain>
+        <tokenfilter>
+          <containsregex
+              pattern="^source\.${project.jar}\s*=\s*(.*)$"
+              replace="\1"/>
+        </tokenfilter>
+        <striplinebreaks/>
+      </filterchain>
+    </loadfile>    
+
+    <!-- get bin.dir from build.properties -->
+    <loadfile
+      property="bin.dir"
+      srcFile="build.properties">
+      <filterchain>
+        <tokenfilter>
+          <containsregex
+              pattern="^output\.${project.jar}\s*=\s*(.*)$"
+              replace="\1"/>
+        </tokenfilter>
+        <striplinebreaks/>
+      </filterchain>
+    </loadfile>    
+
+    <!-- set project.dir to "." if not already defined -->
+    <condition property="project.dir" value=".">
+      <not><isset property="project.dir"/></not>
+    </condition>
+
+    <!-- set dist.dir to "dist" if not already defined -->
+    <condition property="dist.dir" value="dist">
+      <not><isset property="dist.dir"/></not>
+    </condition>
+
+    <!-- use the plugin-id from MANIFEST.MF as project.name
+         if not already defined. -->
+    <condition property="project.name" value="${Bundle-SymbolicName}">
+      <and>
+        <not><isset property="project.name"/></not>
+        <isset property="Bundle-SymbolicName"/>
+      </and>
+    </condition>
+    <!-- use the plugin-id from plugin.xml as project.name
+         if not already defined. -->
+    <condition property="project.name" value="${plugin.id}">
+      <and>
+        <not><isset property="project.name"/></not>
+        <isset property="plugin.id"/>
+      </and>
+    </condition>
+
+    <!-- use the plugin-version from MANIFEST.MF as project.version
+         if not already defined. -->
+    <condition property="project.version" value="${Bundle-Version}">
+      <and>
+        <not><isset property="project.version"/></not>
+        <isset property="Bundle-Version"/>
+      </and>
+    </condition>
+    <!-- use the plugin-version from plugin.xml as project.version
+         if not already defined. -->
+    <condition property="project.version" value="${plugin.version}">
+      <and>
+        <not><isset property="project.version"/></not>
+        <isset property="plugin.version"/>
+      </and>
+    </condition>
+
+    <!-- print properties for debugging -->
+    <echo>project name: ${project.name}</echo>
+    <echo>project version: ${project.version}</echo>
+    <echo>project dir: ${project.dir}</echo>
+    <echo>project jar: ${project.jar}</echo>
+    <echo>src dir: ${project.dir}/${src.dir}</echo>
+    <echo>bin dir: ${project.dir}/${bin.dir}</echo>
+    <echo>dist dir: ${project.dir}/${dist.dir}</echo>
+    <echo>clean includes: ${clean.includes}</echo>
+    <echo>clean excludes: ${clean.excludes}</echo>
+    <echo>project path: ${project.path}</echo>
+
+  </target>
+
+	<!-- ############################################ -->
+
+	<!-- Delete all created files according to
+       properties clean.includes and clean.excludes -->
+	<target name="clean" depends="init">
+    <!-- could we scan project.dir recursively to
+         find .cvsignore files and delete all
+         files/dirs mentioned there?? -->
+    <delete includeEmptyDirs="true" verbose="true">
+			<fileset dir="${project.dir}" excludes="${clean.excludes}" includes="${clean.includes}"/>      
+    </delete>
+  </target>
+
+	<!-- Compile all source files and copy all non-java
+       files from src.dir to bin.dir -->
+  <target name="compile" depends="init">
+    <mkdir dir="${project.dir}/${bin.dir}"/>
+    <javac destdir="${project.dir}/${bin.dir}" classpath="${project.path}">
+      <src path="${project.dir}/${src.dir}"/>
+    </javac>
+    <copy todir="${project.dir}/${bin.dir}">
+      <fileset dir="${project.dir}/${src.dir}" excludes="**/*.java"/>
+    </copy>
+  </target>
+
+	<!-- Create all available dist formats -->
+  <target name="dist" depends="dist.bin, dist.plugin">
+  </target>
+
+	<!-- Create the plugins jar file -->
+  <target name="dist.bin" depends="compile">
+    <mkdir dir="${project.dir}/${dist.dir}/" />
+    <delete file="${project.dir}/${dist.dir}/${project.jar}" failonerror="false" />
+    <jar jarfile="${project.dir}/${dist.dir}/${project.jar}">
+      <fileset dir="${project.dir}/${bin.dir}">
+        <include name="**/*.*"/>
+      </fileset>
+    </jar>  
+  </target>
+
+	<!-- Create a plugin distribution directory and archive -->
+  <target name="dist.plugin" depends="dist.bin">
+    <mkdir dir="${project.dir}/${dist.dir}/${project.name}_${project.version}"/>
+    <copy todir="${project.dir}/${dist.dir}/${project.name}_${project.version}">
+      <fileset dir="${project.dir}/${dist.dir}" includes="${project.jar}"/>
+      <fileset dir="${project.dir}" includes="${bin.includes}"/>
+    </copy>
+    <tar destfile="${project.dir}/${dist.dir}/${project.name}_${project.version}.tar.gz" compression="gzip">
+      <tarfileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}"
+        prefix="plugins/${project.name}_${project.version}" />
+    </tar>
+  </target>
+
+</project>
+  
+    
+      
+        
+          
+            
+              
+                
+ <!--
+  <project name="NLBase" default="build" basedir=".">
+  
+	<target name="init">
+    <property file="build-nightlabs.properties"/>
+
+    <echo>project path: ${project.path}</echo>
+    <echo>project dir: ${project.dir}</echo>
+    <echo>src dir: ${project.dir}/${src.dir}</echo>
+    <echo>bin dir: ${project.dir}/${bin.dir}</echo>
+    <echo>dist dir: ${project.dir}/${dist.dir}</echo>
+	</target>
+
+	<target name="compile" depends="init">
+    <mkdir dir="${project.dir}/${bin.dir}"/>
+    <javac destdir="${project.dir}/${bin.dir}" classpath="${project.path}">
+      <src path="${project.dir}/${src.dir}"/>
+    </javac>
+    <copy todir="${project.dir}/${bin.dir}">
+      <fileset dir="${project.dir}/${src.dir}" excludes="**/*.java"/>
+    </copy>
+	</target>
+
+	<target name="dist" depends="dist.bin">
+  </target>
+  
+	<target name="dist.bin" depends="compile">
+    <mkdir dir="${project.dir}/${dist.dir}/" />
+    <delete file="${project.dir}/${dist.dir}/${project.name}.jar" failonerror="false" />
+    <jar jarfile="${project.dir}/${dist.dir}/${project.name}.jar">
+	    <fileset dir="${project.dir}/${bin.dir}">
+	      <include name="**/*.*"/>
+	    </fileset>
+    </jar>  
+  </target>
+-->  
+<!--  
+	<target name="build" 
+        description="Builds " >
+		<property name="libDir" value="lib"/>
+		
+		<taskdef name="setEclipseVar"
+		                 classname="com.nightlabs.ant.EclipseVar"
+		                 classpath="../com.nightlabs.ant/runtime/"/>
+		                 	
+		<setEclipseVar varName="LOG4J"/>
+		<setEclipseVar varName="XERCES"/>
+		<setEclipseVar varName="JBOSS"/>
+		<setEclipseVar varName="STRUTS"/>
+		
+		<delete dir="${libDir}"/>
+		<mkdir dir="${libDir}"/>
+		
+		
+		<copy file="../NightLabsBase/dist/NightLabsBase.jar" toDir="${libDir}" /> 
+        <copy file="${LOG4J}" tofile="${libDir}/log4j.jar" />
+        <copy file="${XERCES}" tofile="${libDir}/xercesImpl.jar" />
+		<copy file="${JBOSS}/server/default/lib/jboss-j2ee.jar" toDir="${libDir}" /> 
+		<copy file="${JBOSS}/server/default/lib/jbosssx.jar" toDir="${libDir}" />
+		<copy file="${JBOSS}/client/jbossall-client.jar" toDir="${libDir}" />
+		<copy file="${STRUTS}/commons-beanutils.jar" toDir="${libDir}" />
+		<copy file="${STRUTS}/commons-collections.jar" toDir="${libDir}" />
+		<copy file="${STRUTS}/commons-logging.jar" toDir="${libDir}" />
+  	</target>    
+-->
+<!--    
+</project>
+-->

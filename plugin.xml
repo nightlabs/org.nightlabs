@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+   id="com.nightlabs.base"
+   name="NightLabs Base plugin"
+   version="1.0.0"
+   provider-name="NightLabs.com"
+   class="com.nightlabs.base.NLBasePlugin">
+   <runtime>
+      <library name="com.nightlabs.base.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/NightLabsBase.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/log4j.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/xercesImpl.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/commons-beanutils.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/commons-collections.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/commons-logging.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/commons-lang.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/mailapi.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/smtp.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/activation.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.forms"/>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="com.nightlabs.classsharing"/>
+   </requires> 
+   
+	<extension-point         
+   		id="exceptionhandler" 
+   		name="Defines handler for uncaught exception within the workbench." 
+   		schema="schema/exceptionhandler.exsd"
+   	/>
+ <extension-point id="notificationinterceptor" name="Notification Interceptor" schema="schema/notificationinterceptor.exsd"/>
+ <extension-point id="entitymanagerview" name="EntityManagerView Extension-Point" schema="schema/entitymanagerview.exsd"/>
+ <extension-point id="entitylist" name="EntityList Extension Point" schema="schema/entitylist.exsd"/>
+ <extension-point id="editorfilefilter" name="Defines FileExtension-Filter for the OpenFileAction based on the editor-ID" schema="schema/editorfilefilter.exsd"/>
+ <extension-point id="newfileaction" name="newfileaction" schema="schema/newfileaction.exsd"/>
+ <extension-point id="editor2perspective" name="editor2perspective" schema="schema/editor2perspective.exsd"/>
+ <extension-point id="selectionAction" name="selectionAction" schema="schema/selectionAction.exsd"/>
+ <extension-point id="ioFilterRegistry" name="ioFilterRegistry" schema="schema/ioFilterRegistry.exsd"/>
+ <extension
+       point="com.nightlabs.base.exceptionhandler">
+    <exceptionHandler
+          class="com.nightlabs.rcp.exceptionhandler.ThrowableHandler"
+          name="Default Handler for all Throwable s"
+          targetType="java.lang.Throwable"/>
+    <exceptionHandler
+          class="com.nightlabs.rcp.exceptionhandler.OutOfMemoryHandler"
+          name="Handler for OutOfMemoryError"
+          targetType="java.lang.OutOfMemoryError"/>
+ </extension>
+ <extension
+       point="org.eclipse.ui.elementFactories">
+    <factory
+          class="com.nightlabs.rcp.io.FileEditorInputFactory"
+          id="com.nightlabs.rcp.io.FileEditorInputFactory"/>
+ </extension>
+   
+
+</plugin>
