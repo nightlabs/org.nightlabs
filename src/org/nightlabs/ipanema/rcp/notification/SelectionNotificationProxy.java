@@ -2,7 +2,7 @@
  * Created on Apr 27, 2005
  *
  */
-package com.nightlabs.ipanema.rcp.notification;
+package org.nightlabs.ipanema.rcp.notification;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,9 +17,9 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 
-import com.nightlabs.notification.NotificationEvent;
-import com.nightlabs.notification.SubjectCarrier;
-import com.nightlabs.rcp.notification.SelectionManager;
+import org.nightlabs.notification.NotificationEvent;
+import org.nightlabs.notification.SubjectCarrier;
+import org.nightlabs.rcp.notification.SelectionManager;
 
 /**
  * @author Niklas Schiffler <nick@nightlabs.de>

@@ -1,6 +1,6 @@
-package com.nightlabs.jdo.search;
+package org.nightlabs.jdo.search;
 
-import com.nightlabs.j2ee.InitialContextProvider;
+import org.nightlabs.j2ee.InitialContextProvider;
 
 
 /**

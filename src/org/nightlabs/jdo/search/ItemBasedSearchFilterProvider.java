@@ -3,11 +3,11 @@
  * 					by alex
  *
  */
-package com.nightlabs.jdo.search;
+package org.nightlabs.jdo.search;
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.nightlabs.j2ee.InitialContextProvider;
+import org.nightlabs.j2ee.InitialContextProvider;
 
 /**
  * Default implementation of a ItemBased SearchFilterProvider.

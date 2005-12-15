@@ -5,6 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry sourcepath="WORKSPACE/NightLabsJDO/src" kind="var" path="WORKSPACE/NightLabsJDO/dist/NightLabsJDO.jar"/>
 	<classpathentry sourcepath="JPOX_SRC" kind="var" path="JDO2"/>
-	<classpathentry sourcepath="/home/denim/workspace/NightLabsBase/src" kind="lib" path="/com.nightlabs.base/lib/NightLabsBase.jar"/>
+	<classpathentry kind="lib" path="/org.nightlabs.base/lib/NightLabsBase.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

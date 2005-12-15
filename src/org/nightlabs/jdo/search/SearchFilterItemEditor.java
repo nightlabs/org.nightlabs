@@ -3,12 +3,12 @@
  * 					by alex
  *
  */
-package com.nightlabs.jdo.search;
+package org.nightlabs.jdo.search;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.nightlabs.jdo.search.SearchFilterItem;
+import org.nightlabs.jdo.search.SearchFilterItem;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>

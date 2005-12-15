@@ -3,7 +3,7 @@
  * 					by alex
  *
  */
-package com.nightlabs.jdo.search;
+package org.nightlabs.jdo.search;
 
 
 /**

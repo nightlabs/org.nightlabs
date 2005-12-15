@@ -1,4 +1,4 @@
-package com.nightlabs.jdo.search;
+package org.nightlabs.jdo.search;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -8,14 +8,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-import com.nightlabs.j2ee.InitialContextProvider;
-import com.nightlabs.jdo.JdoPlugin;
-import com.nightlabs.rcp.composite.XComposite;
+import org.nightlabs.j2ee.InitialContextProvider;
+import org.nightlabs.jdo.JdoPlugin;
+import org.nightlabs.rcp.composite.XComposite;
 
 /**
- * A Composite for manipulating a list of SearchFieldItems ({@link com.nightlabs.jdo.search.SearchFilterItemList})
+ * A Composite for manipulating a list of SearchFieldItems ({@link org.nightlabs.jdo.search.SearchFilterItemList})
  * and choosing their conjunction. <br/>
- * This Composite will accept a {@link com.nightlabs.jdo.search.SearchResultFetcher} to
+ * This Composite will accept a {@link org.nightlabs.jdo.search.SearchResultFetcher} to
  * actually perform a search.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>

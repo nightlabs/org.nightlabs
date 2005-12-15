@@ -1,4 +1,4 @@
-package com.nightlabs.jdo.search;
+package org.nightlabs.jdo.search;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-import com.nightlabs.rcp.composite.XComposite;
+import org.nightlabs.rcp.composite.XComposite;
 
 
 /**

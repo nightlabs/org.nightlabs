@@ -1,10 +1,10 @@
-<project name="com.nightlabs.ipanema.base" default="build" basedir=".">
+<project name="org.nightlabs.ipanema.base" default="build" basedir=".">
 	<target name="build" >
 		<property name="libDir" value="lib"/>
 		
 		<taskdef name="setEclipseVar"
-		                 classname="com.nightlabs.ant.EclipseVar"
-		                 classpath="../com.nightlabs.ant/runtime/"/>
+		                 classname="org.nightlabs.ant.EclipseVar"
+		                 classpath="../org.nightlabs.ant/runtime/"/>
 		                 	
     	<!-- Create the distribution directory -->	    
 		<delete dir="${libDir}"/>

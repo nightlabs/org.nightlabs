@@ -3,7 +3,7 @@
  * 					by alex
  *
  */
-package com.nightlabs.jdo.search;
+package org.nightlabs.jdo.search;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-import com.nightlabs.rcp.composite.XComposite;
+import org.nightlabs.rcp.composite.XComposite;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>

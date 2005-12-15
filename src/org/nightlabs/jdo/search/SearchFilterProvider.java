@@ -3,11 +3,11 @@
  * 					by alex
  *
  */
-package com.nightlabs.jdo.search;
+package org.nightlabs.jdo.search;
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.nightlabs.jdo.search.SearchFilter;
+import org.nightlabs.jdo.search.SearchFilter;
 
 /**
  * Common interface to handle different scenarios of 

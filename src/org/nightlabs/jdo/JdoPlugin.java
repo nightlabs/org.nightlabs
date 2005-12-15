@@ -1,4 +1,4 @@
-package com.nightlabs.jdo;
+package org.nightlabs.jdo;
 
 import org.eclipse.ui.plugin.*;
 import org.osgi.framework.BundleContext;
@@ -20,7 +20,7 @@ public class JdoPlugin extends AbstractUIPlugin {
 		super();
 		plugin = this;
 		try {
-			resourceBundle = ResourceBundle.getBundle("com.nightlabs.jdo.plugin");
+			resourceBundle = ResourceBundle.getBundle("org.nightlabs.jdo.plugin");
 		} catch (MissingResourceException x) {
 			resourceBundle = null;
 		}

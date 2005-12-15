@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin
-   id="com.nightlabs.jdo"
+   id="org.nightlabs.jdo"
    name="JDO Plugin"
    version="1.0.0"
    provider-name="NightLabs.com"
-   class="com.nightlabs.jdo.JdoPlugin">
+   class="org.nightlabs.jdo.JdoPlugin">
    <runtime>
-      <library name="com.nightlabs.jdo.jar">
-         <export name="com.nightlabs.jdo.*"/>
-         <export name="com.nightlabs.jdo.search.*"/>
-         <export name="com.nightlabs.rcp.notification.*"/>
+      <library name="org.nightlabs.jdo.jar">
+         <export name="org.nightlabs.jdo.*"/>
+         <export name="org.nightlabs.jdo.search.*"/>
+         <export name="org.nightlabs.rcp.notification.*"/>
       </library>
       <library name="lib/NightLabsJDO.jar">
          <export name="*"/>
@@ -19,7 +19,7 @@
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.ui"/>
-      <import plugin="com.nightlabs.base"/>
+      <import plugin="org.nightlabs.base"/>
    </requires>
 
 </plugin>
