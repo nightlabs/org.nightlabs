@@ -1,9 +1,26 @@
-<!-- Generic eclipse/rcp-plugin ant build file
-     Author: marc [at] nightlabs [dot] de -->
-<project default="dist">
+<!--
+  Generic eclipse/rcp-plugin ant build file
+  Author: marc [at] nightlabs [dot] de
+  Author: marco [at] nightlabs [dot] de
 
+  Do NOT modify this file!!! It must be the same in all eclipse/rcp-plugins!
+  Instead, you can create local ant build files:
+    - build-nightlabs-clean.pre.xml
+    - build-nightlabs-clean.post.xml
+    - build-nightlabs-compile.pre.xml
+    - build-nightlabs-compile.post.xml
+    - build-nightlabs-dist.bin.pre.xml
+    - build-nightlabs-dist.bin.post.xml
+    - build-nightlabs-dist.plugin.pre.xml
+    - build-nightlabs-dist.plugin.post.xml
+-->
+<project default="dist">
 	<!-- Initialize all needed properties -->
   <target name="init">
+  	<!-- Set the name of this file. Is there another way?? -->
+  	<property name="build.file" value="build-nightlabs.xml"/>
+
+  	<property file="build-nightlabs-path.properties"/>
     <property file="build-nightlabs.properties"/>
     <property file="build.properties"/>
     <property file="META-INF/MANIFEST.MF"/>
@@ -23,7 +40,7 @@
         </tokenfilter>
         <striplinebreaks/>
       </filterchain>
-    </loadfile>    
+    </loadfile>
 
     <!-- get src.dir from build.properties -->
     <loadfile
@@ -37,7 +54,7 @@
         </tokenfilter>
         <striplinebreaks/>
       </filterchain>
-    </loadfile>    
+    </loadfile>
 
     <!-- get bin.dir from build.properties -->
     <loadfile
@@ -51,7 +68,7 @@
         </tokenfilter>
         <striplinebreaks/>
       </filterchain>
-    </loadfile>    
+    </loadfile>
 
     <!-- set project.dir to "." if not already defined -->
     <condition property="project.dir" value=".">
@@ -97,6 +114,10 @@
       </and>
     </condition>
 
+	<condition property="lib.dir" value="lib">
+		<not><isset property="lib.dir"/></not>
+	</condition>
+
     <!-- print properties for debugging -->
     <echo>project name: ${project.name}</echo>
     <echo>project version: ${project.version}</echo>
@@ -111,22 +132,85 @@
 
   </target>
 
+	<!-- This macro executes a target in the local buildfile
+	       (attribute target extended with the prefix "build-nightlabs-" and the suffix ".xml")
+	       if a given value is true (attribute boolean) and the local build file exists. -->
+	<macrodef name="dolocaliftrue">
+		<attribute name="boolean"/>
+		<attribute name="target"/>
+		<sequential>
+		  	<!-- ${doexec} is set to true, if the build-nightlabs-@{target}.xml exists
+		  		and ${boolean} is true. In this case, the local file will be called. -->
+			<property name="build.file.local-@{target}-@{boolean}" value="build-nightlabs-@{target}.xml"/>
+		  	<available file="${build.file.local-@{target}-@{boolean}}" property="doexec-@{target}-@{boolean}" value="@{boolean}"/>
+			<condition property="doexec-@{target}-@{boolean}" value="false">
+				<not><isset property="doexec-@{target}-@{boolean}"/></not>
+			</condition>
+
+			<echo>doexec-@{target}-@{boolean}: ${doexec-@{target}-@{boolean}}</echo>
+
+			<internal_doiftrue boolean="${doexec-@{target}-@{boolean}}" target="@{target}" buildfile="${build.file.local-@{target}-@{boolean}}"/>
+		</sequential>
+	</macrodef>
+
+	<!-- This macro executes a target in this buildfile
+       (attribute target) if a given value is true
+       (attribute boolean) by creating a temporary 
+       buildfile and calling back this buildfile from
+       there. -->
+	<macrodef name="doiftrue">
+		<attribute name="boolean"/>
+		<attribute name="target"/>
+		<sequential>
+			<internal_doiftrue boolean="@{boolean}" target="@{target}" buildfile="${build.file}"/>
+		</sequential>
+	</macrodef>
+
+	<!-- This macro executes a target in this buildfile
+       (attribute target) if a given value is true
+       (attribute boolean) by creating a temporary 
+       buildfile and calling back this buildfile from
+       there. -->
+	<macrodef name="internal_doiftrue">
+		<attribute name="boolean"/>
+		<attribute name="target"/>
+		<attribute name="buildfile"/>
+		<sequential>
+			<property name="tmpbuildfile.@{target}-@{boolean}-@{buildfile}.name" value=".tmpbuild-@{target}-@{boolean}.xml"/>
+			<property name="tmpbuildfile.@{target}-@{boolean}-@{buildfile}.content.pre" value="&lt;project name=&quot;tmp-build&quot; default=&quot;run&quot;&gt;&lt;target name=&quot;run&quot;&gt;"/>
+			<property name="tmpbuildfile.@{target}-@{boolean}-@{buildfile}.content.post" value="&lt;/target&gt;&lt;/project&gt;"/>
+			<condition property="tmpbuildfile.@{target}-@{boolean}-@{buildfile}.content" value="&lt;ant antfile=&quot;@{buildfile}&quot; target=&quot;@{target}&quot;/&gt;">
+				<istrue value="@{boolean}"/>
+			</condition>
+			<condition property="tmpbuildfile.@{target}-@{boolean}-@{buildfile}.content" value="">
+				<not><isset property="tmpbuildfile.@{target}-@{boolean}-@{buildfile}.content"/></not>
+			</condition>
+			<echo file="${tmpbuildfile.@{target}-@{boolean}-@{buildfile}.name}">${tmpbuildfile.@{target}-@{boolean}-@{buildfile}.content.pre}${tmpbuildfile.@{target}-@{boolean}-@{buildfile}.content}${tmpbuildfile.@{target}-@{boolean}-@{buildfile}.content.post}</echo>
+			<ant antfile="${tmpbuildfile.@{target}-@{boolean}-@{buildfile}.name}"/>
+			<delete file="${tmpbuildfile.@{target}-@{boolean}-@{buildfile}.name}"/>
+		</sequential>
+	</macrodef>
+
+
 	<!-- ############################################ -->
 
 	<!-- Delete all created files according to
        properties clean.includes and clean.excludes -->
 	<target name="clean" depends="init">
+		<dolocaliftrue boolean="true" target="clean.pre"/>
     <!-- could we scan project.dir recursively to
          find .cvsignore files and delete all
          files/dirs mentioned there?? -->
     <delete includeEmptyDirs="true" verbose="true">
 			<fileset dir="${project.dir}" excludes="${clean.excludes}" includes="${clean.includes}"/>      
     </delete>
+		<dolocaliftrue boolean="true" target="clean.post"/>
   </target>
 
 	<!-- Compile all source files and copy all non-java
        files from src.dir to bin.dir -->
   <target name="compile" depends="init">
+  	<dolocaliftrue boolean="true" target="compile.pre"/>
     <mkdir dir="${project.dir}/${bin.dir}"/>
     <javac destdir="${project.dir}/${bin.dir}" classpath="${project.path}">
       <src path="${project.dir}/${src.dir}"/>
@@ -134,6 +218,7 @@
     <copy todir="${project.dir}/${bin.dir}">
       <fileset dir="${project.dir}/${src.dir}" excludes="**/*.java"/>
     </copy>
+  	<dolocaliftrue boolean="true" target="compile.post"/>
   </target>
 
 	<!-- Create all available dist formats -->
@@ -142,17 +227,20 @@
 
 	<!-- Create the plugins jar file -->
   <target name="dist.bin" depends="compile">
+  	<dolocaliftrue boolean="true" target="dist.bin.pre"/>
     <mkdir dir="${project.dir}/${dist.dir}/" />
     <delete file="${project.dir}/${dist.dir}/${project.jar}" failonerror="false" />
     <jar jarfile="${project.dir}/${dist.dir}/${project.jar}">
       <fileset dir="${project.dir}/${bin.dir}">
         <include name="**/*.*"/>
       </fileset>
-    </jar>  
+    </jar>
+  	<dolocaliftrue boolean="true" target="dist.bin.post"/>
   </target>
 
 	<!-- Create a plugin distribution directory and archive -->
   <target name="dist.plugin" depends="dist.bin">
+  	<dolocaliftrue boolean="true" target="dist.plugin.pre"/>
     <mkdir dir="${project.dir}/${dist.dir}/${project.name}_${project.version}"/>
     <copy todir="${project.dir}/${dist.dir}/${project.name}_${project.version}">
       <fileset dir="${project.dir}/${dist.dir}" includes="${project.jar}"/>
@@ -162,82 +250,7 @@
       <tarfileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}"
         prefix="plugins/${project.name}_${project.version}" />
     </tar>
+  	<dolocaliftrue boolean="true" target="dist.plugin.post"/>
   </target>
 
 </project>
-  
-    
-      
-        
-          
-            
-              
-                
- <!--
-  <project name="NLBase" default="build" basedir=".">
-  
-	<target name="init">
-    <property file="build-nightlabs.properties"/>
-
-    <echo>project path: ${project.path}</echo>
-    <echo>project dir: ${project.dir}</echo>
-    <echo>src dir: ${project.dir}/${src.dir}</echo>
-    <echo>bin dir: ${project.dir}/${bin.dir}</echo>
-    <echo>dist dir: ${project.dir}/${dist.dir}</echo>
-	</target>
-
-	<target name="compile" depends="init">
-    <mkdir dir="${project.dir}/${bin.dir}"/>
-    <javac destdir="${project.dir}/${bin.dir}" classpath="${project.path}">
-      <src path="${project.dir}/${src.dir}"/>
-    </javac>
-    <copy todir="${project.dir}/${bin.dir}">
-      <fileset dir="${project.dir}/${src.dir}" excludes="**/*.java"/>
-    </copy>
-	</target>
-
-	<target name="dist" depends="dist.bin">
-  </target>
-  
-	<target name="dist.bin" depends="compile">
-    <mkdir dir="${project.dir}/${dist.dir}/" />
-    <delete file="${project.dir}/${dist.dir}/${project.name}.jar" failonerror="false" />
-    <jar jarfile="${project.dir}/${dist.dir}/${project.name}.jar">
-	    <fileset dir="${project.dir}/${bin.dir}">
-	      <include name="**/*.*"/>
-	    </fileset>
-    </jar>  
-  </target>
--->  
-<!--  
-	<target name="build" 
-        description="Builds " >
-		<property name="libDir" value="lib"/>
-		
-		<taskdef name="setEclipseVar"
-		                 classname="org.nightlabs.ant.EclipseVar"
-		                 classpath="../org.nightlabs.ant/runtime/"/>
-		                 	
-		<setEclipseVar varName="LOG4J"/>
-		<setEclipseVar varName="XERCES"/>
-		<setEclipseVar varName="JBOSS"/>
-		<setEclipseVar varName="STRUTS"/>
-		
-		<delete dir="${libDir}"/>
-		<mkdir dir="${libDir}"/>
-		
-		
-		<copy file="../NightLabsBase/dist/NightLabsBase.jar" toDir="${libDir}" /> 
-        <copy file="${LOG4J}" tofile="${libDir}/log4j.jar" />
-        <copy file="${XERCES}" tofile="${libDir}/xercesImpl.jar" />
-		<copy file="${JBOSS}/server/default/lib/jboss-j2ee.jar" toDir="${libDir}" /> 
-		<copy file="${JBOSS}/server/default/lib/jbosssx.jar" toDir="${libDir}" />
-		<copy file="${JBOSS}/client/jbossall-client.jar" toDir="${libDir}" />
-		<copy file="${STRUTS}/commons-beanutils.jar" toDir="${libDir}" />
-		<copy file="${STRUTS}/commons-collections.jar" toDir="${libDir}" />
-		<copy file="${STRUTS}/commons-logging.jar" toDir="${libDir}" />
-  	</target>    
--->
-<!--    
-</project>
--->
