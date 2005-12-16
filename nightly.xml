@@ -5,6 +5,10 @@
   <project name="org.nightlabs.base" category="NightLabsClient">
     <ant path="org.nightlabs.base" file="build-nightlabs.xml" target="dist.plugin"/>
     <requires/>
+
+    <!-- For the build-nightlabs-compile.pre.xml to work, NightLabsBase must be built before. -->
+    <requires path="/NightLabsBase"/>
+
 <!--
     <requires path="lib/NightLabsBase.jar"/>
 	<requires path="NightLabsBase/dist/NightLabsBase.jar"/>
