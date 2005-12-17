@@ -77,7 +77,7 @@
        point="org.eclipse.ui.elementFactories">
     <factory
           class="org.nightlabs.base.io.FileEditorInputFactory"
-          id="org.nightlabs.rcp.io.FileEditorInputFactory"/>
+          id="org.nightlabs.base.io.FileEditorInputFactory"/>
  </extension>
    
 

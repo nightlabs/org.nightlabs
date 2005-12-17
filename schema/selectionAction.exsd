@@ -116,7 +116,7 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  The fully qualified class name of an implementation of org.nightlabs.rcp.action.SelectionAction
+                  The fully qualified class name of an implementation of org.nightlabs.base.action.SelectionAction
                </documentation>
                <appInfo>
                   <meta.attribute kind="java"/>
