@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-import org.nightlabs.rcp.composite.XComposite;
+import org.nightlabs.base.composite.XComposite;
 
 
 /**

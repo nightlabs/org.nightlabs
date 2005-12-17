@@ -17,9 +17,9 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 
+import org.nightlabs.base.notification.SelectionManager;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.SubjectCarrier;
-import org.nightlabs.rcp.notification.SelectionManager;
 
 /**
  * @author Niklas Schiffler <nick@nightlabs.de>

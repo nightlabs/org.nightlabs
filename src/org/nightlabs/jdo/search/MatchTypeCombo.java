@@ -12,7 +12,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-import org.nightlabs.rcp.composite.XComposite;
+import org.nightlabs.base.composite.XComposite;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>

@@ -8,9 +8,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.j2ee.InitialContextProvider;
 import org.nightlabs.jdo.JdoPlugin;
-import org.nightlabs.rcp.composite.XComposite;
 
 /**
  * A Composite for manipulating a list of SearchFieldItems ({@link org.nightlabs.jdo.search.SearchFilterItemList})
