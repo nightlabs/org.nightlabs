@@ -10,7 +10,7 @@
       <library name="org.nightlabs.jdo.jar">
          <export name="org.nightlabs.jdo.*"/>
          <export name="org.nightlabs.jdo.search.*"/>
-         <export name="org.nightlabs.rcp.notification.*"/>
+         <export name="org.nightlabs.base.notification.*"/>
       </library>
       <library name="lib/NightLabsJDO.jar">
          <export name="*"/>
