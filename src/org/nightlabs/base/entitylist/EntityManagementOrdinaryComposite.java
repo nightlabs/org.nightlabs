@@ -10,7 +10,7 @@ import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
 
-import org.nightlabs.rcp.composite.XComposite;
+import org.nightlabs.base.composite.XComposite;
 
 /**
  * @author Niklas Schiffler <nick@nightlabs.de>

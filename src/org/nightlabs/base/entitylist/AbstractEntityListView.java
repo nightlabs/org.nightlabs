@@ -18,7 +18,7 @@ import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
-import org.nightlabs.rcp.view.ControllableView;
+import org.nightlabs.base.view.ControllableView;
 
 /**
  * @author Niklas Schiffler <nick@nightlabs.de>

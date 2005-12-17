@@ -15,8 +15,8 @@ import java.util.Set;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 
-import org.nightlabs.rcp.extensionpoint.AbstractEPProcessor;
-import org.nightlabs.rcp.extensionpoint.EPProcessorException;
+import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
+import org.nightlabs.base.extensionpoint.EPProcessorException;
 
 /**
  * Holds extensions to the entityManagerView extension point.
@@ -67,7 +67,7 @@ public class EntityManagerViewRegistry extends AbstractEPProcessor {
 	}
 
 	/**
-	 * @see org.nightlabs.rcp.extensionpoint.AbstractEPProcessor#getExtensionPointID()
+	 * @see org.nightlabs.base.extensionpoint.AbstractEPProcessor#getExtensionPointID()
 	 */
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;
@@ -147,7 +147,7 @@ public class EntityManagerViewRegistry extends AbstractEPProcessor {
 		return (Set)listViewsByManager.get(managerViewID);
 	}
 	/**
-	 * @see org.nightlabs.rcp.extensionpoint.AbstractEPProcessor#processElement(IExtension, org.eclipse.core.runtime.IConfigurationElement)
+	 * @see org.nightlabs.base.extensionpoint.AbstractEPProcessor#processElement(IExtension, org.eclipse.core.runtime.IConfigurationElement)
 	 */
 	public void processElement(IExtension extension, IConfigurationElement element)
 			throws EPProcessorException {

@@ -16,8 +16,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 
-import org.nightlabs.rcp.extensionpoint.AbstractEPProcessor;
-import org.nightlabs.rcp.extensionpoint.EPProcessorException;
+import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
+import org.nightlabs.base.extensionpoint.EPProcessorException;
 
 /**
  * Holds extensions to the entityList extension point.
@@ -64,7 +64,7 @@ public class EntityListRegistry extends AbstractEPProcessor {
 	}
 
 	/**
-	 * @see org.nightlabs.rcp.extensionpoint.AbstractEPProcessor#getExtensionPointID()
+	 * @see org.nightlabs.base.extensionpoint.AbstractEPProcessor#getExtensionPointID()
 	 */
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;
@@ -101,7 +101,7 @@ public class EntityListRegistry extends AbstractEPProcessor {
 	
 
 	/**
-	 * @see org.nightlabs.rcp.extensionpoint.AbstractEPProcessor#processElement(IExtension, org.eclipse.core.runtime.IConfigurationElement)
+	 * @see org.nightlabs.base.extensionpoint.AbstractEPProcessor#processElement(IExtension, org.eclipse.core.runtime.IConfigurationElement)
 	 */
 	public void processElement(IExtension extension, IConfigurationElement element)
 			throws EPProcessorException {

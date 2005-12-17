@@ -65,18 +65,18 @@
  <extension
        point="org.nightlabs.base.exceptionhandler">
     <exceptionHandler
-          class="org.nightlabs.rcp.exceptionhandler.ThrowableHandler"
+          class="org.nightlabs.base.exceptionhandler.ThrowableHandler"
           name="Default Handler for all Throwable s"
           targetType="java.lang.Throwable"/>
     <exceptionHandler
-          class="org.nightlabs.rcp.exceptionhandler.OutOfMemoryHandler"
+          class="org.nightlabs.base.exceptionhandler.OutOfMemoryHandler"
           name="Handler for OutOfMemoryError"
           targetType="java.lang.OutOfMemoryError"/>
  </extension>
  <extension
        point="org.eclipse.ui.elementFactories">
     <factory
-          class="org.nightlabs.rcp.io.FileEditorInputFactory"
+          class="org.nightlabs.base.io.FileEditorInputFactory"
           id="org.nightlabs.rcp.io.FileEditorInputFactory"/>
  </extension>
    

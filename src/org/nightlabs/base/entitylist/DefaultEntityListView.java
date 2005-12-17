@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
 
-import org.nightlabs.rcp.composite.XComposite;
+import org.nightlabs.base.composite.XComposite;
 
 /**
  * @author Niklas Schiffler <nick@nightlabs.de>
