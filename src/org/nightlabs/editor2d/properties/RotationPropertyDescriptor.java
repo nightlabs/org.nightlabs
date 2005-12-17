@@ -13,7 +13,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
-import org.nightlabs.rcp.property.ComboBoxLabelProvider;
+import org.nightlabs.base.property.ComboBoxLabelProvider;
 
 public class RotationPropertyDescriptor 
 //extends ComboBoxPropertyDescriptor 

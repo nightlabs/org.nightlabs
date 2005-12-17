@@ -10,7 +10,7 @@ package org.nightlabs.editor2d.properties;
 
 import org.eclipse.swt.widgets.Composite;
 
-import org.nightlabs.rcp.property.ComboBoxCellEditor;
+import org.nightlabs.base.property.ComboBoxCellEditor;
 import org.nightlabs.util.FontUtil;
 
 public class FontSizeCellEditor 

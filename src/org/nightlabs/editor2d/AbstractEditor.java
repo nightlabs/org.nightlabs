@@ -91,6 +91,10 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.holongate.j2d.J2DRegistry;
 
+import org.nightlabs.base.io.FileEditorInput;
+import org.nightlabs.base.io.IOFilterRegistry;
+import org.nightlabs.base.language.LanguageManager;
+import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.EditorPasteTemplateAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
@@ -114,10 +118,6 @@ import org.nightlabs.io.IOFilter;
 import org.nightlabs.io.IOFilterMan;
 import org.nightlabs.io.IOFilterWithProgress;
 import org.nightlabs.io.WriteException;
-import org.nightlabs.rcp.io.FileEditorInput;
-import org.nightlabs.rcp.io.IOFilterRegistry;
-import org.nightlabs.rcp.language.LanguageManager;
-import org.nightlabs.rcp.util.RCPUtil;
 import org.nightlabs.util.FontUtil;
 
 

@@ -14,12 +14,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import org.nightlabs.base.language.ILanguageManager;
+import org.nightlabs.base.language.LanguageChangeEvent;
+import org.nightlabs.base.language.LanguageChangeListener;
+import org.nightlabs.base.language.LanguageChooser;
+import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.language.LanguageCf;
-import org.nightlabs.rcp.language.ILanguageManager;
-import org.nightlabs.rcp.language.LanguageChangeEvent;
-import org.nightlabs.rcp.language.LanguageChangeListener;
-import org.nightlabs.rcp.language.LanguageChooser;
-import org.nightlabs.rcp.language.LanguageManager;
 
 public class NameLanguageManager
 implements ILanguageManager,

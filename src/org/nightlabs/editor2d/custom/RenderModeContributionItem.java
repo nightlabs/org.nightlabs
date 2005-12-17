@@ -31,11 +31,11 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import sun.rmi.runtime.GetThreadPoolAction;
 
+import org.nightlabs.base.action.XContributionItem;
+import org.nightlabs.base.custom.ColorCombo;
 import org.nightlabs.editor2d.render.RenderModeDescriptor;
 import org.nightlabs.editor2d.render.RenderModeListener;
 import org.nightlabs.editor2d.render.RenderModeManager;
-import org.nightlabs.rcp.action.XContributionItem;
-import org.nightlabs.rcp.custom.ColorCombo;
 import org.nightlabs.util.Utils;
 
 public class RenderModeContributionItem 

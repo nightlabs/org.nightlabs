@@ -45,6 +45,9 @@ import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageBook;
 import org.holongate.j2d.J2DCanvas;
 
+import org.nightlabs.base.language.LanguageChangeEvent;
+import org.nightlabs.base.language.LanguageChangeListener;
+import org.nightlabs.base.language.LanguageChooser;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorContextMenuProvider;
 import org.nightlabs.editor2d.EditorPlugin;
@@ -53,9 +56,6 @@ import org.nightlabs.editor2d.dnd.EditorTemplateTransferDropTargetListener;
 import org.nightlabs.editor2d.j2dswt.MLDCPaintable;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 import org.nightlabs.editor2d.properties.NameLanguageManager;
-import org.nightlabs.rcp.language.LanguageChangeEvent;
-import org.nightlabs.rcp.language.LanguageChangeListener;
-import org.nightlabs.rcp.language.LanguageChooser;
 
 
 public class EditorOutlinePage 

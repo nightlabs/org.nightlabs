@@ -17,8 +17,8 @@ import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.swt.graphics.Rectangle;
 
+import org.nightlabs.base.util.ColorUtil;
 import org.nightlabs.editor2d.j2d.GeneralShape;
-import org.nightlabs.rcp.util.ColorUtil;
 
 
 public class J2DUtil

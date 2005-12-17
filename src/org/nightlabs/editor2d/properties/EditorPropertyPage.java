@@ -16,10 +16,10 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+import org.nightlabs.base.action.LanguageAction;
+import org.nightlabs.base.language.LanguageChangeEvent;
+import org.nightlabs.base.language.LanguageChangeListener;
 import org.nightlabs.language.LanguageCf;
-import org.nightlabs.rcp.action.LanguageAction;
-import org.nightlabs.rcp.language.LanguageChangeEvent;
-import org.nightlabs.rcp.language.LanguageChangeListener;
 
 public class EditorPropertyPage 
 extends PropertySheetPage
