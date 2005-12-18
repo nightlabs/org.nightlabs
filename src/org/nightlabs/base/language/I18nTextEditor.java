@@ -47,6 +47,7 @@ public class I18nTextEditor extends XComposite
 	public I18nTextEditor(Composite parent, LanguageChooser languageChooser, String caption)
 	{
 		super(parent, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		getGridData().grabExcessVerticalSpace = false;
 
 		if (languageChooser == null)
 			getGridLayout().numColumns = 2;
@@ -67,8 +68,6 @@ public class I18nTextEditor extends XComposite
 		}
 
 		this.languageChooser = languageChooser;
-
-		getGridData().grabExcessVerticalSpace = false;
 
 		text = new Text(this, SWT.BORDER | SWT.READ_ONLY);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

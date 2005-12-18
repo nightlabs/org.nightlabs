@@ -94,7 +94,7 @@ public class GroupedContentSwitcherTable extends AbstractTableComposite {
 //		getTable().setForeground(parent.getForeground());
 	}
 
-	protected void createTableColumns(Table table) {
+	protected void createTableColumns(TableViewer tableViewer, Table table) {
 //		column = new TableColumn(table, SWT.LEFT); 
 //		if (groupTitle != null)
 //			column.setText(groupTitle);

@@ -13,13 +13,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
 import org.nightlabs.base.composite.XComposite;
-;
+
 
 /**
  * An base Composite for all Table composites
- * 
- * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
+ * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */
 public abstract class AbstractTableComposite extends XComposite {
 
@@ -28,7 +27,7 @@ public abstract class AbstractTableComposite extends XComposite {
 	
 	protected TableViewer tableViewer;
 	protected Table table;
-	
+
 	public AbstractTableComposite(Composite parent, int style) {
 		this(parent, style, true);
 	}
@@ -59,7 +58,7 @@ public abstract class AbstractTableComposite extends XComposite {
 	}
 	
 	protected void initTable() {
-		createTableColumns(table);
+		createTableColumns(tableViewer, table);
 		setTableProvider(tableViewer);
 	}
 	
@@ -76,30 +75,30 @@ public abstract class AbstractTableComposite extends XComposite {
 	
 	/**
 	 * Override for initializatioin to be done
-	 * before {@link #createTableColumns(Table)} and {@link #setTableProvider(TableViewer)}.
+	 * before {@link #createTableColumns(TableViewer, Table)} and {@link #setTableProvider(TableViewer)}.
 	 * Default implementation does nothing.
 	 */
 	public void init() {}
 	
 	/**
 	 * Add your columns here to the Table.
-	 * 
-	 * @param table
+	 * @param tableViewer The TableViewer.
+	 * @param table A shortcut to <code>tableViewer.getTable()</code>.
 	 */
-	protected abstract void createTableColumns(Table table);
-	
+	protected abstract void createTableColumns(TableViewer tableViewer, Table table);
+
 	/**
 	 * Set your content and label provider for the tableViewer.
 	 * 
-	 * @param tableViewer
+	 * @param tableViewer The TableViewer.
+	 * @param table A shortcut to <code>tableViewer.getTable()</code>.
 	 */
 	protected abstract void setTableProvider(TableViewer tableViewer);
 
 	public Table getTable() {
 		return table;
 	}
-	
-	
+
 	/**
 	 * Sets the tableViewers input.
 	 *
