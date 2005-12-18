@@ -18,7 +18,25 @@ public class TableSortSelectionListener implements SelectionListener {
 
 	/**
 	 * The constructor of this listener.
-	 * 
+	 *
+	 * @param viewer
+	 *						the tableviewer this listener belongs to
+	 * @param column
+	 *						the column this listener is responsible for
+	 * @param sorter
+	 *						the sorter this listener uses
+	 * @param defaultDirection
+	 *						the default sorting direction of this Listener. Possible
+	 *						values are {@link SWT.UP} and {@link SWT.DOWN}
+	 */
+	public TableSortSelectionListener(TableViewer viewer, TableColumn column,
+			AbstractInvertableTableSorter sorter, int defaultDirection) {
+		this(viewer, column, sorter, defaultDirection, false);
+	}
+
+	/**
+	 * The constructor of this listener.
+	 *
 	 * @param viewer
 	 *						the tableviewer this listener belongs to
 	 * @param column
@@ -33,6 +51,9 @@ public class TableSortSelectionListener implements SelectionListener {
 	 *						of the associated column and restore it when the column is
 	 *						reselected. If false, the listener will use the default soting
 	 *						direction
+	 *
+	 * @deprecated This constructor is deprecated, because the behaviour "keepDirection"
+	 *		should be global (=> configuration) and not differ from view to view. (Marco)
 	 */
 	public TableSortSelectionListener(TableViewer viewer, TableColumn column,
 			AbstractInvertableTableSorter sorter, int defaultDirection,
@@ -46,7 +67,7 @@ public class TableSortSelectionListener implements SelectionListener {
 
 		this.column.addSelectionListener(this);
 	}
- 
+
 	/**
 	 * Chooses the colum of this listener for sorting of the table. Mainly used
 	 * when first initialising the table.
@@ -56,7 +77,7 @@ public class TableSortSelectionListener implements SelectionListener {
 		viewer.getTable().setSortDirection(currentSorter.getSortDirection());
 		viewer.setSorter(currentSorter);
 	}
- 
+
 	public void widgetSelected(SelectionEvent e) {
 		InvertableSorter newSorter;
 		if (viewer.getTable().getSortColumn() == column) {
@@ -73,7 +94,7 @@ public class TableSortSelectionListener implements SelectionListener {
 		currentSorter = newSorter;
 		chooseColumnForSorting();
 	}
- 
+
 	public void widgetDefaultSelected(SelectionEvent e) {
 		widgetSelected(e);
 	}
