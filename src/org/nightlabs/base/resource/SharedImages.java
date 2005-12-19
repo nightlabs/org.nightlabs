@@ -11,12 +11,16 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 
 import org.nightlabs.base.NLBasePlugin;
 
 public class SharedImages
 {	
+	
+	
 	public SharedImages() {
 		super();
 	}
@@ -82,5 +86,101 @@ public class SharedImages
 	public static final ImageDescriptor DELETE_16x16 = 		
 		ImageDescriptor.createFromURL(
 			NLBasePlugin.getDefault().getBundle().getEntry(
-					NLBasePlugin.getResourceString("icon.delete")));		
+					NLBasePlugin.getResourceString("icon.delete")));
+	
+	
+	
+	public static final String DEFAULT_IMAGE_FORMAT = "16x16";
+	public static final String DEFAULT_IMAGE_EXTENSION = "png";
+	private static final String IMAGES_FOLDER_NAME = "icons";
+	
+	private Map images = new HashMap();
+	private Map imageDescriptors = new HashMap();
+	
+	
+	private static SharedImages sharedInstance;
+	
+	protected static SharedImages sharedInstance() {
+		if (sharedInstance == null)
+			sharedInstance = new SharedImages();
+		return sharedInstance;
+	}
+	
+	
+	private String getImageSubPath(Plugin plugin, Class clazz, String suffix) {
+		String pluginNameSpace = plugin.getBundle().getSymbolicName();
+		String className = clazz.getName();
+		if (!className.contains(pluginNameSpace))
+			throw new IllegalArgumentException("Could not extract image sub path for "+className+" in plugin "+pluginNameSpace);
+		String subPath = className.replace(pluginNameSpace, "");
+		if (subPath.startsWith("."))
+			subPath = subPath.replaceFirst("\\.","");
+		subPath = subPath.replaceAll("\\.", "/");
+		return IMAGES_FOLDER_NAME+"/"+subPath + "-" + suffix; 
+	}
+	
+	private String getImageKey(Plugin plugin, Class clazz, String suffix, String format, String extension) {
+		return plugin.getBundle().getSymbolicName() + "/" + getImageSubPath(plugin, clazz, suffix) + "." + format + "." + extension;
+	}
+	
+	private Image getImage(Plugin plugin, Class clazz, String _suffix, String format, String extension) {
+		String suffix = (_suffix != null) ? _suffix : "";
+		String imageKey = getImageKey(plugin, clazz, suffix, format, extension);
+		Image image = (Image) images.get(imageKey);
+		if (image == null) {
+			ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(
+						plugin.getBundle().getEntry(
+								getImageSubPath(plugin, clazz, suffix) + "." + format + "." + extension
+							)
+					);
+			image = imageDescriptor.createImage() ;
+			imageDescriptors.put(imageKey, imageDescriptor);
+			images.put(imageKey, image);
+		}			
+		return image;
+	}
+	
+	/**
+	 * Get the image for the given clazz and suffix under the given plugin. The image will be
+	 * searched based on the NightLabs coding guidelines.
+	 * 
+	 * @param plugin The plugin the image is package in.
+	 * @param clazz The class using the image
+	 * @param suffix The suffix for the image desired
+	 * @param format The format of the image given as string in format ("{width}x{height}")
+	 * @param extension The extension of the image to be loaded (e.g. "png" or "gif")
+	 */
+	public static Image getSharedImage(Plugin plugin, Class clazz, String suffix, String format, String extension) {
+		return sharedInstance().getImage(plugin, clazz, suffix, format, extension); 
+	}
+	
+	/**
+	 * Get the image for the given clazz The image will be
+	 * searched based on the NightLabs coding guidelines.
+	 * This uses {@link #getSharedImage(Plugin, Class, String, String, String)}
+	 * {@link #DEFAULT_IMAGE_FORMAT} and
+	 * {@link #DEFAULT_IMAGE_EXTENSION}
+	 * 
+	 * @param plugin The plugin the image is package in.
+	 * @param clazz The class using the image
+	 * @param suffix The suffix for the image
+	 */
+	public static Image getSharedImage(Plugin plugin, Class clazz, String suffix) {
+		return sharedInstance().getImage(plugin, clazz, suffix, DEFAULT_IMAGE_FORMAT, DEFAULT_IMAGE_EXTENSION); 
+	}
+	
+	/**
+	 * Get the image for the given clazz The image will be
+	 * searched based on the NightLabs coding guidelines.
+	 * This uses {@link #getSharedImage(Plugin, Class, String, String, String)}
+	 * and passes no suffix, {@link #DEFAULT_IMAGE_FORMAT} and
+	 * {@link #DEFAULT_IMAGE_EXTENSION}
+	 * 
+	 * @param plugin The plugin the image is package in.
+	 * @param clazz The class using the image
+	 */
+	public static Image getSharedImage(Plugin plugin, Class clazz) {
+		return sharedInstance().getImage(plugin, clazz, null, DEFAULT_IMAGE_FORMAT, DEFAULT_IMAGE_EXTENSION); 
+	}
+	
 }
