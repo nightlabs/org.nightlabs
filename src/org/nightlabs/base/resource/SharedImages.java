@@ -90,6 +90,8 @@ public class SharedImages
 	
 	
 	
+	public static final String WIZARD_PAGE_IMAGE_FROMAT = "75x70";
+	
 	public static final String DEFAULT_IMAGE_FORMAT = "16x16";
 	public static final String DEFAULT_IMAGE_EXTENSION = "png";
 	private static final String IMAGES_FOLDER_NAME = "icons";
@@ -106,7 +108,9 @@ public class SharedImages
 		return sharedInstance;
 	}
 	
-	
+	/**
+	 * Get the image subpath on basis of the NightLabs coding guidelines
+	 */
 	private String getImageSubPath(Plugin plugin, Class clazz, String suffix) {
 		String pluginNameSpace = plugin.getBundle().getSymbolicName();
 		String className = clazz.getName();
@@ -116,25 +120,49 @@ public class SharedImages
 		if (subPath.startsWith("."))
 			subPath = subPath.replaceFirst("\\.","");
 		subPath = subPath.replaceAll("\\.", "/");
-		return IMAGES_FOLDER_NAME+"/"+subPath + "-" + suffix; 
+		String suffixStr = "-" + suffix;		
+		if ((suffix == null) || ("".equals(suffix)))
+			suffixStr = "";
+		return IMAGES_FOLDER_NAME+"/"+subPath + suffixStr; 
 	}
-	
+
+	/**
+	 * Get the String key for the image with given parameters 
+	 */
 	private String getImageKey(Plugin plugin, Class clazz, String suffix, String format, String extension) {
 		return plugin.getBundle().getSymbolicName() + "/" + getImageSubPath(plugin, clazz, suffix) + "." + format + "." + extension;
 	}
+
+	/**
+	 * Get the ImageDescriptor with the given parameters out of the caching Map.  
+	 */
+	private ImageDescriptor getImageDescriptor(Plugin plugin, Class clazz, String _suffix, String format, String extension) {
+		String suffix = (_suffix != null) ? _suffix : "";
+		String imageKey = getImageKey(plugin, clazz, suffix, format, extension);
+		ImageDescriptor imageDescriptor = (ImageDescriptor) imageDescriptors.get(imageKey);
+		if (imageDescriptor == null) {
+			imageDescriptor = ImageDescriptor.createFromURL(
+					plugin.getBundle().getEntry(
+							getImageSubPath(plugin, clazz, suffix) + "." + format + "." + extension
+						)
+				);
+			Image image = imageDescriptor.createImage() ;
+			imageDescriptors.put(imageKey, imageDescriptor);
+			images.put(imageKey, image);
+		}			
+		return imageDescriptor;
+	}
 	
+	/**
+	 * Get the Image with the given parameters out of the caching Map.  
+	 */
 	private Image getImage(Plugin plugin, Class clazz, String _suffix, String format, String extension) {
 		String suffix = (_suffix != null) ? _suffix : "";
 		String imageKey = getImageKey(plugin, clazz, suffix, format, extension);
 		Image image = (Image) images.get(imageKey);
 		if (image == null) {
-			ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(
-						plugin.getBundle().getEntry(
-								getImageSubPath(plugin, clazz, suffix) + "." + format + "." + extension
-							)
-					);
-			image = imageDescriptor.createImage() ;
-			imageDescriptors.put(imageKey, imageDescriptor);
+			ImageDescriptor imageDescriptor = getImageDescriptor(plugin, clazz, _suffix, format, extension);
+			image = imageDescriptor.createImage();
 			images.put(imageKey, image);
 		}			
 		return image;
@@ -152,6 +180,31 @@ public class SharedImages
 	 */
 	public static Image getSharedImage(Plugin plugin, Class clazz, String suffix, String format, String extension) {
 		return sharedInstance().getImage(plugin, clazz, suffix, format, extension); 
+	}
+	
+	/**
+	 * Get the ImageDescriptor for the given clazz and suffix under the given plugin. The image will be
+	 * searched based on the NightLabs coding guidelines.
+	 * 
+	 * @param plugin The plugin the image is package in.
+	 * @param clazz The class using the image
+	 * @param suffix The suffix for the image desired
+	 * @param format The format of the image given as string in format ("{width}x{height}")
+	 * @param extension The extension of the image to be loaded (e.g. "png" or "gif")
+	 */
+	public static ImageDescriptor getSharedImageDescriptor(Plugin plugin, Class clazz, String suffix, String format, String extension) {
+		return sharedInstance().getImageDescriptor(plugin, clazz, suffix, format, extension); 
+	}
+	
+	/**
+	 * Get the ImageDescriptor for a WizardPage of the given clazz and
+	 * {@link #WIZARD_PAGE_IMAGE_FROMAT} and {@link #DEFAULT_IMAGE_EXTENSION}. 
+	 * 
+	 * @param plugin The plugin the image is package in.
+	 * @param clazz The class using the image
+	 */
+	public static ImageDescriptor getWizardPageImageDescriptor(Plugin plugin, Class clazz) {
+		return sharedInstance().getImageDescriptor(plugin, clazz, null, WIZARD_PAGE_IMAGE_FROMAT, DEFAULT_IMAGE_EXTENSION); 
 	}
 	
 	/**
