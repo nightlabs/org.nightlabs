@@ -3,7 +3,7 @@
 
 <nightlybuild>
   <project name="org.nightlabs.base" category="NightLabsClient">
-    <ant path="org.nightlabs.base" file="build-nightlabs.xml" target="dist.plugin"/>
+    <ant path="org.nightlabs.base" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
 
     <!-- For the build-nightlabs-compile.pre.xml to work, NightLabsBase must be built before. -->

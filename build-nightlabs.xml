@@ -1,5 +1,5 @@
 <!--
-  Generic eclipse/rcp-plugin ant build file
+  Generic eclipse/rcp-plugin ant build file (version 2005-12-23)
   Author: marc [at] nightlabs [dot] de
   Author: marco [at] nightlabs [dot] de
 
@@ -13,6 +13,8 @@
     - build-nightlabs-dist.bin.post.xml
     - build-nightlabs-dist.plugin.pre.xml
     - build-nightlabs-dist.plugin.post.xml
+    - build-nightlabs-deploy.pre.xml
+    - build-nightlabs-deploy.post.xml
 -->
 <project default="dist">
 	<!-- Initialize all needed properties -->
@@ -118,6 +120,38 @@
 		<not><isset property="lib.dir"/></not>
 	</condition>
 
+	<condition property="rcp.deploy.allplatforms.dir" value="/tmp/rcp/all/plugins">
+		<not><isset property="rcp.deploy.allplatforms.dir"/></not>
+	</condition>
+
+	<condition property="rcp.deploy.allplatforms.enable" value="true">
+		<not><isset property="rcp.deploy.allplatforms.enable"/></not>
+	</condition>
+
+	<condition property="rcp.deploy.win32.dir" value="/tmp/rcp/win32/plugins">
+		<not><isset property="rcp.deploy.win32.dir"/></not>
+	</condition>
+
+  	<condition property="rcp.deploy.win32.enable" value="false">
+		<not><isset property="rcp.deploy.win32.enable"/></not>
+	</condition>
+
+	<condition property="rcp.deploy.linux-gtk32.dir" value="/tmp/rcp/linux-gtk32/plugins">
+		<not><isset property="rcp.deploy.linux-gtk32.dir"/></not>
+	</condition>
+
+	<condition property="rcp.deploy.linux-gtk32.enable" value="false">
+		<not><isset property="rcp.deploy.linux-gtk32.enable"/></not>
+	</condition>
+
+	<condition property="rcp.deploy.linux-gtk64.dir" value="/tmp/rcp/linux-gtk64/plugins">
+		<not><isset property="rcp.deploy.linux-gtk64.dir"/></not>
+	</condition>
+
+	<condition property="rcp.deploy.linux-gtk64.enable" value="false">
+		<not><isset property="rcp.deploy.linux-gtk64.enable"/></not>
+	</condition>
+
     <!-- print properties for debugging -->
     <echo>project name: ${project.name}</echo>
     <echo>project version: ${project.version}</echo>
@@ -129,6 +163,14 @@
     <echo>clean includes: ${clean.includes}</echo>
     <echo>clean excludes: ${clean.excludes}</echo>
     <echo>project path: ${project.path}</echo>
+    <echo>rcp.deploy.allplatforms.enable: ${rcp.deploy.allplatforms.enable}</echo>
+  	<echo>rcp.deploy.allplatforms.dir: ${rcp.deploy.allplatforms.dir}</echo>
+  	<echo>rcp.deploy.win32.enable: ${rcp.deploy.win32.enable}</echo>
+  	<echo>rcp.deploy.win32.dir: ${rcp.deploy.win32.dir}</echo>
+  	<echo>rcp.deploy.linux-gtk32.enable: ${rcp.deploy.linux-gtk32.enable}</echo>
+  	<echo>rcp.deploy.linux-gtk32.dir: ${rcp.deploy.linux-gtk32.dir}</echo>
+  	<echo>rcp.deploy.linux-gtk64.enable: ${rcp.deploy.linux-gtk64.enable}</echo>
+  	<echo>rcp.deploy.linux-gtk64.dir: ${rcp.deploy.linux-gtk64.dir}</echo>
 
   </target>
 
@@ -252,5 +294,43 @@
     </tar>
   	<dolocaliftrue boolean="true" target="dist.plugin.post"/>
   </target>
+
+	<!-- deploy the plugin to the RCP(s) -->
+	<target name="deploy" depends="dist" description="Deploy this project to the RCP">
+		<dolocaliftrue boolean="true" target="deploy.pre"/>
+		<doiftrue boolean="${rcp.deploy.allplatforms.enable}" target="deploy.allplatforms"/>
+		<doiftrue boolean="${rcp.deploy.win32.enable}" target="deploy.win32"/>
+		<doiftrue boolean="${rcp.deploy.linux-gtk32.enable}" target="deploy.linux-gtk32"/>
+		<doiftrue boolean="${rcp.deploy.linux-gtk64.enable}" target="deploy.linux-gtk64"/>
+		<dolocaliftrue boolean="true" target="deploy.post"/>
+	</target>
+
+	<target name="deploy.allplatforms" depends="dist" description="Deploy this project to the RCP (all platforms)">
+		<mkdir dir="${rcp.deploy.allplatforms.dir}/${project.name}_${project.version}"/>
+		<copy todir="${rcp.deploy.allplatforms.dir}/${project.name}_${project.version}">
+			<fileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}" includes="**/*"/>
+		</copy>
+	</target>
+
+	<target name="deploy.win32" depends="dist" description="Deploy this project to the RCP (win32)">
+		<mkdir dir="${rcp.deploy.win32.dir}/${project.name}_${project.version}"/>
+		<copy todir="${rcp.deploy.win32.dir}/${project.name}_${project.version}">
+			<fileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}" includes="**/*"/>
+		</copy>
+	</target>
+
+	<target name="deploy.linux-gtk32" depends="dist" description="Deploy this project to the RCP (linux-gtk32)">
+		<mkdir dir="${rcp.deploy.linux-gtk32.dir}/${project.name}_${project.version}"/>
+		<copy todir="${rcp.deploy.linux-gtk32.dir}/${project.name}_${project.version}">
+			<fileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}" includes="**/*"/>
+		</copy>
+	</target>
+
+	<target name="deploy.linux-gtk64" depends="dist" description="Deploy this project to the RCP (linux-gtk64)">
+		<mkdir dir="${rcp.deploy.linux-gtk64.dir}/${project.name}_${project.version}"/>
+		<copy todir="${rcp.deploy.linux-gtk64.dir}/${project.name}_${project.version}">
+			<fileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}" includes="**/*"/>
+		</copy>
+	</target>
 
 </project>
