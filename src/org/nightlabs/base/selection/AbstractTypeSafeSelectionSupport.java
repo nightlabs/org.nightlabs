@@ -30,7 +30,7 @@ implements ISelectionSupport
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse.jface.viewers.ISelection)
 	 */
 	public void setSelection(ISelection arg0) {
-		selectedObjects = checkSelection(arg0);
+		selection = checkSelection(arg0);
 		fireSelectionChanged();
 	}
 		
@@ -80,7 +80,7 @@ implements ISelectionSupport
 			}
 			List oldSelectedObjects = getSelectedObjects().toList();
 			oldSelectedObjects.addAll(l);
-			selectedObjects = new StructuredSelection(oldSelectedObjects);
+			selection = new StructuredSelection(oldSelectedObjects);
 			fireSelectionChanged();
 		}
 	}
@@ -92,7 +92,7 @@ implements ISelectionSupport
 	public void setSelection(List selectedObjects) 
 	{
 		List list = SelectionUtil.checkList(selectedObjects, getSelectionClass());
-		this.selectedObjects = new StructuredSelection(list);
+		this.selection = new StructuredSelection(list);
 		fireSelectionChanged();
 	}
 	

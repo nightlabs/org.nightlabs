@@ -36,31 +36,38 @@ extends ISelectionProvider
 	
 	/**
 	 * 
-	 * @param selectedObjects A List of Objects which are selected
+	 * @param selection A List of Objects which are selected
 	 */
 	void setSelection(List selectedObjects);
 	
 	/**
 	 * 
-	 * @param o the Object to add to the selectedObjects
+	 * @param o the Object to add to the selection
 	 */
 	void addSelectedObject(Object o);	
 	
 	/**
 	 * 
-	 * @param objects a Collection of Objects to add to the selectedObjects
+	 * @param objects a Collection of Objects to add to the selection
 	 */
 	void addSelectedObjects(Collection objects);
 	
 	/**
 	 * 
-	 * @param o the Object to remove from the selectedObjects
+	 * @param o the Object to remove from the selection
 	 */
 	void removeSelectedObject(Object o);
 	
 	/**
 	 * 
-	 * @param objects a Collection of Objects to remove from the selectedObjects
+	 * @param objects a Collection of Objects to remove from the selection
 	 */
 	void removeSelectedObjects(Collection objects);
+	
+	/**
+	 * 
+	 * @param o element whose presence in this collection is to be tested
+	 * @return true if the Object is contained, false if not
+	 */
+	boolean contains(Object o);	
 }

@@ -10,6 +10,7 @@ package org.nightlabs.base.selection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -82,12 +83,22 @@ implements ISelectionProvider
 	public void setSelection(ISelection arg0) 
 	{
 		if (arg0 instanceof StructuredSelection) {
-			selectedObjects = (StructuredSelection) arg0;
+			selection = (StructuredSelection) arg0;
+			selectedObjects = new ArrayList(selection.toList());
 			fireSelectionChanged();			
 		}		
 	}
 
-	protected StructuredSelection selectedObjects;
+	protected StructuredSelection selection;
+	protected List selectedObjects;
+	
+	protected List getSelectedObjectsList() 
+	{
+		if (selectedObjects == null)
+			selectedObjects = new ArrayList();
+		
+		return selectedObjects;
+	}
 	
 	/**
 	 * 
@@ -95,9 +106,9 @@ implements ISelectionProvider
 	 */
 	public StructuredSelection getSelectedObjects() 
 	{
-		if (selectedObjects == null)
-			selectedObjects = StructuredSelection.EMPTY;
+		if (selectedObjects == null || selectedObjects.isEmpty())
+			return StructuredSelection.EMPTY;
 		
-		return selectedObjects;
+		return new StructuredSelection(selectedObjects);
 	}
 }

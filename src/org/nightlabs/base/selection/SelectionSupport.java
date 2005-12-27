@@ -46,11 +46,11 @@ implements ISelectionSupport
 	 */
 	public void addSelectedObject(Object o) 
 	{
-		List l = getSelectedObjects().toList();
-		l.add(o);
-		selectedObjects = new StructuredSelection(l);		
+		getSelectedObjectsList().add(o);
+		selection = new StructuredSelection(getSelectedObjectsList());		
 		fireSelectionChanged();
 	}
+	
 	
 	/**
 	 * 
@@ -60,11 +60,11 @@ implements ISelectionSupport
 	{
 		if (!objects.isEmpty()) 
 		{
-			List l = getSelectedObjects().toList(); 
+			List l = getSelectedObjectsList(); 
 			for (Iterator it = objects.iterator(); it.hasNext(); ) {
 				l.add(it.next());
 			}
-			selectedObjects = new StructuredSelection(l);
+			selection = new StructuredSelection(l);
 			fireSelectionChanged();			
 		}
 	}	
@@ -75,9 +75,9 @@ implements ISelectionSupport
 	 */
 	public void removeSelectedObject(Object o) 
 	{
-		List l = getSelectedObjects().toList();
+		List l = getSelectedObjectsList();
 		l.remove(o);
-		selectedObjects = new StructuredSelection(l);
+		selection = new StructuredSelection(l);
 		fireSelectionChanged();
 	}	
 	
@@ -89,12 +89,20 @@ implements ISelectionSupport
 	{
 		if (!objects.isEmpty()) 
 		{
-			List l = getSelectedObjects().toList();
+			List l = getSelectedObjectsList();
 			for (Iterator it = objects.iterator(); it.hasNext(); ) {
 				l.remove(it.next());
 			}
-			selectedObjects = new StructuredSelection(l);
+			selection = new StructuredSelection(l);
 			fireSelectionChanged();
 		}
+	}
+	
+	/**
+	 * @see ISelectionSupport.contains(o);
+	 */
+	public boolean contains(Object o) 
+	{
+		return getSelectedObjectsList().contains(o);
 	}
 }
