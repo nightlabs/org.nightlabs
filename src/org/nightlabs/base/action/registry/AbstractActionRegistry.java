@@ -30,7 +30,6 @@ import org.eclipse.jface.action.SubCoolBarManager;
 import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
-
 import org.nightlabs.base.action.IXContributionItem;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
@@ -583,34 +582,34 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 	}
 
 	private String elementNameAction = null;
-	private static final String ELEMENT_NAME_SEPARATOR = "separator";
-	private static final String ELEMENT_NAME_GROUP_MARKER = "groupMarker";
-	private static final String ELEMENT_NAME_MENU = "menu";
+	protected static final String ELEMENT_NAME_SEPARATOR = "separator";
+	protected static final String ELEMENT_NAME_GROUP_MARKER = "groupMarker";
+	protected static final String ELEMENT_NAME_MENU = "menu";
 
-	private static final String ATTRIBUTE_NAME_SEPARATOR_NAME = "name";
-	private static final String ATTRIBUTE_NAME_SEPARATOR_PATH = "path";
+	protected static final String ATTRIBUTE_NAME_SEPARATOR_NAME = "name";
+	protected static final String ATTRIBUTE_NAME_SEPARATOR_PATH = "path";
 
-	private static final String ATTRIBUTE_NAME_GROUP_MARKER_NAME = "name";
-	private static final String ATTRIBUTE_NAME_GROUP_MARKER_PATH = "path";
+	protected static final String ATTRIBUTE_NAME_GROUP_MARKER_NAME = "name";
+	protected static final String ATTRIBUTE_NAME_GROUP_MARKER_PATH = "path";
 
-	private static final String ATTRIBUTE_NAME_MENU_ID = "id";
-	private static final String ATTRIBUTE_NAME_MENU_LABEL = "label";
-	private static final String ATTRIBUTE_NAME_MENU_PATH = "path";
+	protected static final String ATTRIBUTE_NAME_MENU_ID = "id";
+	protected static final String ATTRIBUTE_NAME_MENU_LABEL = "label";
+	protected static final String ATTRIBUTE_NAME_MENU_PATH = "path";
 
-	private static final String ATTRIBUTE_NAME_ACTION_ID = "id";
-	private static final String ATTRIBUTE_NAME_ACTION_NAME = "name";
-	private static final String ATTRIBUTE_NAME_ACTION_TOOLTIP = "tooltip";
-	private static final String ATTRIBUTE_NAME_ACTION_ICON = "icon";
-	private static final String ATTRIBUTE_NAME_ACTION_DISABLED_ICON = "disabledIcon";
-	private static final String ATTRIBUTE_NAME_ACTION_HOVER_ICON = "hoverIcon";
-	private static final String ATTRIBUTE_NAME_ACTION_MENUBAR_PATH = "menubarPath";
-	private static final String ATTRIBUTE_NAME_ACTION_TOOLBAR_PATH = "toolbarPath";
-	private static final String ATTRIBUTE_NAME_ACTION_CONTEXTMENU_PATH = "contextmenuPath";
+	protected static final String ATTRIBUTE_NAME_ACTION_ID = "id";
+	protected static final String ATTRIBUTE_NAME_ACTION_NAME = "name";
+	protected static final String ATTRIBUTE_NAME_ACTION_TOOLTIP = "tooltip";
+	protected static final String ATTRIBUTE_NAME_ACTION_ICON = "icon";
+	protected static final String ATTRIBUTE_NAME_ACTION_DISABLED_ICON = "disabledIcon";
+	protected static final String ATTRIBUTE_NAME_ACTION_HOVER_ICON = "hoverIcon";
+	protected static final String ATTRIBUTE_NAME_ACTION_MENUBAR_PATH = "menubarPath";
+	protected static final String ATTRIBUTE_NAME_ACTION_TOOLBAR_PATH = "toolbarPath";
+	protected static final String ATTRIBUTE_NAME_ACTION_CONTEXTMENU_PATH = "contextmenuPath";
 	
-	private static final String ATTRIBUTE_NAME_ACTION_VISIBLE = "visible";
-	private static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_MENUBAR = "visibleInMenubar";
-	private static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_TOOLBAR = "visibleInToolbar";
-	private static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_CONTEXTMENU = "visibleInContextmenu";
+	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE = "visible";
+	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_MENUBAR = "visibleInMenubar";
+	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_TOOLBAR = "visibleInToolbar";
+	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_CONTEXTMENU = "visibleInContextmenu";
 
 	public synchronized void process() throws EPProcessorException
 	{
@@ -762,10 +761,10 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 			throw new IllegalArgumentException("element.name=\"" + elementName + "\" unknown!");
 	}
 
-	/**
-	 * Your ContributionItem MUST 
-	 */
-	public static final String METHOD_NAME_CONTRIBUTION_ITEM_SET_ID = "setId"; 
+//	/**
+//	 * Your ContributionItem MUST 
+//	 */
+//	public static final String METHOD_NAME_CONTRIBUTION_ITEM_SET_ID = "setId"; 
 
 	protected static boolean parseBooleanAcceptingNull(String s, boolean defaultVal)
 	{
