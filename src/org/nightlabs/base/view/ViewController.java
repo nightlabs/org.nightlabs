@@ -233,6 +233,8 @@ public abstract class ViewController {
 	 */
 	public void createViewControl(final ControllableView view, Composite parent) {
 		ControlledView controlledView = getControlledView(view);
+		if (controlledView == null)
+			throw new IllegalStateException("The ControlledView instance of view "+view.getTitle()+"("+view.getClass().getName()+") could not be found. Maybe it was not registered. Use ViewController#registerView() prior to this method.");
 		if (view != null) {
 			controlledView.createViewControl(parent);
 			controlledView.getWrapper().addDisposeListener(
