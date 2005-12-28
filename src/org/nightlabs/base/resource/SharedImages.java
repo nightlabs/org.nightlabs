@@ -114,9 +114,9 @@ public class SharedImages
 
 	public static final ImageFormat IMAGE_FORMAT_DEFAULT = ImageFormat.png;
 	private static final String IMAGES_FOLDER_NAME = "icons";
-
-	private Map images = new HashMap();
-	private Map imageDescriptors = new HashMap();
+	
+	private Map<String,Image> images = new HashMap<String,Image>();
+	private Map<String,ImageDescriptor> imageDescriptors = new HashMap<String,ImageDescriptor>();
 	
 	
 	private static SharedImages sharedInstance;
@@ -158,7 +158,7 @@ public class SharedImages
 	private ImageDescriptor getImageDescriptor(Plugin plugin, Class clazz, String _suffix, String dimension, ImageFormat format) {
 		String suffix = (_suffix != null) ? _suffix : "";
 		String imageKey = getImageKey(plugin, clazz, suffix, dimension, format);
-		ImageDescriptor imageDescriptor = (ImageDescriptor) imageDescriptors.get(imageKey);
+		ImageDescriptor imageDescriptor = imageDescriptors.get(imageKey);
 		if (imageDescriptor == null) {
 			imageDescriptor = ImageDescriptor.createFromURL(
 					plugin.getBundle().getEntry(
