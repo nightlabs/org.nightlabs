@@ -14,22 +14,15 @@ import java.util.Map;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-
 import org.nightlabs.base.NLBasePlugin;
 
 public class SharedImages
-{	
-	
-	
-	public SharedImages() {
-		super();
-	}
-	
+{
 	public static final ImageDescriptor FLAG_USA_16x16 = 
 		ImageDescriptor.createFromURL(
 				NLBasePlugin.getDefault().getBundle().getEntry(
 						NLBasePlugin.getResourceString("icon.flag.english")));
-	
+
 	public static final ImageDescriptor FLAG_GERMANY_16x16 = 		
 		ImageDescriptor.createFromURL(
 			NLBasePlugin.getDefault().getBundle().getEntry(
@@ -39,9 +32,9 @@ public class SharedImages
 		ImageDescriptor.createFromURL(
 			NLBasePlugin.getDefault().getBundle().getEntry(
 					NLBasePlugin.getResourceString("icon.flag.french")));	
-	
+
 	protected static Map languageID2ImageDesc;
-	
+
 	static {
 		languageID2ImageDesc = new HashMap();
 		languageID2ImageDesc.put(Locale.ENGLISH.getLanguage(), FLAG_USA_16x16);
@@ -87,15 +80,41 @@ public class SharedImages
 		ImageDescriptor.createFromURL(
 			NLBasePlugin.getDefault().getBundle().getEntry(
 					NLBasePlugin.getResourceString("icon.delete")));
-	
-	
-	
-	public static final String WIZARD_PAGE_IMAGE_FROMAT = "75x70";
-	
-	public static final String DEFAULT_IMAGE_FORMAT = "16x16";
-	public static final String DEFAULT_IMAGE_EXTENSION = "png";
+
+	public static enum ImageDimension {
+		_75x70 {
+			@Override
+			public String toString()
+			{
+				return "75x70";
+			}
+		},
+		_16x16 {
+			@Override
+			public String toString()
+			{
+				return "16x16";
+			}
+		},
+		_24x24 {
+			@Override
+			public String toString()
+			{
+				return "24x24";
+			}
+		}
+	}
+
+	public static final ImageDimension IMAGE_DIMENSION_WIZARD_PAGE = ImageDimension._75x70;
+	public static final ImageDimension IMAGE_DIMENSION_DEFAULT = ImageDimension._16x16;
+
+	public static enum ImageFormat {
+		png, gif
+	}
+
+	public static final ImageFormat IMAGE_FORMAT_DEFAULT = ImageFormat.png;
 	private static final String IMAGES_FOLDER_NAME = "icons";
-	
+
 	private Map images = new HashMap();
 	private Map imageDescriptors = new HashMap();
 	
@@ -129,21 +148,21 @@ public class SharedImages
 	/**
 	 * Get the String key for the image with given parameters 
 	 */
-	private String getImageKey(Plugin plugin, Class clazz, String suffix, String format, String extension) {
-		return plugin.getBundle().getSymbolicName() + "/" + getImageSubPath(plugin, clazz, suffix) + "." + format + "." + extension;
+	private String getImageKey(Plugin plugin, Class clazz, String suffix, String dimension, ImageFormat format) {
+		return plugin.getBundle().getSymbolicName() + "/" + getImageSubPath(plugin, clazz, suffix) + "." + dimension + "." + format;
 	}
 
 	/**
 	 * Get the ImageDescriptor with the given parameters out of the caching Map.  
 	 */
-	private ImageDescriptor getImageDescriptor(Plugin plugin, Class clazz, String _suffix, String format, String extension) {
+	private ImageDescriptor getImageDescriptor(Plugin plugin, Class clazz, String _suffix, String dimension, ImageFormat format) {
 		String suffix = (_suffix != null) ? _suffix : "";
-		String imageKey = getImageKey(plugin, clazz, suffix, format, extension);
+		String imageKey = getImageKey(plugin, clazz, suffix, dimension, format);
 		ImageDescriptor imageDescriptor = (ImageDescriptor) imageDescriptors.get(imageKey);
 		if (imageDescriptor == null) {
 			imageDescriptor = ImageDescriptor.createFromURL(
 					plugin.getBundle().getEntry(
-							getImageSubPath(plugin, clazz, suffix) + "." + format + "." + extension
+							getImageSubPath(plugin, clazz, suffix) + "." + dimension + "." + format
 						)
 				);
 			Image image = imageDescriptor.createImage() ;
@@ -156,12 +175,12 @@ public class SharedImages
 	/**
 	 * Get the Image with the given parameters out of the caching Map.  
 	 */
-	private Image getImage(Plugin plugin, Class clazz, String _suffix, String format, String extension) {
+	private Image getImage(Plugin plugin, Class clazz, String _suffix, String dimension, ImageFormat format) {
 		String suffix = (_suffix != null) ? _suffix : "";
-		String imageKey = getImageKey(plugin, clazz, suffix, format, extension);
+		String imageKey = getImageKey(plugin, clazz, suffix, dimension, format);
 		Image image = (Image) images.get(imageKey);
 		if (image == null) {
-			ImageDescriptor imageDescriptor = getImageDescriptor(plugin, clazz, _suffix, format, extension);
+			ImageDescriptor imageDescriptor = getImageDescriptor(plugin, clazz, _suffix, dimension, format);
 			image = imageDescriptor.createImage();
 			images.put(imageKey, image);
 		}			
@@ -175,13 +194,13 @@ public class SharedImages
 	 * @param plugin The plugin the image is package in.
 	 * @param clazz The class using the image
 	 * @param suffix The suffix for the image desired
-	 * @param format The format of the image given as string in format ("{width}x{height}")
-	 * @param extension The extension of the image to be loaded (e.g. "png" or "gif")
+	 * @param dimension The format of the image given as string in format ("{width}x{height}")
+	 * @param format The extension of the image to be loaded (e.g. "png" or "gif")
 	 */
-	public static Image getSharedImage(Plugin plugin, Class clazz, String suffix, String format, String extension) {
-		return sharedInstance().getImage(plugin, clazz, suffix, format, extension); 
+	public static Image getSharedImage(Plugin plugin, Class clazz, String suffix, ImageDimension dimension, ImageFormat format) {
+		return sharedInstance().getImage(plugin, clazz, suffix, dimension.toString(), format); 
 	}
-	
+
 	/**
 	 * Get the ImageDescriptor for the given clazz and suffix under the given plugin. The image will be
 	 * searched based on the NightLabs coding guidelines.
@@ -189,13 +208,27 @@ public class SharedImages
 	 * @param plugin The plugin the image is package in.
 	 * @param clazz The class using the image
 	 * @param suffix The suffix for the image desired
-	 * @param format The format of the image given as string in format ("{width}x{height}")
-	 * @param extension The extension of the image to be loaded (e.g. "png" or "gif")
+	 * @param dimension The format of the image given as string in format ("{width}x{height}")
+	 * @param format The extension of the image to be loaded (e.g. "png" or "gif")
 	 */
-	public static ImageDescriptor getSharedImageDescriptor(Plugin plugin, Class clazz, String suffix, String format, String extension) {
-		return sharedInstance().getImageDescriptor(plugin, clazz, suffix, format, extension); 
+	public static ImageDescriptor getSharedImageDescriptor(Plugin plugin, Class clazz, String suffix, ImageDimension dimension, ImageFormat format) {
+		return sharedInstance().getImageDescriptor(plugin, clazz, suffix, dimension.toString(), format); 
 	}
-	
+
+	/**
+	 * Get the ImageDescriptor for the given clazz and suffix under the given plugin. The image will be
+	 * searched based on the NightLabs coding guidelines.
+	 * 
+	 * @param plugin The plugin the image is package in.
+	 * @param clazz The class using the image
+	 * @param suffix The suffix for the image desired
+	 * @param dimension The format of the image given as string in format ("{width}x{height}")
+	 * @param format The extension of the image to be loaded (e.g. "png" or "gif")
+	 */
+	public static ImageDescriptor getSharedImageDescriptor(Plugin plugin, Class clazz) {
+		return sharedInstance().getImageDescriptor(plugin, clazz, null, IMAGE_DIMENSION_DEFAULT.toString(), IMAGE_FORMAT_DEFAULT); 
+	}
+
 	/**
 	 * Get the ImageDescriptor for a WizardPage of the given clazz and
 	 * {@link #WIZARD_PAGE_IMAGE_FROMAT} and {@link #DEFAULT_IMAGE_EXTENSION}. 
@@ -204,9 +237,9 @@ public class SharedImages
 	 * @param clazz The class using the image
 	 */
 	public static ImageDescriptor getWizardPageImageDescriptor(Plugin plugin, Class clazz) {
-		return sharedInstance().getImageDescriptor(plugin, clazz, null, WIZARD_PAGE_IMAGE_FROMAT, DEFAULT_IMAGE_EXTENSION); 
+		return sharedInstance().getImageDescriptor(plugin, clazz, null, IMAGE_DIMENSION_WIZARD_PAGE.toString(), IMAGE_FORMAT_DEFAULT); 
 	}
-	
+
 	/**
 	 * Get the image for the given clazz The image will be
 	 * searched based on the NightLabs coding guidelines.
@@ -219,9 +252,9 @@ public class SharedImages
 	 * @param suffix The suffix for the image
 	 */
 	public static Image getSharedImage(Plugin plugin, Class clazz, String suffix) {
-		return sharedInstance().getImage(plugin, clazz, suffix, DEFAULT_IMAGE_FORMAT, DEFAULT_IMAGE_EXTENSION); 
+		return sharedInstance().getImage(plugin, clazz, suffix, IMAGE_DIMENSION_DEFAULT.toString(), IMAGE_FORMAT_DEFAULT); 
 	}
-	
+
 	/**
 	 * Get the image for the given clazz The image will be
 	 * searched based on the NightLabs coding guidelines.
@@ -233,7 +266,7 @@ public class SharedImages
 	 * @param clazz The class using the image
 	 */
 	public static Image getSharedImage(Plugin plugin, Class clazz) {
-		return sharedInstance().getImage(plugin, clazz, null, DEFAULT_IMAGE_FORMAT, DEFAULT_IMAGE_EXTENSION); 
+		return sharedInstance().getImage(plugin, clazz, null, IMAGE_DIMENSION_DEFAULT.toString(), IMAGE_FORMAT_DEFAULT); 
 	}
 	
 }
