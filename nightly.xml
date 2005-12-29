@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.5//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_5.dtd">
+
+<nightlybuild>
+  <project name="org.nightlabs.jdo" category="NightLabsClient">
+    <ant path="org.nightlabs.jdo" file="build-nightlabs.xml" target="deploy"/>
+    <requires/>
+    <provides/>
+    <publishes description="..." location="org.nightlabs.jdo/dist/org.nightlabs.jdo.jar"/>
+    <javadoc path="org.nightlabs.jdo/src"/>
+  </project>
+</nightlybuild>
