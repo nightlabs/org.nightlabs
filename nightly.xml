@@ -3,7 +3,11 @@
 
 <nightlybuild>
   <project name="DelegatingClassLoader" category="NightLabsClient">
-    <ant path="DelegatingClassLoader" file="build-nightlabs.xml" target="deploy"/>
+<!--
+  This project is not deployed, because the plugin-project org.nightlabs.classsharing
+  includes this library.
+-->
+    <ant path="DelegatingClassLoader" file="build-nightlabs.xml" target="dist.bin"/>
     <requires/>
     <provides/>
     <publishes description="..." location="DelegatingClassLoader/dist/DelegatingClassLoader.jar"/>
