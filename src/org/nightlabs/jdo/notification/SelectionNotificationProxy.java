@@ -2,7 +2,7 @@
  * Created on Apr 27, 2005
  *
  */
-package org.nightlabs.ipanema.rcp.notification;
+package org.nightlabs.jdo.notification;
 
 import java.util.ArrayList;
 import java.util.Iterator;
