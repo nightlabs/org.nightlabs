@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.util.RCPUtil;
 
 /**
- * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
+ * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
 public class FileSelectComposite extends XComposite {

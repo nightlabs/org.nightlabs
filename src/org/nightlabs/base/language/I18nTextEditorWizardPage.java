@@ -16,7 +16,7 @@ import org.nightlabs.i18n.I18nTextBuffer;
 /**
  * Simple extendable Wizardpage showing one I18nTextEditor.
  * 
- * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
+ * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
 public class I18nTextEditorWizardPage extends WizardHopPage {
