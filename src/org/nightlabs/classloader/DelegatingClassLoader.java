@@ -58,23 +58,26 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * The Ipanema class loading mechanism consists out of multiple parts:<br/>
+ * The JFire class loading mechanism consists out of multiple parts:<br/>
  * <ul>
- *   <li>DelegatingClassLoader (project IpanemaBoot): A system class loader that allows delegates to plug in at a later point.</li>
- *   <li>IpanemaCLDelegate (project IpanemaClassLoader): Client to load classes from the Ipanema j2ee server (caching them locally).</li>
- *   <li>Backend (projects IpanemaCLBackend, IpanemaCLBackendBean): The backend provides the classes to the client.</li>
+ *   <li>DelegatingClassLoader (project DelegatingClassLoader): A system class loader that allows delegates to plug in at a later point.</li>
+ *   <li>JFireCLDelegate (project JFireRemoteClassLoader): Client to load classes from the JFire j2ee server (caching them locally).</li>
+ *   <li>Backend (projects JFireRCLBackend, JFireRCLBackendBean): The backend provides the classes to the client.</li>
+ *   <li>EPClassLoaderDelegate (project org.nightlabs.classsharing): A local delegate that provides a global class namespace (necessary, if mother needs to load child classes).</li>
  * </ul>
  *
  * The DelegatingClassLoader must be declared to be the system class loader of
  * the application. This is done by the VM parameter 
  * <tt>-Djava.system.class.loader=org.nightlabs.ipanema.classloader.boot.DelegatingClassLoader</tt>.
  * <br/><br/>
- * For this to work, the project IpanemaBoot, which contains this class loader must
- * be defined to be part of the bootstrap class path. To define the bootstrap class
- * path, you use the system property <tt>sun.boot.class.path</tt>.
+ * For this to work, the project DelegatingClassLoader, which contains this class loader must
+ * be defined to be part of the bootstrap class path. Note, that there are two bootstrap paths:
+ * First, the real JVM bootstrap classpath: To define this one,
+ * you use the system property <tt>sun.boot.class.path</tt>. Second, when working with OSGI (in Eclipse RCP),
+ * you put sth. like "-Xbootclasspath/p:startup.jar;plugins\a.b.c.jar;plugins\d.e.f.jar" into the eclipse.ini.
  * <br/><br/>
  * A possible boot classpath param could look like this:
- * <tt>-Dsun.boot.class.path=/opt/java/j2sdk1.4.2_05/jre/lib/rt.jar:/opt/java/j2sdk1.4.2_05/jre/lib/i18n.jar:/opt/java/j2sdk1.4.2_05/jre/lib/sunrsasign.jar:/opt/java/j2sdk1.4.2_05/jre/lib/jsse.jar:/opt/java/j2sdk1.4.2_05/jre/lib/jce.jar:/opt/java/j2sdk1.4.2_05/jre/lib/charsets.jar:/opt/java/j2sdk1.4.2_05/jre/classes:/opt/java/ipanema/IpanemaBoot.jar</tt>
+ * <tt>-Dsun.boot.class.path=/opt/java/j2sdk1.4.2_05/jre/lib/rt.jar:/opt/java/j2sdk1.4.2_05/jre/lib/i18n.jar:/opt/java/j2sdk1.4.2_05/jre/lib/sunrsasign.jar:/opt/java/j2sdk1.4.2_05/jre/lib/jsse.jar:/opt/java/j2sdk1.4.2_05/jre/lib/jce.jar:/opt/java/j2sdk1.4.2_05/jre/lib/charsets.jar:/opt/java/j2sdk1.4.2_05/jre/classes:/opt/java/ipanema/JFireBoot.jar</tt>
  * <br/><br/>
  * If the DelegatingClassLoader is not loadable by the bootstrap loader, a different system class loader will be
  * instantiated by the java runtime and this class will log a warning to the console!
