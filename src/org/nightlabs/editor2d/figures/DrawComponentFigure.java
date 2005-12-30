@@ -8,7 +8,6 @@
 package org.nightlabs.editor2d.figures;
 
 import java.awt.Graphics2D;
-import java.awt.font.FontRenderContext;
 import java.awt.geom.Area;
 
 import org.apache.log4j.Logger;
@@ -17,7 +16,6 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.J2DGraphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.editparts.ZoomListener;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.j2d.GeneralShape;

@@ -11,9 +11,7 @@ import java.awt.Color;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-
 import org.nightlabs.base.util.ImageUtil;
-import org.nightlabs.editor2d.util.EditorUtil;
 
 public class AWTColorLabelProvider 
 //implements ILabelProvider

@@ -27,10 +27,8 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.ui.views.properties.IPropertySource;
-
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.editpolicy.MultiLayerDrawComponentXYLayoutPolicy;
-import org.nightlabs.editor2d.model.LayerPropertySource;
 import org.nightlabs.editor2d.model.MultiLayerDrawComponentPropertySource;
 
 public class MultiLayerDrawComponentEditPart 

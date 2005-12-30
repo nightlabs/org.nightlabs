@@ -7,7 +7,6 @@
  **/
 package org.nightlabs.editor2d.figures;
 
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;

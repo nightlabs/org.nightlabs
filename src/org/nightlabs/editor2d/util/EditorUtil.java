@@ -8,7 +8,6 @@
 package org.nightlabs.editor2d.util;
 
 import java.awt.Font;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,10 +21,7 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
-
-import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.math.MathUtil;
 
 public class EditorUtil 

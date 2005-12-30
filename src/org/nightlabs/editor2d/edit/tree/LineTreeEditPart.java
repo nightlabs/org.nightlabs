@@ -7,14 +7,10 @@
 **/
 package org.nightlabs.editor2d.edit.tree;
 
-import java.beans.PropertyChangeEvent;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.LineDrawComponent;
 
 
 public class LineTreeEditPart 

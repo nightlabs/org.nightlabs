@@ -11,12 +11,10 @@ import java.util.Iterator;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
-
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.custom.EditorImages;
 import org.nightlabs.editor2d.util.EditorUtil;

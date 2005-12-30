@@ -12,10 +12,7 @@ import org.eclipse.draw2d.Locator;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-
-import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
-import org.nightlabs.editor2d.figures.ShapeFigure;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.j2d.PathSegment;
 import org.nightlabs.editor2d.util.J2DUtil;

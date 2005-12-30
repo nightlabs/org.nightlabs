@@ -11,8 +11,6 @@ import java.awt.Graphics2D;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.J2DGraphics;
-import org.eclipse.gef.EditPart;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.render.Renderer;
 

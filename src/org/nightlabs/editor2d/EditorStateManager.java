@@ -7,7 +7,6 @@
 **/
 package org.nightlabs.editor2d;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;

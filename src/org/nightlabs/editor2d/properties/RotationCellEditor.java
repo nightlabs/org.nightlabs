@@ -30,12 +30,13 @@ extends ComboBoxCellEditor
   {
     if (comboBox.getText().equals(""))
       return oldValue;
+    Double d = null;
     try {
-      Double d = new Double(comboBox.getText());
+      d = new Double(comboBox.getText());
     } catch (NumberFormatException e) {
       return oldValue;
     }
-    return new Double(comboBox.getText());
+    return d;
 //    return new Double(items[comboBox.getSelectionIndex()]);
   }    
 }

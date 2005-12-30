@@ -15,12 +15,10 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.ui.views.properties.IPropertySource;
-
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
 import org.nightlabs.editor2d.model.LayerPropertySource;
-import org.nightlabs.editor2d.model.TextPropertySource;
 
 public class LayerEditPart 
 extends AbstractDrawComponentContainerEditPart

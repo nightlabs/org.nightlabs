@@ -13,9 +13,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.handles.SquareHandle;
-
 import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
-import org.nightlabs.editor2d.figures.ShapeFigure;
 import org.nightlabs.editor2d.tools.ShapeEditTracker;
 
 
