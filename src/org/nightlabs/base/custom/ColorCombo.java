@@ -1372,7 +1372,11 @@ public void setSelection (Point selection) {
 public void setText (String string) {
 	checkWidget();
 	if (string == null) SWT.error (SWT.ERROR_NULL_ARGUMENT);
-	int index = table.indexOf (getTableItem(string));
+//	int index = table.indexOf (getTableItem(string));
+	TableItem tableItem = getTableItem(string);
+	int index = -1;
+	if (tableItem != null)		
+		index = table.indexOf (getTableItem(string));	
 	if (index == -1) {
 		table.deselectAll ();
 		text.setText (string);
