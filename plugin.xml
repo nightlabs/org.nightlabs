@@ -8,9 +8,7 @@
    class="org.nightlabs.jdo.JdoPlugin">
    <runtime>
       <library name="org.nightlabs.jdo.jar">
-         <export name="org.nightlabs.jdo.*"/>
-         <export name="org.nightlabs.jdo.search.*"/>
-         <export name="org.nightlabs.base.notification.*"/>
+         <export name="*"/>
       </library>
       <library name="lib/NightLabsJDO.jar">
          <export name="*"/>
