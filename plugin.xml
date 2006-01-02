@@ -27,15 +27,15 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            category="org.nightlabs.ipanema.sun.category"
+            category="org.nightlabs.editor2d.category"
             class="org.nightlabs.editor2d.views.LayerView"
             icon="%icon.layer"
             id="org.nightlabs.editor2d.views.LayerView"
-            name="%layer_view_name">
+            name="%view.layer.name">
 	  </view>
       <category
-            id="org.nightlabs.ipanema.sun.category"
-            name="Ipanema Sun"/>            
+            id="org.nightlabs.editor2d.category"
+            name="%category.name"/>            
    </extension>
 
 
