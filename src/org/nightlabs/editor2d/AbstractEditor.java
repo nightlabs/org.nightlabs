@@ -716,9 +716,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
       registry.registerAction(action);
       getSelectionActions().add(action.getId());    
       
-      // Test Viewer Action
-      action = new ViewerAction(this);
-      registry.registerAction(action);
+//      // Test Viewer Action
+//      action = new ViewerAction(this);
+//      registry.registerAction(action);
     }
     
     /* (non-Javadoc)

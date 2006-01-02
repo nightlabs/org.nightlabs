@@ -97,7 +97,7 @@ extends ActionBarContributor
   	addRetargetAction(new ZoomAllRetargetAction());
   	addRetargetAction(new ZoomSelectionRetargetSelection());
 //  	addRetargetAction(new DirectEditRetargetAction());   
-  	addRetargetAction(new ViewerRetargetAction());
+//  	addRetargetAction(new ViewerRetargetAction());
   }
 
   public static final String ID_VIEW_MENU = "menu view";
@@ -160,7 +160,7 @@ extends ActionBarContributor
   	
   	tbm.add(new RenderModeContributionItem(getPage()));
   	
-  	tbm.add(getAction(ViewerAction.ID));
+//  	tbm.add(getAction(ViewerAction.ID));
   }  
     
   /* (non-Javadoc)
