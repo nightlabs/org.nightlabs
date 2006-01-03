@@ -52,8 +52,6 @@ import org.nightlabs.editor2d.actions.ZoomAllAction;
 import org.nightlabs.editor2d.actions.ZoomAllRetargetAction;
 import org.nightlabs.editor2d.actions.ZoomSelectionAction;
 import org.nightlabs.editor2d.actions.ZoomSelectionRetargetSelection;
-import org.nightlabs.editor2d.actions.viewer.ViewerAction;
-import org.nightlabs.editor2d.actions.viewer.ViewerRetargetAction;
 import org.nightlabs.editor2d.custom.EditorZoomComboContributionItem;
 import org.nightlabs.editor2d.viewer.action.RenderModeContributionItem;
 
