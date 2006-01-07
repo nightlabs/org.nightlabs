@@ -37,30 +37,8 @@ import org.nightlabs.base.NLBasePlugin;
 
 public class SharedImages
 {
-	public static final ImageDescriptor FLAG_USA_16x16 = 
-		ImageDescriptor.createFromURL(
-				NLBasePlugin.getDefault().getBundle().getEntry(
-						NLBasePlugin.getResourceString("icon.flag.english")));
 
-	public static final ImageDescriptor FLAG_GERMANY_16x16 = 		
-		ImageDescriptor.createFromURL(
-			NLBasePlugin.getDefault().getBundle().getEntry(
-					NLBasePlugin.getResourceString("icon.flag.german")));
-
-	public static final ImageDescriptor FLAG_FRANCE_16x16 = 		
-		ImageDescriptor.createFromURL(
-			NLBasePlugin.getDefault().getBundle().getEntry(
-					NLBasePlugin.getResourceString("icon.flag.french")));	
-
-	protected static Map languageID2ImageDesc;
-
-	static {
-		languageID2ImageDesc = new HashMap();
-		languageID2ImageDesc.put(Locale.ENGLISH.getLanguage(), FLAG_USA_16x16);
-		languageID2ImageDesc.put(Locale.GERMAN.getLanguage(), FLAG_GERMANY_16x16);
-		languageID2ImageDesc.put(Locale.FRENCH.getLanguage(), FLAG_FRANCE_16x16);		
-	}
-		
+	// TODO: Flag Icons should come from Server
 	public static ImageDescriptor getImageDescriptor(String languageID) 
 	{
 		if (languageID == null)
@@ -68,55 +46,21 @@ public class SharedImages
 		
 		return (ImageDescriptor) languageID2ImageDesc.get(languageID);
 	}
-	
-	public static final ImageDescriptor EDIT_24x24 = 		
-		ImageDescriptor.createFromURL(
-			NLBasePlugin.getDefault().getBundle().getEntry(
-					NLBasePlugin.getResourceString("icon.java.edit")));	
-
-	public static final ImageDescriptor ADD_24x24 = 		
-		ImageDescriptor.createFromURL(
-			NLBasePlugin.getDefault().getBundle().getEntry(
-					NLBasePlugin.getResourceString("icon.java.add")));	
-
-	public static final ImageDescriptor DELETE_24x24 = 		
-		ImageDescriptor.createFromURL(
-			NLBasePlugin.getDefault().getBundle().getEntry(
-					NLBasePlugin.getResourceString("icon.java.delete")));	
-	
-	
-	public static final ImageDescriptor EDIT_16x16 = 		
-		ImageDescriptor.createFromURL(
-			NLBasePlugin.getDefault().getBundle().getEntry(
-					NLBasePlugin.getResourceString("icon.edit")));	
-
-	public static final ImageDescriptor ADD_16x16 = 		
-		ImageDescriptor.createFromURL(
-			NLBasePlugin.getDefault().getBundle().getEntry(
-					NLBasePlugin.getResourceString("icon.add")));	
-
-	public static final ImageDescriptor DELETE_16x16 = 		
-		ImageDescriptor.createFromURL(
-			NLBasePlugin.getDefault().getBundle().getEntry(
-					NLBasePlugin.getResourceString("icon.delete")));
 
 	public static enum ImageDimension {
 		_75x70 {
-			@Override
 			public String toString()
 			{
 				return "75x70";
 			}
 		},
 		_16x16 {
-			@Override
 			public String toString()
 			{
 				return "16x16";
 			}
 		},
 		_24x24 {
-			@Override
 			public String toString()
 			{
 				return "24x24";
@@ -240,14 +184,40 @@ public class SharedImages
 	 * 
 	 * @param plugin The plugin the image is package in.
 	 * @param clazz The class using the image
-	 * @param suffix The suffix for the image desired
-	 * @param dimension The format of the image given as string in format ("{width}x{height}")
-	 * @param format The extension of the image to be loaded (e.g. "png" or "gif")
+	 * @see #getSharedImageDescriptor(Plugin, Class, String, org.nightlabs.base.resource.SharedImages.ImageDimension, org.nightlabs.base.resource.SharedImages.ImageFormat)
 	 */
 	public static ImageDescriptor getSharedImageDescriptor(Plugin plugin, Class clazz) {
 		return sharedInstance().getImageDescriptor(plugin, clazz, null, IMAGE_DIMENSION_DEFAULT.toString(), IMAGE_FORMAT_DEFAULT); 
 	}
 
+	/**
+	 * Get the ImageDescriptor for the given clazz and suffix under the given plugin. The image will be
+	 * searched based on the NightLabs coding guidelines.
+	 * 
+	 * @param plugin The plugin the image is package in.
+	 * @param clazz The class using the image
+	 * @param suffix The suffix for the image desired
+	 * @see #getSharedImageDescriptor(Plugin, Class, String, org.nightlabs.base.resource.SharedImages.ImageDimension, org.nightlabs.base.resource.SharedImages.ImageFormat)
+	 */
+	public static ImageDescriptor getSharedImageDescriptor(Plugin plugin, Class clazz, String suffix) {
+		return sharedInstance().getImageDescriptor(plugin, clazz, suffix, IMAGE_DIMENSION_DEFAULT.toString(), IMAGE_FORMAT_DEFAULT); 
+	}
+
+	/**
+	 * Get the ImageDescriptor for the given clazz and suffix under the given plugin. The image will be
+	 * searched based on the NightLabs coding guidelines.
+	 * 
+	 * @param plugin The plugin the image is package in.
+	 * @param clazz The class using the image
+	 * @param suffix The suffix for the image desired
+	 * @param dimension The format of the image given as string in format ("{width}x{height}")
+	 * @see #getSharedImageDescriptor(Plugin, Class, String, org.nightlabs.base.resource.SharedImages.ImageDimension, org.nightlabs.base.resource.SharedImages.ImageFormat)
+	 */	
+	public static ImageDescriptor getSharedImageDescriptor(Plugin plugin, Class clazz, String suffix, ImageDimension dimension) {
+		return sharedInstance().getImageDescriptor(plugin, clazz, suffix, dimension.toString(), IMAGE_FORMAT_DEFAULT); 
+	}
+	
+	
 	/**
 	 * Get the ImageDescriptor for a WizardPage of the given clazz and
 	 * {@link #WIZARD_PAGE_IMAGE_FROMAT} and {@link #DEFAULT_IMAGE_EXTENSION}. 
@@ -287,5 +257,71 @@ public class SharedImages
 	public static Image getSharedImage(Plugin plugin, Class clazz) {
 		return sharedInstance().getImage(plugin, clazz, null, IMAGE_DIMENSION_DEFAULT.toString(), IMAGE_FORMAT_DEFAULT); 
 	}
+
+	protected static final ImageDescriptor FLAG_USA_16x16 = 
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "USA");
+
+	protected static final ImageDescriptor FLAG_GERMANY_16x16 =
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Germany");		
+
+	protected static final ImageDescriptor FLAG_FRANCE_16x16 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "France");
 	
+	protected static Map languageID2ImageDesc;
+
+	static {
+		languageID2ImageDesc = new HashMap();
+		languageID2ImageDesc.put(Locale.ENGLISH.getLanguage(), FLAG_USA_16x16);
+		languageID2ImageDesc.put(Locale.GERMAN.getLanguage(), FLAG_GERMANY_16x16);
+		languageID2ImageDesc.put(Locale.FRENCH.getLanguage(), FLAG_FRANCE_16x16);		
+	}
+
+	public static final ImageDescriptor EDIT_16x16 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Edit");
+
+	public static final ImageDescriptor EDIT_24x24 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Edit",
+				ImageDimension._24x24);
+
+	public static final ImageDescriptor ADD_16x16 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Create");
+	
+	public static final ImageDescriptor ADD_24x24 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Create",
+				ImageDimension._24x24);
+
+	public static final ImageDescriptor DELETE_16x16 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Delete");	
+	
+	public static final ImageDescriptor DELETE_24x24 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Delete",
+				ImageDimension._24x24);
+		
+	public static final ImageDescriptor DISCARD_16x16 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Discard");	
+
+	public static final ImageDescriptor DISCARD_24x24 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Discard",
+				ImageDimension._24x24);	
+		
+	public static final ImageDescriptor PRINT_16x16 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Print");	
+
+	public static final ImageDescriptor PRINT_24x24 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Print",
+				ImageDimension._24x24);	
+	
+	public static final ImageDescriptor SAVE_16x16 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Save");	
+	
+	public static final ImageDescriptor SAVE_24x24 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Save",
+				ImageDimension._24x24);		
+	
+	public static final ImageDescriptor SEARCH_16x16 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Search");	
+
+	public static final ImageDescriptor SEARCH_24x24 = 		
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Search",
+				ImageDimension._24x24);	
 }
