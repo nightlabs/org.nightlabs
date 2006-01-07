@@ -79,7 +79,7 @@
             class="org.nightlabs.editor2d.Editor"
             contributorClass="org.nightlabs.editor2d.EditorActionBarContributor"
             default="false"
-            extensions="xsm"
+            extensions="e2d"
             icon="icons/EditorPlugin-Logo.16x16.png"
             id="org.nightlabs.editor2d.editor"
             name="%editor.name"/>
@@ -93,7 +93,7 @@
          point="org.nightlabs.base.newfileaction">
       <action
             class="org.nightlabs.base.action.NewFileAction"
-            fileExtension="xsm"
+            fileExtension="e2d"
             title="%action.new.text"
             tooltip="%action.new.tooltip"/>
       <category
