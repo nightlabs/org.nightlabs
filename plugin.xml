@@ -87,7 +87,7 @@
 
    <extension
          point="org.nightlabs.base.editorfilefilter">
-      <editorFileFilter pattern="com\.nightlabs.*"/>
+      <editorFileFilter pattern="org\.nightlabs.*"/>
    </extension>
    <extension
          point="org.nightlabs.base.newfileaction">

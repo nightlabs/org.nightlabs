@@ -53,7 +53,9 @@ import org.nightlabs.editor2d.actions.ZoomAllRetargetAction;
 import org.nightlabs.editor2d.actions.ZoomSelectionAction;
 import org.nightlabs.editor2d.actions.ZoomSelectionRetargetSelection;
 import org.nightlabs.editor2d.custom.EditorZoomComboContributionItem;
+import org.nightlabs.editor2d.render.RenderModeManager;
 import org.nightlabs.editor2d.viewer.action.RenderModeContributionItem;
+import org.nightlabs.editor2d.viewer.render.RendererRegistry;
 
 
 public class EditorActionBarContributor 
@@ -156,7 +158,8 @@ extends ActionBarContributor
   	tbm.add(getAction(ZoomAllAction.ID));
   	tbm.add(getAction(ZoomSelectionAction.ID));
   	
-  	tbm.add(new RenderModeContributionItem(getPage()));
+//  	RenderModeManager renderMan = RendererRegistry.sharedInstance().getRenderModeManager();  	
+  	tbm.add(new RenderModeContributionItem(getPage()));  	
   	
 //  	tbm.add(getAction(ViewerAction.ID));
   }  
