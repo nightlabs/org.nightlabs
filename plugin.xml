@@ -49,7 +49,7 @@
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            application="app"
+            application="org.nightlabs.editor2d.app"
             name="%product.name">
          <property
                name="appName"
@@ -64,6 +64,15 @@
                name="aboutImage"
                value="icons/EditorPlugin-aboutImage.24x24.png"/>
       </product>
+   </extension>
+   <extension
+         id="perspective"
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.nightlabs.editor2d.EditorPerspective"
+            icon="icons/EditorPlugin-Logo.16x16.png"
+            id="org.nightlabs.editor2d.perspective"
+            name="%perspective.name"/>
    </extension>
 
 

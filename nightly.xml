@@ -18,4 +18,9 @@
     <product name="JFire-Editor2D" />
   </project>
 
+  <project name="org.eclipse.core.resources.compatibility">
+    <product name="JFire-Max" />
+    <product name="JFire-Editor2D" />
+  </project>
+
 </nightlybuild>
