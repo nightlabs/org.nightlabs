@@ -31,8 +31,6 @@ import org.eclipse.ui.IPerspectiveFactory;
 import org.nightlabs.editor2d.views.LayerView;
 
 /**
- * <p> Project: org.nightlabs.editor2d </p>
- * <p> Creation Date: 07.01.2006 </p>
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
 public class EditorPerspective 

@@ -66,7 +66,6 @@
       </product>
    </extension>
    <extension
-         id="perspective"
          point="org.eclipse.ui.perspectives">
       <perspective
             class="org.nightlabs.editor2d.EditorPerspective"
@@ -74,7 +73,39 @@
             id="org.nightlabs.editor2d.perspective"
             name="%perspective.name"/>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.nightlabs.editor2d.Editor"
+            contributorClass="org.nightlabs.editor2d.EditorActionBarContributor"
+            default="false"
+            extensions="xsm"
+            icon="icons/EditorPlugin-Logo.16x16.png"
+            id="org.nightlabs.editor2d.editor"
+            name="%editor.name"/>
+   </extension>
 
+   <extension
+         point="org.nightlabs.base.editorfilefilter">
+      <editorFileFilter pattern="com\.nightlabs.*"/>
+   </extension>
+   <extension
+         point="org.nightlabs.base.newfileaction">
+      <action
+            class="org.nightlabs.base.action.NewFileAction"
+            fileExtension="xsm"
+            title="%action.new.text"
+            tooltip="%action.new.tooltip"/>
+      <category
+            id="%category.name"
+            name="%category.name"/>
+   </extension>
+   <extension
+         point="org.nightlabs.base.editor2perspective">
+      <registry
+            editorID="org.nightlabs.editor2d.editor"
+            perspectiveID="org.nightlabs.editor2d.perspective"/>
+   </extension>
 
    
 </plugin>
