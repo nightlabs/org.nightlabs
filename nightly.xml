@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.5//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_5.dtd">
+<!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.6//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_6.dtd">
 
 <nightlybuild>
 
@@ -14,6 +14,8 @@
     <provides/>
     <publishes description="..." location="org.nightlabs.editor2d/dist/org.nightlabs.editor2d_1.0.0.tar.gz"/>
     <javadoc path="org.nightlabs.editor2d/src"/>
+    
+    <product name="JFire-Editor2D" />
   </project>
 
 </nightlybuild>

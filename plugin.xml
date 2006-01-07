@@ -37,6 +37,34 @@
             id="org.nightlabs.editor2d.category"
             name="%category.name"/>            
    </extension>
+   <extension
+         id="app"
+         name="%application.name"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run class="org.nightlabs.editor2d.app.Editor2DApplication"/>
+      </application>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="app"
+            name="%product.name">
+         <property
+               name="appName"
+               value="%application.name"/>
+         <property
+               name="windowImages"
+               value="icons/EditorPlugin-Logo.16x16.png"/>
+         <property
+               name="aboutText"
+               value="%about.text"/>
+         <property
+               name="aboutImage"
+               value="icons/EditorPlugin-aboutImage.24x24.png"/>
+      </product>
+   </extension>
 
 
    

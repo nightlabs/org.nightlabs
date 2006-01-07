@@ -42,15 +42,6 @@ import org.nightlabs.editor2d.util.ModelUtil;
 public class Editor  
 extends AbstractEditor
 {
-//  protected IModelManager modelManager;    
-//  public IModelManager getModelManager() 
-//  {
-//    if (modelManager == null)
-//      modelManager = new DrawComponentModelManager();
-//    
-//    return modelManager;
-//  }
-  
   protected EditPartFactory editPartFactory;
   public EditPartFactory getEditPartFactory() 
   {
