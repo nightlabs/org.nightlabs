@@ -28,8 +28,9 @@ package org.nightlabs.base.app;
 
 import org.apache.log4j.Logger;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
+import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
-
+import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerEPProcessor;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.classloader.DelegatingClassLoader;
@@ -37,6 +38,11 @@ import org.nightlabs.classsharing.ClasssharingPlugin;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 
+/**
+ *
+ * <p> Author: alex[AT]NightLabs[DOT]de </p>
+ * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
+ */
 public abstract class AbstractWorkbenchAdvisor 
 extends WorkbenchAdvisor 
 {
@@ -138,4 +144,16 @@ extends WorkbenchAdvisor
 	}
 	
 	protected abstract AbstractApplication initApplication();	
+	
+	/**
+	 * creates the DefaultWorkbenchWindowAdvisor by default.
+	 * iy you want to specify your own WorkbenchWindowAdvisor, you have to override
+	 * this Method
+	 * 
+	 * @param configurer the IWorkbenchWindowConfigurer
+	 * @return the WorkbenchWindowAdvisor for this WorkbenchAdvisor
+	 */
+	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
+		return new DefaultWorkbenchWindowAdvisor(configurer, getApplication().getApplicationName());
+	}		
 }
