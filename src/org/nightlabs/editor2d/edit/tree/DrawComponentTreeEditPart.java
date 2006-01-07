@@ -234,28 +234,4 @@ extends AbstractTreeEditPart
 		
 	}  
 	
-///* (non-Javadoc)
-//* @see org.eclipse.emf.common.notify.Adapter#notifyChanged(org.eclipse.emf.common.notify.Notification)
-//*/
-//public void notifyChanged(Notification notification)
-//{
-// int type = notification.getEventType();
-// 
-// switch (type)
-// {
-//   case Notification.ADD :
-//   case Notification.ADD_MANY :
-//   case Notification.REMOVE :
-//   case Notification.REMOVE_MANY :
-//     // TODO: need more info to know if children need refresh?
-////     LOGGER.debug("refreshChildren!");
-//     refreshChildren();
-//     break;
-//
-//   case Notification.SET :
-////   	LOGGER.debug("refreshVisuals!");        
-//     refreshVisuals();	
-//     break;
-// }
-//}	
 }

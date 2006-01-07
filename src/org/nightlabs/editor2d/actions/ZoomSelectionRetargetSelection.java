@@ -29,6 +29,7 @@ package org.nightlabs.editor2d.actions;
 
 import org.eclipse.ui.actions.RetargetAction;
 
+import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.custom.EditorImages;
 
@@ -44,7 +45,8 @@ extends RetargetAction
   	setText(EditorPlugin.getResourceString("action.zoom.selection.label"));
   	setId(ZoomSelectionAction.ID);
   	setToolTipText(EditorPlugin.getResourceString("action.zoom.selection.tooltip"));
-  	setImageDescriptor(EditorImages.ZOOM_SELECTION_16);
+//  	setImageDescriptor(EditorImages.ZOOM_SELECTION_16);
+  	setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomSelectionAction.class));  	
 //  	setActionDefinitionId(GEFActionConstants.ZOOM_IN);
   }
 

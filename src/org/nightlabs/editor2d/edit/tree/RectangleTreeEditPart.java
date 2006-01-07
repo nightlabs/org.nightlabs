@@ -30,6 +30,8 @@ package org.nightlabs.editor2d.edit.tree;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 
+import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.editor2d.AbstractPaletteFactory;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.RectangleDrawComponent;
 
@@ -38,8 +40,10 @@ public class RectangleTreeEditPart
 extends DrawComponentTreeEditPart 
 {
 //  public static Image RECTANGLE_ICON = ImageDescriptor.createFromURL(EditorPlugin.getDefault().getBundle().getEntry(EditorPlugin.getResourceString("icon_rectangle"))).createImage();
-  public static Image RECTANGLE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/rectangle16.gif").createImage();  
-  
+//  public static Image RECTANGLE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/rectangle16.gif").createImage();  
+	public static Image RECTANGLE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+			AbstractPaletteFactory.class, "Rectangle").createImage();	
+	  
   /**
    * @param model
    */

@@ -29,7 +29,7 @@
       <view
             category="org.nightlabs.editor2d.category"
             class="org.nightlabs.editor2d.views.LayerView"
-            icon="%icon.layer"
+            icon="icons/views/LayerView.16x16.png"
             id="org.nightlabs.editor2d.views.LayerView"
             name="%view.layer.name">
 	  </view>
@@ -70,7 +70,7 @@
       <perspective
             class="org.nightlabs.editor2d.EditorPerspective"
             icon="icons/EditorPlugin-Logo.16x16.png"
-            id="org.nightlabs.editor2d.perspective"
+            id="org.nightlabs.editor2d.EditorPerspective"
             name="%perspective.name"/>
    </extension>
    <extension

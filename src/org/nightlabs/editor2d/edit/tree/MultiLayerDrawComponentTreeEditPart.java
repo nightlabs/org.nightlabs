@@ -48,7 +48,7 @@ import org.nightlabs.editor2d.outline.filter.FilterManager;
 public class MultiLayerDrawComponentTreeEditPart 
 extends DrawComponentContainerTreeEditPart 
 {
-  public static Image SUN_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/sun16.gif").createImage();  
+//  public static Image SUN_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/sun16.gif").createImage();  
   
   /**
    * @param model
@@ -74,7 +74,7 @@ extends DrawComponentContainerTreeEditPart
    * @see org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart#getIcon()
    */
   public Image getImage() {
-    return SUN_ICON;
+    return null;
   }
 
   /**

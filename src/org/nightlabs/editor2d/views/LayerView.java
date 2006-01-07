@@ -56,6 +56,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
+import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
@@ -70,20 +71,22 @@ public class LayerView
 extends ViewPart 
 implements ISelectionListener
 {
-  public static final Logger LOGGER = Logger.getLogger(LayerView.class);
-  
+  public static final Logger LOGGER = Logger.getLogger(LayerView.class);  
   public static final String ID_VIEW = LayerView.class.getName();  
   
-  public static final Image EYE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/eye12.gif").createImage();
-//  public static final Image DELETE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/delete16.gif").createImage();
-//  public static final Image DELETE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/minus16.gif").createImage();  
-  public static final Image DELETE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/delete24.gif").createImage();  
-//  public static final Image NEW_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/add16.gif").createImage();
-  public static final Image NEW_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/plus16.gif").createImage();  
-  public static final Image UP_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/up16.gif").createImage();
-  public static final Image DOWN_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/down16.gif").createImage();
-  public static final Image LOCK_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/lock12.gif").createImage();
-  
+//  public static final Image EYE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/eye12.gif").createImage();    
+//  public static final Image UP_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/up16.gif").createImage();
+//  public static final Image DOWN_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/down16.gif").createImage();
+//  public static final Image LOCK_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/lock12.gif").createImage();
+//  public static final Image DELETE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/delete24.gif").createImage();  
+//  public static final Image NEW_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/plus16.gif").createImage();
+  public static final Image DELETE_ICON = SharedImages.DELETE_16x16.createImage();  
+  public static final Image NEW_ICON = SharedImages.ADD_16x16.createImage();
+  public static final Image EYE_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Eye");    
+  public static final Image UP_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Up");
+  public static final Image DOWN_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Down");
+  public static final Image LOCK_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Lock");
+      
   protected MultiLayerDrawComponent mldc;
   protected AbstractEditor editor;
   protected Map button2Layer = new HashMap();

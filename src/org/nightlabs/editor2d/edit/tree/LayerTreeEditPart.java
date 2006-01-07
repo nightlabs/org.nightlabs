@@ -27,18 +27,19 @@
 
 package org.nightlabs.editor2d.edit.tree;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-
+import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
+import org.nightlabs.editor2d.views.LayerView;
 
 
 public class LayerTreeEditPart 
 extends DrawComponentContainerTreeEditPart 
 {
-  public static Image LAYER_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/layers16.gif").createImage();
-  
+	public static Image LAYER_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+			LayerView.class).createImage();	
+	  
   /**
    * @param drawComponent
    */

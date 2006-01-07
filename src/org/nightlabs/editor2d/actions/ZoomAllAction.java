@@ -29,6 +29,7 @@ package org.nightlabs.editor2d.actions;
 
 import org.eclipse.gef.editparts.ZoomManager;
 
+import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.custom.EditorImages;
 
@@ -43,8 +44,9 @@ extends ZoomAction
    * @param zoomManager the zoom manager
    */
   public ZoomAllAction(ZoomManager zoomManager) {
-  	super(EditorPlugin.getResourceString("action.zoom.all.label"), 
-  	    EditorImages.ZOOM_ALL_16, zoomManager);  	
+  	super(EditorPlugin.getResourceString("action.zoom.all.label"),
+  	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomAllAction.class),
+  	    zoomManager);  	
   	setToolTipText(EditorPlugin.getResourceString("action.zoom.all.tooltip"));
   	setId(ID);
 //  	setActionDefinitionId(GEFActionConstants.ZOOM_IN);

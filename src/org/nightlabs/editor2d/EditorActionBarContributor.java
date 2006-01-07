@@ -40,6 +40,7 @@ import org.eclipse.gef.ui.actions.RedoRetargetAction;
 import org.eclipse.gef.ui.actions.UndoRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomInRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomOutRetargetAction;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -48,6 +49,9 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
+import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.resource.SharedImages.ImageDimension;
+import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.actions.ZoomAllAction;
 import org.nightlabs.editor2d.actions.ZoomAllRetargetAction;
 import org.nightlabs.editor2d.actions.ZoomSelectionAction;
@@ -152,8 +156,15 @@ extends ActionBarContributor
 //  	tbm.add(new ZoomComboContributionItem(getPage(), zoomStrings));
   	tbm.add(new EditorZoomComboContributionItem(getPage(), zoomStrings));
 
-  	tbm.add(getAction(GEFActionConstants.ZOOM_IN));
-  	tbm.add(getAction(GEFActionConstants.ZOOM_OUT));
+  	IAction zoomInAction = getAction(GEFActionConstants.ZOOM_IN);
+  	zoomInAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
+  			EditorPlugin.getDefault(), EditorActionBarContributor.class, "ZoomIn"));
+  	tbm.add(zoomInAction);
+
+  	IAction zoomOutAction = getAction(GEFActionConstants.ZOOM_OUT);
+  	zoomOutAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
+  			EditorPlugin.getDefault(), EditorActionBarContributor.class, "ZoomOut"));  	
+  	tbm.add(zoomOutAction);
   	
   	tbm.add(getAction(ZoomAllAction.ID));
   	tbm.add(getAction(ZoomSelectionAction.ID));

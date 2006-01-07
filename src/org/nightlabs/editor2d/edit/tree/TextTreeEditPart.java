@@ -33,6 +33,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.editor2d.AbstractPaletteFactory;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.model.TextPropertySource;
@@ -40,7 +42,9 @@ import org.nightlabs.editor2d.model.TextPropertySource;
 public class TextTreeEditPart 
 extends DrawComponentTreeEditPart 
 {
-  public static final Image TEXT_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/text16.gif").createImage();
+//  public static final Image TEXT_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/text16.gif").createImage();
+	public static final Image TEXT_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+			AbstractPaletteFactory.class, "Text").createImage();		
   
   public TextTreeEditPart(TextDrawComponent drawComponent) {
     super(drawComponent);

@@ -29,10 +29,10 @@ package org.nightlabs.editor2d.edit.tree;
 
 import java.beans.PropertyChangeEvent;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
-
+import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.editor2d.AbstractPaletteFactory;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EllipseDrawComponent;
 import org.nightlabs.editor2d.model.EllipsePropertySource;
@@ -41,8 +41,8 @@ import org.nightlabs.editor2d.model.EllipsePropertySource;
 public class EllipseTreeEditPart 
 extends DrawComponentTreeEditPart 
 {
-//  public static Image ELLIPSE_ICON = ImageDescriptor.createFromURL(EditorPlugin.getDefault().getBundle().getEntry(EditorPlugin.getResourceString("icon_ellipse"))).createImage();
-  public static Image ELLIPSE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/ellipse16.gif").createImage();
+	public static Image ELLIPSE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+			AbstractPaletteFactory.class, "Ellipse").createImage();	
   
   /**
    * @param model

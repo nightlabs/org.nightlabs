@@ -35,6 +35,7 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
+import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.custom.EditorImages;
 import org.nightlabs.editor2d.util.EditorUtil;
@@ -59,7 +60,8 @@ extends SelectionAction
   	setText(EditorPlugin.getResourceString("action.zoom.selection.label"));
   	setToolTipText(EditorPlugin.getResourceString("action.zoom.selection.tooltip"));
   	setId(ID);
-  	setImageDescriptor(EditorImages.ZOOM_SELECTION_16);  	
+//  	setImageDescriptor(EditorImages.ZOOM_SELECTION_16);  	
+  	setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomSelectionAction.class));  	
   } 
       
   /* (non-Javadoc)

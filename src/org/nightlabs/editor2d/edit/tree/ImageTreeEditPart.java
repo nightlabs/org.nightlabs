@@ -27,16 +27,17 @@
 
 package org.nightlabs.editor2d.edit.tree;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-
+import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.editor2d.AbstractPaletteFactory;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 
 public class ImageTreeEditPart 
 extends DrawComponentTreeEditPart 
 {
-  public static final Image IMAGE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/image16.gif").createImage();
+	public static Image IMAGE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+			AbstractPaletteFactory.class, "Image").createImage();	
   
   public ImageTreeEditPart(DrawComponent drawComponent) {
     super(drawComponent);

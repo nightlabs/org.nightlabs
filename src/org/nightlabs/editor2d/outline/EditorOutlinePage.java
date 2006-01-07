@@ -67,6 +67,7 @@ import org.holongate.j2d.J2DCanvas;
 import org.nightlabs.base.language.LanguageChangeEvent;
 import org.nightlabs.base.language.LanguageChangeListener;
 import org.nightlabs.base.language.LanguageChooser;
+import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorContextMenuProvider;
 import org.nightlabs.editor2d.EditorPlugin;
@@ -156,8 +157,11 @@ implements IAdaptable
         showPage(ID_OUTLINE);
       }
     };
-    showOutlineAction.setImageDescriptor(ImageDescriptor.createFromFile(
-      EditorPlugin.class,"icons/outline.gif")); //$NON-NLS-1$
+//    showOutlineAction.setImageDescriptor(ImageDescriptor.createFromFile(
+//      EditorPlugin.class,"icons/outline.gif")); //$NON-NLS-1$
+    showOutlineAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
+    		EditorPlugin.getDefault(), EditorOutlinePage.class, "Outline"));
+    
     tbm.add(showOutlineAction);
     
     // Show Overview
@@ -166,8 +170,10 @@ implements IAdaptable
         showPage(ID_OVERVIEW);
       }
     };
-    showOverviewAction.setImageDescriptor(ImageDescriptor.createFromFile(
-      EditorPlugin.class,"icons/overview.gif")); //$NON-NLS-1$
+//    showOverviewAction.setImageDescriptor(ImageDescriptor.createFromFile(
+//      EditorPlugin.class,"icons/overview.gif")); //$NON-NLS-1$
+    showOverviewAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
+    		EditorPlugin.getDefault(), EditorOutlinePage.class, "Overview"));
     tbm.add(showOverviewAction);
         
     showPage(ID_OUTLINE);        
