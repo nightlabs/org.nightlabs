@@ -42,10 +42,6 @@ import org.nightlabs.util.Utils;
 
 /**
  * 
- * <p> Project: org.nightlabs.base </p>
- * <p> Copyright: Copyright (c) 2005 </p>
- * <p> Company: NightLabs GmbH (Germany) </p>
- * <p> Creation Date: 12.12.2005 </p>
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de, <p>
  * <p>		 		 Alex[AT]NightLabs[DOT]de</p>
  */

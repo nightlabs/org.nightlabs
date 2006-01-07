@@ -30,6 +30,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 
+/**
+ * 
+ * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de, <p>
+ * <p>		 		 Alex[AT]NightLabs[DOT]de</p>
+ */
 public abstract class AbstractApplicationThread 
 extends Thread 
 {

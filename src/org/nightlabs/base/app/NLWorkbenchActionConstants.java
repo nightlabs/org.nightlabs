@@ -3,10 +3,6 @@ package org.nightlabs.base.app;
 import org.eclipse.ui.IWorkbenchActionConstants;
 
 /**
- * <p> Project: org.nightlabs.base </p>
- * <p> Copyright: Copyright (c) 2006 </p>
- * <p> Company: NightLabs GmbH (Germany) </p>
- * <p> Creation Date: 03.01.2006 </p>
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
 public interface NLWorkbenchActionConstants 

@@ -55,6 +55,11 @@ import org.nightlabs.base.config.RecentFileCfMod;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 
+/**
+ * 
+ * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de, <p>
+ * <p>		 		 Alex[AT]NightLabs[DOT]de</p>
+ */
 public class DefaultActionBuilder 
 extends ActionBarAdvisor 
 {		
