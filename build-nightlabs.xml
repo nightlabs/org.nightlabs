@@ -1,5 +1,5 @@
 <!--
-  Generic eclipse/rcp-plugin ant build file (version 2005-12-27)
+  Generic eclipse/rcp-plugin ant build file (version 2006-01-07)
   Author: marc [at] nightlabs [dot] de
   Author: marco [at] nightlabs [dot] de
 
@@ -83,6 +83,19 @@
         <striplinebreaks/>
       </filterchain>
     </loadfile>
+
+  	<!--
+  		find out, whether we deploy a plugin or a feature and set the property ${rcp.deploy.subdir} to:
+  			- "plugins"
+  			- "features"
+  	-->
+  	<available file="${project.dir}/feature.xml" property="rcp.deploy.subdir" value="features"/>
+
+   	<condition property="rcp.deploy.subdir" value="plugins">
+  	  <not>
+  	    <isset property="rcp.deploy.subdir"/>
+  	  </not>
+    </condition>
 
    	<condition property="bin.dir" value="bin">
   	  <not>
@@ -323,32 +336,34 @@
 		<dolocaliftrue boolean="true" target="deploy.post"/>
 	</target>
 
+
+	<!-- = = = = = = = = = = = = = = = = =
+	    macrodef: doDeploy (used by all deploy.* targets)
+	    = = = = = = = = = = = = = = = = = -->
+	<macrodef name="doDeploy">
+		<attribute name="platform" />
+		<sequential>
+			<mkdir dir="${rcp.deploy.@{platform}.dir}/${rcp.deploy.subdir}/${project.name}_${project.version}"/>
+			<copy todir="${rcp.deploy.@{platform}.dir}/${rcp.deploy.subdir}/${project.name}_${project.version}">
+				<fileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}" includes="**/*"/>
+			</copy>
+		</sequential>
+	</macrodef>
+
 	<target name="deploy.allplatforms" depends="dist" description="Deploy this project to the RCP (all platforms)">
-		<mkdir dir="${rcp.deploy.allplatforms.dir}/${project.name}_${project.version}"/>
-		<copy todir="${rcp.deploy.allplatforms.dir}/${project.name}_${project.version}">
-			<fileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}" includes="**/*"/>
-		</copy>
+		<doDeploy platform="allplatforms"/>
 	</target>
 
 	<target name="deploy.win32" depends="dist" description="Deploy this project to the RCP (win32)">
-		<mkdir dir="${rcp.deploy.win32.dir}/${project.name}_${project.version}"/>
-		<copy todir="${rcp.deploy.win32.dir}/${project.name}_${project.version}">
-			<fileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}" includes="**/*"/>
-		</copy>
+		<doDeploy platform="win32"/>
 	</target>
 
 	<target name="deploy.linux-gtk32" depends="dist" description="Deploy this project to the RCP (linux-gtk32)">
-		<mkdir dir="${rcp.deploy.linux-gtk32.dir}/${project.name}_${project.version}"/>
-		<copy todir="${rcp.deploy.linux-gtk32.dir}/${project.name}_${project.version}">
-			<fileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}" includes="**/*"/>
-		</copy>
+		<doDeploy platform="linux-gtk32"/>
 	</target>
 
 	<target name="deploy.linux-gtk64" depends="dist" description="Deploy this project to the RCP (linux-gtk64)">
-		<mkdir dir="${rcp.deploy.linux-gtk64.dir}/${project.name}_${project.version}"/>
-		<copy todir="${rcp.deploy.linux-gtk64.dir}/${project.name}_${project.version}">
-			<fileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}" includes="**/*"/>
-		</copy>
+		<doDeploy platform="linux-gtk64"/>
 	</target>
 
 </project>
