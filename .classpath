@@ -5,7 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="lib/log4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/xercesImpl.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jbossall-client.jar"/>
 	<classpathentry exported="true" sourcepath="/NightLabsBase/src" kind="lib" path="lib/NightLabsBase.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-beanutils.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-collections.jar"/>

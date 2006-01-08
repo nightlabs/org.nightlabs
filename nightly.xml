@@ -15,9 +15,7 @@
 -->
     <provides/>
     
-    <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/jboss-j2ee.jar"/>
     <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/activation.jar"/>
-    <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/jbosssx.jar"/>
     <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/mailapi.jar"/>
     <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/smtp.jar"/>
 <!--
@@ -36,7 +34,6 @@
     <provides path="org.nightlabs.base" location="lib/commons-logging/jars/commons-logging-1.0.4.jar"/>
     <provides path="org.nightlabs.base" location="lib/commons-collections/jars/commons-collections-3.1.jar"/>
     <provides path="org.nightlabs.base" location="lib/commons-lang/jars/commons-lang-2.0.jar"/>
-    <provides path="org.nightlabs.base" location="lib/jboss/client/jbossall-client.jar"/>
 <!-- I assume, requires and provides should be the other way around
     <provides path="org.nightlabs.base" location="NightLabsBase/dist/NightLabsBase.jar"/>
 -->
