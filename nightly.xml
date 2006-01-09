@@ -2,7 +2,7 @@
 <!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.5//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_5.dtd">
 
 <nightlybuild>
-  <project name="DelegatingClassLoader" category="NightLabsClient">
+  <project name="DelegatingClassLoader">
 <!--
   This project is not deployed, because the plugin-project org.nightlabs.classsharing
   includes this library.
