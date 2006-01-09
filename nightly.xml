@@ -3,7 +3,7 @@
 
 <nightlybuild>
 
-  <project name="org.nightlabs.editor2d" category="NightLabsClient">
+  <project name="org.nightlabs.editor2d">
     <ant path="org.nightlabs.editor2d" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
 
