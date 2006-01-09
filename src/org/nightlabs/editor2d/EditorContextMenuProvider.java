@@ -37,6 +37,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.actions.ActionFactory;
 
+import org.nightlabs.editor2d.actions.CopyAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
 import org.nightlabs.editor2d.actions.ResetRotationCenterAction;
@@ -146,9 +147,13 @@ extends ContextMenuProvider
   }
   
   protected void buildEditSubMenu(MenuManager menuMan)
-  {  	
+  {
+  	IAction action = getActionRegistry().getAction(CopyAction.ID);
+  	if (action.isEnabled())
+  	  menuMan.add(action);
+  	  	
   	// Edit Shape Action
-  	IAction action = getActionRegistry().getAction(EditShapeAction.ID);
+  	action = getActionRegistry().getAction(EditShapeAction.ID);
   	if (action.isEnabled())
   	  menuMan.add(action);
 

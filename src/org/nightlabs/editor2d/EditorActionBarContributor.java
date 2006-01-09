@@ -169,8 +169,9 @@ extends ActionBarContributor
   	tbm.add(getAction(ZoomAllAction.ID));
   	tbm.add(getAction(ZoomSelectionAction.ID));
   	
-//  	RenderModeManager renderMan = RendererRegistry.sharedInstance().getRenderModeManager();  	
-  	tbm.add(new RenderModeContributionItem(getPage()));  	
+  	RenderModeManager renderMan = RendererRegistry.sharedInstance().getRenderModeManager();
+  	if (renderMan.getRenderModes().size() > 1)
+  		tbm.add(new RenderModeContributionItem(getPage()));  	
   	
 //  	tbm.add(getAction(ViewerAction.ID));
   }  

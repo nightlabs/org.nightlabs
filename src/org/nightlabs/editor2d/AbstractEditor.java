@@ -115,6 +115,7 @@ import org.nightlabs.base.io.FileEditorInput;
 import org.nightlabs.base.io.IOFilterRegistry;
 import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.util.RCPUtil;
+import org.nightlabs.editor2d.actions.CopyAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.EditorPasteTemplateAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
@@ -716,6 +717,11 @@ extends J2DGraphicalEditorWithFlyoutPalette
       registry.registerAction(action);
       getSelectionActions().add(action.getId());    
       
+      // Copy Action
+      action = new CopyAction(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());    
+            
 //      // Test Viewer Action
 //      action = new ViewerAction(this);
 //      registry.registerAction(action);

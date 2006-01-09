@@ -264,14 +264,12 @@ implements FreeformFigure, BufferedFreeformLayer
 				Figure figure = (Figure) iter.next();
 				figure.paint(graphics);
 			}
-			LOGGER.debug("paint called");
+//			LOGGER.debug("paint called");
 		}
 		else {
 			super.paint(graphics);
 		}
-		LOGGER.debug("painted in "+(System.currentTimeMillis()-time));
-		LOGGER.debug("childrenBounds = "+getChildBounds());
-		LOGGER.debug("bounds = "+getBounds());
+//		LOGGER.debug("painted in "+(System.currentTimeMillis()-time));
 	}
 	
 	
@@ -285,7 +283,7 @@ implements FreeformFigure, BufferedFreeformLayer
 		}
 		bufferedImage = null;
 		childBounds = null;
-		LOGGER.debug("buffer cleared()");
+//		LOGGER.debug("buffer cleared()");
 	}
 	
 	
