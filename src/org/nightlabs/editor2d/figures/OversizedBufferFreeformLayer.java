@@ -230,14 +230,11 @@ implements FreeformFigure, BufferedFreeformLayer
 		return bufferedImage;
 	}
 	
-	public void paint(Graphics graphics) {
-//		super.paint(graphics);
-//		if (true)
-//			return;
+	public void paint(Graphics graphics) 
+	{
 		long time = System.currentTimeMillis();
 		if (graphics instanceof J2DGraphics) {
 			J2DGraphics j2dGraphics = (J2DGraphics)graphics;
-//			j2dGraphics.setClip((Rectangle)null);
 			j2dGraphics.clipRect(null);
 			
 			// get / create the buffer 
@@ -267,12 +264,14 @@ implements FreeformFigure, BufferedFreeformLayer
 				Figure figure = (Figure) iter.next();
 				figure.paint(graphics);
 			}
-//			LOGGER.debug("paint called");
+			LOGGER.debug("paint called");
 		}
 		else {
 			super.paint(graphics);
 		}
-//		LOGGER.debug("painted in "+(System.currentTimeMillis()-time));
+		LOGGER.debug("painted in "+(System.currentTimeMillis()-time));
+		LOGGER.debug("childrenBounds = "+getChildBounds());
+		LOGGER.debug("bounds = "+getBounds());
 	}
 	
 	
@@ -286,7 +285,7 @@ implements FreeformFigure, BufferedFreeformLayer
 		}
 		bufferedImage = null;
 		childBounds = null;
-//		LOGGER.debug("buffer cleared()");
+		LOGGER.debug("buffer cleared()");
 	}
 	
 	
@@ -415,17 +414,18 @@ implements FreeformFigure, BufferedFreeformLayer
 	/**
 	 * @see FreeformFigure#setFreeformBounds(Rectangle)
 	 */
-	public void setFreeformBounds(Rectangle bounds) {
-		//  	clearBuffer();
-		//    LOGGER.debug("setFreeformBounds("+bounds+")");
-		//  	helper.setFreeformBounds(bounds);
+	public void setFreeformBounds(Rectangle bounds) 
+	{
+//  	clearBuffer();
+//    LOGGER.debug("setFreeformBounds("+bounds+")");
+//  	helper.setFreeformBounds(bounds);
 	} 
 	
-	public void setBounds(Rectangle rect) {
-		//  	clearBuffer();
-		//    LOGGER.debug("setBounds("+rect+")");
-		//    super.setBounds(rect);
+	public void setBounds(Rectangle rect) 
+	{
+//  	clearBuffer();
+//    LOGGER.debug("setBounds("+rect+")");
+//    super.setBounds(rect);
 	}
-	
-	
+		
 }

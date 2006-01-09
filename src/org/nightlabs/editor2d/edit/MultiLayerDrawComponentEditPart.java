@@ -49,6 +49,8 @@ import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.editpolicy.MultiLayerDrawComponentXYLayoutPolicy;
+import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
+import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
 import org.nightlabs.editor2d.model.MultiLayerDrawComponentPropertySource;
 
 public class MultiLayerDrawComponentEditPart 
@@ -77,14 +79,24 @@ extends AbstractDrawComponentContainerEditPart
 //	    updateManager = figureCanvas.getLightweightSystem().getUpdateManager();
 //	    f.registerOnDeferredUpdateManager(updateManager);
 //	  }
-//	  IFigure f = new MLDCFreeformLayer();
-//	  Figure f = new OversizedBufferFreeformLayer(this);
-		Figure f = new FreeformLayer();
-//	  RendererFigure f = new org.nightlabs.editor2d.figures.FreeformLayer();	  
+		
+	  Figure f = new OversizedBufferFreeformLayer();
+	  ((BufferedFreeformLayer)f).init(this);
+	  
+//		Figure f = new FreeformLayer();
+		
 		f.setLayoutManager(new FreeformLayout());				
 		return f; 		
 	}
 
+	protected BufferedFreeformLayer getBufferedFreeformLayer() 
+	{
+		if (getFigure() instanceof BufferedFreeformLayer)
+			return (BufferedFreeformLayer) getFigure();
+		
+		return null;
+	}
+	
 	/* 
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */

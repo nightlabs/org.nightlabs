@@ -35,6 +35,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
@@ -42,6 +43,7 @@ import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.editpolicy.DrawComponentContainerEditPolicy;
 import org.nightlabs.editor2d.editpolicy.tree.MultiLayerDrawComponentTreeEditPolicy;
+import org.nightlabs.editor2d.model.MultiLayerDrawComponentPropertySource;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 
 
@@ -110,5 +112,15 @@ extends DrawComponentContainerTreeEditPart
     	}      
       return filterChildren;  		
   	}
-  }	  
+  }	
+  
+  protected IPropertySource getPropertySource()
+  {
+    if (propertySource == null)
+    {
+      propertySource =
+        new MultiLayerDrawComponentPropertySource(getMultiLayerDrawComponent());
+    }
+    return propertySource;
+  }    
 }

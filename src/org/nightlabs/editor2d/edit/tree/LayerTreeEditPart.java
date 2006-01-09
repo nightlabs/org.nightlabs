@@ -28,9 +28,11 @@
 package org.nightlabs.editor2d.edit.tree;
 
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
+import org.nightlabs.editor2d.model.LayerPropertySource;
 import org.nightlabs.editor2d.views.LayerView;
 
 
@@ -53,4 +55,18 @@ extends DrawComponentContainerTreeEditPart
   public Image getImage() {
     return LAYER_ICON;
   }  
+  
+  public Layer getLayer() {
+  	return (Layer) getModel();
+  }
+  
+  protected IPropertySource getPropertySource()
+  {
+    if (propertySource == null)
+    {
+      propertySource =
+        new LayerPropertySource(getLayer());
+    }
+    return propertySource;
+  } 
 }

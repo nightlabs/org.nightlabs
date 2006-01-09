@@ -58,7 +58,7 @@ implements EditPartFactory
       return new MultiLayerDrawComponentEditPart((MultiLayerDrawComponent)model);
     
     else if (model instanceof Layer)
-      return new LayerEditPart((Layer)model, (MultiLayerDrawComponentEditPart)context);
+      return new LayerEditPart((Layer)model);
         
     else if (model instanceof EllipseDrawComponent)
     	return new EllipseEditPart((EllipseDrawComponent)model);

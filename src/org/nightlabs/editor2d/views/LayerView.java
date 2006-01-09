@@ -74,12 +74,6 @@ implements ISelectionListener
   public static final Logger LOGGER = Logger.getLogger(LayerView.class);  
   public static final String ID_VIEW = LayerView.class.getName();  
   
-//  public static final Image EYE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/eye12.gif").createImage();    
-//  public static final Image UP_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/up16.gif").createImage();
-//  public static final Image DOWN_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/down16.gif").createImage();
-//  public static final Image LOCK_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/lock12.gif").createImage();
-//  public static final Image DELETE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/delete24.gif").createImage();  
-//  public static final Image NEW_ICON = ImageDescriptor.createFromFile(EditorPlugin.class,"icons/plus16.gif").createImage();
   public static final Image DELETE_ICON = SharedImages.DELETE_16x16.createImage();  
   public static final Image NEW_ICON = SharedImages.ADD_16x16.createImage();
   public static final Image EYE_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Eye");    
@@ -163,7 +157,7 @@ implements ISelectionListener
     refresh();
     scrollComposite.layout(true);
     
-    deactivateTools(false);
+    deactivateTools(true);
   }
 
   private void addLayer() 
@@ -521,9 +515,6 @@ implements ISelectionListener
 	    layerComposite = new Composite(scrollComposite, SWT.NONE);
 	    layerComposite.setSize(scrollComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));    
 	    scrollComposite.setContent(layerComposite);		
-//	    FillLayout layerFillLayout = new FillLayout();
-//	    layerFillLayout.type = SWT.VERTICAL;
-//	    layerComposite.setLayout(layerFillLayout);		
 	    GridLayout layerGridLayout = new GridLayout();
 	    layerComposite.setLayout(layerGridLayout);		
 					
@@ -540,10 +531,10 @@ implements ISelectionListener
 					}
 				}
 				
-//				if (mldc.getDrawComponents().size() <= 1)			  
-//				  deactivateTools(true);			  
-//				else 
-//				  activateTools();
+				if (mldc.getDrawComponents().size() <= 1)			  
+				  deactivateTools(true);			  
+				else 
+				  activateTools();
 				
 				scrollComposite.setMinSize(layerComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));				
 				layerComposite.pack();

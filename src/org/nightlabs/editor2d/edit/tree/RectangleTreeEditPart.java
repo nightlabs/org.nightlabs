@@ -29,11 +29,14 @@ package org.nightlabs.editor2d.edit.tree;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractPaletteFactory;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.RectangleDrawComponent;
+import org.nightlabs.editor2d.model.EllipsePropertySource;
+import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
 
 
 public class RectangleTreeEditPart 
@@ -51,6 +54,20 @@ extends DrawComponentTreeEditPart
     super(model);
   }
 
+  protected IPropertySource getPropertySource()
+  {
+    if (propertySource == null)
+    {
+      propertySource =
+        new ShapeDrawComponentPropertySource(getRectangleDrawComponent());
+    }
+    return propertySource;
+  }  
+  
+  protected RectangleDrawComponent getRectangleDrawComponent() {
+  	return (RectangleDrawComponent) getModel();
+  }
+  
   /* (non-Javadoc)
    * @see org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart#getIcon()
    */

@@ -96,12 +96,6 @@ extends AbstractTreeEditPart
   protected String getText()
   {
   	return getDrawComponent().getName();
-//    // TODO Default Tree Name should come from somewhere else
-//    // respectively the default name should already be set at this point
-//    return 
-//    (null != getDrawComponent().getName()
-//        ? getDrawComponent().getName()
-//        : EditorPlugin.getResourceString("outline_unnamed"));
   }
 
   /**

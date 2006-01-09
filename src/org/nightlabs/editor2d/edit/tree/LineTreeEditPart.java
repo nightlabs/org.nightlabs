@@ -28,10 +28,13 @@
 package org.nightlabs.editor2d.edit.tree;
 
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractPaletteFactory;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.LineDrawComponent;
+import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
 
 
 public class LineTreeEditPart 
@@ -44,7 +47,7 @@ extends DrawComponentTreeEditPart
   /**
    * @param drawComponent
    */
-  public LineTreeEditPart(DrawComponent drawComponent) {
+  public LineTreeEditPart(LineDrawComponent drawComponent) {
     super(drawComponent);
   }
 
@@ -55,6 +58,20 @@ extends DrawComponentTreeEditPart
     return LINE_ICON;
   }
 
+	public LineDrawComponent getLineDrawComponent() {
+	  return (LineDrawComponent) getModel();
+	}
+  
+  protected IPropertySource getPropertySource()
+  {
+    if (propertySource == null)
+    {
+      propertySource =
+        new ShapeDrawComponentPropertySource(getLineDrawComponent());
+    }
+    return propertySource;
+  }   
+  
 //	protected void propertyChanged(PropertyChangeEvent evt) 
 //	{
 //		super.propertyChanged(evt);

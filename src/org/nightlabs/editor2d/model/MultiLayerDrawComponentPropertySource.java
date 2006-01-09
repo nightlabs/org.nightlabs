@@ -40,6 +40,8 @@ extends DrawComponentPropertySource
 	}
 
 	protected List createPropertyDescriptors() {
-		return new ArrayList();
+		return EMPTY_LIST;
 	}		
+	
+	public static final List EMPTY_LIST = new ArrayList(0);
 }

@@ -96,51 +96,14 @@ extends AbstractDrawComponentEditPart
 		if (propertyName.equals(DrawComponentContainer.CHILD_ADDED)) {
 			LOGGER.debug(propertyName);
 			refreshChildren();			
+//			refresh();
 		}
 		else if (propertyName.equals(DrawComponentContainer.CHILD_REMOVED)) {
 			LOGGER.debug(propertyName);
-			refreshChildren();			
+			refreshChildren();
+//			refresh();
 		}		
 	}
-
-//	public void notifyChanged(Notification notification) 
-//	{
-//    int type = notification.getEventType();
-//    int featureId = notification.getFeatureID(Editor2DPackage.class);
-//     
-//    if (featureId == Editor2DPackage.DRAW_COMPONENT_CONTAINER__DRAW_COMPONENTS)
-//    {
-//      switch (type)
-//      {
-//        case Notification.ADD :
-//          LOGGER.debug("DRAW_COMPONENT_CONTAINER__DRAW_COMPONENTS ADD Notified!");
-//          refreshChildren();
-//          break;
-//        case Notification.REMOVE :
-//          LOGGER.debug("DRAW_COMPONENT_CONTAINER__DRAW_COMPONENTS REMOVE Notified!");
-//          refreshChildren();
-//          break;
-//        case Notification.ADD_MANY :
-//          LOGGER.debug("DRAW_COMPONENT_CONTAINER__DRAW_COMPONENTS ADD MANY Notified!");
-//          refreshChildren();
-//          break;                            
-//        case Notification.REMOVE_MANY :
-//          LOGGER.debug("DRAW_COMPONENT_CONTAINER__DRAW_COMPONENTS REMOVE MANY Notified!");
-//          refreshChildren();
-//          break;                            
-//        case Notification.SET :
-//          LOGGER.debug("DRAW_COMPONENT_CONTAINER__DRAW_COMPONENTS SET Notified!");
-//          refreshChildren();
-//          break;                                      
-//      }      
-//    }            
-//    if (type == Notification.SET) {
-//      LOGGER.debug("DrawComponentContainer SET Notified!");       
-//      refreshVisuals();
-//    }
-//        
-//		super.notifyChanged( notification );
-//	}
 	
   protected List getModelChildren()
   {

@@ -60,12 +60,7 @@ implements RendererFigure
       g2d.setClip(null);
       if (renderer != null)
       	renderer.paint(drawComponent, g2d);
-      
-//      FontRenderContext frc = g2d.getFontRenderContext();
-//      LOGGER.debug("frc transform = "+frc.getTransform());
-//      LOGGER.debug("frc antiAlias = "+frc.isAntiAliased());
-//      LOGGER.debug("frc fontMetrics = "+frc.usesFractionalMetrics());
-      
+            
       g2d.dispose();
     }
   }
@@ -75,13 +70,7 @@ implements RendererFigure
   	if (renderer == null && drawComponent != null)
   		renderer = drawComponent.getRenderer();
   	if (renderer != null)
-  	  renderer.paint(drawComponent, graphics);
-  	
-//    FontRenderContext frc = graphics.getFontRenderContext();
-//    LOGGER.debug("frc transform = "+frc.getTransform());
-//    LOGGER.debug("frc antiAlias = "+frc.isAntiAliased());
-//    LOGGER.debug("frc fontMetrics = "+frc.usesFractionalMetrics());
-  	
+  	  renderer.paint(drawComponent, graphics);  	
   }
   
   protected Renderer renderer;   

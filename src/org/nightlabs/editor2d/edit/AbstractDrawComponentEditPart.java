@@ -41,7 +41,6 @@ import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.ui.views.properties.IPropertySource;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.figures.DrawComponentFigure;
 import org.nightlabs.editor2d.figures.RendererFigure;
@@ -63,20 +62,18 @@ implements EditorRequestConstants
     setModel(drawComponent);
   }
   
-//  /* 
-//   * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
-//   */
-//  protected abstract IFigure createFigure();
   protected IFigure createFigure() 
   {
-    DrawComponentFigure figure = new DrawComponentFigure();    
+    RendererFigure figure = new DrawComponentFigure();    
     figure.setDrawComponent(getDrawComponent());    
     addRenderer(figure);
-    addZoomListener(figure);
+    if (figure instanceof DrawComponentFigure) {
+      addZoomListener((DrawComponentFigure)figure);
+    }
     return figure;
   }
   
-  protected void addRenderer(DrawComponentFigure figure) 
+  protected void addRenderer(RendererFigure figure) 
   {
     // add Renderer
     if (getDrawComponent().getRenderer() != null) {
@@ -169,18 +166,30 @@ implements EditorRequestConstants
     }
     
     getFigure().repaint();
-    updateLayer(getFigure());
+//    updateLayer(getFigure());
+    updateRoot(getFigure());
     
-//    LOGGER.debug("refreshVisuals!");
+    LOGGER.debug("refreshVisuals!");
   }
-  
+
+  public void updateRoot(IFigure figure) 
+  {
+    MultiLayerDrawComponentEditPart rootEditPart = getModelRoot();
+    if (rootEditPart != null) {
+      rootEditPart.getBufferedFreeformLayer().refresh(figure);
+      LOGGER.debug("Update Root!");
+    }
+    else    	
+    	LOGGER.debug("rootEditPart == null!");    
+  }
+    
   public void updateLayer(IFigure figure) 
   {
     LayerEditPart layerEditPart = getLayerEditPart();
     if (layerEditPart != null)
       layerEditPart.getBufferedFreeformLayer().refresh(figure);    	
     
-//    LOGGER.debug("Update Layer!");
+    LOGGER.debug("Update Layer!");
   }
   
   protected LayerEditPart getLayerEditPart() 

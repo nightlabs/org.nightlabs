@@ -27,24 +27,15 @@
 
 package org.nightlabs.editor2d.command;
 
-import org.eclipse.gef.commands.Command;
-
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 
 
 public class DeleteLayerCommand 
-extends Command 
+//extends Command 
+extends DeleteDrawComponentCommand
 {
-	/** The DrawComponent to delete */
-	private Layer child;		
-	/** MultiLayerDrawComponent to removed from. */
-	private final MultiLayerDrawComponent parent;
-	/** True, if child was removed from its parent. */	
-	private boolean wasRemoved;
-	/** the LayerIndex of the MultiLayerDrawComponent */
-	private int layerIndex;
 	/** the Deletion String */
 	public static final String DELETE_LAYER = EditorPlugin.getResourceString("command_delete_layer");
 	/**
@@ -53,32 +44,18 @@ extends Command
 	 * @param child    the Shape to remove
 	 * @throws IllegalArgumentException if any parameter is null
 	 */ 
-	public DeleteLayerCommand(MultiLayerDrawComponent parent, Layer child)	
+	public DeleteLayerCommand(MultiLayerDrawComponent mldc, Layer layer)	
 	{
-		if (parent == null || child == null) {
-			throw new IllegalArgumentException();
-		}
+		super(mldc, layer);
 		setLabel(DELETE_LAYER);
-		this.parent = parent;
-		this.child = child;
 	}	
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.commands.Command#canUndo()
-	 */
-	public boolean canUndo() {
-		return wasRemoved;
-	}
-	
+		
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	public void execute() 
 	{
-//	  layerIndex = parent.getDrawComponents().indexOf(child);
-//	  wasRemoved = parent.getDrawComponents().remove(child);
-		layerIndex = parent.getDrawComponents().indexOf(child);
-		wasRemoved = parent.getDrawComponents().remove(child);		
+		super.execute();
 		setCurrentLayer();
 	}	
 	
@@ -87,7 +64,7 @@ extends Command
 	 */
 	public void redo() 
 	{
-	  parent.getDrawComponents().remove(child);	 
+		super.redo();
 	  setCurrentLayer();	  
 	}
 	
@@ -96,25 +73,24 @@ extends Command
 	 */
 	public void undo() 
 	{
-	  parent.getDrawComponents().add(layerIndex, child);
-	  parent.setCurrentLayer(child);
-	  
-//		Layer l = (Layer) parent.getDrawComponents().get(layerIndex);
-//		l.getDrawComponents().add(layerIndex, child);
-//		setCurrentLayer();		
+		super.undo();
+	  getMultiLayerDrawComponent().setCurrentLayer(getLayer());	  
 	}
 	
 	protected void setCurrentLayer() 
 	{
-    if (layerIndex != 0) {
-      parent.setCurrentLayer((Layer) parent.getDrawComponents().get(layerIndex-1));
-    } else if ( layerIndex==0 && parent.getDrawComponents().size() > 2) {
-      parent.setCurrentLayer((Layer) parent.getDrawComponents().get(layerIndex+1));
+    if (index != 0) {
+    	getMultiLayerDrawComponent().setCurrentLayer((Layer) parent.getDrawComponents().get(index-1));
+    } else if ( index==0 && parent.getDrawComponents().size() > 2) {
+    	getMultiLayerDrawComponent().setCurrentLayer((Layer) parent.getDrawComponents().get(index+1));
     }			  	  
 	}
 	
-	public MultiLayerDrawComponent getParent() {
-	  return parent;
+	public MultiLayerDrawComponent getMultiLayerDrawComponent() {
+	  return (MultiLayerDrawComponent) parent;
 	}
 	
+	public Layer getLayer() {
+		return (Layer) child;
+	}
 }

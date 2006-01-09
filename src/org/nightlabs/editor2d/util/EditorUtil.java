@@ -138,10 +138,12 @@ public class EditorUtil
     
   public static double getZoom(EditPart part) 
   {
-    if (part.getRoot() instanceof ScalableFreeformRootEditPart) {
-      ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart) part.getRoot();
-      return root.getZoomManager().getZoom();
-    }
+  	if (part != null && part.getRoot() != null) {
+      if (part.getRoot() instanceof ScalableFreeformRootEditPart) {
+        ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart) part.getRoot();
+        return root.getZoomManager().getZoom();
+      }  		
+  	}
     return 1.0;
   }
   

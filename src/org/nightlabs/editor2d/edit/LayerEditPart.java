@@ -32,11 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
+import org.nightlabs.editor2d.figures.ContainerDrawComponentFigure;
+import org.nightlabs.editor2d.figures.ContainerFreeformLayer;
+import org.nightlabs.editor2d.figures.DrawComponentFigure;
 import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
 import org.nightlabs.editor2d.model.LayerPropertySource;
 
@@ -44,23 +48,30 @@ public class LayerEditPart
 extends AbstractDrawComponentContainerEditPart
 {    
   /**
-   * @param drawComponent
+   * @param layer the Layer for the LayerEditPart
+   * @see org.nightlabs.editor2d.Layer
    */
-  public LayerEditPart(Layer layer, MultiLayerDrawComponentEditPart mldcEditPart) {
+  public LayerEditPart(Layer layer) {
     super(layer);
   }
-    
+	
   /* (non-Javadoc)
    * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
    */
   protected IFigure createFigure() 
   {    
-//    IFigure f = new DummyFreeformLayer();
-//    IFigure f = new org.eclipse.draw2d.FreeformLayer();
-//    RendererFigure f = new FreeformLayer();       
-//  	Figure f = new SmartUpdateFreeformLayer();
-  	Figure f = new OversizedBufferFreeformLayer();
-    ((BufferedFreeformLayer)f).init(this);
+//    IFigure f = new FreeformLayer();
+    
+//  	Figure f = new OversizedBufferFreeformLayer();
+//    ((BufferedFreeformLayer)f).init(this);
+  	
+//  	DrawComponentFigure f = new ContainerDrawComponentFigure();
+//    f.setDrawComponent(getDrawComponent());    
+//    addRenderer(f);
+//    addZoomListener(f);  	
+
+  	IFigure f = new ContainerFreeformLayer();
+  	
 		f.setLayoutManager(new FreeformLayout());		    		
 		return f;  
   }
@@ -77,12 +88,18 @@ extends AbstractDrawComponentContainerEditPart
     if (getLayer().isVisible()) {
       return getLayer().getDrawComponents();
     } else {
-      return new ArrayList();
+      return EMPTY_LIST;
     }
   }
   
-  public BufferedFreeformLayer getBufferedFreeformLayer() {
-    return (BufferedFreeformLayer) getFigure();
+  public static final List EMPTY_LIST = new ArrayList(0); 
+  
+  public BufferedFreeformLayer getBufferedFreeformLayer() 
+  {
+		if (getFigure() instanceof BufferedFreeformLayer)
+			return (BufferedFreeformLayer) getFigure();
+		else
+			return null;
   }
   
 	protected void propertyChanged(PropertyChangeEvent evt) 
@@ -91,7 +108,8 @@ extends AbstractDrawComponentContainerEditPart
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(Layer.PROP_VISIBLE)) {
 			LOGGER.debug(propertyName +" changed!");
-			refreshChildren();			
+//			refreshChildren();
+			refresh();
 		}
 	}
 	
@@ -108,21 +126,4 @@ extends AbstractDrawComponentContainerEditPart
     return propertySource;
   } 
   
-//	public void notifyChanged(Notification notification) 
-//	{
-//    int type = notification.getEventType();
-//    int featureId = notification.getFeatureID(Editor2DPackage.class);
-//    
-//    if (type == Notification.SET) 
-//    {
-//      switch (featureId) 
-//      {
-//	      case Editor2DPackage.LAYER__VISIBLE :
-//	        LOGGER.debug("LAYER__VISIBLE Notified!");
-//		      refreshChildren();
-//		      break;                	
-//      }
-//    }		
-//		super.notifyChanged( notification );
-//	}
 }

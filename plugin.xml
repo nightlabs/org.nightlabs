@@ -20,7 +20,6 @@
       <import plugin="org.holongate.j2d"/>
       <import plugin="org.nightlabs.classsharing"/>
       <import plugin="org.nightlabs.editor2d.viewer"/>
-      <import plugin="org.holongate.j2d.gef"/>
    </requires>
 
    
@@ -81,7 +80,7 @@
             default="false"
             extensions="e2d"
             icon="icons/EditorPlugin-Logo.16x16.png"
-            id="org.nightlabs.editor2d.editor"
+            id="org.nightlabs.editor2d.Editor"
             name="%editor.name"/>
    </extension>
 
@@ -103,8 +102,8 @@
    <extension
          point="org.nightlabs.base.editor2perspective">
       <registry
-            editorID="org.nightlabs.editor2d.editor"
-            perspectiveID="org.nightlabs.editor2d.perspective"/>
+            editorID="org.nightlabs.editor2d.Editor"
+            perspectiveID="org.nightlabs.editor2d.EditorPerspective"/>
    </extension>
 
    
