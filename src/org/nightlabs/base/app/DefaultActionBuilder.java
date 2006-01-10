@@ -29,6 +29,7 @@ package org.nightlabs.base.app;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -79,9 +80,9 @@ extends ActionBarAdvisor
 	private OpenFileAction openAction;
 	
 	// Help-Menu
-//	private ActionFactory.IWorkbenchAction introAction; 
+	private ActionFactory.IWorkbenchAction introAction; 
 	private ActionFactory.IWorkbenchAction helpAction;
-//	private ActionFactory.IWorkbenchAction updateAction;
+	private ActionFactory.IWorkbenchAction updateAction;
 	private ActionFactory.IWorkbenchAction aboutAction;
 	
 	// Window-Menu
@@ -90,14 +91,21 @@ extends ActionBarAdvisor
 	private ActionFactory.IWorkbenchAction preferencesAction;
 			
 	public DefaultActionBuilder(IActionBarConfigurer configurer) 
-	{
-//		this(configurer, false, false, false, false, false, false, false, false);		
+	{		
 		this(configurer, true, true, true, true, true, true, true, true);
+	}	
+	
+	public DefaultActionBuilder(IActionBarConfigurer configurer, boolean showNewMenu, boolean showOpenMenu, 
+			boolean showRecentFilesMenu, boolean showSaveMenu, boolean showPerspectivesMenu, boolean showViewsMenu, 
+			boolean showPreferencesMenu, boolean showHelpMenu) 
+	{
+		this(configurer, showNewMenu, showOpenMenu, showRecentFilesMenu, showSaveMenu, 
+				showPerspectivesMenu, showViewsMenu, showPreferencesMenu, showHelpMenu, true, true);		
 	}	
 
 	public DefaultActionBuilder(IActionBarConfigurer configurer, boolean showNewMenu, boolean showOpenMenu, 
 			boolean showRecentFilesMenu, boolean showSaveMenu, boolean showPerspectivesMenu, boolean showViewsMenu, 
-			boolean showPreferencesMenu, boolean showHelpMenu) 
+			boolean showPreferencesMenu, boolean showHelpMenu, boolean showIntro, boolean showUpdate) 
 	{
 		super(configurer);
 		this.showNewMenu = showNewMenu;
@@ -108,9 +116,11 @@ extends ActionBarAdvisor
 		this.showViewsMenu = showViewsMenu;
 		this.showPreferencesMenu = showPreferencesMenu;
 		this.showHelpMenu = showHelpMenu;
+		this.showIntro = showIntro;
+		this.showUpdate = showUpdate;
 		initRecentFileConfig();
 	}	
-	
+		
 	protected boolean showNewMenu = false;
 	protected boolean showOpenMenu = false;
 	protected boolean showRecentFilesMenu = false;
@@ -119,6 +129,8 @@ extends ActionBarAdvisor
 	protected boolean showViewsMenu = false;
 	protected boolean showPreferencesMenu = false;
 	protected boolean showHelpMenu = false;
+	protected boolean showIntro = false;
+	protected boolean showUpdate = false;
 	
 	protected void initRecentFileConfig() 
 	{
@@ -171,10 +183,14 @@ extends ActionBarAdvisor
 		if (showPreferencesMenu)
 			preferencesAction = ActionFactory.PREFERENCES.create(window);
 				
-		// Help-Menu
-//		introAction = ActionFactory.INTRO.create(window);
+		// Help-Menu		
 		if (showHelpMenu)
-			helpAction = ActionFactory.HELP_CONTENTS.create(window);	
+			helpAction = ActionFactory.HELP_CONTENTS.create(window);		
+		if (showIntro)
+			introAction = ActionFactory.INTRO.create(window);
+		if (showUpdate)
+			// TODO: find out how to hook updateAction
+			
 		aboutAction = ActionFactory.ABOUT.create(window); 
 	}
 
@@ -273,7 +289,12 @@ extends ActionBarAdvisor
 		if (showHelpMenu) {
 			helpMenu.add(helpAction);
 			helpMenu.add(new Separator());
-		}		 
+		}
+		if (showIntro) {
+			helpMenu.add(introAction);		
+			helpMenu.add(new Separator());			
+		}
+		
 		helpMenu.add(aboutAction);
 	}
 
@@ -290,7 +311,8 @@ extends ActionBarAdvisor
 	  	if (showHelpMenu)
 	  		helpAction.dispose();
 //	  	importAction.dispose();
-//	  	introAction.dispose();
+	  	if (showIntro)
+	  		introAction.dispose();
 //	  	newAction.dispose();
 
 	  	if (showPreferencesMenu)
