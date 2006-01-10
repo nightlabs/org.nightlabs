@@ -125,6 +125,8 @@ import org.nightlabs.editor2d.actions.SelectAllWithSameName;
 import org.nightlabs.editor2d.actions.ShowDefaultRenderAction;
 import org.nightlabs.editor2d.actions.ZoomAllAction;
 import org.nightlabs.editor2d.actions.ZoomSelectionAction;
+import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
+import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
 import org.nightlabs.editor2d.actions.viewer.ViewerAction;
 import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
@@ -299,6 +301,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	    			progressFilter.addPropertyChangeListener(progressListener);	    			
 	    			monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), progressFilter.getTotalWork());
 	    			mldc = load(ioFilter, new FileInputStream(fileInput.getFile()));
+	    			progressFilter.removePropertyChangeListener(progressListener);
 	    			return;
 	    		}
 	    		else
@@ -722,6 +725,15 @@ extends J2DGraphicalEditorWithFlyoutPalette
       registry.registerAction(action);
       getSelectionActions().add(action.getId());    
             
+      // Order Actions
+      action = new ChangeOrderToLocalFront(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());    
+
+      action = new ChangeOrderToLocalBack(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());    
+      
 //      // Test Viewer Action
 //      action = new ViewerAction(this);
 //      registry.registerAction(action);

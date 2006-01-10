@@ -105,6 +105,24 @@
             editorID="org.nightlabs.editor2d.Editor"
             perspectiveID="org.nightlabs.editor2d.EditorPerspective"/>
    </extension>
-
-   
+<!--
+	<extension
+			point="org.eclipse.ui.actionSets">
+		<actionSet
+			label="Update"
+			visible="true"
+			id="org.nightlabs.editor2d.softwareUpdates">
+		<menu
+			label="Update"
+			id="help.updateMenu">
+		</menu>
+		<action
+			label="Update"
+			class="rcpmail.rcp.InstallWizardAction"
+			menubarPath="help.updateMenu"
+			id="org.nightlabs.editor2d.update">
+		</action>
+		</actionSet>
+	</extension>		
+-->
 </plugin>

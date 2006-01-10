@@ -23,39 +23,87 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.app;
+package org.nightlabs.editor2d.actions.order;
 
-import org.nightlabs.base.app.AbstractApplication;
-import org.nightlabs.base.app.AbstractWorkbenchAdvisor;
-import org.nightlabs.editor2d.EditorPerspective;
+import org.nightlabs.editor2d.AbstractEditor;
+import org.nightlabs.editor2d.DrawComponentContainer;
+import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.MultiLayerDrawComponent;
 
 /**
+ * changes the order of the selected Objects to the front
+ * of the currentLayer
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class Editor2DWorkbenchAdvisor 
-extends AbstractWorkbenchAdvisor 
+public class ChangeOrderToLocalFront 
+extends AbstractChangeOrderSelectionAction 
 {
-
-	/**
-	 * 
-	 */
-	public Editor2DWorkbenchAdvisor() {
-		super();		
-	}
-
-	/**
-	 * @see org.nightlabs.base.app.AbstractWorkbenchAdvisor#initApplication()
-	 */
-	protected AbstractApplication initApplication() {
-		return new Editor2DApplication();
-	}
-
-	/**
-	 * @see org.eclipse.ui.application.WorkbenchAdvisor#getInitialWindowPerspectiveId()
-	 */
-	public String getInitialWindowPerspectiveId() {
-		return EditorPerspective.ID_PERSPECTIVE;
-	}
-
+	public static final String ID = ChangeOrderToLocalFront.class.getName();
 	
+	/**
+	 * @param editor
+	 * @param style
+	 */
+	public ChangeOrderToLocalFront(AbstractEditor editor, int style) {
+		super(editor, style);
+	}
+
+	/**
+	 * @param editor
+	 */
+	public ChangeOrderToLocalFront(AbstractEditor editor) {
+		super(editor);
+	}
+
+	public void init() 
+	{
+		setText(EditorPlugin.getResourceString("action.changeOrderToLocalFront.text"));
+		setToolTipText(EditorPlugin.getResourceString("action.changeOrderToLocalFront.tooltip"));
+		setId(ID);
+	}
+	
+	/** 
+	 *@return the lastIndex of the drawComponents-List from 
+	 *the parent of the primary selected drawComponent    
+	 */
+	public int getNewIndex() 
+	{
+		int lastIndex = 0;
+		DrawComponentContainer parent = primarySelected.getParent();
+		if (parent.getDrawComponents().size() != 1)
+			 lastIndex = parent.getDrawComponents().size() -1;
+		return lastIndex;		
+	}
+
+	/**
+	 * @return the parent of the primary selected DrawComponent
+	 */
+	public DrawComponentContainer getContainer() 
+	{
+		return primarySelected.getParent();		 		
+	}
+
+//	/** 
+//	 *@return the lastIndex of the drawComponents-List from 
+//	 * the currentLayer
+//	 *@see MultiLayerDrawComponent#getCurrentLayer()    
+//	 */
+//	public int getNewIndex() 
+//	{
+//		int lastIndex = 0;
+//		int size = getCurrentLayer().getDrawComponents().size();
+//		if (size != 1)
+//			lastIndex = size -1;
+//		return lastIndex;
+//	}
+//
+//	/**
+//	 * @return the currentLayer
+//	 * @see MultiLayerDrawComponent#getCurrentLayer()
+//	 */
+//	public DrawComponentContainer getContainer() 
+//	{		 		
+//		return getCurrentLayer();
+//	}
+		
 }

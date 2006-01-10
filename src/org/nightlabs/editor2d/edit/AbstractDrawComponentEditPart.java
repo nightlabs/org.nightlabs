@@ -34,10 +34,8 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -166,53 +164,17 @@ implements EditorRequestConstants
     }
     
     getFigure().repaint();
-//    updateLayer(getFigure());
-    updateRoot(getFigure());
-    
+    updateRoot(getFigure());    
 //    LOGGER.debug("refreshVisuals!");
   }
 
   public void updateRoot(IFigure figure) 
   {
     MultiLayerDrawComponentEditPart rootEditPart = getModelRoot();
-    if (rootEditPart != null) {
+    if (rootEditPart != null)
       rootEditPart.getBufferedFreeformLayer().refresh(figure);
-      LOGGER.debug("Update Root!");
-    }
-    else    	
-    	LOGGER.debug("rootEditPart == null!");    
   }
     
-//  public void updateLayer(IFigure figure) 
-//  {
-//    LayerEditPart layerEditPart = getLayerEditPart();
-//    if (layerEditPart != null)
-//      layerEditPart.getBufferedFreeformLayer().refresh(figure);    	
-//    
-//    LOGGER.debug("Update Layer!");
-//  }
-//  
-//  protected LayerEditPart getLayerEditPart() 
-//  {    
-//    EditPart parent = getParent();  
-//    if (parent == null)
-//      throw new IllegalStateException("Member parent may not be null for DrawComponent"+this.toString());
-//    
-//    if (this instanceof LayerEditPart)
-//      return (LayerEditPart) this;
-//    if (this instanceof MultiLayerDrawComponentEditPart)
-//      return null;
-//    if (this instanceof RootEditPart)            
-//      return null;        
-//    if (parent instanceof LayerEditPart)
-//      return (LayerEditPart) parent;
-//    
-//    while (!(parent instanceof LayerEditPart)) {
-//      parent = parent.getParent(); 
-//    }    
-//    return (LayerEditPart) parent;   
-//  }
-  
   /* (non-Javadoc)
    * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
    */

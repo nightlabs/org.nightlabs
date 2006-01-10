@@ -44,6 +44,8 @@ import org.nightlabs.editor2d.actions.ResetRotationCenterAction;
 import org.nightlabs.editor2d.actions.RotateAction;
 import org.nightlabs.editor2d.actions.SelectAllWithSameName;
 import org.nightlabs.editor2d.actions.ShowDefaultRenderAction;
+import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
+import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
 
 
 public class EditorContextMenuProvider 
@@ -122,6 +124,12 @@ extends ContextMenuProvider
   	buildMarkSubMenu(markSubMenu);
   	if (!markSubMenu.isEmpty())
   		manager.appendToGroup(GEFActionConstants.GROUP_REST, markSubMenu);  	
+
+  	// Order SubMenu
+  	MenuManager orderSubMenu = new MenuManager(EditorPlugin.getResourceString("menu.order"));
+  	buildOrderSubMenu(orderSubMenu);
+  	if (!orderSubMenu.isEmpty())
+  		manager.appendToGroup(GEFActionConstants.GROUP_REST, orderSubMenu);  	
   	
 //  	action = getActionRegistry().getAction(ActionFactory.SAVE.getId());
 //  	manager.appendToGroup(GEFActionConstants.GROUP_SAVE, action);
@@ -145,6 +153,18 @@ extends ContextMenuProvider
   	if (action.isEnabled())
   	  menuMan.add(action);    
   }
+
+  protected void buildOrderSubMenu(MenuManager menuMan) 
+  {
+  	IAction action = getActionRegistry().getAction(ChangeOrderToLocalFront.ID);
+  	if (action.isEnabled())
+  	  menuMan.add(action);    
+  	
+  	action = getActionRegistry().getAction(ChangeOrderToLocalBack.ID);
+  	if (action.isEnabled())
+  	  menuMan.add(action);      	
+  }
+  
   
   protected void buildEditSubMenu(MenuManager menuMan)
   {

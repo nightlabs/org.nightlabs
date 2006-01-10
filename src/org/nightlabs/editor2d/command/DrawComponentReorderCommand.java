@@ -37,13 +37,15 @@ import org.nightlabs.editor2d.EditorPlugin;
 public class DrawComponentReorderCommand 
 extends Command 
 {
-  private int oldIndex, newIndex;
+  private int oldIndex; 
+  private int newIndex;
   private DrawComponent child;
   private DrawComponentContainer parent;
+  private DrawComponentContainer oldParent;
 
   public DrawComponentReorderCommand(DrawComponent child, DrawComponentContainer parent, int newIndex ) 
   {
-  	super(EditorPlugin.getResourceString("command_reorder_drawcomponent"));
+  	super(EditorPlugin.getResourceString("command.reorder.drawcomponent"));
   	this.child = child;
   	this.parent = parent;
   	this.newIndex = newIndex;
@@ -51,14 +53,34 @@ extends Command
 
   public void execute() 
   {
-  	oldIndex = parent.getDrawComponents().indexOf(child);
-  	parent.getDrawComponents().remove(child);
-  	parent.getDrawComponents().add(newIndex, child);
+  	// if the same parent just change index in list
+  	if (parent.equals(child.getParent())) {
+    	oldIndex = parent.getDrawComponents().indexOf(child);
+    	parent.getDrawComponents().remove(child);
+    	parent.getDrawComponents().add(newIndex, child);  		
+  	}
+  	else {
+	  	oldParent = child.getParent();
+	  	oldIndex = oldParent.getDrawComponents().indexOf(child);	  	
+	  	oldParent.removeDrawComponent(child);
+	  	parent.addDrawComponent(child, newIndex);  	  		
+  	}
   }
 
   public void undo() 
   {
-  	parent.getDrawComponents().remove(child);
-  	parent.getDrawComponents().add(oldIndex, child);
+  	if (oldParent == null) {
+    	parent.getDrawComponents().remove(child);
+    	parent.getDrawComponents().add(oldIndex, child);  		
+  	}
+  	else {
+  		parent.removeDrawComponent(child);
+  		oldParent.addDrawComponent(child, oldIndex);
+  	}
+  }
+  
+  public void redo()
+  {
+  	execute();
   }
 }

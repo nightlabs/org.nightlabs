@@ -23,39 +23,63 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.app;
+package org.nightlabs.editor2d.actions.order;
 
-import org.nightlabs.base.app.AbstractApplication;
-import org.nightlabs.base.app.AbstractWorkbenchAdvisor;
-import org.nightlabs.editor2d.EditorPerspective;
+import org.nightlabs.editor2d.AbstractEditor;
+import org.nightlabs.editor2d.DrawComponentContainer;
+import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.MultiLayerDrawComponent;
 
 /**
+ * changes the order of the selected Objects to the back
+ * of the currentLayer  
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class Editor2DWorkbenchAdvisor 
-extends AbstractWorkbenchAdvisor 
+public class ChangeOrderToLocalBack 
+extends AbstractChangeOrderSelectionAction 
 {
-
+	public static final String ID = ChangeOrderToLocalBack.class.getName();
+	
 	/**
-	 * 
+	 * @param editor
+	 * @param style
 	 */
-	public Editor2DWorkbenchAdvisor() {
-		super();		
+	public ChangeOrderToLocalBack(AbstractEditor editor, int style) {
+		super(editor, style);
 	}
 
 	/**
-	 * @see org.nightlabs.base.app.AbstractWorkbenchAdvisor#initApplication()
+	 * @param editor
 	 */
-	protected AbstractApplication initApplication() {
-		return new Editor2DApplication();
+	public ChangeOrderToLocalBack(AbstractEditor editor) {
+		super(editor);
 	}
 
+	public void init() 
+	{
+		setText(EditorPlugin.getResourceString("action.changeOrderToLocalBack.text"));
+		setToolTipText(EditorPlugin.getResourceString("action.changeOrderToLocalBack.tooltip"));
+		setId(ID);
+	}	
+	
+	/** 
+	 *@return the firstIndex of the drawComponents-List from 
+	 * the currentLayer
+	 *@see MultiLayerDrawComponent#getCurrentLayer()    
+	 */
+	public int getNewIndex() 
+	{
+		return 0;
+	}
+	
 	/**
-	 * @see org.eclipse.ui.application.WorkbenchAdvisor#getInitialWindowPerspectiveId()
+	 * @return the currentLayer
+	 * @see MultiLayerDrawComponent#getCurrentLayer()
 	 */
-	public String getInitialWindowPerspectiveId() {
-		return EditorPerspective.ID_PERSPECTIVE;
+	public DrawComponentContainer getContainer() 
+	{
+//		return getCurrentLayer();		
+		return primarySelected.getParent();
 	}
-
 	
 }
