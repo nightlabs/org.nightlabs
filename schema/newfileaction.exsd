@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.ipanema.base">
+<schema targetNamespace="org.nightlabs.base">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.ipanema.base" id="newfileaction" name="newfileaction"/>
+         <meta.schema plugin="org.nightlabs.base" id="newfileaction" name="newfileaction"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]

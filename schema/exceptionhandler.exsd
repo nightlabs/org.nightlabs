@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.ipanema.base">
+<schema targetNamespace="org.nightlabs.base">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.ipanema.base" id="exceptionhandler" name="Defines handler for uncaught exception within the workbench."/>
+         <meta.schema plugin="org.nightlabs.base" id="exceptionhandler" name="Defines handler for uncaught exception within the workbench."/>
       </appInfo>
       <documentation>
          Defines hander for EventLoopExceptions
@@ -57,10 +57,10 @@
             <annotation>
                <documentation>
                   a fully qualified name of the class that implements 
-&lt;samp&gt;org.nightlabs.ipanema.base.exceptionhandler.IExceptionHandler&lt;/samp&gt;
+&lt;samp&gt;org.nightlabs.jfire.base.exceptionhandler.IExceptionHandler&lt;/samp&gt;
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.ipanema.base.exceptionhandler.IExceptionHandler"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.base.exceptionhandler.IExceptionHandler"/>
                </appInfo>
             </annotation>
          </attribute>

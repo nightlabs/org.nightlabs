@@ -66,17 +66,11 @@ implements IWizardHopPage
 	
 	private IWizardHop wizardHop;
 
-	/**
-	 * @see org.nightlabs.base.wizard.IWizardHopPage#setWizardHop(org.nightlabs.ipanema.trade.transfer.wizard.IWizardHop)
-	 */
 	public void setWizardHop(IWizardHop wizardHop)
 	{
 		this.wizardHop = wizardHop;
 	}
 
-	/**
-	 * @see org.nightlabs.base.wizard.IWizardHopPage#getWizardHop()
-	 */
 	public IWizardHop getWizardHop()
 	{
 		return wizardHop;
