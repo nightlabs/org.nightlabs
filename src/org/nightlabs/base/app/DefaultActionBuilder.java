@@ -49,6 +49,7 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
 import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.action.INewFileAction;
 import org.nightlabs.base.action.NewFileRegistry;
 import org.nightlabs.base.action.OpenFileAction;
 import org.nightlabs.base.action.ReOpenFileAction;
@@ -396,35 +397,38 @@ extends ActionBarAdvisor
 	}	
 		
 	/**
-	 * adds entries registered in the NewFileRegistry-ExtensionPoint
-	 * to the given MenuManager
+	 * adds entries registered in the {@link NewFileRegistry}-ExtensionPoint
+	 * to the given {@link MenuManager}
 	 * 
 	 * @param menuMan the IMenuManager to add new entries to
 	 */
 	protected void createNewEntries(IMenuManager menuMan)
 	{
 		NewFileRegistry newFileRegistry = NewFileRegistry.sharedInstance(); 
-		Map categoryID2Action = newFileRegistry.getCategory2Actions();
+		Map categoryID2Actions = newFileRegistry.getCategory2Actions();
 		List defaultActions = new ArrayList();
-		for (Iterator it = categoryID2Action.keySet().iterator(); it.hasNext(); ) 
+		for (Iterator it = categoryID2Actions.keySet().iterator(); it.hasNext(); ) 
 		{
 			String categoryID = (String) it.next();
-			IAction action = (IAction) categoryID2Action.get(categoryID);			
-			if (categoryID.equals(NewFileRegistry.DEFAULT_CATEGORY)) {
-				defaultActions.add(action);
-			}
-			else {
-				String categoryName = newFileRegistry.getCategoryName(categoryID);
-				if (categoryName != null && !categoryName.equals("")) {					
-					IMenuManager categoryMenu = new MenuManager(categoryName);
-					categoryMenu.add(action);
-					menuMan.add(categoryMenu);
+			List actions = (List) categoryID2Actions.get(categoryID);
+			for (Iterator itActions = actions.iterator(); itActions.hasNext(); ) {
+				INewFileAction action = (INewFileAction) itActions.next();			
+				if (categoryID.equals(NewFileRegistry.DEFAULT_CATEGORY)) {
+					defaultActions.add(action);
 				}
-			}			
+				else {
+					String categoryName = newFileRegistry.getCategoryName(categoryID);
+					if (categoryName != null && !categoryName.equals("")) {					
+						IMenuManager categoryMenu = new MenuManager(categoryName);
+						categoryMenu.add(action);
+						menuMan.add(categoryMenu);
+					}
+				}							
+			}
 		}
 		for (Iterator itDefault = defaultActions.iterator(); itDefault.hasNext(); ) {
 			menuMan.add((IAction)itDefault.next());
 		}
 	}
-
+	
 }

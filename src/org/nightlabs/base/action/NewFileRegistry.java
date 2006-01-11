@@ -27,6 +27,8 @@
 package org.nightlabs.base.action;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
@@ -45,14 +47,6 @@ extends AbstractEPProcessor
 	public static final String DEFAULT_CATEGORY = "Default category";
 	
 	private static NewFileRegistry sharedInstance;
-	/**
-	 * @deprecated Use {@link #sharedInstance()} instead
-	 */
-	public static NewFileRegistry getSharedInstance() {
-		if (sharedInstance == null)
-			sharedInstance = new NewFileRegistry();
-		return sharedInstance;
-	}	
 	
 	public static NewFileRegistry sharedInstance() {
 		if (sharedInstance == null)
@@ -61,11 +55,22 @@ extends AbstractEPProcessor
 	}
 	
 	protected Map category2Actions = new HashMap();
+	
+	/**
+	 * 
+	 * @return a {@link Map} containing categoryIDs {@link String} as key and
+	 * a {@link List} of {@link INewFileAction} as value 
+	 */
 	public Map getCategory2Actions() {
 		checkProcessing();
 		return category2Actions;
 	}
 	
+	/**
+	 * 
+	 * @param categoryID the ID of the Category
+	 * @return the name of the category for the corresponding ID
+	 */
 	public String getCategoryName(String categoryID) {
 		return categoryRegistry.getCategoryName(categoryID);
 	}
@@ -99,22 +104,7 @@ extends AbstractEPProcessor
 
 			String tooltip = element.getAttribute("tooltip");			
 			String iconName = element.getAttribute("icon");
-			
-//			try {
-//				Class actionClass = Class.forName(className);
-//				Object o = actionClass.newInstance();
-//				if (o instanceof IAction) {
-//					IAction action = (IAction) o;
-//					category2Actions.put(categoryID, action);
-//				}
-//			} catch (ClassNotFoundException e) {				
-//				throw new EPProcessorException("Class "+className+" not found!");
-//			} catch (InstantiationException e) {
-//				throw new EPProcessorException("Class "+className+" can not be instantiated!");
-//			} catch (IllegalAccessException e) {
-//				throw new EPProcessorException("Class "+className+" can not be accessed!");			
-//			}
-				
+							
 			Object o;
 			try {
 				o = element.createExecutableExtension("class");
@@ -127,7 +117,16 @@ extends AbstractEPProcessor
 					if (checkString(iconName))
 						action.setImageDescriptor(getImageDescriptor(iconName));
 					
-					category2Actions.put(categoryID, action);
+//					category2Actions.put(categoryID, action);
+					if (category2Actions.containsKey(categoryID)) {
+						List actions = (List) category2Actions.get(categoryID);
+						actions.add(action);
+					}
+					else {
+						List actions = new LinkedList();
+						actions.add(action);
+						category2Actions.put(categoryID, actions);						
+					}					
 				}					
 			} catch (CoreException e) {
 				throw new EPProcessorException(e);
@@ -160,7 +159,6 @@ extends AbstractEPProcessor
 			return EXTENSION_POINT_ID;
 		}
 		
-		// TODO: implement this
 		public String getCategoryName(String categoryID) 
 		{
 			checkProcessing();
