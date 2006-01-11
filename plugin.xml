@@ -91,7 +91,6 @@
    <extension
          point="org.nightlabs.base.newfileaction">
       <action
-            categoryID="%category.name"
             class="org.nightlabs.base.action.NewFileAction"
             fileExtension="e2d"
             title="%action.new.text"
