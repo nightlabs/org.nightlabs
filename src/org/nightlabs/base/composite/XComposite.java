@@ -37,11 +37,57 @@ import org.eclipse.swt.widgets.Control;
 
 public class XComposite extends Composite
 {
+	public static enum LayoutMode {
+		ORDINARY_WRAPPER, TIGHT_WRAPPER
+	}
+
+	public static enum LayoutDataMode {
+		NONE, GRID_DATA
+	}
+
+	/**
+	 * @deprecated Use {@link LayoutMode} instead!
+	 */
 	public static final int LAYOUT_MODE_ORDINARY_WRAPPER = 0;
+
+	/**
+	 * @deprecated Use {@link LayoutMode} instead!
+	 */
 	public static final int LAYOUT_MODE_TIGHT_WRAPPER = 1;
 
+	/**
+	 * @deprecated Use {@link LayoutDataMode} instead!
+	 */
 	public static final int LAYOUT_DATA_MODE_NONE = 0;
+
+	/**
+	 * @deprecated Use {@link LayoutDataMode} instead!
+	 */
 	public static final int LAYOUT_DATA_MODE_GRID_DATA = 1;
+
+	private static LayoutMode int2LayoutMode(int layoutMode)
+	{
+		switch (layoutMode) {
+			case LAYOUT_MODE_ORDINARY_WRAPPER:
+				return LayoutMode.ORDINARY_WRAPPER;
+			case LAYOUT_MODE_TIGHT_WRAPPER:
+				return LayoutMode.TIGHT_WRAPPER;
+			default:
+				throw new IllegalArgumentException("Illegal layout mode: " + layoutMode);
+		}
+	}
+
+	private static LayoutDataMode int2LayoutDataMode(int layoutDataMode)
+	{
+		switch (layoutDataMode) {
+			case LAYOUT_DATA_MODE_NONE:
+				return LayoutDataMode.NONE;
+			case LAYOUT_DATA_MODE_GRID_DATA:
+				return LayoutDataMode.GRID_DATA;
+			default:
+				throw new IllegalArgumentException("Illegal layout data mode: " + layoutDataMode);
+		}
+	}
 
 	/**
 	 * Calls {@link #XComposite(Composite, int, int)} with
@@ -75,18 +121,33 @@ public class XComposite extends Composite
 	 */
 	public XComposite(Composite parent, int style, int layoutMode, int layoutDataMode)
 	{
+		this(parent, style, int2LayoutMode(layoutMode), int2LayoutDataMode(layoutDataMode));	
+	}
+
+	public XComposite(Composite parent, int style, LayoutMode layoutMode)
+	{
+		this(parent, style, layoutMode, LayoutDataMode.GRID_DATA);
+	}
+
+	public XComposite(Composite parent, int style, LayoutDataMode layoutDataMode)
+	{
+		this(parent, style, LayoutMode.ORDINARY_WRAPPER, layoutDataMode);
+	}
+
+	public XComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+	{
 		super(parent, style);
 
 		this.setForeground(parent.getForeground());
 		this.setBackground(parent.getBackground());
 
 		switch (layoutMode) {
-			case LAYOUT_MODE_ORDINARY_WRAPPER:{
+			case ORDINARY_WRAPPER:{
 				GridLayout layout = new GridLayout();
 				setLayout(layout);
 				break;
 			}
-			case LAYOUT_MODE_TIGHT_WRAPPER: {
+			case TIGHT_WRAPPER: {
 				GridLayout layout = new GridLayout();
 				layout.horizontalSpacing = 0;
 				layout.verticalSpacing = 0;
@@ -106,10 +167,10 @@ public class XComposite extends Composite
 		}
 
 		switch (layoutDataMode) {
-			case LAYOUT_DATA_MODE_NONE:
+			case NONE:
 				// nothing
 				break;
-			case LAYOUT_DATA_MODE_GRID_DATA:
+			case GRID_DATA:
 				GridData gridData = new GridData(GridData.FILL_BOTH);
 //				gridData.minimumHeight = 1;
 //				gridData.minimumWidth = 1;
@@ -134,10 +195,10 @@ public class XComposite extends Composite
 		}
 	}
 
-	private Map childStatusByControl = new HashMap();
+	private Map<Control, ChildStatus> childStatusByControl = new HashMap<Control, ChildStatus>();
 	private ChildStatus getChildStatus(Control control, boolean create)
 	{
-		ChildStatus cs = (ChildStatus) childStatusByControl.get(control);
+		ChildStatus cs = childStatusByControl.get(control);
 		if (cs == null && create) {
 			cs = new ChildStatus();
 			childStatusByControl.put(control, cs);
