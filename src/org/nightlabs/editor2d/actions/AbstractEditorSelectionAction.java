@@ -28,12 +28,14 @@
 package org.nightlabs.editor2d.actions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -41,7 +43,9 @@ import org.eclipse.swt.widgets.Shell;
 
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.edit.LayerEditPart;
 
 public abstract class AbstractEditorSelectionAction 
 extends SelectionAction
@@ -57,7 +61,7 @@ extends SelectionAction
 
 	protected abstract boolean calculateEnabled(); 
 
-	protected boolean isActiveEditor()
+	public boolean isActiveEditor()
 	{
 		if (getWorkbenchPart().getSite().getWorkbenchWindow().getActivePage().getActiveEditor().equals(getEditor())) {
 			return true;
@@ -94,7 +98,7 @@ extends SelectionAction
 	 * @return true if the selected objects contain minimum so many EditPart
 	 * as the given amount of the given class
 	 */
-	protected boolean selectionContains(Class clazz, int amount, boolean model) 
+	public boolean selectionContains(Class clazz, int amount, boolean model) 
 	{
 		if (!getSelectedObjects().isEmpty()) 
 		{
@@ -122,7 +126,7 @@ extends SelectionAction
 	 * A Convenice Method which calls selectionContains with the amount 1 
 	 * @see selectionContains(Class clazz, int amount, boolean model)
 	 */
-	protected boolean selectionContains(Class clazz, boolean model) {
+	public boolean selectionContains(Class clazz, boolean model) {
 		return selectionContains(clazz, 1, model);
 	}
 	
@@ -136,7 +140,7 @@ extends SelectionAction
 	 * @return a List of all objects from the selection which are assignable 
 	 * from the given class
 	 */
-	protected List getSelection(Class clazz, boolean model) 
+	public List getSelection(Class clazz, boolean model) 
 	{
 		if (!getSelectedObjects().isEmpty()) 
 		{
@@ -163,11 +167,90 @@ extends SelectionAction
 		return EMPTY_LIST;
 	}
 	
-	protected IStructuredSelection getStructuredSelection() {
+	/**
+	 * 
+	 * @param excludeClasses a Collection of Class-Objects which should be excluded
+	 * from the selection
+	 * @param model determines if the Class-Check should be performed on the
+	 * selected EditParts or the model (DrawComponent) of the EditParts
+	 * @return a List of all selected objects (editParts or DrawComponents, determined by model), 
+	 * except those who are assignableFrom a Class included in the excludeList
+	 * @see Class#isAssignableFrom(Class)
+	 */
+	public List getSelection(Collection excludeClasses, boolean model) 
+	{
+		if (!getSelectedObjects().isEmpty()) 
+		{
+			List selection = new ArrayList();
+			for (Iterator it = getSelectedObjects().iterator(); it.hasNext(); ) 
+			{
+				EditPart editPart = (EditPart) it.next();
+				Class c = null;
+				if (!model)
+					c = editPart.getClass();
+				else
+					c = editPart.getModel().getClass();
+				
+				for (Iterator itExclude = excludeClasses.iterator(); itExclude.hasNext(); ) 
+				{
+					Class clazz = (Class) itExclude.next();
+						
+					if (clazz.isAssignableFrom(c)) 
+					{
+						if (!model) {
+							if (selection.contains(editPart))
+								selection.remove(editPart);
+						}
+						else {
+							if (selection.contains(editPart.getModel()))
+								selection.remove(editPart.getModel());							
+						}																			
+					}
+					else {
+						if (!model)
+							selection.add(editPart);
+						else
+							selection.add(editPart.getModel());						
+					}
+				}
+			}
+			return selection;
+		}
+		return EMPTY_LIST;
+	}	
+	
+	protected Collection defaultEditPartExcludeList = null; 
+	protected Collection defaultModelExcludeList = null;
+	public Collection getDefaultExcludeList(boolean model) 
+	{
+		if (!model) {
+			if (defaultEditPartExcludeList == null) {
+				defaultEditPartExcludeList = new LinkedList();
+				defaultEditPartExcludeList.add(RootEditPart.class);
+				defaultEditPartExcludeList.add(LayerEditPart.class);
+			}
+			return defaultEditPartExcludeList;
+		}
+		else {
+			if (defaultModelExcludeList == null) {
+				defaultModelExcludeList = new LinkedList();
+				defaultModelExcludeList.add(MultiLayerDrawComponent.class);
+				defaultModelExcludeList.add(Layer.class);
+			}
+			return defaultModelExcludeList;
+		}
+	}
+	
+	public List getDefaultSelection(boolean model) 
+	{
+		return getSelection(getDefaultExcludeList(model), model);
+	}
+	
+	public IStructuredSelection getStructuredSelection() {
 		return (IStructuredSelection) getSelection();
 	}
 	
-	protected EditPart getPrimarySelected() {
+	public EditPart getPrimarySelected() {
 		return (EditPart) getStructuredSelection().getFirstElement();
 	}
 	

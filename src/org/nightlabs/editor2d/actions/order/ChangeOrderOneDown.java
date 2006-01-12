@@ -28,82 +28,58 @@ package org.nightlabs.editor2d.actions.order;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
 
 /**
- * changes the order of the selected Objects to the front
- * of the currentLayer
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class ChangeOrderToLocalFront 
+public class ChangeOrderOneDown 
 extends AbstractChangeOrderSelectionAction 
 {
-	public static final String ID = ChangeOrderToLocalFront.class.getName();
+	public static final String ID = ChangeOrderOneDown.class.getName();
 	
 	/**
 	 * @param editor
 	 * @param style
 	 */
-	public ChangeOrderToLocalFront(AbstractEditor editor, int style) {
+	public ChangeOrderOneDown(AbstractEditor editor, int style) {
 		super(editor, style);
 	}
 
 	/**
 	 * @param editor
 	 */
-	public ChangeOrderToLocalFront(AbstractEditor editor) {
+	public ChangeOrderOneDown(AbstractEditor editor) {
 		super(editor);
 	}
 
 	public void init() 
 	{
-		setText(EditorPlugin.getResourceString("action.changeOrderToLocalFront.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.changeOrderToLocalFront.tooltip"));
+		setText(EditorPlugin.getResourceString("action.changeOrderOneDown.text"));
+		setToolTipText(EditorPlugin.getResourceString("action.changeOrderOneDown.text"));
 		setId(ID);
-	}
+	}	
 	
-	/** 
-	 *@return the lastIndex of the drawComponents-List from 
-	 * the parent of the primary selected drawComponent    
+	/**
+	 * @return the index - 1 of the primary selected
+	 * @see AbstractChangeOrderSelectionAction#getPrimarySelectedDrawComponent()
 	 */
 	public int getNewIndex() 
 	{
-		int lastIndex = 0;
-		DrawComponentContainer parent = primarySelected.getParent();
-		if (parent.getDrawComponents().size() != 1)
-			 lastIndex = parent.getDrawComponents().size() -1;
-		return lastIndex;		
+		int index = primarySelected.getParent().getDrawComponents().indexOf(primarySelected);
+		int lowestIndex = 0;
+		if (index > lowestIndex)
+			return index - 1;
+		else
+			return lowestIndex;
 	}
 
 	/**
 	 * @return the parent of the primary selected DrawComponent
+	 * @see AbstractChangeOrderSelectionAction#getPrimarySelectedDrawComponent()
 	 */
 	public DrawComponentContainer getContainer() 
 	{
 		return primarySelected.getParent();		 		
 	}
 
-//	/** 
-//	 *@return the lastIndex of the drawComponents-List from 
-//	 * the currentLayer
-//	 *@see MultiLayerDrawComponent#getCurrentLayer()    
-//	 */
-//	public int getNewIndex() 
-//	{
-//		int lastIndex = 0;
-//		int size = getCurrentLayer().getDrawComponents().size();
-//		if (size != 1)
-//			lastIndex = size -1;
-//		return lastIndex;
-//	}
-//
-//	/**
-//	 * @return the currentLayer
-//	 * @see MultiLayerDrawComponent#getCurrentLayer()
-//	 */
-//	public DrawComponentContainer getContainer() 
-//	{		 		
-//		return getCurrentLayer();
-//	}
-		
 }

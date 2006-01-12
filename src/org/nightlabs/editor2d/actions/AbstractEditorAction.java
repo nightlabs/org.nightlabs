@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 
 public abstract class AbstractEditorAction 
@@ -72,6 +73,11 @@ extends EditorPartAction
 	{
 		return getEditor().getMultiLayerDrawComponent();
 	}	
+	
+	public Layer getCurrentLayer() 
+	{
+		return getMultiLayerDrawComponent().getCurrentLayer();
+	}
 	
 	/**
 	 * 

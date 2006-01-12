@@ -36,6 +36,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartListener;
 import org.eclipse.gef.RootEditPart;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
@@ -64,8 +65,10 @@ import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.command.CreateLayerCommand;
 import org.nightlabs.editor2d.command.DeleteLayerCommand;
+import org.nightlabs.editor2d.command.DrawComponentReorderCommand;
 import org.nightlabs.editor2d.edit.LayerEditPart;
 import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
+import org.nightlabs.editor2d.util.OrderUtil;
 
 public class LayerView 
 extends ViewPart 
@@ -158,13 +161,6 @@ implements ISelectionListener
     scrollComposite.layout(true);
     
     deactivateTools(true);
-  }
-
-  private void addLayer() 
-  {
-		// create new Layer		
-		CreateLayerCommand addLayer = new CreateLayerCommand(mldc);
-		editor.getOutlineEditDomain().getCommandStack().execute(addLayer);		
   }
     
 	private void createLayerEntry(Composite parent, Layer l) 
@@ -361,8 +357,8 @@ implements ISelectionListener
 		public void widgetSelected(SelectionEvent e) 
 		{    
 		  LOGGER.debug("NEW widgetSelected()");
-			addLayer();
-//			refresh();
+		  CreateLayerCommand addLayer = new CreateLayerCommand(mldc);
+		  executeCommand(addLayer);
 		}
 	};
 
@@ -374,26 +370,29 @@ implements ISelectionListener
 			
 		  Layer currentLayer = mldc.getCurrentLayer();
 		  DeleteLayerCommand layerCommand = new DeleteLayerCommand(mldc, currentLayer);
-		  editor.getOutlineEditDomain().getCommandStack().execute(layerCommand);
-		  
-//			int index = mldc.getDrawComponents().indexOf(mldc.getCurrentLayer());
-//			mldc.getDrawComponents().remove(index);		
-//
-//      if (index != 0) {
-//        mldc.setCurrentLayer((Layer) mldc.getDrawComponents().get(index-1));
-//      } else if ( index==0 && mldc.getDrawComponents().size() > 2) {
-//        mldc.setCurrentLayer((Layer) mldc.getDrawComponents().get(index+1));
-//      }			
-						  			
-//			refresh();				
+		  executeCommand(layerCommand);		  
 		}
 	};
 
+	protected Layer getCurrentLayer() 
+	{
+		return mldc.getCurrentLayer();
+	}
+	
 	protected SelectionListener upListener = new SelectionAdapter() 
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-		  LOGGER.debug("UP widgetSelected()"); 
+		  LOGGER.debug("UP widgetSelected()");
+		  int oldIndex = OrderUtil.indexOf(getCurrentLayer());
+		  int lastIndex = OrderUtil.getLastIndex(mldc);
+		  int newIndex = oldIndex + 1;
+		  if (!(lastIndex > newIndex)) {
+		  	newIndex = lastIndex;
+		  }
+		  DrawComponentReorderCommand cmd = new DrawComponentReorderCommand(
+		  		getCurrentLayer(), mldc, newIndex);
+		  executeCommand(cmd);
 		}
 	};
 	
@@ -402,9 +401,23 @@ implements ISelectionListener
 		public void widgetSelected(SelectionEvent e) 
 		{    
 		  LOGGER.debug("DOWN widgetSelected()"); 
+		  int oldIndex = OrderUtil.indexOf(getCurrentLayer());
+		  int firstIndex = 0;
+		  int newIndex = oldIndex - 1;
+		  if (!(firstIndex < newIndex)) {
+		  	newIndex = firstIndex;
+		  }
+		  DrawComponentReorderCommand cmd = new DrawComponentReorderCommand(
+		  		getCurrentLayer(), mldc, newIndex);
+		  executeCommand(cmd);		  
 		}
 	};
 		
+	protected void executeCommand(Command cmd) 
+	{
+		editor.getOutlineEditDomain().getCommandStack().execute(cmd);
+	}
+	
 	protected CommandStackListener commandStackListener = new CommandStackListener() 
 	{
     /* (non-Javadoc)

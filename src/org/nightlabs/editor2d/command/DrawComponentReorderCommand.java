@@ -56,26 +56,34 @@ extends Command
   	// if the same parent just change index in list
   	if (parent.equals(child.getParent())) {
     	oldIndex = parent.getDrawComponents().indexOf(child);
-    	parent.getDrawComponents().remove(child);
-    	parent.getDrawComponents().add(newIndex, child);  		
+//    	parent.getDrawComponents().remove(child);
+//  	  parent.getDrawComponents().add(newIndex, child);    	
+    	parent.removeDrawComponent(child);
+    	parent.addDrawComponent(child, newIndex);  		
   	}
   	else {
 	  	oldParent = child.getParent();
 	  	oldIndex = oldParent.getDrawComponents().indexOf(child);	  	
+//	  	oldParent.removeDrawComponent(child);
+//	  	parent.addDrawComponent(child, newIndex);
 	  	oldParent.removeDrawComponent(child);
-	  	parent.addDrawComponent(child, newIndex);  	  		
+	  	parent.addDrawComponent(child, newIndex);  	  			  	
   	}
   }
-
+  
   public void undo() 
   {
   	if (oldParent == null) {
-    	parent.getDrawComponents().remove(child);
-    	parent.getDrawComponents().add(oldIndex, child);  		
+//    	parent.getDrawComponents().remove(child);
+//    	parent.getDrawComponents().add(oldIndex, child);
+    	parent.removeDrawComponent(child);
+    	parent.addDrawComponent(child, oldIndex);  		  		
   	}
   	else {
+//  		parent.removeDrawComponent(child);
+//  		oldParent.addDrawComponent(child, oldIndex);
   		parent.removeDrawComponent(child);
-  		oldParent.addDrawComponent(child, oldIndex);
+  		oldParent.addDrawComponent(child, oldIndex);  		
   	}
   }
   

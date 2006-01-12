@@ -126,10 +126,5 @@ extends Command
 	
 	public void setIndex(int index) {
 	  this.drawOrderIndex = index;
-	}
-  
-//  protected boolean ignoreSize = false;
-//  public void setIgnoreSize(boolean ignoreSize) {
-//    this.ignoreSize = ignoreSize;
-//  }
+	}  
 }

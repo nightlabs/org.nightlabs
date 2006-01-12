@@ -38,6 +38,7 @@ import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
 import org.nightlabs.editor2d.command.DrawComponentReorderCommand;
+import org.nightlabs.editor2d.util.OrderUtil;
 
 /**
  * An Abstract Base Implementation of a generic reorder action  
@@ -62,13 +63,20 @@ extends AbstractEditorSelectionAction
 		super(editor);
 	}
 
+//	/**
+//	 *@return true, if objects are selected
+//	 */
+//	protected boolean calculateEnabled() {
+//		return !getSelectedObjects().isEmpty();
+//	}
+
 	/**
-	 *@return true, if objects are selected
+	 *@return true, if objects are selected, except the RootEditPart or LayerEditParts
 	 */
 	protected boolean calculateEnabled() {
-		return !getSelectedObjects().isEmpty();
+		return !getDefaultSelection(false).isEmpty();
 	}
-
+	
 	/**
 	 * executes a Command which changes the order, based on the newIndex and the 
 	 * DrawComponentContainer for all selected Objects
@@ -88,7 +96,6 @@ extends AbstractEditorSelectionAction
 			{
 				DrawComponent dc = (DrawComponent) it.next();
 				Command cmd = changeOrder(dc, getContainer(), getNewIndex());
-//				compoundCmd.chain(cmd);
 				compoundCmd.add(cmd);
 			}
 			compoundCmd.setLabel(getText());
@@ -97,6 +104,15 @@ extends AbstractEditorSelectionAction
 	}
 	
 	protected DrawComponent primarySelected = null;
+	
+	/**
+	 * 
+	 * @return the primary selected DrawComponent
+	 * @see 
+	 */
+	public DrawComponent getPrimarySelectedDrawComponent() {
+		return primarySelected;
+	}
 	
 	/**
 	 * compares the index of 2 DrawComponents
@@ -183,6 +199,16 @@ extends AbstractEditorSelectionAction
 			return dc.getRoot().getCurrentLayer();
 		}
 		return null;
+	}
+	
+	public int getLastIndex(DrawComponentContainer container) 
+	{
+		return OrderUtil.getLastIndex(container);
+	}
+	
+	public int indexOf(DrawComponent dc) 
+	{
+		return OrderUtil.indexOf(dc);
 	}
 	
 	/**

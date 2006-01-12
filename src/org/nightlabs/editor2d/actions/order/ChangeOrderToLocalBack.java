@@ -61,11 +61,12 @@ extends AbstractChangeOrderSelectionAction
 		setToolTipText(EditorPlugin.getResourceString("action.changeOrderToLocalBack.tooltip"));
 		setId(ID);
 	}	
-	
+
 	/** 
-	 *@return the firstIndex of the drawComponents-List from 
-	 * the currentLayer
-	 *@see MultiLayerDrawComponent#getCurrentLayer()    
+	 *@return the firstIndex of the drawComponents-List where
+	 * the primary selected is contained in 
+	 * @see AbstractChangeOrderSelectionAction#getPrimarySelectedDrawComponent()
+	 *     
 	 */
 	public int getNewIndex() 
 	{
@@ -73,13 +74,31 @@ extends AbstractChangeOrderSelectionAction
 	}
 	
 	/**
-	 * @return the currentLayer
-	 * @see MultiLayerDrawComponent#getCurrentLayer()
+	 * @return the parent of the primary selected DrawComponent
+	 * @see AbstractChangeOrderSelectionAction#getPrimarySelectedDrawComponent()
 	 */
 	public DrawComponentContainer getContainer() 
 	{
-//		return getCurrentLayer();		
-		return primarySelected.getParent();
+		return primarySelected.getParent();		 		
 	}
+		
+//	/** 
+//	 *@return the firstIndex of the drawComponents-List from 
+//	 * the currentLayer
+//	 *@see MultiLayerDrawComponent#getCurrentLayer()    
+//	 */
+//	public int getNewIndex() 
+//	{
+//		return 0;
+//	}
+//	
+//	/**
+//	 * @return the currentLayer
+//	 * @see MultiLayerDrawComponent#getCurrentLayer()
+//	 */
+//	public DrawComponentContainer getContainer() 
+//	{
+//		return getCurrentLayer();		
+//	}
 	
 }

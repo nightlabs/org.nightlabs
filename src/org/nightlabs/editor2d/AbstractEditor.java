@@ -115,16 +115,20 @@ import org.nightlabs.base.io.FileEditorInput;
 import org.nightlabs.base.io.IOFilterRegistry;
 import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.util.RCPUtil;
+import org.nightlabs.editor2d.actions.CloneAction;
 import org.nightlabs.editor2d.actions.CopyAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.EditorPasteTemplateAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
+import org.nightlabs.editor2d.actions.PasteAction;
 import org.nightlabs.editor2d.actions.ResetRotationCenterAction;
 import org.nightlabs.editor2d.actions.RotateAction;
 import org.nightlabs.editor2d.actions.SelectAllWithSameName;
 import org.nightlabs.editor2d.actions.ShowDefaultRenderAction;
 import org.nightlabs.editor2d.actions.ZoomAllAction;
 import org.nightlabs.editor2d.actions.ZoomSelectionAction;
+import org.nightlabs.editor2d.actions.order.ChangeOrderOneDown;
+import org.nightlabs.editor2d.actions.order.ChangeOrderOneUp;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
 import org.nightlabs.editor2d.actions.viewer.ViewerAction;
@@ -721,7 +725,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
       getSelectionActions().add(action.getId());    
       
       // Copy Action
-      action = new CopyAction(this);
+      action = new CloneAction(this);
       registry.registerAction(action);
       getSelectionActions().add(action.getId());    
             
@@ -733,6 +737,25 @@ extends J2DGraphicalEditorWithFlyoutPalette
       action = new ChangeOrderToLocalBack(this);
       registry.registerAction(action);
       getSelectionActions().add(action.getId());    
+      
+      action = new ChangeOrderOneDown(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());    
+
+      action = new ChangeOrderOneUp(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());    
+      
+      // Paste Action
+      PasteAction pasteAction = new PasteAction(this);
+      registry.registerAction(pasteAction);
+      getPropertyActions().add(pasteAction.getId());
+            
+      // Copy Action
+      CopyAction copyAction = new CopyAction(this);
+      registry.registerAction(copyAction);
+      getSelectionActions().add(copyAction.getId());  
+      copyAction.addPropertyChangeListener(pasteAction.copyListener);
       
 //      // Test Viewer Action
 //      action = new ViewerAction(this);

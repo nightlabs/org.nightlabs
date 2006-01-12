@@ -23,87 +23,85 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions.order;
+package org.nightlabs.editor2d.actions;
 
+import java.awt.geom.AffineTransform;
+import java.util.Iterator;
+import java.util.List;
+
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.DrawComponentContainer;
+import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
 
 /**
- * changes the order of the selected Objects to the front
- * of the currentLayer
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class ChangeOrderToLocalFront 
-extends AbstractChangeOrderSelectionAction 
+public class MirrorAction 
+extends AbstractEditorSelectionAction 
 {
-	public static final String ID = ChangeOrderToLocalFront.class.getName();
+	public static final String ID = MirrorAction.class.getName();
 	
 	/**
 	 * @param editor
 	 * @param style
 	 */
-	public ChangeOrderToLocalFront(AbstractEditor editor, int style) {
+	public MirrorAction(AbstractEditor editor, int style) {
 		super(editor, style);
 	}
 
 	/**
 	 * @param editor
 	 */
-	public ChangeOrderToLocalFront(AbstractEditor editor) {
+	public MirrorAction(AbstractEditor editor) {
 		super(editor);
 	}
 
-	public void init() 
-	{
-		setText(EditorPlugin.getResourceString("action.changeOrderToLocalFront.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.changeOrderToLocalFront.tooltip"));
-		setId(ID);
-	}
+  protected void init() 
+  {
+  	super.init();
+  	setText(EditorPlugin.getResourceString("action.mirror.text"));
+  	setToolTipText(EditorPlugin.getResourceString("action.mirror.tooltip"));
+  	setId(ID);
+  } 		
 	
-	/** 
-	 *@return the lastIndex of the drawComponents-List from 
-	 * the parent of the primary selected drawComponent    
-	 */
-	public int getNewIndex() 
-	{
-		int lastIndex = 0;
-		DrawComponentContainer parent = primarySelected.getParent();
-		if (parent.getDrawComponents().size() != 1)
-			 lastIndex = parent.getDrawComponents().size() -1;
-		return lastIndex;		
-	}
+///**
+//*@return true, if objects are selected
+//*/
+//protected boolean calculateEnabled() {
+//	return !getSelectedObjects().isEmpty();
+//}
 
 	/**
-	 * @return the parent of the primary selected DrawComponent
-	 */
-	public DrawComponentContainer getContainer() 
-	{
-		return primarySelected.getParent();		 		
+	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
+	*/
+	protected boolean calculateEnabled() {
+		return !getDefaultSelection(false).isEmpty();
 	}
 
-//	/** 
-//	 *@return the lastIndex of the drawComponents-List from 
-//	 * the currentLayer
-//	 *@see MultiLayerDrawComponent#getCurrentLayer()    
-//	 */
-//	public int getNewIndex() 
-//	{
-//		int lastIndex = 0;
-//		int size = getCurrentLayer().getDrawComponents().size();
-//		if (size != 1)
-//			lastIndex = size -1;
-//		return lastIndex;
-//	}
-//
-//	/**
-//	 * @return the currentLayer
-//	 * @see MultiLayerDrawComponent#getCurrentLayer()
-//	 */
-//	public DrawComponentContainer getContainer() 
-//	{		 		
-//		return getCurrentLayer();
-//	}
-		
+	public void run() 
+	{
+		List dcs = getSelection(DrawComponent.class, true);
+		Command cmd = new CompoundCommand();
+		for (Iterator it = dcs.iterator(); it.hasNext(); ) {
+			DrawComponent dc = (DrawComponent) it.next();
+			CreateDrawComponentCommand createCmd = new CreateDrawComponentCommand();
+			DrawComponent clone = (DrawComponent) dc.clone();
+			AffineTransform at = new AffineTransform();
+			// TODO: find out how to mirror with an AffineTransform
+			clone.setName(clone.getName() + getCopyString());
+			createCmd.setChild(clone);
+			createCmd.setParent(dc.getParent());
+			
+			cmd.chain(createCmd);
+		}
+		execute(cmd);
+	}
+	
+	protected String getCopyString() 
+	{
+		return " ("+EditorPlugin.getResourceString("action.copy.text")+")";
+	}
 }

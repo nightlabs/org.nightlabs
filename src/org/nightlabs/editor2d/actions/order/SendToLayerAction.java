@@ -28,82 +28,55 @@ package org.nightlabs.editor2d.actions.order;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.Layer;
 
 /**
- * changes the order of the selected Objects to the front
- * of the currentLayer
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class ChangeOrderToLocalFront 
+public class SendToLayerAction 
 extends AbstractChangeOrderSelectionAction 
 {
-	public static final String ID = ChangeOrderToLocalFront.class.getName();
-	
+	protected static final String ID = SendToLayerAction.class.getName(); 
+		
 	/**
 	 * @param editor
 	 * @param style
 	 */
-	public ChangeOrderToLocalFront(AbstractEditor editor, int style) {
+	public SendToLayerAction(AbstractEditor editor, int style, Layer l) {
 		super(editor, style);
+		this.layer = l;
 	}
 
 	/**
 	 * @param editor
 	 */
-	public ChangeOrderToLocalFront(AbstractEditor editor) {
+	public SendToLayerAction(AbstractEditor editor, Layer l) {
 		super(editor);
+		this.layer = l;
 	}
 
+	protected Layer layer = null;
+	
 	public void init() 
 	{
-		setText(EditorPlugin.getResourceString("action.changeOrderToLocalFront.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.changeOrderToLocalFront.tooltip"));
-		setId(ID);
+		setText(layer.getName());
+		setToolTipText(EditorPlugin.getResourceString("action.sendToLayer.tooltip"));
+		setId(ID+layer.getId());
 	}
 	
-	/** 
-	 *@return the lastIndex of the drawComponents-List from 
-	 * the parent of the primary selected drawComponent    
+	/**
+	 * @return the index of the primary selected DrawComponent
 	 */
 	public int getNewIndex() 
-	{
-		int lastIndex = 0;
-		DrawComponentContainer parent = primarySelected.getParent();
-		if (parent.getDrawComponents().size() != 1)
-			 lastIndex = parent.getDrawComponents().size() -1;
-		return lastIndex;		
+	{		
+		return indexOf(primarySelected);
 	}
 
 	/**
-	 * @return the parent of the primary selected DrawComponent
+	 * @return the layer the selected objects should be send to 
 	 */
-	public DrawComponentContainer getContainer() 
-	{
-		return primarySelected.getParent();		 		
+	public DrawComponentContainer getContainer() {
+		return layer;
 	}
 
-//	/** 
-//	 *@return the lastIndex of the drawComponents-List from 
-//	 * the currentLayer
-//	 *@see MultiLayerDrawComponent#getCurrentLayer()    
-//	 */
-//	public int getNewIndex() 
-//	{
-//		int lastIndex = 0;
-//		int size = getCurrentLayer().getDrawComponents().size();
-//		if (size != 1)
-//			lastIndex = size -1;
-//		return lastIndex;
-//	}
-//
-//	/**
-//	 * @return the currentLayer
-//	 * @see MultiLayerDrawComponent#getCurrentLayer()
-//	 */
-//	public DrawComponentContainer getContainer() 
-//	{		 		
-//		return getCurrentLayer();
-//	}
-		
 }

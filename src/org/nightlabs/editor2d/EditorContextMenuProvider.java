@@ -27,7 +27,11 @@
 
 package org.nightlabs.editor2d;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.gef.ContextMenuProvider;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
@@ -37,15 +41,21 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.actions.ActionFactory;
 
+import org.nightlabs.editor2d.actions.CloneAction;
 import org.nightlabs.editor2d.actions.CopyAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
+import org.nightlabs.editor2d.actions.PasteAction;
 import org.nightlabs.editor2d.actions.ResetRotationCenterAction;
 import org.nightlabs.editor2d.actions.RotateAction;
 import org.nightlabs.editor2d.actions.SelectAllWithSameName;
 import org.nightlabs.editor2d.actions.ShowDefaultRenderAction;
+import org.nightlabs.editor2d.actions.order.ChangeOrderOneDown;
+import org.nightlabs.editor2d.actions.order.ChangeOrderOneUp;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
+import org.nightlabs.editor2d.actions.order.SendToLayerAction;
+import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
 
 
 public class EditorContextMenuProvider 
@@ -82,17 +92,38 @@ extends ContextMenuProvider
   	GEFActionConstants.addStandardActionGroups(manager);
   	
   	IAction action;
-  	
+
+  	// Undo
   	action = getActionRegistry().getAction(ActionFactory.UNDO.getId());
   	manager.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
 
+  	// Redo
   	action = getActionRegistry().getAction(ActionFactory.REDO.getId());
   	manager.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
-
-  	action = getActionRegistry().getAction(ActionFactory.PASTE.getId());
+  	
+  	// Copy
+  	action = getActionRegistry().getAction(CopyAction.ID);
   	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+//	action = getActionRegistry().getAction(ActionFactory.COPY.getId());
+//	if (action.isEnabled())
+//		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);  	
+  	  	  	
+  	// Paste
+  	action = getActionRegistry().getAction(PasteAction.ID);
+  	if (action.isEnabled())
+  		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);  	
+//	action = getActionRegistry().getAction(ActionFactory.PASTE.getId());
+//	if (action.isEnabled())
+//		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+  	
 
+//  	// Cut
+//  	action = getActionRegistry().getAction(ActionFactory.CUT.getId());
+//  	if (action.isEnabled())
+//  		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+  	  	
+  	// Delete
   	action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
   	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
@@ -159,16 +190,57 @@ extends ContextMenuProvider
   	IAction action = getActionRegistry().getAction(ChangeOrderToLocalFront.ID);
   	if (action.isEnabled())
   	  menuMan.add(action);    
+
+  	action = getActionRegistry().getAction(ChangeOrderOneUp.ID);
+  	if (action.isEnabled())
+  	  menuMan.add(action);      	
+
+  	action = getActionRegistry().getAction(ChangeOrderOneDown.ID);
+  	if (action.isEnabled())
+  	  menuMan.add(action);      	  	
   	
   	action = getActionRegistry().getAction(ChangeOrderToLocalBack.ID);
   	if (action.isEnabled())
-  	  menuMan.add(action);      	
-  }
+  	  menuMan.add(action);    
+  	
+  	menuMan.add(new Separator());
+  	
+  	MenuManager sendToLayerSubMenu = new MenuManager(EditorPlugin.getResourceString("menu.sendToLayer"));
+  	buildSendToLayerSubMenu(sendToLayerSubMenu);
+  	if (!sendToLayerSubMenu.isEmpty())
+  		menuMan.appendToGroup(GEFActionConstants.GROUP_REST, sendToLayerSubMenu);  	  	  	
+  }  
   
+  protected void buildSendToLayerSubMenu(MenuManager menuMan) 
+  {
+  	if (getViewer() instanceof AbstractEditor) 
+  	{
+  		AbstractEditor editor = (AbstractEditor) getViewer();  		
+  		List layers = editor.getMultiLayerDrawComponent().getDrawComponents();
+  		for (Iterator it = layers.iterator(); it.hasNext(); ) 
+  		{
+  			Layer l = (Layer) it.next();
+  			IAction action = new SendToLayerAction(editor, l);
+  	  	if (action.isEnabled())
+  	  	  menuMan.add(action);     	  			
+  		}  		
+  	}
+//  	EditPart content = getViewer().getContents();
+//  	if (content instanceof AbstractDrawComponentEditPart) 
+//  	{
+//  		AbstractDrawComponentEditPart dcep = (AbstractDrawComponentEditPart) content;
+//  		List layers = dcep.getModelRoot().getMultiLayerDrawComponent().getDrawComponents();
+//  		for (Iterator it = layers.iterator(); it.hasNext(); ) {
+//  			IAction action = new SendToLayerAction();
+//  	  	if (action.isEnabled())
+//  	  	  menuMan.add(action);     	  			
+//  		}
+//  	}
+  }
   
   protected void buildEditSubMenu(MenuManager menuMan)
   {
-  	IAction action = getActionRegistry().getAction(CopyAction.ID);
+  	IAction action = getActionRegistry().getAction(CloneAction.ID);
   	if (action.isEnabled())
   	  menuMan.add(action);
   	  	
