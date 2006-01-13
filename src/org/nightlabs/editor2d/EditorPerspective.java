@@ -61,7 +61,10 @@ implements IPerspectiveFactory
     IFolderLayout rightBottom = layout.createFolder("rightBottom", IPageLayout.BOTTOM, 0.5f, "rightMiddle");
     rightBottom.addView(LayerView.ID_VIEW);
                
-    layout.addPerspectiveShortcut(ID_PERSPECTIVE);      		
+    layout.addPerspectiveShortcut(ID_PERSPECTIVE);  
+    layout.addShowViewShortcut(IPageLayout.ID_PROP_SHEET);
+    layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
+    layout.addShowViewShortcut(LayerView.ID_VIEW);
 	}
 
 }
