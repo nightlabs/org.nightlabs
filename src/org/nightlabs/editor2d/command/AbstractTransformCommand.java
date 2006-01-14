@@ -40,7 +40,7 @@ import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 
 
-public abstract class AbstractTransformCommand 
+public class AbstractTransformCommand 
 extends Command 
 { 
   protected Map dc2AffineTransform;  
@@ -88,6 +88,7 @@ extends Command
       dc.setAffineTransform(getAffineTransform()); 
     }        
   }
+  
   public void undo() 
   {
     for (Iterator it = dc2AffineTransform.keySet().iterator(); it.hasNext(); ) 

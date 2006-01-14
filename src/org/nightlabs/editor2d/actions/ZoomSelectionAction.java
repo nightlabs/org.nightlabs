@@ -61,7 +61,8 @@ extends SelectionAction
   	setToolTipText(EditorPlugin.getResourceString("action.zoom.selection.tooltip"));
   	setId(ID);
 //  	setImageDescriptor(EditorImages.ZOOM_SELECTION_16);  	
-  	setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomSelectionAction.class));  	
+  	setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomSelectionAction.class));
+  	setActionDefinitionId(ID);  	
   } 
       
   /* (non-Javadoc)

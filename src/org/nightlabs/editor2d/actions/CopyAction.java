@@ -28,6 +28,8 @@ package org.nightlabs.editor2d.actions;
 import java.util.List;
 
 import org.eclipse.gef.ui.actions.Clipboard;
+import org.eclipse.swt.SWT;
+import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
@@ -38,7 +40,9 @@ import org.nightlabs.editor2d.EditorPlugin;
 public class CopyAction 
 extends AbstractEditorSelectionAction 
 {
-	public static final String ID = CopyAction.class.getName();
+//	public static final String ID = CopyAction.class.getName();
+	public static final String ID = ActionFactory.COPY.getId();
+	
 	public static final String PROP_COPY_TO_CLIPBOARD = "Added Content to Clipboard";	
 	public static final Object EMPTY_CLIPBOARD_CONTENT = new Object();
 	
@@ -63,6 +67,8 @@ extends AbstractEditorSelectionAction
   	setText(EditorPlugin.getResourceString("action.copy.text"));
   	setToolTipText(EditorPlugin.getResourceString("action.copy.tooltip"));
   	setId(ID);
+  	setActionDefinitionId(ID);
+  	setAccelerator(SWT.CTRL | 'C');
   } 
 	
 ///**

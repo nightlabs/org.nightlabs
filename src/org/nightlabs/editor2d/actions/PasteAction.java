@@ -31,6 +31,8 @@ import java.util.List;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.SWT;
+import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
@@ -42,7 +44,8 @@ import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
 public class PasteAction 
 extends AbstractEditorAction
 {
-	public static final String ID = PasteAction.class.getName();
+//	public static final String ID = PasteAction.class.getName();
+	public static final String ID = ActionFactory.PASTE.getId();	
 	
 	/**
 	 * @param part
@@ -65,6 +68,8 @@ extends AbstractEditorAction
   	setText(EditorPlugin.getResourceString("action.paste.text"));
   	setToolTipText(EditorPlugin.getResourceString("action.paste.tooltip"));
   	setId(ID);
+  	setActionDefinitionId(ID);
+  	setAccelerator(SWT.CTRL | 'P');
   } 
 	
 	protected boolean calculateEnabled() {

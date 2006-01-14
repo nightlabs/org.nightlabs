@@ -23,50 +23,40 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d;
+package org.nightlabs.editor2d.views;
 
-import org.eclipse.ui.IFolderLayout;
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IPerspectiveFactory;
-import org.nightlabs.editor2d.views.LayerView;
-import org.nightlabs.editor2d.views.QuickOptionsView;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.part.ViewPart;
+import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.composite.QuickOptionsComposite;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditorPerspective 
-implements IPerspectiveFactory 
+public class QuickOptionsView 
+extends ViewPart 
 {
-	public static final String ID_PERSPECTIVE = EditorPerspective.class.getName();
+	public static final String ID = QuickOptionsView.class.getName(); 
 	
-	/**
-	 * 
-	 */
-	public EditorPerspective() {
+	public QuickOptionsView() 
+	{
 		super();
 	}
 
-	/**
-	 * @see org.eclipse.ui.IPerspectiveFactory#createInitialLayout(org.eclipse.ui.IPageLayout)
-	 */
-	public void createInitialLayout(IPageLayout layout) 
+	protected void init() 
 	{
-    layout.setEditorAreaVisible(true);
-    String editorArea = layout.getEditorArea();
-    layout.addView(IPageLayout.ID_EDITOR_AREA, IPageLayout.TOP, IPageLayout.RATIO_MAX, editorArea);
-    
-    IFolderLayout rightTop = layout.createFolder("rightTop", IPageLayout.RIGHT, 0.75f, editorArea);
-    rightTop.addView(IPageLayout.ID_PROP_SHEET);
-    IFolderLayout rightMiddle = layout.createFolder("rightMiddle", IPageLayout.BOTTOM, 0.33f, "rightTop");
-    rightMiddle.addView(IPageLayout.ID_OUTLINE);    
-    IFolderLayout rightBottom = layout.createFolder("rightBottom", IPageLayout.BOTTOM, 0.5f, "rightMiddle");
-    rightBottom.addView(LayerView.ID_VIEW);
-               
-    layout.addPerspectiveShortcut(ID_PERSPECTIVE);  
-    layout.addShowViewShortcut(IPageLayout.ID_PROP_SHEET);
-    layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
-    layout.addShowViewShortcut(LayerView.ID_VIEW);
-    layout.addShowViewShortcut(QuickOptionsView.ID);
+		setPartName(EditorPlugin.getResourceString("quickOptionsView.name"));
+	}
+	
+	public void createPartControl(Composite parent) 
+	{
+		QuickOptionsComposite comp = new QuickOptionsComposite(parent, SWT.NONE);
+	}
+
+	public void setFocus() 
+	{
+
 	}
 
 }

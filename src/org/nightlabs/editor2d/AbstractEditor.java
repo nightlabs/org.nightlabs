@@ -378,9 +378,11 @@ extends J2DGraphicalEditorWithFlyoutPalette
       // TODO: ContextMenu ID Problem
       getSite().registerContextMenu("org.nightlabs.editor2d.contextmenu", //$NON-NLS-1$
           provider, viewer);
-      viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer)
+//      viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer)
+//          .setParent(getCommonKeyHandler()));
+      viewer.setKeyHandler(new EditorViewerKeyHandler(viewer)
           .setParent(getCommonKeyHandler()));
-      
+            
       loadProperties();
 
       // Actions

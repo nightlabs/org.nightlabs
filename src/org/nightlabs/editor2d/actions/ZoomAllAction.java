@@ -49,7 +49,7 @@ extends ZoomAction
   	    zoomManager);  	
   	setToolTipText(EditorPlugin.getResourceString("action.zoom.all.tooltip"));
   	setId(ID);
-//  	setActionDefinitionId(GEFActionConstants.ZOOM_IN);
+  	setActionDefinitionId(ID);
   }
 
   /**

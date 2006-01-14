@@ -30,10 +30,13 @@ import java.util.List;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.nightlabs.config.Config;
+import org.nightlabs.config.ConfigException;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
+import org.nightlabs.editor2d.config.QuickOptionsConfigModule;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -65,15 +68,27 @@ extends AbstractEditorSelectionAction
   	setToolTipText(EditorPlugin.getResourceString("action.clone.tooltip"));
   	setId(ID);
 //  	setImageDescriptor(ImageDescriptor.createFromFile(EditorPlugin.class,"icons/editShape16.gif"));
+  	initConfigModule();
   } 	
 	
-//	/**
-//	*@return true, if objects are selected
-//	*/
-//	protected boolean calculateEnabled() {
-//		return !getSelectedObjects().isEmpty();
-//	}
-
+	protected QuickOptionsConfigModule confMod = null;
+	protected QuickOptionsConfigModule getConfigModule() 
+	{
+		if (confMod == null)
+			initConfigModule();
+		
+		return confMod;
+	}
+	
+	protected void initConfigModule() 
+	{
+		try {
+			confMod = (QuickOptionsConfigModule) Config.sharedInstance().createConfigModule(QuickOptionsConfigModule.class);
+		} catch (ConfigException e) {
+			throw new RuntimeException(e);
+		} 
+	}  
+  
 	/**
 	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
 	*/
@@ -88,7 +103,7 @@ extends AbstractEditorSelectionAction
 	public void run() 
 	{
 		List dcs = getSelection(DrawComponent.class, true);
-		Command cmd = new CompoundCommand();
+		CompoundCommand cmd = new CompoundCommand();
 		for (Iterator it = dcs.iterator(); it.hasNext(); ) {
 			DrawComponent dc = (DrawComponent) it.next();
 			CreateDrawComponentCommand createCmd = new CreateDrawComponentCommand();
@@ -96,8 +111,9 @@ extends AbstractEditorSelectionAction
 			clone.setName(clone.getName() + getCopyString());
 			createCmd.setChild(clone);
 			createCmd.setParent(dc.getParent());
-			
-			cmd.chain(createCmd);
+
+			// TODO: translate clone depending on values in ConfigModule 
+			cmd.add(createCmd);
 		}
 		execute(cmd);
 	}

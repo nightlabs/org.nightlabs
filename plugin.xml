@@ -34,7 +34,14 @@
 	  </view>
       <category
             id="org.nightlabs.editor2d.category"
-            name="%category.name"/>            
+            name="%category.name"/>
+      <view
+            allowMultiple="false"
+            category="org.nightlabs.editor2d.category"
+            class="org.nightlabs.editor2d.views.QuickOptionsView"
+            icon="icons/views/QuickOptionsView.16x16.png"
+            id="org.nightlabs.editor2d.views.QuickOptionsView"
+            name="%view.quickOptions.name"/>            
    </extension>
    <extension
          id="app"

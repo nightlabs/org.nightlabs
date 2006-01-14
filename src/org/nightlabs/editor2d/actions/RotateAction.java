@@ -28,6 +28,7 @@
 package org.nightlabs.editor2d.actions;
 
 import org.eclipse.gef.ui.actions.SelectionAction;
+import org.eclipse.swt.SWT;
 import org.eclipse.ui.IWorkbenchPart;
 
 import org.nightlabs.editor2d.EditorPlugin;
@@ -52,6 +53,8 @@ implements EditorRequestConstants
   	setToolTipText(EditorPlugin.getResourceString("action.rotate.tooltip"));
   	setId(ID);
 //  	setImageDescriptor(ImageDescriptor.createFromFile(EditorPlugin.class,"icons/editShape16.gif"));
+  	setActionDefinitionId(ID);  
+  	setAccelerator(SWT.CTRL | 'R');
   } 
   
   protected boolean calculateEnabled() 
