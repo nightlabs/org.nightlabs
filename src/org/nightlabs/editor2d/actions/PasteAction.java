@@ -28,7 +28,6 @@ package org.nightlabs.editor2d.actions;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
@@ -37,7 +36,6 @@ import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.command.CloneDrawComponentCommand;
-import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -106,8 +104,6 @@ extends AbstractEditorAction
 			for (Iterator it = clipBoardContent.iterator(); it.hasNext(); ) 
 			{
 				DrawComponent dc = (DrawComponent) it.next();
-//				DrawComponent clone = (DrawComponent) dc.clone();
-//				clone.setName(dc.getName() + getCopyString());
 				CloneDrawComponentCommand cloneCmd = new CloneDrawComponentCommand(dc, getCurrentLayer());
 				cloneCmd.setCloneName(dc.getName() + getCopyString());
 				cmd.add(cloneCmd);
