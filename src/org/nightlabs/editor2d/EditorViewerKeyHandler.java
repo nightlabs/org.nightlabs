@@ -26,7 +26,6 @@
 package org.nightlabs.editor2d;
 
 import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -48,8 +47,6 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
-import org.nightlabs.config.ConfigModuleNotFoundException;
-import org.nightlabs.editor2d.command.AbstractTransformCommand;
 import org.nightlabs.editor2d.command.SetConstraintCommand;
 import org.nightlabs.editor2d.config.QuickOptionsConfigModule;
 import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;

@@ -69,14 +69,14 @@ extends Command
 	  super(name);	  
 	}
 	
-	/* (non-Javadoc)
+	/*
 	 * @see org.eclipse.gef.commands.Command#canUndo()
 	 */
 	public boolean canUndo() {
 		return shapeAdded;
 	}
 	
-	/* (non-Javadoc)
+	/*
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	public void execute() 
@@ -92,19 +92,17 @@ extends Command
     }
 	}	
 		
-	/* (non-Javadoc)
+	/*
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
-	public void redo() 
-	{ 
+	public void redo() { 
     parent.addDrawComponent(drawComponent, drawOrderIndex);    
 	}
 		
-	/* (non-Javadoc)
+	/*
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
-	public void undo() 
-	{ 
+	public void undo() { 
     parent.removeDrawComponent(drawComponent);
 	}	
 	

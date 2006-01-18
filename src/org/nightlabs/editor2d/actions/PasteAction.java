@@ -36,6 +36,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.command.CloneDrawComponentCommand;
 import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
 
 /**
@@ -79,25 +80,42 @@ extends AbstractEditorAction
 	protected boolean enabled = false;
 	protected List clipBoardContent = null;	
 	
+//	public void run() 
+//	{
+//		Command cmd = new CompoundCommand();
+//		if (clipBoardContent != null) 
+//		{
+//			for (Iterator it = clipBoardContent.iterator(); it.hasNext(); ) 
+//			{
+//				DrawComponent dc = (DrawComponent) it.next();
+//				DrawComponent clone = (DrawComponent) dc.clone();
+//				clone.setName(dc.getName() + getCopyString());
+//				CreateDrawComponentCommand createCmd = new CreateDrawComponentCommand();
+//				createCmd.setChild(clone);
+//				createCmd.setParent(getCurrentLayer());
+//				cmd.chain(createCmd);
+//			}
+//			execute(cmd);					
+//		}
+//	}
 	public void run() 
 	{
-		Command cmd = new CompoundCommand();
+		CompoundCommand cmd = new CompoundCommand();
 		if (clipBoardContent != null) 
 		{
 			for (Iterator it = clipBoardContent.iterator(); it.hasNext(); ) 
 			{
 				DrawComponent dc = (DrawComponent) it.next();
-				DrawComponent clone = (DrawComponent) dc.clone();
-				clone.setName(dc.getName() + getCopyString());
-				CreateDrawComponentCommand createCmd = new CreateDrawComponentCommand();
-				createCmd.setChild(clone);
-				createCmd.setParent(getCurrentLayer());				
-				cmd.chain(createCmd);
+//				DrawComponent clone = (DrawComponent) dc.clone();
+//				clone.setName(dc.getName() + getCopyString());
+				CloneDrawComponentCommand cloneCmd = new CloneDrawComponentCommand(dc, getCurrentLayer());
+				cloneCmd.setCloneName(dc.getName() + getCopyString());
+				cmd.add(cloneCmd);
 			}
 			execute(cmd);					
 		}
 	}
-		
+			
 	public IPropertyChangeListener copyListener = new IPropertyChangeListener()
 	{	
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) 
