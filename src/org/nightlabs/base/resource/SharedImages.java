@@ -65,6 +65,12 @@ public class SharedImages
 			{
 				return "24x24";
 			}
+		},
+		_150x15 {
+			public String toString()
+			{
+				return "150x15";
+			}
 		}
 	}
 
@@ -84,7 +90,7 @@ public class SharedImages
 	
 	private static SharedImages sharedInstance;
 	
-	protected static SharedImages sharedInstance() {
+	public static SharedImages sharedInstance() {
 		if (sharedInstance == null)
 			sharedInstance = new SharedImages();
 		return sharedInstance;
@@ -138,7 +144,7 @@ public class SharedImages
 	/**
 	 * Get the Image with the given parameters out of the caching Map.  
 	 */
-	private Image getImage(Plugin plugin, Class clazz, String _suffix, String dimension, ImageFormat format) {
+	public Image getImage(Plugin plugin, Class clazz, String _suffix, String dimension, ImageFormat format) {
 		String suffix = (_suffix != null) ? _suffix : "";
 		String imageKey = getImageKey(plugin, clazz, suffix, dimension, format);
 		Image image = (Image) images.get(imageKey);
