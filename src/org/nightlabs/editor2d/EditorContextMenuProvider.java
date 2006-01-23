@@ -43,6 +43,7 @@ import org.eclipse.ui.actions.ActionFactory;
 
 import org.nightlabs.editor2d.actions.CloneAction;
 import org.nightlabs.editor2d.actions.CopyAction;
+import org.nightlabs.editor2d.actions.CutAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
 import org.nightlabs.editor2d.actions.PasteAction;
@@ -105,23 +106,16 @@ extends ContextMenuProvider
   	action = getActionRegistry().getAction(CopyAction.ID);
   	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-//	action = getActionRegistry().getAction(ActionFactory.COPY.getId());
-//	if (action.isEnabled())
-//		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);  	
   	  	  	
   	// Paste
   	action = getActionRegistry().getAction(PasteAction.ID);
   	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);  	
-//	action = getActionRegistry().getAction(ActionFactory.PASTE.getId());
-//	if (action.isEnabled())
-//		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
   	
-
-//  	// Cut
-//  	action = getActionRegistry().getAction(ActionFactory.CUT.getId());
-//  	if (action.isEnabled())
-//  		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+  	// Cut
+  	action = getActionRegistry().getAction(CutAction.ID);
+  	if (action.isEnabled())
+  		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
   	  	
   	// Delete
   	action = getActionRegistry().getAction(ActionFactory.DELETE.getId());

@@ -171,7 +171,8 @@ public class ViewerManager
     public void mouseMoved(org.eclipse.draw2d.MouseEvent me) 
     {
     	relativePoint = new Point(me.x, me.y);
-      mousePoint = EditorUtil.toAbsolute(root, me.x, me.y);
+//      mousePoint = EditorUtil.toAbsolute(root, me.x, me.y);
+    	mousePoint = EditorUtil.toAbsoluteWithScrollOffset(root, me.x, me.y);    	
       statusLineMan.setMessage("X = "+mousePoint.x+", Y = "+mousePoint.y);
 //      EditPart part = viewer.findObjectAtExcluding(relativePoint, excludeListRef.getExcludeList(), conditionRef.getCondition());
       

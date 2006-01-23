@@ -307,5 +307,12 @@ extends SelectionAction
 	 */
 	public Shell getShell() {
 		return getEditor().getSite().getShell();
+	}
+
+	public void dispose() 
+	{
+		super.dispose();
+		
 	}	
+		
 }

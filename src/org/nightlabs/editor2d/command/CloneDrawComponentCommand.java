@@ -114,17 +114,24 @@ extends Command
 	
 	protected DrawComponent clone = null;	
 	
+//	public void execute() 
+//	{
+//		clone = (DrawComponent) drawComponent.clone();
+//		clone.setName(getCloneName());
+//		clone.setBounds(getCloneBounds());
+//		if (!parent.equals(clone.getParent())) {
+//			clone.getParent().removeDrawComponent(clone);
+//			parent.addDrawComponent(clone);
+//		}
+//	}
+
 	public void execute() 
 	{
-		clone = (DrawComponent) drawComponent.clone();
+		clone = (DrawComponent) drawComponent.clone(getParent());
 		clone.setName(getCloneName());
 		clone.setBounds(getCloneBounds());
-		if (!parent.equals(clone.getParent())) {
-			clone.getParent().removeDrawComponent(clone);
-			parent.addDrawComponent(clone);
-		}
 	}
-	
+		
 	public void redo() 
 	{
 		parent.addDrawComponent(clone);

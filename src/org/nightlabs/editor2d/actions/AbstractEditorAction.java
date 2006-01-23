@@ -69,13 +69,11 @@ extends EditorPartAction
 	 * @return the MultiLayerDrawComponent of the AbstractEditor
 	 * @see org.nightlabs.editor2d.MultiLayerDrawComponent
 	 */
-	public MultiLayerDrawComponent getMultiLayerDrawComponent() 
-	{
+	public MultiLayerDrawComponent getMultiLayerDrawComponent() {
 		return getEditor().getMultiLayerDrawComponent();
 	}	
 	
-	public Layer getCurrentLayer() 
-	{
+	public Layer getCurrentLayer() {
 		return getMultiLayerDrawComponent().getCurrentLayer();
 	}
 	

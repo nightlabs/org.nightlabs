@@ -71,31 +71,15 @@ extends AbstractEditorAction
   	setAccelerator(SWT.CTRL | 'P');
   } 
 	
+	protected boolean enabled = false;  
 	protected boolean calculateEnabled() {
 		return enabled;
 	}
-
-	protected boolean enabled = false;
-	protected List clipBoardContent = null;	
 	
-//	public void run() 
-//	{
-//		Command cmd = new CompoundCommand();
-//		if (clipBoardContent != null) 
-//		{
-//			for (Iterator it = clipBoardContent.iterator(); it.hasNext(); ) 
-//			{
-//				DrawComponent dc = (DrawComponent) it.next();
-//				DrawComponent clone = (DrawComponent) dc.clone();
-//				clone.setName(dc.getName() + getCopyString());
-//				CreateDrawComponentCommand createCmd = new CreateDrawComponentCommand();
-//				createCmd.setChild(clone);
-//				createCmd.setParent(getCurrentLayer());
-//				cmd.chain(createCmd);
-//			}
-//			execute(cmd);					
-//		}
-//	}
+	protected boolean copy = false;
+	protected boolean cut = false;
+	
+	protected List clipBoardContent = null;	
 	public void run() 
 	{
 		CompoundCommand cmd = new CompoundCommand();
@@ -105,7 +89,10 @@ extends AbstractEditorAction
 			{
 				DrawComponent dc = (DrawComponent) it.next();
 				CloneDrawComponentCommand cloneCmd = new CloneDrawComponentCommand(dc, getCurrentLayer());
-				cloneCmd.setCloneName(dc.getName() + getCopyString());
+				if (copy)
+					cloneCmd.setCloneName(dc.getName() + getCopyString());
+				if (cut)
+					cloneCmd.setCloneName(dc.getName());
 				cmd.add(cloneCmd);
 			}
 			execute(cmd);					
@@ -116,12 +103,12 @@ extends AbstractEditorAction
 	{	
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) 
 		{
-			if (event.getProperty().equals(CopyAction.PROP_COPY_TO_CLIPBOARD)
-					&& event.getSource() instanceof CopyAction) 
+			if (event.getProperty().equals(EditorActionConstants.PROP_COPY_TO_CLIPBOARD)) 
 			{
-//				Object content = Clipboard.getDefault().getContents();
+				copy = true;
+				cut = false;
 				Object content = event.getNewValue();
-				if (!content.equals(CopyAction.EMPTY_CLIPBOARD_CONTENT)) 
+				if (!content.equals(EditorActionConstants.EMPTY_CLIPBOARD_CONTENT)) 
 				{
 					enabled = true;
 					if (content instanceof List) 
@@ -133,6 +120,27 @@ extends AbstractEditorAction
 		}	
 	};
 				
+	public IPropertyChangeListener cutListener = new IPropertyChangeListener()
+	{	
+		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) 
+		{
+			if (event.getProperty().equals(EditorActionConstants.PROP_COPY_TO_CLIPBOARD)) 
+			{
+				cut = true;
+				copy = false;
+				Object content = event.getNewValue();
+				if (!content.equals(EditorActionConstants.EMPTY_CLIPBOARD_CONTENT)) 
+				{
+					enabled = true;
+					if (content instanceof List) 
+					{
+						clipBoardContent = (List) content;
+					}
+				}
+			}			
+		}	
+	};	
+	
 	protected String getCopyString() 
 	{
 		return " ("+EditorPlugin.getResourceString("action.copy.text")+")";

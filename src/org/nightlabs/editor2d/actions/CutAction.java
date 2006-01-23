@@ -33,62 +33,53 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.command.CutDrawComponentCommand;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class CopyAction 
+public class CutAction 
 extends AbstractEditorSelectionAction 
 {
-//	public static final String ID = CopyAction.class.getName();
-	public static final String ID = ActionFactory.COPY.getId();
-	
-//	public static final String PROP_COPY_TO_CLIPBOARD = "Added Content to Clipboard";	
-//	public static final Object EMPTY_CLIPBOARD_CONTENT = new Object();
+	public static final String ID = ActionFactory.CUT.getId();
 	
 	/**
 	 * @param editor
 	 * @param style
 	 */
-	public CopyAction(AbstractEditor editor, int style) {
+	public CutAction(AbstractEditor editor, int style) {
 		super(editor, style);
 	}
 
 	/**
 	 * @param editor
 	 */
-	public CopyAction(AbstractEditor editor) {
+	public CutAction(AbstractEditor editor) {
 		super(editor);
 	}
 
-  protected void init() 
-  {
-  	super.init();
-  	setText(EditorPlugin.getResourceString("action.copy.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.copy.tooltip"));
-  	setId(ID);
-  	setActionDefinitionId(ID);
-  	setAccelerator(SWT.CTRL | 'C');
-  } 
+	public void init() 
+	{
+		setId(ID);
+		setText(EditorPlugin.getResourceString("action.cut.text"));
+		setToolTipText(EditorPlugin.getResourceString("action.cut.tooltip"));
+		setActionDefinitionId(ID);
+		setAccelerator(SWT.CTRL | 'X');
+	}
 	
-	/**
-	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
-	*/
+  /**
+	 * @return true, if objects are selected, except the RootEditPart or LayerEditParts
+	 */
 	protected boolean calculateEnabled() {
 		return !getDefaultSelection(false).isEmpty();
 	}
-		
-	/**
-	 * adds all selected DrawComponents to the {@link Clipboard} 
-	 *  
-	 */
+
 	public void run() 
 	{
 		List dcs = getSelection(DrawComponent.class, true);
-		Clipboard clipboard = Clipboard.getDefault();
-		Object oldContent = clipboard.getContents();
-		clipboard.setContents(dcs);
-		firePropertyChange(EditorActionConstants.PROP_COPY_TO_CLIPBOARD, oldContent, dcs);
-	}	
-					
+		CutDrawComponentCommand cutCmd = new CutDrawComponentCommand(dcs);
+		execute(cutCmd);
+		firePropertyChange(EditorActionConstants.PROP_COPY_TO_CLIPBOARD, null, dcs);
+	}
+	
 }

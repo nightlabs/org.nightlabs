@@ -23,72 +23,67 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.command;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.Clipboard;
-import org.eclipse.swt.SWT;
-import org.eclipse.ui.actions.ActionFactory;
-import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class CopyAction 
-extends AbstractEditorSelectionAction 
+public class CutDrawComponentCommand 
+extends Command 
 {
-//	public static final String ID = CopyAction.class.getName();
-	public static final String ID = ActionFactory.COPY.getId();
-	
-//	public static final String PROP_COPY_TO_CLIPBOARD = "Added Content to Clipboard";	
-//	public static final Object EMPTY_CLIPBOARD_CONTENT = new Object();
-	
-	/**
-	 * @param editor
-	 * @param style
-	 */
-	public CopyAction(AbstractEditor editor, int style) {
-		super(editor, style);
-	}
 
-	/**
-	 * @param editor
-	 */
-	public CopyAction(AbstractEditor editor) {
-		super(editor);
-	}
-
-  protected void init() 
-  {
-  	super.init();
-  	setText(EditorPlugin.getResourceString("action.copy.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.copy.tooltip"));
-  	setId(ID);
-  	setActionDefinitionId(ID);
-  	setAccelerator(SWT.CTRL | 'C');
-  } 
-	
-	/**
-	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
-	*/
-	protected boolean calculateEnabled() {
-		return !getDefaultSelection(false).isEmpty();
-	}
-		
-	/**
-	 * adds all selected DrawComponents to the {@link Clipboard} 
-	 *  
-	 */
-	public void run() 
+	public CutDrawComponentCommand(Collection<DrawComponent> dcs) 
 	{
-		List dcs = getSelection(DrawComponent.class, true);
+		super();
+		setLabel(EditorPlugin.getResourceString("command.cut.text"));
+		this.dcs = dcs;
+	}
+
+	protected Collection<DrawComponent> dcs = null;
+	public Collection<DrawComponent> getDrawComponents() {
+		return dcs;
+	}
+	
+	protected Map<DrawComponent, Integer> dc2Index = new HashMap<DrawComponent, Integer>();
+	
+	public void execute() 
+	{
 		Clipboard clipboard = Clipboard.getDefault();
-		Object oldContent = clipboard.getContents();
 		clipboard.setContents(dcs);
-		firePropertyChange(EditorActionConstants.PROP_COPY_TO_CLIPBOARD, oldContent, dcs);
-	}	
-					
+		for (Iterator<DrawComponent> it = dcs.iterator(); it.hasNext(); ) 
+		{
+			DrawComponent dc = it.next();
+			int index = dc.getParent().getDrawComponents().indexOf(dc);
+			dc2Index.put(dc, new Integer(index));
+			dc.getParent().removeDrawComponent(index);
+		}
+	}
+
+	public void redo() 
+	{
+		execute();
+	}
+
+	public void undo() 
+	{
+		for (Iterator<DrawComponent> it = dcs.iterator(); it.hasNext(); ) 
+		{
+			DrawComponent dc = it.next();
+			Integer dcIndex = dc2Index.get(dc);
+			if (dcIndex != null) {
+				dc.getParent().addDrawComponent(dc, dcIndex.intValue());
+			}
+		}
+	}
+	
 }

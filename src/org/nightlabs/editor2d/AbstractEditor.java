@@ -117,6 +117,7 @@ import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.editor2d.actions.CloneAction;
 import org.nightlabs.editor2d.actions.CopyAction;
+import org.nightlabs.editor2d.actions.CutAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.EditorPasteTemplateAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
@@ -125,13 +126,13 @@ import org.nightlabs.editor2d.actions.ResetRotationCenterAction;
 import org.nightlabs.editor2d.actions.RotateAction;
 import org.nightlabs.editor2d.actions.SelectAllWithSameName;
 import org.nightlabs.editor2d.actions.ShowDefaultRenderAction;
-import org.nightlabs.editor2d.actions.ZoomAllAction;
-import org.nightlabs.editor2d.actions.ZoomSelectionAction;
 import org.nightlabs.editor2d.actions.order.ChangeOrderOneDown;
 import org.nightlabs.editor2d.actions.order.ChangeOrderOneUp;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
 import org.nightlabs.editor2d.actions.viewer.ViewerAction;
+import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
+import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
 import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
@@ -726,10 +727,10 @@ extends J2DGraphicalEditorWithFlyoutPalette
       registry.registerAction(action);
       getSelectionActions().add(action.getId());    
       
-      // Copy Action
+      // Clone (Duplicate) Action
       action = new CloneAction(this);
       registry.registerAction(action);
-      getSelectionActions().add(action.getId());    
+      getSelectionActions().add(action.getId());   
             
       // Order Actions
       action = new ChangeOrderToLocalFront(this);
@@ -752,13 +753,22 @@ extends J2DGraphicalEditorWithFlyoutPalette
       PasteAction pasteAction = new PasteAction(this);
       registry.registerAction(pasteAction);
       getPropertyActions().add(pasteAction.getId());
+      getSite().getKeyBindingService().registerAction(pasteAction);
+           
+      // Cut Action
+      CutAction cutAction = new CutAction(this);
+      registry.registerAction(cutAction);
+      getSelectionActions().add(cutAction.getId());
+      cutAction.addPropertyChangeListener(pasteAction.cutListener);
+      getSite().getKeyBindingService().registerAction(cutAction);      
             
       // Copy Action
       CopyAction copyAction = new CopyAction(this);
       registry.registerAction(copyAction);
       getSelectionActions().add(copyAction.getId());  
       copyAction.addPropertyChangeListener(pasteAction.copyListener);
-      
+      getSite().getKeyBindingService().registerAction(copyAction);      
+            
 //      // Test Viewer Action
 //      action = new ViewerAction(this);
 //      registry.registerAction(action);

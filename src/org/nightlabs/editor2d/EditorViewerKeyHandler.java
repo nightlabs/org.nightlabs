@@ -118,7 +118,7 @@ extends GraphicalViewerKeyHandler
 			{
 				if (selection instanceof IStructuredSelection) 
 				{
-					LOGGER.debug("Selection changed");
+//					LOGGER.debug("Selection changed");
 					IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 					selectedObjects = structuredSelection.toList();
 					return;
@@ -138,32 +138,32 @@ extends GraphicalViewerKeyHandler
 	
 	public boolean keyPressed(KeyEvent event) 
 	{
-		LOGGER.debug("Key pressed");
+//		LOGGER.debug("Key pressed");
 		if (!getSelectedObjects().isEmpty()) 
 		{
 			if (acceptLeft(event)) {				
-				LOGGER.debug("Left pressed");
+//				LOGGER.debug("Left pressed");
 				translate(getSelectedObjects(), LEFT);
 				return true;
 			}
 			if (acceptRight(event)) {
-				LOGGER.debug("Right pressed");				
+//				LOGGER.debug("Right pressed");				
 				translate(getSelectedObjects(), RIGHT);
 				return true;				
 			}
 			if (acceptUp(event)) {
-				LOGGER.debug("Up pressed");
+//				LOGGER.debug("Up pressed");
 				translate(getSelectedObjects(), UP);
 				return true;				
 			}
 			if (acceptDown(event)) {
-				LOGGER.debug("Down pressed");				
+//				LOGGER.debug("Down pressed");				
 				translate(getSelectedObjects(), DOWN);
 				return true;				
 			}						
 		}		
-		return false;
-//		return super.keyPressed(event);
+//		return false;
+		return super.keyPressed(event);
 	}	
 	
 	public static final int LEFT = PositionConstants.LEFT;
@@ -186,41 +186,7 @@ extends GraphicalViewerKeyHandler
 	public int getTranslationY() {
 		return getConfigModule().getMoveTranslationY();
 	}
-			
-//	protected AffineTransform affineTransform = new AffineTransform();
-//	
-//	/**
-//	 * 
-//	 * @param editParts a List of EditParts to translate
-//	 * @param direction the translation direction 
-//	 */
-//	protected void translate(List editParts, int direction) 
-//	{		
-//		affineTransform.setToIdentity();
-//		AbstractTransformCommand cmd = new AbstractTransformCommand();
-//		cmd.setEditParts(editParts);
-//		switch (direction) 
-//		{
-//			case(DOWN):
-//				affineTransform.setToTranslation(0, getTranslation());
-//			case(UP):
-//				affineTransform.setToTranslation(0, -getTranslation());
-//			case(LEFT):
-//				affineTransform.setToTranslation(-getTranslation(), 0);
-//			case(RIGHT):
-//				affineTransform.setToTranslation(getTranslation(), 0);			
-//		}
-//		cmd.setAffineTransform(affineTransform);
-//		getCommandStack().execute(cmd);
-//		
-//		for (Iterator it = getSelectedObjects().iterator(); it.hasNext(); ) 
-//		{
-//			EditPart ep = (EditPart) it.next();
-//			ep.refresh();
-//		}
-//		LOGGER.debug("Translate Command executed");		
-//	}
-		
+					
 	/**
 	 * 
 	 * @param editParts a List of EditParts to translate

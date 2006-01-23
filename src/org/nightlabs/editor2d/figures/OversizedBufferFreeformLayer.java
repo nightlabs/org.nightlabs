@@ -235,7 +235,7 @@ implements FreeformFigure, BufferedFreeformLayer
 		long time = System.currentTimeMillis();
 		if (graphics instanceof J2DGraphics) {
 			J2DGraphics j2dGraphics = (J2DGraphics)graphics;
-			j2dGraphics.clipRect(null);
+//			j2dGraphics.clipRect(null);
 			
 			// get / create the buffer 
 			BufferedImage buffer = getBufferedImage();

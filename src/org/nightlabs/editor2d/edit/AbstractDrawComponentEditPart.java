@@ -248,43 +248,43 @@ implements EditorRequestConstants
 		String propertyName = evt.getPropertyName();
 		
 		if (propertyName.equals(DrawComponent.PROP_BOUNDS)) {
-			LOGGER.debug(propertyName+"changed!");
+//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 		}
 		else if (propertyName.equals(DrawComponent.PROP_HEIGHT)) {
-			LOGGER.debug(propertyName+"changed!");
+//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 		}
 		else if (propertyName.equals(DrawComponent.PROP_WIDTH)) {
-			LOGGER.debug(propertyName+"changed!");
+//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 		}
 		else if (propertyName.equals(DrawComponent.PROP_X)) {
-			LOGGER.debug(propertyName+"changed!");
+//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 		}
 		else if (propertyName.equals(DrawComponent.PROP_Y)) {
-			LOGGER.debug(propertyName+"changed!");
+//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 		}
 		else if (propertyName.equals(DrawComponent.PROP_ROTATION)) {
-			LOGGER.debug(propertyName+"changed!");
+//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 		}
 		else if (propertyName.equals(DrawComponent.PROP_ROTATION_X)) {
-			LOGGER.debug(propertyName+"changed!");
+//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 		}
 		else if (propertyName.equals(DrawComponent.PROP_ROTATION_Y)) {
-			LOGGER.debug(propertyName+"changed!");
+//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 		}						
 		else if (propertyName.equals(DrawComponent.PROP_RENDER_MODE)) {
-			LOGGER.debug(propertyName+"changed!");
+//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 		}		
 		else if (propertyName.equals(DrawComponent.TRANSFORM_CHANGED)) {
-			LOGGER.debug(propertyName);
+//			LOGGER.debug(propertyName);
 			refreshVisuals();
 		}				
 	}

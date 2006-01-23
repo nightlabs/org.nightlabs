@@ -96,7 +96,20 @@ public class EditorUtil
     Point viewLocation = viewport.getViewLocation(); 
     return viewLocation;
   }  
-      
+        
+  public static Point getZoomedScrollOffset(EditPart part) 
+  {
+  	Point absoluteScrollOffset = getScrollOffset(part);
+  	double zoom = getZoom(part);
+  	double x = absoluteScrollOffset.x;
+  	double y = absoluteScrollOffset.y;
+  	if (absoluteScrollOffset.x != 0)
+  		x = absoluteScrollOffset.x / zoom;
+  	if (absoluteScrollOffset.y != 0)
+  		y = absoluteScrollOffset.y / zoom;
+  	return new Point(Math.rint(x), Math.rint(y));
+  }
+  
   public static Rectangle toAbsolute(EditPart part, Rectangle rect) 
   {
     Point xy = EditorUtil.toAbsolute(part, rect.x, rect.y);
@@ -122,7 +135,18 @@ public class EditorUtil
     Point p = new Point(newX, newY);
     return p;
   }
-        
+       
+  public static Point toAbsoluteWithScrollOffset(EditPart part, double x, double y) 
+  {
+    double zoom = getZoom(part);
+    double newX = x / zoom;
+    double newY = y / zoom;
+    Point p = new Point(newX, newY);
+//    p.translate(getScrollOffset(part));
+    p.translate(getZoomedScrollOffset(part));    
+    return p;
+  }  
+  
   public static Point toRelative(EditPart part, double x, double y) 
   {
     double zoom = getZoom(part);
