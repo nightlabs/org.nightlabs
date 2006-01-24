@@ -20,6 +20,7 @@
       <import plugin="org.holongate.j2d"/>
       <import plugin="org.nightlabs.classsharing"/>
       <import plugin="org.nightlabs.editor2d.viewer"/>
+      <import plugin="org.eclipse.ui.forms"/>
    </requires>
 
    
