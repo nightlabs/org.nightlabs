@@ -122,9 +122,6 @@ implements ISelectionListener
   	return toolButtonColor;
   }
     
-  /**
-   * 
-   */
   public LayerView() 
   {
     super();

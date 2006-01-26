@@ -39,9 +39,6 @@ implements IPerspectiveFactory
 {
 	public static final String ID_PERSPECTIVE = EditorPerspective.class.getName();
 	
-	/**
-	 * 
-	 */
 	public EditorPerspective() {
 		super();
 	}
@@ -61,6 +58,7 @@ implements IPerspectiveFactory
     rightMiddle.addView(IPageLayout.ID_OUTLINE);    
     IFolderLayout rightBottom = layout.createFolder("rightBottom", IPageLayout.BOTTOM, 0.5f, "rightMiddle");
     rightBottom.addView(LayerView.ID_VIEW);
+    rightBottom.addView(QuickOptionsView.ID);
                
     layout.addPerspectiveShortcut(ID_PERSPECTIVE);  
     layout.addShowViewShortcut(IPageLayout.ID_PROP_SHEET);
