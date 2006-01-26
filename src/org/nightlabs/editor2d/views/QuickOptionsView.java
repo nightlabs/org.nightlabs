@@ -95,7 +95,6 @@ extends ViewPart
 	
 	private FormToolkit toolkit = null;
 	private ScrolledForm form = null;	
-	private int style = SWT.NULL;
 	
 	public void createPartControl(Composite parent) 
 	{
