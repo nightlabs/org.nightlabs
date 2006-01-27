@@ -40,7 +40,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -53,7 +52,6 @@ import org.nightlabs.base.form.XFormToolkit;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.composite.QuickOptionsComposite;
 import org.nightlabs.editor2d.config.QuickOptionsConfigModule;
 
 /**
@@ -101,9 +99,11 @@ extends ViewPart
 		toolkit = new XFormToolkit(parent.getDisplay());
 		form = toolkit.createScrolledForm(parent);
 		TableWrapLayout layout = new TableWrapLayout();
+//		ColumnLayout layout = new ColumnLayout();
 		form.getBody().setLayout(layout);		
 		form.getBody().setLayoutData(new GridData(GridData.FILL_BOTH));
-				
+//		form.setText(EditorPlugin.getResourceString("quickOptionsView.name"));		
+		
 		Section sectionDuplicate = toolkit.createSection(form.getBody(), 
 			  Section.DESCRIPTION|Section.TITLE_BAR|
 			  Section.TWISTIE|Section.EXPANDED);
@@ -155,7 +155,7 @@ extends ViewPart
 		Label l = toolkit.createLabel(parent, labelText);		
 		Spinner spinner = new Spinner(parent, SWT.NONE);
 		spinner.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
+//		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 		spinner.setSelection(getValue(identifier));				
 		spinner.addSelectionListener(textListener);
 		spinner.addFocusListener(focusListener);
@@ -242,5 +242,6 @@ extends ViewPart
 			t.removeSelectionListener(textListener);
 			t.removeFocusListener(focusListener);
 		}	
-	};	
+	};
+	
 }

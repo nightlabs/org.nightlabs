@@ -172,6 +172,7 @@ extends ActionBarContributor
   	RenderModeManager renderMan = RendererRegistry.sharedInstance().getRenderModeManager();
   	if (renderMan.getRenderModes().size() > 1)
   		tbm.add(new RenderModeContributionItem(getPage()));  	
+//  		tbm.add(new RenderModeContributionItem(renderMan));  		
   	
 //  	tbm.add(getAction(ViewerAction.ID));
   }  

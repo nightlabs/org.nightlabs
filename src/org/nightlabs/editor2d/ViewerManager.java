@@ -49,6 +49,7 @@ import org.nightlabs.editor2d.edit.LayerEditPart;
 import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
 import org.nightlabs.editor2d.render.RenderModeManager;
 import org.nightlabs.editor2d.util.EditorUtil;
+import org.nightlabs.editor2d.viewer.descriptor.DrawComponentDescriptor;
 
 public class ViewerManager 
 {
@@ -74,7 +75,6 @@ public class ViewerManager
     mousePoint = new Point();
   }
   
-//  protected List excludeList;
   protected ExcludeListRef excludeListRef;
   protected void initExcludeListRef() 
   {
@@ -164,18 +164,20 @@ public class ViewerManager
   	exclusiveClass = c;
   }
   
-  protected Point relativePoint;
+  protected DrawComponentDescriptor descriptor = new DrawComponentDescriptor();  
+  protected Point relativePoint = null;
   protected AbstractDrawComponentEditPart oldPart;
+  
   protected MouseMotionListener mouseListener = new MouseMotionListener.Stub() 
   {
     public void mouseMoved(org.eclipse.draw2d.MouseEvent me) 
     {
     	relativePoint = new Point(me.x, me.y);
-//      mousePoint = EditorUtil.toAbsolute(root, me.x, me.y);
-    	mousePoint = EditorUtil.toAbsoluteWithScrollOffset(root, me.x, me.y);    	
-      statusLineMan.setMessage("X = "+mousePoint.x+", Y = "+mousePoint.y);
-//      EditPart part = viewer.findObjectAtExcluding(relativePoint, excludeListRef.getExcludeList(), conditionRef.getCondition());
-      
+    	mousePoint = EditorUtil.toAbsoluteWithScrollOffset(root, me.x, me.y);    	      
+      EditPart part = viewer.findObjectAtExcluding(relativePoint, excludeListRef.getExcludeList(), conditionRef.getCondition());
+      statusLineMan.setMessage("MouseX = "+mousePoint.x+", MouseY = "+mousePoint.y);      
+      // TODO: set StatusLine Message filled with the values of the DrawComponentDescriptor
+      // of the current rolled over DrawComponent
 //      EditPart part = viewer.findObjectAtExcluding(relativePoint, excludeListRef.getExcludeList());      
 //      if (part != null) 
 //      {       	
@@ -201,6 +203,7 @@ public class ViewerManager
     }
   };
   
+  // RollOver should be rendered on Feedback Layer to avoid repaint
   protected void doRollOver(AbstractDrawComponentEditPart dcPart) 
   {                    
     if (!dcPart.equals(oldPart)) {            
@@ -301,5 +304,5 @@ public class ViewerManager
   	};
   	return condition;  	
   }
-  
+   
 }
