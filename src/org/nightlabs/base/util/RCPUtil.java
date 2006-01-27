@@ -35,6 +35,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -53,8 +54,11 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -392,5 +396,39 @@ public class RCPUtil
 //		IConfigurationElement[] configPerspectives =  Platform.getExtensionRegistry().getConfigurationElementsFor("org.eclipse.ui.perspectives");
 //		for(int i = 0; i < configPerspectives.length; i++)
 //			layout.addPerspectiveShortcut(configPerspectives[i].getAttribute("id"));
+	}
+	
+	/**
+	 * 
+	 * @param layout the GridLayout to apply the given LayoutMode to 
+	 * @param layoutMode the LayoutMode to apply
+	 * @see LayoutMode
+	 * @return the given GridLayout with the applied LayoutMode
+	 */
+	public static GridLayout applyLayout(GridLayout layout, LayoutMode layoutMode) 
+	{
+		if (layoutMode == LayoutMode.TIGHT_WRAPPER) 
+		{
+			layout.horizontalSpacing = 0;
+			layout.verticalSpacing = 0;
+			layout.marginHeight = 0;
+			layout.marginWidth = 0;
+
+			layout.marginLeft = 0;
+			layout.marginRight = 0;
+			layout.marginTop = 0;
+			layout.marginBottom = 0;
+		}
+		return layout;
+	}
+	
+	/**
+	 *  
+	 * @param comp the Composite to set the Form Border for
+	 * @see FormToolkit#paintBordersFor(Composite)
+	 */
+	public static void setFormBorder(Composite comp) 
+	{
+		comp.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
 	}
 }
