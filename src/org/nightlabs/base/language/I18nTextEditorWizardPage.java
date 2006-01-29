@@ -44,6 +44,8 @@ import org.nightlabs.i18n.I18nTextBuffer;
  */
 public class I18nTextEditorWizardPage extends WizardHopPage {
 
+	private I18nTextBuffer buffer = new I18nTextBuffer();
+	
 	/**
 	 * @param pageName
 	 */
@@ -88,7 +90,7 @@ public class I18nTextEditorWizardPage extends WizardHopPage {
 	public Control createPageContents(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE);
 		textEditor = new I18nTextEditor(wrapper, editorCaption);
-		textEditor.setI18nText(new I18nTextBuffer());
+		textEditor.setI18nText(buffer);
 		textEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_BEGINNING));
 		createAdditionalContents(wrapper);
 		return wrapper;
@@ -103,8 +105,13 @@ public class I18nTextEditorWizardPage extends WizardHopPage {
 	protected void createAdditionalContents(Composite wrapper) {}
 	
 	
+	public void setI18nText(I18nText text) {
+		buffer.copyFrom(text);
+		textEditor.setI18nText(buffer);
+	}
+	
 	public I18nText getI18nText() {
-		return textEditor.getI18nText();
+		return buffer;
 	}
 
 }
