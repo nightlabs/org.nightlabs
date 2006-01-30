@@ -31,7 +31,6 @@ import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
-import org.nightlabs.base.exceptionhandler.ExceptionHandlerEPProcessor;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.classloader.DelegatingClassLoader;
 import org.nightlabs.classsharing.ClasssharingPlugin;
@@ -89,7 +88,6 @@ extends WorkbenchAdvisor
 		return ClassLoader.getSystemClassLoader() instanceof DelegatingClassLoader;
 	}	
 	
-	private ExceptionHandlerEPProcessor epProcessor = null;
 	
 	/**
 	 * Checks the {@link ExceptionHandlerRegistry} for registered {@link ExceptionHandlerRegistryItem} by invoking

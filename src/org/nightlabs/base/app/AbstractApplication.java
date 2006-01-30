@@ -56,61 +56,61 @@ implements IPlatformRunnable
 		super();
 		init();
 	}
-
+	
 	private static String applicationName = "AbstractApplication";
 	public static String getApplicationName() {
 		return applicationName;
 	}
 	
 	private static String rootDir = "";
-
-  /** 
-   * @return the root directory, which is the applicationName in the users home directory.
-   */
+	
+	/** 
+	 * @return the root directory, which is the applicationName in the users home directory.
+	 */
 	public static String getRootDir() {
-      if (rootDir.equals("")){
-      	File rootFile = new File(System.getProperty("user.home"), "."+applicationName);
-      	rootFile.mkdirs();
-      	rootDir = rootFile.getAbsolutePath();
-//      	System.out.println("rootDir is "+rootDir);
-      }
-      return rootDir;
-  }
-
+		if (rootDir.equals("")){
+			File rootFile = new File(System.getProperty("user.home"), "."+applicationName);
+			rootFile.mkdirs();
+			rootDir = rootFile.getAbsolutePath();
+//			System.out.println("rootDir is "+rootDir);
+		}
+		return rootDir;
+	}
+	
 	private static String configDir = "";
 	
 	/**
 	 * @return the config directory, which is getRootDir()+"/config".
 	 */
-  public static String getConfigDir() {
-      if (configDir.equals("")){
-          File configFile = new File(getRootDir(),"config");
-          configFile.mkdirs();
-          configDir = configFile.getAbsolutePath();
-//        	System.out.println("configDir is "+configDir);
-      }
-      return configDir;
-  }
-  
-  
-  private static String logDir = "";
-  
-  /**
-   * 
-   * @return the log directory, which is getRootDir()+"/log"
-   */
-  public static String getLogDir() {
-      if (logDir.equals("")){
-          File logFile = new File(getRootDir(),"log");
-          if (!logFile.exists())
-          	if (!logFile.mkdirs())
-          		System.out.println("Could not create log directory "+logFile.getAbsolutePath());
-          logDir = logFile.getAbsolutePath();
-//        	System.out.println("logDir is "+logDir);
-      }
-      return logDir;
-  }
-
+	public static String getConfigDir() {
+		if (configDir.equals("")){
+			File configFile = new File(getRootDir(),"config");
+			configFile.mkdirs();
+			configDir = configFile.getAbsolutePath();
+//			System.out.println("configDir is "+configDir);
+		}
+		return configDir;
+	}
+	
+	
+	private static String logDir = "";
+	
+	/**
+	 * 
+	 * @return the log directory, which is getRootDir()+"/log"
+	 */
+	public static String getLogDir() {
+		if (logDir.equals("")){
+			File logFile = new File(getRootDir(),"log");
+			if (!logFile.exists())
+				if (!logFile.mkdirs())
+					System.out.println("Could not create log directory "+logFile.getAbsolutePath());
+			logDir = logFile.getAbsolutePath();
+//			System.out.println("logDir is "+logDir);
+		}
+		return logDir;
+	}
+	
 	private static Object mutex = new Object();
 	public static Object getMutex() {
 		return mutex;
@@ -123,16 +123,16 @@ implements IPlatformRunnable
 	public static void initializeLogging() 
 	throws IOException
 	{
-    String logConfFileName = getConfigDir() + File.separatorChar + "log4j.properties";
-    File logProp = new File(logConfFileName);
-    if (!logProp.exists()){
-        // if not there copy
-        Utils.copyResource(AbstractApplication.class ,"log4j.properties",logConfFileName);		        
-    }
-    getLogDir();
-    setSystemProperty();
-    PropertyConfigurator.configure(logConfFileName);
-    LOGGER.info(getApplicationName()+" started.");
+		String logConfFileName = getConfigDir() + File.separatorChar + "log4j.properties";
+		File logProp = new File(logConfFileName);
+		if (!logProp.exists()){
+			// if not there copy
+			Utils.copyResource(AbstractApplication.class ,"log4j.properties",logConfFileName);		        
+		}
+		getLogDir();
+		setSystemProperty();
+		PropertyConfigurator.configure(logConfFileName);
+		LOGGER.info(getApplicationName()+" started.");
 	}	
 	
 	/**
@@ -142,16 +142,16 @@ implements IPlatformRunnable
 	 */
 	protected static void setSystemProperty() 
 	{
-    try {
-      System.setProperty(APPLICATION_SYSTEM_PROPERTY_NAME, getApplicationName());    	
-    } catch (SecurityException se) {
-    	System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" could not be set, to "+getApplicationName()+" because:");
-    	System.out.println("You dont have the permission to set a System Property");
-    } catch (NullPointerException npe) {
-    	System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" could not be set, to "+getApplicationName()+" because:");    	
-    	System.out.println("applicationName == null");
-    }
-//    System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" = "+System.getProperty(APPLICATION_SYSTEM_PROPERTY_NAME));    
+		try {
+			System.setProperty(APPLICATION_SYSTEM_PROPERTY_NAME, getApplicationName());    	
+		} catch (SecurityException se) {
+			System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" could not be set, to "+getApplicationName()+" because:");
+			System.out.println("You dont have the permission to set a System Property");
+		} catch (NullPointerException npe) {
+			System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" could not be set, to "+getApplicationName()+" because:");    	
+			System.out.println("applicationName == null");
+		}
+//		System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" = "+System.getProperty(APPLICATION_SYSTEM_PROPERTY_NAME));    
 	}
 	
 	/**
@@ -162,33 +162,33 @@ implements IPlatformRunnable
 	public Object run(Object args) 
 	throws Exception 
 	{
-	  try {
-	  	SafeRunnable.setRunner(new SaveRunnableRunner());
-	  	applicationThread.start();
-	  	synchronized (mutex) {
-	  		mutex.wait();
-	  	}
-	  	
+		try {
+			SafeRunnable.setRunner(new SaveRunnableRunner());
+			applicationThread.start();
+			synchronized (mutex) {
+				mutex.wait();
+			}
+			
 			if (applicationThread.getPlatformResultCode() == PlatformUI.RETURN_RESTART) 
 				return IPlatformRunnable.EXIT_RESTART; 
 			else 
 				return IPlatformRunnable.EXIT_OK;
 		} finally {
-		    if (Display.getCurrent() != null)
-		    	Display.getCurrent().dispose();
+			if (Display.getCurrent() != null)
+				Display.getCurrent().dispose();
 		}
 	}	
-
+	
 	
 	private ExceptionHandlingThreadGroup threadGroup = null;	
-  protected ThreadGroup getThreadGroup() 
-  {
-  	if (threadGroup == null)
-  		threadGroup = new ExceptionHandlingThreadGroup(getApplicationName()+"ThreadGroup");
-  	return threadGroup;
-  }
-  
-  private AbstractApplicationThread applicationThread = null;
+	protected ThreadGroup getThreadGroup() 
+	{
+		if (threadGroup == null)
+			threadGroup = new ExceptionHandlingThreadGroup(getApplicationName()+"ThreadGroup");
+		return threadGroup;
+	}
+	
+	private AbstractApplicationThread applicationThread = null;
 	protected void init() 
 	{
 		applicationName = initApplicationName();

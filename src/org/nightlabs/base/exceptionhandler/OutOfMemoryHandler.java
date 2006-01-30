@@ -40,13 +40,6 @@ public class OutOfMemoryHandler implements IExceptionHandler {
 	 */
 	public void handleException(Thread thread, Throwable thrownException, Throwable triggerException) 
 	{
-		try {
-			LOGGER.error("OutOfMemoryHandler handling an error!", thrownException);
-      OutOfMemoryErrorDialog dlg = new OutOfMemoryErrorDialog(thrownException, triggerException);
-      dlg.open();
-		} catch (Throwable error) {
-			LOGGER.fatal("While handling an exception, another one occured!", error);
-		}
-	}
-
+		DefaultErrorDialog.addError(OutOfMemoryErrorDialog.class, "Out of memory error", null, thrownException, triggerException);
+	}	
 }

@@ -34,7 +34,6 @@ import org.eclipse.ui.application.WorkbenchAdvisor;
  */
 public abstract class ExceptionHandlingWorkbenchAdvisor extends WorkbenchAdvisor {
 			
-	private ExceptionHandlerEPProcessor epProcessor = null;
 	/**
 	 * Checks the {@link ExceptionHandlerRegistry} for registered {@link ExceptionHandlerRegistryItem} by invoking
 	 * {@link #ExceptionHandlerRegistry.searchHandler(Throwable)}. For the found item the {@link IExceptionHandler.handleException(Throwable)} 

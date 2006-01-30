@@ -35,17 +35,20 @@ import org.apache.log4j.Logger;
 public class ThrowableHandler implements IExceptionHandler
 {
 	public static final Logger LOGGER = Logger.getLogger(ThrowableHandler.class);
-  
+	
 	/**
 	 * @see org.nightlabs.base.exceptionhandler.IExceptionHandler#handleException(java.lang.Thread, java.lang.Throwable, java.lang.Throwable)
 	 */
 	public void handleException(Thread thread, Throwable thrownException,	Throwable triggerException)
 	{
-		try {
+		try
+		{
 			LOGGER.error("ThrowableHandler handling an error!", thrownException);
-      DefaultErrorDialog dlg = new DefaultErrorDialog(thrownException, triggerException);
-      dlg.open();
-		} catch (Throwable error) {
+			//DefaultErrorDialog dlg = new DefaultErrorDialog(thrownException, triggerException);
+			DefaultErrorDialog.addError(DefaultErrorDialog.class, null, null, thrownException, triggerException);	
+			
+		} catch (Throwable error)
+		{
 			LOGGER.fatal("While handling an exception, another one occured!", error);
 		}
 	}

@@ -27,11 +27,15 @@
 package org.nightlabs.base.exceptionhandler;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
 import org.eclipse.swt.widgets.Display;
 
+import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 
 /**
@@ -43,22 +47,21 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de> 
  */
-public class ExceptionHandlerRegistry {
+public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 	public static final Logger LOGGER = Logger.getLogger(ExceptionHandlerRegistry.class);
 	
-	private HashMap exceptionHandlers = new HashMap();
+	private Map exceptionHandlers = new HashMap();
 
 	// Dummy object to provide thread safety
 	// IMPROVE other synchronization strategy
 	private Object synchronizedObject = new Object();
 	
-	protected HashMap getExceptionHandlers(){
+	protected Map getExceptionHandlers(){
 		return exceptionHandlers;
 	}
 	
 	public void addExceptionHandler(String targetType, IExceptionHandler handler){		
 		synchronized(synchronizedObject){
-			ensureProcessingDone();
 			if (exceptionHandlers.containsKey(targetType))
 				throw new DuplicateHandlerRegistryException("An exceptionHandler was already defined for "+targetType);
 			exceptionHandlers.put(targetType,handler);
@@ -71,7 +74,7 @@ public class ExceptionHandlerRegistry {
 	 */
 	protected IExceptionHandler getExceptionHandler(String targetType){
 		synchronized(synchronizedObject){
-			ensureProcessingDone();
+			checkProcessing();
 			if (exceptionHandlers.containsKey(targetType))
 				return (IExceptionHandler)exceptionHandlers.get(targetType);
 			else
@@ -106,23 +109,6 @@ public class ExceptionHandlerRegistry {
 	 */
 	protected boolean haveHandler(Class targetType){
 		return exceptionHandlers.containsKey(targetType.getName());
-	}
-	
-	// TODO: Maybe this should be static as EPs should only be processed once
-	private ExceptionHandlerEPProcessor epProcessor = null;
-	
-	protected void ensureProcessingDone() {
-		synchronized(synchronizedObject){
-			if (epProcessor == null){
-				try {
-					epProcessor = new ExceptionHandlerEPProcessor();
-					epProcessor.process();
-				} catch (EPProcessorException e) {
-					// TODO Add handler code here
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 	
 	public ExceptionHandlerSearchResult getTopLevelCauseHandler(Throwable x)
@@ -174,7 +160,7 @@ public class ExceptionHandlerRegistry {
 	 */
 	public ExceptionHandlerSearchResult searchHandler(Throwable exception){
 		// make sure the registrations where made
-		ensureProcessingDone();
+		checkProcessing();
 
 		ExceptionHandlerSearchResult rootCauseResult = getTopLevelCauseHandler(exception);
 		if (rootCauseResult != null)
@@ -285,6 +271,43 @@ public class ExceptionHandlerRegistry {
 			return false;
 		}
 	}
+	
+	public static final String ExtensionPointID = "org.nightlabs.base.exceptionhandler";
+	/**
+	 * Processes exceptionHandler extension-point elements.
+	 * For each element one instance of exceptionHandler.class is registered
+	 * in the {@link ExceptionHandlerRegistry}. 
+	 * @param element
+	 * @throws EPProcessorException
+	 */
+	public void processElement(IExtension extension, IConfigurationElement element) 
+	throws EPProcessorException
+	{
+		try{
+			if (element.getName().toLowerCase().equals("exceptionhandler")) {
+				String targetType = element.getAttribute("targetType");
+				String handlerClassStr = element.getAttribute("class");
+				IExceptionHandler handler = (IExceptionHandler) element.createExecutableExtension("class");
+				if (!IExceptionHandler.class.isAssignableFrom(handler.getClass()))
+				throw new IllegalArgumentException("Specified class for element exceptionHandler must implement "+IExceptionHandler.class.getName()+". "+handler.getClass().getName()+" does not.");
+				ExceptionHandlerRegistry.sharedInstance().addExceptionHandler(targetType,handler);
+			}
+			else {
+				// wrong element according to schema, probably checked earlier
+				throw new IllegalArgumentException("Element "+element.getName()+" is not supported by extension-point "+ExtensionPointID);
+			}
+		}catch(Throwable e){
+			throw new EPProcessorException(e);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.extensionpoint.AbstractEPProcessor#getExtensionPointID()
+	 */
+	public String getExtensionPointID() {
+		return ExtensionPointID;
+	}
+	
 	
 	
 	private static ExceptionHandlerRegistry sharedInstance;
