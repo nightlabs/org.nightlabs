@@ -55,13 +55,33 @@ extends AbstractDrawComponentContainerEditPart
     super(layer);
   }
 	
+//  /* (non-Javadoc)
+//   * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
+//   */
+//  protected IFigure createFigure() 
+//  {    
+////    IFigure f = new FreeformLayer();    
+//  	
+////  	Figure f = new OversizedBufferFreeformLayer();
+////    ((BufferedFreeformLayer)f).init(this);
+//  	
+////  	DrawComponentFigure f = new ContainerDrawComponentFigure();
+////    f.setDrawComponent(getDrawComponent());    
+////    addRenderer(f);
+////    addZoomListener(f);  	
+//
+//  	IFigure f = new ContainerFreeformLayer();
+//  	
+//		f.setLayoutManager(new FreeformLayout());		    		
+//		return f;  
+//  }
   /* (non-Javadoc)
    * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
    */
   protected IFigure createFigure() 
   {    
-//    IFigure f = new FreeformLayer();
-    
+//    IFigure f = new FreeformLayer();    
+  	
 //  	Figure f = new OversizedBufferFreeformLayer();
 //    ((BufferedFreeformLayer)f).init(this);
   	

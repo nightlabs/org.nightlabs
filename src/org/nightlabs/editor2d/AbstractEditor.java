@@ -517,12 +517,12 @@ extends J2DGraphicalEditorWithFlyoutPalette
         
         if (file.exists() 
             || org.eclipse.jface.dialogs.MessageDialogWithToggle.openConfirm(getSite().getShell(),
-                EditorPlugin.getResourceString("resource_create_file"),
-                EditorPlugin.getResourceString("resource_file_not_exists_1")
+                EditorPlugin.getResourceString("resource.create.file"),
+                EditorPlugin.getResourceString("resource.fileNotExists.1")
                 + " "
                 + file.getName() 
                 + " "
-                + EditorPlugin.getResourceString("resource_file_not_exists_2")))
+                + EditorPlugin.getResourceString("resource.fileNotExists.2")))
         {
           editorSaving = true;
           saveProperties();
@@ -534,12 +534,12 @@ extends J2DGraphicalEditorWithFlyoutPalette
       {
       	throw new RuntimeException(e);
       	
-//      	RCPUtil.showErrorDialog(EditorPlugin.getResourceString("error_during_save"));
+//      	RCPUtil.showErrorDialog(EditorPlugin.getResourceString("error.during.save"));
       	
 //        ErrorDialog.openError(
 //          getSite().getShell(),
-//          EditorPlugin.getResourceString("error_during_save"),
-//          EditorPlugin.getResourceString("error_during_save_message"),
+//          EditorPlugin.getResourceString("error.during.save"),
+//          EditorPlugin.getResourceString("error.during.save.message"),
 //          e.getStatus());
       }   
     }

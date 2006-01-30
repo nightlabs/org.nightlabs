@@ -49,7 +49,7 @@ extends Command
 	protected boolean wasRemoved;
 
 	/** the Deletion String */
-	public static final String DELETE_DRAWCOMPONENT = EditorPlugin.getResourceString("command_delete_drawcomponent");
+	public static final String DELETE_DRAWCOMPONENT = EditorPlugin.getResourceString("command.delete.drawcomponent");
   
 	/**
 	 * Create a command that will remove the shape from its parent.

@@ -127,10 +127,8 @@ implements RendererFigure
   
   protected Area outlineArea;
   
-  protected ZoomListener zoomListener = new ZoomListener() 
-  {
-    public void zoomChanged(double zoom) 
-    {
+  protected ZoomListener zoomListener = new ZoomListener() {
+    public void zoomChanged(double zoom) {
       hitTolerance = DEFAULT_HIT_TOLERANCE / zoom;
     }    
   };
@@ -138,13 +136,11 @@ implements RendererFigure
     return zoomListener;
   }
 
-	public Rectangle getBounds() 
-	{
+	public Rectangle getBounds() {
 		if (drawComponent != null)
 			return J2DUtil.toDraw2D(drawComponent.getBounds());
 		
 		return super.getBounds();
 	}  
-  
-  
+    
 }

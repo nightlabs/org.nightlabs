@@ -34,32 +34,39 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartListener;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.RootEditPart;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IStatusLineManager;
 
 import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
 import org.nightlabs.editor2d.edit.LayerEditPart;
 import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
+import org.nightlabs.editor2d.figures.DrawComponentFigure;
+import org.nightlabs.editor2d.render.RenderConstants;
 import org.nightlabs.editor2d.render.RenderModeManager;
+import org.nightlabs.editor2d.render.Renderer;
 import org.nightlabs.editor2d.util.EditorUtil;
+import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 import org.nightlabs.editor2d.viewer.descriptor.DrawComponentDescriptor;
 
 public class ViewerManager 
 {
   public static final Logger LOGGER = Logger.getLogger(ViewerManager.class);
   
-  protected ScrollingGraphicalViewer viewer;
-  protected Viewport viewport;
-  protected Point mousePoint;
-  protected RootEditPart root;
-  protected IStatusLineManager statusLineMan;
+  protected ScrollingGraphicalViewer viewer = null;
+  protected Viewport viewport = null;
+  protected Point mousePoint = new Point();
+  protected RootEditPart root = null;
+  protected IStatusLineManager statusLineMan = null;
   public ViewerManager(ScrollingGraphicalViewer viewer, IStatusLineManager statusLineMan) 
   {
     super();
@@ -156,17 +163,18 @@ public class ViewerManager
   	conditionRef.setCondition(condition);
   }
   
-//  public void setExclusiveClass(Class c) {
-//  	conditionRef.setCondition(createExclusiveCondition(c));
-//  }
   protected Class exclusiveClass;
   public void setExclusiveClass(Class c) {
   	exclusiveClass = c;
   }
+    
+  protected DescriptorManager descriptorManager = new DescriptorManager();
+  public DescriptorManager getDescriptorManager() {
+  	return descriptorManager;
+  }
   
-  protected DrawComponentDescriptor descriptor = new DrawComponentDescriptor();  
   protected Point relativePoint = null;
-  protected AbstractDrawComponentEditPart oldPart;
+  protected AbstractDrawComponentEditPart oldPart = null;
   
   protected MouseMotionListener mouseListener = new MouseMotionListener.Stub() 
   {
@@ -175,47 +183,111 @@ public class ViewerManager
     	relativePoint = new Point(me.x, me.y);
     	mousePoint = EditorUtil.toAbsoluteWithScrollOffset(root, me.x, me.y);    	      
       EditPart part = viewer.findObjectAtExcluding(relativePoint, excludeListRef.getExcludeList(), conditionRef.getCondition());
-      statusLineMan.setMessage("MouseX = "+mousePoint.x+", MouseY = "+mousePoint.y);      
-      // TODO: set StatusLine Message filled with the values of the DrawComponentDescriptor
-      // of the current rolled over DrawComponent
-//      EditPart part = viewer.findObjectAtExcluding(relativePoint, excludeListRef.getExcludeList());      
-//      if (part != null) 
-//      {       	
-//      	if (!(part instanceof MultiLayerDrawComponentEditPart) &&
-//      			!(part instanceof LayerEditPart))
-//      	{
-//      		if (!(part instanceof RootEditPart)) 
-//      		{
-//        		if (exclusiveClass == null) {
-//          		if (part instanceof AbstractDrawComponentEditPart) {
-//          			doRollOver((AbstractDrawComponentEditPart)part);     			
-//          		}      		
-//        		}
-//        		else {
-//        			if (exclusiveClass.equals(part.getClass())) {
-//        				AbstractDrawComponentEditPart dcPart = (AbstractDrawComponentEditPart) exclusiveClass.cast(part);
-//        				doRollOver(dcPart);
-//        			}
-//        		}      			
-//      		}
-//        }              		
-//      }            
+      statusLineMan.setMessage(getMouseCoordinates());      
+      if (part != null) 
+      {       	
+      	if (!(part instanceof MultiLayerDrawComponentEditPart) &&
+      			!(part instanceof LayerEditPart))
+      	{
+      		if (!(part instanceof RootEditPart)) 
+      		{
+        		if (exclusiveClass == null) {
+          		if (part instanceof AbstractDrawComponentEditPart) {
+          			doRollOver((AbstractDrawComponentEditPart)part);     			
+          		}      		
+        		}
+        		else {
+        			if (exclusiveClass.equals(part.getClass())) {
+        				AbstractDrawComponentEditPart dcPart = (AbstractDrawComponentEditPart) exclusiveClass.cast(part);
+        				doRollOver(dcPart);
+        			}
+        		}      			
+      		}
+        }
+      }
     }
   };
   
-  // RollOver should be rendered on Feedback Layer to avoid repaint
+  protected String getMouseCoordinates() 
+  {
+  	return "MouseX = "+mousePoint.x+", MouseY = "+mousePoint.y;  	
+  }
+
+  protected IFigure getFeedbackLayer() 
+  {
+    if (root instanceof ScalableFreeformRootEditPart) {
+    	ScalableFreeformRootEditPart rootEditPart = (ScalableFreeformRootEditPart) root;
+    	IFigure feedbackLayer = rootEditPart.getLayer(ScalableFreeformRootEditPart.FEEDBACK_LAYER);
+    	return feedbackLayer;
+    }
+    return null;
+  }
+  
+  protected DrawComponentFigure rollOverFigure = null;
+//  protected void addRollOver(AbstractDrawComponentEditPart dcPart) 
+//  {
+//    if (getFeedbackLayer() != null && dcPart != null) 
+//    {
+//    	DrawComponent dc = dcPart.getDrawComponent();
+//    	Rectangle figureBounds = dcPart.getFigure().getBounds();
+//    	rollOverFigure = new DrawComponentFigure();
+//    	Renderer r = dc.getRenderModeManager().getRenderer(RenderConstants.ROLLOVER_MODE, dc.getClass());
+//    	if (r != null) {
+//    		rollOverFigure.setRenderer(r);
+//    		rollOverFigure.setDrawComponent(dc);
+//    		rollOverFigure.setBounds(figureBounds);
+//      	getFeedbackLayer().add(rollOverFigure); 
+//      	getFeedbackLayer().repaint();
+//    	}
+//    }  	  	
+//  }
+  
+  protected void addRollOver(AbstractDrawComponentEditPart dcPart) 
+  {
+    if (getFeedbackLayer() != null && dcPart != null) 
+    {
+    	DrawComponent dc = dcPart.getDrawComponent();
+    	Rectangle figureBounds = dcPart.getFigure().getBounds();
+    	rollOverFigure = new DrawComponentFigure();
+    	Renderer r = dc.getRenderModeManager().getRenderer(RenderConstants.ROLLOVER_MODE, dc.getClass());
+    	if (r != null) {
+    		rollOverFigure.setRenderer(r);
+    		rollOverFigure.setDrawComponent(dc);
+    		rollOverFigure.setBounds(figureBounds);
+      	getFeedbackLayer().add(rollOverFigure); 
+      	getFeedbackLayer().repaint();
+    	}
+    }  	  	
+  }
+
+  protected void removeRollOver() 
+  {
+    if (getFeedbackLayer() != null && rollOverFigure != null) {
+    	getFeedbackLayer().remove(rollOverFigure);
+    }  	
+  }
+    
   protected void doRollOver(AbstractDrawComponentEditPart dcPart) 
-  {                    
-    if (!dcPart.equals(oldPart)) {            
-			if (oldPart != null) {
-      	oldPart.getDrawComponent().setRenderMode(RenderModeManager.DEFAULT_MODE);
-      	oldPart.getFigure().repaint();
-			}						
-      dcPart.getDrawComponent().setRenderMode(RenderModeManager.ROLLOVER_MODE);
-			oldPart = dcPart;
-			dcPart.getFigure().repaint();
-			LOGGER.debug("dcPart = "+dcPart);
-    }      			  	
+  {
+    if (dcPart != null) {
+    	DrawComponent dc = dcPart.getDrawComponent();    	
+  		descriptorManager.setDrawComponent(dc);
+  		statusLineMan.setMessage(getMouseCoordinates() + ", " + descriptorManager.getEntriesAsString());
+  		
+//      removeRollOver();
+//      addRollOver(dcPart);  		
+    }
+    
+//    if (!dcPart.equals(oldPart)) {            
+//			if (oldPart != null) {
+//      	oldPart.getDrawComponent().setRenderMode(RenderModeManager.DEFAULT_MODE);
+//      	oldPart.getFigure().repaint();
+//			}						
+//      dcPart.getDrawComponent().setRenderMode(RenderModeManager.ROLLOVER_MODE);
+//			oldPart = dcPart;
+//			dcPart.getFigure().repaint();
+//			LOGGER.debug("dcPart = "+dcPart);
+//    }      			  	
   }
     
   public static class ConditionRef

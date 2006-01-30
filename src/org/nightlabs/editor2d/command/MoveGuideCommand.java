@@ -43,7 +43,7 @@ extends Command
   private EditorGuide guide;
   	
   public MoveGuideCommand(EditorGuide guide, int positionDelta) {
-  	super(EditorPlugin.getResourceString("command_move_guide"));
+  	super(EditorPlugin.getResourceString("command.move.guide"));
   	this.guide = guide;
   	pDelta = positionDelta;
   }

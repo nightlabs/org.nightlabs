@@ -37,7 +37,7 @@ public class DeleteLayerCommand
 extends DeleteDrawComponentCommand
 {
 	/** the Deletion String */
-	public static final String DELETE_LAYER = EditorPlugin.getResourceString("command_delete_layer");
+	public static final String DELETE_LAYER = EditorPlugin.getResourceString("command.delete.layer");
 	/**
 	 * Create a command that will remove the shape from its parent.
 	 * @param parent the ShapesDiagram containing the child

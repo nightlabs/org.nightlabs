@@ -102,7 +102,7 @@ extends TreeContainerEditPolicy
 		int index = findIndexOfTreeItemAt(request.getLocation());
 //		return createCreateCommand(child, null, index, EditorPlugin.getResourceString("command_create_drawcomponent"));//$NON-NLS-1$
 		Rectangle bounds = J2DUtil.toDraw2D(child.getBounds());
-		return createCreateCommand(child, bounds, index, EditorPlugin.getResourceString("command_create_drawcomponent"));//$NON-NLS-1$
+		return createCreateCommand(child, bounds, index, EditorPlugin.getResourceString("command.create.drawcomponent"));//$NON-NLS-1$
 	}
 
 	protected Command getMoveChildrenCommand(ChangeBoundsRequest request)

@@ -127,7 +127,7 @@ extends ContextMenuProvider
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
   	
   	// View SubMenu
-  	MenuManager viewsubmenu = new MenuManager(EditorPlugin.getResourceString("menu_view"));  	 
+  	MenuManager viewsubmenu = new MenuManager(EditorPlugin.getResourceString("menu.view"));  	 
   	buildViewSubMenu(viewsubmenu);  	
   	if (!viewsubmenu.isEmpty())
   		manager.appendToGroup(GEFActionConstants.GROUP_REST, viewsubmenu);

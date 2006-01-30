@@ -61,7 +61,7 @@ extends Command
 	 */	
 	public CreateDrawComponentCommand() 
 	{
-	  super(EditorPlugin.getResourceString("command_create_drawcomponent"));	  
+	  super(EditorPlugin.getResourceString("command.create.drawcomponent"));	  
 	}
 	
 	public CreateDrawComponentCommand(String name) 

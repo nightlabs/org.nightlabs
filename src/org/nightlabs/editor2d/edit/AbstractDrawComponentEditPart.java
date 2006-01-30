@@ -166,7 +166,9 @@ implements EditorRequestConstants
     }
     
     getFigure().repaint();
-    updateRoot(getFigure());    
+    
+//    updateRoot(getFigure());   
+    
 //    updateLayer(getFigure());
 //    LOGGER.debug("refreshVisuals!");
   }

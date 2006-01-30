@@ -65,7 +65,7 @@ extends Command
   public EditShapeCommand() 
   {
     super();
-    setLabel(EditorPlugin.getResourceString("command_edit_shape"));
+    setLabel(EditorPlugin.getResourceString("command.edit.shape"));
   }
 
   /**

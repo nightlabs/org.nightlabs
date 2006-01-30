@@ -432,7 +432,7 @@ implements EditorRequestConstants
     	ShapeDrawComponent sdc = sdcEP.getShapeDrawComponent();
     	editShapeCommand.setShapeDrawComponent(sdc);
     	editShapeCommand.setPathSegmentIndex(request.getPathSegmentIndex());
-    	editShapeCommand.setLabel(EditorPlugin.getResourceString("command_edit_shape"));      
+    	editShapeCommand.setLabel(EditorPlugin.getResourceString("command.edit.shape"));      
     }
   	Point modelPoint = getConstraintPointFor(request.getLocation());
   	editShapeCommand.setLocation(modelPoint); 
@@ -550,7 +550,7 @@ implements EditorRequestConstants
 		SetConstraintCommand setConstraint = new SetConstraintCommand();
 		setConstraint.setBounds(J2DUtil.toAWTRectangle(rect));
 		setConstraint.setPart(part);
-		setConstraint.setLabel(EditorPlugin.getResourceString("command_add_command"));
+		setConstraint.setLabel(EditorPlugin.getResourceString("command.add.drawComponent"));
 		setConstraint.setDebugLabel("MLDC_XYEP setConstraint");//$NON-NLS-1$
 		
 //		Command cmd = add.chain(setConstraint);

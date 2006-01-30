@@ -35,8 +35,8 @@ import org.nightlabs.editor2d.EditorPlugin;
 public class SetConstraintCommand 
 extends Command
 {
-	private static final String Command_Label_Location = EditorPlugin.getResourceString("command_change_location");
-	private static final String Command_Label_Resize = EditorPlugin.getResourceString("command_resize");
+	private static final String Command_Label_Location = EditorPlugin.getResourceString("command.change.location");
+	private static final String Command_Label_Resize = EditorPlugin.getResourceString("command.resize");
 
 	private DrawComponent part;
 	private java.awt.Rectangle oldBounds;

@@ -46,7 +46,7 @@ extends Command
   private Map oldParts;
 
   public DeleteGuideCommand(EditorGuide guide, EditorRuler parent) {
-  	super(EditorPlugin.getResourceString("command_delete_guide"));
+  	super(EditorPlugin.getResourceString("command.delete.guide"));
   	this.guide = guide;
   	this.parent = parent;
   }

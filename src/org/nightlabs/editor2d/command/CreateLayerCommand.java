@@ -54,7 +54,7 @@ extends CreateDrawComponentCommand
 		}
 	  
 	  this.parent = parent;
-	  setLabel(EditorPlugin.getResourceString("command_create_layer"));	  
+	  setLabel(EditorPlugin.getResourceString("command.create.layer"));	  
 	}
 	
 	/* (non-Javadoc)

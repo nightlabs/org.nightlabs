@@ -112,7 +112,7 @@ extends ActionBarContributor
   {
   	super.contributeToMenu(menubar);  	
 //  	IMenuManager fileMenu = (IMenuManager) menubar.find(IWorkbenchActionConstants.M_FILE);  	
-  	MenuManager viewMenu = new MenuManager(EditorPlugin.getResourceString("menu_view"), ID_VIEW_MENU);
+  	MenuManager viewMenu = new MenuManager(EditorPlugin.getResourceString("menu.view"), ID_VIEW_MENU);
   	viewMenu.add(getAction(GEFActionConstants.ZOOM_IN));
   	viewMenu.add(getAction(GEFActionConstants.ZOOM_OUT));
   	viewMenu.add(new Separator());

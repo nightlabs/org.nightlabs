@@ -42,7 +42,7 @@ extends Command
   private int position;
 
   public CreateGuideCommand(EditorRuler parent, int position) {
-  	super(EditorPlugin.getResourceString("command_create_guide"));
+  	super(EditorPlugin.getResourceString("command.create.guide"));
   	this.parent = parent;
   	this.position = position;
   }
