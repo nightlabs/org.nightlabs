@@ -113,5 +113,9 @@ public class I18nTextEditorWizardPage extends WizardHopPage {
 	public I18nText getI18nText() {
 		return buffer;
 	}
+	
+	public I18nTextEditor getTextEditor() {
+		return textEditor;
+	}
 
 }
