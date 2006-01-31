@@ -108,7 +108,7 @@ implements FreeformFigure, BufferedFreeformLayer
 	 */
 	private Point bufferOrigin = new Point(0,0);
 	/**
-	 * To be able to paint children even if not an instance of DrawComponentFigure
+	 * To be able to paint children even if not an instance of RendererFigure
 	 */
 	private List nonDCFChildren = new LinkedList();
 	
@@ -149,8 +149,8 @@ implements FreeformFigure, BufferedFreeformLayer
 	 * 
 	 * @return The offscreen buffer
 	 */
-	protected BufferedImage getBufferedImage() {
-		
+	protected BufferedImage getBufferedImage() 
+	{	
 		double tmpZoom = EditorUtil.getZoom(editPart);
 		if (tmpZoom != currentZoom) {			
 			// clear buffer if zoom changed
@@ -192,17 +192,18 @@ implements FreeformFigure, BufferedFreeformLayer
 				);
 				J2DRegistry.initGraphics(bufferedGraphics);
 				nonDCFChildren.clear();
-				for (Iterator iter = getChildren().iterator(); iter.hasNext();) {
+				for (Iterator iter = getChildren().iterator(); iter.hasNext();) 
+				{
 					Figure figure = (Figure) iter.next();
-					if (figure instanceof DrawComponentFigure) {
+					if (figure instanceof RendererFigure) {
 						// let all children draw on the buffer
-						((DrawComponentFigure)figure).paint(bufferedGraphics);
+						((RendererFigure)figure).paint(bufferedGraphics);
 					}
 					else {
 						// Figure can not draw on a Graphics2D
 						// will be painted unbuffered
 						nonDCFChildren.add(figure);
-					}
+					}				
 				}
 				LOGGER.debug("buffer created in "+(System.currentTimeMillis()-time)+" ms");
 			}
@@ -232,8 +233,10 @@ implements FreeformFigure, BufferedFreeformLayer
 	
 	public void paint(Graphics graphics) 
 	{
+//		LOGGER.debug("paint called");
 		long time = System.currentTimeMillis();
-		if (graphics instanceof J2DGraphics) {
+		if (graphics instanceof J2DGraphics) 
+		{
 			J2DGraphics j2dGraphics = (J2DGraphics)graphics;
 //			j2dGraphics.clipRect(null);
 			
@@ -264,14 +267,67 @@ implements FreeformFigure, BufferedFreeformLayer
 				Figure figure = (Figure) iter.next();
 				figure.paint(graphics);
 			}
-//			LOGGER.debug("paint called");
 		}
 		else {
 			super.paint(graphics);
 		}
 //		LOGGER.debug("painted in "+(System.currentTimeMillis()-time));
 	}
-	
+		
+//	public void paint(Graphics graphics) 
+//	{
+//		LOGGER.debug("paint called");
+//		long time = System.currentTimeMillis();
+//		if (graphics instanceof J2DGraphics) 
+//		{
+//			J2DGraphics j2dGraphics = (J2DGraphics)graphics;
+//			j2dGraphics.clipRect(null);
+//			
+//			long bufferStart = System.currentTimeMillis();
+//			// get / create the buffer 
+//			BufferedImage buffer = getBufferedImage();
+//			long bufferEnd = System.currentTimeMillis() - bufferStart;
+//			LOGGER.debug("getBufferedImage() took "+bufferEnd+" ms!");
+//			
+//			// create the Graphics where the buffer is drawn on
+//			Graphics2D g2d = j2dGraphics.createGraphics2D();
+//			// scale it invers of the current zoom ...
+//			g2d.scale(1/currentZoom, 1/currentZoom);			
+//			// and translate it with the current scroll offset
+//			// so 0,0 will be drawn on top left of the control			
+//			Point scrollOffset = EditorUtil.getScrollOffset(editPart);
+//			g2d.translate(scrollOffset.x, scrollOffset.y);
+//			
+//			// now copy the buffer region
+//			g2d.setPaint(Color.WHITE);
+//			g2d.fillRect(-2, -2, currentSize.x+2, currentSize.y+2);
+//			long imageStart = System.currentTimeMillis();
+//			g2d.drawImage(
+//				buffer,
+//				0, 0, currentSize.x, currentSize.y,
+//				bufferOrigin.x, bufferOrigin.y, bufferOrigin.x+currentSize.x, bufferOrigin.y+currentSize.y,
+//				null
+//			);
+//			long imageEnd = System.currentTimeMillis() - imageStart;
+//			LOGGER.debug("drawImage took "+imageEnd+" ms!");
+//			
+//			g2d.dispose();
+//			
+//			long nonDCFStart = System.currentTimeMillis();			
+//			// Paint all children that are not an instance of DrawComponentFigure
+//			for (Iterator iter = nonDCFChildren.iterator(); iter.hasNext();) {
+//				Figure figure = (Figure) iter.next();
+//				figure.paint(graphics);
+//			}
+//			long nonDCFEnd = System.currentTimeMillis() - nonDCFStart;
+//			LOGGER.debug("painting of non DrawComponentFigures took "+nonDCFEnd+" ms!");
+//			
+//		}
+//		else {
+//			super.paint(graphics);
+//		}
+//		LOGGER.debug("painted in "+(System.currentTimeMillis()-time)+" ms!");
+//	}	
 	
 	protected void clearBuffer() {
 		// TODO: make sure this is called when editor is closed
@@ -307,7 +363,8 @@ implements FreeformFigure, BufferedFreeformLayer
 		
 	private Rectangle childBounds;
 	
-	protected Rectangle getChildBounds() {  	
+	protected Rectangle getChildBounds() 
+	{  	
 		if (childBounds == null) {
 			for (Iterator iter = getChildren().iterator(); iter.hasNext();) {
 				Figure figure = (Figure) iter.next();
