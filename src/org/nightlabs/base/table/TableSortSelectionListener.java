@@ -99,26 +99,26 @@ public class TableSortSelectionListener implements SelectionListener {
 	 * when first initialising the table.
 	 */
 	public void chooseColumnForSorting() {
-		viewer.getTable().setSortColumn(column);
-		viewer.getTable().setSortDirection(currentSorter.getSortDirection());
-		viewer.setSorter(currentSorter);
+//		viewer.getTable().setSortColumn(column);
+//		viewer.getTable().setSortDirection(currentSorter.getSortDirection());
+//		viewer.setSorter(currentSorter);
 	}
 
 	public void widgetSelected(SelectionEvent e) {
-		InvertableSorter newSorter;
-		if (viewer.getTable().getSortColumn() == column) {
-			newSorter = ((InvertableSorter) viewer.getSorter())
-					.getInverseSorter();
-		} else {
-			if (keepDirection) {
-				newSorter = currentSorter;
-			} else {
-				newSorter = sorter;
-			}
-		}
- 
-		currentSorter = newSorter;
-		chooseColumnForSorting();
+//		InvertableSorter newSorter;
+//		if (viewer.getTable().getSortColumn() == column) {
+//			newSorter = ((InvertableSorter) viewer.getSorter())
+//					.getInverseSorter();
+//		} else {
+//			if (keepDirection) {
+//				newSorter = currentSorter;
+//			} else {
+//				newSorter = sorter;
+//			}
+//		}
+// 
+//		currentSorter = newSorter;
+//		chooseColumnForSorting();
 	}
 
 	public void widgetDefaultSelected(SelectionEvent e) {
