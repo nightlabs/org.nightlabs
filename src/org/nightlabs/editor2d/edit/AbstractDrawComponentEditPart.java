@@ -167,7 +167,7 @@ implements EditorRequestConstants
     
     getFigure().repaint();
     
-//    updateRoot(getFigure());   
+    updateRoot(getFigure());   
     
 //    updateLayer(getFigure());
 //    LOGGER.debug("refreshVisuals!");
@@ -176,8 +176,10 @@ implements EditorRequestConstants
   public void updateRoot(IFigure figure) 
   {
     MultiLayerDrawComponentEditPart rootEditPart = getModelRoot();
-    if (rootEditPart != null)
-      rootEditPart.getBufferedFreeformLayer().refresh(figure);
+    if (rootEditPart != null) {
+    	if (rootEditPart.getBufferedFreeformLayer() != null)
+    		rootEditPart.getBufferedFreeformLayer().refresh(figure);    	
+    }
   }
     
 //  public void updateLayer(IFigure figure) 
