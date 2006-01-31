@@ -301,7 +301,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	if (ioFilter != null) 
     	{
     		try {    		
-	    		if (ioFilter instanceof IOFilterWithProgress) {
+	    		if (ioFilter instanceof IOFilterWithProgress) 
+	    		{	    			
 	    			IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
 	    			progressFilter.addPropertyChangeListener(progressListener);	    			
 	    			monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), progressFilter.getTotalWork());
@@ -315,6 +316,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	    			return;
 				} catch (FileNotFoundException e) {
 					throw new RuntimeException(e);
+				} finally {
+    			monitor.done();
 				}
     	}
     }
@@ -920,29 +923,24 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return true;
     }
     
-//	protected PropertyChangeListener progressListener = new PropertyChangeListener(){	
-//	public void propertyChange(PropertyChangeEvent evt) {
-//		Object newValue = evt.getNewValue();
-//		if (newValue instanceof Integer) {
-//			int work = ((Integer)newValue).intValue();
-//			getProgressMonitor().getProgressMonitor().internalWorked(work);
-//		}
-//	}	
-//};    
     protected PropertyChangeListener progressListener = new PropertyChangeListener()
     {
   		public void propertyChange(PropertyChangeEvent evt) 
   		{
   			Object newValue = evt.getNewValue();
-  			if (newValue.equals(AbstractIOFilterWithProgress.PROGRESS_CHANGED)) {
+  			String propertyName = evt.getPropertyName();
+  			if (propertyName.equals(AbstractIOFilterWithProgress.PROGRESS_CHANGED)) {
   				int work = ((Integer)newValue).intValue();
   				getProgressMonitor().getProgressMonitor().internalWorked(work); 
+//  				getProgressMonitor().getProgressMonitor().worked(work); 
+//  				LOGGER.debug("Progress changes to "+work);
   			}
-  			else if (newValue.equals(AbstractIOFilterWithProgress.SUBTASK_FINISHED)) {
+  			else if (propertyName.equals(AbstractIOFilterWithProgress.SUBTASK_FINISHED)) {
   				String subTaskName = (String) newValue;
   				// TODO: Listener must get to the subTask2Work-Map of the IOFilterWithProgress
   				// to begin the new SubTask progressMonitor.beginTask(subTaskName, subTaskName.work)
-  				getProgressMonitor().getProgressMonitor().subTask(subTaskName);  				
+  				getProgressMonitor().getProgressMonitor().subTask(subTaskName);
+//  				LOGGER.debug("subTask "+subTaskName+" finished!");  				
   			}
   		}			
   	};
@@ -955,12 +953,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	}
     	return progressMonitor;
     }
-//    protected IOFilterProgressDialog progressMonitor; 
-//    protected ProgressMonitorDialog getProgressMonitor(IOFilter ioFilter) 
-//    {
-//    	progressMonitor = new IOFilterProgressDialog(getSite().getWorkbenchWindow().getShell(), ioFilter);    		
-//    	return progressMonitor;
-//    }
     
     protected void save(File f) 
     {
@@ -1005,15 +997,20 @@ extends J2DGraphicalEditorWithFlyoutPalette
       IOFilter ioFilter = getIOFilterMan().getIOFilter(file);      
       if (ioFilter != null) 
       {
-      	if (ioFilter instanceof IOFilterWithProgress) {      		
-      		IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
-      		progressMonitor.beginTask(EditorPlugin.getResourceString("resource.save") +" "+ file.getName(), progressFilter.getTotalWork());      		
-      		progressFilter.addPropertyChangeListener(progressListener);      		
-      		saveFile(file, progressFilter, progressMonitor);
-      	}
-      	else {
-      		progressMonitor.beginTask(EditorPlugin.getResourceString("resource.save") +" "+ file.getName(), 2);      		
-      		saveFile(file, ioFilter, progressMonitor);
+      	try {
+        	if (ioFilter instanceof IOFilterWithProgress) {      		
+        		IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
+        		progressMonitor.beginTask(EditorPlugin.getResourceString("resource.save") +" "+ file.getName(), progressFilter.getTotalWork());      		
+        		progressFilter.addPropertyChangeListener(progressListener);      		
+        		saveFile(file, progressFilter, progressMonitor);
+        		progressFilter.removePropertyChangeListener(progressListener); 
+        	}
+        	else {
+        		progressMonitor.beginTask(EditorPlugin.getResourceString("resource.save") +" "+ file.getName(), 2);      		
+        		saveFile(file, ioFilter, progressMonitor);      		
+        	}      		
+      	} finally {
+      		progressMonitor.done();
       	}
       }
     }     
@@ -1041,8 +1038,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
         mldc = getMultiLayerDrawComponent();        
         if (!fileInput.isSaved()) {
         	createNewMultiLayerDrawComponent();
-        } else {
-//          mldc = load(fileInput);        	
+        } else {        	
           load(fileInput);        	
         }        
 //        System.gc();      	      	

@@ -176,6 +176,38 @@ public class ViewerManager
   protected Point relativePoint = null;
   protected AbstractDrawComponentEditPart oldPart = null;
   
+//  protected MouseMotionListener mouseListener = new MouseMotionListener.Stub() 
+//  {
+//    public void mouseMoved(org.eclipse.draw2d.MouseEvent me) 
+//    {
+//    	relativePoint = new Point(me.x, me.y);
+//    	mousePoint = EditorUtil.toAbsoluteWithScrollOffset(root, me.x, me.y);    	      
+//      EditPart part = viewer.findObjectAtExcluding(relativePoint, excludeListRef.getExcludeList(), conditionRef.getCondition());
+//      statusLineMan.setMessage(getMouseCoordinates());      
+//      if (part != null) 
+//      {       	
+//      	if (!(part instanceof MultiLayerDrawComponentEditPart) &&
+//      			!(part instanceof LayerEditPart))
+//      	{
+//      		if (!(part instanceof RootEditPart)) 
+//      		{
+//        		if (exclusiveClass == null) {
+//          		if (part instanceof AbstractDrawComponentEditPart) {
+//          			doRollOver((AbstractDrawComponentEditPart)part);     			
+//          		}      		
+//        		}
+//        		else {
+//        			if (exclusiveClass.equals(part.getClass())) {
+//        				AbstractDrawComponentEditPart dcPart = (AbstractDrawComponentEditPart) exclusiveClass.cast(part);
+//        				doRollOver(dcPart);
+//        			}
+//        		}      			
+//      		}
+//        }
+//      }
+//    }
+//  };
+  
   protected MouseMotionListener mouseListener = new MouseMotionListener.Stub() 
   {
     public void mouseMoved(org.eclipse.draw2d.MouseEvent me) 
@@ -186,27 +218,20 @@ public class ViewerManager
       statusLineMan.setMessage(getMouseCoordinates());      
       if (part != null) 
       {       	
-      	if (!(part instanceof MultiLayerDrawComponentEditPart) &&
-      			!(part instanceof LayerEditPart))
-      	{
-      		if (!(part instanceof RootEditPart)) 
-      		{
-        		if (exclusiveClass == null) {
-          		if (part instanceof AbstractDrawComponentEditPart) {
-          			doRollOver((AbstractDrawComponentEditPart)part);     			
-          		}      		
-        		}
-        		else {
-        			if (exclusiveClass.equals(part.getClass())) {
-        				AbstractDrawComponentEditPart dcPart = (AbstractDrawComponentEditPart) exclusiveClass.cast(part);
-        				doRollOver(dcPart);
-        			}
-        		}      			
-      		}
-        }
+    		if (exclusiveClass == null) {
+      		if (part instanceof AbstractDrawComponentEditPart) {
+      			doRollOver((AbstractDrawComponentEditPart)part);     			
+      		}      		
+    		}
+    		else {
+    			if (exclusiveClass.equals(part.getClass())) {
+    				AbstractDrawComponentEditPart dcPart = (AbstractDrawComponentEditPart) exclusiveClass.cast(part);
+    				doRollOver(dcPart);
+    			}
+    		}      			
       }
     }
-  };
+  };  
   
   protected String getMouseCoordinates() 
   {
@@ -223,46 +248,35 @@ public class ViewerManager
     return null;
   }
   
-  protected DrawComponentFigure rollOverFigure = null;
-//  protected void addRollOver(AbstractDrawComponentEditPart dcPart) 
-//  {
-//    if (getFeedbackLayer() != null && dcPart != null) 
-//    {
-//    	DrawComponent dc = dcPart.getDrawComponent();
-//    	Rectangle figureBounds = dcPart.getFigure().getBounds();
-//    	rollOverFigure = new DrawComponentFigure();
-//    	Renderer r = dc.getRenderModeManager().getRenderer(RenderConstants.ROLLOVER_MODE, dc.getClass());
-//    	if (r != null) {
-//    		rollOverFigure.setRenderer(r);
-//    		rollOverFigure.setDrawComponent(dc);
-//    		rollOverFigure.setBounds(figureBounds);
-//      	getFeedbackLayer().add(rollOverFigure); 
-//      	getFeedbackLayer().repaint();
-//    	}
-//    }  	  	
-//  }
-  
+  protected DrawComponentFigure rollOverFigure = null;  
   protected void addRollOver(AbstractDrawComponentEditPart dcPart) 
   {
     if (getFeedbackLayer() != null && dcPart != null) 
     {
+    	long addStart = System.currentTimeMillis();
     	DrawComponent dc = dcPart.getDrawComponent();
-    	Rectangle figureBounds = dcPart.getFigure().getBounds();
-    	rollOverFigure = new DrawComponentFigure();
+//    	Rectangle figureBounds = dcPart.getFigure().getBounds();
+    	if (rollOverFigure == null)
+    		rollOverFigure = new DrawComponentFigure();
     	Renderer r = dc.getRenderModeManager().getRenderer(RenderConstants.ROLLOVER_MODE, dc.getClass());
-    	if (r != null) {
+    	
+    	if (r != null) 
+    	{
     		rollOverFigure.setRenderer(r);
-    		rollOverFigure.setDrawComponent(dc);
-    		rollOverFigure.setBounds(figureBounds);
+    		rollOverFigure.setDrawComponent(dc);    		
+//    		rollOverFigure.setBounds(figureBounds);
+    		// add already calls repaint
       	getFeedbackLayer().add(rollOverFigure); 
-      	getFeedbackLayer().repaint();
     	}
+    	long addEnd = System.currentTimeMillis() - addStart;
+    	LOGGER.debug("addRollOver took "+addEnd+" ms!");
     }  	  	
   }
 
   protected void removeRollOver() 
   {
     if (getFeedbackLayer() != null && rollOverFigure != null) {
+    	// remove already calls repaint
     	getFeedbackLayer().remove(rollOverFigure);
     }  	
   }
