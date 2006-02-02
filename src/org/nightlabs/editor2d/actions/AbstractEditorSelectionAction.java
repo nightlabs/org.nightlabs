@@ -311,8 +311,7 @@ extends SelectionAction
 
 	public void dispose() 
 	{
-		super.dispose();
-		
+		super.dispose();		
 	}	
 		
 }

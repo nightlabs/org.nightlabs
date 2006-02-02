@@ -131,4 +131,12 @@ extends EditorPartAction
 	public Shell getShell() {
 		return getEditor().getSite().getShell();
 	}
+	
+	public boolean isActiveEditor()
+	{
+		if (getWorkbenchPart().getSite().getWorkbenchWindow().getActivePage().getActiveEditor().equals(getEditor())) {
+			return true;
+		}
+		return false;
+	}	
 }

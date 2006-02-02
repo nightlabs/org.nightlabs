@@ -81,8 +81,8 @@ implements RendererFigure
   protected DrawComponent drawComponent;  
   public void setDrawComponent(DrawComponent drawComponent) {
     this.drawComponent = drawComponent;
-  }
-    
+  }   
+  
   public boolean containsPoint(int x, int y) 
   {
     if (drawComponent != null) {
@@ -142,5 +142,28 @@ implements RendererFigure
 		
 		return super.getBounds();
 	}  
+    
+//  protected Label tooltip = new Label();
+//  protected Label getTooltip() 
+//  {
+//  	tooltip.setText(getTooltipText(drawComponent));
+//  	return tooltip; 
+//  }
+//  
+//  protected DescriptorManager descMan = new DescriptorManager();
+//  public void setDescriptorManager(DescriptorManager descMan) {
+//  	this.descMan = descMan;
+//  }
+//  
+//  protected String getTooltipText(DrawComponent dc) 
+//  {
+//  	descMan.setDrawComponent(drawComponent);
+//  	return descMan.getEntriesAsString(true);
+//  }
+//
+//	@Override
+//	public IFigure getToolTip() {
+//		return getToolTip();
+//	}	
     
 }

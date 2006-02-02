@@ -286,7 +286,7 @@ public class ViewerManager
     if (dcPart != null) {
     	DrawComponent dc = dcPart.getDrawComponent();    	
   		descriptorManager.setDrawComponent(dc);
-  		statusLineMan.setMessage(getMouseCoordinates() + ", " + descriptorManager.getEntriesAsString());
+  		statusLineMan.setMessage(getMouseCoordinates() + ", " + descriptorManager.getEntriesAsString(false));
   		
 //      removeRollOver();
 //      addRollOver(dcPart);  		

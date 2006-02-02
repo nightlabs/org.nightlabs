@@ -52,7 +52,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -71,7 +70,6 @@ import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorContextMenuProvider;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.dnd.EditorTemplateTransferDropTargetListener;
 import org.nightlabs.editor2d.j2dswt.MLDCPaintable;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 import org.nightlabs.editor2d.properties.NameLanguageManager;
@@ -144,8 +142,8 @@ implements IAdaptable
       EditorContextMenuProvider.CONTEXT_MENU_ID, //$NON-NLS-1$
       provider, getSite().getSelectionProvider());
     getViewer().setKeyHandler(editor.getCommonKeyHandler());
-    getViewer().addDropTargetListener(
-      new EditorTemplateTransferDropTargetListener(getViewer()));
+//    getViewer().addDropTargetListener(
+//      new EditorTemplateTransferDropTargetListener(getViewer()));
     IToolBarManager tbm = getSite().getActionBars().getToolBarManager();
     
     IMenuManager menuMan = getSite().getActionBars().getMenuManager();

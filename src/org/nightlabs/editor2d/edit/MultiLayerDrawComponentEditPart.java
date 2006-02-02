@@ -52,19 +52,29 @@ import org.nightlabs.editor2d.editpolicy.MultiLayerDrawComponentXYLayoutPolicy;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
 import org.nightlabs.editor2d.model.MultiLayerDrawComponentPropertySource;
+import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 
 public class MultiLayerDrawComponentEditPart 
 extends AbstractDrawComponentContainerEditPart
 {  
   public static final Logger LOGGER = Logger.getLogger(MultiLayerDrawComponentEditPart.class);
-
-  public static UpdateManager updateManager = null;
   
-	public MultiLayerDrawComponentEditPart(MultiLayerDrawComponent mldc) {
+	public MultiLayerDrawComponentEditPart(MultiLayerDrawComponent mldc) 
+	{
 	  super(mldc);
-	  setModel(mldc);	  
+	  setModel(mldc);
 	}
-  
+
+	// TODO Must be set from the Editor to asure same instance like in ViewerManager
+	protected DescriptorManager descriptorManager = new DescriptorManager();		
+	public DescriptorManager getDescriptorManager() {
+		return descriptorManager;
+	}
+	public void setDescriptorManager(DescriptorManager descriptorManager) {
+		this.descriptorManager = descriptorManager;
+	}
+
+	//  public static UpdateManager updateManager = null;	
 	/* 
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
 	 */
@@ -89,7 +99,7 @@ extends AbstractDrawComponentContainerEditPart
 		return f; 		
 	}
 
-	protected BufferedFreeformLayer getBufferedFreeformLayer() 
+	public BufferedFreeformLayer getBufferedFreeformLayer() 
 	{
 		if (getFigure() instanceof BufferedFreeformLayer)
 			return (BufferedFreeformLayer) getFigure();

@@ -160,61 +160,61 @@ extends ColorUtil
 	  }	  
 	}
 	 
-  public static AffineTransform getAffineTransform(int x1, int y1, int w1, int h1, 
-      int x2, int y2, int w2, int h2)
-  {
-    // if both Rectangles are equal do nothing
-    if (x1 == x2 && y1 == y2 && w1 == w2 && h1 == h2) 
-    {
-//      LOGGER.debug("Both Rectangles are Equal!");
-      at.setToIdentity();
-      return at;
-    }
-          
-    // if only a Translation is performed, just translate
-    if (w1 == w2 && h1 == h2) 
-    {
-//      LOGGER.debug("Only Translation!");
-      at.setToIdentity();
-      at.translate(x2 - x1, y2 - y1);
-      return at;
-    }
-    else if (x1 == x2 && y1 == y2) 
-    {
-//      LOGGER.debug("Only Scale");
-      at.setToIdentity();
-      float ratioY = (float)h2 / (float)h1;
-      float ratioX = (float)w2 / (float)w1;
-      float distanceX = (float)x1 - ((float)x1*ratioX);
-      float distanceY = (float)y1 - ((float)y1*ratioY);
-      at.translate(distanceX, distanceY);
-      at.scale(ratioX, ratioY);
-      return at;
-    }
-    else 
-    {
-//      LOGGER.debug("Scale + Translation");
-      // translate to origin and scale      
-      double ratioX = ((double)w2) / ((double)w1);
-      double ratioY = ((double)h2) / ((double)h1);    
-      double x = (double)x1;
-      double y = (double)y1;
-      double distanceX = x - (x*ratioX);
-      double distanceY = y - (y*ratioY);
-      at.setToIdentity();
-      at.translate(distanceX, distanceY);
-      at.scale(ratioX, ratioY);
-      
-      // translate back
-      AffineTransform at2 = new AffineTransform();
-      distanceX = x2 - x1;
-      distanceY = y2 - y1;    
-      at2.translate(distanceX, distanceY);
-      
-      at.preConcatenate(at2);
-    }     
-    return at;
-  }
+//  public static AffineTransform getAffineTransform(int x1, int y1, int w1, int h1, 
+//      int x2, int y2, int w2, int h2)
+//  {
+//    // if both Rectangles are equal do nothing
+//    if (x1 == x2 && y1 == y2 && w1 == w2 && h1 == h2) 
+//    {
+////      LOGGER.debug("Both Rectangles are Equal!");
+//      at.setToIdentity();
+//      return at;
+//    }
+//          
+//    // if only a Translation is performed, just translate
+//    if (w1 == w2 && h1 == h2) 
+//    {
+////      LOGGER.debug("Only Translation!");
+//      at.setToIdentity();
+//      at.translate(x2 - x1, y2 - y1);
+//      return at;
+//    }
+//    else if (x1 == x2 && y1 == y2) 
+//    {
+////      LOGGER.debug("Only Scale");
+//      at.setToIdentity();
+//      float ratioY = (float)h2 / (float)h1;
+//      float ratioX = (float)w2 / (float)w1;
+//      float distanceX = (float)x1 - ((float)x1*ratioX);
+//      float distanceY = (float)y1 - ((float)y1*ratioY);
+//      at.translate(distanceX, distanceY);
+//      at.scale(ratioX, ratioY);
+//      return at;
+//    }
+//    else 
+//    {
+////      LOGGER.debug("Scale + Translation");
+//      // translate to origin and scale      
+//      double ratioX = ((double)w2) / ((double)w1);
+//      double ratioY = ((double)h2) / ((double)h1);    
+//      double x = (double)x1;
+//      double y = (double)y1;
+//      double distanceX = x - (x*ratioX);
+//      double distanceY = y - (y*ratioY);
+//      at.setToIdentity();
+//      at.translate(distanceX, distanceY);
+//      at.scale(ratioX, ratioY);
+//      
+//      // translate back
+//      AffineTransform at2 = new AffineTransform();
+//      distanceX = x2 - x1;
+//      distanceY = y2 - y1;    
+//      at2.translate(distanceX, distanceY);
+//      
+//      at.preConcatenate(at2);
+//    }     
+//    return at;
+//  }
 
   public static AffineTransform getTranslateAffineTransform(java.awt.Rectangle oldBounds, 
       java.awt.Rectangle newBounds)
@@ -293,20 +293,31 @@ extends ColorUtil
     return at;
   }
   
+  /**
+   * @see GeomUtil#getAffineTransform(java.awt.Rectangle, java.awt.Rectangle) 
+   */
   public static AffineTransform getAffineTransform(org.eclipse.draw2d.geometry.Rectangle oldBounds,
       org.eclipse.draw2d.geometry.Rectangle newBounds)
   {
-    return getAffineTransform(oldBounds.x, oldBounds.y, oldBounds.width, oldBounds.height,
+    return GeomUtil.getAffineTransform(oldBounds.x, oldBounds.y, oldBounds.width, oldBounds.height,
         newBounds.x, newBounds.y, newBounds.width, newBounds.height);
   }
   
+  /**
+   * @see GeomUtil#getAffineTransform(java.awt.Rectangle, java.awt.Rectangle) 
+   */
   public static AffineTransform getAffineTransform(java.awt.Rectangle oldBounds,
       java.awt.Rectangle newBounds)
   {
-    return getAffineTransform(oldBounds.x, oldBounds.y, oldBounds.width, oldBounds.height,
-        newBounds.x, newBounds.y, newBounds.width, newBounds.height);
+  	return GeomUtil.getAffineTransform(oldBounds, newBounds);
   }  
   
+  /**
+   * converts the roattion from degrees to radians
+   * 
+   * @param _degrees the rotation given in degrees
+   * @return the rotation given in radians
+   */
   public static double calcRotationInRadians(double _degrees) 
   {
     double degreesToRotate = 0;

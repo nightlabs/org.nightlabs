@@ -50,6 +50,7 @@ import org.eclipse.draw2d.J2DGraphics;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
@@ -60,13 +61,10 @@ import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
-import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.J2DScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
-import org.eclipse.gef.requests.CreationFactory;
-import org.eclipse.gef.requests.SimpleFactory;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.AlignmentAction;
@@ -83,7 +81,6 @@ import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
-import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.J2DGraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
@@ -93,7 +90,6 @@ import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -110,7 +106,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.holongate.j2d.J2DRegistry;
-
 import org.nightlabs.base.io.FileEditorInput;
 import org.nightlabs.base.io.IOFilterRegistry;
 import org.nightlabs.base.language.LanguageManager;
@@ -119,7 +114,6 @@ import org.nightlabs.editor2d.actions.CloneAction;
 import org.nightlabs.editor2d.actions.CopyAction;
 import org.nightlabs.editor2d.actions.CutAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
-import org.nightlabs.editor2d.actions.EditorPasteTemplateAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
 import org.nightlabs.editor2d.actions.PasteAction;
 import org.nightlabs.editor2d.actions.ResetRotationCenterAction;
@@ -130,9 +124,10 @@ import org.nightlabs.editor2d.actions.order.ChangeOrderOneDown;
 import org.nightlabs.editor2d.actions.order.ChangeOrderOneUp;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
-import org.nightlabs.editor2d.actions.viewer.ViewerAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
+import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
+import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
@@ -492,18 +487,18 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return rulerComp;
     }
       
-    /**
-     * Create a transfer drop target listener. When using a CombinedTemplateCreationEntry
-     * tool in the palette, this will enable model element creation by dragging from the palette.
-     * @see #createPaletteViewerProvider()
-     */
-    protected TransferDropTargetListener createTransferDropTargetListener() {
-      return new TemplateTransferDropTargetListener(getGraphicalViewer()) {
-        protected CreationFactory getFactory(Object template) {
-          return new SimpleFactory((Class) template);
-        }
-      };
-    }
+//    /**
+//     * Create a transfer drop target listener. When using a CombinedTemplateCreationEntry
+//     * tool in the palette, this will enable model element creation by dragging from the palette.
+//     * @see #createPaletteViewerProvider()
+//     */
+//    protected TransferDropTargetListener createTransferDropTargetListener() {
+//      return new TemplateTransferDropTargetListener(getGraphicalViewer()) {
+//        protected CreationFactory getFactory(Object template) {
+//          return new SimpleFactory((Class) template);
+//        }
+//      };
+//    }
 
     public void doSave(IProgressMonitor monitor) 
     {
@@ -603,8 +598,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
     {
       GraphicalViewer graphicalViewer = getGraphicalViewer();
       graphicalViewer.setContents(getModel()); // set the contents of this editor
-      // listen for dropped parts
-      graphicalViewer.addDropTargetListener(createTransferDropTargetListener());   
+      
+//      // listen for dropped parts
+//      graphicalViewer.addDropTargetListener(createTransferDropTargetListener());   
       
       configureFilterManager();      
     }
@@ -637,8 +633,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
       ActionRegistry registry = getActionRegistry();
       IAction action;
       
-      action = new CopyTemplateAction(this);
-      registry.registerAction(action);
+//      action = new CopyTemplateAction(this);
+//      registry.registerAction(action);
 
       // Match Actions
       action = new MatchWidthAction(this);
@@ -649,9 +645,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
       registry.registerAction(action);
       getSelectionActions().add(action.getId());
       
-      action = new EditorPasteTemplateAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
+//      action = new EditorPasteTemplateAction(this);
+//      registry.registerAction(action);
+//      getSelectionActions().add(action.getId());
 
       action = new DirectEditAction((IWorkbenchPart)this);
       registry.registerAction(action);
@@ -1070,14 +1066,37 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return (EditPartViewer) getGraphicalViewer();
     }
     
+//    public void updateViewer() 
+//    {
+//      getGraphicalViewer().getControl().redraw();
+////    	getRootEditPart().getFigure().repaint();
+////    	refreshBuffer();
+//      LOGGER.debug("updateViewer!");
+//    }
+
     public void updateViewer() 
     {
+    	refreshBuffer();    	
       getGraphicalViewer().getControl().redraw();
-//    	getRootEditPart().getFigure().repaint();
-//    	refreshBuffer();
       LOGGER.debug("updateViewer!");
     }
         
+    protected void refreshBuffer() 
+    {
+    	if (getRootEditPart().getChildren().size() == 1) {
+    		EditPart editPart = (EditPart) getRootEditPart().getChildren().get(0);
+      	if (editPart != null) {
+      		if (editPart instanceof MultiLayerDrawComponentEditPart) {
+      			MultiLayerDrawComponentEditPart mldcEditPart = (MultiLayerDrawComponentEditPart) editPart;
+      			BufferedFreeformLayer buffer = mldcEditPart.getBufferedFreeformLayer();
+      			if (buffer != null) {
+      				buffer.refresh();
+      			}
+      		}
+      	}    		
+    	}
+    }
+    
 //   **************** BEGIN public Methods for EditorOutlinePage ******************** 
     public GraphicalViewer getOutlineGraphicalViewer() {
       return getGraphicalViewer();

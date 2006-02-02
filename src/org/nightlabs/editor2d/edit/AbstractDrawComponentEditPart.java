@@ -33,11 +33,10 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -48,6 +47,7 @@ import org.nightlabs.editor2d.model.DrawComponentPropertySource;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
 import org.nightlabs.editor2d.util.EditorUtil;
 import org.nightlabs.editor2d.util.J2DUtil;
+import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 
 public abstract class AbstractDrawComponentEditPart 
 extends AbstractGraphicalEditPart
@@ -62,17 +62,39 @@ implements EditorRequestConstants
     setModel(drawComponent);
   }
   
+  protected Label tooltip = new Label();
+  protected Label getTooltip() 
+  {
+  	tooltip.setText(getTooltipText(getDrawComponent()));
+  	return tooltip; 
+  }
+  
+  protected String getTooltipText(DrawComponent dc) 
+  {
+  	DescriptorManager descMan = getModelRoot().getDescriptorManager();
+  	descMan.setDrawComponent(getDrawComponent());
+  	return descMan.getEntriesAsString(true);
+  }
+  
+  // TODO: must be updated to asure up to date values 
+  protected void updateTooltip() 
+  {
+  	getFigure().setToolTip(getTooltip());
+  }
+  
   protected IFigure createFigure() 
   {
-    RendererFigure figure = new DrawComponentFigure();    
+  	RendererFigure figure = new DrawComponentFigure();  
+//  	figure.setDescriptorManager(getModelRoot().getDescriptorManager());
     figure.setDrawComponent(getDrawComponent());    
     addRenderer(figure);
     if (figure instanceof DrawComponentFigure) {
       addZoomListener((DrawComponentFigure)figure);
     }
+    figure.setToolTip(getTooltip());
     return figure;
   }
-  
+      
   protected void addRenderer(RendererFigure figure) 
   {
     // add Renderer
