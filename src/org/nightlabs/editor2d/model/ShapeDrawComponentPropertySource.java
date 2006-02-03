@@ -32,11 +32,11 @@ import java.util.List;
 
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import org.nightlabs.base.property.AWTColorPropertyDescriptor;
+import org.nightlabs.base.property.CheckboxPropertyDescriptor;
+import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
-import org.nightlabs.editor2d.properties.AWTColorPropertyDescriptor;
-import org.nightlabs.editor2d.properties.CheckboxPropertyDescriptor;
-import org.nightlabs.editor2d.properties.IntPropertyDescriptor;
 
 
 public class ShapeDrawComponentPropertySource 

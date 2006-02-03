@@ -36,9 +36,9 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import org.nightlabs.base.language.LanguageChangeEvent;
 import org.nightlabs.base.language.LanguageChangeListener;
+import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.properties.IntPropertyDescriptor;
 import org.nightlabs.editor2d.properties.NameLanguageManager;
 import org.nightlabs.editor2d.properties.NamePropertyDescriptor;
 import org.nightlabs.editor2d.properties.RotationPropertyDescriptor;
@@ -232,7 +232,6 @@ implements IPropertySource
 		else if (id.equals(DrawComponent.PROP_NAME)) {
 			drawComponent.setName((String)value);
 		}
-
 	}
 			
 }

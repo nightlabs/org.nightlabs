@@ -27,7 +27,7 @@
 
 package org.nightlabs.editor2d.model;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.nightlabs.editor2d.Layer;
@@ -40,8 +40,6 @@ extends DrawComponentPropertySource
 	}
 
 	protected List createPropertyDescriptors() {
-		return EMPTY_LIST;
-	}		
-	
-	public static final List EMPTY_LIST = new ArrayList(0); 
+		return Collections.EMPTY_LIST;
+	}			 
 }

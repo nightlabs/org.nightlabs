@@ -30,10 +30,10 @@ package org.nightlabs.editor2d.model;
 import java.util.List;
 
 import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ImageDrawComponent;
-import org.nightlabs.editor2d.properties.IntPropertyDescriptor;
 import org.nightlabs.editor2d.properties.RotationPropertyDescriptor;
 
 public class ImagePropertySource 

@@ -29,9 +29,9 @@ package org.nightlabs.editor2d.model;
 
 import java.util.List;
 
+import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EllipseDrawComponent;
-import org.nightlabs.editor2d.properties.IntPropertyDescriptor;
 
 public class EllipsePropertySource 
 extends ShapeDrawComponentPropertySource 
