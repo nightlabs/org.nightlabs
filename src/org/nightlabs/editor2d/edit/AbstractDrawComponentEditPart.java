@@ -187,11 +187,9 @@ implements EditorRequestConstants
       getRendererFigure().setDrawComponent(getDrawComponent());      
     }
     
-    getFigure().repaint();
-    
-    updateRoot(getFigure());   
-    
-//    updateLayer(getFigure());
+    getFigure().repaint();    
+    updateRoot(getFigure());       
+    updateTooltip();
 //    LOGGER.debug("refreshVisuals!");
   }
 
@@ -277,6 +275,10 @@ implements EditorRequestConstants
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 		}
+		else if (propertyName.equals(DrawComponent.PROP_NAME)) {
+//		LOGGER.debug(propertyName+"changed!");
+			refreshVisuals();
+		}		
 		else if (propertyName.equals(DrawComponent.PROP_HEIGHT)) {
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
