@@ -41,6 +41,7 @@ import org.nightlabs.base.language.LanguageChooser;
 import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.language.LanguageCf;
 
+// TODO: remove this class and use org.nightlabs.base.LanguageManager instead
 public class NameLanguageManager
 implements ILanguageManager,
 					 LanguageChooser

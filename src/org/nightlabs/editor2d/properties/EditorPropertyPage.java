@@ -72,12 +72,13 @@ extends PropertySheetPage
   public void makeContributions(IMenuManager menuManager,
       IToolBarManager toolBarManager, IStatusLineManager statusLineManager) 
   {
-//  	super.makeContributions(menuManager, toolBarManager, statusLineManager);
+//  	super.makeContributions(menuManager, toolBarManager, statusLineManager);  	
+  	
   	Collection languageActions = makeLanguageActions();
   	for (Iterator it = languageActions.iterator(); it.hasNext(); ) {
   		LanguageAction action = (LanguageAction) it.next();
   		menuManager.add(action);
-  	}  		
+  	}  	
   }
   
   protected Collection makeLanguageActions() 
