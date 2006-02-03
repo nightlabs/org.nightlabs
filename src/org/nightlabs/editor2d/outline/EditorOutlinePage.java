@@ -63,16 +63,12 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageBook;
 import org.holongate.j2d.J2DCanvas;
-import org.nightlabs.base.language.LanguageChangeEvent;
-import org.nightlabs.base.language.LanguageChangeListener;
-import org.nightlabs.base.language.LanguageChooser;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorContextMenuProvider;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.j2dswt.MLDCPaintable;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
-import org.nightlabs.editor2d.properties.NameLanguageManager;
 
 
 public class EditorOutlinePage 
@@ -98,26 +94,14 @@ implements IAdaptable
   protected DisposeListener disposeListener;
   
   protected Canvas overview;  
-  
-  protected LanguageChooser langMan;
-  
+    
   public EditorOutlinePage(AbstractEditor editor, EditPartViewer viewer){
     super(viewer);
     this.editor = editor;
     this.filterMan = editor.getFilterManager();
     filterMan.addPropertyChangeListener(filterListener);
-    langMan = NameLanguageManager.sharedInstance();
-    langMan.addLanguageChangeListener(langListener);
   }
-  
-	protected LanguageChangeListener langListener = new LanguageChangeListener(){	
-		public void languageChanged(LanguageChangeEvent event) {			
-//			getViewer().getContents().refresh();
-//			getViewer().getControl().update();
-//			outline.update();
-		}	
-	};  
-  
+    
   public void init(IPageSite pageSite) {
     super.init(pageSite);
     ActionRegistry registry = editor.getOutlineActionRegistry();

@@ -30,29 +30,47 @@ package org.nightlabs.editor2d.properties;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.property.I18nTextLabelProvider;
+import org.nightlabs.base.property.XPropertyDescriptor;
+import org.nightlabs.base.property.XTextCellEditor;
 import org.nightlabs.editor2d.DrawComponent;
 
 public class NamePropertyDescriptor 
-extends PropertyDescriptor
+extends XPropertyDescriptor
 {
-	protected DrawComponent dc;
 	public NamePropertyDescriptor(DrawComponent dc, Object id, String displayName) {
-		super(id, displayName);
-		this.dc = dc;
+		this(dc, id, displayName, false);
 	}
 
-  public ILabelProvider getLabelProvider() {
-//  	return new I18nTextLabelProvider(dc.getI18nText(), dc.getLanguageId());
-  	return new I18nTextLabelProvider(dc.getI18nText(),
-  			NameLanguageManager.sharedInstance().getCurrentLanguageID());  	
+	public NamePropertyDescriptor(DrawComponent dc, Object id, String displayName, 
+			boolean readOnly) {
+		super(id, displayName, readOnly);
+		this.dc = dc;
+	}	
+	
+	protected DrawComponent dc;
+	
+//  public ILabelProvider getLabelProvider() 
+//  {
+////  	return new I18nTextLabelProvider(dc.getI18nText(), dc.getLanguageId());
+//  	return new I18nTextLabelProvider(dc.getI18nText(),
+//  			NameLanguageManager.sharedInstance().getCurrentLanguageID());  	
+//	}	  
+
+  public ILabelProvider getLabelProvider() 
+  {
+  	return new I18nTextLabelProvider(dc.getI18nText(), 
+  			LanguageManager.sharedInstance().getCurrentLanguageID());  	
 	}	  
-  
-  public CellEditor createPropertyEditor(Composite parent) {
-    CellEditor editor = new TextCellEditor(parent);
+		
+  public CellEditor createPropertyEditor(Composite parent) 
+  {
+    CellEditor editor = new XTextCellEditor(parent, SWT.NONE, readOnly);
     if (getValidator() != null)
         editor.setValidator(getValidator());
     return editor;

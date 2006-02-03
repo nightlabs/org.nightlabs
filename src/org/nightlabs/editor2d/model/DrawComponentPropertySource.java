@@ -27,38 +27,58 @@
 
 package org.nightlabs.editor2d.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
-
-import org.nightlabs.base.language.LanguageChangeEvent;
-import org.nightlabs.base.language.LanguageChangeListener;
+import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.properties.NameLanguageManager;
 import org.nightlabs.editor2d.properties.NamePropertyDescriptor;
 import org.nightlabs.editor2d.properties.RotationPropertyDescriptor;
+import org.nightlabs.language.LanguageCf;
 
 public class DrawComponentPropertySource 
 implements IPropertySource
 {	
 	protected DrawComponent drawComponent;
-	protected NameLanguageManager nameLangMan;	
+//	protected NameLanguageManager nameLangMan;	
+//	public DrawComponentPropertySource(DrawComponent element) {
+//		this.drawComponent = element;
+//		descriptors = createPropertyDescriptors();
+//		nameLangMan = NameLanguageManager.sharedInstance();	
+//		nameLangMan.addLanguageChangeListener(langListener);
+//	}
+
+//	protected LanguageChangeListener langListener = new LanguageChangeListener(){	
+//		public void languageChanged(LanguageChangeEvent event) {	
+//			String newLanguageID = event.getNewLanguage().getLanguageID();
+//			drawComponent.setLanguageId(newLanguageID);
+//		}	
+//	};
+	
+	protected LanguageManager nameLangMan;	
 	public DrawComponentPropertySource(DrawComponent element) {
 		this.drawComponent = element;
 		descriptors = createPropertyDescriptors();
-		nameLangMan = NameLanguageManager.sharedInstance();	
-		nameLangMan.addLanguageChangeListener(langListener);
+		nameLangMan = LanguageManager.sharedInstance();	
+		nameLangMan.addPropertyChangeListener(langListener);
 	}
- 
-	protected LanguageChangeListener langListener = new LanguageChangeListener(){	
-		public void languageChanged(LanguageChangeEvent event) {	
-			String newLanguageID = event.getNewLanguage().getLanguageID();
-			drawComponent.setLanguageId(newLanguageID);
+	
+	protected PropertyChangeListener langListener = new PropertyChangeListener()
+	{	
+		public void propertyChange(PropertyChangeEvent evt) 
+		{
+			if (evt.getPropertyName().equals(LanguageManager.LANGUAGE_CHANGED)) 
+			{
+				LanguageCf langCf = (LanguageCf) evt.getNewValue();
+				drawComponent.setLanguageId(langCf.getLanguageID());
+			}
 		}	
 	};
 	
