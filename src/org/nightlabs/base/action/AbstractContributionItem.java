@@ -39,17 +39,19 @@ import org.eclipse.swt.widgets.ToolItem;
 public abstract class AbstractContributionItem 
 extends XContributionItem 
 {
-	public AbstractContributionItem() 
+	public AbstractContributionItem(String id, String name) 
 	{
 		super();
-		init();
+		setId(id);
+		this.name = name;
 	}
 
-	public AbstractContributionItem(boolean fillToolBar, boolean fillCoolBar,
-			boolean fillMenuBar, boolean fillComposite) 
+	public AbstractContributionItem(String id, String name, boolean fillToolBar, 
+			boolean fillCoolBar, boolean fillMenuBar, boolean fillComposite) 
 	{
 		super();
-		init();
+		setId(id);
+		this.name = name;		
 		this.fillCoolBar = fillCoolBar;
 		this.fillToolBar = fillToolBar;
 		this.fillMenuBar = fillMenuBar;
@@ -57,8 +59,6 @@ extends XContributionItem
 	}
 		
 	protected abstract Control createControl(Composite parent);
-	protected abstract String initName(); 
-	protected abstract String initID();
 	
 	protected boolean fillToolBar = true;
 	protected boolean fillCoolBar = true;
@@ -69,17 +69,11 @@ extends XContributionItem
 	protected boolean coolBarFilled = false;
 	protected boolean compositeFilled = false;
 	
-	protected String name = null;
+	protected String name = "";
 	public String getName() {
 		return name;
 	}
-	
-	protected void init() 
-	{
-		name = initName();
-		setId(initID());
-	}
-		
+			
 	protected void setSize() 
 	{
 		if (fillToolBar && toolBarFilled) 

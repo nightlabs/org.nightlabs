@@ -30,21 +30,21 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
-
+import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.action.AbstractContributionItem;
 import org.nightlabs.base.custom.ColorCombo;
 import org.nightlabs.language.LanguageCf;
 
 public class LanguageContributionItem 
-extends ContributionItem
+extends AbstractContributionItem
 {
 	public static final String ID = LanguageContributionItem.class.getName();
 	
@@ -55,18 +55,21 @@ extends ContributionItem
 		this(langMan, false);
 	}
 	
-	public LanguageContributionItem(LanguageManager langMan, boolean onlyImage) {
-		super(ID);
+	public LanguageContributionItem(LanguageManager langMan, boolean onlyImage) 
+	{
+		super(ID, NLBasePlugin.getResourceString("contribution.language.name"));
 		this.langMan = langMan;
 		this.onlyImage = onlyImage;
 	}
 
+	protected ColorCombo combo;
 	protected Map index2Language;
 	protected Control createControl(Composite parent) 
 	{
-		ColorCombo combo = new ColorCombo(parent, SWT.DEFAULT);
+		combo = new ColorCombo(parent, SWT.DEFAULT);
 		combo.setSize(200, 30);
 		combo.addSelectionListener(comboListener);
+		combo.addDisposeListener(disposeListener);
 		index2Language = new HashMap();
 		int index = 0;
 		
@@ -83,15 +86,15 @@ extends ContributionItem
 		return combo;
 	}
 
-	public void fill(Composite parent) {
-		createControl(parent);
-	}
-
-	public void fill(ToolBar parent, int index) {
-		ToolItem toolitem = new ToolItem(parent, SWT.SEPARATOR, index);
-  	Control control = createControl(parent);
-  	toolitem.setControl(control);	
-	}
+//	public void fill(Composite parent) {
+//		createControl(parent);
+//	}
+//
+//	public void fill(ToolBar parent, int index) {
+//		ToolItem toolitem = new ToolItem(parent, SWT.SEPARATOR, index);
+//  	Control control = createControl(parent);
+//  	toolitem.setControl(control);	
+//	}
 		
 	protected SelectionListener comboListener = new SelectionListener() 
 	{	
@@ -103,8 +106,18 @@ extends ContributionItem
 			ColorCombo combo = (ColorCombo) e.getSource();
 			int index = combo.getSelectionIndex();
 			LanguageCf language = (LanguageCf) index2Language.get(new Integer(index));
-			// TODO: Must set cuurentLanguage
+			// TODO: Must set currentLanguage
 			langMan.setCurrentLanguage(language);
 		}	
 	};
+	
+	protected DisposeListener disposeListener = new DisposeListener()
+	{	
+		public void widgetDisposed(DisposeEvent e) 
+		{
+			if (combo != null && !combo.isDisposed())
+				combo.removeSelectionListener(comboListener);
+		}	
+	};
+	
 }

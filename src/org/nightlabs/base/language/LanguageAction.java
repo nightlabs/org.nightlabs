@@ -24,12 +24,10 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.base.action;
+package org.nightlabs.base.language;
 
 import org.eclipse.jface.action.Action;
 
-import org.nightlabs.base.language.ILanguageManager;
-import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.resource.SharedImages;
 
 public class LanguageAction 
