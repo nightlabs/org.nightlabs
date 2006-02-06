@@ -135,6 +135,7 @@ import org.nightlabs.editor2d.outline.filter.FilterNameProvider;
 import org.nightlabs.editor2d.properties.EditorPropertyPage;
 import org.nightlabs.editor2d.render.RenderModeManager;
 import org.nightlabs.editor2d.rulers.EditorRulerProvider;
+import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 import org.nightlabs.editor2d.viewer.render.RendererRegistry;
 import org.nightlabs.io.AbstractIOFilterWithProgress;
 import org.nightlabs.io.IOFilter;
@@ -342,7 +343,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
       	throw new RuntimeException(e);
       }    	    	
     }
-
     
     protected ScalableFreeformRootEditPart rootEditPart;
     public ScalableFreeformRootEditPart getRootEditPart() 
@@ -356,6 +356,11 @@ extends J2DGraphicalEditorWithFlyoutPalette
     protected ViewerManager viewerManager;
     public ViewerManager getViewerManager() {
     	return viewerManager;
+    }
+    
+    protected DescriptorManager descriptorManager;
+    public DescriptorManager getDescriptorManager() {
+    	return descriptorManager;
     }
     
     protected void configureGraphicalViewer() 
@@ -401,10 +406,11 @@ extends J2DGraphicalEditorWithFlyoutPalette
       };
       getGraphicalControl().addListener(SWT.Activate, listener);
       getGraphicalControl().addListener(SWT.Deactivate, listener);  
-      
+            
+      // ViewerManager
       viewerManager = new ViewerManager(viewer, getEditorSite().getActionBars().getStatusLineManager());
       configureViewerManager();  
-      
+            
       getGraphicalControl().addControlListener(resizeListener);
       getCommandStack().addCommandStackEventListener(commandStackListener);
     }
@@ -417,7 +423,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //				}
 			}		
 		};
-    
+    		
     // should solve redraw problems when undoing things
     protected CommandStackEventListener commandStackListener = new CommandStackEventListener(){		
 			public void stackChanged(CommandStackEvent event) {
@@ -602,6 +608,16 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //      // listen for dropped parts
 //      graphicalViewer.addDropTargetListener(createTransferDropTargetListener());   
       
+      // DescriptorManager
+      descriptorManager = new DescriptorManager();
+      configureDescriptorManager();      
+      if (getModelRootEditPart() != null) {
+      	getModelRootEditPart().setDescriptorManager(getDescriptorManager());
+      } else {
+      	LOGGER.debug("DescriptorManager for MultiLayerDrawComponentEditPart not set, because it is null!");
+      }
+      viewerManager.setDescriptorManager(getDescriptorManager());      
+      
       configureFilterManager();      
     }
 
@@ -624,7 +640,18 @@ extends J2DGraphicalEditorWithFlyoutPalette
      */
     protected void configureViewerManager()
     {
-
+    	
+    }
+    
+    /**
+     * By Default this Method does nothing, but Inheritans can override this Method to add 
+     * Descriptors for special classes to the DescriptorManager
+     * 
+     * @see DescriptorManager#addDescriptor(org.nightlabs.editor2d.viewer.descriptor.IDrawComponentDescriptor, Class) 
+     */
+    protected void configureDescriptorManager() 
+    {
+    	
     }
     
     protected void createActions() 
@@ -933,8 +960,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
   			}
   			else if (propertyName.equals(AbstractIOFilterWithProgress.SUBTASK_FINISHED)) {
   				String subTaskName = (String) newValue;
-  				// TODO: Listener must get to the subTask2Work-Map of the IOFilterWithProgress
-  				// to begin the new SubTask progressMonitor.beginTask(subTaskName, subTaskName.work)
   				getProgressMonitor().getProgressMonitor().subTask(subTaskName);
 //  				LOGGER.debug("subTask "+subTaskName+" finished!");  				
   			}
@@ -1083,18 +1108,41 @@ extends J2DGraphicalEditorWithFlyoutPalette
         
     protected void refreshBuffer() 
     {
+    	MultiLayerDrawComponentEditPart mldcEditPart = getModelRootEditPart();
+    	if (mldcEditPart != null) {
+  			BufferedFreeformLayer buffer = mldcEditPart.getBufferedFreeformLayer();
+  			if (buffer != null) {
+  				buffer.refresh();
+  			}			    		
+    	}
+    }
+    
+    protected MultiLayerDrawComponentEditPart mldcEditPart = null;
+//    protected MultiLayerDrawComponentEditPart getModelRootEditPart() 
+//    {
+//    	if (mldcEditPart == null) {
+//      	if (getRootEditPart().getChildren().size() == 1) {
+//      		EditPart editPart = (EditPart) getRootEditPart().getChildren().get(0);
+//        	if (editPart != null) {
+//        		if (editPart instanceof MultiLayerDrawComponentEditPart) {
+//        			mldcEditPart = (MultiLayerDrawComponentEditPart) editPart;
+//        		}
+//        	}
+//      	}    		
+//    	}
+//    	return mldcEditPart;
+//    }
+    protected MultiLayerDrawComponentEditPart getModelRootEditPart() 
+    {
     	if (getRootEditPart().getChildren().size() == 1) {
     		EditPart editPart = (EditPart) getRootEditPart().getChildren().get(0);
       	if (editPart != null) {
       		if (editPart instanceof MultiLayerDrawComponentEditPart) {
-      			MultiLayerDrawComponentEditPart mldcEditPart = (MultiLayerDrawComponentEditPart) editPart;
-      			BufferedFreeformLayer buffer = mldcEditPart.getBufferedFreeformLayer();
-      			if (buffer != null) {
-      				buffer.refresh();
-      			}
+      			return mldcEditPart = (MultiLayerDrawComponentEditPart) editPart;
       		}
-      	}    		
-    	}
+      	}
+    	}    		
+    	return mldcEditPart;
     }
     
 //   **************** BEGIN public Methods for EditorOutlinePage ******************** 

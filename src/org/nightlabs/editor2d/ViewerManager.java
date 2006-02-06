@@ -172,6 +172,9 @@ public class ViewerManager
   public DescriptorManager getDescriptorManager() {
   	return descriptorManager;
   }
+  public void setDescriptorManager(DescriptorManager descMan) {
+  	this.descriptorManager = descMan;
+  }
   
   protected Point relativePoint = null;
   protected AbstractDrawComponentEditPart oldPart = null;
