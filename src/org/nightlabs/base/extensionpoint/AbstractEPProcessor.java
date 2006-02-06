@@ -26,6 +26,9 @@
 
 package org.nightlabs.base.extensionpoint;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -52,11 +55,17 @@ import org.eclipse.core.runtime.Platform;
 public abstract class AbstractEPProcessor 
 implements IEPProcessor
 {
-
 	public abstract String getExtensionPointID();
-
+	
 	public abstract void processElement(IExtension extension, IConfigurationElement element) throws EPProcessorException;
-  
+	
+	private List<IEPProcessListener> processListeners;
+	
+	public AbstractEPProcessor()
+	{
+		processListeners = new ArrayList<IEPProcessListener>();
+	}
+	
 	private boolean processed = false;
 	public boolean isProcessed() {
 		return processed;
@@ -67,66 +76,73 @@ implements IEPProcessor
 	protected boolean isProcessing() {
 		return processing;
 	}
-
-  public synchronized void process() throws EPProcessorException{
-  	processing = true;
-  	try {
-	    try{
-	    	IExtensionRegistry registry = Platform.getExtensionRegistry();
-	    	if (registry != null) 
-	    	{
-		    	IExtensionPoint extensionPoint = registry.getExtensionPoint(getExtensionPointID());
-		    	if (extensionPoint == null) {
-		    		throw new EPProcessorException(
-		    				"Unable to resolve extension-point: " + getExtensionPointID());
-		    	}	        
-		
-		      IExtension[] extensions = extensionPoint.getExtensions();
-		      // For each extension ...
-		      for (int i = 0; i < extensions.length; i++) {           
-		          IExtension extension = extensions[i];
-		          IConfigurationElement[] elements = 
-		            extension.getConfigurationElements();
-		          // For each member of the extension ...
-		          for (int j = 0; j < elements.length; j++) {
-		          	IConfigurationElement element = elements[j];
-		          	processElement(extension, element);               
-		          }
-		      }
-		      processed = true;	    		
-	    	}
-	    }catch(Throwable e){
-	    	if (e instanceof EPProcessorException)
-	    		throw (EPProcessorException)e;
-	    	else
-	    		throw new EPProcessorException(e);
-	    }
-  	} finally {
-  		processing = false;
-  	}
-  }
-
+	
+	public synchronized void process() throws EPProcessorException{
+		processing = true;
+		try {
+			try {
+				for(IEPProcessListener listener : processListeners)
+					listener.preProcess();
+				
+				IExtensionRegistry registry = Platform.getExtensionRegistry();
+				if (registry != null) 
+				{
+					IExtensionPoint extensionPoint = registry.getExtensionPoint(getExtensionPointID());
+					if (extensionPoint == null) {
+						throw new EPProcessorException(
+								"Unable to resolve extension-point: " + getExtensionPointID());
+					}	        
+					
+					IExtension[] extensions = extensionPoint.getExtensions();
+					// For each extension ...
+					for (int i = 0; i < extensions.length; i++) {           
+						IExtension extension = extensions[i];
+						IConfigurationElement[] elements = 
+							extension.getConfigurationElements();
+						// For each member of the extension ...
+						for (int j = 0; j < elements.length; j++) {
+							IConfigurationElement element = elements[j];
+							processElement(extension, element);               
+						}
+					}
+					
+					for(IEPProcessListener listener : processListeners)
+						listener.postProcess();
+					
+					processed = true;	    		
+				}
+			}catch(Throwable e){
+				if (e instanceof EPProcessorException)
+					throw (EPProcessorException)e;
+				else
+					throw new EPProcessorException(e);
+			}
+		} finally {
+			processing = false;
+		}
+	}
+	
 	/**
 	 * Assures that this processor 
 	 * has processed its extensions
 	 */
-  public void checkProcessing() 
-  {
-  	if (!isProcessed()) {
-  		try {
-  			process();
-  		} catch (EPProcessorException e) {
-  			throw new RuntimeException(e);
-  		}  	  		
-  	}
-  }
-  
-  /**
-   * 
-   * @param s the String to check
-   * @return true if the String is neither null nor an empty String otherwise 
-   * returns false
-   */
+	public void checkProcessing() 
+	{
+		if (!isProcessed()) {
+			try {
+				process();
+			} catch (EPProcessorException e) {
+				throw new RuntimeException(e);
+			}  	  		
+		}
+	}
+	
+	/**
+	 * 
+	 * @param s the String to check
+	 * @return true if the String is neither null nor an empty String otherwise 
+	 * returns false
+	 */
 	protected boolean checkString(String s) 
 	{
 		if (s == null || "".equals(s))
@@ -134,4 +150,14 @@ implements IEPProcessor
 		
 		return true;
 	}  
+	
+	public void addProcessListener(IEPProcessListener listener)
+	{
+		processListeners.add(listener);
+	}
+	
+	public void removeProcessListener(IEPProcessListener listener)
+	{
+		processListeners.remove(listener);
+	}
 }

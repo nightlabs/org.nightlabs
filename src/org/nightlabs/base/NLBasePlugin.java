@@ -27,6 +27,8 @@
 package org.nightlabs.base;
 
 import org.eclipse.ui.plugin.*;
+import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
+import org.nightlabs.base.exceptionhandler.SimpleExceptionHandlerRegistry;
 import org.osgi.framework.BundleContext;
 import java.util.*;
 
@@ -57,6 +59,7 @@ public class NLBasePlugin extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		ExceptionHandlerRegistry.sharedInstance().addProcessListener(SimpleExceptionHandlerRegistry.sharedInstance());
 	}
 
 	/**

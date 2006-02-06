@@ -3,6 +3,8 @@
  */
 package org.nightlabs.base.exceptionhandler;
 
+import java.net.SocketException;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -42,7 +44,7 @@ public class TestExceptionAction extends Action implements IWorkbenchWindowActio
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
 	 */
-	public void run(IAction action) {
+	public void run(IAction action) {		
 		Thread thread1 = new Thread() {
 			public void run()
 			{
@@ -75,13 +77,29 @@ public class TestExceptionAction extends Action implements IWorkbenchWindowActio
 					Thread.sleep(7000);
 				}
 				catch(Exception e) { }
-				throw new RuntimeException(new IllegalStateException("Test test3 ..."));
+//				throw new RuntimeException(new IllegalStateException("Test test3 ..."));
+				throw new OutOfMemoryError("Test test3");
+			}
+		};
+		
+		Thread thread4 = new Thread() {
+			public void run()
+			{
+				try
+				{
+					Thread.sleep(11000);
+				}
+				catch(Exception e) { }
+//				throw new RuntimeException(new IllegalStateException("Test test3 ..."));
+				throw new OutOfMemoryError("Test test4");
 			}
 		};
 		
 		thread1.start();
 		thread2.start();
 		thread3.start();
+		thread4.start();
+		
 	}
 
 	/* (non-Javadoc)

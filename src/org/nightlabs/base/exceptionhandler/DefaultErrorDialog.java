@@ -29,6 +29,7 @@ package org.nightlabs.base.exceptionhandler;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -113,7 +114,7 @@ public class DefaultErrorDialog extends IconAndMessageDialog {
 	/** 
 	 * Collection of all errors currently displayed/displayable.
 	 */
-	private Collection<ErrorItem> errorList = new ArrayList<ErrorItem>();
+	private List<ErrorItem> errorList = new ArrayList<ErrorItem>();
 	
 	private ErrorTable errorTable;
 	
@@ -132,7 +133,7 @@ public class DefaultErrorDialog extends IconAndMessageDialog {
 	
 	public static boolean addError(Class theClass, String dialogTitle, String message, Throwable thrownException, Throwable triggerException)
 	{
-		if (!theClass.isAssignableFrom(DefaultErrorDialog.class))
+		if (!DefaultErrorDialog.class.isAssignableFrom(theClass))
 			throw new IllegalArgumentException(theClass.getSimpleName() + " is no subclass of DefaultErrorDialog.");
 		
 		DefaultErrorDialog dialog;
@@ -180,7 +181,7 @@ public class DefaultErrorDialog extends IconAndMessageDialog {
 		this.message = (message == null || message == "") ? exMsg : message;		
 		dialogTitle = dialogTitle == null ? "Error occured." : dialogTitle;
 		setDialogTitle(dialogTitle);
-		errorList.add(new ErrorItem(this.message, thrownException, triggerException));		
+		errorList.add(0, new ErrorItem(this.message, thrownException, triggerException));		
 		if(errorTable != null)
 			errorTable.refresh();
 		
