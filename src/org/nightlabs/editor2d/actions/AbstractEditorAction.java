@@ -73,6 +73,10 @@ extends EditorPartAction
 		return getEditor().getMultiLayerDrawComponent();
 	}	
 	
+	/**
+	 * 
+	 * @return the currentLayer of the MultiLayerDrawComponent
+	 */
 	public Layer getCurrentLayer() {
 		return getMultiLayerDrawComponent().getCurrentLayer();
 	}
@@ -132,10 +136,17 @@ extends EditorPartAction
 		return getEditor().getSite().getShell();
 	}
 	
+	/** 
+	 * @return true if the AbstractEditor is the active Editor of the Workbench 
+	 */
 	public boolean isActiveEditor()
 	{
-		if (getWorkbenchPart().getSite().getWorkbenchWindow().getActivePage().getActiveEditor().equals(getEditor())) {
-			return true;
+		// TODO: find out why getActivePage() always return null
+		if (getWorkbenchPart().getSite().getWorkbenchWindow().getActivePage() != null) 
+		{
+			if (getWorkbenchPart().getSite().getWorkbenchWindow().getActivePage().getActiveEditor().equals(getEditor())) {
+				return true;
+			}			
 		}
 		return false;
 	}	

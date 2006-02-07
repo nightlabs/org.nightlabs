@@ -138,7 +138,7 @@ implements FreeformFigure, BufferedFreeformLayer
 					Math.min(4, (childBound.height / realSizeBounds.y)+addY)
 				);
 		}
-		LOGGER.debug("Calculated buffer factors: "+result);
+//		LOGGER.debug("Calculated buffer factors: "+result);
 		return result;
 	}
 	
@@ -284,7 +284,7 @@ implements FreeformFigure, BufferedFreeformLayer
 		}
 		bufferedImage = null;
 		childBounds = null;
-//		LOGGER.debug("buffer cleared()");
+		LOGGER.debug("buffer cleared()");
 	}
 	
 	

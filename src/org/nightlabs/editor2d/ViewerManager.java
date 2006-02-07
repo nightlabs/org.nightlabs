@@ -38,7 +38,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartListener;
 import org.eclipse.gef.EditPartViewer;
@@ -46,17 +45,17 @@ import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IStatusLineManager;
-
+import org.nightlabs.config.Config;
+import org.nightlabs.config.ConfigException;
+import org.nightlabs.editor2d.config.PreferencesConfigModule;
 import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
 import org.nightlabs.editor2d.edit.LayerEditPart;
 import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
 import org.nightlabs.editor2d.figures.DrawComponentFigure;
 import org.nightlabs.editor2d.render.RenderConstants;
-import org.nightlabs.editor2d.render.RenderModeManager;
 import org.nightlabs.editor2d.render.Renderer;
 import org.nightlabs.editor2d.util.EditorUtil;
 import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
-import org.nightlabs.editor2d.viewer.descriptor.DrawComponentDescriptor;
 
 public class ViewerManager 
 {
@@ -80,6 +79,7 @@ public class ViewerManager
     conditionRef = new ConditionRef(createDefaultCondition());
     viewport.addMouseMotionListener(mouseListener);
     mousePoint = new Point();
+    initConfigModule();
   }
   
   protected ExcludeListRef excludeListRef;
@@ -284,13 +284,24 @@ public class ViewerManager
     }  	
   }
     
+  protected PreferencesConfigModule prefConfMod = null;
+  protected void initConfigModule() 
+  {
+  	try {
+    	prefConfMod = (PreferencesConfigModule) Config.sharedInstance().createConfigModule(PreferencesConfigModule.class);  		
+  	} catch (ConfigException ce) {
+  		throw new RuntimeException(ce);
+  	}
+  }
+  
   protected void doRollOver(AbstractDrawComponentEditPart dcPart) 
   {
     if (dcPart != null) {
     	DrawComponent dc = dcPart.getDrawComponent();    	
   		descriptorManager.setDrawComponent(dc);
-  		statusLineMan.setMessage(getMouseCoordinates() + ", " + descriptorManager.getEntriesAsString(false));
-  		
+  		if (prefConfMod.isShowStatusLine())
+  			statusLineMan.setMessage(getMouseCoordinates() + ", " + descriptorManager.getEntriesAsString(false));
+  			  		
 //      removeRollOver();
 //      addRollOver(dcPart);  		
     }

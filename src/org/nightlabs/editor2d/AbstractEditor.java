@@ -124,6 +124,8 @@ import org.nightlabs.editor2d.actions.order.ChangeOrderOneDown;
 import org.nightlabs.editor2d.actions.order.ChangeOrderOneUp;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
+import org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction;
+import org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
 import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
@@ -795,6 +797,14 @@ extends J2DGraphicalEditorWithFlyoutPalette
       copyAction.addPropertyChangeListener(pasteAction.copyListener);
       getSite().getKeyBindingService().registerAction(copyAction);      
             
+      action = new ShowFigureToolTipAction(this);
+      registry.registerAction(action);
+      getPropertyActions().add(action);
+
+      action = new ShowStatusLineAction(this);
+      registry.registerAction(action);
+      getPropertyActions().add(action);
+      
 //      // Test Viewer Action
 //      action = new ViewerAction(this);
 //      registry.registerAction(action);

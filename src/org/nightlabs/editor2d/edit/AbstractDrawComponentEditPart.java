@@ -75,11 +75,13 @@ implements EditorRequestConstants
   	descMan.setDrawComponent(getDrawComponent());
   	return descMan.getEntriesAsString(true);
   }
-  
-  // TODO: must be updated to asure up to date values 
-  protected void updateTooltip() 
+   
+  public void updateTooltip() 
   {
-  	getFigure().setToolTip(getTooltip());
+  	if (getModelRoot().getPreferencesConfigModule().isShowToolTips())
+  		getFigure().setToolTip(getTooltip());
+  	else
+  		getFigure().setToolTip(null);
   }
   
   protected IFigure createFigure() 

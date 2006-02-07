@@ -45,9 +45,6 @@ extends ComponentEditPolicy
 	{
 		Object parent = getHost().getParent().getModel();
 		Object child = getHost().getModel();
-//		if (parent instanceof MultiLayerDrawComponent && child instanceof DrawComponent) {
-//		return new DeleteDrawComponentCommand((MultiLayerDrawComponent) parent, (DrawComponent) child);		
-//	}		
 		if (parent instanceof DrawComponentContainer && child instanceof DrawComponent) {
 			return new DeleteDrawComponentCommand((DrawComponentContainer) parent, (DrawComponent) child);		
 		}

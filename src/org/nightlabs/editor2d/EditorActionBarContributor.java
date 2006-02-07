@@ -40,7 +40,6 @@ import org.eclipse.gef.ui.actions.RedoRetargetAction;
 import org.eclipse.gef.ui.actions.UndoRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomInRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomOutRetargetAction;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -50,8 +49,8 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.nightlabs.base.resource.SharedImages;
-import org.nightlabs.base.resource.SharedImages.ImageDimension;
-import org.nightlabs.base.resource.SharedImages.ImageFormat;
+import org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction;
+import org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllRetargetAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
@@ -100,8 +99,14 @@ extends ActionBarContributor
   	addRetargetAction(new ZoomOutRetargetAction());  	
   	addRetargetAction(new ZoomAllRetargetAction());
   	addRetargetAction(new ZoomSelectionRetargetSelection());
+  	
 //  	addRetargetAction(new DirectEditRetargetAction());   
 //  	addRetargetAction(new ViewerRetargetAction());
+  	
+  	addRetargetAction(new RetargetAction(ShowFigureToolTipAction.ID, 
+  			EditorPlugin.getResourceString("action.showFigureToolTip.text"), IAction.AS_CHECK_BOX));
+  	addRetargetAction(new RetargetAction(ShowStatusLineAction.ID,
+  			EditorPlugin.getResourceString("action.statusLine.text"), IAction.AS_CHECK_BOX));
   }
 
   public static final String ID_VIEW_MENU = "menu view";
@@ -115,13 +120,20 @@ extends ActionBarContributor
   	MenuManager viewMenu = new MenuManager(EditorPlugin.getResourceString("menu.view"), ID_VIEW_MENU);
   	viewMenu.add(getAction(GEFActionConstants.ZOOM_IN));
   	viewMenu.add(getAction(GEFActionConstants.ZOOM_OUT));
+  	
   	viewMenu.add(new Separator());
   	viewMenu.add(getAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY));
   	viewMenu.add(getAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY));
   	viewMenu.add(getAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY));
+  	
   	viewMenu.add(new Separator());
   	viewMenu.add(getAction(GEFActionConstants.MATCH_WIDTH));
   	viewMenu.add(getAction(GEFActionConstants.MATCH_HEIGHT));
+  	
+  	viewMenu.add(new Separator());
+  	viewMenu.add(getAction(ShowFigureToolTipAction.ID));
+  	viewMenu.add(getAction(ShowStatusLineAction.ID));
+  	
   	menubar.insertAfter(IWorkbenchActionConstants.M_FILE, viewMenu);
   }
     
@@ -139,6 +151,7 @@ extends ActionBarContributor
   	tbm.add(getAction(GEFActionConstants.ALIGN_LEFT));
   	tbm.add(getAction(GEFActionConstants.ALIGN_CENTER));
   	tbm.add(getAction(GEFActionConstants.ALIGN_RIGHT));
+  	
   	tbm.add(new Separator());
   	tbm.add(getAction(GEFActionConstants.ALIGN_TOP));
   	tbm.add(getAction(GEFActionConstants.ALIGN_MIDDLE));

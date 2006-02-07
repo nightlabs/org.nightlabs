@@ -114,6 +114,11 @@
             editorID="org.nightlabs.editor2d.Editor"
             perspectiveID="org.nightlabs.editor2d.EditorPerspective"/>
    </extension>
+   <extension
+         point="org.nightlabs.classsharing.globalclasspublish">
+      <globalClassPublish pattern="org\.nightlabs\.base\.config\..*"/>
+      <globalClassPublish pattern="org\.nightlabs\.editor2d\.config\..*"/>
+   </extension>
 <!--
 	<extension
 			point="org.eclipse.ui.actionSets">

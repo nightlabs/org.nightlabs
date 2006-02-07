@@ -270,8 +270,7 @@ implements EditorRequestConstants
     else  
       super.showSourceFeedback(request);
   }
-    
-  
+      
   protected ShapeFigure getShearFeedbackFigure() 
   {
     if (feedback == null) {

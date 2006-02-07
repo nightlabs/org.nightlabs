@@ -204,7 +204,7 @@ extends GraphicalViewerKeyHandler
 				DrawComponent dc = dcep.getDrawComponent();
 				SetConstraintCommand cmd = new SetConstraintCommand();
 				cmd.setPart(dc);
-				Rectangle dcBounds = dc.getBounds();				
+				Rectangle dcBounds = new Rectangle(dc.getBounds());				
 				switch (direction) 
 				{				
 					case(DOWN):

@@ -28,20 +28,14 @@
 package org.nightlabs.editor2d.edit;
 
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.editor2d.Layer;
-import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
-import org.nightlabs.editor2d.figures.ContainerDrawComponentFigure;
 import org.nightlabs.editor2d.figures.ContainerFreeformLayer;
-import org.nightlabs.editor2d.figures.DrawComponentFigure;
-import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
 import org.nightlabs.editor2d.model.LayerPropertySource;
 
 public class LayerEditPart 
@@ -55,27 +49,7 @@ extends AbstractDrawComponentContainerEditPart
     super(layer);
   }
 	
-//  /* (non-Javadoc)
-//   * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
-//   */
-//  protected IFigure createFigure() 
-//  {    
-////    IFigure f = new FreeformLayer();    
-//  	
-////  	Figure f = new OversizedBufferFreeformLayer();
-////    ((BufferedFreeformLayer)f).init(this);
-//  	
-////  	DrawComponentFigure f = new ContainerDrawComponentFigure();
-////    f.setDrawComponent(getDrawComponent());    
-////    addRenderer(f);
-////    addZoomListener(f);  	
-//
-//  	IFigure f = new ContainerFreeformLayer();
-//  	
-//		f.setLayoutManager(new FreeformLayout());		    		
-//		return f;  
-//  }
-  /* (non-Javadoc)
+  /**
    * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
    */
   protected IFigure createFigure() 
@@ -108,19 +82,17 @@ extends AbstractDrawComponentContainerEditPart
     if (getLayer().isVisible()) {
       return getLayer().getDrawComponents();
     } else {
-      return EMPTY_LIST;
+      return Collections.EMPTY_LIST;
     }
   }
-  
-  public static final List EMPTY_LIST = new ArrayList(0); 
-  
-  public BufferedFreeformLayer getBufferedFreeformLayer() 
-  {
-		if (getFigure() instanceof BufferedFreeformLayer)
-			return (BufferedFreeformLayer) getFigure();
-		else
-			return null;
-  }
+    
+//  public BufferedFreeformLayer getBufferedFreeformLayer() 
+//  {
+//		if (getFigure() instanceof BufferedFreeformLayer)
+//			return (BufferedFreeformLayer) getFigure();
+//		else
+//			return null;
+//  }
   
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{

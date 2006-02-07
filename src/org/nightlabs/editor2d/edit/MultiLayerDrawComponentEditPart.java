@@ -47,7 +47,10 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.nightlabs.config.Config;
+import org.nightlabs.config.ConfigException;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.config.PreferencesConfigModule;
 import org.nightlabs.editor2d.editpolicy.MultiLayerDrawComponentXYLayoutPolicy;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
@@ -63,9 +66,9 @@ extends AbstractDrawComponentContainerEditPart
 	{
 	  super(mldc);
 	  setModel(mldc);
+	  initConfigModule();
 	}
 
-	// TODO Must be set from the Editor to asure same instance like in ViewerManager
 	protected DescriptorManager descriptorManager = new DescriptorManager();		
 	public DescriptorManager getDescriptorManager() {
 		return descriptorManager;
@@ -74,6 +77,20 @@ extends AbstractDrawComponentContainerEditPart
 		this.descriptorManager = descriptorManager;
 	}
 
+  protected void initConfigModule() 
+  {
+  	try {
+    	prefConfMod = (PreferencesConfigModule) Config.sharedInstance().createConfigModule(PreferencesConfigModule.class);  		
+  	} catch (ConfigException ce) {
+  		throw new RuntimeException(ce);
+  	}
+  }
+	
+  protected PreferencesConfigModule prefConfMod = null;
+  public PreferencesConfigModule getPreferencesConfigModule() {
+  	return prefConfMod;
+  }
+  
 	//  public static UpdateManager updateManager = null;	
 	/* 
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()

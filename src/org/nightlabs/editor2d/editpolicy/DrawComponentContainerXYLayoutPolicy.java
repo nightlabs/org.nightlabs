@@ -98,7 +98,7 @@ implements EditorRequestConstants
     setXyLayout(layout);
   }
     
-  /* (non-Javadoc)
+  /**
    * @see org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy#createAddCommand(org.eclipse.gef.EditPart, java.lang.Object)
    */
   protected Command createAddCommand(EditPart child, Object constraint) 
@@ -391,7 +391,7 @@ implements EditorRequestConstants
   
   public Command getCreateTextCommand(TextCreateRequest request) 
   {
-    // TODO: Optimize Command (don�t create each time a new Command)
+    // TODO: Optimize Command (dont create each time a new Command)
     CreateTextCommand create = new CreateTextCommand(request);                 
     create.setParent(getDrawComponentContainer());    
       
@@ -503,7 +503,7 @@ implements EditorRequestConstants
 		if (size == null || size.isEmpty())
 			return getConstraintFor(where);
 		else {
-			//$TODO Probably should use PrecisionRectangle at some point instead of two 
+			//TODO Probably should use PrecisionRectangle at some point instead of two 
 			// geometrical objects
 			size = size.getCopy();
 			figure.translateToRelative(size);
@@ -584,7 +584,7 @@ implements EditorRequestConstants
 	
 	protected Command getEditorCreateCommand(EditorCreateRequest request) 
 	{
-	  // TODO: Optimize Command (don�t create each time a new Command)
+	  // TODO: Optimize Command (dont create each time a new Command)
     CreateShapeCommand create = new CreateShapeCommand();	    
     create.setGeneralShape(request.getGeneralShape());
     ShapeDrawComponent newPart = (ShapeDrawComponent)request.getNewObject();
