@@ -41,6 +41,7 @@ import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
@@ -64,7 +65,10 @@ import org.nightlabs.config.ConfigException;
  */
 public class DefaultActionBuilder 
 extends ActionBarAdvisor 
-{		
+{	
+	
+	private IActionBarConfigurer configurer;
+	
 	// File-Menu
 	private IMenuManager newMenu;
 	private IMenuManager recentFilesMenu;
@@ -179,20 +183,38 @@ extends ActionBarAdvisor
 		// Window-Menu
 		if (showPerspectivesMenu)
 			openPerspectiveMenu = ContributionItemFactory.PERSPECTIVES_SHORTLIST.create(window);
-		if (showViewsMenu)
+		if (showViewsMenu) 
 			showViewMenu = ContributionItemFactory.VIEWS_SHORTLIST.create(window);
 		if (showPreferencesMenu)
 			preferencesAction = ActionFactory.PREFERENCES.create(window);
 				
 		// Help-Menu		
 		if (showHelpMenu)
-			helpAction = ActionFactory.HELP_CONTENTS.create(window);		
+			helpAction = ActionFactory.HELP_CONTENTS.create(window);
 		if (showIntro)
 			introAction = ActionFactory.INTRO.create(window);
 		if (showUpdate)
 			// TODO: find out how to hook updateAction
 			
 		aboutAction = ActionFactory.ABOUT.create(window); 
+		
+		if (saveAction != null)
+			getActionBarConfigurer().registerGlobalAction(saveAction);
+		if (saveAsAction != null)
+			getActionBarConfigurer().registerGlobalAction(saveAsAction);
+		if (quitAction != null)
+			getActionBarConfigurer().registerGlobalAction(quitAction);
+		if (openAction != null)
+			getActionBarConfigurer().registerGlobalAction(openAction);
+		if (introAction != null)
+			getActionBarConfigurer().registerGlobalAction(introAction);
+		if (helpAction != null)
+			getActionBarConfigurer().registerGlobalAction(helpAction);
+		if (updateAction != null)
+			getActionBarConfigurer().registerGlobalAction(updateAction);
+		if (updateAction != null)
+			getActionBarConfigurer().registerGlobalAction(updateAction);
+		
 	}
 
 	protected IMenuManager fileMenu = null;
