@@ -32,11 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Polyline;
-import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
@@ -46,25 +44,19 @@ import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.swt.graphics.Color;
-import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorStateManager;
-import org.nightlabs.editor2d.ImageDrawComponent;
-import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
-import org.nightlabs.editor2d.figures.FeedbackShapeFigure;
 import org.nightlabs.editor2d.figures.ShapeFigure;
 import org.nightlabs.editor2d.handle.RotateCenterHandle;
 import org.nightlabs.editor2d.handle.RotateHandleKit;
 import org.nightlabs.editor2d.handle.ShapeEditHandleKit;
 import org.nightlabs.editor2d.j2d.GeneralShape;
-import org.nightlabs.editor2d.j2d.GeneralShapeFactory;
 import org.nightlabs.editor2d.request.EditorEditShapeRequest;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
 import org.nightlabs.editor2d.request.EditorRotateCenterRequest;
 import org.nightlabs.editor2d.request.EditorRotateRequest;
-import org.nightlabs.editor2d.request.EditorShearRequest;
 import org.nightlabs.editor2d.util.EditorUtil;
+import org.nightlabs.editor2d.util.FeedbackUtil;
 import org.nightlabs.editor2d.util.J2DUtil;
 
 
@@ -73,14 +65,7 @@ extends ResizableEditPolicy
 implements EditorRequestConstants
 {
   public static final Logger LOGGER = Logger.getLogger(DrawComponentResizeEditPolicy.class);
-   
-  protected static Color ghostFillColor = new Color(null, 31, 31, 31);
-  protected static final Color DEFAULT_BGCOLOR = ColorConstants.darkGray;
-  protected static final Color DEFAULT_FGCOLOR = ColorConstants.white;
-  
-  protected Color bgColor = DEFAULT_BGCOLOR;
-  protected Color fgColor = DEFAULT_FGCOLOR;
-  
+     
   /**
    * Creates the figure used for feedback.
    * @return the new feedback figure
@@ -100,8 +85,8 @@ implements EditorRequestConstants
     polyline.setLineStyle(2);
     polyline.setXOR(true);
     polyline.setFill(true);
-    polyline.setBackgroundColor(bgColor);
-    polyline.setForegroundColor(fgColor);    
+    polyline.setBackgroundColor(FeedbackUtil.getBackgroundColor());
+    polyline.setForegroundColor(FeedbackUtil.getForegroundColor());    
         
     // transform each point to absolute
   	for (int i=0; i<polyline.getPoints().size(); i++) {
@@ -114,44 +99,8 @@ implements EditorRequestConstants
   }
       
   protected ShapeFigure getCustomFeedbackFigure(Object modelPart) 
-//  protected IFigure getCustomFeedbackFigure(Object modelPart)
   {
-    GeneralShape gs = null;
-    if (modelPart instanceof ShapeDrawComponent) {
-      ShapeDrawComponent sdc = (ShapeDrawComponent) modelPart;
-      gs = (GeneralShape)sdc.getGeneralShape().clone();
-    }
-    else if (modelPart instanceof ImageDrawComponent) {
-      ImageDrawComponent idc = (ImageDrawComponent) modelPart;
-      gs = (GeneralShape) idc.getImageShape().clone();
-    }
-    else if (modelPart instanceof DrawComponentContainer) 
-    {
-      DrawComponentContainer container = (DrawComponentContainer) modelPart;
-      ShapeFigure containerFigure = new FeedbackShapeFigure();
-      GeneralShape containerShape = GeneralShapeFactory.createRectangle(1,1,1,1);
-      containerFigure.setGeneralShape(containerShape);
-      containerFigure.setXOR(true);
-      containerFigure.setFill(true);
-      containerFigure.setBackgroundColor(bgColor);
-      containerFigure.setForegroundColor(fgColor);      
-//      for (Iterator it = container.getDrawComponents().iterator(); it.hasNext(); ) {
-//        DrawComponent dc = (DrawComponent) it.next(); 
-//        ShapeFigure figure = getCustomFeedbackFigure(dc);
-//        containerFigure.add(figure);
-//      }
-      return containerFigure;      
-    }    
-    else {
-      gs = GeneralShapeFactory.createRectangle(0, 0, 10, 10);      
-    }
-    ShapeFigure shapeFigure = new FeedbackShapeFigure();
-    shapeFigure.setGeneralShape(gs);
-    shapeFigure.setXOR(true);
-    shapeFigure.setFill(true);
-    shapeFigure.setBackgroundColor(bgColor);       
-    shapeFigure.setForegroundColor(fgColor);
-    return shapeFigure;    
+  	return FeedbackUtil.getCustomFeedbackFigure(modelPart);
   }  
   
   /**
@@ -230,8 +179,8 @@ implements EditorRequestConstants
       eraseRotateFeedback((EditorRotateRequest)request);
     else if (request.getType().equals(REQ_EDIT_ROTATE_CENTER))
       eraseEditRotateCenterFeedback((EditorRotateCenterRequest)request);
-    else if (request.getType().equals(REQ_SHEAR))
-      eraseShearFeedback();        
+//    else if (request.getType().equals(REQ_SHEAR))
+//      eraseShearFeedback();        
     else
       super.eraseSourceFeedback(request);
   }  
@@ -265,21 +214,21 @@ implements EditorRequestConstants
       showRotateFeedback((EditorRotateRequest)request);
     else if (request.getType().equals(REQ_EDIT_ROTATE_CENTER))
       showEditRotateCenterFeedback((EditorRotateCenterRequest)request);
-    else if (request.getType().equals(REQ_SHEAR))
-      showShearFeedback((EditorShearRequest)request);        
+//    else if (request.getType().equals(REQ_SHEAR))
+//      showShearFeedback((EditorShearRequest)request);        
     else  
       super.showSourceFeedback(request);
   }
       
-  protected ShapeFigure getShearFeedbackFigure() 
-  {
-    if (feedback == null) {
-      feedback = createDragSourceFeedbackFigure();       
-    	PrecisionRectangle rect = new PrecisionRectangle(getInitialFeedbackBounds().getCopy());
-    	feedback.setBounds(getConstraintFor(rect));
-    }      
-    return (ShapeFigure) feedback;
-  }
+//  protected ShapeFigure getShearFeedbackFigure() 
+//  {
+//    if (feedback == null) {
+//      feedback = createDragSourceFeedbackFigure();       
+//    	PrecisionRectangle rect = new PrecisionRectangle(getInitialFeedbackBounds().getCopy());
+//    	feedback.setBounds(getConstraintFor(rect));
+//    }      
+//    return (ShapeFigure) feedback;
+//  }
   
   protected Rectangle rotateCenterBounds;
   protected void showEditRotateCenterFeedback(EditorRotateCenterRequest request)
@@ -299,8 +248,8 @@ implements EditorRequestConstants
   {
     RotateCenterHandle figure = new RotateCenterHandle(request.getEditParts()); 
     request.setMultiple(figure.isMultiple());
-    figure.setBackgroundColor(bgColor);
-    figure.setForegroundColor(fgColor);     
+    figure.setBackgroundColor(FeedbackUtil.getBackgroundColor());
+    figure.setForegroundColor(FeedbackUtil.getForegroundColor());     
     return figure;
   }
   
@@ -371,67 +320,67 @@ implements EditorRequestConstants
     LOGGER.debug("rotation = "+rotation);
   }  
       
-  protected void eraseShearFeedback() 
-  {
-    if (feedback != null)
-      removeFeedback(feedback);
-    
-    feedback = null;
-    rotatedShape = null;
-    unrotatedShape = null;
-  }
+//  protected void eraseShearFeedback() 
+//  {
+//    if (feedback != null)
+//      removeFeedback(feedback);
+//    
+//    feedback = null;
+//    rotatedShape = null;
+//    unrotatedShape = null;
+//  }
   
-  protected void showShearFeedback(EditorShearRequest request) 
-  {
-    ShapeFigure shearFeedback = getShearFeedbackFigure();
-    if (unrotatedShape == null)
-      unrotatedShape = (GeneralShape) shearFeedback.getGeneralShape().clone();     
-    
-    Point location = request.getLocation();
-    location.translate(getScrollOffset());    
-    LOGGER.debug("location = "+location);
-    
-    Rectangle bounds = request.getShearBounds();
-    LOGGER.debug("shearBounds = "+bounds);
-    
-    AffineTransform at = getShearTransform(location, bounds, request.getDirection());
-    rotatedShape = (GeneralShape) unrotatedShape.clone();
-    rotatedShape.transform(at);
-    shearFeedback.setGeneralShape(rotatedShape);
-    getFeedbackLayer().repaint();        
-    
-    request.setAffineTransform(at);    
-  }  
+//  protected void showShearFeedback(EditorShearRequest request) 
+//  {
+//    ShapeFigure shearFeedback = getShearFeedbackFigure();
+//    if (unrotatedShape == null)
+//      unrotatedShape = (GeneralShape) shearFeedback.getGeneralShape().clone();     
+//    
+//    Point location = request.getLocation();
+//    location.translate(getScrollOffset());    
+//    LOGGER.debug("location = "+location);
+//    
+//    Rectangle bounds = request.getShearBounds();
+//    LOGGER.debug("shearBounds = "+bounds);
+//    
+//    AffineTransform at = getShearTransform(location, bounds, request.getDirection());
+//    rotatedShape = (GeneralShape) unrotatedShape.clone();
+//    rotatedShape.transform(at);
+//    shearFeedback.setGeneralShape(rotatedShape);
+//    getFeedbackLayer().repaint();        
+//    
+//    request.setAffineTransform(at);    
+//  }  
   
-  protected AffineTransform getShearTransform(Point location, Rectangle bounds, int direction)  
-  {
-    double shear = 0.0d;
-    double idleShear = 0.0d;
-    at.setToIdentity();
-    switch(direction)
-    {
-    	case(PositionConstants.WEST):
-    	case(PositionConstants.EAST):
-    	  double heightMiddle = bounds.y + bounds.height/2;
-    		double y = location.y;
-    		double distanceY = heightMiddle - y;
-    	  double height = bounds.height;
-    		shear = distanceY / height;
-    		at.shear(idleShear, shear);
-    		break;
-    	case(PositionConstants.NORTH):
-    	case(PositionConstants.SOUTH):
-    	  double widthMiddle = bounds.x + bounds.width/2;
-    		double x = location.x;
-    		double distanceX = widthMiddle - x;
-    	  double width = bounds.width;
-    		shear = distanceX / width;
-    		at.shear(shear, idleShear);
-    		break;
-    }
-		LOGGER.debug("shear = "+shear);    
-    return at;
-  }  
+//  protected AffineTransform getShearTransform(Point location, Rectangle bounds, int direction)  
+//  {
+//    double shear = 0.0d;
+//    double idleShear = 0.0d;
+//    at.setToIdentity();
+//    switch(direction)
+//    {
+//    	case(PositionConstants.WEST):
+//    	case(PositionConstants.EAST):
+//    	  double heightMiddle = bounds.y + bounds.height/2;
+//    		double y = location.y;
+//    		double distanceY = heightMiddle - y;
+//    	  double height = bounds.height;
+//    		shear = distanceY / height;
+//    		at.shear(idleShear, shear);
+//    		break;
+//    	case(PositionConstants.NORTH):
+//    	case(PositionConstants.SOUTH):
+//    	  double widthMiddle = bounds.x + bounds.width/2;
+//    		double x = location.x;
+//    		double distanceX = widthMiddle - x;
+//    	  double width = bounds.width;
+//    		shear = distanceX / width;
+//    		at.shear(shear, idleShear);
+//    		break;
+//    }
+//		LOGGER.debug("shear = "+shear);    
+//    return at;
+//  }  
   
   protected ShapeFigure getRotateFeedbackFigure() 
   {
@@ -489,7 +438,7 @@ implements EditorRequestConstants
   
 // ****************************** BEGIN Workaround private feedback *****************************  
   
-  private IFigure feedback;
+  protected IFigure feedback;
   
   /**
    * Lazily creates and returns the feedback figure used during drags.
@@ -513,39 +462,11 @@ implements EditorRequestConstants
   	hideFocus();
   	super.deactivate();
   }  
-  
-//  protected void showChangeBoundsFeedback(ChangeBoundsRequest request) 
-//  {
-//  	IFigure feedback = getDragSourceFeedbackFigure();
-//  	
-//  	PrecisionRectangle rect = new PrecisionRectangle(getInitialFeedbackBounds().getCopy());
-//  	getHostFigure().translateToAbsolute(rect);
-//  	rect.translate(request.getMoveDelta());
-//  	rect.resize(request.getSizeDelta());
-//  	
-//  	feedback.translateToRelative(rect);
-//  	feedback.setBounds(rect);
-//  	  	  	
-//  	getFeedbackLayer().repaint();
-//  }  
-//    
-//  /**
-//   * Erases drag feedback.  This method called whenever an erase feedback request is
-//   * received of the appropriate type.
-//   * @param request the request
-//   */
-//  protected void eraseChangeBoundsFeedback(ChangeBoundsRequest request) 
-//  {
-//  	if (feedback != null) {
-//  		removeFeedback(feedback);
-//  	}
-//  	feedback = null;
-//  }    
-  
+    
 // ****************************** END Workaround private feedback *****************************
 
   protected boolean showFeedBackText = true;
-  private Label feedbackLabel;
+  protected Label feedbackLabel;
     
   protected void showChangeBoundsFeedback(ChangeBoundsRequest request) 
   {

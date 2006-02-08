@@ -41,6 +41,7 @@ import org.eclipse.gef.editparts.ZoomListener;
 
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.util.J2DUtil;
+import org.nightlabs.editor2d.util.RenderUtil;
 
 public class AbstractShapeFigure 
 extends Shape 
@@ -88,6 +89,7 @@ implements ShapeFigure
       g2d = j2d.createGraphics2D();
       g2d.setClip(null);      
       g2d.setPaint(J2DUtil.toAWTColor(getForegroundColor()));
+      g2d.setStroke(RenderUtil.setStrokeStyle(lineWidth, lineStyle));
       g2d.draw(getGeneralShape());      
       g2d.dispose();
     }    

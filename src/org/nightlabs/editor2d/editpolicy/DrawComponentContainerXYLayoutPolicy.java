@@ -52,7 +52,6 @@ import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.rulers.RulerProvider;
-import org.eclipse.swt.graphics.Color;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorGuide;
@@ -85,6 +84,7 @@ import org.nightlabs.editor2d.request.ImageCreateRequest;
 import org.nightlabs.editor2d.request.LineCreateRequest;
 import org.nightlabs.editor2d.request.TextCreateRequest;
 import org.nightlabs.editor2d.util.EditorUtil;
+import org.nightlabs.editor2d.util.FeedbackUtil;
 import org.nightlabs.editor2d.util.J2DUtil;
 
 public class DrawComponentContainerXYLayoutPolicy 
@@ -624,34 +624,7 @@ implements EditorRequestConstants
   protected Point getScrollOffset() {
     return EditorUtil.getScrollOffset(getHost());
   }	
-    
-  protected Color bgColor = DrawComponentResizeEditPolicy.DEFAULT_BGCOLOR;
-  protected Color fgColor = DrawComponentResizeEditPolicy.DEFAULT_FGCOLOR;
-  
-//  protected IFigure sizeOnDropFeedbackDefault = null;  
-//  /**
-//   * Lazily creates and returns the Figure to use for size-on-drop feedback.
-//   * @return the size-on-drop feedback figure
-//   */
-//  protected IFigure createDefaultSizeOnDropFeedback() 
-//  {
-//  	if (sizeOnDropFeedbackDefault == null) 
-//  	{
-//  		sizeOnDropFeedbackDefault = new RectangleFigure();
-//  		sizeOnDropFeedbackDefault.setBackgroundColor(bgColor);
-//  		sizeOnDropFeedbackDefault.setForegroundColor(fgColor);
-//  		if (sizeOnDropFeedbackDefault instanceof Shape) 
-//  		{
-//  			Shape s = (Shape) sizeOnDropFeedbackDefault;
-//  			s.setLineStyle(Graphics.LINE_SOLID);
-//  			s.setFillXOR(true);
-//  			s.setOutlineXOR(true);  			
-//  		}
-//  		addFeedback(sizeOnDropFeedbackDefault);
-//  	}
-//  	return sizeOnDropFeedbackDefault;
-//  }  
-    
+        
 	/**
 	 * Lazily creates and returns the Figure to use for size-on-drop feedback.
 	 * @return the size-on-drop feedback figure
@@ -659,8 +632,8 @@ implements EditorRequestConstants
 	protected IFigure createDefaultSizeOnDropFeedback() 
 	{
 		IFigure	sizeOnDropFeedbackDefault = new RectangleFigure();
-		sizeOnDropFeedbackDefault.setBackgroundColor(bgColor);
-		sizeOnDropFeedbackDefault.setForegroundColor(fgColor);
+		sizeOnDropFeedbackDefault.setBackgroundColor(FeedbackUtil.getBackgroundColor());
+		sizeOnDropFeedbackDefault.setForegroundColor(FeedbackUtil.getForegroundColor());
 		if (sizeOnDropFeedbackDefault instanceof Shape) 
 		{
 			Shape s = (Shape) sizeOnDropFeedbackDefault;
