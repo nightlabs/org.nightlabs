@@ -62,12 +62,15 @@
  <extension-point id="editor2perspective" name="editor2perspective" schema="schema/editor2perspective.exsd"/>
  <extension-point id="selectionAction" name="selectionAction" schema="schema/selectionAction.exsd"/>
  <extension-point id="ioFilterRegistry" name="ioFilterRegistry" schema="schema/ioFilterRegistry.exsd"/>
+ <extension-point id="simpleExceptionHandler" name="simpleExceptionHandler" schema="schema/simpleExceptionHandler.exsd"/>
  <extension
        point="org.nightlabs.base.exceptionhandler">
+
     <exceptionHandler
           class="org.nightlabs.base.exceptionhandler.ThrowableHandler"
           name="Default Handler for all Throwable s"
           targetType="java.lang.Throwable"/>
+
     <exceptionHandler
           class="org.nightlabs.base.exceptionhandler.OutOfMemoryHandler"
           name="Handler for OutOfMemoryError"
@@ -79,7 +82,6 @@
           class="org.nightlabs.base.io.FileEditorInputFactory"
           id="org.nightlabs.base.io.FileEditorInputFactory"/>
  </extension>
-<!--
  <extension
        point="org.eclipse.ui.preferencePages">
     <page
@@ -87,6 +89,7 @@
           class="org.eclipse.ui.internal.keys.KeysPreferencePage"
           id="org.eclipse.ui.internal.keys.KeysPreferencePage"
           name="%preferencePage.keys.label"/>
+<!--          
     <page
           category="%category.general"
           class="org.eclipse.ui.internal.themes.ColorsAndFontsPreferencePage"
@@ -97,7 +100,7 @@
           class="org.eclipse.ui.internal.dialogs.ContentTypesPreferencePage"
           id="org.eclipse.ui.internal.dialogs.ContentTypesPreferencePage"
           name="%preferencePage.contentTypes.label"/>
+-->           
  </extension>
---> 
 
 </plugin>

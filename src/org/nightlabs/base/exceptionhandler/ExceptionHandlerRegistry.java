@@ -60,10 +60,14 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 		return exceptionHandlers;
 	}
 	
-	public void addExceptionHandler(String targetType, IExceptionHandler handler){		
-		synchronized(synchronizedObject){
-			if (exceptionHandlers.containsKey(targetType))
-				throw new DuplicateHandlerRegistryException("An exceptionHandler was already defined for "+targetType);
+	public void addExceptionHandler(String targetType, IExceptionHandler handler)
+	{		
+		synchronized(synchronizedObject)
+		{
+//			if (exceptionHandlers.containsKey(targetType))
+//				throw new DuplicateHandlerRegistryException("An exceptionHandler was already defined for "+targetType);
+			LOGGER.debug("An exceptionHandler was already defined for "+targetType+" !");
+			
 			exceptionHandlers.put(targetType,handler);
 		}
 	}
@@ -289,8 +293,8 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 				String handlerClassStr = element.getAttribute("class");
 				IExceptionHandler handler = (IExceptionHandler) element.createExecutableExtension("class");
 				if (!IExceptionHandler.class.isAssignableFrom(handler.getClass()))
-				throw new IllegalArgumentException("Specified class for element exceptionHandler must implement "+IExceptionHandler.class.getName()+". "+handler.getClass().getName()+" does not.");
-				ExceptionHandlerRegistry.sharedInstance().addExceptionHandler(targetType,handler);
+					throw new IllegalArgumentException("Specified class for element exceptionHandler must implement "+IExceptionHandler.class.getName()+". "+handler.getClass().getName()+" does not.");
+				ExceptionHandlerRegistry.sharedInstance().addExceptionHandler(targetType, handler);
 			}
 			else {
 				// wrong element according to schema, probably checked earlier
