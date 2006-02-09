@@ -74,6 +74,7 @@ implements EditorRequestConstants
   	setText(EditorPlugin.getResourceString("action.editshape.text"));
   	setToolTipText(EditorPlugin.getResourceString("action.editshape.tooltip"));
   	setId(ID);
+  	setActionDefinitionId(EditorCommandConstants.EDIT_SHAPE_ID);
 //  	setImageDescriptor(ImageDescriptor.createFromFile(EditorPlugin.class,"icons/editShape16.gif"));
   }  
   

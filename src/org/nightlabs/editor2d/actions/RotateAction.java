@@ -53,8 +53,8 @@ implements EditorRequestConstants
   	setToolTipText(EditorPlugin.getResourceString("action.rotate.tooltip"));
   	setId(ID);
 //  	setImageDescriptor(ImageDescriptor.createFromFile(EditorPlugin.class,"icons/editShape16.gif"));
-  	setActionDefinitionId(ID);  
-  	setAccelerator(SWT.CTRL | 'R');
+  	setActionDefinitionId(EditorCommandConstants.ROTATE_ID);  
+//  	setAccelerator(SWT.CTRL | 'R');
   } 
   
   protected boolean calculateEnabled() 

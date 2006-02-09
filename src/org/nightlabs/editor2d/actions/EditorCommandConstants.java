@@ -25,70 +25,21 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.actions;
 
-import java.util.List;
-
-import org.eclipse.gef.ui.actions.Clipboard;
-import org.eclipse.swt.SWT;
-import org.eclipse.ui.actions.ActionFactory;
-import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
-
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class CopyAction 
-extends AbstractEditorSelectionAction 
+public class EditorCommandConstants 
 {
-//	public static final String ID = CopyAction.class.getName();
-	public static final String ID = ActionFactory.COPY.getId();
+	public static final String CATEGORY_EDITOR2D_ID = "org.nightlabs.editor2d";
 	
-//	public static final String PROP_COPY_TO_CLIPBOARD = "Added Content to Clipboard";	
-//	public static final Object EMPTY_CLIPBOARD_CONTENT = new Object();
-	
-	/**
-	 * @param editor
-	 * @param style
-	 */
-	public CopyAction(AbstractEditor editor, int style) {
-		super(editor, style);
-	}
-
-	/**
-	 * @param editor
-	 */
-	public CopyAction(AbstractEditor editor) {
-		super(editor);
-	}
-
-  protected void init() 
-  {
-  	super.init();
-  	setText(EditorPlugin.getResourceString("action.copy.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.copy.tooltip"));
-  	setId(ID);
-  	setActionDefinitionId(ID);
-//  	setAccelerator(SWT.CTRL | 'C');
-  } 
-	
-	/**
-	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
-	*/
-	protected boolean calculateEnabled() {
-		return !getDefaultSelection(false).isEmpty();
-	}
-		
-	/**
-	 * adds all selected DrawComponents to the {@link Clipboard} 
-	 *  
-	 */
-	public void run() 
-	{
-		List dcs = getSelection(DrawComponent.class, true);
-		Clipboard clipboard = Clipboard.getDefault();
-		Object oldContent = clipboard.getContents();
-		clipboard.setContents(dcs);
-		firePropertyChange(EditorActionConstants.PROP_COPY_TO_CLIPBOARD, oldContent, dcs);
-	}	
-					
+	public static final String EDIT_SHAPE_ID = "org.nightlabs.editor2d.editShape";
+	public static final String ROTATE_ID = "org.nightlabs.editor2d.rotate";
+	public static final String ORDER_ONE_UP_ID = "org.nightlabs.editor2d.orderOneUp";	
+	public static final String ORDER_ONE_DOWN_ID = "org.nightlabs.editor2d.orderOneDown";
+	public static final String ORDER_TO_LOCAL_BACK_ID = "org.nightlabs.editor2d.orderToLocalBack";
+	public static final String ORDER_TO_LOCAL_FRONT_ID = "org.nightlabs.editor2d.orderToLocalFront";
+	public static final String SHOW_FIGURE_TOOLTIPS_ID = "org.nightlabs.editor2d.showFigureToolTip";
+	public static final String SHOW_STATUSLINE_ID = "org.nightlabs.editor2d.showStatusLine";
+	public static final String ZOOM_SELECTION_ID = "org.nightlabs.editor2d.zoomSelection";
+	public static final String ZOOM_ALL_ID = "org.nightlabs.editor2d.zoomAll";	
 }

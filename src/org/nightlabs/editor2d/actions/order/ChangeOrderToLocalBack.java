@@ -29,6 +29,7 @@ import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.actions.EditorCommandConstants;
 
 /**
  * changes the order of the selected Objects to the back
@@ -60,6 +61,7 @@ extends AbstractChangeOrderSelectionAction
 		setText(EditorPlugin.getResourceString("action.changeOrderToLocalBack.text"));
 		setToolTipText(EditorPlugin.getResourceString("action.changeOrderToLocalBack.tooltip"));
 		setId(ID);
+		setActionDefinitionId(EditorCommandConstants.ORDER_TO_LOCAL_BACK_ID);
 	}	
 
 	/** 

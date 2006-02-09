@@ -203,22 +203,6 @@ implements ShapeFigure
    return fill; 
   }  
   
-  
-///**
-//* Translates this Figure's bounds, without firing a move.
-//* @param dx The amount to translate horizontally
-//* @param dy The amount to translate vertically
-//* @see #translate(int, int)
-//* @since 2.0
-//*/
-//protected void primTranslate(int dx, int dy) 
-//{
-// at.setToIdentity();
-// at.translate(dx, dy);
-// getGeneralShape().transform(at);
-// super.primTranslate(dx, dy);
-//}  
-
 	public Rectangle getBounds() 
 	{
 		if (getGeneralShape() != null) {

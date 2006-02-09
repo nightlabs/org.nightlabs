@@ -81,6 +81,7 @@ import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
+import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.J2DGraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
@@ -116,6 +117,7 @@ import org.nightlabs.editor2d.actions.CutAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
 import org.nightlabs.editor2d.actions.PasteAction;
+import org.nightlabs.editor2d.actions.RepaintAction;
 import org.nightlabs.editor2d.actions.ResetRotationCenterAction;
 import org.nightlabs.editor2d.actions.RotateAction;
 import org.nightlabs.editor2d.actions.SelectAllWithSameName;
@@ -148,7 +150,8 @@ import org.nightlabs.util.FontUtil;
 
 
 public abstract class AbstractEditor 
-extends J2DGraphicalEditorWithFlyoutPalette 
+extends J2DGraphicalEditorWithFlyoutPalette
+//extends GraphicalEditorWithFlyoutPalette
 {
     public static final Logger LOGGER = Logger.getLogger(Editor.class);
 
@@ -797,11 +800,18 @@ extends J2DGraphicalEditorWithFlyoutPalette
       copyAction.addPropertyChangeListener(pasteAction.copyListener);
       getSite().getKeyBindingService().registerAction(copyAction);      
             
+      // Tooltip Preference 
       action = new ShowFigureToolTipAction(this);
       registry.registerAction(action);
       getPropertyActions().add(action);
 
+      // Status Line Preference
       action = new ShowStatusLineAction(this);
+      registry.registerAction(action);
+      getPropertyActions().add(action);
+      
+      // Repaint Action
+      action = new RepaintAction(this);
       registry.registerAction(action);
       getPropertyActions().add(action);
       

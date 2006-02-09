@@ -23,72 +23,49 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.actions.preferences;
 
-import java.util.List;
-
-import org.eclipse.gef.ui.actions.Clipboard;
-import org.eclipse.swt.SWT;
-import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.actions.EditorCommandConstants;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class CopyAction 
-extends AbstractEditorSelectionAction 
+public class ShowRollOverAction 
+extends PreferencesAction 
 {
-//	public static final String ID = CopyAction.class.getName();
-	public static final String ID = ActionFactory.COPY.getId();
-	
-//	public static final String PROP_COPY_TO_CLIPBOARD = "Added Content to Clipboard";	
-//	public static final Object EMPTY_CLIPBOARD_CONTENT = new Object();
+	public static final String ID = ShowRollOverAction.class.getName();
 	
 	/**
 	 * @param editor
 	 * @param style
 	 */
-	public CopyAction(AbstractEditor editor, int style) {
-		super(editor, style);
+	public ShowRollOverAction(AbstractEditor editor, int style) {
+		super(editor, style | AS_CHECK_BOX);
 	}
 
 	/**
 	 * @param editor
 	 */
-	public CopyAction(AbstractEditor editor) {
-		super(editor);
+	public ShowRollOverAction(AbstractEditor editor) {
+		super(editor, AS_CHECK_BOX);
 	}
 
-  protected void init() 
-  {
-  	super.init();
-  	setText(EditorPlugin.getResourceString("action.copy.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.copy.tooltip"));
-  	setId(ID);
-  	setActionDefinitionId(ID);
-//  	setAccelerator(SWT.CTRL | 'C');
-  } 
+	protected void init() 
+	{
+		setId(ID);
+		setText(EditorPlugin.getResourceString("action.showRollover.text"));
+		setToolTipText(EditorPlugin.getResourceString("action.showRollover.tooltip"));
+	}	
 	
-	/**
-	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
-	*/
-	protected boolean calculateEnabled() {
-		return !getDefaultSelection(false).isEmpty();
+	public boolean isChecked() 
+	{
+		return prefConfMod.isShowRollOver();
 	}
-		
-	/**
-	 * adds all selected DrawComponents to the {@link Clipboard} 
-	 *  
-	 */
+
 	public void run() 
 	{
-		List dcs = getSelection(DrawComponent.class, true);
-		Clipboard clipboard = Clipboard.getDefault();
-		Object oldContent = clipboard.getContents();
-		clipboard.setContents(dcs);
-		firePropertyChange(EditorActionConstants.PROP_COPY_TO_CLIPBOARD, oldContent, dcs);
-	}	
-					
+		prefConfMod.setShowRollOver(!isChecked());
+	}		
 }

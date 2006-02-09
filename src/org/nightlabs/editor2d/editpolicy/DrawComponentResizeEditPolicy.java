@@ -56,8 +56,8 @@ import org.nightlabs.editor2d.request.EditorRequestConstants;
 import org.nightlabs.editor2d.request.EditorRotateCenterRequest;
 import org.nightlabs.editor2d.request.EditorRotateRequest;
 import org.nightlabs.editor2d.util.EditorUtil;
-import org.nightlabs.editor2d.util.FeedbackUtil;
 import org.nightlabs.editor2d.util.J2DUtil;
+import org.nightlabs.editor2d.util.feedback.FeedbackUtil;
 
 
 public class DrawComponentResizeEditPolicy 
@@ -85,8 +85,8 @@ implements EditorRequestConstants
     polyline.setLineStyle(2);
     polyline.setXOR(true);
     polyline.setFill(true);
-    polyline.setBackgroundColor(FeedbackUtil.getBackgroundColor());
-    polyline.setForegroundColor(FeedbackUtil.getForegroundColor());    
+    polyline.setBackgroundColor(FeedbackUtil.DEFAULT_PAINT_DESCRIPTOR.getBackgroundColor());
+    polyline.setForegroundColor(FeedbackUtil.DEFAULT_PAINT_DESCRIPTOR.getForegroundColor());    
         
     // transform each point to absolute
   	for (int i=0; i<polyline.getPoints().size(); i++) {
@@ -248,8 +248,8 @@ implements EditorRequestConstants
   {
     RotateCenterHandle figure = new RotateCenterHandle(request.getEditParts()); 
     request.setMultiple(figure.isMultiple());
-    figure.setBackgroundColor(FeedbackUtil.getBackgroundColor());
-    figure.setForegroundColor(FeedbackUtil.getForegroundColor());     
+    figure.setBackgroundColor(FeedbackUtil.DEFAULT_PAINT_DESCRIPTOR.getBackgroundColor());
+    figure.setForegroundColor(FeedbackUtil.DEFAULT_PAINT_DESCRIPTOR.getForegroundColor());         
     return figure;
   }
   

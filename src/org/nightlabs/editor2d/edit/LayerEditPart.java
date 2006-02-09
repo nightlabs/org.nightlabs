@@ -31,6 +31,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -85,15 +86,7 @@ extends AbstractDrawComponentContainerEditPart
       return Collections.EMPTY_LIST;
     }
   }
-    
-//  public BufferedFreeformLayer getBufferedFreeformLayer() 
-//  {
-//		if (getFigure() instanceof BufferedFreeformLayer)
-//			return (BufferedFreeformLayer) getFigure();
-//		else
-//			return null;
-//  }
-  
+      
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{
 		super.propertyChanged(evt);
@@ -105,9 +98,6 @@ extends AbstractDrawComponentContainerEditPart
 		}
 	}
 	
-  /* (non-Javadoc)
-   * @see com.ibm.itso.sal330r.gefdemo.edit.WorkflowElementEditPart#getPropertySource()
-   */
   protected IPropertySource getPropertySource()
   {
     if (propertySource == null)

@@ -31,6 +31,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.actions.EditorCommandConstants;
 import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
 import org.nightlabs.editor2d.figures.DrawComponentFigure;
 
@@ -62,6 +63,7 @@ extends PreferencesAction
 		setId(ID);
 		setText(EditorPlugin.getResourceString("action.showFigureToolTip.text"));
 		setToolTipText(EditorPlugin.getResourceString("action.showFigureToolTip.tooltip"));
+		setActionDefinitionId(EditorCommandConstants.SHOW_FIGURE_TOOLTIPS_ID);
 	}
 	
 	public boolean isChecked() 

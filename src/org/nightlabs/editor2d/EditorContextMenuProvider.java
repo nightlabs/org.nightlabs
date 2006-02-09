@@ -122,6 +122,7 @@ extends ContextMenuProvider
   	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
+  	// Direct Edit
   	action = getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
   	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);

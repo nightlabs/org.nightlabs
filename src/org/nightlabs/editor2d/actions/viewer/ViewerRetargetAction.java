@@ -27,10 +27,10 @@
 
 package org.nightlabs.editor2d.actions.viewer;
 
-import org.eclipse.ui.actions.RetargetAction;
+import org.nightlabs.editor2d.actions.EditorRetargetAction;
 
 public class ViewerRetargetAction 
-extends RetargetAction 
+extends EditorRetargetAction
 {
 	public ViewerRetargetAction() 
 	{

@@ -49,6 +49,10 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.editor2d.actions.EditorCommandConstants;
+import org.nightlabs.editor2d.actions.RepaintAction;
+import org.nightlabs.editor2d.actions.RepaintRetargetAction;
+import org.nightlabs.editor2d.actions.RotateAction;
 import org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction;
 import org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
@@ -99,44 +103,77 @@ extends ActionBarContributor
   	addRetargetAction(new ZoomOutRetargetAction());  	
   	addRetargetAction(new ZoomAllRetargetAction());
   	addRetargetAction(new ZoomSelectionRetargetSelection());
-  	
-//  	addRetargetAction(new DirectEditRetargetAction());   
-//  	addRetargetAction(new ViewerRetargetAction());
-  	
+  	  	
   	addRetargetAction(new RetargetAction(ShowFigureToolTipAction.ID, 
   			EditorPlugin.getResourceString("action.showFigureToolTip.text"), IAction.AS_CHECK_BOX));
+  	
   	addRetargetAction(new RetargetAction(ShowStatusLineAction.ID,
   			EditorPlugin.getResourceString("action.statusLine.text"), IAction.AS_CHECK_BOX));
+  	
+  	addRetargetAction(new RepaintRetargetAction());
+  	
+//	addRetargetAction(new DirectEditRetargetAction());   
+//	addRetargetAction(new ViewerRetargetAction());  	
   }
 
-  public static final String ID_VIEW_MENU = "menu view";
+  public static final String ID_VIEW_MENU = IWorkbenchActionConstants.M_VIEW;
+  public static final String ID_EDIT_MENU = IWorkbenchActionConstants.M_EDIT;
+  
   /**
    * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToMenu(IMenuManager)
    */
   public void contributeToMenu(IMenuManager menubar) 
   {
   	super.contributeToMenu(menubar);  	
-//  	IMenuManager fileMenu = (IMenuManager) menubar.find(IWorkbenchActionConstants.M_FILE);  	
-  	MenuManager viewMenu = new MenuManager(EditorPlugin.getResourceString("menu.view"), ID_VIEW_MENU);
+
+  	editMenu = new MenuManager(EditorPlugin.getResourceString("menu.edit"), ID_EDIT_MENU);
+  	editMenu.add(getAction(ActionFactory.UNDO.getId()));
+  	editMenu.add(getAction(ActionFactory.REDO.getId()));
+  	
+  	editMenu.add(new Separator());
+  	editMenu.add(getAction(GEFActionConstants.ALIGN_LEFT));
+  	editMenu.add(getAction(GEFActionConstants.ALIGN_CENTER));
+  	editMenu.add(getAction(GEFActionConstants.ALIGN_RIGHT));
+  	
+  	editMenu.add(new Separator());
+  	editMenu.add(getAction(GEFActionConstants.ALIGN_TOP));
+  	editMenu.add(getAction(GEFActionConstants.ALIGN_MIDDLE));
+  	editMenu.add(getAction(GEFActionConstants.ALIGN_BOTTOM));
+  	
+  	editMenu.add(new Separator());	
+  	editMenu.add(getAction(GEFActionConstants.MATCH_WIDTH));
+  	editMenu.add(getAction(GEFActionConstants.MATCH_HEIGHT));  	
+  	
+  	menubar.insertAfter(IWorkbenchActionConstants.M_FILE, editMenu);  	
+  	
+  	viewMenu = new MenuManager(EditorPlugin.getResourceString("menu.view"), ID_VIEW_MENU);
   	viewMenu.add(getAction(GEFActionConstants.ZOOM_IN));
   	viewMenu.add(getAction(GEFActionConstants.ZOOM_OUT));
+  	viewMenu.add(getAction(ZoomAllAction.ID));
+  	viewMenu.add(getAction(ZoomSelectionAction.ID));
   	
   	viewMenu.add(new Separator());
   	viewMenu.add(getAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY));
   	viewMenu.add(getAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY));
   	viewMenu.add(getAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY));
-  	
-  	viewMenu.add(new Separator());
-  	viewMenu.add(getAction(GEFActionConstants.MATCH_WIDTH));
-  	viewMenu.add(getAction(GEFActionConstants.MATCH_HEIGHT));
-  	
+  	  	
   	viewMenu.add(new Separator());
   	viewMenu.add(getAction(ShowFigureToolTipAction.ID));
   	viewMenu.add(getAction(ShowStatusLineAction.ID));
   	
-  	menubar.insertAfter(IWorkbenchActionConstants.M_FILE, viewMenu);
+  	menubar.insertAfter(ID_EDIT_MENU, viewMenu);
   }
     
+  protected MenuManager viewMenu = null;
+  protected MenuManager getViewMenu() {
+  	return viewMenu;
+  }
+  
+  protected MenuManager editMenu = null;
+  protected MenuManager getEditMenu() {
+  	return editMenu;
+  }
+  
   /**
    * Add actions to the given toolbar.
    * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToToolBar(org.eclipse.jface.action.IToolBarManager)
@@ -182,15 +219,17 @@ extends ActionBarContributor
   	tbm.add(getAction(ZoomAllAction.ID));
   	tbm.add(getAction(ZoomSelectionAction.ID));
   	
+  	tbm.add(new Separator());	
   	RenderModeManager renderMan = RendererRegistry.sharedInstance().getRenderModeManager();
   	if (renderMan.getRenderModes().size() > 1)
-  		tbm.add(new RenderModeContributionItem(getPage()));  	
-//  		tbm.add(new RenderModeContributionItem(renderMan));  		
+  		tbm.add(new RenderModeContributionItem(getPage()));  	  		
   	
+  	tbm.add(new Separator());
+  	tbm.add(getAction(RepaintAction.ID));
 //  	tbm.add(getAction(ViewerAction.ID));
   }  
     
-  /* (non-Javadoc)
+  /**
    * @see org.eclipse.gef.ui.actions.ActionBarContributor#declareGlobalActionKeys()
    */
   protected void declareGlobalActionKeys() 
@@ -199,6 +238,21 @@ extends ActionBarContributor
   	addGlobalActionKey(ActionFactory.SELECT_ALL.getId());
   	addGlobalActionKey(ActionFactory.PASTE.getId());    
   	addGlobalActionKey(ActionFactory.COPY.getId());  	
+  	addGlobalActionKey(GEFActionConstants.ZOOM_IN);
+  	addGlobalActionKey(GEFActionConstants.ZOOM_OUT);
+  	addGlobalActionKey(ActionFactory.SAVE.getId());  	
+  	addGlobalActionKey(ActionFactory.SAVE_AS.getId());
+  	addGlobalActionKey(ActionFactory.UNDO.getId());
+  	addGlobalActionKey(ActionFactory.REDO.getId());
+
+  	addGlobalActionKey(EditorCommandConstants.ZOOM_ALL_ID);
+  	addGlobalActionKey(EditorCommandConstants.ZOOM_SELECTION_ID);
+  	addGlobalActionKey(EditorCommandConstants.ROTATE_ID);
+  	addGlobalActionKey(EditorCommandConstants.EDIT_SHAPE_ID);
+  	addGlobalActionKey(EditorCommandConstants.ORDER_ONE_DOWN_ID);
+  	addGlobalActionKey(EditorCommandConstants.ORDER_ONE_UP_ID);
+  	addGlobalActionKey(EditorCommandConstants.ORDER_TO_LOCAL_BACK_ID);
+  	addGlobalActionKey(EditorCommandConstants.ORDER_TO_LOCAL_FRONT_ID);
   }
 
 }

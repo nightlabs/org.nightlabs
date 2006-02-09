@@ -23,72 +23,64 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.figures;
 
-import java.util.List;
-
-import org.eclipse.gef.ui.actions.Clipboard;
-import org.eclipse.swt.SWT;
-import org.eclipse.ui.actions.ActionFactory;
-import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.Shape;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.swt.graphics.Path;
+import org.nightlabs.editor2d.util.J2DUtil;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class CopyAction 
-extends AbstractEditorSelectionAction 
+public class PathShapeFigure 
+extends Shape 
 {
-//	public static final String ID = CopyAction.class.getName();
-	public static final String ID = ActionFactory.COPY.getId();
-	
-//	public static final String PROP_COPY_TO_CLIPBOARD = "Added Content to Clipboard";	
-//	public static final Object EMPTY_CLIPBOARD_CONTENT = new Object();
+
+	public PathShapeFigure(Path path) {
+		super();
+		this.path = path;
+	}
+
+	protected Path path = null;
+	public Path getPath() {
+		return path;
+	}
+	public void setPath(Path path) {
+		this.path = path;
+	}
 	
 	/**
-	 * @param editor
-	 * @param style
+	 * @see org.eclipse.draw2d.Shape#fillShape(org.eclipse.draw2d.Graphics)
 	 */
-	public CopyAction(AbstractEditor editor, int style) {
-		super(editor, style);
+	protected void fillShape(Graphics graphics) {
+		graphics.fillPath(path);
 	}
 
 	/**
-	 * @param editor
+	 * @see org.eclipse.draw2d.Shape#outlineShape(org.eclipse.draw2d.Graphics)
 	 */
-	public CopyAction(AbstractEditor editor) {
-		super(editor);
+	protected void outlineShape(Graphics graphics) {
+		graphics.drawPath(path);
 	}
 
-  protected void init() 
-  {
-  	super.init();
-  	setText(EditorPlugin.getResourceString("action.copy.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.copy.tooltip"));
-  	setId(ID);
-  	setActionDefinitionId(ID);
-//  	setAccelerator(SWT.CTRL | 'C');
-  } 
+	protected float[] boundsArray = new float[4];
 	
-	/**
-	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
-	*/
-	protected boolean calculateEnabled() {
-		return !getDefaultSelection(false).isEmpty();
-	}
-		
-	/**
-	 * adds all selected DrawComponents to the {@link Clipboard} 
-	 *  
-	 */
-	public void run() 
+	public Rectangle getBounds() 
 	{
-		List dcs = getSelection(DrawComponent.class, true);
-		Clipboard clipboard = Clipboard.getDefault();
-		Object oldContent = clipboard.getContents();
-		clipboard.setContents(dcs);
-		firePropertyChange(EditorActionConstants.PROP_COPY_TO_CLIPBOARD, oldContent, dcs);
-	}	
-					
+		path.getBounds(boundsArray);
+		bounds = createBounds(boundsArray); 
+		return super.getBounds();
+	}
+
+	protected Rectangle createBounds(float[] boundsArray) 
+	{
+		return new Rectangle((int)boundsArray[0], (int)boundsArray[1], (int)boundsArray[2], (int)boundsArray[3]);
+	}
+//	public boolean containsPoint(int x, int y) {
+//		return path.contains(x, y, null, true);
+//	}
+	
+	
 }

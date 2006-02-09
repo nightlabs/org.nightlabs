@@ -23,72 +23,81 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.util.feedback;
 
-import java.util.List;
-
-import org.eclipse.gef.ui.actions.Clipboard;
-import org.eclipse.swt.SWT;
-import org.eclipse.ui.actions.ActionFactory;
-import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.swt.graphics.Color;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class CopyAction 
-extends AbstractEditorSelectionAction 
+public class PaintDescriptor 
 {
-//	public static final String ID = CopyAction.class.getName();
-	public static final String ID = ActionFactory.COPY.getId();
-	
-//	public static final String PROP_COPY_TO_CLIPBOARD = "Added Content to Clipboard";	
-//	public static final Object EMPTY_CLIPBOARD_CONTENT = new Object();
-	
-	/**
-	 * @param editor
-	 * @param style
-	 */
-	public CopyAction(AbstractEditor editor, int style) {
-		super(editor, style);
+  public static final Color DEFAULT_BGCOLOR = ColorConstants.darkGray;
+  public static final Color DEFAULT_FGCOLOR = ColorConstants.white;
+  public static final int DEFAULT_LINE_WIDTH = 1;  
+  public static final int DEFAULT_LINE_STYLE = 1;
+  public static final boolean DEFAULT_XOR = true;  
+  public static final boolean DEFAULT_FILL = true;
+  public static final boolean DEFAULT_OUTLINE = true;
+  
+	public PaintDescriptor() {
+		super();
 	}
 
-	/**
-	 * @param editor
-	 */
-	public CopyAction(AbstractEditor editor) {
-		super(editor);
+	protected boolean fill = DEFAULT_FILL;
+	public boolean isFill() {
+		return fill;
+	}
+	public void setFill(boolean fill) {
+		this.fill = fill;
+	}
+	
+	protected boolean xor = DEFAULT_XOR;
+	public boolean isXor() {
+		return xor;
+	}
+	public void setXor(boolean xor) {
+		this.xor = xor;
+	}
+	
+	protected int lineWidth = DEFAULT_LINE_WIDTH;
+	public int getLineWidth() {
+		return lineWidth;
+	}
+	public void setLineWidth(int lineWidth) {
+		this.lineWidth = lineWidth;
 	}
 
-  protected void init() 
-  {
-  	super.init();
-  	setText(EditorPlugin.getResourceString("action.copy.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.copy.tooltip"));
-  	setId(ID);
-  	setActionDefinitionId(ID);
-//  	setAccelerator(SWT.CTRL | 'C');
-  } 
-	
-	/**
-	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
-	*/
-	protected boolean calculateEnabled() {
-		return !getDefaultSelection(false).isEmpty();
+	protected int lineStyle = DEFAULT_LINE_STYLE;
+	public int getLineStyle() {
+		return lineStyle;
 	}
-		
-	/**
-	 * adds all selected DrawComponents to the {@link Clipboard} 
-	 *  
-	 */
-	public void run() 
-	{
-		List dcs = getSelection(DrawComponent.class, true);
-		Clipboard clipboard = Clipboard.getDefault();
-		Object oldContent = clipboard.getContents();
-		clipboard.setContents(dcs);
-		firePropertyChange(EditorActionConstants.PROP_COPY_TO_CLIPBOARD, oldContent, dcs);
-	}	
-					
+	public void setLineStyle(int lineStyle) {
+		this.lineStyle = lineStyle;
+	}
+
+	protected boolean outline = DEFAULT_OUTLINE;
+	public boolean isOutline() {
+		return outline;
+	}
+	public void setOutline(boolean outline) {
+		this.outline = outline;
+	}
+	
+  protected Color bgColor = DEFAULT_BGCOLOR;
+  public Color getBackgroundColor() {
+  	return bgColor;
+  }
+  public void setBackgroundColor(Color bgColor) {
+  	this.bgColor = bgColor;
+  }
+  
+  protected Color fgColor = DEFAULT_FGCOLOR;
+  public Color getForegroundColor() {
+  	return fgColor;
+  }
+  public void setForegroundColor(Color fgColor) {
+  	this.fgColor = fgColor;
+  }
 }

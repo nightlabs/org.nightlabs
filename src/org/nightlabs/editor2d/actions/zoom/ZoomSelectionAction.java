@@ -37,6 +37,7 @@ import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.actions.EditorCommandConstants;
 import org.nightlabs.editor2d.custom.EditorImages;
 import org.nightlabs.editor2d.util.EditorUtil;
 
@@ -62,7 +63,7 @@ extends SelectionAction
   	setId(ID);
 //  	setImageDescriptor(EditorImages.ZOOM_SELECTION_16);  	
   	setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomSelectionAction.class));
-  	setActionDefinitionId(ID);  	
+  	setActionDefinitionId(EditorCommandConstants.ZOOM_SELECTION_ID);
   } 
       
   /* (non-Javadoc)

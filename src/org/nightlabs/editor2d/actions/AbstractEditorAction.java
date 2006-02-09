@@ -54,6 +54,7 @@ extends EditorPartAction
 	}
 
 	protected abstract boolean calculateEnabled();
+	protected abstract void init();
 	
 	/**
 	 * 

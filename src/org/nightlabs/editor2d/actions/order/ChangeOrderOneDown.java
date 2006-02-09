@@ -28,6 +28,7 @@ package org.nightlabs.editor2d.actions.order;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.actions.EditorCommandConstants;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -57,6 +58,7 @@ extends AbstractChangeOrderSelectionAction
 		setText(EditorPlugin.getResourceString("action.changeOrderOneDown.text"));
 		setToolTipText(EditorPlugin.getResourceString("action.changeOrderOneDown.text"));
 		setId(ID);
+		setActionDefinitionId(EditorCommandConstants.ORDER_ONE_DOWN_ID);
 	}	
 	
 	/**

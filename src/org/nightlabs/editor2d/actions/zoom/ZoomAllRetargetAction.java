@@ -27,27 +27,25 @@
 
 package org.nightlabs.editor2d.actions.zoom;
 
-import org.eclipse.ui.actions.RetargetAction;
-
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.custom.EditorImages;
+import org.nightlabs.editor2d.actions.EditorCommandConstants;
+import org.nightlabs.editor2d.actions.EditorRetargetAction;
 
 
 public class ZoomAllRetargetAction 
-extends RetargetAction {
+extends EditorRetargetAction 
+{
 
   /**
    * Constructor for ZoomInRetargetAction
    */
-  public ZoomAllRetargetAction() {
-  	super(null, null);
-  	setText(EditorPlugin.getResourceString("action.zoom.all.label"));
-  	setId(ZoomAllAction.ID);
+  public ZoomAllRetargetAction() 
+  {
+  	super(ZoomAllAction.ID, EditorPlugin.getResourceString("action.zoom.all.label"));
   	setToolTipText(EditorPlugin.getResourceString("action.zoom.all.tooltip"));
-//  	setImageDescriptor(EditorImages.ZOOM_ALL_16);
   	setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomAllAction.class));
-//  	setActionDefinitionId(GEFActionConstants.ZOOM_IN);
+  	setActionDefinitionId(EditorCommandConstants.ZOOM_ALL_ID);  	
   }
 
 }

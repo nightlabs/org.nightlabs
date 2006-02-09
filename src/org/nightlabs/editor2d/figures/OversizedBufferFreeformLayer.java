@@ -112,8 +112,10 @@ implements FreeformFigure, BufferedFreeformLayer
 	 */
 	private List nonDCFChildren = new LinkedList();
 	
+	protected boolean debug = false;
 	
-	protected Point calculateBufferFactors() {
+	protected Point calculateBufferFactors() 
+	{
 		Point result = new Point(1,1);
 		Point realSizeBounds = EditorUtil.toAbsolute(editPart, currentSize.x, currentSize.y);
 		Point so = EditorUtil.getScrollOffset(editPart);
@@ -205,7 +207,8 @@ implements FreeformFigure, BufferedFreeformLayer
 						nonDCFChildren.add(figure);
 					}				
 				}
-				LOGGER.debug("buffer created in "+(System.currentTimeMillis()-time)+" ms");
+				if (debug)
+					LOGGER.debug("buffer created in "+(System.currentTimeMillis()-time)+" ms");
 			}
 			finally {
 				if (bufferedGraphics != null)
@@ -271,7 +274,8 @@ implements FreeformFigure, BufferedFreeformLayer
 		else {
 			super.paint(graphics);
 		}
-//		LOGGER.debug("painted in "+(System.currentTimeMillis()-time));
+		if (debug)
+			LOGGER.debug("painted in "+(System.currentTimeMillis()-time));
 	}
 			
 	protected void clearBuffer() {
@@ -284,10 +288,10 @@ implements FreeformFigure, BufferedFreeformLayer
 		}
 		bufferedImage = null;
 		childBounds = null;
-		LOGGER.debug("buffer cleared()");
+		if (debug)
+			LOGGER.debug("buffer cleared()");
 	}
-	
-	
+		
 	/**
 	 * @see BufferedFreeformLayer#refresh()
 	 */

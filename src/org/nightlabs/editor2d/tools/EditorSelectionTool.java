@@ -29,9 +29,12 @@ package org.nightlabs.editor2d.tools;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.tools.PanningSelectionTool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseEvent;
 
 import org.nightlabs.editor2d.EditorStateManager;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
@@ -40,10 +43,12 @@ import org.nightlabs.editor2d.request.EditorRequestConstants;
 public class EditorSelectionTool 
 extends PanningSelectionTool
 implements EditorRequestConstants
-{
+{	
   protected static final int STATE_ROTATE = PanningSelectionTool.MAX_STATE << 1;
   protected static final int STATE_ROTATE_IN_PROGRESS = STATE_ROTATE << 1;
   protected static final int MAX_STATE = STATE_ROTATE;
+ 
+  public static final Logger LOGGER = Logger.getLogger(EditorSelectionTool.class);
   
   public EditorSelectionTool() {
     super();
@@ -94,5 +99,20 @@ implements EditorRequestConstants
       
     return super.handleKeyDown(e);
   }
-    
+
+  // TODO: find out why mouseHover reacts so slow, and how
+  // the hover (also with mouseMove workaround) can be speed up
+	public void mouseHover(MouseEvent me, EditPartViewer viewer) 
+	{ 
+		super.mouseHover(me, viewer);
+//		LOGGER.debug("mouseHover!");
+	}
+
+	public void mouseMove(MouseEvent me, EditPartViewer viewer) 
+	{
+		super.mouseMove(me, viewer);				
+		handleHover();
+//		LOGGER.debug("mouseMove!");		
+	}
+      
 }

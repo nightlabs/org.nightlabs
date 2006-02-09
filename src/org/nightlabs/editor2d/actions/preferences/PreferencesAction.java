@@ -34,7 +34,7 @@ import org.nightlabs.editor2d.config.PreferencesConfigModule;
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class PreferencesAction 
+public abstract class PreferencesAction 
 extends AbstractEditorAction 
 {
 

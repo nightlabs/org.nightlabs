@@ -84,8 +84,8 @@ import org.nightlabs.editor2d.request.ImageCreateRequest;
 import org.nightlabs.editor2d.request.LineCreateRequest;
 import org.nightlabs.editor2d.request.TextCreateRequest;
 import org.nightlabs.editor2d.util.EditorUtil;
-import org.nightlabs.editor2d.util.FeedbackUtil;
 import org.nightlabs.editor2d.util.J2DUtil;
+import org.nightlabs.editor2d.util.feedback.FeedbackUtil;
 
 public class DrawComponentContainerXYLayoutPolicy 
 extends XYLayoutEditPolicy 
@@ -632,8 +632,8 @@ implements EditorRequestConstants
 	protected IFigure createDefaultSizeOnDropFeedback() 
 	{
 		IFigure	sizeOnDropFeedbackDefault = new RectangleFigure();
-		sizeOnDropFeedbackDefault.setBackgroundColor(FeedbackUtil.getBackgroundColor());
-		sizeOnDropFeedbackDefault.setForegroundColor(FeedbackUtil.getForegroundColor());
+		sizeOnDropFeedbackDefault.setBackgroundColor(FeedbackUtil.DEFAULT_PAINT_DESCRIPTOR.getBackgroundColor());
+		sizeOnDropFeedbackDefault.setForegroundColor(FeedbackUtil.DEFAULT_PAINT_DESCRIPTOR.getForegroundColor());
 		if (sizeOnDropFeedbackDefault instanceof Shape) 
 		{
 			Shape s = (Shape) sizeOnDropFeedbackDefault;

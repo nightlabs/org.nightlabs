@@ -63,12 +63,11 @@ extends AbstractEditorAction
 
   protected void init() 
   {
-  	super.init();
   	setText(EditorPlugin.getResourceString("action.paste.text"));
   	setToolTipText(EditorPlugin.getResourceString("action.paste.tooltip"));
   	setId(ID);
   	setActionDefinitionId(ID);
-  	setAccelerator(SWT.CTRL | 'P');
+//  	setAccelerator(SWT.CTRL | 'P');
   } 
 	
 	protected boolean enabled = false;  

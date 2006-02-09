@@ -26,7 +26,7 @@
 package org.nightlabs.editor2d;
 
 import java.awt.Rectangle;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -97,14 +97,12 @@ extends GraphicalViewerKeyHandler
 	protected CommandStack getCommandStack() {
 		return getViewer().getEditDomain().getCommandStack();
 	}
-	
-	public static final List EMPTY_LIST = new ArrayList(0);
-	
+		
 	protected List selectedObjects = null;
 	protected List getSelectedObjects() 
 	{
 		if (selectedObjects == null)
-			selectedObjects = EMPTY_LIST;
+			selectedObjects = Collections.EMPTY_LIST;
 		
 		return selectedObjects;
 	}
@@ -124,7 +122,7 @@ extends GraphicalViewerKeyHandler
 					return;
 				}
 			}
-			selectedObjects = EMPTY_LIST;			
+			selectedObjects = Collections.EMPTY_LIST;			
 		}	
 	};
 	
@@ -142,27 +140,22 @@ extends GraphicalViewerKeyHandler
 		if (!getSelectedObjects().isEmpty()) 
 		{
 			if (acceptLeft(event)) {				
-//				LOGGER.debug("Left pressed");
 				translate(getSelectedObjects(), LEFT);
 				return true;
 			}
-			if (acceptRight(event)) {
-//				LOGGER.debug("Right pressed");				
+			if (acceptRight(event)) {				
 				translate(getSelectedObjects(), RIGHT);
 				return true;				
 			}
 			if (acceptUp(event)) {
-//				LOGGER.debug("Up pressed");
 				translate(getSelectedObjects(), UP);
 				return true;				
 			}
-			if (acceptDown(event)) {
-//				LOGGER.debug("Down pressed");				
+			if (acceptDown(event)) {				
 				translate(getSelectedObjects(), DOWN);
 				return true;				
 			}						
 		}		
-//		return false;
 		return super.keyPressed(event);
 	}	
 	
@@ -171,18 +164,10 @@ extends GraphicalViewerKeyHandler
 	public static final int UP = PositionConstants.TOP;
 	public static final int DOWN = PositionConstants.BOTTOM;
 		
-//	protected int translationX = 25;
-//	public void setTranslationX(int translation) {
-//		this.translationX = translation;
-//	}
 	public int getTranslationX() {
 		return getConfigModule().getMoveTranslationX();
 	}
 	
-//	protected int translationY = 25;
-//	public void setTranslationY(int translation) {
-//		this.translationY = translation;
-//	}
 	public int getTranslationY() {
 		return getConfigModule().getMoveTranslationY();
 	}

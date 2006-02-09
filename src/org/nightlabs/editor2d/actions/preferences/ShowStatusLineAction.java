@@ -27,6 +27,7 @@ package org.nightlabs.editor2d.actions.preferences;
 
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.actions.EditorCommandConstants;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -56,6 +57,7 @@ extends PreferencesAction
 		setId(ID);
 		setText(EditorPlugin.getResourceString("action.showStatusLine.text"));
 		setToolTipText(EditorPlugin.getResourceString("action.showStatusLine.tooltip"));
+		setActionDefinitionId(EditorCommandConstants.SHOW_STATUSLINE_ID);
 	}	
 	
 	public boolean isChecked() 

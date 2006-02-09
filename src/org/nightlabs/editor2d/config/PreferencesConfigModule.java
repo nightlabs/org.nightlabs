@@ -47,7 +47,7 @@ extends ConfigModule
 		setChanged(true);
 	}
 	
-	protected boolean showStatusLine = true;
+	protected boolean showStatusLine = false;
 	public boolean isShowStatusLine() {
 		return showStatusLine;
 	}
@@ -56,13 +56,21 @@ extends ConfigModule
 		setChanged(true);
 	}
 	
-	protected boolean showFeedbackInfo = true;
-	public boolean isShowFeedbackInfo() {
-		return showFeedbackInfo;
+//	protected boolean showFeedbackInfo = true;
+//	public boolean isShowFeedbackInfo() {
+//		return showFeedbackInfo;
+//	}
+//	public void setShowFeedbackInfo(boolean showFeedbackInfo) {
+//		this.showFeedbackInfo = showFeedbackInfo;
+//		setChanged(true);
+//	}
+	
+	protected boolean showRollOver = false;
+	public boolean isShowRollOver() {
+		return showRollOver;
 	}
-	public void setShowFeedbackInfo(boolean showFeedbackInfo) {
-		this.showFeedbackInfo = showFeedbackInfo;
-		setChanged(true);
+	public void setShowRollOver(boolean showRollOver) {
+		this.showRollOver = showRollOver;
 	}
 	
 }

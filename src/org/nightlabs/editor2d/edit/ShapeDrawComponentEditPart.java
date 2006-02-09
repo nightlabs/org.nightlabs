@@ -32,10 +32,8 @@ import java.beans.PropertyChangeEvent;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.Request;
 import org.eclipse.ui.views.properties.IPropertySource;
-
 import org.nightlabs.editor2d.EditorStateManager;
 import org.nightlabs.editor2d.ShapeDrawComponent;
-import org.nightlabs.editor2d.figures.ShapeFigure;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
 import org.nightlabs.editor2d.request.EditorEditShapeRequest;
@@ -53,46 +51,53 @@ extends DrawComponentEditPart
     super(shapeDrawComponent);
   }
 
-//  /* (non-Javadoc)
+//  /**
 //   * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
 //   */
 //  protected IFigure createFigure() 
 //  {
-//    AbstractShapeFigure shapeFigure = new ShapeFigureImpl();
-//    shapeFigure.setGeneralShape(getShapeDrawComponent().getGeneralShape());
-//    setShapeProperties(getShapeDrawComponent(), shapeFigure);
-//    
-//    if (getRoot() instanceof ScalableRootEditPart) {
-//      ((ScalableRootEditPart) getRoot()).getZoomManager().addZoomListener(shapeFigure.getZoomListener());
-//    }
-//    
+//  	Path path = convertShape(getGeneralShape());
+//    PathShapeFigure shapeFigure = new PathShapeFigure(path);
+//    setShapeProperties(getShapeDrawComponent(), shapeFigure);        
 //    return shapeFigure;
 //  }
-
-//	protected Color defaultFillColor = ColorConstants.white;
-//	protected Color defaultLineColor = ColorConstants.black;
-	 
-//	protected void setShapeProperties(ShapeDrawComponent sdc, ShapeFigure s)	
-//	{	  
-//	  // TODO: Color should come from ConfigModule
-//	  Color fillColor = J2DUtil.toSWTColor(sdc.getFillColor());	  
-//	  Color lineColor = J2DUtil.toSWTColor(sdc.getLineColor());
-//	  	  	 	  
-//	  s.setBackgroundColor(fillColor);
-//	  s.setForegroundColor(lineColor);
-//	  s.setLineWidth(sdc.getLineWidth());
-//	  s.setLineStyle(sdc.getLineStyle());
-//	  s.setFill(sdc.isFill());
-//	}
-  	
+//      
+//  protected Path convertShape(Shape s) 
+//  {
+//  	return AWTSWTUtil.convertShape(s, null, null);  	
+//  }
+//  
+//  protected void setShapeProperties(ShapeDrawComponent sdc, PathShapeFigure shapeFigure) 
+//  {
+//  	// TODO: only update Path when PROP_GENERAL_PATH changed
+//  	Path path = AWTSWTUtil.convertShape(getGeneralShape(), null, null);
+//  	shapeFigure.setPath(path);
+//  	shapeFigure.setBackgroundColor(ColorUtil.toSWTColor(sdc.getFillColor()));
+//  	shapeFigure.setForegroundColor(ColorUtil.toSWTColor(sdc.getLineColor()));
+//  	shapeFigure.setLineWidth(sdc.getLineWidth());
+//  	shapeFigure.setLineStyle(convertLineStyle(sdc.getLineStyle()));
+//  	shapeFigure.setFill(sdc.isFill());  	
+//  }
+//  
 //	protected void refreshVisuals() 
-//	{ 
-//	  GeneralShape gs = (GeneralShape) getShapeDrawComponent().getGeneralShape().clone();
-//	  getShapeFigure().setGeneralShape(gs);
-////	  setShapeProperties(getShapeDrawComponent(), getShapeFigure());
-//	  super.refreshVisuals();
+//	{
+//		setShapeProperties(getShapeDrawComponent(), getPathShapeFigure());
+//    updateTooltip();		
+//    updateRoot(getFigure());    
+//    getFigure().repaint();           
 //	}
-		
+//
+//	// TODO: convert ShapeDrawComponent LineStyle to Shape (Draw2D) Line Style 
+//  protected int convertLineStyle(int sdcLineStyle) 
+//  {
+//  	return sdcLineStyle;
+//  }
+//  
+//  protected PathShapeFigure getPathShapeFigure() 
+//  {
+//  	return (PathShapeFigure) getFigure();
+//  }
+  		
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{
 		super.propertyChanged(evt);
@@ -126,21 +131,11 @@ extends DrawComponentEditPart
   public ShapeDrawComponent getShapeDrawComponent() {
     return (ShapeDrawComponent) getModel();
   }
- 
-//  public ShapeFigure getShapeFigure() {
-//    return (ShapeFigure) getFigure();
-//  }
-  
-  public GeneralShape getGeneralShape() 
-  {
-    GeneralShape gs = getShapeDrawComponent().getGeneralShape();
-    if (gs == null) {
-      gs = ((ShapeFigure)getFigure()).getGeneralShape();
-      getShapeDrawComponent().setGeneralShape(gs);
-    }
-    return gs;     
+   
+  public GeneralShape getGeneralShape() {
+  	return getShapeDrawComponent().getGeneralShape();
   }
-    
+      
   /**
    * Overridden to return a default <code>DragTracker</code> for GraphicalEditParts.
    * @see org.eclipse.gef.EditPart#getDragTracker(Request)
