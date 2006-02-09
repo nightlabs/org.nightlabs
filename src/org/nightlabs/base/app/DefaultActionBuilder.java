@@ -65,8 +65,7 @@ import org.nightlabs.config.ConfigException;
  */
 public class DefaultActionBuilder 
 extends ActionBarAdvisor 
-{	
-	
+{		
 	private IActionBarConfigurer configurer;
 	
 	// File-Menu
@@ -211,10 +210,7 @@ extends ActionBarAdvisor
 		if (helpAction != null)
 			getActionBarConfigurer().registerGlobalAction(helpAction);
 		if (updateAction != null)
-			getActionBarConfigurer().registerGlobalAction(updateAction);
-		if (updateAction != null)
-			getActionBarConfigurer().registerGlobalAction(updateAction);
-		
+			getActionBarConfigurer().registerGlobalAction(updateAction);		
 	}
 
 	protected IMenuManager fileMenu = null;
