@@ -90,6 +90,10 @@ public abstract class AbstractTableComposite extends XComposite {
 		tableViewer.refresh();		
 	}
 	
+	public void refresh(boolean updateLabels) {
+		tableViewer.refresh(updateLabels);
+	}
+	
 	public TableViewer getTableViewer() {
 		return tableViewer;
 	}
