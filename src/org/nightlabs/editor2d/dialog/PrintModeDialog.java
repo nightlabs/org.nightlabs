@@ -23,46 +23,70 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.app;
+package org.nightlabs.editor2d.dialog;
 
-import org.eclipse.ui.application.ActionBarAdvisor;
-import org.eclipse.ui.application.IActionBarConfigurer;
-import org.nightlabs.base.app.AbstractApplication;
-import org.nightlabs.base.app.AbstractWorkbenchAdvisor;
-import org.nightlabs.base.app.DefaultActionBuilder;
-import org.nightlabs.editor2d.EditorPerspective;
+import org.eclipse.draw2d.PrintFigureOperation;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class Editor2DWorkbenchAdvisor 
-extends AbstractWorkbenchAdvisor 
+public class PrintModeDialog 
+extends Dialog 
 {
 
-	/**
-	 * 
-	 */
-	public Editor2DWorkbenchAdvisor() {
-		super();		
+	private Button tile, fitPage, fitWidth, fitHeight;
+
+	public PrintModeDialog(Shell shell) {
+		super(shell);
 	}
 
-	/**
-	 * @see org.nightlabs.base.app.AbstractWorkbenchAdvisor#initApplication()
-	 */
-	protected AbstractApplication initApplication() {
-		return new Editor2DApplication();
+	protected void cancelPressed() {
+		setReturnCode(-1);
+		close();
 	}
 
-	/**
-	 * @see org.eclipse.ui.application.WorkbenchAdvisor#getInitialWindowPerspectiveId()
-	 */
-	public String getInitialWindowPerspectiveId() {
-		return EditorPerspective.ID_PERSPECTIVE;
+	protected void configureShell(Shell newShell) {
+		newShell.setText("PrintDialog");
+		super.configureShell(newShell);
 	}
 
-//	public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) 
-//	{
-//		return new DefaultActionBuilder(configurer, true, true, true, true, true, true, true, 
-//				false, true, true, true, true, true, true, true, true);
-//	}
+	protected Control createDialogArea(Composite parent) 
+	{
+		Composite composite = (Composite)super.createDialogArea(parent);
+		
+		tile = new Button(composite, SWT.RADIO);
+		tile.setText("Tile");
+		tile.setSelection(true);
+		
+		fitPage = new Button(composite, SWT.RADIO);
+		fitPage.setText("Fit Page");
+
+		fitWidth = new Button(composite, SWT.RADIO);
+		fitWidth.setText("Fit Width");
+
+		fitHeight = new Button(composite, SWT.RADIO);
+		fitHeight.setText("Fit Height");
+
+		return composite;
+	}
+
+	protected void okPressed() {
+		int returnCode = -1;
+		if (tile.getSelection())
+			returnCode = PrintFigureOperation.TILE;
+		else if (fitPage.getSelection())
+			returnCode = PrintFigureOperation.FIT_PAGE;
+		else if (fitHeight.getSelection())
+			returnCode = PrintFigureOperation.FIT_HEIGHT;
+		else if (fitWidth.getSelection())
+			returnCode = PrintFigureOperation.FIT_WIDTH;
+		setReturnCode(returnCode);
+		close();
+	}
 }

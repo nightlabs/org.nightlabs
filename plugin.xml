@@ -22,6 +22,7 @@
       <import plugin="org.eclipse.ui.forms"/>
       <import plugin="org.eclipse.draw2d"/>
       <import plugin="org.eclipse.gef"/>
+      <import plugin="org.eclipse.core.resources"/>
    </requires>
 
    
@@ -189,37 +190,30 @@
             sequence="CTRL+R"/>
       <key
             commandId="org.nightlabs.editor2d.editShape"
-            contextId="org.nightlabs.editor2d"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+E"/>
       <key
             commandId="org.nightlabs.editor2d.orderOneUp"
-            contextId="org.nightlabs.editor2d"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+Up"/>
       <key
             commandId="org.nightlabs.editor2d.orderOneDown"
-            contextId="org.nightlabs.editor2d"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+Down"/>
       <key
             commandId="org.nightlabs.editor2d.orderToLocaFront"
-            contextId="org.nightlabs.editor2d"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+Shift+Up"/>
       <key
             commandId="org.nightlabs.editor2d.orderToLocalBack"
-            contextId="org.nightlabs.editor2d"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+Shift+Down"/>
       <key
             commandId="org.nightlabs.editor2d.showFigureToolTip"
-            contextId="org.nightlabs.editor2d"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+Shift+T"/>
       <key
             commandId="org.nightlabs.editor2d.showStatusLine"
-            contextId="org.nightlabs.editor2d"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+Shift+S"/>
       <key
@@ -232,6 +226,22 @@
             sequence="CTRL+Shift+A"/>
    </extension>
 <!--
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            nameFilter="*.sun, *.msp, *.e2d"
+            id="org.eclipse.editor2d">
+         <action
+               label="Print"
+               class="org.nightlabs.editor2d.actions.print.EditorPrintAction"
+               menubarPath="additions"
+               enablesFor="1"
+               id="org.nightlabs.editor2d.print">
+         </action>
+      </objectContribution>
+   </extension>   
+   
 	<extension
 			point="org.eclipse.ui.actionSets">
 		<actionSet

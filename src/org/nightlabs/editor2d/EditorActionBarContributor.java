@@ -49,12 +49,17 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.nightlabs.base.resource.SharedImages;
-import org.nightlabs.editor2d.actions.EditorCommandConstants;
+import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.RepaintAction;
 import org.nightlabs.editor2d.actions.RepaintRetargetAction;
 import org.nightlabs.editor2d.actions.RotateAction;
+import org.nightlabs.editor2d.actions.order.ChangeOrderOneDown;
+import org.nightlabs.editor2d.actions.order.ChangeOrderOneUp;
+import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
+import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
 import org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction;
 import org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction;
+import org.nightlabs.editor2d.actions.print.EditorPrintAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllRetargetAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
@@ -112,12 +117,15 @@ extends ActionBarContributor
   	
   	addRetargetAction(new RepaintRetargetAction());
   	
+//  	addRetargetAction(new RetargetAction(EditorPrintAction.ID, 
+//  			GEFMessages.PrintAction_Label));  	
 //	addRetargetAction(new DirectEditRetargetAction());   
 //	addRetargetAction(new ViewerRetargetAction());  	
   }
 
   public static final String ID_VIEW_MENU = IWorkbenchActionConstants.M_VIEW;
   public static final String ID_EDIT_MENU = IWorkbenchActionConstants.M_EDIT;
+  public static final String ID_FILE_MENU = IWorkbenchActionConstants.M_FILE;
   
   /**
    * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToMenu(IMenuManager)
@@ -125,7 +133,10 @@ extends ActionBarContributor
   public void contributeToMenu(IMenuManager menubar) 
   {
   	super.contributeToMenu(menubar);  	
-
+  	
+//  	fileMenu = new MenuManager(EditorPlugin.getResourceString("menu.file"), ID_FILE_MENU);
+//  	fileMenu.add(getAction(EditorPrintAction.ID));
+  	
   	editMenu = new MenuManager(EditorPlugin.getResourceString("menu.edit"), ID_EDIT_MENU);
   	editMenu.add(getAction(ActionFactory.UNDO.getId()));
   	editMenu.add(getAction(ActionFactory.REDO.getId()));
@@ -143,7 +154,9 @@ extends ActionBarContributor
   	editMenu.add(new Separator());	
   	editMenu.add(getAction(GEFActionConstants.MATCH_WIDTH));
   	editMenu.add(getAction(GEFActionConstants.MATCH_HEIGHT));  	
-  	
+
+//  	editMenu.add(getAction(EditorPrintAction.ID));
+  	  	
   	menubar.insertAfter(IWorkbenchActionConstants.M_FILE, editMenu);  	
   	
   	viewMenu = new MenuManager(EditorPlugin.getResourceString("menu.view"), ID_VIEW_MENU);
@@ -172,6 +185,11 @@ extends ActionBarContributor
   protected MenuManager editMenu = null;
   protected MenuManager getEditMenu() {
   	return editMenu;
+  }
+  
+  protected MenuManager fileMenu = null;
+  protected MenuManager getFileMenu() {
+  	return fileMenu;
   }
   
   /**
@@ -245,14 +263,14 @@ extends ActionBarContributor
   	addGlobalActionKey(ActionFactory.UNDO.getId());
   	addGlobalActionKey(ActionFactory.REDO.getId());
 
-  	addGlobalActionKey(EditorCommandConstants.ZOOM_ALL_ID);
-  	addGlobalActionKey(EditorCommandConstants.ZOOM_SELECTION_ID);
-  	addGlobalActionKey(EditorCommandConstants.ROTATE_ID);
-  	addGlobalActionKey(EditorCommandConstants.EDIT_SHAPE_ID);
-  	addGlobalActionKey(EditorCommandConstants.ORDER_ONE_DOWN_ID);
-  	addGlobalActionKey(EditorCommandConstants.ORDER_ONE_UP_ID);
-  	addGlobalActionKey(EditorCommandConstants.ORDER_TO_LOCAL_BACK_ID);
-  	addGlobalActionKey(EditorCommandConstants.ORDER_TO_LOCAL_FRONT_ID);
+  	addGlobalActionKey(ZoomAllAction.ID);
+  	addGlobalActionKey(ZoomSelectionAction.ID);
+  	addGlobalActionKey(RotateAction.ID);
+  	addGlobalActionKey(EditShapeAction.ID);
+  	addGlobalActionKey(ChangeOrderOneUp.ID);
+  	addGlobalActionKey(ChangeOrderOneDown.ID);
+  	addGlobalActionKey(ChangeOrderToLocalBack.ID);
+  	addGlobalActionKey(ChangeOrderToLocalFront.ID);  	
   }
 
 }

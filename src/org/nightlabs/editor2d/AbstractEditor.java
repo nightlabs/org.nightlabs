@@ -102,6 +102,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -128,6 +129,7 @@ import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
 import org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction;
 import org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction;
+import org.nightlabs.editor2d.actions.print.EditorPrintAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
 import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
@@ -626,6 +628,18 @@ extends J2DGraphicalEditorWithFlyoutPalette
       configureFilterManager();      
     }
 
+    protected void initializeActionRegistry() 
+    {
+    	super.initializeActionRegistry();
+    	
+    	// TODO: hook either into the ActionBarContributor and automaticly register all
+    	// actions as globalKeyActions or get the IKeyBindingService of the WorkbenchPart
+    	IKeyBindingService keyBindingService = getSite().getKeyBindingService();
+    	for (Iterator<IAction> it = getActionRegistry().getActions(); it.hasNext(); ) {
+    		keyBindingService.registerAction(it.next());
+    	} 	
+    }     
+    
     protected void configureFilterManager() 
     {
     	Map class2DrawComponents = getMultiLayerDrawComponent().getClass2DrawComponents();
@@ -818,6 +832,10 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //      // Test Viewer Action
 //      action = new ViewerAction(this);
 //      registry.registerAction(action);
+      
+//      action = new EditorPrintAction(this);
+//      registry.registerAction(action);
+//      getPropertyActions().add(action);
     }
     
     /* (non-Javadoc)
