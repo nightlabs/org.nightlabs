@@ -32,6 +32,7 @@ import java.awt.Toolkit;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -430,5 +431,14 @@ public class RCPUtil
 	public static void setFormBorder(Composite comp) 
 	{
 		comp.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+	}
+	
+	public static void centerDialog(Dialog d) 
+	{
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Point shellSize = d.getShell().getSize();
+		int diffWidth = screenSize.width - shellSize.x;
+		int diffHeight = screenSize.height - shellSize.y;
+		d.getShell().setLocation(diffWidth/2, diffHeight/2);
 	}
 }
