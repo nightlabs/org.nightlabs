@@ -177,6 +177,7 @@ public class DefaultErrorDialog extends IconAndMessageDialog {
 	protected void addErrorEntry(String dialogTitle, String message, Throwable thrownException, Throwable triggerException)
 	{
 		String exMsg = thrownException.getMessage();
+		exMsg = exMsg == null ? "" : exMsg;
 		exMsg = exMsg.substring(exMsg.indexOf(' ')+1);
 		this.message = (message == null || message == "") ? exMsg : message;		
 		dialogTitle = dialogTitle == null ? "Error occured." : dialogTitle;

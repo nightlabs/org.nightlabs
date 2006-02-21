@@ -29,10 +29,16 @@ package org.nightlabs.base.app;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
@@ -44,8 +50,10 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ContributionItemFactory;
+import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
+import org.eclipse.ui.internal.handlers.ShowKeyAssistHandler;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.action.INewFileAction;
 import org.nightlabs.base.action.NewFileRegistry;
@@ -62,8 +70,43 @@ import org.nightlabs.config.ConfigException;
  */
 public class DefaultActionBuilder 
 extends ActionBarAdvisor 
-{		
+{
+	public static enum ActionBarItem 
+	{
+		About,
+		Close,
+		CloseAll,		
+		Export,		
+		Help,
+		Import,
+		Intro,
+		KeyAssist,
+		New,
+		Open,
+		Print,		
+		Save,
+		SaveAs,
+		Properties,
+		Preferences,
+		Quit,
+		Perspectives,
+		RecentFiles,		
+		Update,
+		Views;
+	}
+	
+	public static enum ActionGroup
+	{
+		Save,
+		Print,
+		Close;
+	}
+	
 	protected IActionBarConfigurer configurer;
+	
+	// Actions
+	protected Map<ActionBarItem, IWorkbenchAction> actions;
+	protected Map<IContributionItem, String> groupNames;
 	
 	// File-Menu
 	protected IMenuManager newMenu;
@@ -86,79 +129,35 @@ extends ActionBarAdvisor
 	protected ActionFactory.IWorkbenchAction updateAction;
 	protected ActionFactory.IWorkbenchAction aboutAction;
 	
+	protected ShowKeyAssistHandler keyAssistHandler;
+	
 	// Window-Menu
 	protected IContributionItem openPerspectiveMenu;
 	protected IContributionItem showViewMenu;	
 	protected ActionFactory.IWorkbenchAction preferencesAction;
-			
-	public DefaultActionBuilder(IActionBarConfigurer configurer) 
-	{		
-		this(configurer, true, true, true, true, true, true, true, true);
-	}	
 	
-	public DefaultActionBuilder(IActionBarConfigurer configurer, boolean showNewMenu, boolean showOpenMenu, 
-			boolean showRecentFilesMenu, boolean showSaveMenu, boolean showPerspectivesMenu, boolean showViewsMenu, 
-			boolean showPreferencesMenu, boolean showHelpMenu) 
-	{
-		this(configurer, showNewMenu, showOpenMenu, showRecentFilesMenu, showSaveMenu, 
-				showPerspectivesMenu, showViewsMenu, showPreferencesMenu, showHelpMenu, true, true);		
-	}	
+	protected Collection<ActionBarItem> menuBarItems;
+	protected Collection<ActionBarItem> coolBarItems;
 
-	public DefaultActionBuilder(IActionBarConfigurer configurer, boolean showNewMenu, boolean showOpenMenu, 
-			boolean showRecentFilesMenu, boolean showSaveMenu, boolean showPerspectivesMenu, boolean showViewsMenu, 
-			boolean showPreferencesMenu, boolean showHelpMenu, boolean showIntro, boolean showUpdate) 
-	{
-//		this(configurer, showNewMenu, showOpenMenu, showRecentFilesMenu, showSaveMenu, showPerspectivesMenu, showViewsMenu,
-//				showPerspectivesMenu, showHelpMenu, showIntro, showUpdate, false, false, false, false, false, false);
-		this(configurer, showNewMenu, showOpenMenu, showRecentFilesMenu, showSaveMenu, showPerspectivesMenu, showViewsMenu,
-				showPerspectivesMenu, showHelpMenu, showIntro, showUpdate, true, true, true, true, true, true);				
-	}	
-		
-	public DefaultActionBuilder(IActionBarConfigurer configurer, boolean showNewMenu, boolean showOpenMenu, 
-			boolean showRecentFilesMenu, boolean showSaveMenu, boolean showPerspectivesMenu, boolean showViewsMenu, 
-			boolean showPreferencesMenu, boolean showHelpMenu, boolean showIntro, boolean showUpdate, boolean showClose,
-			boolean showCloseAll, boolean showPrint, boolean showImport, boolean showExport, boolean showProperties) 
+	public DefaultActionBuilder(IActionBarConfigurer configurer,
+				Collection<ActionBarItem> showInMenuBar, Collection<ActionBarItem> showInCoolBar)	
 	{
 		super(configurer);
-		this.showNewMenu = showNewMenu;
-		this.showOpenMenu = showOpenMenu;
-		this.showRecentFilesMenu = showRecentFilesMenu;
-		this.showSaveMenu = showSaveMenu;
-		this.showPerspectivesMenu = showPerspectivesMenu;
-		this.showViewsMenu = showViewsMenu;
-		this.showPreferencesMenu = showPreferencesMenu;
-		this.showHelpMenu = showHelpMenu;
-		this.showIntro = showIntro;
-		this.showUpdate = showUpdate;
-		this.showClose = showClose;
-		this.showCloseAll = showCloseAll;
-		this.showPrint = showPrint;
-		this.showImport = showImport;
-		this.showExport = showExport;
-		this.showProperties = showProperties;
+		menuBarItems = showInMenuBar == null ? new HashSet<ActionBarItem>() : showInMenuBar;
+		coolBarItems = showInCoolBar == null ? new HashSet<ActionBarItem>() : showInCoolBar;		
 		
-		if (showRecentFilesMenu)
+		actions = new HashMap<ActionBarItem, IWorkbenchAction>();
+		groupNames = new HashMap<IContributionItem, String>();
+		
+		if (menuBarItems.contains(ActionBarItem.RecentFiles))
 			initRecentFileConfig();
-	}		
+	}
 	
-	protected boolean showNewMenu = false;
-	protected boolean showOpenMenu = false;
-	protected boolean showRecentFilesMenu = false;
-	protected boolean showSaveMenu = false;
-	protected boolean showPerspectivesMenu = false;
-	protected boolean showViewsMenu = false;
-	protected boolean showPreferencesMenu = false;
-	protected boolean showHelpMenu = false;
-	protected boolean showIntro = false;
-	protected boolean showUpdate = false;
-	
-	protected boolean showPrint = false;
-	protected boolean showImport = false;
-	protected boolean showExport = false;
-	protected boolean showClose = false;
-	protected boolean showCloseAll = false;
-	protected boolean showProperties = false;
-	
+	public DefaultActionBuilder(IActionBarConfigurer configurer)
+	{
+		this(configurer, Arrays.asList(ActionBarItem.values()), null);
+	}
+		
 	protected void initRecentFileConfig() 
 	{
 		try {
@@ -173,83 +172,84 @@ extends ActionBarAdvisor
 	 */
 	protected void makeActions(IWorkbenchWindow window) 
 	{
-		// File-Menu
-		if (showNewMenu) {
+		if (menuBarItems.contains(ActionBarItem.KeyAssist))			
+			keyAssistHandler = new ShowKeyAssistHandler();
+		if (menuBarItems.contains(ActionBarItem.New))
+		{			
 			newMenu = new MenuManager(NLBasePlugin.getResourceString("menu.new.label"), ActionFactory.NEW.getId());
-//		newMenu.add((ActionFactory.NEW.create(window)));
+//			newMenu.add((ActionFactory.NEW.create(window)));
 			newMenu.add(new GroupMarker(ActionFactory.NEW.getId()));			
 		}
-		
-		if (showOpenMenu)			
-			openAction = new OpenFileAction();			
-		
-		if (showRecentFilesMenu) {
+		if (menuBarItems.contains(ActionBarItem.Open))			
+			openAction = new OpenFileAction();
+		if (menuBarItems.contains(ActionBarItem.RecentFiles))
+		{
 			openAction.addPropertyChangeListener(historyFileListener);
 			recentFilesMenu = new MenuManager(NLBasePlugin.getResourceString("menu.openRecentFiles.label"), NLWorkbenchActionConstants.M_RECENT_FILES);
 			recentFilesMenu.add(new GroupMarker(IWorkbenchActionConstants.HISTORY_GROUP));			
 		}
-		
-		if (showClose)
+		if (menuBarItems.contains(ActionBarItem.Close)) {
 			closeAction = ActionFactory.CLOSE.create(window);
-		
-		if (showCloseAll)
+			actions.put(ActionBarItem.Close, closeAction);
+		}			
+		if (menuBarItems.contains(ActionBarItem.CloseAll)) {
 			closeAllAction = ActionFactory.CLOSE_ALL.create(window);
-		
-		if (showSaveMenu) {
-			saveAction = ActionFactory.SAVE.create(window);
-			saveAsAction = ActionFactory.SAVE_AS.create(window);				
+			actions.put(ActionBarItem.CloseAll, closeAllAction);
 		}
-		
-		if (showPrint)
+		if (menuBarItems.contains(ActionBarItem.Save)) {
+			saveAction = ActionFactory.SAVE.create(window);
+			actions.put(ActionBarItem.Save, saveAction);
+			saveAsAction = ActionFactory.SAVE_AS.create(window);
+			actions.put(ActionBarItem.SaveAs, saveAsAction);
+		}
+		if (menuBarItems.contains(ActionBarItem.Print)) {
 			printAction = ActionFactory.PRINT.create(window);
-		
-		if (showImport)
+			actions.put(ActionBarItem.Print, printAction);
+		}
+		if (menuBarItems.contains(ActionBarItem.Import)) {
 			importAction = ActionFactory.IMPORT.create(window);
-		
-		if (showExport)
+			actions.put(ActionBarItem.Import, importAction);
+		}
+		if (menuBarItems.contains(ActionBarItem.Export)) {
 			exportAction = ActionFactory.EXPORT.create(window);
-		
-		if (showProperties)
+			actions.put(ActionBarItem.Export, exportAction);
+		}
+		if (menuBarItems.contains(ActionBarItem.Properties)) {
 			propertiesAction = ActionFactory.PROPERTIES.create(window);
-		 
+			actions.put(ActionBarItem.Properties, propertiesAction);
+		}
+				 
 		quitAction = ActionFactory.QUIT.create(window);
+		actions.put(ActionBarItem.Quit, quitAction);
 		
 		// Window-Menu
-		if (showPerspectivesMenu)
+		if (menuBarItems.contains(ActionBarItem.Perspectives))
 			openPerspectiveMenu = ContributionItemFactory.PERSPECTIVES_SHORTLIST.create(window);
-		
-		if (showViewsMenu) 
+		if (menuBarItems.contains(ActionBarItem.Views))
 			showViewMenu = ContributionItemFactory.VIEWS_SHORTLIST.create(window);
-		
-		if (showPreferencesMenu)
+		if (menuBarItems.contains(ActionBarItem.Preferences)) {
 			preferencesAction = ActionFactory.PREFERENCES.create(window);
+			actions.put(ActionBarItem.Preferences, preferencesAction);
+		}
 				
 		// Help-Menu		
-		if (showHelpMenu)
+		if (menuBarItems.contains(ActionBarItem.Help)) {
 			helpAction = ActionFactory.HELP_CONTENTS.create(window);
-		
-		if (showIntro)
+			actions.put(ActionBarItem.Help, helpAction);
+		}
+		if (menuBarItems.contains(ActionBarItem.Intro)) {
 			introAction = ActionFactory.INTRO.create(window);
-		
-		if (showUpdate)
+			actions.put(ActionBarItem.Intro, introAction);
+		}
+		if (menuBarItems.contains(ActionBarItem.Update)) {
 			// TODO: find out how to hook updateAction
-			
-		aboutAction = ActionFactory.ABOUT.create(window); 
+		}
 		
-		if (saveAction != null)
-			getActionBarConfigurer().registerGlobalAction(saveAction);
-		if (saveAsAction != null)
-			getActionBarConfigurer().registerGlobalAction(saveAsAction);
-		if (quitAction != null)
-			getActionBarConfigurer().registerGlobalAction(quitAction);
-		if (openAction != null)
-			getActionBarConfigurer().registerGlobalAction(openAction);
-		if (introAction != null)
-			getActionBarConfigurer().registerGlobalAction(introAction);
-		if (helpAction != null)
-			getActionBarConfigurer().registerGlobalAction(helpAction);
-		if (updateAction != null)
-			getActionBarConfigurer().registerGlobalAction(updateAction);		
+		aboutAction = ActionFactory.ABOUT.create(window);
+		actions.put(ActionBarItem.About, aboutAction);
+		
+		for(IWorkbenchAction action : actions.values()) 
+			getActionBarConfigurer().registerGlobalAction(action);
 	}
 
 	protected IMenuManager fileMenu = null;
@@ -267,6 +267,27 @@ extends ActionBarAdvisor
 		return helpMenu;
 	}
 	
+	protected void addToMenuGroup(IMenuManager menu, IContributionItem contribItem, String groupName) 
+	{
+		if (groupName != null)
+		{
+			if (menu.find(groupName) == null)
+				menu.add(new GroupMarker(groupName));
+			
+			menu.appendToGroup(groupName, contribItem);
+			groupNames.put(contribItem, groupName);
+		}
+		else
+		{
+			menu.add(contribItem);
+		}
+	}
+	
+	protected void addToMenuGroup(IMenuManager menu, IAction action, String groupName)
+	{
+		this.addToMenuGroup(menu, new ActionContributionItem(action), groupName);
+	}
+	
 	/**
 	 * @see org.eclipse.ui.application.ActionBarAdvisor#fillMenuBar(org.eclipse.jface.action.IMenuManager)
 	 */
@@ -274,95 +295,91 @@ extends ActionBarAdvisor
 	{		
 	  // File-Menu
 		fileMenu = new MenuManager(NLBasePlugin.getResourceString("menu.file.label"), 
-				IWorkbenchActionConstants.M_FILE); 
+				IWorkbenchActionConstants.M_FILE);
+		
 		menuBar.add(fileMenu);
 
 		fileMenu.add(new GroupMarker(IWorkbenchActionConstants.FILE_START));
 		fileMenu.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		
 		// New
-		if (showNewMenu) {
-			fileMenu.add(new GroupMarker(IWorkbenchActionConstants.NEW_GROUP));			
-			fileMenu.add(newMenu);
+		if (menuBarItems.contains(ActionBarItem.New)) {
+			addToMenuGroup(fileMenu, newMenu, IWorkbenchActionConstants.NEW_EXT);
 			createNewEntries(newMenu);
 			fileMenu.add(new Separator());			
 		}
-
+		
 		// Open
-		if (showOpenMenu && showRecentFilesMenu) {
-			fileMenu.add(openAction);	
-	    fileMenu.add(recentFilesMenu);
+		if (menuBarItems.contains(ActionBarItem.Open) && menuBarItems.contains(ActionBarItem.RecentFiles)) {
+			addToMenuGroup(fileMenu, openAction, IWorkbenchActionConstants.OPEN_EXT);
+			addToMenuGroup(fileMenu, recentFilesMenu, IWorkbenchActionConstants.OPEN_EXT);
 			historyFileMenuManager = recentFilesMenu;
 			createHistoryEntries(historyFileMenuManager);
 			fileMenu.add(new Separator());						
 		}
-		else if (showOpenMenu) {
-			fileMenu.add(openAction);	
+		else if (menuBarItems.contains(ActionBarItem.Open)) {
+			addToMenuGroup(fileMenu, openAction, IWorkbenchActionConstants.OPEN_EXT);
 			fileMenu.add(new Separator());								
-		} 
-		else if (showRecentFilesMenu) {
-	    fileMenu.add(recentFilesMenu);
+		}		
+		else if (menuBarItems.contains(ActionBarItem.RecentFiles)) {
+			addToMenuGroup(fileMenu, recentFilesMenu, IWorkbenchActionConstants.OPEN_EXT);
 			historyFileMenuManager = recentFilesMenu;
 			createHistoryEntries(historyFileMenuManager);
 			fileMenu.add(new Separator());			
 		}
 		
-		// Close
-		if (showClose && showCloseAll) {
-			fileMenu.add(closeAction);
-			fileMenu.add(closeAllAction);
+		// Close		
+		if (menuBarItems.contains(ActionBarItem.Close) && menuBarItems.contains(ActionBarItem.CloseAll)) {
+			addToMenuGroup(fileMenu, closeAction, IWorkbenchActionConstants.CLOSE_EXT);
+			addToMenuGroup(fileMenu, closeAllAction, IWorkbenchActionConstants.CLOSE_EXT);
 			fileMenu.add(new Separator());
 		}			
-		else if (showClose) {
-			fileMenu.add(closeAction);
+		else if (menuBarItems.contains(ActionBarItem.Close)) {
+			addToMenuGroup(fileMenu, closeAction, IWorkbenchActionConstants.CLOSE_EXT);
 			fileMenu.add(new Separator());			
 		}
-		else if (showCloseAll) {
-			fileMenu.add(closeAllAction);
+		else if (menuBarItems.contains(ActionBarItem.CloseAll)) {
+			addToMenuGroup(fileMenu, closeAllAction, IWorkbenchActionConstants.CLOSE_EXT);
 			fileMenu.add(new Separator());						
 		}			    
 			
 		// Save
-		if (showSaveMenu) {
-	    fileMenu.add(new GroupMarker(IWorkbenchActionConstants.SAVE_GROUP));
-			fileMenu.add(saveAction);
-			fileMenu.add(saveAsAction);
+		if (menuBarItems.contains(ActionBarItem.Save)) {
+			addToMenuGroup(fileMenu, saveAction, IWorkbenchActionConstants.SAVE_EXT);
+			addToMenuGroup(fileMenu, saveAsAction, IWorkbenchActionConstants.SAVE_EXT);
 			fileMenu.add(new Separator());			
 		}
 		
 		// Print
-		if (showPrint) {
-			fileMenu.add(printAction);
+		if (menuBarItems.contains(ActionBarItem.Print)) {
+			addToMenuGroup(fileMenu, printAction, IWorkbenchActionConstants.PRINT_EXT);
 			fileMenu.add(new Separator());			
 		}
 		
 		// Import / Export
-		if (showImport && showExport) {
-			fileMenu.add(new GroupMarker(IWorkbenchActionConstants.IMPORT_EXT));
-			fileMenu.add(importAction);
-			fileMenu.add(exportAction);
+		if (menuBarItems.contains(ActionBarItem.Import) && menuBarItems.contains(ActionBarItem.Export)) {
+			addToMenuGroup(fileMenu, importAction, IWorkbenchActionConstants.IMPORT_EXT);
+			addToMenuGroup(fileMenu, exportAction, IWorkbenchActionConstants.IMPORT_EXT);
 			fileMenu.add(new Separator());
 		}		
-		else if (showImport) {
-			fileMenu.add(new GroupMarker(IWorkbenchActionConstants.IMPORT_EXT));
-			fileMenu.add(importAction);		
+		else if (menuBarItems.contains(ActionBarItem.Import)) {
+			addToMenuGroup(fileMenu, importAction, IWorkbenchActionConstants.IMPORT_EXT);
 			fileMenu.add(new Separator());			
 		}
-		else if (showExport) {
-			fileMenu.add(new GroupMarker(IWorkbenchActionConstants.IMPORT_EXT));			
-			fileMenu.add(exportAction);
+		else if (menuBarItems.contains(ActionBarItem.Export)) {
+			addToMenuGroup(fileMenu, exportAction, IWorkbenchActionConstants.IMPORT_EXT);
 			fileMenu.add(new Separator());			
 		}
 		
-		// Properties
-		if (showProperties) {
-			fileMenu.add(propertiesAction);
+		// Properties		
+		if (menuBarItems.contains(ActionBarItem.Properties)) {
+			addToMenuGroup(fileMenu, propertiesAction, null);
 			fileMenu.add(new Separator());
 		}
 		
-		fileMenu.add(quitAction);
-    fileMenu.add(new GroupMarker(IWorkbenchActionConstants.FILE_END));		
+		addToMenuGroup(fileMenu, quitAction, null);
 		
+    fileMenu.add(new GroupMarker(IWorkbenchActionConstants.FILE_END));
     menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
     
     // Window-Menu
@@ -371,7 +388,7 @@ extends ActionBarAdvisor
 		menuBar.add(windowMenu);		
 		
 		// Perspective-SubMenu
-		if (showPerspectivesMenu) {
+		if (menuBarItems.contains(ActionBarItem.Perspectives)) {		
 			MenuManager openPerspectiveMenuMgr = new MenuManager(NLBasePlugin.getResourceString("menu.openPerspective.label"), 
 					NLWorkbenchActionConstants.M_PERSPECTIVES);
 			openPerspectiveMenuMgr.add(openPerspectiveMenu);
@@ -379,7 +396,7 @@ extends ActionBarAdvisor
 		}
 		
 		// View-SubMenu
-		if (showViewsMenu) {
+		if (menuBarItems.contains(ActionBarItem.Views)) {
 			MenuManager showViewMenuMgr = new MenuManager(NLBasePlugin.getResourceString("menu.showView.label"), 
 					NLWorkbenchActionConstants.M_VIEWS);
 			showViewMenuMgr.add(showViewMenu);
@@ -387,7 +404,7 @@ extends ActionBarAdvisor
 			windowMenu.add(new Separator());			
 		}
 		
-		if (showPreferencesMenu)
+		if (menuBarItems.contains(ActionBarItem.Preferences))
 			windowMenu.add(preferencesAction);
 		
 		// Help-Menu
@@ -395,11 +412,11 @@ extends ActionBarAdvisor
 				IWorkbenchActionConstants.M_HELP);
 		menuBar.add(helpMenu);
 //		helpMenu.add(introAction);
-		if (showHelpMenu) {
+		if (menuBarItems.contains(ActionBarItem.Help)) {
 			helpMenu.add(helpAction);
 			helpMenu.add(new Separator());
 		}
-		if (showIntro) {
+		if (menuBarItems.contains(ActionBarItem.Intro)) {
 			helpMenu.add(introAction);		
 			helpMenu.add(new Separator());			
 		}
@@ -416,28 +433,8 @@ extends ActionBarAdvisor
 	  	aboutAction.dispose();
 	    quitAction.dispose();
 	    
-	  	if (showClose)
-	  		closeAction.dispose();
-	  	if (showCloseAll)
-	  		closeAllAction.dispose();
-	  	if (showImport)
-	  		importAction.dispose();
-	  	if (showExport)
-	  		exportAction.dispose();
-	  	if (showHelpMenu)
-	  		helpAction.dispose();	  	
-	  	if (showIntro)
-	  		introAction.dispose();
-	  	if (showPreferencesMenu)
-	  		preferencesAction.dispose();	  	
-	  	if (showPrint)
-	  		printAction.dispose();
-	  	if (showProperties)
-	  		propertiesAction.dispose();	  		    
-	    if (showSaveMenu) {
-		    saveAction.dispose();
-		    saveAsAction.dispose();	    	    	
-	    }
+	  for (IWorkbenchAction action : actions.values())
+	  		action.dispose();
 	}
 	
 	protected RecentFileCfMod fileHistory;

@@ -44,13 +44,14 @@ public class TestExceptionAction extends Action implements IWorkbenchWindowActio
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
 	 */
-	public void run(IAction action) {		
+	public void run(IAction action) {
+		final int DELAY = 1000;
 		Thread thread1 = new Thread() {
 			public void run()
 			{
 				try
 				{
-					Thread.sleep(1000);
+					Thread.sleep(DELAY);
 				}
 				catch(Exception e) { }
 				throw new RuntimeException(new IllegalStateException("Test test1 ..."));
@@ -62,7 +63,7 @@ public class TestExceptionAction extends Action implements IWorkbenchWindowActio
 			{
 				try
 				{
-					Thread.sleep(4000);
+					Thread.sleep(DELAY*2);
 				}
 				catch(Exception e) { }
 				throw new RuntimeException(new IllegalStateException("Test test2 ..."));
@@ -74,10 +75,9 @@ public class TestExceptionAction extends Action implements IWorkbenchWindowActio
 			{
 				try
 				{
-					Thread.sleep(7000);
+					Thread.sleep(DELAY*3);
 				}
 				catch(Exception e) { }
-//				throw new RuntimeException(new IllegalStateException("Test test3 ..."));
 				throw new OutOfMemoryError("Test test3");
 			}
 		};
@@ -87,7 +87,7 @@ public class TestExceptionAction extends Action implements IWorkbenchWindowActio
 			{
 				try
 				{
-					Thread.sleep(11000);
+					Thread.sleep(DELAY*4);
 				}
 				catch(Exception e) { }
 //				throw new RuntimeException(new IllegalStateException("Test test3 ..."));

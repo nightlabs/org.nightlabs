@@ -65,12 +65,10 @@
  <extension-point id="simpleExceptionHandler" name="simpleExceptionHandler" schema="schema/simpleExceptionHandler.exsd"/>
  <extension
        point="org.nightlabs.base.exceptionhandler">
-
     <exceptionHandler
           class="org.nightlabs.base.exceptionhandler.ThrowableHandler"
-          name="Default Handler for all Throwable s"
+          name="Default Handler for all Throwables"
           targetType="java.lang.Throwable"/>
-
     <exceptionHandler
           class="org.nightlabs.base.exceptionhandler.OutOfMemoryHandler"
           name="Handler for OutOfMemoryError"
@@ -89,7 +87,6 @@
           class="org.eclipse.ui.internal.keys.KeysPreferencePage"
           id="org.eclipse.ui.internal.keys.KeysPreferencePage"
           name="%preferencePage.keys.label"/>
-<!--          
     <page
           category="%category.general"
           class="org.eclipse.ui.internal.themes.ColorsAndFontsPreferencePage"
@@ -100,7 +97,80 @@
           class="org.eclipse.ui.internal.dialogs.ContentTypesPreferencePage"
           id="org.eclipse.ui.internal.dialogs.ContentTypesPreferencePage"
           name="%preferencePage.contentTypes.label"/>
--->           
  </extension>
-
+ <extension
+       point="org.eclipse.ui.actionSets">
+    <actionSet
+          id="org.nightlabs.base.KeyAssistantActionSet"
+          label="org.nightlabs.base.KeyAssistantActionSet"
+          visible="true">
+       <action
+             class="org.eclipse.ui.internal.handlers.ShowKeyAssistHandler"
+             definitionId="org.eclipse.ui.window.showKeyAssist"
+             id="org.eclipse.ui.actions.showKeyAssistHandler"
+             label="%menu.help.showKeyAssistant.label"
+             menubarPath="help/group.assist"
+             style="push"/>
+    </actionSet>
+ </extension>
+<!--
+ <extension
+       point="org.nightlabs.base.simpleExceptionHandler">
+    <simpleExceptionHandler
+          message="Ein Laufzeit-Fehler ist aufgetreten. Wenden Sie sich bitte an Ihren System-Administrator..."
+          targetType="java.lang.RuntimeException"/>
+ </extension>
+ <extension
+       point="org.eclipse.ui.actionSets">
+    <actionSet
+          id="org.nightlabs.base.actionSet2"
+          label="org.nightlabs.base.actionSet2"
+          visible="true">
+       <action
+             class="org.nightlabs.base.exceptionhandler.TestExceptionAction"
+             definitionId="org.nightlabs.base.TriggerTestException"
+             icon="icons/NLBasePlugin-Delete.24x24.png"
+             id="TriggerTestException"
+             label="TriggerTestException"
+             menubarPath="File/testMenu"
+             style="push"
+             toolbarPath="TriggerTestException"
+             tooltip="TriggerTestException"/>
+    </actionSet>
+         <actionSet
+            label="Show Key Assist..."
+            visible="true"
+            id="org.eclipse.ui.actionSet.keyBindings">
+         <action
+               label="%KeyBindingActionSet.showKeyAssist.label"
+               class="org.eclipse.ui.internal.handlers.ShowKeyAssistHandler"
+               menubarPath="help/group.assist"
+               id="org.eclipse.ui.actions.showKeyAssistHandler"
+               definitionId="org.eclipse.ui.window.showKeyAssist">
+         </action>
+     	</actionSet>
+ </extension>
+ <extension
+       point="org.eclipse.ui.bindings">
+    <key
+      sequence="Shift+Ctrl+A"
+      commandId="org.nightlabs.base.TriggerTestException"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+	</key>
+ </extension>
+ <extension
+       point="org.eclipse.ui.commands">
+    <command
+          description="TriggerTestException"
+          id="org.nightlabs.base.TriggerTestException"
+          name="org.nightlabs.base.TriggerTestException"
+          categoryId="org.nightlabs.base.TestExceptionCategory">
+    </command>
+	<category
+          name="TestExceptionCategory"
+          description="TestExceptionCategory"
+          id="org.nightlabs.base.TestExceptionCategory">
+    </category>
+ </extension>
+-->
 </plugin>

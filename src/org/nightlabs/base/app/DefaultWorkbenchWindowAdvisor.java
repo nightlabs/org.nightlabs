@@ -28,12 +28,15 @@ package org.nightlabs.base.app;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.nightlabs.base.app.DefaultActionBuilder.ActionBarItem;
 
 /**
  * 
@@ -54,7 +57,15 @@ extends WorkbenchWindowAdvisor
 	protected String applicationName = "Application";
 	
 	public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) {
-		return new DefaultActionBuilder(configurer, true, true, true, true, true, true, true, false);
+		Collection<ActionBarItem> menuBarItems = new HashSet<ActionBarItem>();
+		menuBarItems.add(ActionBarItem.New);
+		menuBarItems.add(ActionBarItem.Open);
+		menuBarItems.add(ActionBarItem.RecentFiles);
+		menuBarItems.add(ActionBarItem.Save);
+		menuBarItems.add(ActionBarItem.Perspectives);
+		menuBarItems.add(ActionBarItem.Views);
+		menuBarItems.add(ActionBarItem.Preferences);
+		return new DefaultActionBuilder(configurer, menuBarItems, null);				
 	}
 
 	public void preWindowOpen() 
