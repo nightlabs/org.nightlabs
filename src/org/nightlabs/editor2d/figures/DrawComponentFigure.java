@@ -39,6 +39,8 @@ import org.eclipse.gef.editparts.ZoomListener;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.render.J2DRenderContext;
+import org.nightlabs.editor2d.render.RenderContext;
 import org.nightlabs.editor2d.render.Renderer;
 import org.nightlabs.editor2d.util.J2DUtil;
 
@@ -52,25 +54,37 @@ implements RendererFigure
 	
   protected J2DGraphics j2d;
   protected Graphics2D g2d;
-  public void paint(Graphics graphics) 
-  {
-    if (graphics instanceof J2DGraphics) {
-      j2d = (J2DGraphics) graphics;
-      g2d = j2d.createGraphics2D();
-      g2d.setClip(null);
-      if (renderer != null)
-      	renderer.paint(drawComponent, g2d);
-            
-      g2d.dispose();
-    }
-  }
-  
+    
   public void paint(Graphics2D graphics) 
   {
   	if (renderer == null && drawComponent != null)
   		renderer = drawComponent.getRenderer();
-  	if (renderer != null)
-  	  renderer.paint(drawComponent, graphics);  	
+  	if (renderer != null) {
+  		RenderContext rc = renderer.getRenderContext();
+  		if (rc != null && rc instanceof J2DRenderContext)
+    	  ((J2DRenderContext)rc).paint(drawComponent, graphics);
+  		else {
+  			if (rc == null)
+  				LOGGER.debug("RenderContext for Renderer "+renderer+" == null!");
+  			if (!(rc instanceof J2DRenderContext))
+  				LOGGER.debug("RenderContext "+rc+" NOT instanceof J2DRenderContext!");
+  		}
+  	}  	
+  }  
+  
+  public void paint(Graphics graphics) 
+  {  	
+    if (graphics instanceof J2DGraphics) 
+    {
+      j2d = (J2DGraphics) graphics;
+      g2d = j2d.createGraphics2D();
+      g2d.setClip(null);
+      paint(g2d);      
+      g2d.dispose();
+    }
+    else {
+    	// TODO: paint with Draw2DRenderContext
+    }
   }
   
   protected Renderer renderer;   

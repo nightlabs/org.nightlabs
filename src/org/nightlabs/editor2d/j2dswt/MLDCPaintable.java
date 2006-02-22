@@ -39,6 +39,8 @@ import org.holongate.j2d.J2DUtilities;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.render.J2DRenderContext;
+import org.nightlabs.editor2d.render.RenderContext;
 import org.nightlabs.editor2d.render.Renderer;
 
 public class MLDCPaintable implements IPaintable
@@ -80,8 +82,12 @@ public class MLDCPaintable implements IPaintable
 		}
 		else {
 			Renderer r = dc.getRenderer();
-			if (r != null) 
-				r.paint(dc, g2d);			
+			if (r != null) {
+//			r.paint(dc, g2d);
+				RenderContext rc = r.getRenderContext();
+				if (rc != null && rc instanceof J2DRenderContext)
+					((J2DRenderContext)rc).paint(dc, g2d);								
+			}
 		}
 	}
 	

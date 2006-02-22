@@ -203,37 +203,7 @@ implements EditorRequestConstants
     		rootEditPart.getBufferedFreeformLayer().refresh(figure);    	
     }
   }
-    
-//  public void updateLayer(IFigure figure) 
-//  {
-//    LayerEditPart layerEditPart = getLayerEditPart();
-//    if (layerEditPart != null)
-//      layerEditPart.getBufferedFreeformLayer().refresh(figure);    	
-//    
-////    LOGGER.debug("Update Layer!");
-//  }
-//  
-//  protected LayerEditPart getLayerEditPart() 
-//  {    
-//    EditPart parent = getParent();  
-//    if (parent == null)
-//      throw new IllegalStateException("Member parent may not be null for DrawComponent"+this.toString());
-//    
-//    if (this instanceof LayerEditPart)
-//      return (LayerEditPart) this;
-//    if (this instanceof MultiLayerDrawComponentEditPart)
-//      return null;
-//    if (this instanceof RootEditPart)            
-//      return null;        
-//    if (parent instanceof LayerEditPart)
-//      return (LayerEditPart) parent;
-//    
-//    while (!(parent instanceof LayerEditPart)) {
-//      parent = parent.getParent(); 
-//    }    
-//    return (LayerEditPart) parent;   
-//  }
-  
+      
   /* (non-Javadoc)
    * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
    */
