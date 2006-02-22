@@ -53,8 +53,8 @@ extends EditorPartAction
 		super(editor);
 	}
 
-	protected abstract boolean calculateEnabled();
-	protected abstract void init();
+//	protected abstract boolean calculateEnabled();
+//	protected abstract void init();
 	
 	/**
 	 * 
