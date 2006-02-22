@@ -177,9 +177,10 @@ public class DefaultErrorDialog extends IconAndMessageDialog {
 	protected void addErrorEntry(String dialogTitle, String message, Throwable thrownException, Throwable triggerException)
 	{
 		String exMsg = thrownException.getMessage();
-		exMsg = exMsg == null ? "" : exMsg;
-		exMsg = exMsg.substring(exMsg.indexOf(' ')+1);
-		this.message = (message == null || message == "") ? exMsg : message;		
+		if (exMsg != null)
+			exMsg = exMsg.substring(exMsg.indexOf(' ')+1);		
+		this.message = (message == null || "".equals(message)) ? exMsg : message;
+		this.message = (this.message == null) ? "" : this.message;
 		dialogTitle = dialogTitle == null ? "Error occured." : dialogTitle;
 		setDialogTitle(dialogTitle);
 		errorList.add(0, new ErrorItem(this.message, thrownException, triggerException));		
