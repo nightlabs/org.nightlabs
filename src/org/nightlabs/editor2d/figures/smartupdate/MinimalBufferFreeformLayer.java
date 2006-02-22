@@ -25,7 +25,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.editor2d.figures;
+package org.nightlabs.editor2d.figures.smartupdate;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -45,6 +45,7 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.swt.widgets.Control;
 
+import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.util.EditorUtil;
 
 /**

@@ -25,7 +25,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.editor2d.figures;
+package org.nightlabs.editor2d.figures.smartupdate;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -44,6 +44,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.nightlabs.editor2d.figures.RendererFigure;
 
 /**
  * 
@@ -74,28 +75,28 @@ public class SmartUpdateFigure
 		}		
 
 		/**
-		 * @see org.nightlabs.editor2d.figures.FigureTile#intersects(org.eclipse.draw2d.geometry.Rectangle)
+		 * @see org.nightlabs.editor2d.figures.smartupdate.FigureTile#intersects(org.eclipse.draw2d.geometry.Rectangle)
 		 */
 		public boolean intersects(Rectangle rect) {
 			return bounds.intersects(rect);
 		}
 
 		/**
-		 * @see org.nightlabs.editor2d.figures.FigureTile#getBounds()
+		 * @see org.nightlabs.editor2d.figures.smartupdate.FigureTile#getBounds()
 		 */
 		public Rectangle getBounds() {
 			return bounds;
 		}
 		
 		/**
-		 * @see org.nightlabs.editor2d.figures.FigureTile#getTileFigures()
+		 * @see org.nightlabs.editor2d.figures.smartupdate.FigureTile#getTileFigures()
 		 */
 		public Collection getTileFigures() {
 			return figures;
 		}
 
 		/**
-		 * @see org.nightlabs.editor2d.figures.FigureTile#addFigure(org.eclipse.draw2d.Figure)
+		 * @see org.nightlabs.editor2d.figures.smartupdate.FigureTile#addFigure(org.eclipse.draw2d.Figure)
 		 */
 		public void addFigure(IFigure figure) {
 			if (!figures.contains(figure))
@@ -103,14 +104,14 @@ public class SmartUpdateFigure
 		}
 
 		/**
-		 * @see org.nightlabs.editor2d.figures.FigureTile#removeFigure(org.eclipse.draw2d.Figure)
+		 * @see org.nightlabs.editor2d.figures.smartupdate.FigureTile#removeFigure(org.eclipse.draw2d.Figure)
 		 */
 		public void removeFigure(IFigure figure) {
 			figures.remove(figure);
 		}
 
 		/**
-		 * @see org.nightlabs.editor2d.figures.FigureTile#getIntersectionFigures(org.eclipse.draw2d.geometry.Rectangle)
+		 * @see org.nightlabs.editor2d.figures.smartupdate.FigureTile#getIntersectionFigures(org.eclipse.draw2d.geometry.Rectangle)
 		 */
 		public Collection getIntersectingFigures(Rectangle rect) {
 			List result = new ArrayList();
@@ -260,14 +261,14 @@ public class SmartUpdateFigure
 	}
 	
 	/**
-	 * @see org.nightlabs.editor2d.figures.ISmartUpdateFigure#paintRegion(Graphics, Rectangle)
+	 * @see org.nightlabs.editor2d.figures.smartupdate.ISmartUpdateFigure#paintRegion(Graphics, Rectangle)
 	 */
 	public void paintRegion(Graphics graphics, Rectangle region) {
 		internalPaintRegion(graphics, region);
 	}
 
 	/**
-	 * @see org.nightlabs.editor2d.figures.ISmartUpdateFigure#paintRegion(java.awt.Graphics2D, org.eclipse.draw2d.geometry.Rectangle)
+	 * @see org.nightlabs.editor2d.figures.smartupdate.ISmartUpdateFigure#paintRegion(java.awt.Graphics2D, org.eclipse.draw2d.geometry.Rectangle)
 	 */
 	public void paintRegion(Graphics2D graphics, Rectangle region) {
 		internalPaintRegion(graphics, region);
@@ -330,14 +331,14 @@ public class SmartUpdateFigure
 
 
 	/**
-	 * @see org.nightlabs.editor2d.figures.ISmartUpdateFigure#refresh()
+	 * @see org.nightlabs.editor2d.figures.smartupdate.ISmartUpdateFigure#refresh()
 	 */
 	public void refresh() {
 		tilesBuild = false;
 	}
 
 	/**
-	 * @see org.nightlabs.editor2d.figures.ISmartUpdateFigure#refresh(org.eclipse.draw2d.Figure)
+	 * @see org.nightlabs.editor2d.figures.smartupdate.ISmartUpdateFigure#refresh(org.eclipse.draw2d.Figure)
 	 */
 	public void refresh(IFigure figure) {
 		if (!tilesBuild)

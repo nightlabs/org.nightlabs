@@ -25,7 +25,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.editor2d.figures;
+package org.nightlabs.editor2d.figures.smartupdate;
 
 import java.util.Collection;
 
