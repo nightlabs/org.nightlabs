@@ -41,6 +41,7 @@ import org.eclipse.gef.ui.actions.UndoRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomInRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomOutRetargetAction;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -59,12 +60,15 @@ import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
 import org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction;
 import org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction;
-import org.nightlabs.editor2d.actions.print.EditorPrintAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllRetargetAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionRetargetSelection;
 import org.nightlabs.editor2d.custom.EditorZoomComboContributionItem;
+import org.nightlabs.editor2d.print.EditorPrintAction;
+import org.nightlabs.editor2d.print.EditorPrintPreviewAction;
+import org.nightlabs.editor2d.print.EditorPrintSetupAction;
+import org.nightlabs.editor2d.print.PrintPaintable;
 import org.nightlabs.editor2d.render.RenderModeManager;
 import org.nightlabs.editor2d.viewer.action.RenderModeContributionItem;
 import org.nightlabs.editor2d.viewer.render.RendererRegistry;
@@ -116,9 +120,14 @@ extends ActionBarContributor
   			EditorPlugin.getResourceString("action.statusLine.text"), IAction.AS_CHECK_BOX));
   	
   	addRetargetAction(new RepaintRetargetAction());
+  	  	
+  	addRetargetAction(new RetargetAction(EditorPrintAction.ID, 
+  			EditorPlugin.getResourceString("action.print.text")));  	
+  	addRetargetAction(new RetargetAction(EditorPrintPreviewAction.ID, 
+  			EditorPlugin.getResourceString("action.printPreview.text")));  	  	
+  	addRetargetAction(new RetargetAction(EditorPrintSetupAction.ID, 
+  			EditorPlugin.getResourceString("action.printPageSetup.text")));  	
   	
-//  	addRetargetAction(new RetargetAction(EditorPrintAction.ID, 
-//  			GEFMessages.PrintAction_Label));  	
 //	addRetargetAction(new DirectEditRetargetAction());   
 //	addRetargetAction(new ViewerRetargetAction());  	
   }
@@ -136,6 +145,21 @@ extends ActionBarContributor
   	
 //  	fileMenu = new MenuManager(EditorPlugin.getResourceString("menu.file"), ID_FILE_MENU);
 //  	fileMenu.add(getAction(EditorPrintAction.ID));
+  	fileMenu = getMenuItem(ID_FILE_MENU, menubar);
+  	if (fileMenu != null) {
+  		IMenuManager printMenu = getMenuItem(EditorPrintAction.ID, fileMenu);
+  		if (printMenu == null) {
+  			fileMenu.insertBefore(ActionFactory.QUIT.getId(), getAction(EditorPrintAction.ID));
+      	fileMenu.insertAfter(EditorPrintAction.ID, getAction(EditorPrintPreviewAction.ID));
+      	fileMenu.insertAfter(EditorPrintPreviewAction.ID, getAction(EditorPrintSetupAction.ID));
+      	fileMenu.insertAfter(EditorPrintSetupAction.ID, new Separator());  			
+  		}
+  		else {
+      	fileMenu.insertAfter(EditorPrintAction.ID, getAction(EditorPrintPreviewAction.ID));
+      	fileMenu.insertAfter(EditorPrintPreviewAction.ID, getAction(EditorPrintSetupAction.ID));
+      	fileMenu.insertAfter(EditorPrintSetupAction.ID, new Separator());
+  		}
+  	}
   	
   	editMenu = new MenuManager(EditorPlugin.getResourceString("menu.edit"), ID_EDIT_MENU);
   	editMenu.add(getAction(ActionFactory.UNDO.getId()));
@@ -155,6 +179,7 @@ extends ActionBarContributor
   	editMenu.add(getAction(GEFActionConstants.MATCH_WIDTH));
   	editMenu.add(getAction(GEFActionConstants.MATCH_HEIGHT));  	
 
+//  	editMenu.add(new Separator());  	
 //  	editMenu.add(getAction(EditorPrintAction.ID));
   	  	
   	menubar.insertAfter(IWorkbenchActionConstants.M_FILE, editMenu);  	
@@ -177,18 +202,18 @@ extends ActionBarContributor
   	menubar.insertAfter(ID_EDIT_MENU, viewMenu);
   }
     
-  protected MenuManager viewMenu = null;
-  protected MenuManager getViewMenu() {
+  protected IMenuManager viewMenu = null;
+  protected IMenuManager getViewMenu() {
   	return viewMenu;
   }
   
-  protected MenuManager editMenu = null;
-  protected MenuManager getEditMenu() {
+  protected IMenuManager editMenu = null;
+  protected IMenuManager getEditMenu() {
   	return editMenu;
   }
   
-  protected MenuManager fileMenu = null;
-  protected MenuManager getFileMenu() {
+  protected IMenuManager fileMenu = null;
+  protected IMenuManager getFileMenu() {
   	return fileMenu;
   }
   
@@ -273,4 +298,22 @@ extends ActionBarContributor
   	addGlobalActionKey(ChangeOrderToLocalFront.ID);  	
   }
 
+  /**
+   * 
+   * @param id the ID of the ContributionItem
+   * @param menuMan the MenuManager to search in
+   * @return the ContributionItem with the given ID or null if not contained
+   */
+  protected IMenuManager getMenuItem(String id, IMenuManager menuMan) 
+  {
+  	IContributionItem[] menuItems = menuMan.getItems();
+  	for (int i=0; i<menuItems.length; i++) {
+  		IContributionItem menuItem = menuItems[i];
+  		if (menuItem != null && menuItem.getId() != null) {
+    		if (menuItem.getId().equals(id) && menuItem instanceof IMenuManager) 
+    			return (IMenuManager)menuItem;  			
+  		}
+  	}
+  	return null;
+  }
 }

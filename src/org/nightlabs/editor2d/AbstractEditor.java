@@ -27,6 +27,8 @@
 
 package org.nightlabs.editor2d;
 
+import java.awt.print.PageFormat;
+import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -68,7 +70,6 @@ import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.AlignmentAction;
-import org.eclipse.gef.ui.actions.CopyTemplateAction;
 import org.eclipse.gef.ui.actions.DirectEditAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.MatchHeightAction;
@@ -81,7 +82,6 @@ import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
-import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.J2DGraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
@@ -129,7 +129,6 @@ import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
 import org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction;
 import org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction;
-import org.nightlabs.editor2d.actions.print.EditorPrintAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
 import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
@@ -138,6 +137,9 @@ import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 import org.nightlabs.editor2d.outline.filter.FilterNameProvider;
+import org.nightlabs.editor2d.print.EditorPrintAction;
+import org.nightlabs.editor2d.print.EditorPrintPreviewAction;
+import org.nightlabs.editor2d.print.EditorPrintSetupAction;
 import org.nightlabs.editor2d.properties.EditorPropertyPage;
 import org.nightlabs.editor2d.render.RenderModeManager;
 import org.nightlabs.editor2d.rulers.EditorRulerProvider;
@@ -199,7 +201,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
         
     public abstract EditPartFactory getOutlineEditPartFactory();
     
-    /* (non-Javadoc)
+    /**
      * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getPaletteRoot()
      */
     public abstract PaletteRoot getPaletteRoot(); 
@@ -261,10 +263,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     {
       setEditDomain(new DefaultEditDomain(this));
       FontUtil.initSystemFonts();
-      
-//      renderMan = new RenderModeManager();
-//      registerRenderer();
-      
+            
 //      ioFilterMan = new IOFilterMan();      
 //      registerIOFilters();
       
@@ -541,17 +540,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
           getCommandStack().markSaveLocation();
         }
       }
-      catch (WriteException e)
-      {
-      	throw new RuntimeException(e);
-      	
-//      	RCPUtil.showErrorDialog(EditorPlugin.getResourceString("error.during.save"));
-      	
-//        ErrorDialog.openError(
-//          getSite().getShell(),
-//          EditorPlugin.getResourceString("error.during.save"),
-//          EditorPlugin.getResourceString("error.during.save.message"),
-//          e.getStatus());
+      catch (WriteException e){
+      	throw new RuntimeException(e);      	
       }   
     }
 
@@ -583,7 +573,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return sharedKeyHandler;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getPalettePreferences()
      */
     protected FlyoutPreferences getPalettePreferences() {
@@ -631,9 +621,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
     protected void initializeActionRegistry() 
     {
     	super.initializeActionRegistry();
-    	
-    	// TODO: hook either into the ActionBarContributor and automaticly register all
-    	// actions as globalKeyActions or get the IKeyBindingService of the WorkbenchPart
+
+    	// TODO: find out why global keyBindings not work only on base of Extension-Points
+    	// (org.eclipse.ui.bindings + commands) nor on EditorActionBarContributor.declareGlobalActionKeys()
     	IKeyBindingService keyBindingService = getSite().getKeyBindingService();
     	for (Iterator<IAction> it = getActionRegistry().getActions(); it.hasNext(); ) {
     		keyBindingService.registerAction(it.next());
@@ -833,12 +823,23 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //      action = new ViewerAction(this);
 //      registry.registerAction(action);
       
-//      action = new EditorPrintAction(this);
-//      registry.registerAction(action);
-//      getPropertyActions().add(action);
+      // Print Action
+      action = new EditorPrintAction(this);
+      registry.registerAction(action);
+      getPropertyActions().add(action);
+
+      // Print Preview Action
+      action = new EditorPrintPreviewAction(this);
+      registry.registerAction(action);
+      getPropertyActions().add(action);
+            
+      // Print Page Setup Action
+      action = new EditorPrintSetupAction(this);
+      registry.registerAction(action);
+      getPropertyActions().add(action);      
     }
     
-    /* (non-Javadoc)
+    /**
      * @see org.eclipse.gef.ui.parts.GraphicalEditor#createGraphicalViewer(org.eclipse.swt.widgets.Composite)
      */
     protected void createGraphicalViewer(Composite parent) 
@@ -893,11 +894,10 @@ extends J2DGraphicalEditorWithFlyoutPalette
       ZoomManager manager = (ZoomManager)getGraphicalViewer()
           .getProperty(ZoomManager.class.toString());
       if (manager != null)
-        manager.setZoom(getMultiLayerDrawComponent().getZoom());
-//        manager.setZoomAsText(ZoomManager.FIT_ALL);      	            
+        manager.setZoom(getMultiLayerDrawComponent().getZoom());      	            
     }
     
-    /* (non-Javadoc)
+    /**
      * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
      */
     public boolean isSaveAsAllowed() {
@@ -962,12 +962,10 @@ extends J2DGraphicalEditorWithFlyoutPalette
             
       final File file = new File(fullPath);  
       
-      if (!file.exists()) 
-      {
+      if (!file.exists()) {
       	save(file);
       }
-      else 
-      {
+      else {
       	int returnVal = RCPUtil.showConfirmOverwriteDialog(file.getName());
       	if (returnVal == SWT.OK)
       		save(file);
@@ -993,13 +991,10 @@ extends J2DGraphicalEditorWithFlyoutPalette
   			if (propertyName.equals(AbstractIOFilterWithProgress.PROGRESS_CHANGED)) {
   				int work = ((Integer)newValue).intValue();
   				getProgressMonitor().getProgressMonitor().internalWorked(work); 
-//  				getProgressMonitor().getProgressMonitor().worked(work); 
-//  				LOGGER.debug("Progress changes to "+work);
   			}
   			else if (propertyName.equals(AbstractIOFilterWithProgress.SUBTASK_FINISHED)) {
   				String subTaskName = (String) newValue;
-  				getProgressMonitor().getProgressMonitor().subTask(subTaskName);
-//  				LOGGER.debug("subTask "+subTaskName+" finished!");  				
+  				getProgressMonitor().getProgressMonitor().subTask(subTaskName);  				
   			}
   		}			
   	};
@@ -1129,14 +1124,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return (EditPartViewer) getGraphicalViewer();
     }
     
-//    public void updateViewer() 
-//    {
-//      getGraphicalViewer().getControl().redraw();
-////    	getRootEditPart().getFigure().repaint();
-////    	refreshBuffer();
-//      LOGGER.debug("updateViewer!");
-//    }
-
     public void updateViewer() 
     {
     	refreshBuffer();    	
@@ -1156,20 +1143,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
     }
     
     protected MultiLayerDrawComponentEditPart mldcEditPart = null;
-//    protected MultiLayerDrawComponentEditPart getModelRootEditPart() 
-//    {
-//    	if (mldcEditPart == null) {
-//      	if (getRootEditPart().getChildren().size() == 1) {
-//      		EditPart editPart = (EditPart) getRootEditPart().getChildren().get(0);
-//        	if (editPart != null) {
-//        		if (editPart instanceof MultiLayerDrawComponentEditPart) {
-//        			mldcEditPart = (MultiLayerDrawComponentEditPart) editPart;
-//        		}
-//        	}
-//      	}    		
-//    	}
-//    	return mldcEditPart;
-//    }
     protected MultiLayerDrawComponentEditPart getModelRootEditPart() 
     {
     	if (getRootEditPart().getChildren().size() == 1) {
@@ -1215,5 +1188,13 @@ extends J2DGraphicalEditorWithFlyoutPalette
     treeViewer = null;
     viewerManager = null;
   }
+   
+  protected PageFormat pageFormat = PrinterJob.getPrinterJob().defaultPage();
+	public PageFormat getPageFormat() {
+		return pageFormat;
+	}
+	public void setPageFormat(PageFormat pageFormat) {
+		this.pageFormat = pageFormat;
+	}
   
 }
