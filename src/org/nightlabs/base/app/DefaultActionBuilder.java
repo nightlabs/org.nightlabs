@@ -95,12 +95,12 @@ extends ActionBarAdvisor
 		Views;
 	}
 	
-	public static enum ActionGroup
-	{
-		Save,
-		Print,
-		Close;
-	}
+//	public static enum ActionGroup
+//	{
+//		Save,
+//		Print,
+//		Close;
+//	}
 	
 	protected IActionBarConfigurer configurer;
 	
@@ -267,7 +267,7 @@ extends ActionBarAdvisor
 		return helpMenu;
 	}
 	
-	protected void addToMenuGroup(IMenuManager menu, IContributionItem contribItem, String groupName) 
+	public void addToMenuGroup(IMenuManager menu, IContributionItem contribItem, String groupName) 
 	{
 		if (groupName != null)
 		{
@@ -283,7 +283,7 @@ extends ActionBarAdvisor
 		}
 	}
 	
-	protected void addToMenuGroup(IMenuManager menu, IAction action, String groupName)
+	public void addToMenuGroup(IMenuManager menu, IAction action, String groupName)
 	{
 		this.addToMenuGroup(menu, new ActionContributionItem(action), groupName);
 	}
