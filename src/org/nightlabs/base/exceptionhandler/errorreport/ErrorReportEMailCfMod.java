@@ -53,13 +53,14 @@ public class ErrorReportEMailCfMod extends ConfigModule
 	{
 		super.init();
 		if (mailFrom == null)
-			mailFrom = "optsuite@imtek.de";
+			mailFrom = "ipanema@nightlabs.de";
 		if (mailTo == null)
 		{
 			mailTo = new CfModList(this);
+      mailTo.add("dev@nightlabs.de");
 //			mailTo.add("simon@nightlabs.de");
 //			mailTo.add("garbage@nightlabs.de");
-			mailTo.add("alex@nightlabs.de");
+//			mailTo.add("alex@nightlabs.de");
 //			mailTo.add("nick@nightlabs.de");
 //			mailTo.add("marco@nightlabs.de");
 
