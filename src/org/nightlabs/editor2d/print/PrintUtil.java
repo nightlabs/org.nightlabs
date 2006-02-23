@@ -28,6 +28,7 @@ package org.nightlabs.editor2d.print;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 import java.awt.print.PageFormat;
 
 import org.apache.log4j.Logger;
@@ -73,29 +74,18 @@ public class PrintUtil
 	}	
 	
 	public static void prepareGraphics(Graphics2D g2d, DrawComponent dc, PageFormat pageFormat) 
-	{
-		Rectangle dcBounds = dc.getBounds();
-//		LOGGER.debug("dcBounds before translate = "+dcBounds);		
-		dcBounds = GeomUtil.translateRectToOrigin(dcBounds);
-//		LOGGER.debug("dcBounds after translate = "+dcBounds);		
-		
+	{		
+		Rectangle dcBounds = GeomUtil.translateToOrigin(dc.getBounds());				
 		Rectangle pageRectangle = new Rectangle(0, 0, 
 				(int)pageFormat.getImageableWidth(), (int)pageFormat.getImageableHeight());		
-//		LOGGER.debug("pageRectangle = "+ pageRectangle);
 		
-		double scaleX = 1;
-		double scaleY = 1;
-		if (dcBounds.width != 0 && pageRectangle.width != 0)
-			scaleX = (double)pageRectangle.width / (double)dcBounds.width;
-		if (dcBounds.height != 0 && pageRectangle.height != 0)
-			scaleY = (double)pageRectangle.height / (double)dcBounds.height;
-		
-		double scale = Math.min(scaleX, scaleY); 
-		g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());		
-		g2d.scale(scale, scale);
-		
-//		LOGGER.debug("scaleX = " + scaleX);
-//		LOGGER.debug("scaleY = " + scaleY);
-//		LOGGER.debug("scale = " + scale);
-	}	
+		Point2D scales = GeomUtil.calcScale(dcBounds, pageRectangle);		
+		double scale = Math.min(scales.getX(), scales.getY()); 
+		double translateX = (((double)pageFormat.getImageableX()) - (dc.getX() * scale ));
+		double translateY = (((double)pageFormat.getImageableY()) - (dc.getY() * scale )); 
+//		g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());		
+		g2d.translate(translateX, translateY);		
+		g2d.scale(scale, scale);		
+	}
+	
 }

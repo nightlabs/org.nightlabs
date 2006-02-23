@@ -63,7 +63,7 @@ extends AbstractEditorPrintAction
 	{
 		setId(ID);
 		setText(EditorPlugin.getResourceString("action.printPreview.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.printPreview.tolltip"));
+		setToolTipText(EditorPlugin.getResourceString("action.printPreview.tooltip"));
 	}
 			
 	public void run() 
@@ -76,8 +76,7 @@ extends AbstractEditorPrintAction
 			PageFormat pageFormat = printDialog.getPageFormat();
 			PrinterJob printJob = PrinterJob.getPrinterJob();
 			printJob.setJobName(getEditor().getTitle());
-			printJob.setPrintable(printable, pageFormat);
-//			printJob.setPrintable(printable);			
+			printJob.setPrintable(printable, pageFormat);	
 			try {
 				printJob.print();				
 			} catch (PrinterException pe) {

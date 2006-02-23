@@ -93,8 +93,8 @@ extends AbstractEditorAction
 				j2drc = (J2DRenderContext) r.getRenderContext();
 			}						
 			
-			LOGGER.debug("pageFormat in printable");
-			PrintUtil.logPageFormat(pageFormat);
+//			LOGGER.debug("pageFormat in printable");
+//			PrintUtil.logPageFormat(pageFormat);
 			
 			// Print only 1 Page
 			if (pageIndex >= 1) {
@@ -109,8 +109,12 @@ extends AbstractEditorAction
 		}	
 	};	
 	
-	public static void prepareGraphics(Graphics2D g2d, DrawComponent dc, PageFormat pageFormat) {
+	public static void prepareGraphics(Graphics2D g2d, DrawComponent dc, PageFormat pageFormat) 
+	{
+		long startTime = System.currentTimeMillis();
 		PrintUtil.prepareGraphics(g2d, dc, pageFormat);
+		long endTime = System.currentTimeMillis() - startTime;
+		LOGGER.debug("prepareGraphics took "+endTime+" ms!");
 	}
 	
 	public DrawComponent getDrawComponent() {

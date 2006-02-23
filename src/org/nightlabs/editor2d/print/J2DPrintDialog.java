@@ -221,11 +221,11 @@ extends CenteredDialog
 			refresh();
 		}	
 	};	
-				
-	protected void setMarginValue(int orientation, double value) 
+					
+	protected void setMarginValue(int position, double value) 
 	{
 		Paper paper = pageFormat.getPaper();		
-		switch (orientation) 
+		switch (position) 
 		{		
 			case(SWT.TOP):
 				marginTop = value;
@@ -239,50 +239,25 @@ extends CenteredDialog
 			case(SWT.BOTTOM):
 				marginBottom = value;
 				break;				
-		}		
-		paper.setImageableArea(marginLeft, marginTop, (paper.getWidth() - (marginLeft + marginRight)), 
-				(paper.getHeight() - (marginTop + marginBottom)) );		
+		}
+		if (pageFormat.getOrientation() == PageFormat.PORTRAIT) {
+			paper.setImageableArea(marginLeft, marginTop, (paper.getWidth() - (marginLeft + marginRight)), 
+					(paper.getHeight() - (marginTop + marginBottom)) );					
+		} 
+		else if (pageFormat.getOrientation() == PageFormat.LANDSCAPE) {
+			paper.setImageableArea(marginTop, marginRight, (paper.getWidth() - (marginBottom + marginTop)), 
+					(paper.getHeight() - (marginLeft + marginRight)) );						
+		}
 		pageFormat.setPaper(paper);		
-	}	
-	
-//	protected void setMarginValue(int position, double value) 
-//	{
-//		Paper paper = pageFormat.getPaper();		
-//		switch (position) 
-//		{		
-//			case(SWT.TOP):
-//				marginTop = value;
-//				break;
-//			case(SWT.LEFT):
-//				marginLeft = value;
-//				break;
-//			case(SWT.RIGHT):
-//				marginRight = value;
-//				break;
-//			case(SWT.BOTTOM):
-//				marginBottom = value;
-//				break;				
-//		}
-//		if (pageFormat.getOrientation() == PageFormat.PORTRAIT) {
-//			paper.setImageableArea(marginLeft, marginTop, (paper.getWidth() - (marginLeft + marginRight)), 
-//					(paper.getHeight() - (marginTop + marginBottom)) );					
-//		} 
-//		else if (pageFormat.getOrientation() == PageFormat.LANDSCAPE) {
-//			paper.setImageableArea(marginBottom, marginLeft, (paper.getWidth() - (marginBottom + marginTop)), 
-//					(paper.getHeight() - (marginLeft + marginRight)) );
-//		}
-//		pageFormat.setPaper(paper);		
-//	}		
+	}		
 	
 	protected Control createDialogArea(Composite parent) 
 	{
 		Composite comp = new XComposite(parent, SWT.NONE);		
 		comp.setLayout(new GridLayout(2, false));
 		
-//		Composite prefComp = new XComposite(comp, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		Composite prefComp = new Composite(comp, SWT.NONE);		
 		prefComp.setLayout(new GridLayout(1, true));
-//		prefComp.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 //		// Fit		
 //		Group fitGroup = new Group(prefComp, SWT.NONE);
@@ -387,6 +362,7 @@ extends CenteredDialog
 		}		
 		t.setSelection((int)Math.rint(value));
 		t.addSelectionListener(marginListener);
+		t.setMaximum(200);
 		Label l = new Label(comp, SWT.NONE);
 		l.setText(label);
 		l.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -409,7 +385,7 @@ extends CenteredDialog
 		
 	protected Rectangle pageRectangle;
 	protected Rectangle imageablePageRectangle;
-			
+					
 	protected void initPage(PageFormat pf) 
 	{
 		pageRectangle = new Rectangle(0, 0, (int)pf.getWidth(), (int)pf.getHeight());
@@ -417,23 +393,10 @@ extends CenteredDialog
 				(int)pf.getImageableX(), (int)pf.getImageableY(), 
 				(int)pf.getImageableWidth(), (int)pf.getImageableHeight());
 
-		double newMarginTop = Math.rint(pf.getImageableY());
-		double newMarginBottom = Math.rint((pf.getHeight() - (pf.getImageableY() + pf.getImageableHeight())));
-		double newMarginLeft = Math.rint(pf.getImageableX());
-		double newMarginRight = Math.rint((pf.getWidth() - (pf.getImageableX() + pf.getImageableWidth())));			
-
-		if (pf.getOrientation() == PageFormat.PORTRAIT) {
-			marginTop = newMarginTop;
-			marginBottom = newMarginBottom;
-			marginLeft = newMarginLeft;
-			marginRight = newMarginRight;			
-		}
-		else if (pf.getOrientation() == PageFormat.LANDSCAPE) {
-			marginTop = newMarginLeft;
-			marginBottom = newMarginRight;
-			marginLeft = newMarginBottom;
-			marginRight = newMarginTop;			
-		}
+		marginTop = Math.rint(pf.getImageableY());
+		marginBottom = Math.rint((pf.getHeight() - (pf.getImageableY() + pf.getImageableHeight())));
+		marginLeft = Math.rint(pf.getImageableX());
+		marginRight = Math.rint((pf.getWidth() - (pf.getImageableX() + pf.getImageableWidth())));		
 										
 		if (marginTopWidget != null)
 			marginTopWidget.setSelection((int)marginTop);
@@ -444,42 +407,13 @@ extends CenteredDialog
 		if (marginRightWidget != null)
 			marginRightWidget.setSelection((int)marginRight);
 			
-		LOGGER.debug("initPage");
-		PrintUtil.logPageFormat(pf);
-		LOGGER.debug("marginTop = " + marginTop);
-		LOGGER.debug("marginBottom = " + marginBottom);
-		LOGGER.debug("marginLeft = " + marginLeft);
-		LOGGER.debug("marginRight = " + marginRight);		
-	}	
-		
-//	protected void initPage(PageFormat pf) 
-//	{
-//		pageRectangle = new Rectangle(0, 0, (int)pf.getWidth(), (int)pf.getHeight());
-//		imageablePageRectangle = new Rectangle(
-//				(int)pf.getImageableX(), (int)pf.getImageableY(), 
-//				(int)pf.getImageableWidth(), (int)pf.getImageableHeight());
-//
-//		marginTop = Math.rint(pf.getImageableY());
-//		marginBottom = Math.rint((pf.getHeight() - (pf.getImageableY() + pf.getImageableHeight())));
-//		marginLeft = Math.rint(pf.getImageableX());
-//		marginRight = Math.rint((pf.getWidth() - (pf.getImageableX() + pf.getImageableWidth())));		
-//										
-//		if (marginTopWidget != null)
-//			marginTopWidget.setSelection((int)marginTop);
-//		if (marginBottomWidget != null)
-//			marginBottomWidget.setSelection((int)marginBottom);
-//		if (marginLeftWidget != null)
-//			marginLeftWidget.setSelection((int)marginLeft);
-//		if (marginRightWidget != null)
-//			marginRightWidget.setSelection((int)marginRight);
-//			
 //		LOGGER.debug("initPage");
 //		PrintUtil.logPageFormat(pf);
 //		LOGGER.debug("marginTop = " + marginTop);
 //		LOGGER.debug("marginBottom = " + marginBottom);
 //		LOGGER.debug("marginLeft = " + marginLeft);
 //		LOGGER.debug("marginRight = " + marginRight);		
-//	}		
+	}		
 	
 	protected Rectangle dcBounds;
 	protected Rectangle canvasBounds;
@@ -515,55 +449,38 @@ extends CenteredDialog
 		initPage(pageFormat);	
 		setCanvasSize();
 		
-		dcBounds = drawComponent.getBounds();
-		dcBounds = GeomUtil.translateRectToOrigin(dcBounds);				
-		canvasBounds = GeomUtil.toAWTRectangle(canvas.getClientArea());
+		LOGGER.debug("dcBounds(original) = " + drawComponent.getBounds());
+		dcBounds = GeomUtil.translateToOrigin(drawComponent.getBounds());				
+		canvasBounds = GeomUtil.toAWTRectangle(canvas.getClientArea());										
+		Rectangle shrinkedCanvasBounds = new Rectangle(0, 0, 
+				(int)(pageFormat.getImageableWidth() / canvasScaleFactor), 
+				(int)(pageFormat.getImageableHeight() / canvasScaleFactor) );		
+		Point2D scales = GeomUtil.calcScale(dcBounds, shrinkedCanvasBounds);		
+		
+		scale = Math.min(scales.getX(), scales.getY());
 		translateCanvas();
 		
-//		double shrinkX = translateX;
-//		double shrinkY = translateY;
-//		if ((marginLeft + marginRight) != 0)
-//			shrinkX = (marginLeft + marginRight) / canvasScaleFactor;
-//		if ((marginTop + marginBottom) != 0)
-//			shrinkY = (marginTop + marginBottom) / canvasScaleFactor;		
-//		Rectangle shrinkedCanvasBounds = shrinkRect(canvasBounds, (int)shrinkX, (int)shrinkY);
-		Rectangle shrinkedCanvasBounds = shrinkRect(canvasBounds, (int)translateX, (int)translateY);
-		
-		Point2D scales = calcScale(dcBounds, shrinkedCanvasBounds);						
-		scale = Math.min(scales.getX(), scales.getY());
-		
-		LOGGER.debug("dcBounds = " + dcBounds);
-		LOGGER.debug("canvasBounds = " + canvasBounds);
-		LOGGER.debug("imageablePageRectangle = " + imageablePageRectangle);
-		LOGGER.debug("scale = "+scale);
-		LOGGER.debug("translateX = "+translateX);		
-		LOGGER.debug("translateY = "+translateY);
-		LOGGER.debug("");
+//		LOGGER.debug("dcBounds = " + dcBounds);
+//		LOGGER.debug("canvasBounds = " + canvasBounds);
+//		LOGGER.debug("shrinkedCanvasBounds = " + shrinkedCanvasBounds);
+//		LOGGER.debug("imageablePageRectangle = " + imageablePageRectangle);
+//		LOGGER.debug("scale = "+scale);
+//		LOGGER.debug("translateX = "+translateX);		
+//		LOGGER.debug("translateY = "+translateY);
+//		LOGGER.debug("");
 				
 		setCanvasZoom(scale);		
 		updateCanvas();
 	}			
-	
-	protected Point2D calcScale(Rectangle r1, Rectangle r2) 
-	{
-		double scaleX = 1.0;
-		double scaleY = 1.0;
-		if (r1.width != 0 && r2.width != 0)
-			scaleX = (double)r2.width / (double)r1.width;
-		if (r1.height != 0 && r2.height != 0)
-			scaleY = (double)r2.height / (double)r1.height;
 		
-		return new Point2D.Double(scaleX, scaleY);
-	}
-	
 	protected double translateX = 0; 
 	protected double translateY = 0;
 	protected void translateCanvas() 
 	{
 		AffineTransform initalAT = canvas.getPaintableManager().getInitialTransform();
 		AffineTransform at = new AffineTransform(initalAT);
-		translateX = (double)pageFormat.getImageableX() / canvasScaleFactor;
-		translateY = (double)pageFormat.getImageableY() / canvasScaleFactor;
+		translateX = (((double)pageFormat.getImageableX() / canvasScaleFactor) - (drawComponent.getX() * scale ));
+		translateY = (((double)pageFormat.getImageableY() / canvasScaleFactor) - (drawComponent.getY() * scale ));
 		at.setToTranslation(translateX, translateY);		
 		canvas.getPaintableManager().setInitialTransform(at);		
 	}
@@ -575,7 +492,7 @@ extends CenteredDialog
 			GC gc = e.gc; 
 			Transform transform = new Transform(gc.getDevice());			
 			Rectangle canvasBounds = GeomUtil.toAWTRectangle(canvas.getClientArea());			
-			Point2D scales = calcScale(pageRectangle, canvasBounds);			
+			Point2D scales = GeomUtil.calcScale(pageRectangle, canvasBounds);			
 			double gcScale = Math.min(scales.getX(), scales.getY());											
 			transform.scale((float)gcScale, (float)gcScale);
 			
@@ -594,10 +511,4 @@ extends CenteredDialog
 		initPage(pageFormat);		
 	}
 	
-	protected Rectangle shrinkRect(Rectangle r, int diffX, int diffY) 
-	{
-		Rectangle rect = new Rectangle(r);
-		rect.grow(-diffX, -diffY);
-		return rect;
-	}
 }
