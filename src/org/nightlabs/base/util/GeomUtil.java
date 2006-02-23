@@ -70,19 +70,20 @@ public class GeomUtil
 	
 	/**
 	 * checks if the given source rectangle is contained in the target Rectangle,
-	 * if the source rectangle is outside of the target Rectangle the source rectangle is 
-	 * trimmed so that it fits in the target rectangle
+	 * if the source rectangle is outside of the target Rectangle, 
+	 * the returned rectangle is trimmed so that it fits in the target rectangle
 	 * 
 	 * @param source the source rectangle to check 
 	 * @param target the target rectangle to check if the source rectangle fits in
-	 * @return the modified source rectangle
+	 * @return the a new modified rectangle that it fits in the target rectangle
 	 */
-	public static java.awt.Rectangle checkBounds(java.awt.Rectangle source, java.awt.Rectangle target) 
+	public static java.awt.Rectangle checkBounds(java.awt.Rectangle s, java.awt.Rectangle target) 
 	{
-		if (target.contains(source))
-			return target;
+		if (target.contains(s))
+			return new java.awt.Rectangle(target);
 		else 
 		{
+			java.awt.Rectangle source = new java.awt.Rectangle(s); 			
 			// is source outter target left
 			if (source.x < target.x) {
 				source.x = target.x;
@@ -110,14 +111,18 @@ public class GeomUtil
 			return source;
 		}			
 	}
-	
+		
 	/**
 	 * 
-	 * @param r the Rectangle to translate to Origin (0/0)
-	 * @return the translated source rectangle
+	 * @param r the Rectangle to translate to Origin (0/0) and adjust the size
+	 * @return a new Rectangle with the origin at (0/0) and newWidth = (oldWidth + oldX), 
+	 * newHeight = (oldHeight + oldY), which means that the size of the returned rectangle 
+	 * is always greater than before, if the oldOrigin wasn´t already at (0/0)
+	 * 
 	 */
-	public static java.awt.Rectangle translateRectToOrigin(java.awt.Rectangle r) 
+	public static java.awt.Rectangle translateToOriginAndAdjustSize(java.awt.Rectangle rect) 
 	{
+		java.awt.Rectangle r = new java.awt.Rectangle(rect);
 		if (r.x < 0) {
 			r.width = r.width - r.x;
 			r.x = 0;
@@ -136,6 +141,39 @@ public class GeomUtil
 		}
 		return r;
 	}		
+	
+	/**
+	 * calculates the scaleFactor for width and height by r2 / r1 and returns it
+	 * as Point2D(scaleX, scaleY)
+	 * 
+	 * @param r1 Rectangle r1
+	 * @param r2 Rectangle r2 
+	 * @return the scaleFactors scaleX and scaleY as Point2D 
+	 */
+	public static Point2D calcScale(java.awt.Rectangle r1, java.awt.Rectangle r2) 
+	{
+		double scaleX = 1.0;
+		double scaleY = 1.0;
+		if (r1.width != 0 && r2.width != 0)
+			scaleX = (double)r2.width / (double)r1.width;
+		if (r1.height != 0 && r2.height != 0)
+			scaleY = (double)r2.height / (double)r1.height;
+		
+		return new Point2D.Double(scaleX, scaleY);
+	}	
+	
+	/**
+	 * 
+	 * @param r the Rectangle to translate to Origin (0/0)
+	 * @return a new translated rectangle
+	 */
+	public static java.awt.Rectangle translateToOrigin(java.awt.Rectangle r) 
+	{
+		java.awt.Rectangle newRect = new java.awt.Rectangle(r);
+		newRect.x = 0;
+		newRect.y = 0;
+		return newRect;
+	}			
 	
 	/**
 	 * checks if the dimension of target rectangle is contained in the source rectangle,
