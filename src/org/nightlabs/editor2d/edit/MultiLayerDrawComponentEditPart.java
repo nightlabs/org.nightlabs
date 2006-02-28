@@ -106,10 +106,11 @@ extends AbstractDrawComponentContainerEditPart
 //	    f.registerOnDeferredUpdateManager(updateManager);
 //	  }
 		
-	  Figure f = new OversizedBufferFreeformLayer();
-	  ((BufferedFreeformLayer)f).init(this);
+		// TODO: find out why figures are not painted at high zoom/scale (<2.0) in BufferedLayer
+//	  Figure f = new OversizedBufferFreeformLayer();
+//	  ((BufferedFreeformLayer)f).init(this);		
 	  
-//		Figure f = new FreeformLayer();
+		Figure f = new FreeformLayer();
 		
 		f.setLayoutManager(new FreeformLayout());				
 		return f; 		

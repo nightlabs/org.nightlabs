@@ -37,16 +37,9 @@ import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.resource.ImageDescriptor;
-
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.base.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.resource.SharedImages.ImageFormat;
-import org.nightlabs.editor2d.EllipseDrawComponent;
-import org.nightlabs.editor2d.ImageDrawComponent;
-import org.nightlabs.editor2d.LineDrawComponent;
-import org.nightlabs.editor2d.RectangleDrawComponent;
-import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.model.ModelCreationFactory;
 import org.nightlabs.editor2d.tools.EditorSelectionToolEntry;
 import org.nightlabs.editor2d.tools.EllipseToolEntry;
@@ -106,7 +99,7 @@ public abstract class AbstractPaletteFactory
     };
   } 
     
-  /*
+  /**
   * Returns the preference store for the EditorPlugin.
   * @see org.eclipse.ui.plugin.AbstractUIPlugin#getPreferenceStore() 
   */
@@ -121,78 +114,23 @@ public abstract class AbstractPaletteFactory
   PaletteDrawer componentsDrawer = new PaletteDrawer(EditorPlugin.getResourceString("palette.group.shapes"));
 
   // add Rectangle Tool
-  ToolEntry component = new RectangleToolEntry  
-  (
-    EditorPlugin.getResourceString("palette.rectangle.label"),
-    EditorPlugin.getResourceString("palette.rectangle.shortdesc"), 
-    RectangleDrawComponent.class,
-    new ModelCreationFactory(RectangleDrawComponent.class), 
-//    ImageDescriptor.createFromFile(EditorPlugin.class, "icons/rectangle16.gif"),
-//    ImageDescriptor.createFromFile(EditorPlugin.class, "icons/rectangle24.gif")    
-    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Rectangle"),    
-    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Rectangle",
-    		ImageDimension._24x24, ImageFormat.png)
-  );
+  ToolEntry component = createRectangleToolEntry();
   componentsDrawer.add(component);
 
   // add Ellipse Tool
-  component = new EllipseToolEntry
-  (
-    EditorPlugin.getResourceString("palette.ellipse.label"),
-    EditorPlugin.getResourceString("palette.ellipse.shortdesc"), 
-    EllipseDrawComponent.class,
-    new ModelCreationFactory(EllipseDrawComponent.class), 
-//    ImageDescriptor.createFromFile(EditorPlugin.class, "icons/ellipse16.gif"),
-//    ImageDescriptor.createFromFile(EditorPlugin.class, "icons/ellipse24.gif")    
-    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Ellipse"),        
-    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Ellipse",
-    		ImageDimension._24x24, ImageFormat.png)
-  );
+  component = createEllipseToolEntry();
   componentsDrawer.add(component);
 
   // add Line Tool
-  component = new LineToolEntry
-  (
-    EditorPlugin.getResourceString("palette.line.label"),
-    EditorPlugin.getResourceString("palette.line.shortdesc"), 
-    LineDrawComponent.class,
-    new ModelCreationFactory(LineDrawComponent.class), 
-//    ImageDescriptor.createFromFile(EditorPlugin.class, "icons/line16.gif"),
-//    ImageDescriptor.createFromFile(EditorPlugin.class, "icons/line24.gif")    
-    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Line"),    
-    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Line",
-    		ImageDimension._24x24, ImageFormat.png)    
-  );
+  component = createLineToolEntry();
   componentsDrawer.add(component);
   
   // add Text Tool
-  component = new TextToolEntry
-  (
-    EditorPlugin.getResourceString("palette.text.label"),
-    EditorPlugin.getResourceString("palette.text.shortdesc"), 
-    TextDrawComponent.class,
-    new ModelCreationFactory(TextDrawComponent.class), 
-//    ImageDescriptor.createFromFile(EditorPlugin.class, "icons/text16.gif"),
-//    ImageDescriptor.createFromFile(EditorPlugin.class, "icons/text24.gif")    
-    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Text"),    
-    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Text",
-    		ImageDimension._24x24, ImageFormat.png)    
-  );
+  component = createTextToolEntry();   
   componentsDrawer.add(component);
 
   // add Image Tool
-  component = new ImageToolEntry
-  (
-    EditorPlugin.getResourceString("palette.image.label"),
-    EditorPlugin.getResourceString("palette.image.shortdesc"), 
-    ImageDrawComponent.class,
-    new ModelCreationFactory(ImageDrawComponent.class), 
-//    ImageDescriptor.createFromFile(EditorPlugin.class, "icons/image16.gif"), 
-//    ImageDescriptor.createFromFile(EditorPlugin.class, "icons/image24.gif")
-    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Image"),    
-    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Image",
-    		ImageDimension._24x24, ImageFormat.png)        
-  );
+  component = createImageToolEntry();
   componentsDrawer.add(component);
   
   return componentsDrawer;
@@ -217,27 +155,109 @@ public abstract class AbstractPaletteFactory
   PaletteGroup toolGroup = new PaletteGroup(EditorPlugin.getResourceString("palette.group.tools"));
 
   // Add a selection tool to the group
-  ToolEntry tool = new EditorSelectionToolEntry();
+  ToolEntry tool = createEditorSelectionToolEntry();
   toolGroup.add(tool);
   palette.setDefaultEntry(tool);
   
   // Add a marquee tool to the group
-  toolGroup.add(new MarqueeToolEntry());
+  toolGroup.add(createMarqueeToolEntry());
 
   // Add a zoom tool to the group
-  toolGroup.add(new ZoomToolEntry(EditorPlugin.getResourceString("palette.zoom.label"),
-    EditorPlugin.getResourceString("palette.zoom.shortdesc"),
-//    ImageDescriptor.createFromFile(EditorPlugin.class, "icons/zoom16.gif"),
-//    ImageDescriptor.createFromFile(EditorPlugin.class, "icons/zoom24.gif")    
-    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Zoom"),    
-    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Zoom",
-    		ImageDimension._24x24, ImageFormat.png)
-  ));
+  toolGroup.add(createZoomToolEntry());
   
   // Add a (unnamed) separator to the group
   toolGroup.add(new PaletteSeparator());
 
   return toolGroup;
  }
+  
+ protected static ToolEntry createEditorSelectionToolEntry() 
+ {
+	  return new EditorSelectionToolEntry();	 
+ }
  
+ protected static ToolEntry createMarqueeToolEntry() 
+ {
+	  return new MarqueeToolEntry();	 
+ }
+
+ protected static ToolEntry createZoomToolEntry() 
+ {
+	 return new ZoomToolEntry(
+			 EditorPlugin.getResourceString("palette.zoom.label"),
+		   EditorPlugin.getResourceString("palette.zoom.shortdesc"),
+		   SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Zoom"),    
+		   SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Zoom",
+		  		 ImageDimension._24x24, ImageFormat.png)
+	 );	 
+ }
+ 
+ protected static ToolEntry createRectangleToolEntry() 
+ {
+	 return new RectangleToolEntry (
+	    EditorPlugin.getResourceString("palette.rectangle.label"),
+	    EditorPlugin.getResourceString("palette.rectangle.shortdesc"), 
+	    RectangleDrawComponent.class,
+	    new ModelCreationFactory(RectangleDrawComponent.class), 
+	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Rectangle"),    
+	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Rectangle",
+	    		ImageDimension._24x24, ImageFormat.png)
+	  );	 
+ }
+ 
+ protected static ToolEntry createEllipseToolEntry() 
+ {
+	 return new EllipseToolEntry (
+	    EditorPlugin.getResourceString("palette.ellipse.label"),
+	    EditorPlugin.getResourceString("palette.ellipse.shortdesc"), 
+	    EllipseDrawComponent.class,
+	    new ModelCreationFactory(EllipseDrawComponent.class), 
+	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Ellipse"),        
+	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Ellipse",
+	    		ImageDimension._24x24, ImageFormat.png)
+	  );	 
+ 	}
+ 
+ 	protected static ToolEntry createLineToolEntry() 
+ 	{
+ 		return new LineToolEntry
+ 	  (
+ 	    EditorPlugin.getResourceString("palette.line.label"),
+ 	    EditorPlugin.getResourceString("palette.line.shortdesc"), 
+ 	    LineDrawComponent.class,
+ 	    new ModelCreationFactory(LineDrawComponent.class), 
+ 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Line"),    
+ 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Line",
+ 	    		ImageDimension._24x24, ImageFormat.png)    
+ 	  ); 		
+ 	}
+ 	
+ 	protected static ToolEntry createTextToolEntry() 
+ 	{
+ 		return new TextToolEntry
+ 	  (
+ 	    EditorPlugin.getResourceString("palette.text.label"),
+ 	    EditorPlugin.getResourceString("palette.text.shortdesc"), 
+ 	    TextDrawComponent.class,
+ 	    new ModelCreationFactory(TextDrawComponent.class), 
+ 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Text"),    
+ 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Text",
+ 	    		ImageDimension._24x24, ImageFormat.png)    
+ 	  ); 		
+ 	}
+ 	
+ 	protected static ToolEntry createImageToolEntry() 
+ 	{
+ 		return new ImageToolEntry
+ 	  (
+ 	    EditorPlugin.getResourceString("palette.image.label"),
+ 	    EditorPlugin.getResourceString("palette.image.shortdesc"), 
+ 	    ImageDrawComponent.class,
+ 	    new ModelCreationFactory(ImageDrawComponent.class), 
+ 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Image"),    
+ 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Image",
+ 	    		ImageDimension._24x24, ImageFormat.png)        
+ 	  ); 		
+ 	}
+ 	
 }

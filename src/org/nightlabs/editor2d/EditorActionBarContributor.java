@@ -68,7 +68,6 @@ import org.nightlabs.editor2d.custom.EditorZoomComboContributionItem;
 import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintPreviewAction;
 import org.nightlabs.editor2d.print.EditorPrintSetupAction;
-import org.nightlabs.editor2d.print.PrintPaintable;
 import org.nightlabs.editor2d.render.RenderModeManager;
 import org.nightlabs.editor2d.viewer.action.RenderModeContributionItem;
 import org.nightlabs.editor2d.viewer.render.RendererRegistry;
@@ -178,9 +177,6 @@ extends ActionBarContributor
   	editMenu.add(new Separator());	
   	editMenu.add(getAction(GEFActionConstants.MATCH_WIDTH));
   	editMenu.add(getAction(GEFActionConstants.MATCH_HEIGHT));  	
-
-//  	editMenu.add(new Separator());  	
-//  	editMenu.add(getAction(EditorPrintAction.ID));
   	  	
   	menubar.insertAfter(IWorkbenchActionConstants.M_FILE, editMenu);  	
   	
