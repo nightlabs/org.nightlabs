@@ -186,6 +186,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return getMultiLayerDrawComponent();
     }
     
+    public abstract MultiLayerDrawComponent createMultiLayerDrawComponent();    
     protected MultiLayerDrawComponent mldc = null;  
     public MultiLayerDrawComponent getMultiLayerDrawComponent() 
     {
@@ -194,19 +195,45 @@ extends J2DGraphicalEditorWithFlyoutPalette
       }      
       return mldc;
     }
-  
-    public abstract MultiLayerDrawComponent createMultiLayerDrawComponent(); 
+      
+    public abstract EditPartFactory createEditPartFactory(); 
+    protected EditPartFactory editPartFactory = null;
+    public EditPartFactory getEditPartFactory() 
+    {
+      if (editPartFactory == null)
+        editPartFactory = createEditPartFactory();;
+      
+      return editPartFactory;
+    }      
         
-    public abstract EditPartFactory getEditPartFactory();
+    public abstract EditPartFactory createOutlineEditPartFactory();
+    protected EditPartFactory outlineEditPartFactory = null;
+    public EditPartFactory getOutlineEditPartFactory() 
+    {
+      if (outlineEditPartFactory == null)
+        outlineEditPartFactory = createOutlineEditPartFactory();
+      
+      return outlineEditPartFactory;
+    }     
         
-    public abstract EditPartFactory getOutlineEditPartFactory();
+    public abstract ContextMenuProvider createContextMenuProvider();    
+    protected ContextMenuProvider contextMenuProvider = null;
+    public ContextMenuProvider getContextMenuProvider() 
+    {
+      if (contextMenuProvider == null)
+      	contextMenuProvider = createContextMenuProvider();
+      
+      return contextMenuProvider;
+    }    
     
-    /**
-     * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getPaletteRoot()
-     */
-    public abstract PaletteRoot getPaletteRoot(); 
-    
-    public abstract ContextMenuProvider getContextMenuProvider();
+    protected PaletteRoot paletteRoot = null;
+    public PaletteRoot getPaletteRoot() 
+    {
+    	if (paletteRoot == null) {
+    		paletteRoot = getPaletteFactory().createPalette();
+    	}
+    	return paletteRoot;
+    }
     
 //    /**
 //     * SubClasses of this Editor should register here IOFilters for Input/Outputs
@@ -220,7 +247,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     /** KeyHandler with common bindings for both the Outline View and the Editor. */
     protected KeyHandler sharedKeyHandler;
 
-    protected RenderModeManager renderMan;
+    protected RenderModeManager renderMan = null;
     public RenderModeManager getRenderModeManager() {
       return renderMan;
     }     
@@ -228,12 +255,12 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //      return getMultiLayerDrawComponent().getRenderModeManager();
 //    } 
     
-    protected FilterManager filterMan;
+    protected FilterManager filterMan = null;
     public FilterManager getFilterManager() {
       return filterMan;
     }
      
-    protected abstract FilterNameProvider getFilterNameProvider();
+    public abstract FilterNameProvider createFilterNameProvider();
     
 //    protected IOFilterMan ioFilterMan;
 //    public IOFilterMan getIOFilterMan() {
@@ -267,7 +294,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //      ioFilterMan = new IOFilterMan();      
 //      registerIOFilters();
       
-      filterMan = new FilterManager(getFilterNameProvider());     
+      filterMan = new FilterManager(createFilterNameProvider());     
       
       // WORKAROUND: Holongate Draw2D-PreferencePage does not store values 
       Map hints = new HashMap();
@@ -577,7 +604,18 @@ extends J2DGraphicalEditorWithFlyoutPalette
      * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getPalettePreferences()
      */
     protected FlyoutPreferences getPalettePreferences() {
-      return EditorPaletteFactory.createPalettePreferences();
+      return getPaletteFactory().createPalettePreferences();
+    }
+        
+    public abstract AbstractPaletteFactory createPaletteFactory();   
+    
+    protected AbstractPaletteFactory paletteFactory = null;
+    public AbstractPaletteFactory getPaletteFactory() 
+    {
+    	if (paletteFactory == null) {
+    		paletteFactory = createPaletteFactory();
+    	}
+    	return paletteFactory;
     }
     
     protected void handleActivationChanged(Event event) 
@@ -1187,6 +1225,15 @@ extends J2DGraphicalEditorWithFlyoutPalette
     rulerComp = null;
     treeViewer = null;
     viewerManager = null;
+    
+    if (contextMenuProvider != null)
+      contextMenuProvider.dispose();
+    
+    contextMenuProvider = null;
+    editPartFactory = null;
+    paletteRoot = null;    
+    
+    freeMemory();
   }
    
   protected PageFormat pageFormat = PrinterJob.getPrinterJob().defaultPage();
@@ -1197,4 +1244,26 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		this.pageFormat = pageFormat;
 	}
   
+  protected void freeMemory() 
+  {
+    Runtime runTime = Runtime.getRuntime();
+    long maxMemory = runTime.maxMemory();
+    long freeMemory = runTime.freeMemory();
+    long totalMemory = runTime.totalMemory();    
+    long startTime = System.currentTimeMillis();
+        
+    LOGGER.debug("Total Memory BEFORE GC = "+totalMemory);
+    LOGGER.debug("Max Memory BEFORE GC   = "+maxMemory);
+    LOGGER.debug("Free Memory BEFORE GC  = "+freeMemory);    
+    LOGGER.debug("GC Begin!");
+    
+    runTime.gc();
+    long newTime = System.currentTimeMillis() - startTime;
+    
+    LOGGER.debug("GC took "+newTime+" ms");        
+    LOGGER.debug("Total Memory AFTER GC = "+totalMemory);
+    LOGGER.debug("Max Memory AFTER GC   = "+maxMemory);
+    LOGGER.debug("Free Memory AFTER GC  = "+freeMemory);
+    LOGGER.debug("");  	
+  }	
 }

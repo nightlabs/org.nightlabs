@@ -78,7 +78,7 @@ implements RendererFigure
     {
       j2d = (J2DGraphics) graphics;
       g2d = j2d.createGraphics2D();
-      g2d.setClip(null);
+      g2d.setClip(null);      
       paint(g2d);      
       g2d.dispose();
     }

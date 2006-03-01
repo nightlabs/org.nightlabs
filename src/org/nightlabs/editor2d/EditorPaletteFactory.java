@@ -35,8 +35,7 @@ import org.nightlabs.editor2d.model.ModelCreationFactory;
 public class EditorPaletteFactory
 extends AbstractPaletteFactory
 {
-  public CreationFactory getCreationFactory(Class targetClass) 
-  {          
+  public CreationFactory getCreationFactory(Class targetClass) {          
     return new ModelCreationFactory(targetClass);
   } 
 }

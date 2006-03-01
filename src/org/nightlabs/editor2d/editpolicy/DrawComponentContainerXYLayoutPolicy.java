@@ -676,13 +676,7 @@ implements EditorRequestConstants
 	{
 		LOGGER.debug("eraseSizeOnDropFeedback!");
 		
-//		if (sizeOnDropFeedbackDefault != null) {
-//			removeFeedback(sizeOnDropFeedbackDefault);
-//			sizeOnDropFeedbackDefault = null;
-//		} 
-//		else {
-			super.eraseSizeOnDropFeedback(request);			
-//		}					
+		super.eraseSizeOnDropFeedback(request);								
 		if (showFeedbackText) {
 			eraseFeedbackText();
 		}		

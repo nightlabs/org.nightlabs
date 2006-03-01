@@ -50,6 +50,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.RepaintAction;
 import org.nightlabs.editor2d.actions.RepaintRetargetAction;
@@ -141,25 +142,21 @@ extends ActionBarContributor
   public void contributeToMenu(IMenuManager menubar) 
   {
   	super.contributeToMenu(menubar);  	
-  	
-//  	fileMenu = new MenuManager(EditorPlugin.getResourceString("menu.file"), ID_FILE_MENU);
-//  	fileMenu.add(getAction(EditorPrintAction.ID));
-  	fileMenu = getMenuItem(ID_FILE_MENU, menubar);
-  	if (fileMenu != null) {
-  		IMenuManager printMenu = getMenuItem(EditorPrintAction.ID, fileMenu);
-  		if (printMenu == null) {
+  	 
+  	IContributionItem fm = RCPUtil.getMenuItem(ID_FILE_MENU, menubar);
+  	if (fm instanceof IMenuManager)  
+  		fileMenu = (IMenuManager) fm;
+  	if (fileMenu != null) 
+  	{
+  		IContributionItem printMenu = RCPUtil.getMenuItem(EditorPrintAction.ID, fileMenu);
+  		if (printMenu == null)
   			fileMenu.insertBefore(ActionFactory.QUIT.getId(), getAction(EditorPrintAction.ID));
-      	fileMenu.insertAfter(EditorPrintAction.ID, getAction(EditorPrintPreviewAction.ID));
-      	fileMenu.insertAfter(EditorPrintPreviewAction.ID, getAction(EditorPrintSetupAction.ID));
-      	fileMenu.insertAfter(EditorPrintSetupAction.ID, new Separator());  			
-  		}
-  		else {
-      	fileMenu.insertAfter(EditorPrintAction.ID, getAction(EditorPrintPreviewAction.ID));
-      	fileMenu.insertAfter(EditorPrintPreviewAction.ID, getAction(EditorPrintSetupAction.ID));
-      	fileMenu.insertAfter(EditorPrintSetupAction.ID, new Separator());
-  		}
+  		
+			fileMenu.insertAfter(EditorPrintAction.ID, getAction(EditorPrintPreviewAction.ID));
+  		fileMenu.insertAfter(EditorPrintPreviewAction.ID, getAction(EditorPrintSetupAction.ID));
+    	fileMenu.insertAfter(EditorPrintSetupAction.ID, new Separator());  				  		
   	}
-  	
+  	  	
   	editMenu = new MenuManager(EditorPlugin.getResourceString("menu.edit"), ID_EDIT_MENU);
   	editMenu.add(getAction(ActionFactory.UNDO.getId()));
   	editMenu.add(getAction(ActionFactory.REDO.getId()));
@@ -294,22 +291,26 @@ extends ActionBarContributor
   	addGlobalActionKey(ChangeOrderToLocalFront.ID);  	
   }
 
-  /**
-   * 
-   * @param id the ID of the ContributionItem
-   * @param menuMan the MenuManager to search in
-   * @return the ContributionItem with the given ID or null if not contained
-   */
-  protected IMenuManager getMenuItem(String id, IMenuManager menuMan) 
-  {
-  	IContributionItem[] menuItems = menuMan.getItems();
-  	for (int i=0; i<menuItems.length; i++) {
-  		IContributionItem menuItem = menuItems[i];
-  		if (menuItem != null && menuItem.getId() != null) {
-    		if (menuItem.getId().equals(id) && menuItem instanceof IMenuManager) 
-    			return (IMenuManager)menuItem;  			
-  		}
-  	}
-  	return null;
-  }
+	public void dispose() 
+	{
+		super.dispose();
+		
+		// TODO: workaround because printActions are not removed automaticly
+		IContributionItem fm = RCPUtil.getMenuItem(ID_FILE_MENU, getActionBars().getMenuManager());
+		if (fm instanceof IMenuManager) {
+			IMenuManager fileMenu = (IMenuManager) fm;
+			removeActionMenu(EditorPrintAction.ID, fileMenu);			
+			removeActionMenu(EditorPrintPreviewAction.ID, fileMenu);
+			removeActionMenu(EditorPrintSetupAction.ID, fileMenu);
+		}		
+	}
+  
+	protected void removeActionMenu(String actionID, IMenuManager menuMan) 
+	{
+		IContributionItem ci = RCPUtil.getMenuItem(actionID, menuMan);
+		if (ci != null) {
+			menuMan.remove(ci);
+		}
+	}
+	 
 }

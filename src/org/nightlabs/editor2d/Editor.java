@@ -29,10 +29,6 @@ package org.nightlabs.editor2d;
 
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartFactory;
-import org.eclipse.gef.palette.PaletteRoot;
-
-import org.nightlabs.editor2d.Editor2DFactory;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.edit.GraphicalEditPartFactory;
 import org.nightlabs.editor2d.edit.tree.TreePartFactory;
 import org.nightlabs.editor2d.outline.filter.FilterNameProvider;
@@ -42,51 +38,48 @@ import org.nightlabs.editor2d.util.ModelUtil;
 public class Editor  
 extends AbstractEditor
 {
-  protected EditPartFactory editPartFactory;
-  public EditPartFactory getEditPartFactory() 
-  {
-    if (editPartFactory == null)
-      editPartFactory = new GraphicalEditPartFactory();
-    
-    return editPartFactory;
+	/**
+	 * @see org.nightlabs.editor2d.AbstractEditor#createEditPartFactory()
+	 */	
+  public EditPartFactory createEditPartFactory() {
+  	return new GraphicalEditPartFactory();
   }  
     
-  protected EditPartFactory outlineEditPartFactory;
-  public EditPartFactory getOutlineEditPartFactory() 
-  {
-    if (outlineEditPartFactory == null)
-      outlineEditPartFactory = new TreePartFactory(getFilterManager());
-    
-    return outlineEditPartFactory;
+	/**
+	 * @see org.nightlabs.editor2d.AbstractEditor#createOutlineEditPartFactory()
+	 */  
+  public EditPartFactory createOutlineEditPartFactory() {
+  	return new TreePartFactory(getFilterManager());
   }   
-  
-  protected PaletteRoot palette; 
-  public PaletteRoot getPaletteRoot() 
-  {
-    if (palette == null)
-      palette = EditorPaletteFactory.createPalette();
 
-    return palette;
-  }  
-  
-  protected ContextMenuProvider contextMenuProvider;
-  public ContextMenuProvider getContextMenuProvider() 
-  {
-    if (contextMenuProvider == null)
-      return new EditorContextMenuProvider(getGraphicalViewer(), getActionRegistry());
-    
-    return contextMenuProvider;
+	/**
+	 * @see org.nightlabs.editor2d.AbstractEditor#createContextMenuProvider()
+	 */    
+  public ContextMenuProvider createContextMenuProvider() {
+    return new EditorContextMenuProvider(getGraphicalViewer(), getActionRegistry());
   }
-      
-  protected FilterNameProvider getFilterNameProvider() 
-  {
+
+	/**
+	 * @see org.nightlabs.editor2d.AbstractEditor#createFilterNameProvider()
+	 */    
+  public FilterNameProvider createFilterNameProvider() {
 		return new ModelUtil();
 	}
 
-	public MultiLayerDrawComponent createMultiLayerDrawComponent() 
-  {
+	/**
+	 * @see org.nightlabs.editor2d.AbstractEditor#createMultiLayerDrawComponent()
+	 */    
+	public MultiLayerDrawComponent createMultiLayerDrawComponent() {
     MultiLayerDrawComponent mldc = Editor2DFactory.eINSTANCE.createMultiLayerDrawComponent();
     return mldc;
   }
+
+	/**
+	 * @see org.nightlabs.editor2d.AbstractEditor#createPaletteFactory()
+	 */  	
+	public AbstractPaletteFactory createPaletteFactory() {
+		return new EditorPaletteFactory();
+	}
+		
 }
   

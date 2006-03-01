@@ -44,6 +44,14 @@ implements EditorShapeRequest,
   public static final int BOUNDS_FIX_MODE = 1;
   public static final int BOUNDS_UNFIX_MODE = 2;
   
+  public EditorCreateRequest() {
+    super();
+  }
+
+  public EditorCreateRequest(Object type) {
+    super(type);
+  }  
+  
   protected int mode = BOUNDS_UNFIX_MODE;    
   public int getMode() {
     return mode;
@@ -75,27 +83,5 @@ implements EditorShapeRequest,
   public void setUseShape(boolean useShape) {
     this.useShape = useShape;
   }
-  
-//  protected boolean ignoreSize = false;    
-//  public boolean isIgnoreSize() {
-//    return ignoreSize;
-//  }  
-//  public void setIgnoreSize(boolean ignoreSize) {
-//    this.ignoreSize = ignoreSize;
-//  }
-  
-  /**
-   * 
-   */
-  public EditorCreateRequest() {
-    super();
-  }
-
-  /**
-   * @param type
-   */
-  public EditorCreateRequest(Object type) {
-    super(type);
-  }
-  
+      
 }
