@@ -56,9 +56,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-
 import org.nightlabs.base.NLBasePlugin;
-import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
@@ -291,6 +289,13 @@ public class RCPUtil
 		return window == null ? null : window.getActivePage();
 	}
 
+	/**
+	 * opens a ErrorDialog with the given message 
+	 * 
+	 * @param message the message to display
+	 * @param buttonStyle the buttonStyle
+	 * @return the returnCode of the Dialog
+	 */
 	public static int showErrorDialog(String message, int buttonStyle) 
 	{
 		MessageBox errorDialog = new MessageBox(getWorkbenchShell(), SWT.ICON_ERROR | buttonStyle);
@@ -299,11 +304,24 @@ public class RCPUtil
 		return errorDialog.open();				
 	}
 	
+	/**
+	 * opens a ErrorDialog with the given message
+	 * 
+	 * @param message the message to display
+	 * @return the returnCode of the Dialog
+	 */
 	public static int showErrorDialog(String message) 
 	{
 		return showErrorDialog(message, SWT.OK);
 	}	
 	
+	/**
+	 * opens a MessageBox which asks the user if he want to overwrite the file,
+	 * with the given fileName
+	 * 
+	 * @param fileName the name of the file
+	 * @return the returnCode of the Dialog
+	 */
 	public static int showConfirmOverwriteDialog(String fileName) 
 	{
 		MessageBox errorDialog = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.ICON_INFORMATION | SWT.OK | SWT.CANCEL);
@@ -315,6 +333,11 @@ public class RCPUtil
 		return errorDialog.open();	  	
 	}
 	
+	/**
+	 * disposes the given Composite with all of its children
+	 * 
+	 * @param comp the Composite to dispose with all of its children
+	 */
 	public static void disposeAllChildren(Composite comp) 
 	{
 		if (comp != null) 
@@ -433,6 +456,10 @@ public class RCPUtil
 		comp.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
 	}
 	
+	/**
+	 * sets the location of a dialog so that it apperas in the center of the screen 
+	 * @param d the Dialog to center
+	 */
 	public static void centerDialog(Dialog d) 
 	{
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -441,4 +468,28 @@ public class RCPUtil
 		int diffHeight = screenSize.height - shellSize.y;
 		d.getShell().setLocation(diffWidth/2, diffHeight/2);
 	}
+	
+  /**
+   * checks if a IMenuManager with the given ID is contained in 
+   * the given IMenuManager and returns it. 
+   * 
+   * @param id the ID of the ContributionItem
+   * @param menuMan the MenuManager to search in
+   * @return the ContributionItem with the given ID or null if not contained
+   */
+  public static IContributionItem getMenuItem(String id, IMenuManager menuMan) 
+  {
+  	if (menuMan != null) {
+    	IContributionItem[] menuItems = menuMan.getItems();
+    	for (int i=0; i<menuItems.length; i++) {
+    		IContributionItem menuItem = menuItems[i];
+    		if (menuItem != null && menuItem.getId() != null) {
+      		if (menuItem.getId().equals(id)) 
+      			return menuItem;  			
+    		}
+    	}  		
+  	}
+  	return null;
+  }	
+	
 }
