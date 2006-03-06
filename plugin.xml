@@ -22,7 +22,6 @@
       <import plugin="org.eclipse.ui.forms"/>
       <import plugin="org.eclipse.draw2d"/>
       <import plugin="org.eclipse.gef"/>
-      <import plugin="org.eclipse.core.resources"/>
    </requires>
 
    
