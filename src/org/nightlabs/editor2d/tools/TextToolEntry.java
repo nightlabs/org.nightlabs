@@ -47,7 +47,7 @@ extends CombinedTemplateCreationEntry
     this.factory = factory;
   }
 
-  /* (non-Javadoc)
+  /**
    * @see org.eclipse.gef.palette.ToolEntry#createTool()
    */
   public Tool createTool() 
