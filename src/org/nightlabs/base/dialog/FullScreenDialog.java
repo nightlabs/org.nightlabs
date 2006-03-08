@@ -31,17 +31,21 @@ import java.awt.Toolkit;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.IShellProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
-public class FullScreenDialog extends Dialog
+public class FullScreenDialog 
+extends Dialog
 {
 
 	public FullScreenDialog(Shell arg0) {
 		super(arg0);
+		setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MIN | SWT.MAX);		
 	}
 
 	public FullScreenDialog(IShellProvider arg0) {
 		super(arg0);
+		setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MIN | SWT.MAX );		
 	}
 
 	public void create() 
@@ -49,7 +53,7 @@ public class FullScreenDialog extends Dialog
 		super.create();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		getShell().setSize(screenSize.width, screenSize.height);
-		getShell().setLocation(0,0);				
+		getShell().setLocation(0,0);	
 	}
 	
 }
