@@ -33,6 +33,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.internal.win32.FILETIME;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -80,7 +81,9 @@ public class FileSelectComposite extends XComposite {
 	
 	private Text fileTextControl;
 	private Button browseButton;
-	private String fileText = ""; 
+	private String fileText = "";
+	
+	private boolean updating = false;
 	
 	private void createContents(String caption) {
 		new Label(this, SWT.NONE).setText((caption != null) ? caption: "");
@@ -92,6 +95,8 @@ public class FileSelectComposite extends XComposite {
 		fileTextControl.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e)
 			{
+				if (updating)
+					return;
 				fileText = fileTextControl.getText();
 				FileSelectComposite.this.modifyText(e);
 			}
@@ -119,6 +124,19 @@ public class FileSelectComposite extends XComposite {
 	
 	public File getFile() {
 		return new File(getFileText());
+	}
+	
+	public void setFileText(String fileText) {
+		updating = true;
+		try {
+			this.fileText = fileText;
+			if (fileTextControl != null && (!fileTextControl.isDisposed()))
+				if (fileText != null)
+					fileTextControl.setText(fileText);
+		}
+		finally {
+			updating = false;
+		}
 	}
 	
 	protected void modifyText(ModifyEvent e) {	}
