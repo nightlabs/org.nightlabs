@@ -31,6 +31,7 @@ import java.awt.Toolkit;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.IShellProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Shell;
 
@@ -46,14 +47,14 @@ extends Dialog
 	 * @param parentShell
 	 */
 	public CenteredDialog(Shell parentShell) {
-		super(parentShell);
+		super(parentShell);	
 	}
 
 	/**
 	 * @param parentShell
 	 */
 	public CenteredDialog(IShellProvider parentShell) {
-		super(parentShell);
+		super(parentShell);	
 	}
 
 	public void create() 
