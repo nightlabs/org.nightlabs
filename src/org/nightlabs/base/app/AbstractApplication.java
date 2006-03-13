@@ -116,6 +116,9 @@ implements IPlatformRunnable
 		return mutex;
 	}	
 	
+//	protected static final String LOG4J_CONFIG_FILE = "log4j.xml"; 
+	protected static final String LOG4J_CONFIG_FILE = "log4j.properties";
+	
 	/**
 	 * Configures log4j with the file located in {@link #getConfigDir()}+"/log4j.properties"
 	 * @throws IOException
@@ -123,11 +126,12 @@ implements IPlatformRunnable
 	public static void initializeLogging() 
 	throws IOException
 	{
-		String logConfFileName = getConfigDir() + File.separatorChar + "log4j.properties";
+//		String logConfFileName = getConfigDir() + File.separatorChar + "log4j.properties";
+		String logConfFileName = getConfigDir() + File.separatorChar + LOG4J_CONFIG_FILE;		
 		File logProp = new File(logConfFileName);
 		if (!logProp.exists()){
 			// if not there copy
-			Utils.copyResource(AbstractApplication.class ,"log4j.properties",logConfFileName);		        
+			Utils.copyResource(AbstractApplication.class ,LOG4J_CONFIG_FILE, logConfFileName);		        
 		}
 		getLogDir();
 		setSystemProperty();
