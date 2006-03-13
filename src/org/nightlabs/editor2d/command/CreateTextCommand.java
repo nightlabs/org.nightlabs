@@ -67,7 +67,11 @@ extends Command
     this.textDrawComponent = (TextDrawComponent) request.getNewObject();
   }
 
-  protected TextDrawComponent textDrawComponent;      
+  protected TextDrawComponent textDrawComponent;
+  
+  /**
+   * @see org.eclipse.gef.commands.Command#execute()
+   */   
   public void execute() 
   {
     int x = getLocation().x;
@@ -81,12 +85,15 @@ extends Command
     drawOrderIndex = parent.getDrawComponents().indexOf(textDrawComponent);    
   }
   
+  /**
+   * @see org.eclipse.gef.commands.Command#redo()
+   */  
   public void redo() 
   { 
     parent.addDrawComponent(textDrawComponent, drawOrderIndex);    
   }  
   
-  /* (non-Javadoc)
+  /**
    * @see org.eclipse.gef.commands.Command#undo()
    */
   public void undo() 
