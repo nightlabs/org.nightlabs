@@ -33,7 +33,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.internal.win32.FILETIME;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -88,7 +87,7 @@ public class FileSelectComposite extends XComposite {
 	private void createContents(String caption) {
 		new Label(this, SWT.NONE).setText((caption != null) ? caption: "");
 
-		XComposite fileComp = new XComposite(this, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);		
+		XComposite fileComp = new XComposite(this, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);		
 		fileComp.getGridLayout().numColumns = 3;
 		fileTextControl = new Text(fileComp, SWT.BORDER);
 		fileTextControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
