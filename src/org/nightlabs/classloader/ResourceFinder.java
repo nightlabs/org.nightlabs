@@ -27,6 +27,7 @@
 package org.nightlabs.classloader;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -44,5 +45,5 @@ public interface ResourceFinder {
 	 * @return Returns <tt>null</tt> or a <tt>List</tt> of <tt>URL</tt> instances - preferably a <tt>LinkedList</tt>.
 	 * @throws IOException
 	 */
-	public List getResources(String name, boolean returnAfterFoundFirst) throws IOException;
+	public List<URL> getResources(String name, boolean returnAfterFoundFirst) throws IOException;
 }

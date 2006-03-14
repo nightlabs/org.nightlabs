@@ -101,24 +101,24 @@ public class DelegatingClassLoader
 	 */
 	protected class ResourceSearchResult {
 		
-		public ResourceSearchResult(boolean fullSearch, List resources) {
+		public ResourceSearchResult(boolean fullSearch, List<URL> resources) {
 			this.wasFullSearch = fullSearch;
 			this.searchFoundResources = resources;
 		}
-		
+
 		protected boolean wasFullSearch = false;
-		protected List searchFoundResources;
-		
-		public List getFoundResources() {
+		protected List<URL> searchFoundResources;
+
+		public List<URL> getFoundResources() {
 			return searchFoundResources;
 		}
-		public void setFoundResources(List foundResources) {
+		public void setFoundResources(List<URL> foundResources) {
 			this.searchFoundResources = foundResources;
 		}
 		public boolean wasFullSearch() {
 			return wasFullSearch;
 		}
-		
+
 		public void setWasFullSearch(boolean wasFullSearch) {
 			this.wasFullSearch = wasFullSearch;
 		}
@@ -182,7 +182,7 @@ public class DelegatingClassLoader
 				isjar = false;
 			else {
 				try {
-					JarFile jf = new JarFile(path);
+					new JarFile(path);
 					isjar = true;
 				} catch (IOException e) {
 					isjar = false;
@@ -226,14 +226,14 @@ public class DelegatingClassLoader
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
-				jarFile = new WeakReference(jf); // Because the jarfiles otherwise stay open - which might cause problems because of the limited number of filehandles -, I use WeakReferences
+				jarFile = new WeakReference<JarFile>(jf); // Because the jarfiles otherwise stay open - which might cause problems because of the limited number of filehandles -, I use WeakReferences
 			}
 			return jf;
 		}
 	}
 
-	private List libpath = new LinkedList();
-	private List classpath = new LinkedList();
+	private List<PathEntry> libpath = new LinkedList<PathEntry>();
+	private List<PathEntry> classpath = new LinkedList<PathEntry>();
 	
 	public void addPathEntry(PathEntry pathEntry) {
 		classpath.add(pathEntry);
@@ -246,7 +246,7 @@ public class DelegatingClassLoader
 		public boolean accept(File dir, String name)
 		{
 			try {
-				JarFile jf = new JarFile(new File(dir, name));
+				new JarFile(new File(dir, name));
 			} catch (IOException e) {
 				return false;
 			}
@@ -254,13 +254,16 @@ public class DelegatingClassLoader
 		}
 	}
 
-	private List delegates = new LinkedList();
-
 	/**
-	 * The parent classloader is normally ignored to force this class loader being the begin
-	 * of the chain directly after the bootstrap loader.
+	 * Instances either of {@link ClassLoaderDelegate} or {@link ClassDataLoaderDelegate}.
 	 */
-	private ClassLoader parent;
+	private List<Object> delegates = new LinkedList<Object>();
+
+//	/**
+//	 * The parent classloader is normally ignored to force this class loader being the begin
+//	 * of the chain directly after the bootstrap loader.
+//	 */
+//	private ClassLoader parent;
 
 	public static boolean debugEnabled = false;
 
@@ -324,7 +327,7 @@ public class DelegatingClassLoader
 	}
 
 	private static String pathSeparator = System.getProperty("path.separator");
-	private static void addPathEntry(Collection pathCollection, File pathItem, boolean recursiveDirs, FilenameFilter dirListFilter)
+	private static void addPathEntry(Collection<PathEntry> pathCollection, File pathItem, boolean recursiveDirs, FilenameFilter dirListFilter)
 	{
 		if (recursiveDirs) {
 			if (!pathItem.isDirectory())
@@ -339,7 +342,7 @@ public class DelegatingClassLoader
 		else
 			pathCollection.add(new PathEntry(pathItem));
 	}
-	private static void parsePathProperty(Collection pathCollection, String property, boolean recursiveDirs, FilenameFilter dirListFilter)
+	private static void parsePathProperty(Collection<PathEntry> pathCollection, String property, boolean recursiveDirs, FilenameFilter dirListFilter)
 	{
 		if (property != null)
 		{
@@ -359,7 +362,7 @@ public class DelegatingClassLoader
 	{
 		// super(null); // we ignore the parent to force this classloader to be the direct child of the bootstrap loader.
 		super(_parent);
-		this.parent = _parent;
+//		this.parent = _parent;
 
 		// Add the system paths...
 		parsePathProperty(libpath,   System.getProperty("java.ext.dirs"), false, null);
@@ -461,12 +464,92 @@ public class DelegatingClassLoader
 	 * key: String className
 	 * value: ClassSearchResult foundClass
 	 */
-	private Map foundClasses = new HashMap();
+	private Map<String, ClassSearchResult> foundClasses = new HashMap<String, ClassSearchResult>();
+
+	//This method is invoked by the virtual machine to load a class.
+	// TODO there's a lot of magic in this classloading stuff, thus I don't know whether this
+	// method would ever be called. Even if this method is never called, it probably doesn't hurt, either ;-)
+  @SuppressWarnings("unused")
+	private Class loadClassInternal(String name)
+  throws ClassNotFoundException
+  {
+  	log_info("loadClassInternal(String name)", "Amazing! The classloader magic calls my loadClassInternal method!");
+  	return loadClass(name);
+  }
+
+  private Map<Thread, Integer> loadClassThreadMap = new HashMap<Thread, Integer>();
+
+	@Override
+	protected Class<?> loadClass(String name, boolean resolve)
+			throws ClassNotFoundException
+	{
+		int loadClassThreadMapSize;
+		synchronized(loadClassThreadMap) {
+			Integer lccI = loadClassThreadMap.get(Thread.currentThread());
+			if (lccI != null)
+				loadClassThreadMap.put(Thread.currentThread(), new Integer(lccI.intValue() + 1));
+			else
+				loadClassThreadMap.put(Thread.currentThread(), new Integer(1));
+
+			loadClassThreadMapSize = loadClassThreadMap.size();
+		}
+		try {
+
+			if (loadClassThreadMapSize > 1) { // if there is another thread doing loadClass
+				try {
+					this.wait(500);
+					System.out.println("#################################################################################");
+					System.out.println("### " + Thread.currentThread().getName());
+					System.out.println("#################################################################################");
+				} catch (InterruptedException e) {
+					// ignore
+				} catch (IllegalMonitorStateException e) {
+					// ignore
+				}
+			}
+
+			Class c;
+			try {
+				c = super.loadClass(name, resolve);
+			} catch (ClassNotFoundException x) {
+	//			log_info("loadClass(String name, boolean resolve)", "Before _findClass("+name+")");
+				
+				c = _findClass(name);
+				
+	//			log_info("loadClass(String name, boolean resolve)", "After _findClass("+name+"), before sleep");
+	//			try {
+	//				Thread.sleep(10000);
+	//			} catch (InterruptedException e) {
+	//				e.printStackTrace();
+	//			}
+	//			log_info("loadClass(String name, boolean resolve)", "After sleep, before resolveClass("+name+")");			
+				
+				resolveClass(c);
+			}
+			return c;
+
+		} finally {
+			synchronized(loadClassThreadMap) {
+				Integer lccI = loadClassThreadMap.get(Thread.currentThread());
+				if (lccI.intValue() > 1)
+					loadClassThreadMap.put(Thread.currentThread(), new Integer(lccI.intValue() - 1));
+				else
+					loadClassThreadMap.remove(Thread.currentThread());
+			}
+		}
+	}
 
 	/**
-	 * @see java.lang.ClassLoader#findClass(java.lang.String)
+	 * Because of a dead lock problem, we've overridden {@link #loadClass(String, boolean) } in order for it
+	 * to not be synchronized. Note, that we do not override {@link ClassLoader#findClass(String name)}, because
+	 * this method would be called within the synchronized super.loadClass(...). Thus, we call this
+	 * method directly in our {@link #loadClass(String, boolean) } implementation outside of a synchronized.
+	 *
+	 * @param name
+	 * @return
+	 * @throws ClassNotFoundException
 	 */
-	protected Class findClass(String name) throws ClassNotFoundException
+	protected Class _findClass(String name) throws ClassNotFoundException
 	{
 		if (debugEnabled)
 			log_debug("findClass", "Entered findClass for name \"" + name + "\".");
@@ -592,9 +675,9 @@ public class DelegatingClassLoader
 	 * key: String resourceName
 	 * value: ResourceSearchResult found resources
 	 */
-	private Map foundResources = new HashMap();
+	private Map<String, ResourceSearchResult> foundResources = new HashMap<String, ResourceSearchResult>();
 	
-	protected List findResources(String name, boolean returnAfterFoundFirst) throws IOException
+	protected List<URL> findResources(String name, boolean returnAfterFoundFirst) throws IOException
 	{
 		synchronized(foundResources) {
 			ResourceSearchResult rsr = (ResourceSearchResult)foundResources.get(name);
@@ -622,7 +705,7 @@ public class DelegatingClassLoader
 		}
 		try {
 		
-			List resources = new LinkedList();
+			List<URL> resources = new LinkedList<URL>();
 	
 			String relativeFileName;
 			if (name.startsWith("/"))
@@ -661,7 +744,7 @@ public class DelegatingClassLoader
 			// now check whether one of the delegates can deliver the class
 			for (Iterator it = delegates.iterator(); it.hasNext(); ) {
 				ResourceFinder delegate = (ResourceFinder) it.next();
-				List delegateRes = delegate.getResources(name, returnAfterFoundFirst);
+				List<URL> delegateRes = delegate.getResources(name, returnAfterFoundFirst);
 				if (delegateRes != null) {
 					resources.addAll(delegateRes);
 					if (returnAfterFoundFirst && !delegateRes.isEmpty())
@@ -682,35 +765,28 @@ public class DelegatingClassLoader
 		}
 	}
 
-	protected Set ignoredThreadsClassesOrResources = new HashSet();
-	
-	public static class ResourceEnumeration implements Enumeration
+	protected Set<String> ignoredThreadsClassesOrResources = new HashSet<String>();
+
+	public static class ResourceEnumeration<T> implements Enumeration<T>
 	{
-		private Iterator iterator;
-		public ResourceEnumeration(Iterator it)
+		private Iterator<T> iterator;
+		public ResourceEnumeration(Iterator<T> it)
 		{
 			this.iterator = it;
 		}
-		/**
-		 * @see java.util.Enumeration#hasMoreElements()
-		 */
+
 		public boolean hasMoreElements()
 		{
 			return iterator.hasNext();
 		}
 
-		/**
-		 * @see java.util.Enumeration#nextElement()
-		 */
-		public Object nextElement()
+		public T nextElement()
 		{
 			return iterator.next();
 		}
 	}
 
-	/**
-	 * @see java.lang.ClassLoader#findResource(java.lang.String)
-	 */
+	@Override
 	protected URL findResource(String name)
 	{
 		log_debug("findResource", "DelegatingClassLoader.findResource(\""+name+"\")");
@@ -726,19 +802,17 @@ public class DelegatingClassLoader
 		else
 			return (URL)resources.get(0);
 	}
-	/**
-	 * @see java.lang.ClassLoader#findResources(java.lang.String)
-	 */
-	protected Enumeration findResources(String name) throws IOException
+
+	@Override
+	protected Enumeration<URL> findResources(String name) throws IOException
 	{
 		log_debug("findResources", "DelegatingClassLoader.findResources(\""+name+"\")");
 
-		List resources = findResources(name, false);
-		return new ResourceEnumeration(resources.iterator());
+		List<URL> resources = findResources(name, false);
+		return new ResourceEnumeration<URL>(resources.iterator());
 	}
-	/**
-	 * @see java.lang.ClassLoader#findLibrary(java.lang.String)
-	 */
+
+	@Override
 	protected String findLibrary(String libname)
 	{
 		// TODO I guess, it is necessary to implement this! Probably, the bootstrap loader ignores the system properties?!
