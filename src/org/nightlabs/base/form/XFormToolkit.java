@@ -395,31 +395,31 @@ extends FormToolkit
 
 	@Override
 	public FormText createFormText(Composite parent, boolean trackFocus) {
-		// TODO Auto-generated method stub
+		// TODO create XFormText
 		return super.createFormText(parent, trackFocus);
 	}
 
 	@Override
 	public Hyperlink createHyperlink(Composite parent, String text, int style) {
-		// TODO Auto-generated method stub
+		// TODO create XHyperlink
 		return super.createHyperlink(parent, text, style);
 	}
 
 	@Override
 	public ImageHyperlink createImageHyperlink(Composite parent, int style) {
-		// TODO Auto-generated method stub
+		// TODO create XImageHyperLink
 		return super.createImageHyperlink(parent, style);
 	}
 
 	@Override
 	public ScrolledPageBook createPageBook(Composite parent, int style) {
-		// TODO Auto-generated method stub
+		// TODO create XScrolledPageBook
 		return super.createPageBook(parent, style);
 	}
 		
 	@Override
 	public HyperlinkGroup getHyperlinkGroup() {
-		// TODO Auto-generated method stub
+		// TODO create XHyperlinkGroup
 		return super.getHyperlinkGroup();
 	}
 
@@ -435,12 +435,6 @@ extends FormToolkit
 			default:
 				super.paintBordersFor(parent);
 		}	
-	}
-
-	@Override
-	public void refreshHyperlinkColors() {
-		// TODO Auto-generated method stub
-		super.refreshHyperlinkColors();
 	}
 
 	public static void paintBorderFor(Widget w) 
