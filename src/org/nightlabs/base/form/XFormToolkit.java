@@ -27,6 +27,7 @@
 package org.nightlabs.base.form;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -36,6 +37,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.HyperlinkGroup;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -324,7 +326,8 @@ extends FormToolkit
 			case FORM:
 				return super.createScrolledForm(parent);
 			case COMPOSITE:
-				return new ScrolledForm(parent, defaultStyle);
+				// TODO: create XScrolledForm
+				return super.createScrolledForm(parent);
 			default:
 				return super.createScrolledForm(parent);
 		}			
@@ -359,6 +362,20 @@ extends FormToolkit
 	}	
 	
 	@Override
+	public Form createForm(Composite parent) 
+	{		
+		switch (currentMode) 
+		{
+			case FORM:
+				return super.createForm(parent);
+			case COMPOSITE:
+				return new XForm(parent, defaultStyle);
+			default:
+				return super.createForm(parent);
+		}	
+	}	
+	
+	@Override
 	public void adapt(Composite composite) {
 		// TODO Auto-generated method stub
 		super.adapt(composite);
@@ -374,12 +391,6 @@ extends FormToolkit
 	public Composite createCompositeSeparator(Composite parent) {
 		// TODO Auto-generated method stub
 		return super.createCompositeSeparator(parent);
-	}
-
-	@Override
-	public Form createForm(Composite parent) 
-	{		
-		return super.createForm(parent);
 	}
 
 	@Override
@@ -413,9 +424,17 @@ extends FormToolkit
 	}
 
 	@Override
-	public void paintBordersFor(Composite parent) {
-		// TODO Auto-generated method stub
-		super.paintBordersFor(parent);
+	public void paintBordersFor(Composite parent) 
+	{
+		switch (currentMode) 
+		{
+			case FORM:
+				super.paintBordersFor(parent);
+			case COMPOSITE:
+				// Does nothing
+			default:
+				super.paintBordersFor(parent);
+		}	
 	}
 
 	@Override
@@ -423,6 +442,23 @@ extends FormToolkit
 		// TODO Auto-generated method stub
 		super.refreshHyperlinkColors();
 	}
+
+	public static void paintBorderFor(Widget w) 
+	{
+		w.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);		
+	}
 	
-	//TODO: add Method createSpinner(Composite parent, int style)
+	public Color getBackground() 
+	{
+		switch (currentMode) 
+		{
+			case FORM:
+				return getColors().getBackground();
+			case COMPOSITE:
+				// TODO: return standard Composite background
+				 return null;
+			default:
+				return getColors().getBackground();
+		}			
+	}
 }
