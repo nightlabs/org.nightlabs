@@ -29,6 +29,7 @@ package org.nightlabs.base.composite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
 
 public class XComposite extends Composite
@@ -106,8 +107,23 @@ public class XComposite extends Composite
 				return layout;
 			default:
 				throw new IllegalArgumentException("layoutMode = " + layoutMode + " is unknown!");
-		}
-		
+		}		
+	}
+	
+	public static void setLayoutDataMode(LayoutDataMode layoutDataMode, Control c) 
+	{
+		switch (layoutDataMode) 
+		{
+			case NONE:
+				// nothing
+				break;
+			case GRID_DATA:
+				GridData gridData = new GridData(GridData.FILL_BOTH);
+				c.setLayoutData(gridData);
+				break;
+			default:
+				throw new IllegalArgumentException("layoutDataMode = " + layoutDataMode + " is unknown!");
+		}	 
 	}
 	
 	/**
@@ -163,20 +179,20 @@ public class XComposite extends Composite
 		this.setBackground(parent.getBackground());
 
 		setLayout(getLayout(layoutMode));
-		
-		switch (layoutDataMode) {
-			case NONE:
-				// nothing
-				break;
-			case GRID_DATA:
-				GridData gridData = new GridData(GridData.FILL_BOTH);
-//				gridData.minimumHeight = 1;
-//				gridData.minimumWidth = 1;
-				setLayoutData(gridData);
-				break;
-			default:
-				throw new IllegalArgumentException("layoutDataMode = " + layoutDataMode + " is unknown!");
-		}
+		setLayoutDataMode(layoutDataMode, this);
+//		switch (layoutDataMode) {
+//			case NONE:
+//				// nothing
+//				break;
+//			case GRID_DATA:
+//				GridData gridData = new GridData(GridData.FILL_BOTH);
+////				gridData.minimumHeight = 1;
+////				gridData.minimumWidth = 1;
+//				setLayoutData(gridData);
+//				break;
+//			default:
+//				throw new IllegalArgumentException("layoutDataMode = " + layoutDataMode + " is unknown!");
+//		}
 	}
 
 	/**
