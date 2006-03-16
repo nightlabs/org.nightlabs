@@ -27,7 +27,6 @@
 package org.nightlabs.base.form;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -255,6 +254,40 @@ extends FormToolkit
 	}
 
 	@Override
+	public ScrolledForm createScrolledForm(Composite parent) 
+	{
+		switch (currentMode) 
+		{
+			case(MODE_FORM):
+				return super.createScrolledForm(parent);
+			case(MODE_COMPOSITE):
+				return new ScrolledForm(parent, defaultStyle);
+			default:
+				return super.createScrolledForm(parent);
+		}			
+	}
+
+	@Override
+	public Label createSeparator(Composite parent, int style) 
+	{
+		switch (currentMode) 
+		{
+			case(MODE_FORM):
+				return super.createSeparator(parent, style);
+			case(MODE_COMPOSITE):
+				return new Label(parent, SWT.SEPARATOR | style);
+			default:
+				return super.createSeparator(parent, style);
+		}	
+	}
+
+	@Override
+	public Section createSection(Composite parent, int sectionStyle) {
+		// TODO Auto-generated method stub
+		return super.createSection(parent, sectionStyle);
+	}	
+	
+	@Override
 	public void adapt(Composite composite) {
 		// TODO Auto-generated method stub
 		super.adapt(composite);
@@ -301,53 +334,11 @@ extends FormToolkit
 		// TODO Auto-generated method stub
 		return super.createPageBook(parent, style);
 	}
-
-	@Override
-	public ScrolledForm createScrolledForm(Composite parent) {
-		// TODO Auto-generated method stub
-		return super.createScrolledForm(parent);
-	}
-
-	@Override
-	public Section createSection(Composite parent, int sectionStyle) {
-		// TODO Auto-generated method stub
-		return super.createSection(parent, sectionStyle);
-	}
-
-	@Override
-	public Label createSeparator(Composite parent, int style) {
-		// TODO Auto-generated method stub
-		return super.createSeparator(parent, style);
-	}
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		super.dispose();
-	}
-
-	@Override
-	public int getBorderStyle() {
-		// TODO Auto-generated method stub
-		return super.getBorderStyle();
-	}
-
-	@Override
-	public FormColors getColors() {
-		// TODO Auto-generated method stub
-		return super.getColors();
-	}
-
+		
 	@Override
 	public HyperlinkGroup getHyperlinkGroup() {
 		// TODO Auto-generated method stub
 		return super.getHyperlinkGroup();
-	}
-
-	@Override
-	public int getOrientation() {
-		// TODO Auto-generated method stub
-		return super.getOrientation();
 	}
 
 	@Override
@@ -361,25 +352,6 @@ extends FormToolkit
 		// TODO Auto-generated method stub
 		super.refreshHyperlinkColors();
 	}
-
-	@Override
-	public void setBackground(Color bg) {
-		// TODO Auto-generated method stub
-		super.setBackground(bg);
-	}
-
-	@Override
-	public void setBorderStyle(int style) {
-		// TODO Auto-generated method stub
-		super.setBorderStyle(style);
-	}
-
-	@Override
-	public void setOrientation(int orientation) {
-		// TODO Auto-generated method stub
-		super.setOrientation(orientation);
-	}
-
 	
 	//TODO: add Method createSpinner(Composite parent, int style)
 }
