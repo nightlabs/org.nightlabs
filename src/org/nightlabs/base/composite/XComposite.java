@@ -26,17 +26,15 @@
 
 package org.nightlabs.base.composite;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Layout;
 
 public class XComposite extends Composite
 {
+	private ChildStatusController childStatusController = new ChildStatusController();
+
 	public static enum LayoutMode {
 		ORDINARY_WRAPPER, TIGHT_WRAPPER
 	}
@@ -65,7 +63,7 @@ public class XComposite extends Composite
 	 */
 	public static final int LAYOUT_DATA_MODE_GRID_DATA = 1;
 
-	private static LayoutMode int2LayoutMode(int layoutMode)
+	public static LayoutMode int2LayoutMode(int layoutMode)
 	{
 		switch (layoutMode) {
 			case LAYOUT_MODE_ORDINARY_WRAPPER:
@@ -77,7 +75,7 @@ public class XComposite extends Composite
 		}
 	}
 
-	private static LayoutDataMode int2LayoutDataMode(int layoutDataMode)
+	public static LayoutDataMode int2LayoutDataMode(int layoutDataMode)
 	{
 		switch (layoutDataMode) {
 			case LAYOUT_DATA_MODE_NONE:
@@ -89,6 +87,29 @@ public class XComposite extends Composite
 		}
 	}
 
+	public static Layout getLayout(LayoutMode layoutMode)
+	{
+		switch (layoutMode) 
+		{
+			case ORDINARY_WRAPPER:
+				return new GridLayout();
+			case TIGHT_WRAPPER: 
+				GridLayout layout = new GridLayout();
+				layout.horizontalSpacing = 0;
+				layout.verticalSpacing = 0;
+				layout.marginHeight = 0;
+				layout.marginWidth = 0;
+				layout.marginLeft = 0;
+				layout.marginRight = 0;
+				layout.marginTop = 0;
+				layout.marginBottom = 0;
+				return layout;
+			default:
+				throw new IllegalArgumentException("layoutMode = " + layoutMode + " is unknown!");
+		}
+		
+	}
+	
 	/**
 	 * Calls {@link #XComposite(Composite, int, int)} with
 	 * <code>layoutMode = </code>{@link #LAYOUT_MODE_ORDINARY_WRAPPER}.
@@ -141,31 +162,8 @@ public class XComposite extends Composite
 		this.setForeground(parent.getForeground());
 		this.setBackground(parent.getBackground());
 
-		switch (layoutMode) {
-			case ORDINARY_WRAPPER:{
-				GridLayout layout = new GridLayout();
-				setLayout(layout);
-				break;
-			}
-			case TIGHT_WRAPPER: {
-				GridLayout layout = new GridLayout();
-				layout.horizontalSpacing = 0;
-				layout.verticalSpacing = 0;
-				layout.marginHeight = 0;
-				layout.marginWidth = 0;
-
-				layout.marginLeft = 0;
-				layout.marginRight = 0;
-				layout.marginTop = 0;
-				layout.marginBottom = 0;
-
-				setLayout(layout);
-				break;
-			}
-			default:
-				throw new IllegalArgumentException("layoutMode = " + layoutMode + " is unknown!");
-		}
-
+		setLayout(getLayout(layoutMode));
+		
 		switch (layoutDataMode) {
 			case NONE:
 				// nothing
@@ -181,38 +179,6 @@ public class XComposite extends Composite
 		}
 	}
 
-	private static class ChildStatus
-	{
-		private boolean enabled = true;
-
-		public boolean isEnabled()
-		{
-			return enabled;
-		}
-		public void setEnabled(boolean enabled)
-		{
-			this.enabled = enabled;
-		}
-	}
-
-	private Map<Control, ChildStatus> childStatusByControl = new HashMap<Control, ChildStatus>();
-	private ChildStatus getChildStatus(Control control, boolean create)
-	{
-		ChildStatus cs = childStatusByControl.get(control);
-		if (cs == null && create) {
-			cs = new ChildStatus();
-			childStatusByControl.put(control, cs);
-			control.addDisposeListener(childDisposeListener);
-		}
-		return cs;
-	}
-
-	private DisposeListener childDisposeListener = new DisposeListener() {
-		public void widgetDisposed(org.eclipse.swt.events.DisposeEvent e) {
-			childStatusByControl.remove(e.getSource());
-		}
-	};
-
 	/**
 	 * @see org.eclipse.swt.widgets.Control#setEnabled(boolean)
 	 */
@@ -220,21 +186,7 @@ public class XComposite extends Composite
 	{
 		if (enabled == isEnabled())
 			return;
-
-		Control[] children = getChildren();
-		for (int i = 0; i < children.length; ++i) {
-			Control child = children[i];
-			if (enabled) {
-				ChildStatus childStatus = getChildStatus(child, false);
-				if (childStatus != null) {
-					child.setEnabled(childStatus.isEnabled());
-				}
-			} else {
-				ChildStatus childStatus = getChildStatus(child, true);
-				childStatus.setEnabled(child.isEnabled());
-				child.setEnabled(false);
-			}
-		}
+		childStatusController.setEnabled(this, enabled);
 		super.setEnabled(enabled);
 	}
 
