@@ -282,9 +282,17 @@ extends FormToolkit
 	}
 
 	@Override
-	public Section createSection(Composite parent, int sectionStyle) {
-		// TODO Auto-generated method stub
-		return super.createSection(parent, sectionStyle);
+	public Section createSection(Composite parent, int sectionStyle) 
+	{
+		switch (currentMode) 
+		{
+			case(MODE_FORM):
+				return super.createSection(parent, sectionStyle);
+			case(MODE_COMPOSITE):
+				return new XSection(parent, sectionStyle);
+			default:
+				return super.createSection(parent, sectionStyle);
+		}	
 	}	
 	
 	@Override
