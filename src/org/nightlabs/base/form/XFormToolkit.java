@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
@@ -46,6 +47,9 @@ import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.ScrolledPageBook;
 import org.eclipse.ui.forms.widgets.Section;
+import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * This is a subclass of the {@link FormToolkit} which allows also to 
@@ -60,31 +64,42 @@ import org.eclipse.ui.forms.widgets.Section;
 public class XFormToolkit 
 extends FormToolkit 
 {
-	public static final int MODE_COMPOSITE = 1; 
-	public static final int MODE_FORM = 2;
+//	public static final int MODE_COMPOSITE = 1; 
+//	public static final int MODE_FORM = 2;
 	
-	/**
-	 * determines the current creation mode
-	 * either MODE_COMPOSITE or MODE_FORM
-	 */
-	protected int currentMode = MODE_FORM;
+	public static enum TOOLKIT_MODE {
+		COMPOSITE, FORM;
+	}
 	
-	/**
-	 * returns the current creation mode
-	 * either MODE_COMPOSITE or MODE_FORM 
-	 * @return the current creation Mode
-	 */
-	public int getCurrentMode() {
+	protected TOOLKIT_MODE currentMode = TOOLKIT_MODE.FORM;
+	public TOOLKIT_MODE getCurrentMode() {
 		return currentMode;
 	}
-	/**
-	 * sets the current creation mode
-	 * either MODE_COMPOSITE or MODE_FORM
-	 * @param currentMode the creation mode to set
-	 */
-	public void setCurrentMode(int currentMode) {
-		this.currentMode = currentMode;
+	public void setCurrentMode(TOOLKIT_MODE mode) {
+		this.currentMode = mode;
 	}
+//	/**
+//	 * determines the current creation mode
+//	 * either MODE_COMPOSITE or MODE_FORM
+//	 */
+//	protected int currentMode = MODE_FORM;
+//	
+//	/**
+//	 * returns the current creation mode
+//	 * either MODE_COMPOSITE or MODE_FORM 
+//	 * @return the current creation Mode
+//	 */
+//	public int getCurrentMode() {
+//		return currentMode;
+//	}
+//	/**
+//	 * sets the current creation mode
+//	 * either MODE_COMPOSITE or MODE_FORM
+//	 * @param currentMode the creation mode to set
+//	 */
+//	public void setCurrentMode(int currentMode) {
+//		this.currentMode = currentMode;
+//	}
 
 	/**
 	 * @param display
@@ -113,9 +128,9 @@ extends FormToolkit
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createButton(parent, text, style);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				Button b = new Button(parent, style);
 				b.setText(text);
 				return b;
@@ -124,29 +139,71 @@ extends FormToolkit
 		}			
 	}
 	
+	public Composite createXComposite(Composite parent, int style, 
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
+	{
+		switch (currentMode) 
+		{
+			case FORM: 
+				Composite c = super.createComposite(parent, style);
+				c.setLayout(XComposite.getLayout(layoutMode));
+				XComposite.setLayoutDataMode(layoutDataMode, c);
+				return c;
+			case COMPOSITE:
+				return new XComposite(parent, style, layoutMode, layoutDataMode);
+			default:
+				c = super.createComposite(parent, style);
+				c.setLayout(XComposite.getLayout(layoutMode));
+				XComposite.setLayoutDataMode(layoutDataMode, c);
+				return c;
+		}					
+	}
+	
+	public Composite createXComposite(Composite parent, int style) 
+	{
+		return createXComposite(parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA);
+	}	
+	
+	public Spinner createSpinner(Composite parent, int style) 
+	{
+		switch (currentMode) 
+		{
+			case FORM:
+				Spinner s = new Spinner(parent, style);
+				paintBordersFor(s);
+				return s;
+			case COMPOSITE:
+				return new Spinner(parent, style);
+			default:
+				s = new Spinner(parent, style);
+				paintBordersFor(s);
+				return s;			
+		}		
+	}
+	
 	@Override
 	public Composite createComposite(Composite parent, int style) 
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createComposite(parent, style);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				Composite c = createInternalComposite(parent, style);
 				return c;
 			default:
 				return super.createComposite(parent, style);
 		}			
 	}
-
+	
 	@Override
 	public Composite createComposite(Composite parent) 
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createComposite(parent);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				return createInternalComposite(parent, defaultStyle);
 			default:
 				return super.createComposite(parent);
@@ -158,9 +215,9 @@ extends FormToolkit
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createExpandableComposite(parent, style);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				return new ExpandableComposite(parent, style);				
 			default:
 				return super.createExpandableComposite(parent, style);
@@ -172,9 +229,9 @@ extends FormToolkit
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createLabel(parent, text, style);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				Label l = new Label(parent, style);
 				l.setText(text);
 				return l;				
@@ -188,9 +245,9 @@ extends FormToolkit
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createLabel(parent, text);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				Label l = new Label(parent, defaultStyle);
 				l.setText(text);
 				return l;								
@@ -204,9 +261,9 @@ extends FormToolkit
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createTable(parent, style);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				return new Table(parent, style);
 			default:
 				return super.createTable(parent, style);
@@ -218,9 +275,9 @@ extends FormToolkit
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createText(parent, text, style);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				Text t = new Text(parent, style);
 				t.setText(text);
 				return t;
@@ -234,9 +291,9 @@ extends FormToolkit
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createText(parent, text);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				Text t = new Text(parent, defaultStyle);
 				t.setText(text);
 				return t;
@@ -250,9 +307,9 @@ extends FormToolkit
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createTree(parent, style);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				return new Tree(parent, style);
 			default:
 				return super.createTree(parent, style);
@@ -264,9 +321,9 @@ extends FormToolkit
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createScrolledForm(parent);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				return new ScrolledForm(parent, defaultStyle);
 			default:
 				return super.createScrolledForm(parent);
@@ -278,9 +335,9 @@ extends FormToolkit
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createSeparator(parent, style);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				return new Label(parent, SWT.SEPARATOR | style);
 			default:
 				return super.createSeparator(parent, style);
@@ -292,9 +349,9 @@ extends FormToolkit
 	{
 		switch (currentMode) 
 		{
-			case(MODE_FORM):
+			case FORM:
 				return super.createSection(parent, sectionStyle);
-			case(MODE_COMPOSITE):
+			case COMPOSITE:
 				return new XSection(parent, sectionStyle);
 			default:
 				return super.createSection(parent, sectionStyle);
