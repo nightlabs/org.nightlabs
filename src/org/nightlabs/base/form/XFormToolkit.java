@@ -48,6 +48,12 @@ import org.eclipse.ui.forms.widgets.ScrolledPageBook;
 import org.eclipse.ui.forms.widgets.Section;
 
 /**
+ * This is a subclass of the {@link FormToolkit} which allows also to 
+ * use "ordinary" Composites as well.
+ * When you create all GUI-Elements with the help of this class
+ * you can easily switch the complete GUI-Style from Forms to normal
+ * Composites
+ * 
  * @author Daniel.Mazurek <at> NightLabs <dot> de
  *
  */
