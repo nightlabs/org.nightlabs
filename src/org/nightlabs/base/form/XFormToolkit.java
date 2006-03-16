@@ -172,13 +172,13 @@ extends FormToolkit
 		{
 			case FORM:
 				Spinner s = new Spinner(parent, style);
-				paintBordersFor(s);
+				paintBorderFor(s);
 				return s;
 			case COMPOSITE:
 				return new Spinner(parent, style);
 			default:
 				s = new Spinner(parent, style);
-				paintBordersFor(s);
+				paintBorderFor(s);
 				return s;			
 		}		
 	}
@@ -326,8 +326,12 @@ extends FormToolkit
 			case FORM:
 				return super.createScrolledForm(parent);
 			case COMPOSITE:
-				// TODO: create XScrolledForm
 				return super.createScrolledForm(parent);
+				// TODO: make XScrolledForm work
+//				XScrolledForm form = new XScrolledForm(parent); 
+//				form.setExpandHorizontal(true);
+//				form.setExpandVertical(true);
+//				return form;
 			default:
 				return super.createScrolledForm(parent);
 		}			
