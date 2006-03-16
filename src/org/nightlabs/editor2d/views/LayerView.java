@@ -68,7 +68,10 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.ViewPart;
+import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.base.form.XFormToolkit;
+import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
@@ -195,8 +198,8 @@ implements ISelectionListener
     getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);		
 	}
 	
-	protected FormToolkit toolkit = null;
-	protected FormToolkit getToolkit() {
+	protected XFormToolkit toolkit = null;
+	protected XFormToolkit getToolkit() {
 		return toolkit;
 	}
 	
@@ -254,30 +257,28 @@ implements ISelectionListener
   public void createPartControl(Composite parent) 
   {   	
     init();
-            
-    parent.setLayout(new GridLayout());
+                
+    parent.setLayout(XComposite.getLayout(LayoutMode.ORDINARY_WRAPPER));    
     parent.setLayoutData(new GridData(GridData.FILL_BOTH));    
     
 		toolkit = new XFormToolkit(parent.getDisplay());
+//		toolkit.setCurrentMode(TOOLKIT_MODE.COMPOSITE);				
+		parent.setBackground(toolkit.getBackground());
+		
 		form = getToolkit().createScrolledForm(parent);
 		form.setLayout(new GridLayout());
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));		
 		form.getBody().setLayout(new GridLayout());
 		form.getBody().setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-//		form.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-//		toolkit.paintBordersFor(form);
-//		form.getBody().setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-//		toolkit.paintBordersFor(form.getBody());
-		    
-    parent.setBackground(toolkit.getColors().getBackground());		
-		
+				    				
 		layerComposite = getToolkit().createComposite(form.getBody(), SWT.NONE);
 		layerComposite.setLayout(new GridLayout());
 		layerComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		layerComposite.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+//		layerComposite.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+//		toolkit.paintBordersFor(form.getBody());
+		toolkit.paintBordersFor(layerComposite);
 		toolkit.paintBordersFor(form.getBody());
-				
+						
 		createTools(parent);				
     refresh();    
     deactivateTools(true);
@@ -289,6 +290,7 @@ implements ISelectionListener
 				
 		Composite parentComposite = getToolkit().createComposite(parent, SWT.NONE);
 		parentComposite.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+		
 		getToolkit().paintBordersFor(parent);
 		getToolkit().paintBordersFor(parentComposite);		
 		if (!parentComposite.isDisposed()) 

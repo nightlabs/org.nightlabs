@@ -49,6 +49,7 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.ViewPart;
 import org.nightlabs.base.form.XFormToolkit;
+import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 import org.nightlabs.editor2d.EditorPlugin;
@@ -91,15 +92,16 @@ extends ViewPart
 		} 
 	}	
 	
-	private FormToolkit toolkit = null;
+	private XFormToolkit toolkit = null;
 	private ScrolledForm form = null;	
 	
 	public void createPartControl(Composite parent) 
 	{
 		toolkit = new XFormToolkit(parent.getDisplay());
+//		toolkit.setCurrentMode(TOOLKIT_MODE.COMPOSITE);
+		
 		form = toolkit.createScrolledForm(parent);
 		TableWrapLayout layout = new TableWrapLayout();
-//		ColumnLayout layout = new ColumnLayout();
 		form.getBody().setLayout(layout);		
 		form.getBody().setLayoutData(new GridData(GridData.FILL_BOTH));
 //		form.setText(EditorPlugin.getResourceString("quickOptionsView.name"));		
@@ -153,8 +155,8 @@ extends ViewPart
 		toolkit.paintBordersFor(parent);
 		
 		Label l = toolkit.createLabel(parent, labelText);		
-		Spinner spinner = new Spinner(parent, SWT.NONE);
-		spinner.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+		Spinner spinner = toolkit.createSpinner(parent, SWT.NONE);
+		
 //		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 		spinner.setSelection(getValue(identifier));				
 		spinner.addSelectionListener(textListener);
