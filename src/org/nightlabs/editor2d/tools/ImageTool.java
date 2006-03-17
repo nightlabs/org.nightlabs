@@ -61,15 +61,29 @@ extends CreationTool
     return (ImageCreateRequest) getTargetRequest();
   }
   
-//  public static final String[] fileExtensions = new String[] {"*.jpg","*.gif","*.png","*.bmp"};
-  public static final String[] fileExtensions = new String[] {"*.jpg"};
-  protected boolean handleButtonDown(int button) 
-  {    
+  protected static final String[] fileExtensions = new String[] {"*.jpg", "*.png", "*.gif", "*.bmp"};
+  // TODO should come from ImageFormatRegistry
+  public String[] getFileExtensions() {
+  	return fileExtensions;
+  }
+  
+  protected FileDialog openFileDialog() 
+  {
     FileDialog dialog = new FileDialog(getCurrentViewer().getControl().getShell());
-    dialog.setFilterExtensions(fileExtensions);
+    dialog.setFilterExtensions(getFileExtensions());
     dialog.setText(EditorPlugin.getResourceString("dialog.choose.image"));
     dialog.open();
-    
+    return dialog;
+  }
+  
+  protected boolean handleButtonDown(int button) 
+  {    
+//    FileDialog dialog = new FileDialog(getCurrentViewer().getControl().getShell());
+//    dialog.setFilterExtensions(fileExtensions);
+//    dialog.setText(EditorPlugin.getResourceString("dialog.choose.image"));
+//    dialog.open();
+  	FileDialog dialog = openFileDialog();
+  	
     if (!dialog.getFileName().equals("")) 
     {
       String fullPathName = dialog.getFilterPath() + File.separator + dialog.getFileName(); 

@@ -32,15 +32,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
+
+import org.apache.log4j.Logger;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ImageDrawComponent;
-import com.sun.image.codec.jpeg.ImageFormatException;
-import com.sun.image.codec.jpeg.JPEGCodec;
 
 public class CreateImageCommand 
 extends CreateDrawComponentCommand 
 {
-
+	public static final Logger LOGGER = Logger.getLogger(CreateImageCommand.class);
   public CreateImageCommand() 
   {
     super();
@@ -64,22 +65,60 @@ extends CreateDrawComponentCommand
     this.simpleFileName = simpleFileName;
   }
   
+//  public void execute() 
+//  {
+//    super.execute();    
+//    try {
+//      image = JPEGCodec.createJPEGDecoder(new FileInputStream(fileName)).decodeAsBufferedImage();
+//      getImageDrawComponent().setImage(image);
+//      getImageDrawComponent().setName(simpleFileName);
+//    } catch (ImageFormatException e) {
+//    	throw new RuntimeException(e);
+//    } catch (FileNotFoundException e) {
+//    	throw new RuntimeException(e);    
+//    } catch (IOException e) {
+//    	throw new RuntimeException(e);    
+//    }
+//  }
+
   public void execute() 
-  {
-    super.execute();    
-    try {
-      image = JPEGCodec.createJPEGDecoder(new FileInputStream(fileName)).decodeAsBufferedImage();
-      getImageDrawComponent().setImage(image);
-      getImageDrawComponent().setName(simpleFileName);
-    } catch (ImageFormatException e) {
-    	throw new RuntimeException(e);
-    } catch (FileNotFoundException e) {
+  {    
+    try {    
+    	FileInputStream fis = new FileInputStream(fileName);
+    	try {
+        image = ImageIO.read(fis);
+    	}
+	    catch (IOException e) {
+	    	throw new RuntimeException(e);    
+	    } 
+	    catch (IllegalArgumentException e) {
+	    	throw new RuntimeException(e);
+	    }
+
+    	if (image == null) {
+  	    // if ImageIO could not read it try it with JIMI    		
+//	    	Image img = Jimi.getImage(fis);
+//	    	image = ImageUtil.toBufferedImage(img);
+    	}
+	 
+    	if (image != null) {
+        super.execute();
+      	getImageDrawComponent().setImage(image);
+        getImageDrawComponent().setName(simpleFileName);        
+    	}    	      
+    	
+//      LOGGER.debug("ImageIO.getReaderFormatNames() = ");
+//      String[] formatNames = ImageIO.getReaderFormatNames();
+//      for (int i=0; i<formatNames.length; i++) {
+//      	String formatName = formatNames[i];
+//      	LOGGER.debug("formatName "+i+" = "+formatName);
+//      }
+    } 
+    catch (FileNotFoundException e) {
     	throw new RuntimeException(e);    
-    } catch (IOException e) {
-    	throw new RuntimeException(e);    
-    }
+    }    
   }
-  
+    
   public void redo() 
   {
     super.redo();
@@ -89,6 +128,5 @@ extends CreateDrawComponentCommand
   {
     super.undo();
   }
-  
-  
+    
 }
