@@ -95,6 +95,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -439,7 +440,10 @@ extends J2DGraphicalEditorWithFlyoutPalette
       };
       getGraphicalControl().addListener(SWT.Activate, listener);
       getGraphicalControl().addListener(SWT.Deactivate, listener);  
-            
+      
+      // TODO Workaround to fix grey bg in editor
+      getGraphicalControl().setBackground(new Color(null, 255, 255, 255));
+
       // ViewerManager
       viewerManager = new ViewerManager(viewer, getEditorSite().getActionBars().getStatusLineManager());
       configureViewerManager();  
@@ -640,6 +644,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
       GraphicalViewer graphicalViewer = getGraphicalViewer();
       graphicalViewer.setContents(getModel()); // set the contents of this editor
       
+      graphicalViewer.getControl().setBackground(new Color(null, 255, 255, 255));
+      graphicalViewer.getControl().setForeground(new Color(null, 255, 255, 255));      
 //      // listen for dropped parts
 //      graphicalViewer.addDropTargetListener(createTransferDropTargetListener());   
       

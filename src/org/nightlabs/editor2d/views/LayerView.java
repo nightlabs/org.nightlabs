@@ -299,7 +299,8 @@ implements ISelectionListener
 			parentComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			
 			// create Visible-Button
-			Button buttonVisible = getToolkit().createButton(parentComposite, EditorPlugin.getResourceString("layerView.buttonVisible.text"), buttonStyle);		
+//			Button buttonVisible = getToolkit().createButton(parentComposite, EditorPlugin.getResourceString("layerView.buttonVisible.text"), buttonStyle);
+			Button buttonVisible = getToolkit().createButton(parentComposite, "", buttonStyle);			
 			buttonVisible.setSelection(!l.isVisible());
 			if (l.isVisible()) {
 				buttonVisible.setImage(EYE_ICON);				
@@ -334,8 +335,8 @@ implements ISelectionListener
 			Text text = getToolkit().createText(parentComposite, EditorPlugin.getResourceString("layerView.layer.name"));
 			if (l.getName() != null)
 				text.setText(l.getName());		
-	  	text.setEditable(true);
-	  	text.setLayoutData(new GridData(GridData.FILL_BOTH));		  								
+			text.setEditable(true);
+			text.setLayoutData(new GridData(GridData.FILL_BOTH));		  								
 			text.addSelectionListener(textListener);
 			text.addFocusListener(focusListener);
 			text.addDisposeListener(textDisposeListener);
