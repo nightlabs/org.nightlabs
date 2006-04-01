@@ -66,6 +66,9 @@ public class SharedImages
 				return "75x70";
 			}
 		},
+		/**
+		 * @deprecated What's that strange format doing here? Marco.
+		 */
 		_150x15 {
 			public String toString()
 			{
