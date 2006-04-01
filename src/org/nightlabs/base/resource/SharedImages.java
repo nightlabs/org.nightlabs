@@ -48,12 +48,6 @@ public class SharedImages
 	}
 
 	public static enum ImageDimension {
-		_75x70 {
-			public String toString()
-			{
-				return "75x70";
-			}
-		},
 		_16x16 {
 			public String toString()
 			{
@@ -64,6 +58,12 @@ public class SharedImages
 			public String toString()
 			{
 				return "24x24";
+			}
+		},
+		_75x70 {
+			public String toString()
+			{
+				return "75x70";
 			}
 		},
 		_150x15 {
