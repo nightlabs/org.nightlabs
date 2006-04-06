@@ -29,6 +29,7 @@ package org.nightlabs.base.form;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -458,5 +459,28 @@ extends FormToolkit
 			default:
 				return getColors().getBackground();
 		}			
+	}
+	
+	public Combo createCombo(Composite parent, int style) 
+	{
+		switch (currentMode) 
+		{
+			case FORM:
+				Combo c = null;
+				if ((style & SWT.BORDER) != 0) {					
+					c = new Combo(parent, style ^ SWT.BORDER);
+					paintBorderFor(c);					
+					paintBorderFor(parent);
+				} else {
+					c = new Combo(parent, style);					
+				} 					
+				return c;
+			case COMPOSITE:
+				 return new Combo(parent, style);
+			default:
+				c = new Combo(parent, style);
+				paintBorderFor(c);
+				return c;
+		}					
 	}
 }
