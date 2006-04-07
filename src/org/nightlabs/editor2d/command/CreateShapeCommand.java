@@ -55,7 +55,8 @@ extends CreateDrawComponentCommand
 	 */	
 	public CreateShapeCommand() 
 	{
-	  super(EditorPlugin.getResourceString("command.create.shape"));	
+		super();		
+		setLabel(EditorPlugin.getResourceString("command.create.shape")); 	  
 	}
 		
 	/* (non-Javadoc)

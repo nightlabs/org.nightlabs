@@ -52,7 +52,6 @@ import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.config.PreferencesConfigModule;
 import org.nightlabs.editor2d.editpolicy.MultiLayerDrawComponentXYLayoutPolicy;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
-import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
 import org.nightlabs.editor2d.model.MultiLayerDrawComponentPropertySource;
 import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 

@@ -64,10 +64,10 @@ extends Command
 	  super(EditorPlugin.getResourceString("command.create.drawcomponent"));	  
 	}
 	
-	public CreateDrawComponentCommand(String name) 
-	{
-	  super(name);	  
-	}
+//	public CreateDrawComponentCommand(String name) 
+//	{
+//	  super(name);	  
+//	}
 	
 	/*
 	 * @see org.eclipse.gef.commands.Command#canUndo()
@@ -113,6 +113,9 @@ extends Command
 	public void setLocation(Rectangle r) {
 		rect = r;
 	}	
+	protected Rectangle getLocation() {
+		return rect;
+	}
 	
 	public void setChild(DrawComponent dc) {
 		drawComponent = dc;

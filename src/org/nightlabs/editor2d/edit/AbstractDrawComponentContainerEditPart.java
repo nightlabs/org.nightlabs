@@ -38,9 +38,13 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 
 import org.nightlabs.editor2d.DrawComponentContainer;
+import org.nightlabs.editor2d.editpolicy.CreateContainerXYLayoutEditPolicy;
 import org.nightlabs.editor2d.editpolicy.DrawComponentContainerEditPolicy;
 import org.nightlabs.editor2d.editpolicy.DrawComponentContainerXYLayoutPolicy;
 import org.nightlabs.editor2d.editpolicy.DrawComponentEditPolicy;
+import org.nightlabs.editor2d.editpolicy.EditShapeContainerXYLayoutEditPolicy;
+import org.nightlabs.editor2d.editpolicy.EditorEditPolicy;
+import org.nightlabs.editor2d.editpolicy.RotateContainerXYLayoutEditPolicy;
 import org.nightlabs.editor2d.figures.ContainerDrawComponentFigure;
 
 
@@ -84,11 +88,26 @@ extends AbstractDrawComponentEditPart
     installEditPolicy(EditPolicy.COMPONENT_ROLE, new DrawComponentEditPolicy());
 		installEditPolicy(EditPolicy.CONTAINER_ROLE, new DrawComponentContainerEditPolicy());
 		XYLayout layout = (XYLayout) getContentPane().getLayoutManager();
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new DrawComponentContainerXYLayoutPolicy(layout));
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new DrawComponentContainerXYLayoutPolicy(layout));					
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, null);	
-		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy()); //$NON-NLS-1$				
+		installEditPolicy(EditorEditPolicy.SNAP_FEEDBACK_ROLE, new SnapFeedbackPolicy()); //$NON-NLS-1$		
   }  
-  
+
+//  /* (non-Javadoc)
+//   * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
+//   */
+//  protected void createEditPolicies() 
+//  {
+//    installEditPolicy(EditPolicy.COMPONENT_ROLE, new DrawComponentEditPolicy());
+//		installEditPolicy(EditPolicy.CONTAINER_ROLE, new DrawComponentContainerEditPolicy());
+//		XYLayout layout = (XYLayout) getContentPane().getLayoutManager();
+//		installEditPolicy(EditPolicy.LAYOUT_ROLE, new CreateContainerXYLayoutEditPolicy());					
+//		installEditPolicy(EditorEditPolicy.ROTATE_ROLE, new RotateContainerXYLayoutEditPolicy());		
+//		installEditPolicy(EditorEditPolicy.EDIT_SHAPE_ROLE, new EditShapeContainerXYLayoutEditPolicy());		
+//		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, null);	
+//		installEditPolicy(EditorEditPolicy.SNAP_FEEDBACK_ROLE, new SnapFeedbackPolicy()); //$NON-NLS-1$		
+//  }  
+    
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{
 		super.propertyChanged(evt);
