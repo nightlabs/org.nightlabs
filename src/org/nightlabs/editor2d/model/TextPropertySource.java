@@ -56,41 +56,61 @@ extends ShapeDrawComponentPropertySource
 		List descriptors = super.createPropertyDescriptors();
 		
 		// Font Name
-		PropertyDescriptor desc = new FontNamePropertyDescriptor(TextDrawComponent.PROP_FONT_NAME,
-				EditorPlugin.getResourceString("property.fontname.label"));
-		desc.setCategory(CATEGORY_FONT);
-		descriptors.add(desc);
-		
+		descriptors.add(createFontNamePD());		
 		// Font Size
-//		desc = new FontSizePropertyDescriptor(TextDrawComponent.PROP_FONT_SIZE,
-//				EditorPlugin.getResourceString("property.fontsize.label"));
-//		desc.setCategory(CATEGORY_FONT);
-//		descriptors.add(desc);
-		desc = new IntPropertyDescriptor(TextDrawComponent.PROP_FONT_SIZE,
-				EditorPlugin.getResourceString("property.fontsize.label"));
-		desc.setCategory(CATEGORY_FONT);
-		descriptors.add(desc);
-		
+		descriptors.add(createFontSizePD());		
 		// Bold
-		desc = new CheckboxPropertyDescriptor(TextDrawComponent.PROP_BOLD,
-				EditorPlugin.getResourceString("property.bold.label"));
-		desc.setCategory(CATEGORY_FONT);
-		descriptors.add(desc);
-		
+		descriptors.add(createBoldPD());		
 		// Italic
-		desc = new CheckboxPropertyDescriptor(TextDrawComponent.PROP_ITALIC,
-				EditorPlugin.getResourceString("property.italic.label"));
-		desc.setCategory(CATEGORY_FONT);
-		descriptors.add(desc);
-		
+		descriptors.add(createItalicPD());		
 		// Text
-		desc = new TextPropertyDescriptor(TextDrawComponent.PROP_TEXT,
-				EditorPlugin.getResourceString("property.text.label"));
-		desc.setCategory(CATEGORY_FONT);
-		descriptors.add(desc);
+		descriptors.add(createTextPD());
 		
 		return descriptors;
 	}	
+	
+	protected PropertyDescriptor createFontNamePD() 
+	{
+		PropertyDescriptor desc = new FontNamePropertyDescriptor(TextDrawComponent.PROP_FONT_NAME,
+				EditorPlugin.getResourceString("property.fontname.label"));
+		desc.setCategory(CATEGORY_FONT);
+		return desc;
+	}
+	
+	protected PropertyDescriptor createFontSizePD() 
+	{
+//	PropertyDescriptor desc = new FontSizePropertyDescriptor(TextDrawComponent.PROP_FONT_SIZE,
+//	EditorPlugin.getResourceString("property.fontsize.label"));
+//  desc.setCategory(CATEGORY_FONT);		
+		PropertyDescriptor desc = new IntPropertyDescriptor(TextDrawComponent.PROP_FONT_SIZE,
+				EditorPlugin.getResourceString("property.fontsize.label"));
+		desc.setCategory(CATEGORY_FONT);
+		return desc;
+	}
+	
+	protected PropertyDescriptor createBoldPD() 
+	{
+		PropertyDescriptor desc = new CheckboxPropertyDescriptor(TextDrawComponent.PROP_BOLD,
+				EditorPlugin.getResourceString("property.bold.label"));
+		desc.setCategory(CATEGORY_FONT);
+		return desc;
+	}
+
+	protected PropertyDescriptor createItalicPD() 
+	{
+		PropertyDescriptor desc = new CheckboxPropertyDescriptor(TextDrawComponent.PROP_ITALIC,
+				EditorPlugin.getResourceString("property.italic.label"));
+		desc.setCategory(CATEGORY_FONT);
+		return desc;
+	}
+	
+	protected PropertyDescriptor createTextPD() 
+	{
+		PropertyDescriptor desc = new TextPropertyDescriptor(TextDrawComponent.PROP_TEXT,
+				EditorPlugin.getResourceString("property.text.label"));
+		desc.setCategory(CATEGORY_FONT);
+		return desc;
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)

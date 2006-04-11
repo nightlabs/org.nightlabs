@@ -46,22 +46,7 @@ import org.nightlabs.language.LanguageCf;
 public class DrawComponentPropertySource 
 implements IPropertySource
 {	
-	protected DrawComponent drawComponent;
-//	protected NameLanguageManager nameLangMan;	
-//	public DrawComponentPropertySource(DrawComponent element) {
-//		this.drawComponent = element;
-//		descriptors = createPropertyDescriptors();
-//		nameLangMan = NameLanguageManager.sharedInstance();	
-//		nameLangMan.addLanguageChangeListener(langListener);
-//	}
-
-//	protected LanguageChangeListener langListener = new LanguageChangeListener(){	
-//		public void languageChanged(LanguageChangeEvent event) {	
-//			String newLanguageID = event.getNewLanguage().getLanguageID();
-//			drawComponent.setLanguageId(newLanguageID);
-//		}	
-//	};
-	
+	protected DrawComponent drawComponent;	
 	protected LanguageManager nameLangMan;	
 	public DrawComponentPropertySource(DrawComponent element) {
 		this.drawComponent = element;
@@ -104,66 +89,89 @@ implements IPropertySource
 	{
 		List descriptors = getDescriptors();
 		
-//		// Name
-//		PropertyDescriptor desc = new TextPropertyDescriptor(DrawComponent.PROP_NAME,
-//				EditorPlugin.getResourceString("property.name.label"));
-//		desc.setCategory(CATEGORY_NAME);
-//		descriptors.add(desc);
-//		// Name
-//		PropertyDescriptor desc = new LanguagePropertyDescriptor(
-//				drawComponent.getI18nText(),
-//				DrawComponent.PROP_NAME,
-//				EditorPlugin.getResourceString("property.name.label"));
 		// Name
+		descriptors.add(createNamePD());				
+		// X
+		descriptors.add(createXPD());		
+		// Y		
+		descriptors.add(createYPD());		
+		// Width		
+		descriptors.add(createWidthPD());		
+		// Height		
+		descriptors.add(createHeightPD());		
+		// Rotation		
+		descriptors.add(createRotationPD());		
+		// RotationX
+		descriptors.add(createRotationXPD());		
+		// RotationY
+		descriptors.add(createRotationYPD());
+		
+		return descriptors;
+	}
+	
+	protected PropertyDescriptor createNamePD() 
+	{
 		PropertyDescriptor desc = new NamePropertyDescriptor(drawComponent,
 				DrawComponent.PROP_NAME,
 				EditorPlugin.getResourceString("property.name.label"));		
 		desc.setCategory(CATEGORY_NAME);
-		descriptors.add(desc);		
-		
-		// X
-		desc = new IntPropertyDescriptor(DrawComponent.PROP_X,
+		return desc;
+	}
+	
+	protected PropertyDescriptor createXPD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_X,
 				EditorPlugin.getResourceString("property.x.label"));
-		desc.setCategory(CATEGORY_GEOM);		
-		descriptors.add(desc);
-		
-		// Y		
-		desc = new IntPropertyDescriptor(DrawComponent.PROP_Y,
+		desc.setCategory(CATEGORY_GEOM);
+		return desc;
+	}
+	
+	protected PropertyDescriptor createYPD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_Y,
 				EditorPlugin.getResourceString("property.y.label"));
-		desc.setCategory(CATEGORY_GEOM);		
-		descriptors.add(desc);
-		
-		// Width		
-		desc = new IntPropertyDescriptor(DrawComponent.PROP_WIDTH,
+		desc.setCategory(CATEGORY_GEOM);
+		return desc;
+	}
+
+	protected PropertyDescriptor createWidthPD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_WIDTH,
 				EditorPlugin.getResourceString("property.width.label"));
-		desc.setCategory(CATEGORY_GEOM);		
-		descriptors.add(desc);
-		
-		// Height		
-		desc = new IntPropertyDescriptor(DrawComponent.PROP_HEIGHT,
+		desc.setCategory(CATEGORY_GEOM);
+		return desc;
+	}
+
+	protected PropertyDescriptor createHeightPD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_HEIGHT,
 				EditorPlugin.getResourceString("property.height.label"));
-		desc.setCategory(CATEGORY_GEOM);		
-		descriptors.add(desc);
-		
-		// Rotation		
-		desc = new RotationPropertyDescriptor(DrawComponent.PROP_ROTATION,
+		desc.setCategory(CATEGORY_GEOM);
+		return desc;
+	}
+	
+	protected PropertyDescriptor createRotationPD() 
+	{
+		PropertyDescriptor desc = new RotationPropertyDescriptor(DrawComponent.PROP_ROTATION,
 				EditorPlugin.getResourceString("property.rotation.label"));
 		desc.setCategory(CATEGORY_ROTATION);		
-		descriptors.add(desc);
-		
-		// RotationX
-		desc = new IntPropertyDescriptor(DrawComponent.PROP_ROTATION_X,
+		return desc;
+	}
+	
+	protected PropertyDescriptor createRotationXPD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_ROTATION_X,
 				EditorPlugin.getResourceString("property.rotationx.label"));
 		desc.setCategory(CATEGORY_ROTATION);		
-		descriptors.add(desc);
-		
-		// RotationY
-		desc = new IntPropertyDescriptor(DrawComponent.PROP_ROTATION_Y,
+		return desc;
+	}
+
+	protected PropertyDescriptor createRotationYPD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_ROTATION_Y,
 				EditorPlugin.getResourceString("property.rotationy.label"));
 		desc.setCategory(CATEGORY_ROTATION);		
-		descriptors.add(desc);
-		
-		return descriptors;
+		return desc;
 	}
 	
 	public IPropertyDescriptor[] getPropertyDescriptors() 

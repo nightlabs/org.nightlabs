@@ -58,37 +58,58 @@ extends DrawComponentPropertySource
 		List descriptors = super.createPropertyDescriptors();
 		
 		// Line Color		
-		PropertyDescriptor desc = new AWTColorPropertyDescriptor(ShapeDrawComponent.PROP_LINE_COLOR,
-				EditorPlugin.getResourceString("property.linecolor.label"));
-		desc.setCategory(CATEGORY_COLORS);
-		descriptors.add(desc);
-		
+		descriptors.add(createLineColorPD());		
 		// Fill Color
-		desc = new AWTColorPropertyDescriptor(ShapeDrawComponent.PROP_FILL_COLOR,
-				EditorPlugin.getResourceString("property.fillcolor.label"));
-		desc.setCategory(CATEGORY_COLORS);
-		descriptors.add(desc);
-		
+		descriptors.add(createFillColorPD());		
 		// Line Width
-		desc = new IntPropertyDescriptor(ShapeDrawComponent.PROP_LINE_WIDTH,
-				EditorPlugin.getResourceString("property.linewidth.label"));
-		desc.setCategory(CATEGORY_LINE);
-		descriptors.add(desc);
-		
+		descriptors.add(createLineWidthPD());		
 		// Line Style
-		desc = new IntPropertyDescriptor(ShapeDrawComponent.PROP_LINE_STYLE,
-				EditorPlugin.getResourceString("property.linestyle.label"));
-		desc.setCategory(CATEGORY_LINE);
-		descriptors.add(desc);
-		
+		descriptors.add(createLineStylePD());		
 		// Fill
-		desc = new CheckboxPropertyDescriptor(ShapeDrawComponent.PROP_FILL,
-				EditorPlugin.getResourceString("property.fill.label"));				
-		descriptors.add(desc);
+		descriptors.add(createFillPD());
 		
 		return descriptors;
 	}
-		
+			
+	protected PropertyDescriptor createLineColorPD() 
+	{
+		PropertyDescriptor desc = new AWTColorPropertyDescriptor(ShapeDrawComponent.PROP_LINE_COLOR,
+				EditorPlugin.getResourceString("property.linecolor.label"));
+		desc.setCategory(CATEGORY_COLORS);
+		return desc;
+	}
+	
+	protected PropertyDescriptor createFillColorPD() 
+	{
+		PropertyDescriptor desc = new AWTColorPropertyDescriptor(ShapeDrawComponent.PROP_FILL_COLOR,
+				EditorPlugin.getResourceString("property.fillcolor.label"));
+		desc.setCategory(CATEGORY_COLORS);
+		return desc;
+	}
+	
+	protected PropertyDescriptor createLineWidthPD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(ShapeDrawComponent.PROP_LINE_WIDTH,
+				EditorPlugin.getResourceString("property.linewidth.label"));
+		desc.setCategory(CATEGORY_LINE);
+		return desc;
+	}
+	
+	protected PropertyDescriptor createLineStylePD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(ShapeDrawComponent.PROP_LINE_STYLE,
+				EditorPlugin.getResourceString("property.linestyle.label"));
+		desc.setCategory(CATEGORY_LINE);
+		return desc;		
+	}
+
+	protected PropertyDescriptor createFillPD() 
+	{
+		PropertyDescriptor desc = new CheckboxPropertyDescriptor(ShapeDrawComponent.PROP_FILL,
+				EditorPlugin.getResourceString("property.fill.label"));				
+		return desc;		
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
