@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
@@ -54,6 +55,8 @@ import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
 
+import sun.rmi.runtime.GetThreadPoolAction;
+
 /**
  * This is a subclass of the {@link FormToolkit} which allows also to 
  * use "ordinary" Composites as well.
@@ -66,10 +69,7 @@ import org.nightlabs.base.composite.XComposite.LayoutMode;
  */
 public class XFormToolkit 
 extends FormToolkit 
-{
-//	public static final int MODE_COMPOSITE = 1; 
-//	public static final int MODE_FORM = 2;
-	
+{	
 	public static enum TOOLKIT_MODE {
 		COMPOSITE, FORM;
 	}
@@ -81,28 +81,6 @@ extends FormToolkit
 	public void setCurrentMode(TOOLKIT_MODE mode) {
 		this.currentMode = mode;
 	}
-//	/**
-//	 * determines the current creation mode
-//	 * either MODE_COMPOSITE or MODE_FORM
-//	 */
-//	protected int currentMode = MODE_FORM;
-//	
-//	/**
-//	 * returns the current creation mode
-//	 * either MODE_COMPOSITE or MODE_FORM 
-//	 * @return the current creation Mode
-//	 */
-//	public int getCurrentMode() {
-//		return currentMode;
-//	}
-//	/**
-//	 * sets the current creation mode
-//	 * either MODE_COMPOSITE or MODE_FORM
-//	 * @param currentMode the creation mode to set
-//	 */
-//	public void setCurrentMode(int currentMode) {
-//		this.currentMode = currentMode;
-//	}
 
 	/**
 	 * @param display
@@ -166,6 +144,25 @@ extends FormToolkit
 	{
 		return createXComposite(parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA);
 	}	
+	
+	public Group createGroup(Composite parent, int style, String text) 
+	{
+		Group g = new Group(parent, style);
+		g.setText(text);				
+		switch (currentMode) 
+		{
+			case FORM:
+				g.setBackground(getBackground());
+				paintBorderFor(g);
+				return g;
+			case COMPOSITE:
+				return g;
+			default:
+				g.setBackground(getBackground());
+				paintBorderFor(g);
+				return g;			
+		}				 
+	}
 	
 	public Spinner createSpinner(Composite parent, int style) 
 	{
