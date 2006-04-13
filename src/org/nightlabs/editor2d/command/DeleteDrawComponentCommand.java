@@ -40,7 +40,7 @@ extends Command
 	protected DrawComponent child;
 	
 	/** MultiLayerDrawComponent to removed from. */
-	protected final DrawComponentContainer parent;
+	protected DrawComponentContainer parent;
   
 	/** the DrawComponentsIndex of the DrawComponentContainer */
 	protected int index;

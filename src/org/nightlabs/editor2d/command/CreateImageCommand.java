@@ -65,22 +65,6 @@ extends CreateDrawComponentCommand
     this.simpleFileName = simpleFileName;
   }
   
-//  public void execute() 
-//  {
-//    super.execute();    
-//    try {
-//      image = JPEGCodec.createJPEGDecoder(new FileInputStream(fileName)).decodeAsBufferedImage();
-//      getImageDrawComponent().setImage(image);
-//      getImageDrawComponent().setName(simpleFileName);
-//    } catch (ImageFormatException e) {
-//    	throw new RuntimeException(e);
-//    } catch (FileNotFoundException e) {
-//    	throw new RuntimeException(e);    
-//    } catch (IOException e) {
-//    	throw new RuntimeException(e);    
-//    }
-//  }
-
   public void execute() 
   {    
     try {    
@@ -94,25 +78,12 @@ extends CreateDrawComponentCommand
 	    catch (IllegalArgumentException e) {
 	    	throw new RuntimeException(e);
 	    }
-
-    	if (image == null) {
-  	    // if ImageIO could not read it try it with JIMI    		
-//	    	Image img = Jimi.getImage(fis);
-//	    	image = ImageUtil.toBufferedImage(img);
-    	}
 	 
     	if (image != null) {
         super.execute();
       	getImageDrawComponent().setImage(image);
-        getImageDrawComponent().setName(simpleFileName);        
-    	}    	      
-    	
-//      LOGGER.debug("ImageIO.getReaderFormatNames() = ");
-//      String[] formatNames = ImageIO.getReaderFormatNames();
-//      for (int i=0; i<formatNames.length; i++) {
-//      	String formatName = formatNames[i];
-//      	LOGGER.debug("formatName "+i+" = "+formatName);
-//      }
+        getImageDrawComponent().setName(simpleFileName); 
+    	}    	          	
     } 
     catch (FileNotFoundException e) {
     	throw new RuntimeException(e);    
@@ -121,12 +92,14 @@ extends CreateDrawComponentCommand
     
   public void redo() 
   {
-    super.redo();
+  	if (image != null)
+  		super.redo();
   }
   
   public void undo() 
   {
-    super.undo();
+  	if (image != null)  	
+  		super.undo();
   }
     
 }

@@ -35,6 +35,7 @@ import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.LineDrawComponent;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RectangleDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
@@ -74,7 +75,10 @@ implements EditPartFactory
     
     else if (model instanceof ImageDrawComponent)
       return new ImageTreeEditPart((ImageDrawComponent)model);
-    
+
+    else if (model instanceof PageDrawComponent)
+      return new PageTreeEditPart((PageDrawComponent)model);
+  	
     return null;
   }
 

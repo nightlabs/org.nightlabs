@@ -32,45 +32,30 @@ import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 
 
-public class DeleteLayerCommand 
-//extends Command 
+public class DeleteLayerCommand  
 extends DeleteDrawComponentCommand
 {
-	/** the Deletion String */
-	public static final String DELETE_LAYER = EditorPlugin.getResourceString("command.delete.layer");
-	/**
-	 * Create a command that will remove the shape from its parent.
-	 * @param parent the ShapesDiagram containing the child
-	 * @param child    the Shape to remove
-	 * @throws IllegalArgumentException if any parameter is null
-	 */ 
+
 	public DeleteLayerCommand(MultiLayerDrawComponent mldc, Layer layer)	
 	{
 		super(mldc, layer);
-		setLabel(DELETE_LAYER);
+		setLabel(EditorPlugin.getResourceString("command.delete.layer"));
+		this.mldc = mldc;
+		this.parent = mldc.getCurrentPage();
 	}	
 		
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
 	public void execute() 
 	{
 		super.execute();
 		setCurrentLayer();
 	}	
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
 	public void redo() 
 	{
 		super.redo();
 	  setCurrentLayer();	  
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
 	public void undo() 
 	{
 		super.undo();
@@ -86,8 +71,9 @@ extends DeleteDrawComponentCommand
     }			  	  
 	}
 	
+	protected MultiLayerDrawComponent mldc;
 	public MultiLayerDrawComponent getMultiLayerDrawComponent() {
-	  return (MultiLayerDrawComponent) parent;
+	  return mldc;
 	}
 	
 	public Layer getLayer() {

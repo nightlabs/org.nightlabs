@@ -27,41 +27,26 @@
 
 package org.nightlabs.editor2d.command;
 
-import org.apache.log4j.Logger;
-
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.LineDrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 
 
-public class CreateShapeCommand 
-//extends Command 
+public class CreateShapeCommand  
 extends CreateDrawComponentCommand
-{
-  public static final Logger LOGGER = Logger.getLogger(CreateShapeCommand.class);
-  	
+{  	
   protected GeneralShape generalShape;  
   public void setGeneralShape(GeneralShape generalShape) {
     this.generalShape = generalShape;
   }
   	
-	/**
-	 * Create a command that will add a new DrawComponent to a MultiLayerDrawComponent.
-	 * @param parent the MultiLayerDrawComponent that will hold the new element
-	 * @param req     a request to create a new DrawComponent
-	 * @throws IllegalArgumentException if any parameter is null, or the request
-	 * 						  does not provide a new DrawComponent instance
-	 */	
 	public CreateShapeCommand() 
 	{
 		super();		
 		setLabel(EditorPlugin.getResourceString("command.create.shape")); 	  
 	}
 		
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
 	public void execute() 
 	{		
 	  if (generalShape != null)

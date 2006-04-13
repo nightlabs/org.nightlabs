@@ -35,21 +35,20 @@ import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.LineDrawComponent;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RectangleDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 
 public class GraphicalEditPartFactory 
 implements EditPartFactory
 {
-	/**
-	 * 
-	 */
+
 	public GraphicalEditPartFactory()
 	{
 		super();
 	}
 
-	/* 
+	/**
 	 * @see org.eclipse.gef.EditPartFactory#createEditPart(org.eclipse.gef.EditPart, java.lang.Object)
 	 */
 	public EditPart createEditPart(EditPart context, Object model)
@@ -74,6 +73,9 @@ implements EditPartFactory
 
     else if (model instanceof ImageDrawComponent)
       return new ImageEditPart((ImageDrawComponent)model);
+
+    else if (model instanceof PageDrawComponent)
+      return new PageEditPart((PageDrawComponent)model);
     
     return null;
 	}

@@ -31,6 +31,7 @@ import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EllipseDrawComponent;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.LineDrawComponent;
+import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RectangleDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.outline.filter.FilterNameProvider;
@@ -66,7 +67,9 @@ implements FilterNameProvider
 		else if (TextDrawComponent.class.isAssignableFrom(c)) {
 			return EditorPlugin.getResourceString("model.textDrawComponent.name");
 		}
-		
+		else if (PageDrawComponent.class.isAssignableFrom(c)) {
+			return EditorPlugin.getResourceString("model.pageDrawComponent.name");
+		}		
 		return EditorPlugin.getResourceString("model.drawComponent.name");
 	}
 }

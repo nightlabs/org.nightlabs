@@ -23,6 +23,7 @@
       <import plugin="org.eclipse.draw2d"/>
       <import plugin="org.eclipse.gef"/>
    </requires>
+   <extension-point id="pageRegistry" name="pageRegistry" schema="schema/pageRegistry.exsd"/>
 
    
    <extension
@@ -254,7 +255,34 @@
                renderContext="org.nightlabs.editor2d.render.Draw2DBaseRenderer"
                renderContextType="Draw2D"/>
       </registry>   
-	</extension>      
+	</extension>
+   <extension
+         point="org.nightlabs.editor2d.pageRegistry">
+      <Unit
+            factor="1"
+            name="mm"/>
+      <Unit
+            factor="0.1"
+            name="cm"/>
+      <Unit
+            factor="0.254"
+            name="inch"/>
+      <ResolutionUnit
+            factor="2.54"
+            name="DPI"/>
+      <ResolutionUnit
+            factor="1"
+            name="DPCM"/>
+      <PredefinedPage
+            name="DIN A4"
+            page="org.nightlabs.editor2d.page.predefined.A4Page"/>
+      <PredefinedPage
+            name="DIN A3"
+            page="org.nightlabs.editor2d.page.predefined.A3Page"/>
+      <PredefinedPage
+            name="DIN A5"
+            page="org.nightlabs.editor2d.page.predefined.A5Page"/>
+   </extension>      
 <!--
    <extension
          point="org.eclipse.ui.popupMenus">

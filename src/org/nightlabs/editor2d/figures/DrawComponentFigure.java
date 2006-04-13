@@ -150,34 +150,12 @@ implements RendererFigure
     return zoomListener;
   }
 
-	public Rectangle getBounds() {
+	public Rectangle getBounds() 
+	{
 		if (drawComponent != null)
 			return J2DUtil.toDraw2D(drawComponent.getBounds());
 		
 		return super.getBounds();
 	}  
-    
-//  protected Label tooltip = new Label();
-//  protected Label getTooltip() 
-//  {
-//  	tooltip.setText(getTooltipText(drawComponent));
-//  	return tooltip; 
-//  }
-//  
-//  protected DescriptorManager descMan = new DescriptorManager();
-//  public void setDescriptorManager(DescriptorManager descMan) {
-//  	this.descMan = descMan;
-//  }
-//  
-//  protected String getTooltipText(DrawComponent dc) 
-//  {
-//  	descMan.setDrawComponent(drawComponent);
-//  	return descMan.getEntriesAsString(true);
-//  }
-//
-//	@Override
-//	public IFigure getToolTip() {
-//		return getToolTip();
-//	}	
-    
+       
 }

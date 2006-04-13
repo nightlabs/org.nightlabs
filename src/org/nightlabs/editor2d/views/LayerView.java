@@ -668,39 +668,54 @@ implements ISelectionListener
 		layerComposite.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
 		getToolkit().paintBordersFor(form.getBody());		
   }
-  
-//  protected void createComposites() 
-//  {
-//		// remove All Entries  	
-//		if (layerComposite != null || !layerComposite.isDisposed()) {
-//			for (int i = 0; i < layerComposite.getChildren().length; i++) {
-//				Control c = layerComposite.getChildren()[i];
-//				c.dispose();
-//			}							
+    
+//	public void refresh()
+//	{			
+//		if (layerComposite != null || !layerComposite.isDisposed()) 		
+//		{						
+//			createComposites();
+//			button2Layer.clear();
+//			
+//			if (mldc != null) 
+//			{
+//				for (int i = mldc.getDrawComponents().size()-1; i >= 0; --i)
+//				{
+//					DrawComponent dc  = (DrawComponent) mldc.getDrawComponents().get(i);
+//					if (dc instanceof Layer) {
+//					  Layer l = (Layer) dc; 
+//					  createLayerEntry(layerComposite, l); 
+//					} else {
+//					  LOGGER.debug("dc NOT instanceof Layer, but instanceof "+dc.getClass());
+//					}
+//				}
+//				
+//				if (mldc.getDrawComponents().size() <= 1)			  
+//				  deactivateTools(true);			  
+//				else 
+//				  activateTools();
+//				
+//				form.reflow(true);
+//			}				  
 //		}		
-//  }
-  
+//	}
+				
 	public void refresh()
 	{			
 		if (layerComposite != null || !layerComposite.isDisposed()) 		
 		{						
 			createComposites();
-			button2Layer.clear();
-			
-			if (mldc != null) 
-			{
-				for (int i = mldc.getDrawComponents().size()-1; i >= 0; --i)
-				{
-					DrawComponent dc  = (DrawComponent) mldc.getDrawComponents().get(i);
+			button2Layer.clear();			
+			if (mldc != null) {
+				for (int i = mldc.getCurrentPage().getDrawComponents().size()-1; i >= 0; --i) {
+					DrawComponent dc  = (DrawComponent) mldc.getCurrentPage().getDrawComponents().get(i);
 					if (dc instanceof Layer) {
 					  Layer l = (Layer) dc; 
 					  createLayerEntry(layerComposite, l); 
 					} else {
 					  LOGGER.debug("dc NOT instanceof Layer, but instanceof "+dc.getClass());
 					}
-				}
-				
-				if (mldc.getDrawComponents().size() <= 1)			  
+				}				
+				if (mldc.getCurrentPage().getDrawComponents().size() <= 1)			  
 				  deactivateTools(true);			  
 				else 
 				  activateTools();
@@ -708,8 +723,8 @@ implements ISelectionListener
 				form.reflow(true);
 			}				  
 		}		
-	}
-				
+	}  
+  
   public void dispose() 
   {
     getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);    

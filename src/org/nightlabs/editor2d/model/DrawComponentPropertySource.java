@@ -46,14 +46,20 @@ import org.nightlabs.language.LanguageCf;
 public class DrawComponentPropertySource 
 implements IPropertySource
 {	
-	protected DrawComponent drawComponent;	
-	protected LanguageManager nameLangMan;	
-	public DrawComponentPropertySource(DrawComponent element) {
+	public static final String CATEGORY_NAME = EditorPlugin.getResourceString("property.category.name");
+	public static final String CATEGORY_GEOM = EditorPlugin.getResourceString("property.category.geom");		
+	public static final String CATEGORY_ROTATION = EditorPlugin.getResourceString("property.category.rotation");
+	
+	public DrawComponentPropertySource(DrawComponent element) 
+	{
 		this.drawComponent = element;
 		descriptors = createPropertyDescriptors();
 		nameLangMan = LanguageManager.sharedInstance();	
 		nameLangMan.addPropertyChangeListener(langListener);
 	}
+	
+	protected DrawComponent drawComponent;	
+	protected LanguageManager nameLangMan;	
 	
 	protected PropertyChangeListener langListener = new PropertyChangeListener()
 	{	
@@ -67,16 +73,12 @@ implements IPropertySource
 		}	
 	};
 	
-	/* (non-Javadoc)
+	/**
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getEditableValue()
 	 */
 	public Object getEditableValue() {
 		return drawComponent;
 	}
-
-	public static final String CATEGORY_NAME = EditorPlugin.getResourceString("property.category.name");
-	public static final String CATEGORY_GEOM = EditorPlugin.getResourceString("property.category.geom");		
-	public static final String CATEGORY_ROTATION = EditorPlugin.getResourceString("property.category.rotation");
 	
 	protected List descriptors = null;
 	protected List getDescriptors() {
@@ -183,7 +185,7 @@ implements IPropertySource
 		return (IPropertyDescriptor[])descriptors.toArray( new IPropertyDescriptor[] {} );		
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
 	public Object getPropertyValue(Object id) 
@@ -216,11 +218,10 @@ implements IPropertySource
 		return null;
 	}
 	
-	/* (non-Javadoc)
+	/* 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#isPropertySet(java.lang.Object)
 	 */
 	public boolean isPropertySet(Object id) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -228,10 +229,9 @@ implements IPropertySource
 	 * @see org.eclipse.ui.views.properties.IPropertySouce#resetPropertyValue(java.lang.Object)
 	 */
 	public void resetPropertyValue(Object id) {
-		// TODO Auto-generated method stub
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) 

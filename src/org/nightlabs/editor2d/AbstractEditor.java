@@ -27,6 +27,7 @@
 
 package org.nightlabs.editor2d;
 
+import java.awt.Rectangle;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
@@ -89,6 +90,7 @@ import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.gef.ui.properties.UndoablePropertySheetEntry;
 import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
@@ -132,12 +134,15 @@ import org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction;
 import org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
+import org.nightlabs.editor2d.dialog.CreatePageDialog;
 import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 import org.nightlabs.editor2d.outline.filter.FilterNameProvider;
+import org.nightlabs.editor2d.page.IUnit;
+import org.nightlabs.editor2d.page.resolution.Resolution;
 import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintPreviewAction;
 import org.nightlabs.editor2d.print.EditorPrintSetupAction;
@@ -235,14 +240,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	}
     	return paletteRoot;
     }
-    
-//    /**
-//     * SubClasses of this Editor should register here IOFilters for Input/Outputs
-//     * which they want to support
-//     * @see EditorIOFilterMan.addIOFIlter(Class IOFilterClass)
-//     */
-//    public abstract void registerIOFilters(); 
-    
+        
     /** Cache save-request status. */
     protected boolean saveAlreadyRequested;
     /** KeyHandler with common bindings for both the Outline View and the Editor. */
@@ -262,12 +260,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     }
      
     public abstract FilterNameProvider createFilterNameProvider();
-    
-//    protected IOFilterMan ioFilterMan;
-//    public IOFilterMan getIOFilterMan() {
-//    	return ioFilterMan;
-//    }
-   
+       
     protected IOFilterMan ioFilterMan;
     public IOFilterMan getIOFilterMan() 
     {
@@ -292,22 +285,13 @@ extends J2DGraphicalEditorWithFlyoutPalette
       setEditDomain(new DefaultEditDomain(this));
       FontUtil.initSystemFonts();
             
-//      ioFilterMan = new IOFilterMan();      
-//      registerIOFilters();
-      
       filterMan = new FilterManager(createFilterNameProvider());     
       
-      // WORKAROUND: Holongate Draw2D-PreferencePage does not store values 
+      // TODO: Holongate Draw2D-PreferencePage does not store values 
       Map hints = new HashMap();
       hints.put(J2DGraphics.KEY_USE_JAVA2D, Boolean.TRUE);
-  	  J2DRegistry.setHints(hints);      
+  	  J2DRegistry.setHints(hints);     	  
     }
-
-//    /**
-//     * Subclasses should register in this Method custom renderers
-//     * in the RenderModeManager
-//     */
-//    public abstract void registerRenderer();
                       
     protected MultiLayerDrawComponent load(IOFilter ioFilter, InputStream input) 
     {      
@@ -1145,13 +1129,26 @@ extends J2DGraphicalEditorWithFlyoutPalette
       	createNewMultiLayerDrawComponent();
         
       mldc.setRenderModeManager(getRenderModeManager());      
-      getMultiLayerDrawComponent().setLanguageId(getLanguageManager().getCurrentLanguageID());
+      getMultiLayerDrawComponent().setLanguageId(getLanguageManager().getCurrentLanguageID());      
     }
         
     protected void createNewMultiLayerDrawComponent() 
     {
     	mldc = getMultiLayerDrawComponent();
-    	loadAdditional();    	
+    	loadAdditional();
+    	
+  	  CreatePageDialog pageDialog = new CreatePageDialog(getSite().getShell());
+  	  if (pageDialog.open() == Dialog.OK) {
+  	  	double pageHeight = pageDialog.getPageComposite().getPageHeight();
+  	  	double pageWidth = pageDialog.getPageComposite().getPageWidth();
+  	  	IUnit unit = pageDialog.getPageComposite().getUnit();
+  	  	Resolution resolution = pageDialog.getPageComposite().getResolution();
+  	  	int defaultX = 25;
+  	  	int defaultY = 25;
+  	  	Rectangle pageBounds = new Rectangle(defaultX, defaultY, (int)pageWidth, (int)pageHeight);
+  	  	getMultiLayerDrawComponent().setResolution(resolution);  	  	
+  	  	getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds);
+  	  }    	
     }
         
     protected void loadAdditional() {

@@ -63,12 +63,7 @@ extends Command
 	{
 	  super(EditorPlugin.getResourceString("command.create.drawcomponent"));	  
 	}
-	
-//	public CreateDrawComponentCommand(String name) 
-//	{
-//	  super(name);	  
-//	}
-	
+		
 	/*
 	 * @see org.eclipse.gef.commands.Command#canUndo()
 	 */

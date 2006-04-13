@@ -28,8 +28,6 @@
 package org.nightlabs.editor2d.model;
 
 import org.eclipse.gef.requests.CreationFactory;
-
-import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.Editor2DFactory;
 import org.nightlabs.editor2d.EditorGuide;
 import org.nightlabs.editor2d.EditorRuler;
@@ -38,6 +36,7 @@ import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.LineDrawComponent;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RectangleDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 
@@ -54,13 +53,7 @@ implements CreationFactory
 	 * @see org.eclipse.gef.requests.CreationFactory#getNewObject()
 	 */
 	public Object getNewObject()
-	{
-//		Map registry = EPackage.Registry.INSTANCE;
-//		String editor2DURI = Editor2DPackage.eNS_URI;
-//		Editor2DPackage editor2DPackage =
-//		(Editor2DPackage) registry.get(editor2DURI);
-//		Editor2DFactory factory = editor2DPackage.getEditor2DFactory();
-	  
+	{	  
 	  Editor2DFactory factory = Editor2DFactory.eINSTANCE;
 	  	  
 		Object result = null;
@@ -77,9 +70,6 @@ implements CreationFactory
 		else if( targetClass.equals(MultiLayerDrawComponent.class)) {
 		  result = factory.createMultiLayerDrawComponent();
 		}
-		else if (targetClass.equals(DrawComponentContainer.class)) {
-		  result = factory.createDrawComponentContainer();
-		}
 		else if( targetClass.equals(EditorGuide.class)) {
 		  result = factory.createEditorGuide();
 		}
@@ -94,6 +84,9 @@ implements CreationFactory
     }
     else if ( targetClass.equals(ImageDrawComponent.class)) {
       result = factory.createImageDrawComponent();
+    }
+    else if ( targetClass.equals(PageDrawComponent.class)) {
+      result = factory.createPageDrawComponent();
     }
 			
 		return result;

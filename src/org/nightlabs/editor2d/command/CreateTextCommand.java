@@ -29,76 +29,36 @@ package org.nightlabs.editor2d.command;
 
 import java.awt.Font;
 
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.commands.Command;
-
-import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.impl.TextDrawComponentImpl;
 import org.nightlabs.editor2d.request.TextCreateRequest;
 
-public class CreateTextCommand 
-extends Command 
+public class CreateTextCommand  
+extends CreateDrawComponentCommand
 {  
-  /** DrawComponentContainer to add to. */
-  protected DrawComponentContainer parent;
-  public void setParent(DrawComponentContainer parent) {
-    this.parent = parent;
-  }  
-  
-  protected Rectangle rect;
-  public void setLocation(Rectangle rect) {
-    this.rect = rect;
-  }
-  protected Rectangle getLocation() {
-    return rect;
-  }
-
-  protected boolean shapeAdded;
-  protected int drawOrderIndex;  
-  protected TextCreateRequest request;
-  
+  protected TextCreateRequest request;  
   public CreateTextCommand(TextCreateRequest request) 
   {
     super();
     setLabel(EditorPlugin.getResourceString("command.create.text"));  
     this.request = request; 
-    this.textDrawComponent = (TextDrawComponent) request.getNewObject();
   }
 
-  protected TextDrawComponent textDrawComponent;
-  
-  /**
-   * @see org.eclipse.gef.commands.Command#execute()
-   */   
+  protected TextDrawComponent getTextDrawComponent() {
+  	return (TextDrawComponent) getChild();
+  }
+    
   public void execute() 
   {
     int x = getLocation().x;
     int y = getLocation().y;
     Font newFont = new Font(request.getFontName(), request.getFontStyle(), request.getFontSize());    
-    textDrawComponent = new TextDrawComponentImpl(request.getText(), newFont, x, y);
-    
-    parent.addDrawComponent(textDrawComponent);
-    textDrawComponent.setName(request.getText());
+    drawComponent = new TextDrawComponentImpl(request.getText(), newFont, x, y);
+    getTextDrawComponent().setName(request.getText());
+    parent.addDrawComponent(drawComponent);
     shapeAdded = true;
-    drawOrderIndex = parent.getDrawComponents().indexOf(textDrawComponent);    
+		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);    
   }
-  
-  /**
-   * @see org.eclipse.gef.commands.Command#redo()
-   */  
-  public void redo() 
-  { 
-    parent.addDrawComponent(textDrawComponent, drawOrderIndex);    
-  }  
-  
-  /**
-   * @see org.eclipse.gef.commands.Command#undo()
-   */
-  public void undo() 
-  { 
-    parent.removeDrawComponent(textDrawComponent);
-  }
-     
+       
 }

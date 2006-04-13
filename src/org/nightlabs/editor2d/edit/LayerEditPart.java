@@ -65,8 +65,7 @@ extends AbstractDrawComponentContainerEditPart
 //    addRenderer(f);
 //    addZoomListener(f);  	
 
-  	IFigure f = new ContainerFreeformLayer();
-  	
+  	IFigure f = new ContainerFreeformLayer();  	
 		f.setLayoutManager(new FreeformLayout());		    		
 		return f;  
   }
