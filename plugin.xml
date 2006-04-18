@@ -119,6 +119,7 @@
          point="org.nightlabs.classsharing.globalclasspublish">
       <globalClassPublish pattern="org\.nightlabs\.base\.config\..*"/>
       <globalClassPublish pattern="org\.nightlabs\.editor2d\.config\..*"/>
+      <globalClassPublish pattern="org\.nightlabs\.i18n\..*"/>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -254,34 +255,54 @@
          <renderContext
                renderContext="org.nightlabs.editor2d.render.Draw2DBaseRenderer"
                renderContextType="Draw2D"/>
+      </registry>
+      <registry
+            drawComponentClass="org.nightlabs.editor2d.PageDrawComponent"
+            mode="1"
+            name="Default"
+            renderer="org.nightlabs.editor2d.render.PageRenderer">
+         <renderContext
+               renderContext="org.nightlabs.editor2d.render.Draw2DPageRenderer"
+               renderContextType="Draw2D"/>
       </registry>   
 	</extension>
    <extension
          point="org.nightlabs.editor2d.pageRegistry">
       <Unit
             factor="1"
-            name="mm"/>
+            name="mm"
+            symbol="mm"
+            unitID="millimetre"/>
       <Unit
             factor="0.1"
-            name="cm"/>
+            name="cm"
+            symbol="cm"
+            unitID="centimetre"/>
       <Unit
             factor="0.254"
-            name="inch"/>
+            name="inch"
+            symbol="in"
+            unitID="inch"/>
       <ResolutionUnit
             factor="2.54"
-            name="DPI"/>
+            name="DPI"
+            resolutionID="DPI"/>
       <ResolutionUnit
             factor="1"
-            name="DPCM"/>
+            name="DPCM"
+            resolutionID="DPCM"/>
       <PredefinedPage
             name="DIN A4"
-            page="org.nightlabs.editor2d.page.predefined.A4Page"/>
+            page="org.nightlabs.editor2d.page.predefined.A4Page"
+            pageID="A4"/>
       <PredefinedPage
             name="DIN A3"
-            page="org.nightlabs.editor2d.page.predefined.A3Page"/>
+            page="org.nightlabs.editor2d.page.predefined.A3Page"
+            pageID="A3"/>
       <PredefinedPage
             name="DIN A5"
-            page="org.nightlabs.editor2d.page.predefined.A5Page"/>
+            page="org.nightlabs.editor2d.page.predefined.A5Page"
+            pageID="A5"/>
    </extension>      
 <!--
    <extension

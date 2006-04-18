@@ -57,20 +57,31 @@ implements RendererFigure
     
   public void paint(Graphics2D graphics) 
   {
+  	paintJ2D(graphics, drawComponent, renderer);
+  }  
+  
+  public static void paintJ2D(Graphics2D graphics, DrawComponent drawComponent, Renderer renderer) 
+  {
   	if (renderer == null && drawComponent != null)
   		renderer = drawComponent.getRenderer();
   	if (renderer != null) {
   		RenderContext rc = renderer.getRenderContext();
   		if (rc != null && rc instanceof J2DRenderContext)
     	  ((J2DRenderContext)rc).paint(drawComponent, graphics);
-  		else {
-  			if (rc == null)
-  				LOGGER.debug("RenderContext for Renderer "+renderer+" == null!");
-  			if (!(rc instanceof J2DRenderContext))
-  				LOGGER.debug("RenderContext "+rc+" NOT instanceof J2DRenderContext!");
-  		}
-  	}  	
-  }  
+  	}    	
+  }
+    
+  public static void checkDraw2D(Graphics graphics, DrawComponent dc, Renderer r) 
+  {
+    if (graphics instanceof J2DGraphics) 
+    {
+    	J2DGraphics j2d = (J2DGraphics) graphics;
+      Graphics2D g2d = j2d.createGraphics2D();
+      g2d.setClip(null);      
+      paintJ2D(g2d, dc, r);      
+      g2d.dispose();
+    }  	
+  }
   
   public void paint(Graphics graphics) 
   {  	
@@ -86,7 +97,7 @@ implements RendererFigure
     	// TODO: paint with Draw2DRenderContext
     }
   }
-  
+      
   protected Renderer renderer;   
   public void setRenderer(Renderer renderer) {
     this.renderer = renderer;

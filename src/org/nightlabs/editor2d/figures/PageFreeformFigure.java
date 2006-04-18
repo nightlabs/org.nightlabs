@@ -25,16 +25,23 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.figures;
 
+import java.awt.Graphics2D;
+import java.util.Iterator;
+
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.J2DGraphics;
 import org.nightlabs.editor2d.PageDrawComponent;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class PageDrawComponentFigure 
-extends ContainerDrawComponentFigure 
+public class PageFreeformFigure 
+//extends ContainerDrawComponentFigure 
+extends ContainerFreeformLayer
 {
 
-	public PageDrawComponentFigure() {
+	public PageFreeformFigure() {
 		super();
 	}
 
@@ -42,4 +49,19 @@ extends ContainerDrawComponentFigure
 		return (PageDrawComponent) drawComponent;
 	}
 	
+	/**
+	 * Overridden to paint bounds of page and children
+	 */
+	public void paint(Graphics2D graphics) 
+	{
+		DrawComponentFigure.paintJ2D(graphics, drawComponent, renderer);
+	}  
+	
+	/**
+	 * Overridden to paint bounds of page and children
+	 */
+	public void paint(Graphics graphics) 
+	{
+		DrawComponentFigure.checkDraw2D(graphics, drawComponent, renderer);
+	}	
 }

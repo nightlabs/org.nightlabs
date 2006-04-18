@@ -34,6 +34,8 @@ import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.ResolutionUnit;
+import org.nightlabs.i18n.IUnit;
+import org.nightlabs.i18n.Unit;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -47,6 +49,10 @@ extends AbstractEPProcessor
 	public static final String ELEMENT_PREDEFINED_PAGE = "PredefinedPage";
 	public static final String ATTRIBUTE_NAME = "name";
 	public static final String ATTRIBUTE_FACTOR = "factor";
+	public static final String ATTRIBUTE_UNIT_ID = "unitID";
+	public static final String ATTRIBUTE_UNIT_SYMBOL = "symbol";	
+	public static final String ATTRIBUTE_RESOLUTION_ID = "resolutionID";
+	public static final String ATTRIBUTE_PAGE_ID = "pageID";
 	
 	protected static PageRegistryEP sharedInstance = null;
 	public static PageRegistryEP sharedInstance() {
@@ -87,9 +93,20 @@ extends AbstractEPProcessor
 			} catch (NumberFormatException e) {
 				throw new EPProcessorException("unit "+name+" has no valid factor ("+element.getAttribute(ATTRIBUTE_FACTOR)+")!", e);				
 			}
+			
+			String unitID = element.getAttribute(ATTRIBUTE_UNIT_ID);
+			if (!checkString(unitID))
+				throw new EPProcessorException("unitID must not be null nor empty! for element "+element);
+
+			String symbol = element.getAttribute(ATTRIBUTE_UNIT_SYMBOL);
+			
 			IUnit unit = new Unit();
 			unit.setName(Locale.getDefault().getLanguage(), name);
 			unit.setFactor(factor);
+			unit.setUnitID(unitID);
+			if (checkString(symbol))
+				unit.setUnitSymbol(symbol);
+			
 			registry.addUnit(unit);
 		}
 		else if (element.getName().equalsIgnoreCase(ELEMENT_RESOLUTION_UNIT)) 
@@ -104,9 +121,15 @@ extends AbstractEPProcessor
 			} catch (NumberFormatException e) {
 				throw new EPProcessorException("unit "+name+" has no valid factor ("+element.getAttribute(ATTRIBUTE_FACTOR)+")!", e);				
 			}
+			
+			String resolutionID = element.getAttribute(ATTRIBUTE_RESOLUTION_ID);
+			if (!checkString(resolutionID))
+				throw new EPProcessorException("resolutionID must not be null nor empty! for element "+element);
+			
 			IResolutionUnit unit = new ResolutionUnit();
 			unit.setName(Locale.getDefault().getLanguage(), name);
 			unit.setFactor(factor);
+			unit.setResolutionID(resolutionID);
 			registry.addResolutionUnit(unit);
 		}
 		else if (element.getName().equalsIgnoreCase(ELEMENT_PREDEFINED_PAGE)) 
@@ -115,9 +138,14 @@ extends AbstractEPProcessor
 			if (!checkString(name))
 				throw new IllegalArgumentException("unit name must not be null nor empty!");
 			
+			String pageID = element.getAttribute(ATTRIBUTE_PAGE_ID);
+			if (!checkString(pageID))
+				throw new IllegalArgumentException("pageID must not be null nor empty!");
+				
 			try {
 				IPredefinedPage page = (IPredefinedPage) element.createExecutableExtension("page");
 				page.setName(Locale.getDefault().getLanguage(), name);
+				page.setPageID(pageID);
 				registry.addPredefinedPage(page);
 			} catch (CoreException ce) {
 				throw new EPProcessorException(ce); 

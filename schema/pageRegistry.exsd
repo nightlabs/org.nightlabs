@@ -68,6 +68,21 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="unitID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  the unique name of the measurement unit like in the ISO 31-1 described. (e.g. millimetre)
+http://en.wikipedia.org/wiki/ISO_31-1
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="symbol" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
@@ -92,6 +107,13 @@
             <annotation>
                <documentation>
                   the calculation factor for transforming a value from the standard unit DPCM (dots per centimeter) into this one
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="resolutionID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  the unique name of the resolution unit (e.g. DPI)
                </documentation>
             </annotation>
          </attribute>
@@ -123,6 +145,14 @@
                <appInfo>
                   <meta.attribute kind="java" basedOn="org.nightlabs.editor2d.page.IPredefinedPage"/>
                </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="pageID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  the unique name of the paper size like in the ISO 216 described (e.g. A4)
+http://en.wikipedia.org/wiki/ISO_216
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

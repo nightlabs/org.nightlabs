@@ -31,7 +31,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.ui.views.properties.IPropertySource;

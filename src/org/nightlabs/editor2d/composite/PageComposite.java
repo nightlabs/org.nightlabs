@@ -46,12 +46,15 @@ import org.nightlabs.base.form.XFormToolkit;
 import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.page.IPredefinedPage;
-import org.nightlabs.editor2d.page.IUnit;
 import org.nightlabs.editor2d.page.PageRegistry;
 import org.nightlabs.editor2d.page.PageRegistryEP;
+import org.nightlabs.editor2d.page.predefined.A4Page;
+import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.Resolution;
 import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
+import org.nightlabs.editor2d.page.unit.MMUnit;
+import org.nightlabs.i18n.IUnit;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -162,6 +165,7 @@ extends XComposite
 		pageWidthText.addSelectionListener(widthListener);
 		pageHeightText.addSelectionListener(heightListener);
 		resolutionText.addSelectionListener(resolutionListener);
+		resolutionUnitsCombo.addSelectionListener(resolutionUnitComboListener);
 	}
 	
 	protected SelectionListener pageSelectListener = new SelectionListener()
@@ -169,10 +173,18 @@ extends XComposite
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
 		}	
-		public void widgetSelected(SelectionEvent e) {
+		public void widgetSelected(SelectionEvent e) 
+		{
 			IPredefinedPage page = pages.get(pageSelectCombo.getSelectionIndex());
-			pageHeightText.setText(""+page.getPageHeight());
-			pageWidthText.setText(""+page.getPageWidth());
+			
+			if (page.getUnit().getFactor() == unit.getFactor()) {
+				pageHeightText.setText(""+page.getPageHeight());
+				pageWidthText.setText(""+page.getPageWidth());				
+			}
+			else {
+				setPageHeight(getPageHeight(), page.getUnit());
+				setPageWidth(getPageWidth(), page.getUnit());
+			}
 		}	
 	};
 	
@@ -181,8 +193,12 @@ extends XComposite
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
 		}	
-		public void widgetSelected(SelectionEvent e) {
-			unit = units.get(unitsCombo.getSelectionIndex());			
+		public void widgetSelected(SelectionEvent e) 
+		{
+			IUnit unit = units.get(unitsCombo.getSelectionIndex());			
+			setPageWidth(getPageWidth(), unit);
+			setPageHeight(getPageHeight(), unit);
+			PageComposite.this.unit = unit;
 		}	
 	};
 
@@ -192,7 +208,7 @@ extends XComposite
 			widgetSelected(e);
 		}	
 		public void widgetSelected(SelectionEvent e) {
-			pageWidth = Double.valueOf(pageWidthText.getText());			
+//			pageWidth = Double.valueOf(pageWidthText.getText());			
 		}	
 	};
 
@@ -202,7 +218,7 @@ extends XComposite
 			widgetSelected(e);
 		}	
 		public void widgetSelected(SelectionEvent e) {
-			pageHeight = Double.valueOf(pageHeightText.getText());
+//			pageHeight = Double.valueOf(pageHeightText.getText());
 		}	
 	};
 
@@ -227,6 +243,19 @@ extends XComposite
 			resolutionText.setText(""+resolution.getResolution());
 		}	
 	};	
+
+	protected SelectionListener resolutionUnitComboListener = new SelectionListener()
+	{	
+		public void widgetDefaultSelected(SelectionEvent e) {
+			widgetSelected(e);
+		}	
+		public void widgetSelected(SelectionEvent e) {
+			IResolutionUnit unit = resolutionUnits.get(resolutionUnitsCombo.getSelectionIndex());
+			resolution.setResolutionUnit(unit);
+			resolutionText.setText(""+resolution.getResolution());
+		}	
+	};	
+	
 	
 	private List<IPredefinedPage> pages = null;
 	protected void populatePageSelectCombo(PageRegistry registry) 
@@ -236,8 +265,17 @@ extends XComposite
 			IPredefinedPage page = it.next();
 			pageSelectCombo.add(page.getName().getText(Locale.getDefault().getLanguage()));
 		}
+		if (registry.getPagesIDs().contains(A4Page.PAGE_ID)) {
+			int index = pages.indexOf(registry.getPredefinedPage(A4Page.PAGE_ID));
+			pageSelectCombo.select(index);
+		} else if (pages.size() > 0) {
+			pageSelectCombo.select(0);
+		}
+		
 		if (pages.size() > 0) {
-			pageSelectCombo.setText("DIN A4");
+			IPredefinedPage page = pages.get(pageSelectCombo.getSelectionIndex());
+			pageWidthText.setText(""+page.getPageWidth());
+			pageHeightText.setText(""+page.getPageHeight());					
 		}
 	}
 	
@@ -249,8 +287,10 @@ extends XComposite
 			IUnit unit = it.next();
 			unitsCombo.add(unit.getName().getText(Locale.getDefault().getLanguage()));
 		}
-		if (units.size() > 0) {
-			unitsCombo.setText("mm");			
+		if (registry.getUnitIDs().contains(MMUnit.UNIT_ID)) {
+			unitsCombo.select(units.indexOf(registry.getUnit(MMUnit.UNIT_ID)));			
+		} else if (units.size() > 0) {
+			unitsCombo.select(0);
 		}
 	}
 		
@@ -262,8 +302,10 @@ extends XComposite
 			IResolutionUnit unit = it.next();
 			resolutionUnitsCombo.add(unit.getName().getText(Locale.getDefault().getLanguage()));
 		}
-		if (resolutionUnits.size() > 0) {
-			resolutionUnitsCombo.setText("DPI");
+		if (registry.getResolutionIDs().contains(DPIResolutionUnit.RESOLUTION_ID)) {
+			resolutionUnitsCombo.select(resolutionUnits.indexOf(registry.getResolutionUnit(DPIResolutionUnit.RESOLUTION_ID)));			
+		} else if (resolutionUnits.size() > 0) {
+			resolutionUnitsCombo.select(0);
 		}
 	}
 	
@@ -272,17 +314,55 @@ extends XComposite
 		return resolution;
 	}
 	
-	protected double pageWidth = 0;
-	public double getPageWidth() {
+	protected double pageWidth = 210;
+	public double getPageWidth() 
+	{
+		if (!pageWidthText.isDisposed()) {
+			try {
+				pageWidth = Double.valueOf(pageWidthText.getText());
+			} catch (NumberFormatException nfe) {
+			
+			}
+		}			 
 		return pageWidth;
 	}
-	
-	protected double pageHeight = 0;
-	public double getPageHeight() {
-		return pageHeight;
+	protected void setPageWidth(double value, IUnit unit) 
+	{
+		double pageWidth = getPageWidth();
+		if (this.unit.getFactor() == unit.getFactor())		
+			pageWidth = value;
+		else {
+			double oldFactor = this.unit.getFactor();
+			pageWidth = (pageWidth * unit.getFactor()) / oldFactor;			
+		}
+		pageWidthText.setText(""+pageWidth);
 	}
 	
-	protected IUnit unit = null;
+	protected double pageHeight = 297;
+	public double getPageHeight() 
+	{
+		if (!pageHeightText.isDisposed()) 
+		{
+			try {
+				pageHeight = Double.valueOf(pageHeightText.getText());
+			} catch (NumberFormatException nfe) {
+			}			
+		}
+		return pageHeight;
+	}
+	protected void setPageHeight(double value, IUnit unit) 
+	{
+		double pageHeight = getPageHeight();
+		if (this.unit.getFactor() == unit.getFactor())			
+			pageHeight = value;
+		else {			
+			double oldFactor = this.unit.getFactor();
+			pageHeight = (pageHeight * unit.getFactor()) / oldFactor;						
+		}
+		pageHeightText.setText(""+pageHeight);
+	}
+	
+	protected IUnit unit = new MMUnit();
 	public IUnit getUnit() {
 		return unit;
 	}

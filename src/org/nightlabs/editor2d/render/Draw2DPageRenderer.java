@@ -23,69 +23,32 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.edit;
+package org.nightlabs.editor2d.render;
 
-import java.beans.PropertyChangeEvent;
-
-import org.eclipse.draw2d.FreeformLayout;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.swt.SWT;
+import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
-import org.nightlabs.editor2d.figures.PageFreeformFigure;
-import org.nightlabs.editor2d.figures.RendererFigure;
-import org.nightlabs.editor2d.model.PagePropertySource;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class PageEditPart 
-extends AbstractDrawComponentContainerEditPart 
+public class Draw2DPageRenderer 
+extends Draw2DBaseRenderer 
 {
 
-	/**
-	 * @param page the PageDrawComponent to initalize this PageEditPart with
-	 */
-	public PageEditPart(PageDrawComponent page) 
-	{
-		super(page);
+	public Draw2DPageRenderer() {
+		super();
 	}
 
-	protected PageDrawComponent getPageDrawComponent() {
-		return (PageDrawComponent) getDrawComponent();
-	}
-	
-  protected IFigure createFigure() 
-  {    
-//  	DrawComponentFigure f = new ContainerDrawComponentFigure();
-//    f.setDrawComponent(getDrawComponent());    
-//    addRenderer(f);
-    
-//  	IFigure f = new ContainerFreeformLayer();  	
-  	RendererFigure f = new PageFreeformFigure();
-    f.setDrawComponent(getPageDrawComponent());    
-    addRenderer(f);
-    
-		f.setLayoutManager(new FreeformLayout());    
-		return f;  
-  }	
-  
-  protected IPropertySource getPropertySource()
-  {
-    if (propertySource == null) {
-      propertySource = new PagePropertySource(getPageDrawComponent());
-    }
-    return propertySource;
-  }  
-  
-	protected void propertyChanged(PropertyChangeEvent evt) 
+	public void paint(DrawComponent dc, Graphics g) 
 	{
-		String propertyName = evt.getPropertyName();
-		if (propertyName.equals(PageDrawComponent.PROP_RESOLUTION)) {
-			refresh();
-		}
-		else if (propertyName.equals(PageDrawComponent.PROP_ORIENTATION)) {
-			refresh();
-		}
-		super.propertyChanged(evt);		
-	}
+    PageDrawComponent page = (PageDrawComponent) dc;
+    g.setForegroundColor(ColorConstants.black);
+    g.setLineStyle(SWT.LINE_SOLID);
+    g.drawRectangle(page.getBounds().x, page.getBounds().y, 
+    		page.getBounds().width, page.getBounds().height);
+    super.paint(dc, g);
+	}	
 }

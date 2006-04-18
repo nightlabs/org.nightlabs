@@ -36,15 +36,11 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
-
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.editpolicy.CreateContainerXYLayoutEditPolicy;
 import org.nightlabs.editor2d.editpolicy.DrawComponentContainerEditPolicy;
 import org.nightlabs.editor2d.editpolicy.DrawComponentContainerXYLayoutPolicy;
 import org.nightlabs.editor2d.editpolicy.DrawComponentEditPolicy;
-import org.nightlabs.editor2d.editpolicy.EditShapeContainerXYLayoutEditPolicy;
 import org.nightlabs.editor2d.editpolicy.EditorEditPolicy;
-import org.nightlabs.editor2d.editpolicy.RotateContainerXYLayoutEditPolicy;
 import org.nightlabs.editor2d.figures.ContainerDrawComponentFigure;
 
 
@@ -67,19 +63,14 @@ extends AbstractDrawComponentEditPart
     figure.setLayoutManager(new FreeformLayout());    
     figure.setDrawComponent(getDrawComponent());    
     addRenderer(figure);
-    addZoomListener(figure);
+//    addZoomListener(figure);
     return figure;  	
   }
   
-//  /* (non-Javadoc)
-//   * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
-//   */
-//  protected IFigure createFigure() {
-//		Figure f = new Figure();
-//		f.setLayoutManager(new FreeformLayout());
-//		return f;
-//  }
-
+  public DrawComponentContainer getDrawComponentContainer() {
+  	return (DrawComponentContainer) getModel();
+  }
+  
   /* (non-Javadoc)
    * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
    */
@@ -126,6 +117,6 @@ extends AbstractDrawComponentEditPart
 	
   protected List getModelChildren()
   {
-    return ((DrawComponentContainer)getModel()).getDrawComponents();
+    return getDrawComponentContainer().getDrawComponents();
   }   
 }

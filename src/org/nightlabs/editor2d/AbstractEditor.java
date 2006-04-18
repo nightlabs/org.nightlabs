@@ -141,7 +141,6 @@ import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 import org.nightlabs.editor2d.outline.filter.FilterNameProvider;
-import org.nightlabs.editor2d.page.IUnit;
 import org.nightlabs.editor2d.page.resolution.Resolution;
 import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintPreviewAction;
@@ -151,6 +150,7 @@ import org.nightlabs.editor2d.render.RenderModeManager;
 import org.nightlabs.editor2d.rulers.EditorRulerProvider;
 import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 import org.nightlabs.editor2d.viewer.render.RendererRegistry;
+import org.nightlabs.i18n.IUnit;
 import org.nightlabs.io.AbstractIOFilterWithProgress;
 import org.nightlabs.io.IOFilter;
 import org.nightlabs.io.IOFilterMan;
@@ -1113,7 +1113,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
     protected void setInput(IEditorInput input)
     {
       super.setInput(input);
-      renderMan = RendererRegistry.sharedInstance().getRenderModeManager();  
+      renderMan = RendererRegistry.sharedInstance().getRenderModeManager();
+      renderMan.logRegisteredRenderer(1);
+      renderMan.logRenderContexts();
       
       if (input instanceof FileEditorInput) {
         FileEditorInput fileInput = (FileEditorInput) input; 
@@ -1138,7 +1140,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	loadAdditional();
     	
   	  CreatePageDialog pageDialog = new CreatePageDialog(getSite().getShell());
-  	  if (pageDialog.open() == Dialog.OK) {
+  	  if (pageDialog.open() == Dialog.OK) 
+  	  {
   	  	double pageHeight = pageDialog.getPageComposite().getPageHeight();
   	  	double pageWidth = pageDialog.getPageComposite().getPageWidth();
   	  	IUnit unit = pageDialog.getPageComposite().getUnit();
@@ -1147,7 +1150,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
   	  	int defaultY = 25;
   	  	Rectangle pageBounds = new Rectangle(defaultX, defaultY, (int)pageWidth, (int)pageHeight);
   	  	getMultiLayerDrawComponent().setResolution(resolution);  	  	
-  	  	getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds);
+  	  	getMultiLayerDrawComponent().getCurrentPage().setBounds(pageBounds);
   	  }    	
     }
         

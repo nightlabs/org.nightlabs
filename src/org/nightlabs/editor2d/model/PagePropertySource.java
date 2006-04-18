@@ -30,6 +30,7 @@ import java.util.List;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.nightlabs.base.property.ComboBoxPropertyDescriptor;
 import org.nightlabs.base.property.DoublePropertyDescriptor;
+import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.PageDrawComponent;
@@ -59,6 +60,14 @@ extends DrawComponentPropertySource
 		descriptors.add(createResolutionPD());
 		// Orientation
 		descriptors.add(createOrientationPD());
+		// Page X
+		descriptors.add(createXPD());
+		// Page Y
+		descriptors.add(createYPD());
+		// Page Width
+		descriptors.add(createWidthPD());
+		// Page Height
+		descriptors.add(createHeightPD());		
 		
 		return descriptors;
 	}
@@ -90,6 +99,37 @@ extends DrawComponentPropertySource
 		return -1;
 	}
 	
+	protected PropertyDescriptor createXPD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_X,
+				EditorPlugin.getResourceString("property.x.label"), true);
+		desc.setCategory(CATEGORY_GEOM);
+		return desc;
+	}
+	
+	protected PropertyDescriptor createYPD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_Y,
+				EditorPlugin.getResourceString("property.y.label"), true);
+		desc.setCategory(CATEGORY_GEOM);
+		return desc;
+	}
+
+	protected PropertyDescriptor createWidthPD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_WIDTH,
+				EditorPlugin.getResourceString("property.width.label"), true);
+		desc.setCategory(CATEGORY_GEOM);
+		return desc;
+	}
+
+	protected PropertyDescriptor createHeightPD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_HEIGHT,
+				EditorPlugin.getResourceString("property.height.label"), true);
+		desc.setCategory(CATEGORY_GEOM);
+		return desc;
+	}	
 	
 	protected PropertyDescriptor createOrientationPD()
 	{
@@ -115,6 +155,19 @@ extends DrawComponentPropertySource
 		else if (id.equals(DrawComponent.PROP_NAME)) {
 			return drawComponent.getI18nText().getText(nameLangMan.getCurrentLanguageID());
 		}			
+		else if (id.equals(DrawComponent.PROP_X)) {
+			return (int)getPageDrawComponent().getBounds().getX();
+		}
+		else if (id.equals(DrawComponent.PROP_Y)) {
+			return (int)getPageDrawComponent().getBounds().getY();
+		}
+		else if (id.equals(DrawComponent.PROP_WIDTH)) {
+			return (int)getPageDrawComponent().getBounds().getWidth();
+		}
+		else if (id.equals(DrawComponent.PROP_HEIGHT)) {
+			return (int)getPageDrawComponent().getBounds().getHeight();
+		}
+		
 		return null;
 	}
 	
