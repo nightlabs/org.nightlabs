@@ -133,8 +133,6 @@ extends DialogCellEditor
 		super(parent, style);	  
 	}
 
-	
-
 	/* 
 	 * Method declared on DialogCellEditor.
 	 */
@@ -204,16 +202,7 @@ extends DialogCellEditor
 	    value = new java.awt.Color(0,0,0);
 	  }
 	  	  
-	  RGB rgb = ColorUtil.toRGB((java.awt.Color)value);
-//		if (rgb == null) {
-//			rgb = new RGB(0, 0, 0);
-//		}
-//		if (image != null)
-//			image.dispose();	
-//		ImageData id = createColorImage(colorLabel.getParent().getParent(), rgb);
-//		ImageData mask = id.getTransparencyMask();
-//		image = new Image(colorLabel.getDisplay(), id, mask);
-	  
+	  RGB rgb = ColorUtil.toRGB((java.awt.Color)value);	  
 		image = ImageUtil.createColorImage((java.awt.Color)value);
 		colorLabel.setImage(image);
 	
