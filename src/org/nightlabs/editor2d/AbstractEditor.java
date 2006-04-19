@@ -133,6 +133,7 @@ import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
 import org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction;
 import org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
+import org.nightlabs.editor2d.actions.zoom.ZoomPageAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
 import org.nightlabs.editor2d.dialog.CreatePageDialog;
 import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
@@ -141,7 +142,11 @@ import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 import org.nightlabs.editor2d.outline.filter.FilterNameProvider;
+import org.nightlabs.editor2d.page.IPredefinedPage;
+import org.nightlabs.editor2d.page.predefined.A4Page;
+import org.nightlabs.editor2d.page.resolution.IResolution;
 import org.nightlabs.editor2d.page.resolution.Resolution;
+import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
 import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintPreviewAction;
 import org.nightlabs.editor2d.print.EditorPrintSetupAction;
@@ -761,6 +766,11 @@ extends J2DGraphicalEditorWithFlyoutPalette
       registry.registerAction(action);
       getSelectionActions().add(action.getId());
             
+      // Zoom Page
+      action = new ZoomPageAction(this, getRootEditPart().getZoomManager());      
+      registry.registerAction(action);
+      getPropertyActions().add(action.getId());
+      
       // Edit Shape Action
       action = new EditShapeAction(this);
       registry.registerAction(action);
@@ -1114,8 +1124,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
     {
       super.setInput(input);
       renderMan = RendererRegistry.sharedInstance().getRenderModeManager();
-      renderMan.logRegisteredRenderer(1);
-      renderMan.logRenderContexts();
+//      renderMan.logRegisteredRenderer(1);
+//      renderMan.logRenderContexts();
       
       if (input instanceof FileEditorInput) {
         FileEditorInput fileInput = (FileEditorInput) input; 
@@ -1139,20 +1149,29 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	mldc = getMultiLayerDrawComponent();
     	loadAdditional();
     	
-  	  CreatePageDialog pageDialog = new CreatePageDialog(getSite().getShell());
-  	  if (pageDialog.open() == Dialog.OK) 
-  	  {
-  	  	double pageHeight = pageDialog.getPageComposite().getPageHeight();
-  	  	double pageWidth = pageDialog.getPageComposite().getPageWidth();
-  	  	IUnit unit = pageDialog.getPageComposite().getUnit();
-  	  	Resolution resolution = pageDialog.getPageComposite().getResolution();
-  	  	int defaultX = 25;
-  	  	int defaultY = 25;
-  	  	Rectangle pageBounds = new Rectangle(defaultX, defaultY, (int)pageWidth, (int)pageHeight);
-  	  	getMultiLayerDrawComponent().setResolution(resolution);  	  	
-//  	  	getMultiLayerDrawComponent().getCurrentPage().setBounds(pageBounds);
-  	  	getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds);  	  	
-  	  }    	
+    	// TODO: pageDialog must open somewhere else, to avoid popup at startup
+//  	  CreatePageDialog pageDialog = new CreatePageDialog(getSite().getShell());
+//  	  if (pageDialog.open() == Dialog.OK) 
+//  	  {
+//  	  	double pageHeight = pageDialog.getPageComposite().getPageHeight();
+//  	  	double pageWidth = pageDialog.getPageComposite().getPageWidth();
+//  	  	IUnit unit = pageDialog.getPageComposite().getUnit();
+//  	  	Resolution resolution = pageDialog.getPageComposite().getResolution();
+//  	  	int defaultX = 25;
+//  	  	int defaultY = 25;
+//  	  	Rectangle pageBounds = new Rectangle(defaultX, defaultY, (int)pageWidth, (int)pageHeight);
+//  	  	getMultiLayerDrawComponent().setResolution(resolution);  	  	
+//  	  	getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds);  	  	
+//  	  }
+    	IPredefinedPage defaultPage = new A4Page();
+    	Resolution resolution = new ResolutionImpl();
+    	double pageHeight = defaultPage.getPageHeight();
+    	double pageWidth = defaultPage.getPageWidth();
+	  	int defaultX = 25;
+	  	int defaultY = 25;
+	  	Rectangle pageBounds = new Rectangle(defaultX, defaultY, (int)pageWidth, (int)pageHeight);
+	  	getMultiLayerDrawComponent().setResolution(resolution);  	  	
+	  	getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds);  	  	    	    	
     }
         
     protected void loadAdditional() {

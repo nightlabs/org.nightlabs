@@ -44,7 +44,8 @@ extends ZoomAction
    * Constructor for ZoomInAction.
    * @param zoomManager the zoom manager
    */
-  public ZoomAllAction(ZoomManager zoomManager) {
+  public ZoomAllAction(ZoomManager zoomManager) 
+  {
   	super(EditorPlugin.getResourceString("action.zoom.all.label"),
   	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomAllAction.class),
   	    zoomManager);  	

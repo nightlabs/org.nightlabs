@@ -23,24 +23,60 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.actions.zoom;
+
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.editparts.ZoomManager;
+import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.editor2d.AbstractEditor;
+import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.actions.AbstractEditorAction;
+import org.nightlabs.editor2d.actions.EditorCommandConstants;
+import org.nightlabs.editor2d.util.EditorUtil;
+import org.nightlabs.editor2d.util.J2DUtil;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditorCommandConstants 
+public class ZoomPageAction 
+extends AbstractEditorAction 
 {
-	public static final String CATEGORY_EDITOR2D_ID = "org.nightlabs.editor2d";
+	public static final String ID = ZoomPageAction.class.getName();
 	
-	public static final String EDIT_SHAPE_ID = "org.nightlabs.editor2d.editShape";
-	public static final String ROTATE_ID = "org.nightlabs.editor2d.rotate";
-	public static final String ORDER_ONE_UP_ID = "org.nightlabs.editor2d.orderOneUp";	
-	public static final String ORDER_ONE_DOWN_ID = "org.nightlabs.editor2d.orderOneDown";
-	public static final String ORDER_TO_LOCAL_BACK_ID = "org.nightlabs.editor2d.orderToLocalBack";
-	public static final String ORDER_TO_LOCAL_FRONT_ID = "org.nightlabs.editor2d.orderToLocalFront";
-	public static final String SHOW_FIGURE_TOOLTIPS_ID = "org.nightlabs.editor2d.showFigureToolTip";
-	public static final String SHOW_STATUSLINE_ID = "org.nightlabs.editor2d.showStatusLine";
-	public static final String ZOOM_SELECTION_ID = "org.nightlabs.editor2d.zoomSelection";
-	public static final String ZOOM_ALL_ID = "org.nightlabs.editor2d.zoomAll";	
-	public static final String ZOOM_PAGE_ID = "org.nightlabs.editor2d.zoomPage";
+	/**
+	 * @param editor
+	 * @param style
+	 */
+	public ZoomPageAction(AbstractEditor editor, ZoomManager zoomManager) 
+	{
+		super(editor);
+		this.zoomManager = zoomManager;
+		setId(ID);
+		setText(EditorPlugin.getResourceString("action.zoom.page.label"));
+		setToolTipText(EditorPlugin.getResourceString("action.zoom.page.tooltip"));
+		setActionDefinitionId(EditorCommandConstants.ZOOM_PAGE_ID);
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomPageAction.class));
+	}
+
+	private ZoomManager zoomManager = null;
+	
+	/**
+	 * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#calculateEnabled()
+	 */
+	@Override
+	protected boolean calculateEnabled() {
+		return true;
+	}
+
+	/**
+	 * @see org.eclipse.jface.action.Action#run()
+	 */
+	@Override
+	public void run() 
+	{
+		Rectangle pageBounds = J2DUtil.toDraw2D(getMultiLayerDrawComponent().getCurrentPage().getPageBounds());
+//		zoomManager.zoomTo(pageBounds);
+		EditorUtil.zoomToRelativeRect(pageBounds, zoomManager);		
+	}
+	
 }

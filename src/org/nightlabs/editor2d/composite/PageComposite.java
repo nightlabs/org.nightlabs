@@ -48,6 +48,7 @@ import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.page.IPredefinedPage;
 import org.nightlabs.editor2d.page.PageRegistry;
 import org.nightlabs.editor2d.page.PageRegistryEP;
+import org.nightlabs.editor2d.page.PageSize;
 import org.nightlabs.editor2d.page.predefined.A4Page;
 import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
@@ -365,5 +366,10 @@ extends XComposite
 	protected IUnit unit = new MMUnit();
 	public IUnit getUnit() {
 		return unit;
+	}
+	
+	public PageSize getPageSize() 
+	{
+		return new PageSize(getPageWidth(), getPageHeight(), getUnit(), getResolution());
 	}
 }

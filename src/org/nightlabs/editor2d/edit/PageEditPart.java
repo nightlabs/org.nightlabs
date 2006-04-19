@@ -82,10 +82,16 @@ extends AbstractDrawComponentContainerEditPart
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(PageDrawComponent.PROP_RESOLUTION)) {
 			refresh();
+			return;
 		}
 		else if (propertyName.equals(PageDrawComponent.PROP_ORIENTATION)) {
 			refresh();
+			return;
 		}
+		else if (propertyName.equals(PageDrawComponent.PROP_PAGE_BOUNDS)) {
+			refresh();
+			return;
+		}		
 		super.propertyChanged(evt);		
 	}
 }

@@ -107,11 +107,13 @@ extends AbstractDrawComponentEditPart
 			LOGGER.debug(propertyName);
 			refreshChildren();			
 //			refresh();
+			return;
 		}
 		else if (propertyName.equals(DrawComponentContainer.CHILD_REMOVED)) {
 			LOGGER.debug(propertyName);
-			refreshChildren();
+			refreshChildren();			
 //			refresh();
+			return;
 		}		
 	}
 	

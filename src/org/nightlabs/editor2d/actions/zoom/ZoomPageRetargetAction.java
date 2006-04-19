@@ -23,24 +23,29 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.actions.zoom;
+
+import org.eclipse.ui.actions.RetargetAction;
+import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.actions.EditorCommandConstants;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditorCommandConstants 
+public class ZoomPageRetargetAction 
+extends RetargetAction 
 {
-	public static final String CATEGORY_EDITOR2D_ID = "org.nightlabs.editor2d";
-	
-	public static final String EDIT_SHAPE_ID = "org.nightlabs.editor2d.editShape";
-	public static final String ROTATE_ID = "org.nightlabs.editor2d.rotate";
-	public static final String ORDER_ONE_UP_ID = "org.nightlabs.editor2d.orderOneUp";	
-	public static final String ORDER_ONE_DOWN_ID = "org.nightlabs.editor2d.orderOneDown";
-	public static final String ORDER_TO_LOCAL_BACK_ID = "org.nightlabs.editor2d.orderToLocalBack";
-	public static final String ORDER_TO_LOCAL_FRONT_ID = "org.nightlabs.editor2d.orderToLocalFront";
-	public static final String SHOW_FIGURE_TOOLTIPS_ID = "org.nightlabs.editor2d.showFigureToolTip";
-	public static final String SHOW_STATUSLINE_ID = "org.nightlabs.editor2d.showStatusLine";
-	public static final String ZOOM_SELECTION_ID = "org.nightlabs.editor2d.zoomSelection";
-	public static final String ZOOM_ALL_ID = "org.nightlabs.editor2d.zoomAll";	
-	public static final String ZOOM_PAGE_ID = "org.nightlabs.editor2d.zoomPage";
+
+	/**
+	 * @param actionID
+	 * @param text
+	 */
+	public ZoomPageRetargetAction() 
+	{
+		super(ZoomPageAction.ID, EditorPlugin.getResourceString("action.zoom.page.label"));
+		setToolTipText(EditorPlugin.getResourceString("action.zoom.page.tooltip"));
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomPageAction.class));
+		setActionDefinitionId(EditorCommandConstants.ZOOM_PAGE_ID);
+	}
 }

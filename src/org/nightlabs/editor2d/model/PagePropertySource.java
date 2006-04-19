@@ -25,15 +25,17 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.model;
 
+import java.awt.Rectangle;
 import java.util.List;
 
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.nightlabs.base.property.ComboBoxPropertyDescriptor;
 import org.nightlabs.base.property.DoublePropertyDescriptor;
-import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.PageDrawComponent;
+import org.nightlabs.editor2d.page.PageSize;
+import org.nightlabs.editor2d.properties.PageSelectPropertyDescriptor;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -60,14 +62,8 @@ extends DrawComponentPropertySource
 		descriptors.add(createResolutionPD());
 		// Orientation
 		descriptors.add(createOrientationPD());
-		// Page X
-		descriptors.add(createXPD());
-		// Page Y
-		descriptors.add(createYPD());
-		// Page Width
-		descriptors.add(createWidthPD());
-		// Page Height
-		descriptors.add(createHeightPD());		
+		// Page Size
+		descriptors.add(createPageSizePD());
 		
 		return descriptors;
 	}
@@ -99,37 +95,37 @@ extends DrawComponentPropertySource
 		return -1;
 	}
 	
-	protected PropertyDescriptor createXPD() 
-	{
-		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_X,
-				EditorPlugin.getResourceString("property.x.label"), true);
-		desc.setCategory(CATEGORY_GEOM);
-		return desc;
-	}
-	
-	protected PropertyDescriptor createYPD() 
-	{
-		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_Y,
-				EditorPlugin.getResourceString("property.y.label"), true);
-		desc.setCategory(CATEGORY_GEOM);
-		return desc;
-	}
-
-	protected PropertyDescriptor createWidthPD() 
-	{
-		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_WIDTH,
-				EditorPlugin.getResourceString("property.width.label"), true);
-		desc.setCategory(CATEGORY_GEOM);
-		return desc;
-	}
-
-	protected PropertyDescriptor createHeightPD() 
-	{
-		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_HEIGHT,
-				EditorPlugin.getResourceString("property.height.label"), true);
-		desc.setCategory(CATEGORY_GEOM);
-		return desc;
-	}	
+//	protected PropertyDescriptor createXPD() 
+//	{
+//		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_X,
+//				EditorPlugin.getResourceString("property.x.label"), true);
+//		desc.setCategory(CATEGORY_GEOM);
+//		return desc;
+//	}
+//	
+//	protected PropertyDescriptor createYPD() 
+//	{
+//		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_Y,
+//				EditorPlugin.getResourceString("property.y.label"), true);
+//		desc.setCategory(CATEGORY_GEOM);
+//		return desc;
+//	}
+//
+//	protected PropertyDescriptor createWidthPD() 
+//	{
+//		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_WIDTH,
+//				EditorPlugin.getResourceString("property.width.label"), true);
+//		desc.setCategory(CATEGORY_GEOM);
+//		return desc;
+//	}
+//
+//	protected PropertyDescriptor createHeightPD() 
+//	{
+//		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_HEIGHT,
+//				EditorPlugin.getResourceString("property.height.label"), true);
+//		desc.setCategory(CATEGORY_GEOM);
+//		return desc;
+//	}	
 	
 	protected PropertyDescriptor createOrientationPD()
 	{
@@ -140,6 +136,13 @@ extends DrawComponentPropertySource
 				EditorPlugin.getResourceString("property.orientation.label"), values);
 		return desc;
 	}	
+	
+	protected PropertyDescriptor createPageSizePD()
+	{
+		PropertyDescriptor pd = new PageSelectPropertyDescriptor(PageDrawComponent.PROP_PAGE_BOUNDS,
+				EditorPlugin.getResourceString("property.pageBounds.label"));
+		return pd;
+	}
 	
 	/**
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
@@ -155,31 +158,13 @@ extends DrawComponentPropertySource
 		else if (id.equals(DrawComponent.PROP_NAME)) {
 			return drawComponent.getI18nText().getText(nameLangMan.getCurrentLanguageID());
 		}			
-//		else if (id.equals(DrawComponent.PROP_X)) {
-//			return (int)getPageDrawComponent().getBounds().getX();
-//		}
-//		else if (id.equals(DrawComponent.PROP_Y)) {
-//			return (int)getPageDrawComponent().getBounds().getY();
-//		}
-//		else if (id.equals(DrawComponent.PROP_WIDTH)) {
-//			return (int)getPageDrawComponent().getBounds().getWidth();
-//		}
-//		else if (id.equals(DrawComponent.PROP_HEIGHT)) {
-//			return (int)getPageDrawComponent().getBounds().getHeight();
-//		}
-		else if (id.equals(DrawComponent.PROP_X)) {
-			return (int)getPageDrawComponent().getPageBounds().getX();
+		else if (id.equals(PageDrawComponent.PROP_PAGE_BOUNDS)) {
+			PageSize pageSize = new PageSize();
+			pageSize.setPageHeight(getPageDrawComponent().getPageBounds().width);
+			pageSize.setPageWidth(getPageDrawComponent().getPageBounds().height);
+			pageSize.setResolution(getPageDrawComponent().getResolution());
+			return pageSize;
 		}
-		else if (id.equals(DrawComponent.PROP_Y)) {
-			return (int)getPageDrawComponent().getPageBounds().getY();
-		}
-		else if (id.equals(DrawComponent.PROP_WIDTH)) {
-			return (int)getPageDrawComponent().getPageBounds().getWidth();
-		}
-		else if (id.equals(DrawComponent.PROP_HEIGHT)) {
-			return (int)getPageDrawComponent().getPageBounds().getHeight();
-		}
-		
 		return null;
 	}
 	
@@ -198,6 +183,17 @@ extends DrawComponentPropertySource
 		}
 		else if (id.equals(DrawComponent.PROP_NAME)) {
 			drawComponent.setName((String)value);
+		}
+		else if (id.equals(PageDrawComponent.PROP_PAGE_BOUNDS)) 
+		{
+			PageSize pageSize = (PageSize) value;
+			int defaultX = 25;
+			int defaultY = 25;
+			Rectangle pageBounds = new Rectangle(defaultX, defaultY, 
+					(int)pageSize.getPageWidth(), (int)pageSize.getPageHeight());
+			getPageDrawComponent().setPageBounds(pageBounds);
+			getPageDrawComponent().setResolution(pageSize.getResolution());
 		}		
+		
 	}
 }

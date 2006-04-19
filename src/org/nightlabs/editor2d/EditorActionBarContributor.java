@@ -63,6 +63,8 @@ import org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction;
 import org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllRetargetAction;
+import org.nightlabs.editor2d.actions.zoom.ZoomPageAction;
+import org.nightlabs.editor2d.actions.zoom.ZoomPageRetargetAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionRetargetSelection;
 import org.nightlabs.editor2d.custom.EditorZoomComboContributionItem;
@@ -112,6 +114,7 @@ extends ActionBarContributor
   	addRetargetAction(new ZoomOutRetargetAction());  	
   	addRetargetAction(new ZoomAllRetargetAction());
   	addRetargetAction(new ZoomSelectionRetargetSelection());
+  	addRetargetAction(new ZoomPageRetargetAction());
   	  	
   	addRetargetAction(new RetargetAction(ShowFigureToolTipAction.ID, 
   			EditorPlugin.getResourceString("action.showFigureToolTip.text"), IAction.AS_CHECK_BOX));
@@ -182,6 +185,7 @@ extends ActionBarContributor
   	viewMenu.add(getAction(GEFActionConstants.ZOOM_OUT));
   	viewMenu.add(getAction(ZoomAllAction.ID));
   	viewMenu.add(getAction(ZoomSelectionAction.ID));
+  	viewMenu.add(getAction(ZoomPageAction.ID));
   	
   	viewMenu.add(new Separator());
   	viewMenu.add(getAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY));
@@ -254,6 +258,7 @@ extends ActionBarContributor
   	
   	tbm.add(getAction(ZoomAllAction.ID));
   	tbm.add(getAction(ZoomSelectionAction.ID));
+  	tbm.add(getAction(ZoomPageAction.ID));
   	
   	tbm.add(new Separator());	
   	RenderModeManager renderMan = RendererRegistry.sharedInstance().getRenderModeManager();
@@ -283,6 +288,7 @@ extends ActionBarContributor
 
   	addGlobalActionKey(ZoomAllAction.ID);
   	addGlobalActionKey(ZoomSelectionAction.ID);
+  	addGlobalActionKey(ZoomPageAction.ID);
   	addGlobalActionKey(RotateAction.ID);
   	addGlobalActionKey(EditShapeAction.ID);
   	addGlobalActionKey(ChangeOrderOneUp.ID);

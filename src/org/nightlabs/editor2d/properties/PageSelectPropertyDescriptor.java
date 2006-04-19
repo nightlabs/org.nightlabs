@@ -23,24 +23,51 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.properties;
+
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.language.LanguageManager;
+import org.nightlabs.base.property.I18nTextLabelProvider;
+import org.nightlabs.base.property.XPropertyDescriptor;
+import org.nightlabs.base.property.XTextCellEditor;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditorCommandConstants 
+public class PageSelectPropertyDescriptor 
+extends XPropertyDescriptor 
 {
-	public static final String CATEGORY_EDITOR2D_ID = "org.nightlabs.editor2d";
-	
-	public static final String EDIT_SHAPE_ID = "org.nightlabs.editor2d.editShape";
-	public static final String ROTATE_ID = "org.nightlabs.editor2d.rotate";
-	public static final String ORDER_ONE_UP_ID = "org.nightlabs.editor2d.orderOneUp";	
-	public static final String ORDER_ONE_DOWN_ID = "org.nightlabs.editor2d.orderOneDown";
-	public static final String ORDER_TO_LOCAL_BACK_ID = "org.nightlabs.editor2d.orderToLocalBack";
-	public static final String ORDER_TO_LOCAL_FRONT_ID = "org.nightlabs.editor2d.orderToLocalFront";
-	public static final String SHOW_FIGURE_TOOLTIPS_ID = "org.nightlabs.editor2d.showFigureToolTip";
-	public static final String SHOW_STATUSLINE_ID = "org.nightlabs.editor2d.showStatusLine";
-	public static final String ZOOM_SELECTION_ID = "org.nightlabs.editor2d.zoomSelection";
-	public static final String ZOOM_ALL_ID = "org.nightlabs.editor2d.zoomAll";	
-	public static final String ZOOM_PAGE_ID = "org.nightlabs.editor2d.zoomPage";
+
+	/**
+	 * @param id
+	 * @param displayName
+	 */
+	public PageSelectPropertyDescriptor(Object id, String displayName) {
+		super(id, displayName);
+	}
+
+	/**
+	 * @param id
+	 * @param displayName
+	 * @param readOnly
+	 */
+	public PageSelectPropertyDescriptor(Object id, String displayName, boolean readOnly) {
+		super(id, displayName, readOnly);
+	}
+
+  public CellEditor createPropertyEditor(Composite parent) 
+  {
+    CellEditor editor = new PageSelectCellEditor(parent, SWT.NONE);
+    if (getValidator() != null)
+        editor.setValidator(getValidator());
+    return editor;
+  } 	
+  
+  public ILabelProvider getLabelProvider() 
+  {
+  	return new PageSelectLabelProvider();  	
+	}	   
 }

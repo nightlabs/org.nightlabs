@@ -23,24 +23,63 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.properties;
+
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.DialogCellEditor;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.nightlabs.editor2d.dialog.CreatePageDialog;
+import org.nightlabs.editor2d.page.PageSize;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditorCommandConstants 
+public class PageSelectCellEditor 
+extends DialogCellEditor 
 {
-	public static final String CATEGORY_EDITOR2D_ID = "org.nightlabs.editor2d";
+
+	public PageSelectCellEditor() {
+		super();
+	}
+
+	/**
+	 * @param parent
+	 */
+	public PageSelectCellEditor(Composite parent) {
+		super(parent);
+	}
+
+	/**
+	 * @param parent
+	 * @param style
+	 */
+	public PageSelectCellEditor(Composite parent, int style) {
+		super(parent, style);
+	}
+
+	/**
+	 * @see org.eclipse.jface.viewers.DialogCellEditor#openDialogBox(org.eclipse.swt.widgets.Control)
+	 */
+	protected Object openDialogBox(Control cellEditorWindow) 
+	{
+		CreatePageDialog pageDialog = new CreatePageDialog(cellEditorWindow.getShell());
+		if (pageDialog.open() == Dialog.OK) {
+			return pageDialog.getPageComposite().getPageSize(); 
+		}
+		return null;
+	}
+
+	/**
+	 * @see org.eclipse.jface.viewers.DialogCellEditor#updateContents(java.lang.Object)
+	 */
+	@Override
+	protected void updateContents(Object value) 
+	{
+		if (value instanceof PageSize && value != null)
+			getDefaultLabel().setText(PageSelectLabelProvider.getText((PageSize)value));
+		else
+			super.updateContents(value);
+	}
 	
-	public static final String EDIT_SHAPE_ID = "org.nightlabs.editor2d.editShape";
-	public static final String ROTATE_ID = "org.nightlabs.editor2d.rotate";
-	public static final String ORDER_ONE_UP_ID = "org.nightlabs.editor2d.orderOneUp";	
-	public static final String ORDER_ONE_DOWN_ID = "org.nightlabs.editor2d.orderOneDown";
-	public static final String ORDER_TO_LOCAL_BACK_ID = "org.nightlabs.editor2d.orderToLocalBack";
-	public static final String ORDER_TO_LOCAL_FRONT_ID = "org.nightlabs.editor2d.orderToLocalFront";
-	public static final String SHOW_FIGURE_TOOLTIPS_ID = "org.nightlabs.editor2d.showFigureToolTip";
-	public static final String SHOW_STATUSLINE_ID = "org.nightlabs.editor2d.showStatusLine";
-	public static final String ZOOM_SELECTION_ID = "org.nightlabs.editor2d.zoomSelection";
-	public static final String ZOOM_ALL_ID = "org.nightlabs.editor2d.zoomAll";	
-	public static final String ZOOM_PAGE_ID = "org.nightlabs.editor2d.zoomPage";
 }

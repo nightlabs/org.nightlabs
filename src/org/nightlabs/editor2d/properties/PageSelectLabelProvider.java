@@ -23,24 +23,86 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.properties;
+
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.swt.graphics.Image;
+import org.nightlabs.editor2d.page.PageSize;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditorCommandConstants 
+public class PageSelectLabelProvider 
+implements ILabelProvider 
 {
-	public static final String CATEGORY_EDITOR2D_ID = "org.nightlabs.editor2d";
+	public static String getText(PageSize pageSize) 
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append(""+pageSize.getPageWidth());
+		sb.append(" ");
+		sb.append(""+pageSize.getUnit().getUnitSymbol());
+		sb.append(", ");
+		sb.append(""+pageSize.getPageHeight());
+		sb.append(" ");
+		sb.append(""+pageSize.getUnit().getUnitSymbol());
+		sb.append(", ");
+		sb.append(""+pageSize.getResolution().getResolution());
+		sb.append(" ");
+		sb.append(""+pageSize.getResolution().getResolutionUnit().getResolutionID());
+		return sb.toString();		
+	}
 	
-	public static final String EDIT_SHAPE_ID = "org.nightlabs.editor2d.editShape";
-	public static final String ROTATE_ID = "org.nightlabs.editor2d.rotate";
-	public static final String ORDER_ONE_UP_ID = "org.nightlabs.editor2d.orderOneUp";	
-	public static final String ORDER_ONE_DOWN_ID = "org.nightlabs.editor2d.orderOneDown";
-	public static final String ORDER_TO_LOCAL_BACK_ID = "org.nightlabs.editor2d.orderToLocalBack";
-	public static final String ORDER_TO_LOCAL_FRONT_ID = "org.nightlabs.editor2d.orderToLocalFront";
-	public static final String SHOW_FIGURE_TOOLTIPS_ID = "org.nightlabs.editor2d.showFigureToolTip";
-	public static final String SHOW_STATUSLINE_ID = "org.nightlabs.editor2d.showStatusLine";
-	public static final String ZOOM_SELECTION_ID = "org.nightlabs.editor2d.zoomSelection";
-	public static final String ZOOM_ALL_ID = "org.nightlabs.editor2d.zoomAll";	
-	public static final String ZOOM_PAGE_ID = "org.nightlabs.editor2d.zoomPage";
+	public PageSelectLabelProvider() {
+		super();
+	}
+
+	/**
+	 * @see org.eclipse.jface.viewers.ILabelProvider#getImage(java.lang.Object)
+	 */
+	public Image getImage(Object element) {
+		return null;
+	}
+
+	/**
+	 * @see org.eclipse.jface.viewers.ILabelProvider#getText(java.lang.Object)
+	 */
+	public String getText(Object element) 
+	{
+		if (element instanceof PageSize && element != null) 
+		{
+			PageSize pageSize = (PageSize) element;
+			return getText(pageSize);
+		}
+		return null;
+	}
+
+	/**
+	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#addListener(org.eclipse.jface.viewers.ILabelProviderListener)
+	 */
+	public void addListener(ILabelProviderListener listener) {
+
+	}
+
+	/**
+	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#dispose()
+	 */
+	public void dispose() {
+
+	}
+
+	/**
+	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#isLabelProperty(java.lang.Object, java.lang.String)
+	 */
+	public boolean isLabelProperty(Object element, String property) {
+		return false;
+	}
+
+	/**
+	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#removeListener(org.eclipse.jface.viewers.ILabelProviderListener)
+	 */
+	public void removeListener(ILabelProviderListener listener) {
+
+	}
+
 }
