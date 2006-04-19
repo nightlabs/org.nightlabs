@@ -51,15 +51,7 @@ public class ShapeEditHandleKit
    * @param handles the List to add the handles to
    */
   public static void addHandles(ShapeDrawComponentEditPart part, List handles) 
-  {    
-//    Polyline polyline = J2DUtil.toPolyline(part.getGeneralShape()); 
-//    PointList points = polyline.getPoints();
-//    for (int i=0; i<points.size(); i++) 
-//    {
-//      ShapeEditHandle handle = new ShapeEditHandle(part, i);
-//      handles.add(handle);
-//    }
-    
+  {        
     Polyline polyline = J2DUtil.toPolyline(part.getGeneralShape()); 
     PointList points = polyline.getPoints();
     for (int i=0; i<points.size(); i++) 

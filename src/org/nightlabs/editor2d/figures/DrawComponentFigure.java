@@ -71,13 +71,19 @@ implements RendererFigure
   	}    	
   }
     
+//  protected static final java.awt.Rectangle clipRect = new java.awt.Rectangle(-Integer.MAX_VALUE, -Integer.MAX_VALUE,
+//  		Integer.MAX_VALUE, Integer.MAX_VALUE);
+  
   public static void checkDraw2D(Graphics graphics, DrawComponent dc, Renderer r) 
   {
     if (graphics instanceof J2DGraphics) 
     {
     	J2DGraphics j2d = (J2DGraphics) graphics;
+    	j2d.clipRect(null);
       Graphics2D g2d = j2d.createGraphics2D();
-      g2d.setClip(null);      
+      g2d.setClip(null);
+//      g2d.setClip(clipRect);
+//      g2d.setClip(dc.getBounds());
       paintJ2D(g2d, dc, r);      
       g2d.dispose();
     }  	
@@ -88,6 +94,7 @@ implements RendererFigure
     if (graphics instanceof J2DGraphics) 
     {
       j2d = (J2DGraphics) graphics;
+      j2d.clipRect(null);
       g2d = j2d.createGraphics2D();
       g2d.setClip(null);      
       paint(g2d);      

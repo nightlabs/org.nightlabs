@@ -155,17 +155,29 @@ extends DrawComponentPropertySource
 		else if (id.equals(DrawComponent.PROP_NAME)) {
 			return drawComponent.getI18nText().getText(nameLangMan.getCurrentLanguageID());
 		}			
+//		else if (id.equals(DrawComponent.PROP_X)) {
+//			return (int)getPageDrawComponent().getBounds().getX();
+//		}
+//		else if (id.equals(DrawComponent.PROP_Y)) {
+//			return (int)getPageDrawComponent().getBounds().getY();
+//		}
+//		else if (id.equals(DrawComponent.PROP_WIDTH)) {
+//			return (int)getPageDrawComponent().getBounds().getWidth();
+//		}
+//		else if (id.equals(DrawComponent.PROP_HEIGHT)) {
+//			return (int)getPageDrawComponent().getBounds().getHeight();
+//		}
 		else if (id.equals(DrawComponent.PROP_X)) {
-			return (int)getPageDrawComponent().getBounds().getX();
+			return (int)getPageDrawComponent().getPageBounds().getX();
 		}
 		else if (id.equals(DrawComponent.PROP_Y)) {
-			return (int)getPageDrawComponent().getBounds().getY();
+			return (int)getPageDrawComponent().getPageBounds().getY();
 		}
 		else if (id.equals(DrawComponent.PROP_WIDTH)) {
-			return (int)getPageDrawComponent().getBounds().getWidth();
+			return (int)getPageDrawComponent().getPageBounds().getWidth();
 		}
 		else if (id.equals(DrawComponent.PROP_HEIGHT)) {
-			return (int)getPageDrawComponent().getBounds().getHeight();
+			return (int)getPageDrawComponent().getPageBounds().getHeight();
 		}
 		
 		return null;

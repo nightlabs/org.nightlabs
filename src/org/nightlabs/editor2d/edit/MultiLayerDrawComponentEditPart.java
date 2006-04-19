@@ -52,6 +52,7 @@ import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.config.PreferencesConfigModule;
 import org.nightlabs.editor2d.editpolicy.MultiLayerDrawComponentXYLayoutPolicy;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
+import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
 import org.nightlabs.editor2d.model.MultiLayerDrawComponentPropertySource;
 import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 
@@ -106,10 +107,10 @@ extends AbstractDrawComponentContainerEditPart
 //	  }
 		
 		// TODO: find out why figures are not painted at high zoom/scale (<2.0) in BufferedLayer
-//	  Figure f = new OversizedBufferFreeformLayer();
-//	  ((BufferedFreeformLayer)f).init(this);		
+	  Figure f = new OversizedBufferFreeformLayer();
+	  ((BufferedFreeformLayer)f).init(this);		
 	  
-		Figure f = new FreeformLayer();
+//		Figure f = new FreeformLayer();
 		
 		f.setLayoutManager(new FreeformLayout());				
 		return f; 		

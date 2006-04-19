@@ -35,6 +35,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
+import org.nightlabs.base.io.IOUtil;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ImageDrawComponent;
 
@@ -83,6 +84,7 @@ extends CreateDrawComponentCommand
         super.execute();
       	getImageDrawComponent().setImage(image);
         getImageDrawComponent().setName(simpleFileName); 
+        getImageDrawComponent().setImageFileExtension(IOUtil.getFileExtension(simpleFileName));
     	}    	          	
     } 
     catch (FileNotFoundException e) {

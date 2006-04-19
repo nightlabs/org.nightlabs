@@ -1150,7 +1150,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
   	  	int defaultY = 25;
   	  	Rectangle pageBounds = new Rectangle(defaultX, defaultY, (int)pageWidth, (int)pageHeight);
   	  	getMultiLayerDrawComponent().setResolution(resolution);  	  	
-  	  	getMultiLayerDrawComponent().getCurrentPage().setBounds(pageBounds);
+//  	  	getMultiLayerDrawComponent().getCurrentPage().setBounds(pageBounds);
+  	  	getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds);  	  	
   	  }    	
     }
         

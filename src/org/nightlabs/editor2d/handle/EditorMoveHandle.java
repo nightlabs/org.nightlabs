@@ -23,81 +23,49 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.util.feedback;
+package org.nightlabs.editor2d.handle;
 
 import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.draw2d.Cursors;
+import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.Locator;
+import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.handles.MoveHandle;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class PaintDescriptor 
+public class EditorMoveHandle 
+extends MoveHandle 
 {
-  public static final Color DEFAULT_BGCOLOR = ColorConstants.darkGray;
-  public static final Color DEFAULT_FGCOLOR = ColorConstants.black;
-  public static final int DEFAULT_LINE_WIDTH = 1;  
-  public static final int DEFAULT_LINE_STYLE = 1;
-  public static final boolean DEFAULT_XOR = true;  
-  public static final boolean DEFAULT_FILL = true;
-  public static final boolean DEFAULT_OUTLINE = true;
-  
-	public PaintDescriptor() {
-		super();
+
+	/**
+	 * @param owner
+	 */
+	public EditorMoveHandle(GraphicalEditPart owner) {
+		super(owner);
 	}
 
-	protected boolean fill = DEFAULT_FILL;
-	public boolean isFill() {
-		return fill;
-	}
-	public void setFill(boolean fill) {
-		this.fill = fill;
-	}
-	
-	protected boolean xor = DEFAULT_XOR;
-	public boolean isXor() {
-		return xor;
-	}
-	public void setXor(boolean xor) {
-		this.xor = xor;
-	}
-	
-	protected int lineWidth = DEFAULT_LINE_WIDTH;
-	public int getLineWidth() {
-		return lineWidth;
-	}
-	public void setLineWidth(int lineWidth) {
-		this.lineWidth = lineWidth;
+	/**
+	 * @param owner
+	 * @param loc
+	 */
+	public EditorMoveHandle(GraphicalEditPart owner, Locator loc) {
+		super(owner, loc);
 	}
 
-	protected int lineStyle = DEFAULT_LINE_STYLE;
-	public int getLineStyle() {
-		return lineStyle;
-	}
-	public void setLineStyle(int lineStyle) {
-		this.lineStyle = lineStyle;
-	}
-
-	protected boolean outline = DEFAULT_OUTLINE;
-	public boolean isOutline() {
-		return outline;
-	}
-	public void setOutline(boolean outline) {
-		this.outline = outline;
-	}
-	
-  protected Color bgColor = DEFAULT_BGCOLOR;
-  public Color getBackgroundColor() {
-  	return bgColor;
-  }
-  public void setBackgroundColor(Color bgColor) {
-  	this.bgColor = bgColor;
-  }
-  
-  protected Color fgColor = DEFAULT_FGCOLOR;
-  public Color getForegroundColor() {
-  	return fgColor;
-  }
-  public void setForegroundColor(Color fgColor) {
-  	this.fgColor = fgColor;
-  }
+	/**
+	 * Initializes the handle.  Sets the {@link DragTracker} and
+	 * DragCursor.
+	 */
+	protected void initialize() 
+	{	
+//		super.initialize();
+//		setBorder(new LineBorder(ColorConstants.black, 1));
+		
+		setOpaque(false);
+		setBorder(new LineBorder(ColorConstants.black, 1));
+		setCursor(Cursors.SIZEALL);		
+	}	
 }

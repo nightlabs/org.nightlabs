@@ -30,6 +30,7 @@ package org.nightlabs.editor2d.editpolicy;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -52,6 +53,7 @@ import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.rulers.RulerProvider;
+import org.eclipse.swt.graphics.Color;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorGuide;
@@ -438,7 +440,12 @@ implements EditorRequestConstants
   	editShapeCommand.setLocation(modelPoint); 
 		return editShapeCommand;		
   } 
-      			
+      		
+  protected Color outlineColor = ColorConstants.black;
+  protected Color getOutlineColor() {
+  	return outlineColor;
+  }
+  
 	protected IFigure createSizeOnDropFeedback(EditorCreateRequest editorRequest) 
 	{
     Rectangle constrainedBounds = (Rectangle)getConstraintFor((EditorBoundsRequest)editorRequest);	    
@@ -448,7 +455,8 @@ implements EditorRequestConstants
       Shape shape = editorRequest.getShape();
       if (shape != null) 
       {
-        shape.setBounds(constrainedBounds);            
+        shape.setBounds(constrainedBounds); 
+        shape.setForegroundColor(getOutlineColor());
         addFeedback(shape);
         return shape;
       }	            
@@ -463,6 +471,7 @@ implements EditorRequestConstants
 			    ShapeFigure shapeFigure = new AbstractShapeFigure();			    			    
 			    shapeFigure.setGeneralShape(gp);			    
 			    shapeFigure.setFill(false);
+			    shapeFigure.setForegroundColor(getOutlineColor());
 			    addFeedback(shapeFigure);		   		    		    
 			    return shapeFigure;	        
 	      }
@@ -471,6 +480,7 @@ implements EditorRequestConstants
 			    FeedbackShapeFigure shapeFigure = new FeedbackShapeFigure();			    			    
 			    shapeFigure.setGeneralShape(gp);			    
 			    shapeFigure.setFill(false);
+			    shapeFigure.setForegroundColor(getOutlineColor());			    
 			    addFeedback(shapeFigure);		   		    		    
 			    return shapeFigure;	      		      	        
 	      }
@@ -712,6 +722,7 @@ implements EditorRequestConstants
   protected Label createFeedbackTextFigure(String text) 
   {       	
     Label l = new Label(text);
+    l.setForegroundColor(getOutlineColor());
   	l.setBounds(getInitialFeedbackBounds());
   	addFeedback(l);
   	return l;

@@ -32,9 +32,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Polyline;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
@@ -43,10 +45,15 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
+import org.eclipse.gef.handles.NonResizableHandleKit;
+import org.eclipse.gef.handles.ResizableHandleKit;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.swt.graphics.Color;
 import org.nightlabs.editor2d.EditorStateManager;
 import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
 import org.nightlabs.editor2d.figures.ShapeFigure;
+import org.nightlabs.editor2d.handle.EditorNonResizableHandleKit;
+import org.nightlabs.editor2d.handle.EditorResizableHandleKit;
 import org.nightlabs.editor2d.handle.RotateCenterHandle;
 import org.nightlabs.editor2d.handle.RotateHandleKit;
 import org.nightlabs.editor2d.handle.ShapeEditHandleKit;
@@ -125,9 +132,9 @@ implements EditorRequestConstants
     
   protected List createSelectionHandles() 
   {
+  	List list = new ArrayList();  	
     if (EditorStateManager.getCurrentState() == EditorStateManager.STATE_EDIT_SHAPE) 
     {
-    	List list = new ArrayList();
     	if (getHost() instanceof ShapeDrawComponentEditPart) {
     	  ShapeDrawComponentEditPart sdcEditPart = (ShapeDrawComponentEditPart) getHost();
     	  ShapeEditHandleKit.addHandles(sdcEditPart, list);
@@ -137,12 +144,71 @@ implements EditorRequestConstants
     else if (EditorStateManager.getCurrentState() == EditorStateManager.STATE_ROTATE)
     {
       clearHandleLayer();
-      List list = new ArrayList();
       RotateHandleKit.addHandles(getHost().getViewer().getSelectedEditParts(), list);
       return list;
     }
-    
-  	return super.createSelectionHandles();  	  	   	
+    else if (EditorStateManager.getCurrentState() == EditorStateManager.STATE_NORMAL_SELECTION)
+    {    	
+    	// WORKAROUND: use own ResizableHandleKit and NonResizeableHandleKit
+    	// because MoveHandle are created with white line by default instead of black line
+    	int directions = getResizeDirections();
+    	if (directions == 0)
+    		EditorNonResizableHandleKit.addHandles((GraphicalEditPart)getHost(), list);
+    	else if (directions != -1) {
+    		EditorResizableHandleKit.addMoveHandle((GraphicalEditPart)getHost(), list);
+    		if ((directions & PositionConstants.EAST) != 0)
+    			EditorResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    					PositionConstants.EAST);
+    		else
+    			EditorNonResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    					PositionConstants.EAST);
+    		if ((directions & PositionConstants.SOUTH_EAST) == PositionConstants.SOUTH_EAST)
+    			EditorResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    					PositionConstants.SOUTH_EAST);
+    		else
+    			EditorNonResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list,
+    					PositionConstants.SOUTH_EAST);
+    		if ((directions & PositionConstants.SOUTH) != 0)
+    			EditorResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    					PositionConstants.SOUTH);
+    		else
+    			EditorNonResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    					PositionConstants.SOUTH);
+    		if ((directions & PositionConstants.SOUTH_WEST) == PositionConstants.SOUTH_WEST)
+    			EditorResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    					PositionConstants.SOUTH_WEST);
+    		else
+    			EditorNonResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    						PositionConstants.SOUTH_WEST);
+    		if ((directions & PositionConstants.WEST) != 0)
+    			EditorResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    					PositionConstants.WEST);
+    		else
+    			EditorNonResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    						PositionConstants.WEST);
+    		if ((directions & PositionConstants.NORTH_WEST) == PositionConstants.NORTH_WEST)
+    			EditorResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    					PositionConstants.NORTH_WEST);
+    		else
+    			EditorNonResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    					PositionConstants.NORTH_WEST);
+    		if ((directions & PositionConstants.NORTH) != 0)
+    			EditorResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    					PositionConstants.NORTH);
+    		else
+    			EditorNonResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    					PositionConstants.NORTH);
+    		if ((directions & PositionConstants.NORTH_EAST) == PositionConstants.NORTH_EAST)
+    			EditorResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    					PositionConstants.NORTH_EAST);
+    		else
+    			EditorNonResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
+    						PositionConstants.NORTH_EAST);	
+    	} else
+    		EditorResizableHandleKit.addHandles((GraphicalEditPart)getHost(), list);    	    	
+    }
+   	return list;    
+//  	return super.createSelectionHandles();  	  	   	
   }
     
   protected void clearHandleLayer() 
@@ -510,11 +576,17 @@ implements EditorRequestConstants
   	return feedbackLabel;
   }
   
+  protected Color outlineColor = ColorConstants.black;
+  protected Color getOutlineColor() {
+  	return outlineColor;
+  }
+  
   protected Label createFeedbackTextFigure(String text) 
   {       	
     Label l = new Label(text);
+  	l.setForegroundColor(getOutlineColor());    
   	l.setBounds(getInitialFeedbackBounds());
-  	addFeedback(l);
+  	addFeedback(l);  	  	
   	return l;
   }  
     
