@@ -112,7 +112,7 @@ implements FreeformFigure, BufferedFreeformLayer
 	 */
 	private List nonDCFChildren = new LinkedList();
 	
-	protected boolean debug = false;
+	protected boolean debug = true;
 	
 	protected Point calculateBufferFactors() 
 	{
@@ -171,7 +171,6 @@ implements FreeformFigure, BufferedFreeformLayer
 				bufferedImage = new BufferedImage(bufferSize.x, bufferSize.y, BufferedImage.TYPE_INT_ARGB);
 			}
 			Graphics2D bufferedGraphics  = bufferedImage.createGraphics();
-//			bufferedGraphics.copyArea()
 			try {
 				bufferedGraphics.setClip(null);
 				bufferedGraphics.scale(currentZoom, currentZoom);
@@ -185,8 +184,7 @@ implements FreeformFigure, BufferedFreeformLayer
 				Point absoluteBufferTranslation = EditorUtil.toAbsolute(
 						editPart, 
 						bufferTranslation.x,
-						bufferTranslation.y
-						
+						bufferTranslation.y						
 				);
 				bufferedGraphics.translate(
 						absoluteBufferTranslation.x-offsetTranslation.x, 
@@ -207,14 +205,18 @@ implements FreeformFigure, BufferedFreeformLayer
 						nonDCFChildren.add(figure);
 					}				
 				}
-				if (debug)
+				if (debug) {
 					LOGGER.debug("buffer created in "+(System.currentTimeMillis()-time)+" ms");
+//					LOGGER.debug("currentZoom = " + currentZoom);
+//					LOGGER.debug("absoluteBufferTranslation = "+ absoluteBufferTranslation);
+//					LOGGER.debug("offsetTranslation = " + offsetTranslation);
+//					LOGGER.debug("");
+				}
 			}
 			finally {
 				if (bufferedGraphics != null)
 				bufferedGraphics.dispose();
-			}
-			
+			}			
 		}
 		Point scrollOffset = EditorUtil.getScrollOffset(editPart);
 		bufferOrigin.setLocation(0,0);
@@ -236,12 +238,11 @@ implements FreeformFigure, BufferedFreeformLayer
 	
 	public void paint(Graphics graphics) 
 	{
-//		LOGGER.debug("paint called");
 		long time = System.currentTimeMillis();
 		if (graphics instanceof J2DGraphics) 
 		{
 			J2DGraphics j2dGraphics = (J2DGraphics)graphics;
-//			j2dGraphics.clipRect(null);
+			j2dGraphics.clipRect(null);
 			
 			// get / create the buffer 
 			BufferedImage buffer = getBufferedImage();
@@ -254,7 +255,7 @@ implements FreeformFigure, BufferedFreeformLayer
 			// so 0,0 will be drawn on top left of the control			
 			Point scrollOffset = EditorUtil.getScrollOffset(editPart);
 			g2d.translate(scrollOffset.x, scrollOffset.y);
-			
+			g2d.setClip(null);
 			// now copy the buffer region
 			g2d.setPaint(Color.WHITE);
 			g2d.fillRect(-2, -2, currentSize.x+2, currentSize.y+2);
