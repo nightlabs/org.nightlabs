@@ -45,6 +45,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.spi.IIORegistry;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -287,15 +289,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
     /** Create a new Editor instance. This is called by the Workspace. */
     public AbstractEditor() 
     {
-      setEditDomain(new DefaultEditDomain(this));
-      FontUtil.initSystemFonts();
-            
-      filterMan = new FilterManager(createFilterNameProvider());     
-      
-      // TODO: Holongate Draw2D-PreferencePage does not store values 
-      Map hints = new HashMap();
-      hints.put(J2DGraphics.KEY_USE_JAVA2D, Boolean.TRUE);
-  	  J2DRegistry.setHints(hints);     	  
+      setEditDomain(new DefaultEditDomain(this));            
+      filterMan = new FilterManager(createFilterNameProvider());           
     }
                       
     protected MultiLayerDrawComponent load(IOFilter ioFilter, InputStream input) 

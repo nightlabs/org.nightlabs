@@ -29,6 +29,8 @@ package org.nightlabs.editor2d.tools;
 
 import java.io.File;
 
+import javax.imageio.ImageIO;
+
 import org.eclipse.gef.Request;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.CreationFactory;
@@ -61,11 +63,14 @@ extends CreationTool
     return (ImageCreateRequest) getTargetRequest();
   }
   
-  protected static final String[] fileExtensions = new String[] {"*.jpg", "*.png", "*.gif", "*.bmp"};
-  // TODO should come from ImageFormatRegistry
+  // TODO should come from ImageIO
+  protected static final String[] fileExtensions = new String[] {"*.jpg", "*.png", "*.gif", "*.bmp", "*.pcx"};
   public String[] getFileExtensions() {
   	return fileExtensions;
   }
+//  public String[] getFileExtensions() {
+//  	return ImageIO.getReaderFormatNames();
+//  }
   
   protected FileDialog openFileDialog() 
   {

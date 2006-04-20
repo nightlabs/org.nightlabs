@@ -28,9 +28,16 @@
 package org.nightlabs.editor2d;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.draw2d.J2DGraphics;
 import org.eclipse.ui.plugin.*;
+import org.holongate.j2d.J2DRegistry;
+import org.nightlabs.io.pcx.PCXImageReaderSPI;
+import org.nightlabs.io.pcx.PCXImageWriterSPI;
+import org.nightlabs.util.FontUtil;
 import org.osgi.framework.BundleContext;
 import java.util.*;
+
+import javax.imageio.spi.IIORegistry;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -60,7 +67,18 @@ extends AbstractUIPlugin
 	public void start(BundleContext context) throws Exception 
 	{
 		super.start(context);
-		resourceBundle = Platform.getResourceBundle(getBundle());		
+		resourceBundle = Platform.getResourceBundle(getBundle());	
+		
+    FontUtil.initSystemFonts();
+    
+    // TODO: Holongate Draw2D-PreferencePage does not store values 
+    Map hints = new HashMap();
+    hints.put(J2DGraphics.KEY_USE_JAVA2D, Boolean.TRUE);
+	  J2DRegistry.setHints(hints);   
+	  
+//	  // register additional ImageReader + ImageWriter
+	  IIORegistry.getDefaultInstance().registerServiceProvider(new PCXImageReaderSPI());
+//	  IIORegistry.getDefaultInstance().registerServiceProvider(new PCXImageWriterSPI());    
 	}
 
 	/**
