@@ -41,7 +41,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 public class ImageUtil
-{
+{	
 	public ImageUtil() {
 		super();
 	}
@@ -192,4 +192,5 @@ public class ImageUtil
   public static Image createLineStyleImage(int lineStyle) {
     return createLineStyleImage(lineStyle, 16, 64);
   }  
+     	
 }
