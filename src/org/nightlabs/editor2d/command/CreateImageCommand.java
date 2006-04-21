@@ -28,6 +28,7 @@
 package org.nightlabs.editor2d.command;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,8 +50,7 @@ extends CreateDrawComponentCommand
     setLabel(EditorPlugin.getResourceString("command.create.image"));  
   }
   
-  public ImageDrawComponent getImageDrawComponent() 
-  {
+  public ImageDrawComponent getImageDrawComponent() {
     return (ImageDrawComponent) getChild();
   }
   
@@ -67,41 +67,49 @@ extends CreateDrawComponentCommand
   }
   
   public void execute() 
-  {    
-    try {    
-    	FileInputStream fis = new FileInputStream(fileName);
-    	try {
-        image = ImageIO.read(fis);
-    	}
-	    catch (IOException e) {
-	    	throw new RuntimeException(e);    
-	    } 
-	    catch (IllegalArgumentException e) {
-	    	throw new RuntimeException(e);
-	    }
-	 
-    	if (image != null) {
-        super.execute();
-      	getImageDrawComponent().setImage(image);
-        getImageDrawComponent().setName(simpleFileName); 
-        getImageDrawComponent().setImageFileExtension(IOUtil.getFileExtension(simpleFileName));
-    	}    	          	
-    } 
+  {
+  	super.execute();
+    try {
+    	File file = new File(fileName);
+    	FileInputStream fis = new FileInputStream(file);
+   		getImageDrawComponent().loadImage(simpleFileName, file.lastModified(), fis);
+    }
     catch (FileNotFoundException e) {
     	throw new RuntimeException(e);    
     }    
-  }
-    
-  public void redo() 
-  {
-  	if (image != null)
-  		super.redo();
-  }
+  }  
   
-  public void undo() 
-  {
-  	if (image != null)  	
-  		super.undo();
-  }
+//  public void execute() 
+//  {
+//  	super.execute();
+//    try {
+//    	File file = new File(fileName);
+//    	FileInputStream fis = new FileInputStream(file);
+//   		getImageDrawComponent().setOriginalImage(fis, file.lastModified());
+//   		getImageDrawComponent().setImage(getImageDrawComponent().getOriginalImage());
+//
+////    	if (image != null) {
+////        super.execute();
+//      	getImageDrawComponent().setImage(image);
+//        getImageDrawComponent().setName(simpleFileName); 
+//        getImageDrawComponent().setImageFileExtension(IOUtil.getFileExtension(simpleFileName));
+////    	}
+//    }
+//    catch (FileNotFoundException e) {
+//    	throw new RuntimeException(e);    
+//    }    
+//  }
+    
+//  public void redo() 
+//  {
+//  	if (image != null)
+//  		super.redo();
+//  }
+//  
+//  public void undo() 
+//  {
+//  	if (image != null)  	
+//  		super.undo();
+//  }
     
 }

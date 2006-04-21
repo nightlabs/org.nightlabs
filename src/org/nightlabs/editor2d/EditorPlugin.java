@@ -27,16 +27,19 @@
 
 package org.nightlabs.editor2d;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.J2DGraphics;
 import org.eclipse.ui.plugin.*;
 import org.holongate.j2d.J2DRegistry;
+import org.nightlabs.base.util.ImageUtil;
 import org.nightlabs.io.pcx.PCXImageReaderSPI;
 import org.nightlabs.io.pcx.PCXImageWriterSPI;
 import org.nightlabs.util.FontUtil;
 import org.osgi.framework.BundleContext;
 import java.util.*;
 
+import javax.imageio.ImageIO;
 import javax.imageio.spi.IIORegistry;
 
 /**
@@ -44,7 +47,7 @@ import javax.imageio.spi.IIORegistry;
  */
 public class EditorPlugin 
 extends AbstractUIPlugin 
-{
+{	
 	//The shared instance.
 	private static EditorPlugin plugin;
 	//Resource bundle.
@@ -69,6 +72,7 @@ extends AbstractUIPlugin
 		super.start(context);
 		resourceBundle = Platform.getResourceBundle(getBundle());	
 		
+		// init System Fonts
     FontUtil.initSystemFonts();
     
     // TODO: Holongate Draw2D-PreferencePage does not store values 
@@ -76,11 +80,12 @@ extends AbstractUIPlugin
     hints.put(J2DGraphics.KEY_USE_JAVA2D, Boolean.TRUE);
 	  J2DRegistry.setHints(hints);   
 	  
-//	  // register additional ImageReader + ImageWriter
+	  // register additional ImageReader + ImageWriter
 	  IIORegistry.getDefaultInstance().registerServiceProvider(new PCXImageReaderSPI());
-//	  IIORegistry.getDefaultInstance().registerServiceProvider(new PCXImageWriterSPI());    
+	  IIORegistry.getDefaultInstance().registerServiceProvider(new PCXImageWriterSPI());
+	  
+//	  ImageUtil.logAvailableFileFormats();
 	}
-
 	/**
 	 * This method is called when the plug-in is stopped
 	 */
