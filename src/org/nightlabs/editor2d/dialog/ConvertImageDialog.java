@@ -1,7 +1,6 @@
 /* *****************************************************************************
  * NightLabs Editor2D - Graphical editor framework                             *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
- * Project author: Daniel Mazurek <Daniel.Mazurek [at] nightlabs [dot] org>    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
  * modify it under the terms of the GNU Lesser General Public                  *
@@ -24,19 +23,57 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
+package org.nightlabs.editor2d.dialog;
 
-package org.nightlabs.editor2d.j2dswt;
+import java.awt.image.BufferedImage;
 
-import org.holongate.j2d.IPaintable;
-import org.nightlabs.editor2d.DrawComponent;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
+import org.nightlabs.base.dialog.CenteredDialog;
+import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
+import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.composite.ConvertImageComposite;
 
-public class DrawComponentPaintable 
-extends org.nightlabs.editor2d.viewer.DrawComponentPaintable
-implements IPaintable
+/**
+ * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
+ */
+public class ConvertImageDialog 
+extends CenteredDialog 
 {
-	public DrawComponentPaintable(DrawComponent dc) 
+
+	/**
+	 * @param parentShell
+	 */
+	public ConvertImageDialog(Shell parentShell, BufferedImage originalImage) 
 	{
-		super(dc);
+		super(parentShell);
+		setShellStyle(getShellStyle() | SWT.RESIZE);
+		this.image = originalImage;
 	}
+	
+	public void create() 
+	{
+		super.create();
+		getShell().setText(EditorPlugin.getResourceString("dialog.convertImage.title"));
+		getShell().setSize(400, 400);
+	}	
 		
+	protected BufferedImage image = null;
+	
+	protected ConvertImageComposite convertImageComp = null;
+	public ConvertImageComposite getConvertImageComposite() {
+		return convertImageComp;
+	}
+	
+	/**
+	 * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
+	 */
+	protected Control createDialogArea(Composite parent) 
+	{
+		convertImageComp = new ConvertImageComposite(parent, SWT.NONE, image, TOOLKIT_MODE.COMPOSITE);
+		return convertImageComp;
+	}
+	
 }

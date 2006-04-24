@@ -27,27 +27,44 @@
 
 package org.nightlabs.editor2d.tools;
 
+import java.awt.color.ICC_Profile;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.apache.log4j.Logger;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.tools.CreationTool;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.FileDialog;
-
+import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.command.CreateImageCommand;
+import org.nightlabs.editor2d.dialog.ConvertImageDialog;
 import org.nightlabs.editor2d.request.ImageCreateRequest;
 
 public class ImageTool 
 extends CreationTool 
 {
+	public static final Logger LOGGER = Logger.getLogger(ImageTool.class);
+	
   public ImageTool(CreationFactory aFactory) {
-    super(aFactory);
+    this(aFactory, false);
   }
 
+  public ImageTool(CreationFactory aFactory, boolean colorConversion) 
+  {
+    super(aFactory);
+    this.colorConversion = colorConversion;
+  }
+    
+  protected boolean colorConversion = false;
+  
   /**
    * Creates a {@link CreateRequest} and sets this tool's factory on the request.
    * @see org.eclipse.gef.tools.TargetingTool#createTargetRequest()
@@ -72,32 +89,84 @@ extends CreationTool
 //  	return ImageIO.getReaderFormatNames();
 //  }
   
+  protected Shell getShell() {
+  	return getCurrentViewer().getControl().getShell();
+  }
+  
   protected FileDialog openFileDialog() 
   {
-    FileDialog dialog = new FileDialog(getCurrentViewer().getControl().getShell());
+    FileDialog dialog = new FileDialog(getShell());
     dialog.setFilterExtensions(getFileExtensions());
     dialog.setText(EditorPlugin.getResourceString("dialog.choose.image"));
     dialog.open();
     return dialog;
   }
-  
+   
   protected boolean handleButtonDown(int button) 
   {    
-//    FileDialog dialog = new FileDialog(getCurrentViewer().getControl().getShell());
-//    dialog.setFilterExtensions(fileExtensions);
-//    dialog.setText(EditorPlugin.getResourceString("dialog.choose.image"));
-//    dialog.open();
-  	FileDialog dialog = openFileDialog();
-  	
+  	FileDialog dialog = openFileDialog();  	  	
     if (!dialog.getFileName().equals("")) 
     {
-      String fullPathName = dialog.getFilterPath() + File.separator + dialog.getFileName(); 
-      getImageCreateRequest().setFileName(fullPathName);
-      ((CreateImageCommand)getCurrentCommand()).setFileName(fullPathName);
-      ((CreateImageCommand)getCurrentCommand()).setSimpleFileName(dialog.getFileName());
-      performCreation(1);
+      String fullPathName = dialog.getFilterPath() + File.separator + dialog.getFileName();
+      String fileName = dialog.getFileName();
+      getImageCreateRequest().setFileName(fullPathName);      
+      if (colorConversion) {
+      	BufferedImage originalImage;
+				try {
+					originalImage = ImageIO.read(new File(fullPathName));
+					logColorProfile(fullPathName);
+					if (originalImage != null) {
+		      	ConvertImageDialog convertDialog = new ConvertImageDialog(getShell(), originalImage);
+		      	if (convertDialog.open() == Dialog.OK) {
+		      		colorConvertOp = convertDialog.getConvertImageComposite().getColorConvertOp();
+		      		if (colorConvertOp == null)
+		      			LOGGER.debug("colorConvertOp == null!");
+		      		doCreation(fullPathName, fileName);		      		
+		      	}											
+					} else {
+						LOGGER.debug("Image "+fullPathName+" could not be loaded");
+					}
+				} catch (IOException e) {
+					throw new RuntimeException("Image "+fullPathName+" could not be loaded", e);
+				}      
+			}
+      else {
+        doCreation(fullPathName, fileName);      	
+      }
       return true;
     }
     return false;
   }   
+    
+  protected void doCreation(String fullFileName, String fileName) 
+  {
+    ((CreateImageCommand)getCurrentCommand()).setFileName(fullFileName);
+    ((CreateImageCommand)getCurrentCommand()).setSimpleFileName(fileName);
+    ((CreateImageCommand)getCurrentCommand()).setColorConvertOp(getColorConvertOp());
+    performCreation(1);  	
+  }
+  
+  protected void logColorProfile(String fileName) 
+  throws IOException
+  {
+  	try {
+  		ICC_Profile profile = ICC_Profile.getInstance(fileName);
+  		LOGGER.debug("IIC Profile for image "+fileName+" = "+profile);
+  		LOGGER.debug("profile.getProfileClass = "+profile.getProfileClass()); 
+  		LOGGER.debug("profile.getColorSpaceType() = "+profile.getColorSpaceType());  		
+  	} catch (IllegalArgumentException e) {
+  		LOGGER.debug("no ICC_Profile found for image "+fileName);
+  	}
+  }
+  
+  protected ColorConvertOp colorConvertOp = null;
+  /**
+   * returns the ColorConvertOp which should be used for Color Conversion of loaded images
+   * if no color conversion is needed this method just returns null, which is the defult behaviour
+   *  
+   * @return the ColorConvertOp to be uses for Color Converion of loaded images
+   */
+  protected ColorConvertOp getColorConvertOp() {
+  	return colorConvertOp;
+  }
 }

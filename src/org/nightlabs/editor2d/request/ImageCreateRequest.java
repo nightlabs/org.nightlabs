@@ -27,6 +27,8 @@
 
 package org.nightlabs.editor2d.request;
 
+import java.awt.image.ColorConvertOp;
+
 import org.eclipse.gef.requests.CreateRequest;
 
 public class ImageCreateRequest 
@@ -41,7 +43,7 @@ extends CreateRequest
     super(type);
   }
 
-  protected String fileName;
+  protected String fileName = null;
   public String getFileName() {
     return fileName;
   }
@@ -49,4 +51,18 @@ extends CreateRequest
     this.fileName = fileName;
   }
     
+  protected ColorConvertOp colorConvertOp = null;
+	/**
+	 * @return Returns the colorConvertOp.
+	 */
+	public ColorConvertOp getColorConvertOp() {
+		return colorConvertOp;
+	}
+	/**
+	 * @param colorConvertOp The colorConvertOp to set.
+	 */
+	public void setColorConvertOp(ColorConvertOp colorConvertOp) {
+		this.colorConvertOp = colorConvertOp;
+	}
+  
 }

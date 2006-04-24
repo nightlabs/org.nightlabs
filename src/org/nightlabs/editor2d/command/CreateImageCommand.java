@@ -27,16 +27,12 @@
 
 package org.nightlabs.editor2d.command;
 
-import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
-import org.nightlabs.base.io.IOUtil;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ImageDrawComponent;
 
@@ -53,17 +49,20 @@ extends CreateDrawComponentCommand
   public ImageDrawComponent getImageDrawComponent() {
     return (ImageDrawComponent) getChild();
   }
-  
-  protected BufferedImage image;
-  
-  protected String fileName;
+    
+  protected String fileName = null;
   public void setFileName(String fileName) {
     this.fileName = fileName;
   }
   
-  protected String simpleFileName;    
+  protected String simpleFileName = null;    
   public void setSimpleFileName(String simpleFileName) {
     this.simpleFileName = simpleFileName;
+  }
+  
+  protected ColorConvertOp colorConvertOp = null;
+  public void setColorConvertOp(ColorConvertOp colorConvertOp) {
+  	this.colorConvertOp = colorConvertOp;
   }
   
   public void execute() 
@@ -73,12 +72,15 @@ extends CreateDrawComponentCommand
     	File file = new File(fileName);
     	FileInputStream fis = new FileInputStream(file);
    		getImageDrawComponent().loadImage(simpleFileName, file.lastModified(), fis);
+   		getImageDrawComponent().setColorConvertOp(colorConvertOp);
     }
     catch (FileNotFoundException e) {
     	throw new RuntimeException(e);    
     }    
   }  
   
+//  protected BufferedImage image;
+//  
 //  public void execute() 
 //  {
 //  	super.execute();
@@ -99,7 +101,7 @@ extends CreateDrawComponentCommand
 //    	throw new RuntimeException(e);    
 //    }    
 //  }
-    
+//    
 //  public void redo() 
 //  {
 //  	if (image != null)

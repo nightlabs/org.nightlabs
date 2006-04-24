@@ -1,7 +1,6 @@
 /* *****************************************************************************
  * NightLabs Editor2D - Graphical editor framework                             *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
- * Project author: Daniel Mazurek <Daniel.Mazurek [at] nightlabs [dot] org>    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
  * modify it under the terms of the GNU Lesser General Public                  *
@@ -24,19 +23,63 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-
 package org.nightlabs.editor2d.j2dswt;
 
-import org.holongate.j2d.IPaintable;
-import org.nightlabs.editor2d.DrawComponent;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
-public class DrawComponentPaintable 
-extends org.nightlabs.editor2d.viewer.DrawComponentPaintable
-implements IPaintable
+import org.apache.log4j.Logger;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.widgets.Control;
+import org.holongate.j2d.IPaintable;
+
+/**
+ * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
+ */
+public class BufferedImagePaintable 
+implements IPaintable 
 {
-	public DrawComponentPaintable(DrawComponent dc) 
-	{
-		super(dc);
+	public static final Logger LOGGER = Logger.getLogger(BufferedImagePaintable.class);
+	
+	private BufferedImage image = null;
+	public BufferedImagePaintable(BufferedImage bi) {
+		super();
+		this.image = bi;
 	}
+
+	/**
+	 * @see org.holongate.j2d.IPaintable#paint(org.eclipse.swt.widgets.Control, java.awt.Graphics2D)
+	 */
+	public void paint(Control control, Graphics2D g2d) 
+	{
+		if (image == null) {
+			LOGGER.debug("image = null!");
+			return;			
+		}
 		
+		g2d.drawRenderedImage(image, null);
+		LOGGER.debug("paint called!");
+	}
+
+	/**
+	 * @see org.holongate.j2d.IPaintable#redraw(org.eclipse.swt.widgets.Control, org.eclipse.swt.graphics.GC)
+	 */
+	public void redraw(Control control, GC gc) {
+
+	}
+
+	/**
+	 * @see org.holongate.j2d.IPaintable#getBounds(org.eclipse.swt.widgets.Control)
+	 */
+	public Rectangle2D getBounds(Control control) {
+		return new Rectangle2D.Double(0,0,image.getWidth(),image.getHeight());
+	}
+
+	public void setImage(BufferedImage bi) {
+		this.image = bi;
+	}
+	public BufferedImage getImage() {
+		return image;
+	}
 }
