@@ -152,8 +152,8 @@ extends CreationTool
   	try {
   		ICC_Profile profile = ICC_Profile.getInstance(fileName);
   		LOGGER.debug("IIC Profile for image "+fileName+" = "+profile);
-  		LOGGER.debug("profile.getProfileClass = "+profile.getProfileClass()); 
-  		LOGGER.debug("profile.getColorSpaceType() = "+profile.getColorSpaceType());  		
+  		LOGGER.debug("colorModel.getProfileClass = "+profile.getProfileClass()); 
+  		LOGGER.debug("colorModel.getColorSpaceType() = "+profile.getColorSpaceType());  		
   	} catch (IllegalArgumentException e) {
   		LOGGER.debug("no ICC_Profile found for image "+fileName);
   	}

@@ -57,7 +57,7 @@ extends CenteredDialog
 	{
 		super.create();
 		getShell().setText(EditorPlugin.getResourceString("dialog.convertImage.title"));
-		getShell().setSize(400, 400);
+		getShell().setSize(500, 500);
 	}	
 		
 	protected BufferedImage image = null;

@@ -28,6 +28,7 @@ package org.nightlabs.editor2d.j2dswt;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.GC;
@@ -42,8 +43,8 @@ implements IPaintable
 {
 	public static final Logger LOGGER = Logger.getLogger(BufferedImagePaintable.class);
 	
-	private BufferedImage image = null;
-	public BufferedImagePaintable(BufferedImage bi) {
+	private RenderedImage image = null;
+	public BufferedImagePaintable(RenderedImage bi) {
 		super();
 		this.image = bi;
 	}
@@ -76,10 +77,10 @@ implements IPaintable
 		return new Rectangle2D.Double(0,0,image.getWidth(),image.getHeight());
 	}
 
-	public void setImage(BufferedImage bi) {
+	public void setImage(RenderedImage bi) {
 		this.image = bi;
 	}
-	public BufferedImage getImage() {
+	public RenderedImage getImage() {
 		return image;
 	}
 }
