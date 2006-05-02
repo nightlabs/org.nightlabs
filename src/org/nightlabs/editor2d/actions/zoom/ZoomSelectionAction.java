@@ -28,6 +28,7 @@
 package org.nightlabs.editor2d.actions.zoom;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -36,14 +37,17 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
 import org.nightlabs.editor2d.custom.EditorImages;
+import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
 import org.nightlabs.editor2d.util.EditorUtil;
 
 
-public class ZoomSelectionAction 
-extends SelectionAction 
+public class ZoomSelectionAction  
+extends AbstractEditorSelectionAction
 {
   public static final String ID = ZoomSelectionAction.class.getName();
   
@@ -51,7 +55,7 @@ extends SelectionAction
   /**
    * @param part
    */
-  public ZoomSelectionAction(IWorkbenchPart part) {
+  public ZoomSelectionAction(AbstractEditor part) {
     super(part); 
   }
 
@@ -60,8 +64,7 @@ extends SelectionAction
   	super.init();
   	setText(EditorPlugin.getResourceString("action.zoom.selection.label"));
   	setToolTipText(EditorPlugin.getResourceString("action.zoom.selection.tooltip"));
-  	setId(ID);
-//  	setImageDescriptor(EditorImages.ZOOM_SELECTION_16);  	
+  	setId(ID);  	
   	setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomSelectionAction.class));
   	setActionDefinitionId(EditorCommandConstants.ZOOM_SELECTION_ID);
   } 
@@ -71,14 +74,17 @@ extends SelectionAction
    */
   protected boolean calculateEnabled() 
   {
-    if (getSelectedObjects() != null && !getSelectedObjects().isEmpty()) 
+  	List selectedObjects = getDefaultSelection(false);
+    if (!selectedObjects.isEmpty()) 
     {
-    	for (Iterator it = getSelectedObjects().iterator(); it.hasNext(); ) {
+    	for (Iterator it = selectedObjects.iterator(); it.hasNext(); ) 
+    	{
     		Object o = it.next();
     		if (o instanceof GraphicalEditPart) {
     			GraphicalEditPart editPart = (GraphicalEditPart) o;
     			IFigure f = editPart.getFigure();
-    			if (!f.getBounds().equals(EMPTY_RECTANGLE))
+    			if (!f.getBounds().equals(EMPTY_RECTANGLE) &&
+    					!f.getBounds().equals(OversizedBufferFreeformLayer.INIT_BOUNDS))
     				return true;
     		}
     	}
