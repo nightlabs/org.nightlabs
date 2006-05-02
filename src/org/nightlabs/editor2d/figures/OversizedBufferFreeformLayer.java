@@ -112,7 +112,7 @@ implements FreeformFigure, BufferedFreeformLayer
 	 */
 	private List nonDCFChildren = new LinkedList();
 	
-	protected boolean debug = false;
+	protected boolean debug = true;
 	
 	protected Point calculateBufferFactors() 
 	{
@@ -164,9 +164,9 @@ implements FreeformFigure, BufferedFreeformLayer
 		}
 		if (bufferedImage == null) {
 			long time = System.currentTimeMillis();
-			currentSize.setLocation(viewerControl.getSize().x, viewerControl.getSize().x);
+			currentSize.setLocation(viewerControl.getSize().x, viewerControl.getSize().y);			
 			Point factors = calculateBufferFactors();
-			bufferSize.setLocation(currentSize.x * factors.x, currentSize.y*factors.y);
+			bufferSize.setLocation(currentSize.x * factors.x, currentSize.y * factors.y);
 			if (bufferedImage == null) {
 				bufferedImage = new BufferedImage(bufferSize.x, bufferSize.y, BufferedImage.TYPE_INT_ARGB);
 			}
@@ -279,13 +279,11 @@ implements FreeformFigure, BufferedFreeformLayer
 			LOGGER.debug("painted in "+(System.currentTimeMillis()-time));
 	}
 			
-	protected void clearBuffer() {
+	protected void clearBuffer() 
+	{
 		// TODO: make sure this is called when editor is closed
 		if (bufferedImage != null) {
 			bufferedImage.flush();
-//			long time = System.currentTimeMillis();
-//			System.gc();
-//			LOGGER.debug("gc() took "+(System.currentTimeMillis()-time)+" ms");
 		}
 		bufferedImage = null;
 		childBounds = null;
@@ -338,8 +336,6 @@ implements FreeformFigure, BufferedFreeformLayer
 	 */
 	public OversizedBufferFreeformLayer() 
 	{
-		//TODO remove this workaround, and instead try to catch the Layer-selection in the outline
-		//     I think this is ok now (Alex)
 		super.setBounds(new Rectangle(-Integer.MAX_VALUE / 2, -Integer.MAX_VALUE / 2, Integer.MAX_VALUE, Integer.MAX_VALUE));
 	}
 	
