@@ -38,6 +38,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
@@ -91,28 +92,61 @@ extends DrawComponentContainerTreeEditPart
   	installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
   }  
   
+//  protected List getModelChildren()
+//  { 
+//  	if (getFilterMan().isAllFilterSet()) {
+//  		return getMultiLayerDrawComponent().getDrawComponents(); 
+//  	}
+//  	else {
+//      List filterChildren = new ArrayList(); 
+//    	for (Iterator itFilter = getFilterMan().getFilters().iterator(); itFilter.hasNext(); ) {
+//    		Class filter = (Class) itFilter.next();
+//        for (Iterator itLayers = getDrawComponentContainer().getDrawComponents().iterator(); itLayers.hasNext(); ) {
+//          Layer l = (Layer) itLayers.next();        
+//          for (Iterator itDrawOrder = l.getDrawComponents().iterator(); itDrawOrder.hasNext(); ) {
+//            DrawComponent dc = (DrawComponent) itDrawOrder.next();
+//      			if (filter.isAssignableFrom(dc.getClass())) {
+//      				filterChildren.add(dc);
+//      			}        
+//          }
+//        }
+//    	}      
+//      return filterChildren;  		
+//  	}
+//  }	
+
   protected List getModelChildren()
   { 
   	if (getFilterMan().isAllFilterSet()) {
   		return getMultiLayerDrawComponent().getDrawComponents(); 
   	}
   	else {
-      List filterChildren = new ArrayList(); 
-    	for (Iterator itFilter = getFilterMan().getFilters().iterator(); itFilter.hasNext(); ) {
-    		Class filter = (Class) itFilter.next();
-        for (Iterator itLayers = getDrawComponentContainer().getDrawComponents().iterator(); itLayers.hasNext(); ) {
-          Layer l = (Layer) itLayers.next();        
-          for (Iterator itDrawOrder = l.getDrawComponents().iterator(); itDrawOrder.hasNext(); ) {
-            DrawComponent dc = (DrawComponent) itDrawOrder.next();
-      			if (filter.isAssignableFrom(dc.getClass())) {
-      				filterChildren.add(dc);
-      			}        
-          }
-        }
-    	}      
-      return filterChildren;  		
+      List filterChildren = new ArrayList();
+      filterChildren = getModelChildren(getMultiLayerDrawComponent());
+      return filterChildren;
   	}
   }	
+    
+  protected List getModelChildren(DrawComponentContainer dcc) 
+  {
+    List filterChildren = new ArrayList(); 
+  	for (Iterator itFilter = getFilterMan().getFilters().iterator(); itFilter.hasNext(); ) 
+  	{
+  		Class filter = (Class) itFilter.next();
+      for (Iterator itChildren = dcc.getDrawComponents().iterator(); itChildren.hasNext(); ) 
+      {
+        DrawComponent dc = (DrawComponent) itChildren.next();        
+  			if (filter.isAssignableFrom(dc.getClass())) {
+  				filterChildren.add(dc);
+  			}
+  			if (dc instanceof DrawComponentContainer) {
+  				DrawComponentContainer childDcc = (DrawComponentContainer) dc;
+  				filterChildren.addAll(getModelChildren(childDcc));
+  			}
+      }
+  	}      
+    return filterChildren;  		  	
+  }
   
   protected IPropertySource getPropertySource()
   {
