@@ -28,13 +28,9 @@ package org.nightlabs.base.entitylist;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -48,9 +44,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.notification.SelectionManager;
-import org.nightlabs.notification.NotificationEvent;
-import org.nightlabs.util.Utils;
 
 /**
  * @author Niklas Schiffler <nick@nightlabs.de>
@@ -67,19 +60,19 @@ public abstract class DefaultEntityListView
   private EntityListContentProvider contentProvider;
   private ArrayList selections;
 
-  private String selectionZone = null;
-  private List<Class> selectionSubjectClasses = null;
-
-  public void enableSelectionManager(String selectionZone, Class[] selectionSubjectClasses)
-  {
-  	this.selectionZone = selectionZone;
-  	this.selectionSubjectClasses = Utils.array2ArrayList(selectionSubjectClasses, true);
-  }
-  public void enableSelectionManager(String selectionZone, List<Class> selectionSubjectClasses)
-  {
-  	this.selectionZone = selectionZone;
-  	this.selectionSubjectClasses = selectionSubjectClasses;
-  }
+//  private String selectionZone = null;
+//  private List<Class> selectionSubjectClasses = null;
+//
+//  public void enableSelectionManager(String selectionZone, Class[] selectionSubjectClasses)
+//  {
+//  	this.selectionZone = selectionZone;
+//  	this.selectionSubjectClasses = Utils.array2ArrayList(selectionSubjectClasses, true);
+//  }
+//  public void enableSelectionManager(String selectionZone, List<Class> selectionSubjectClasses)
+//  {
+//  	this.selectionZone = selectionZone;
+//  	this.selectionSubjectClasses = selectionSubjectClasses;
+//  }
 
   private class EntitySelectionListener implements ISelectionChangedListener
 	{
@@ -100,16 +93,16 @@ public abstract class DefaultEntityListView
 			if (listChangeListener != null)
 				listChangeListener.selectionChanged(event);
 
-			if (selectionZone != null && selectionSubjectClasses != null) {
-				IStructuredSelection sel = (IStructuredSelection) selection;
-				LinkedList subjects = new LinkedList();
-
-				for (Iterator it = sel.iterator(); it.hasNext(); )
-					subjects.add(subjects.add(it.next()));
-
-				SelectionManager.sharedInstance().notify(
-						new NotificationEvent(this, selectionZone, subjects, selectionSubjectClasses));
-			}
+//			if (selectionZone != null && selectionSubjectClasses != null) {
+//				IStructuredSelection sel = (IStructuredSelection) selection;
+//				LinkedList subjects = new LinkedList();
+//
+//				for (Iterator it = sel.iterator(); it.hasNext(); )
+//					subjects.add(subjects.add(it.next()));
+//
+//				SelectionManager.sharedInstance().notify(
+//						new NotificationEvent(this, selectionZone, subjects, selectionSubjectClasses));
+//			}
   	}
   }
   private class EntityManagementViewListener implements IPartListener2 
