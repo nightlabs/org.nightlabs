@@ -64,6 +64,8 @@ implements FreeformFigure, BufferedFreeformLayer
 {
 	public static final Logger LOGGER = Logger.getLogger(OversizedBufferFreeformLayer.class);
 	
+	public static final Rectangle INIT_BOUNDS = new Rectangle(-Integer.MAX_VALUE / 2, -Integer.MAX_VALUE / 2, Integer.MAX_VALUE, Integer.MAX_VALUE);
+	
 	//  private FreeformHelper helper = new FreeformHelper(this);
 	private LayerFreeformHelper helper = new LayerFreeformHelper(this);
 	
@@ -336,7 +338,7 @@ implements FreeformFigure, BufferedFreeformLayer
 	 */
 	public OversizedBufferFreeformLayer() 
 	{
-		super.setBounds(new Rectangle(-Integer.MAX_VALUE / 2, -Integer.MAX_VALUE / 2, Integer.MAX_VALUE, Integer.MAX_VALUE));
+		super.setBounds(INIT_BOUNDS);
 	}
 	
 	public void init(EditPart editPart) {

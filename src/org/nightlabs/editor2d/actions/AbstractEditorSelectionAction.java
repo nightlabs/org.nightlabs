@@ -45,7 +45,9 @@ import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.edit.LayerEditPart;
+import org.nightlabs.editor2d.edit.PageEditPart;
 
 public abstract class AbstractEditorSelectionAction 
 extends SelectionAction
@@ -228,6 +230,7 @@ extends SelectionAction
 				defaultEditPartExcludeList = new LinkedList();
 				defaultEditPartExcludeList.add(RootEditPart.class);
 				defaultEditPartExcludeList.add(LayerEditPart.class);
+				defaultEditPartExcludeList.add(PageEditPart.class);				
 			}
 			return defaultEditPartExcludeList;
 		}
@@ -236,6 +239,7 @@ extends SelectionAction
 				defaultModelExcludeList = new LinkedList();
 				defaultModelExcludeList.add(MultiLayerDrawComponent.class);
 				defaultModelExcludeList.add(Layer.class);
+				defaultModelExcludeList.add(PageDrawComponent.class);
 			}
 			return defaultModelExcludeList;
 		}
