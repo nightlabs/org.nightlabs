@@ -63,6 +63,6 @@ extends EditorPartAction
     }    
   }
     
-  public abstract int getRenderMode();
+  public abstract String getRenderMode();
   protected abstract void init();
 }

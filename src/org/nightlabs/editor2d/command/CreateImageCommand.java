@@ -27,14 +27,16 @@
 
 package org.nightlabs.editor2d.command;
 
-import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ImageDrawComponent;
+import org.nightlabs.editor2d.image.RenderModeMetaData;
 
 public class CreateImageCommand 
 extends CreateDrawComponentCommand 
@@ -59,11 +61,14 @@ extends CreateDrawComponentCommand
   public void setSimpleFileName(String simpleFileName) {
     this.simpleFileName = simpleFileName;
   }
-  
-  protected ColorConvertOp colorConvertOp = null;
-  public void setColorConvertOp(ColorConvertOp colorConvertOp) {
-  	this.colorConvertOp = colorConvertOp;
-  }
+    
+  protected List<RenderModeMetaData> renderModeMetaDatas = new LinkedList<RenderModeMetaData>();
+//  public void addRenderModeMetaData(RenderModeMetaData renderModeMetaData) {
+//  	renderModeMetaDatas.add(renderModeMetaData);
+//  }
+  public void setRenderModeMetaData(List<RenderModeMetaData> renderModeMetaDatas) {
+  	this.renderModeMetaDatas = renderModeMetaDatas;
+  }  
   
   public void execute() 
   {
@@ -72,46 +77,11 @@ extends CreateDrawComponentCommand
     	File file = new File(fileName);
     	FileInputStream fis = new FileInputStream(file);
    		getImageDrawComponent().loadImage(simpleFileName, file.lastModified(), fis);
-   		getImageDrawComponent().setColorConvertOp(colorConvertOp);
+   		getImageDrawComponent().getRenderModeMetaDataList().addAll(renderModeMetaDatas);
     }
     catch (FileNotFoundException e) {
     	throw new RuntimeException(e);    
     }    
   }  
-  
-//  protected BufferedImage image;
-//  
-//  public void execute() 
-//  {
-//  	super.execute();
-//    try {
-//    	File file = new File(fileName);
-//    	FileInputStream fis = new FileInputStream(file);
-//   		getImageDrawComponent().setOriginalImage(fis, file.lastModified());
-//   		getImageDrawComponent().setImage(getImageDrawComponent().getOriginalImage());
-//
-////    	if (image != null) {
-////        super.execute();
-//      	getImageDrawComponent().setImage(image);
-//        getImageDrawComponent().setName(simpleFileName); 
-//        getImageDrawComponent().setImageFileExtension(IOUtil.getFileExtension(simpleFileName));
-////    	}
-//    }
-//    catch (FileNotFoundException e) {
-//    	throw new RuntimeException(e);    
-//    }    
-//  }
-//    
-//  public void redo() 
-//  {
-//  	if (image != null)
-//  		super.redo();
-//  }
-//  
-//  public void undo() 
-//  {
-//  	if (image != null)  	
-//  		super.undo();
-//  }
     
 }

@@ -114,7 +114,7 @@ implements FreeformFigure, BufferedFreeformLayer
 	 */
 	private List nonDCFChildren = new LinkedList();
 	
-	protected boolean debug = true;
+	protected boolean debug = false;
 	
 	protected Point calculateBufferFactors() 
 	{

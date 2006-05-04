@@ -50,7 +50,7 @@ extends AbstractRendererModeAction
 //    setImageDescriptor(ImageDescriptor.createFromFile(EditorPlugin.class, "icons/sun16.gif"));
   } 
     
-  public int getRenderMode() 
+  public String getRenderMode() 
   {
     return RenderConstants.DEFAULT_MODE;
   }
