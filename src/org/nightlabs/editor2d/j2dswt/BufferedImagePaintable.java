@@ -27,7 +27,6 @@ package org.nightlabs.editor2d.j2dswt;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 
 import org.apache.log4j.Logger;
@@ -59,8 +58,10 @@ implements IPaintable
 			return;			
 		}
 		
+		long start = System.currentTimeMillis();
 		g2d.drawRenderedImage(image, null);
-		LOGGER.debug("paint called!");
+		long end = System.currentTimeMillis() - start;		
+		LOGGER.debug("paint took "+end+" ms!");
 	}
 
 	/**

@@ -1009,7 +1009,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
         getCommandStack().markSaveLocation();
       } 
       catch (Exception e) {
-        e.printStackTrace();
+        throw new RuntimeException(e);
       }
       
       return true;
@@ -1111,7 +1111,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
         FileOutputStream fos = new FileOutputStream(fileName);          
         ioFilter.write(getMultiLayerDrawComponent(), fos);      		
     	} catch (Exception e) {
-    		throw new WriteException(file, "an error occured while writing", e);
+//    		throw new WriteException(file, "an error occured while writing", e);
+    		throw new RuntimeException(e);
     	}    	
     }
                         		

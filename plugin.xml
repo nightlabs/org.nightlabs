@@ -72,6 +72,9 @@
          <property
                name="aboutImage"
                value="icons/EditorPlugin-aboutImage.24x24.png"/>
+		<property 
+				name="preferenceCustomization" 
+				value="plugin_customization.ini"/>
       </product>
    </extension>
    <extension

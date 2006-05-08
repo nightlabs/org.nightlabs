@@ -57,6 +57,8 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
@@ -123,12 +125,12 @@ extends XComposite
 		start = System.currentTimeMillis();
 		originalImage = bi;
 		convertImage = ImageUtil.cloneImage(originalImage);
-//		convertImage = ImageUtil.cloneImage(originalImage, BufferedImage.TYPE_INT_ARGB);
 		bitsPerPixel = bi.getColorModel().getPixelSize();
 		initColorModels();		
 		initRenderHints();
 		initDithering();
 		createComposite(this);		
+		addDisposeListener(disposeListener);
 	}
 	
 	protected void initRenderHints() 
@@ -501,27 +503,20 @@ extends XComposite
 		}	
 	};
 	
-	private void layoutScrollBars() 
+	protected void layoutScrollBars() 
 	{
 		Point size = null;
-		if (!fitImage) {
+		if (!fitImage)
 			size = new Point(originalImage.getWidth(), originalImage.getHeight());			
-		}
-		else {
+		else
 			size = new Point(originalScale.getWidth(), originalScale.getHeight());			
-		}
 		
 		originalCanvas.computeSize(size.x, size.y);
 		convertCanvas.computeSize(size.x, size.y);		
 		originalSC.setMinSize(size);		
 		convertSC.setMinSize(size);				
 		originalCanvas.layout(true);		
-		convertCanvas.layout(true);
-		
-		LOGGER.debug("originalCanvas Size = "+originalCanvas.getSize());		
-		LOGGER.debug("originalImage Size = (W = "+originalImage.getWidth()+"), (H = "+originalImage.getHeight()+")");		
-		LOGGER.debug("originalScale Size = (W = "+originalScale.getWidth()+"), (H = "+originalScale.getHeight()+")");		
-		LOGGER.debug("originalSC Size = "+originalSC.getSize());
+		convertCanvas.layout(true);		
 	}	
 		
 	protected List<RenderModeMetaData> renderModeMetaDatas = new LinkedList<RenderModeMetaData>();
@@ -532,6 +527,7 @@ extends XComposite
 	protected void refresh() 
 	{		
 		LOGGER.debug("refresh!");
+		long start = System.currentTimeMillis();
 				
 		if (colorModel == bw) {			
 			convertBlackWhite();						
@@ -545,6 +541,8 @@ extends XComposite
 				convertImage = convertToBufferedImage(img);
 		}						
 		rescaleImages();
+		long end = System.currentTimeMillis() - start;
+		LOGGER.debug("refresh took "+end+" ms!");
 	}		
 			
 //	private BufferedImage colorConvertJAI(BufferedImage original, ColorModel colorModel,
@@ -560,14 +558,23 @@ extends XComposite
 //	{
 //		return cm.isCompatibleSampleModel(bi.getSampleModel());
 //	}
+//	
+//	private ImageLayout getColorConvertImageLayout(ColorModel cm, int width, int height) 
+//	{
+//    ImageLayout layout = new ImageLayout(); 
+//    layout.setColorModel(cm);
+//    layout.setSampleModel(cm.createCompatibleSampleModel(width, height));
+//    return layout;
+//	}		
 	
 	private RenderedImage colorConvertJDK(BufferedImage original, ColorModel colorModel, 
 			RenderingHints rh) 
 	{
 		long startTime = System.currentTimeMillis();		
-		RenderModeMetaData renderModeMetaData = new RenderModeMetaData();
-		Map<String, Object> parameters = renderModeMetaData.getParameters();
+		renderModeMetaData = new RenderModeMetaData();
+		parameters.clear();
 		parameters.put(RenderModeMetaData.KEY_BUFFERED_IMAGE_OP, new ColorConvertOp(colorModel.getColorSpace(), rh));
+		renderModeMetaData.setParameters(parameters);
 		renderModeMetaData.setRendererDelegateClass(ColorConvertDelegate.class);
 		
 		renderModeMetaDatas.clear();
@@ -596,54 +603,56 @@ extends XComposite
 		return null;
 	}
 	
-	private ImageLayout getColorConvertImageLayout(ColorModel cm, int width, int height) 
-	{
-    ImageLayout layout = new ImageLayout(); 
-    layout.setColorModel(cm);
-    layout.setSampleModel(cm.createCompatibleSampleModel(width, height));
-    return layout;
-	}	
-	
 	protected BufferedImage originalScale = null;
 	protected BufferedImage convertScale = null;
 	protected void rescaleImages() 
 	{
+		long start = System.currentTimeMillis();
+		
 		if (fitImage && (rescaleOp != null)) 		
 		{
-			originalScale = rescaleOp.filter(originalImage, null);
+			originalScale = rescaleOp.filter(originalImage, null);			
 			originalPaintable.setImage(originalScale);
-			convertScale = rescaleOp.filter(convertImage, null);
-			convertPaintable.setImage(convertScale);
-			
-			LOGGER.debug("rescaleOp.getTransform() = "+rescaleOp.getTransform());
+			convertScale = rescaleOp.filter(convertImage, null);			
+			convertPaintable.setImage(convertScale);			
 		}
 		else {
 			originalPaintable.setImage(originalImage);
 			convertPaintable.setImage(convertImage);			
 		}
 		repaintCanvas();
+		
+		long end = System.currentTimeMillis() - start;
+		LOGGER.debug("rescaleImages took "+end+" ms!");
 	}
 							
 	private void convertBlackWhite() 
 	{						
 		if (!dithering) {
-			convertImage = ImageUtil.cloneImage(originalImage, BufferedImage.TYPE_BYTE_BINARY);
-			LOGGER.debug("Dithering skipped!");
+			convertImage = convertBlackWhiteWithoutDithering(originalImage);			
 			return;
-		}				
+		}			
 		try {
 			PlanarImage dst = PlanarImage.wrapRenderedImage(originalImage);		
-			RenderedImage img = ditherTo1Bit(dst, bitsPerPixel);
+			RenderedImage img = convertBlackWhiteWithDithering(dst, bitsPerPixel);
 			if (img != null)
 				convertImage = convertToBufferedImage(img);
 			LOGGER.debug("Dithering worked!");
 		} catch (Exception e) {
-			convertImage = ImageUtil.cloneImage(originalImage, BufferedImage.TYPE_BYTE_BINARY);			
-			LOGGER.debug("Dithering skipped!");
+			convertImage = convertBlackWhiteWithoutDithering(originalImage);
 		}
 	}		
 		
-	private RenderedImage ditherTo1Bit(PlanarImage src, int bitsPerPixel) 
+	private BufferedImage convertBlackWhiteWithoutDithering(BufferedImage img) 
+	{
+		LOGGER.debug("Dithering skipped!");					
+		return convertToBufferedImage(colorConvertJDK(img, bw, renderHints));
+//	return ImageUtil.cloneImage(img, BufferedImage.TYPE_BYTE_BINARY);		
+	}
+		
+	protected RenderModeMetaData renderModeMetaData = null;
+	protected Map<String, Object> parameters = new HashMap<String, Object>();	
+	private RenderedImage convertBlackWhiteWithDithering(PlanarImage src, int bitsPerPixel) 
 	{
 		long startTime = System.currentTimeMillis();
     // Load the ParameterBlock for the dithering operation
@@ -666,12 +675,13 @@ extends XComposite
     // Create a hint containing the layout.
     RenderingHints hints = new RenderingHints(JAI.KEY_IMAGE_LAYOUT,
                                               imagelayout);    
-		RenderModeMetaData renderModeMetaData = new RenderModeMetaData();
-		Map<String, Object> parameters = renderModeMetaData.getParameters();
+		renderModeMetaData = new RenderModeMetaData();
+		parameters.clear();
 		parameters.put(RenderModeMetaData.KEY_OP_NAME, opName);
 		parameters.put(RenderModeMetaData.KEY_PARAMETER_BLOCK, pb);
 		parameters.put(RenderModeMetaData.KEY_RENDERING_HINTS, hints);
 		renderModeMetaData.setRendererDelegateClass(ColorConvertDelegate.class);
+		renderModeMetaData.setParameters(parameters);
 		
 		renderModeMetaDatas.clear();
 		renderModeMetaDatas.add(renderModeMetaData);
@@ -689,12 +699,7 @@ extends XComposite
 		
 	protected BufferedImage convertToBufferedImage(RenderedImage img) 
 	{
-		if (img instanceof BufferedImage) {
-			return (BufferedImage) img;
-		} else if (img instanceof PlanarImage) {
-			return ((PlanarImage)img).getAsBufferedImage();
-		}
-		return null;
+		return ImageUtil.convertToBufferedImage(img);
 	}
 	
 	protected LookupTableJAI lookupTable = null;
@@ -707,4 +712,21 @@ extends XComposite
 		imagelayout = ImageUtil.get1BitDitherImageLayout(originalImage.getWidth(), originalImage.getHeight());
 	}
 		
+	protected DisposeListener disposeListener = new DisposeListener()
+	{	
+		public void widgetDisposed(DisposeEvent e) 
+		{
+			colorCube = null;
+			colorModel = null;
+			convertImage = null;
+			convertScale = null;
+			grey = null;
+			imagelayout = null;
+			lookupTable = null;
+			originalImage = null;
+			originalScale = null;
+			rgb = null;
+		}	
+	};
+	
 }

@@ -122,7 +122,7 @@ extends CreationTool
 		      		doCreation(fullPathName, fileName);		      		
 		      	}											
 					} else {
-						LOGGER.debug("Image "+fullPathName+" could not be loaded");
+						throw new RuntimeException("Image "+fullPathName+" could not be loaded");
 					}
 				} catch (IOException e) {
 					throw new RuntimeException("Image "+fullPathName+" could not be loaded", e);
@@ -145,8 +145,5 @@ extends CreationTool
   }
     
   protected List<RenderModeMetaData> renderModeMetaDatas = new LinkedList<RenderModeMetaData>();
-//  protected List<RenderModeMetaData> getRenderModeMetaDatas() {
-//  	return renderModeMetaDatas;
-//  }
   
 }
