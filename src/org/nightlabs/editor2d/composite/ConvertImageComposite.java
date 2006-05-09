@@ -576,6 +576,7 @@ extends XComposite
 		parameters.put(RenderModeMetaData.KEY_BUFFERED_IMAGE_OP, new ColorConvertOp(colorModel.getColorSpace(), rh));
 		renderModeMetaData.setParameters(parameters);
 		renderModeMetaData.setRendererDelegateClass(ColorConvertDelegate.class);
+		renderModeMetaData.getSupportedRenderModes().add(getRenderMode(colorModel));
 		
 		renderModeMetaDatas.clear();
 		renderModeMetaDatas.add(renderModeMetaData);
@@ -635,9 +636,10 @@ extends XComposite
 		try {
 			PlanarImage dst = PlanarImage.wrapRenderedImage(originalImage);		
 			RenderedImage img = convertBlackWhiteWithDithering(dst, bitsPerPixel);
-			if (img != null)
+			if (img != null) {
 				convertImage = convertToBufferedImage(img);
-			LOGGER.debug("Dithering worked!");
+				LOGGER.debug("Dithering worked!");				
+			}
 		} catch (Exception e) {
 			convertImage = convertBlackWhiteWithoutDithering(originalImage);
 		}
@@ -682,6 +684,7 @@ extends XComposite
 		parameters.put(RenderModeMetaData.KEY_RENDERING_HINTS, hints);
 		renderModeMetaData.setRendererDelegateClass(ColorConvertDelegate.class);
 		renderModeMetaData.setParameters(parameters);
+		renderModeMetaData.getSupportedRenderModes().add(RenderConstants.BLACK_WHITE_MODE);
 		
 		renderModeMetaDatas.clear();
 		renderModeMetaDatas.add(renderModeMetaData);

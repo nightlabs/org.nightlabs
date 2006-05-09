@@ -27,9 +27,11 @@
 
 package org.nightlabs.editor2d.model;
 
-import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.nightlabs.base.property.CheckboxPropertyDescriptor;
+import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
 
 public class LayerPropertySource 
@@ -39,7 +41,44 @@ extends DrawComponentPropertySource
 		super(layer);
 	}
 
-	protected List createPropertyDescriptors() {
-		return Collections.EMPTY_LIST;
+	protected Layer getLayer() {
+		return (Layer) drawComponent;
+	}
+	
+	protected List createPropertyDescriptors() 
+	{
+		List descriptors = getDescriptors();
+		// Name
+		descriptors.add(createNamePD());
+		// Visible
+		descriptors.add(createVisiblePD());
+		
+		return descriptors;
 	}			 
+	
+	protected PropertyDescriptor createVisiblePD() 
+	{
+		PropertyDescriptor pd = new CheckboxPropertyDescriptor(Layer.PROP_VISIBLE, 
+				EditorPlugin.getResourceString("property.visible.label"), false);
+		return pd;
+	}
+
+	@Override
+	public Object getPropertyValue(Object id) 
+	{
+		if (id.equals(Layer.PROP_VISIBLE)) {
+			return new Boolean(getLayer().isVisible());
+		}		
+		return super.getPropertyValue(id);
+	}
+
+	@Override
+	public void setPropertyValue(Object id, Object value) 
+	{
+		if (id.equals(Layer.PROP_VISIBLE)) {
+			getLayer().setVisible(((Boolean)value).booleanValue());
+		}
+		super.setPropertyValue(id, value);
+	}
+		
 }
