@@ -38,10 +38,12 @@ import java.awt.image.DataBuffer;
 import java.awt.image.RenderedImage;
 import java.awt.image.renderable.ParameterBlock;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.media.jai.ColorCube;
 import javax.media.jai.ImageLayout;
@@ -49,7 +51,6 @@ import javax.media.jai.JAI;
 import javax.media.jai.KernelJAI;
 import javax.media.jai.LookupTableJAI;
 import javax.media.jai.PlanarImage;
-import javax.media.jai.operator.ColorConvertDescriptor;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
@@ -79,7 +80,9 @@ import org.nightlabs.base.form.XFormToolkit;
 import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
 import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.image.ColorConvertDelegate;
+import org.nightlabs.editor2d.image.BlackWhiteColorConvertDelegate;
+import org.nightlabs.editor2d.image.GrayscaleColorConvertDelegate;
+import org.nightlabs.editor2d.image.RGBColorConvertDelegate;
 import org.nightlabs.editor2d.image.RenderModeMetaData;
 import org.nightlabs.editor2d.j2dswt.BufferedImagePaintable;
 import org.nightlabs.editor2d.render.RenderConstants;
@@ -571,12 +574,14 @@ extends XComposite
 			RenderingHints rh) 
 	{
 		long startTime = System.currentTimeMillis();		
-		renderModeMetaData = new RenderModeMetaData();
-		parameters.clear();
+		Map<String, Object> parameters = new HashMap<String, Object>(1);
 		parameters.put(RenderModeMetaData.KEY_BUFFERED_IMAGE_OP, new ColorConvertOp(colorModel.getColorSpace(), rh));
-		renderModeMetaData.setParameters(parameters);
-		renderModeMetaData.setRendererDelegateClass(ColorConvertDelegate.class);
-		renderModeMetaData.getSupportedRenderModes().add(getRenderMode(colorModel));
+		String renderDelegateClassName = getImageRenderDelegateClassName(colorModel);
+		Set<String> supportedRenderModes = new HashSet<String>();
+		supportedRenderModes.add(getRenderMode(colorModel));
+		String id = getRenderModeMetaDataID(colorModel);		
+		RenderModeMetaData renderModeMetaData = new RenderModeMetaData(id, supportedRenderModes, 
+				renderDelegateClassName, parameters, true);
 		
 		renderModeMetaDatas.clear();
 		renderModeMetaDatas.add(renderModeMetaData);
@@ -602,6 +607,30 @@ extends XComposite
 			return RenderConstants.RGB_MODE;
 		}
 		return null;
+	}
+
+	protected String getRenderModeMetaDataID(ColorModel cm) 
+	{
+		if (cm.equals(bw)) {
+			return RenderConstants.BLACK_WHITE_MODE;
+		} else if (cm.equals(grey)) {
+			return RenderConstants.GRAY_MODE;
+		} else if (cm.equals(rgb)) {
+			return RenderConstants.RGB_MODE;
+		}
+		return null;
+	}
+		
+	protected String getImageRenderDelegateClassName(ColorModel cm) 
+	{
+		if (cm.equals(bw)) {
+			return BlackWhiteColorConvertDelegate.class.getName();
+		} else if (cm.equals(grey)) {
+			return GrayscaleColorConvertDelegate.class.getName();
+		} else if (cm.equals(rgb)) {
+			return RGBColorConvertDelegate.class.getName();
+		}
+		return null;		
 	}
 	
 	protected BufferedImage originalScale = null;
@@ -652,8 +681,8 @@ extends XComposite
 //	return ImageUtil.cloneImage(img, BufferedImage.TYPE_BYTE_BINARY);		
 	}
 		
-	protected RenderModeMetaData renderModeMetaData = null;
-	protected Map<String, Object> parameters = new HashMap<String, Object>();	
+//	protected RenderModeMetaData renderModeMetaData = null;
+//	protected Map<String, Object> parameters = new HashMap<String, Object>();	
 	private RenderedImage convertBlackWhiteWithDithering(PlanarImage src, int bitsPerPixel) 
 	{
 		long startTime = System.currentTimeMillis();
@@ -677,19 +706,22 @@ extends XComposite
     // Create a hint containing the layout.
     RenderingHints hints = new RenderingHints(JAI.KEY_IMAGE_LAYOUT,
                                               imagelayout);    
-		renderModeMetaData = new RenderModeMetaData();
-		parameters.clear();
+		
+		Map<String, Object> parameters = new HashMap<String, Object>(1);
 		parameters.put(RenderModeMetaData.KEY_OP_NAME, opName);
 		parameters.put(RenderModeMetaData.KEY_PARAMETER_BLOCK, pb);
-		parameters.put(RenderModeMetaData.KEY_RENDERING_HINTS, hints);
-		renderModeMetaData.setRendererDelegateClass(ColorConvertDelegate.class);
-		renderModeMetaData.setParameters(parameters);
-		renderModeMetaData.getSupportedRenderModes().add(RenderConstants.BLACK_WHITE_MODE);
+		parameters.put(RenderModeMetaData.KEY_RENDERING_HINTS, hints);		
+		String renderDelegateClassName = getImageRenderDelegateClassName(bw);
+		Set<String> supportedRenderModes = new HashSet<String>();
+		supportedRenderModes.add(getRenderMode(bw));
+		String id = getRenderModeMetaDataID(bw);		
+		RenderModeMetaData renderModeMetaData = new RenderModeMetaData(id, supportedRenderModes, 
+				renderDelegateClassName, parameters, false);		
 		
 		renderModeMetaDatas.clear();
 		renderModeMetaDatas.add(renderModeMetaData);
 		
-		String renderMode = getRenderMode(colorModel); 
+		String renderMode = getRenderMode(bw); 
 		try {
 			RenderedImage img = renderModeMetaData.getRendererDelegate().render(renderMode, null, src, renderModeMetaData);
 			long end = System.currentTimeMillis() - startTime;

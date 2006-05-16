@@ -30,6 +30,7 @@ package org.nightlabs.editor2d.command;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -63,9 +64,6 @@ extends CreateDrawComponentCommand
   }
     
   protected List<RenderModeMetaData> renderModeMetaDatas = new LinkedList<RenderModeMetaData>();
-//  public void addRenderModeMetaData(RenderModeMetaData renderModeMetaData) {
-//  	renderModeMetaDatas.add(renderModeMetaData);
-//  }
   public void setRenderModeMetaData(List<RenderModeMetaData> renderModeMetaDatas) {
   	this.renderModeMetaDatas = renderModeMetaDatas;
   }  
@@ -77,7 +75,9 @@ extends CreateDrawComponentCommand
     	File file = new File(fileName);
     	FileInputStream fis = new FileInputStream(file);
    		getImageDrawComponent().loadImage(simpleFileName, file.lastModified(), fis);
-   		getImageDrawComponent().getRenderModeMetaDataList().addAll(renderModeMetaDatas);
+   		for (Iterator<RenderModeMetaData> it = renderModeMetaDatas.iterator(); it.hasNext(); ) {
+   			getImageDrawComponent().addRenderModeMetaData(it.next());
+   		}
     }
     catch (FileNotFoundException e) {
     	throw new RuntimeException(e);    
