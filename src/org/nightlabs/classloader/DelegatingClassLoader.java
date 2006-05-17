@@ -545,9 +545,9 @@ public class DelegatingClassLoader
 	 * this method would be called within the synchronized super.loadClass(...). Thus, we call this
 	 * method directly in our {@link #loadClass(String, boolean) } implementation outside of a synchronized.
 	 *
-	 * @param name
-	 * @return
-	 * @throws ClassNotFoundException
+	 * @param name The class name
+	 * @return The found class
+	 * @throws ClassNotFoundException if the class was not found
 	 */
 	protected Class _findClass(String name) throws ClassNotFoundException
 	{
