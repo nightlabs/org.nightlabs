@@ -197,7 +197,7 @@ public class RCPUtil
 	 * one of the pages of the active Workbench window. Will also return 
 	 * true when the page-book containing this view is minimized.
 	 * 
-	 * @param viewID The part to check
+	 * @param part The part to check
 	 * @return Wether the view is visible
 	 */
 	public static boolean isPartVisible(IWorkbenchPart part) {

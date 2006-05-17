@@ -241,7 +241,7 @@ public class SharedImages
 	/**
 	 * Get the image for the given clazz The image will be
 	 * searched based on the NightLabs coding guidelines.
-	 * This uses {@link #getSharedImage(Plugin, Class, String, String, String)}
+	 * This uses <code>sharedInstance().getImage()</code>.
 	 * {@link #IMAGE_DIMENSION_DEFAULT} and
 	 * {@link #IMAGE_FORMAT_DEFAULT}
 	 * 
@@ -256,7 +256,7 @@ public class SharedImages
 	/**
 	 * Get the image for the given clazz The image will be
 	 * searched based on the NightLabs coding guidelines.
-	 * This uses {@link #getSharedImage(Plugin, Class, String, String, String)}
+	 * This uses <code>sharedInstance().getImage()</code>.
 	 * and passes no suffix, {@link #IMAGE_DIMENSION_DEFAULT} and
 	 * {@link #IMAGE_FORMAT_DEFAULT}
 	 * 

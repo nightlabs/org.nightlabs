@@ -71,7 +71,7 @@ public class TableSortSelectionListener implements SelectionListener {
 	 *						the sorter this listener uses
 	 * @param defaultDirection
 	 *						the default sorting direction of this Listener. Possible
-	 *						values are {@link SWT.UP} and {@link SWT.DOWN}
+	 *						values are {@link SWT#UP} and {@link SWT#DOWN}
 	 * @param keepDirection
 	 *						if true, the listener will remember the last sorting direction
 	 *						of the associated column and restore it when the column is
