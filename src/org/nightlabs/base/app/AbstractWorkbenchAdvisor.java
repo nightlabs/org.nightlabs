@@ -91,7 +91,8 @@ extends WorkbenchAdvisor
 	
 	/**
 	 * Checks the {@link ExceptionHandlerRegistry} for registered handlers by invoking
-	 * {@link ExceptionHandlerRegistry#searchHandler(Throwable)}. For the found item the {@link IExceptionHandler#handleException(Throwable)} 
+	 * {@link ExceptionHandlerRegistry#searchHandler(Throwable)}. For the found item the 
+	 * {@link org.eclipse.jface.window.Window.IExceptionHandler#handleException(java.lang.Throwable)} 
 	 * method is invoked on a unique instance of the eventHandler class (plugin.xml). 
 	 */
 	public void eventLoopException(Throwable exception) {
