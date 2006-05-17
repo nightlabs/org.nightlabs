@@ -33,7 +33,8 @@ import java.util.List;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
-/**
+/* OLD JAVADOC:
+ * 
  * Used for Wizards with dynamic WizardPages.
  * Inteded to be used as follows.<br/>
  * Subclass DynamicPathWizardPage and implement
@@ -63,12 +64,29 @@ import org.eclipse.jface.wizard.Wizard;
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  * @author Marco Schulze
- *
+ */
+
+/**
+ * Used for Wizards with dynamic WizardPages.
+ * Inteded to be used as follows.<br/>
+ * Subclass DynamicPathWizardPage and implement
+ * <ul>
+ *   <li>{@link org.eclipse.jface.wizard.Wizard#performFinish()}, where you perform your
+ *   wizards action as you are used with normal
+ *   Wizards.</li>
+ * </ul> 
+ * <p>
+ *   You can use the add/removeDynamicWizardPage methods to add the
+ *   pages as you need them. If you don't override the getNextPage-behavior
+ *   of the added pages they will appear in the same order as added.
+ * </p>
+ * 
+ * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ * @author Marco Schulze
  */
 public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWizard {
 	
 	private List dynamicWizardPages = new ArrayList();
-//	private DynamicWizardPopulator populator;
 	private DynamicPathWizardDialog dynamicWizardDialog;
 
 	/**
@@ -370,12 +388,6 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 //		}
 	}	
 	
-//	public DynamicWizardPopulator getPopulator() {
-//		return populator;
-//	}
-//	public void setPopulator(DynamicWizardPopulator populator) {
-//		this.populator = populator;
-//	}	
 	public DynamicPathWizardDialog getDynamicWizardDialog() {
 		return dynamicWizardDialog;
 	}
