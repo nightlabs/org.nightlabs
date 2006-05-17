@@ -105,11 +105,11 @@ public class LanguageChooserCombo
 	}
 
 	/**
-	 * @see org.nightlabs.base.language.LanguageChooser#getCurrentLanguage()
+	 * Get the {@link LanguageCf} of the currently selected language.
+	 * @see org.nightlabs.base.language.LanguageChooser#getLanguage()
 	 */
 	public LanguageCf getLanguage()
 	{
 		return (LanguageCf)languages.get(combo.getSelectionIndex());
 	}
-
 }

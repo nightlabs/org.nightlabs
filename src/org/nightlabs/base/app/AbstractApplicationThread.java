@@ -31,9 +31,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 
 /**
- * 
- * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de, <p>
- * <p>		 		 Alex[AT]NightLabs[DOT]de</p>
+ * @author Daniel.Mazurek[AT]NightLabs[DOT]de
+ * @author Alex[AT]NightLabs[DOT]de</p>
  */
 public abstract class AbstractApplicationThread 
 extends Thread 
@@ -84,8 +83,8 @@ extends Thread
 	 * directory under ".applicationName/config". Sets static members of this class for 
 	 * other plugins to access the root of the applicationName folder and log.
 	 * Creates a display in {@link org.eclipse.ui.PlatformUI} and a new WorkbenchAdvisor 
-	 * {@link getWorkbenchAdvisor} and runs the Application.
-	 * @see org.eclipse.core.boot.IPlatformRunnable#run(java.lang.Object)
+	 * {@link #getWorkbenchAdvisor()} and runs the Application.
+	 * @see org.eclipse.core.runtime.IPlatformRunnable#run(java.lang.Object)
 	 */	
 	public void run() 
 	{

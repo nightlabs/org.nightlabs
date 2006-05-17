@@ -128,7 +128,7 @@ public abstract class ComboContributionItem extends XContributionItem {
 	
 	/**
 	 * Returns the Combo control
-	 * @return
+	 * @return the Combo control
 	 */
 	public ColorCombo getCombo() {
 		return combo;

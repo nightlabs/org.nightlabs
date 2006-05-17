@@ -59,16 +59,14 @@ implements ILanguageManager
 	}
 	
 	/**
-	 * 
-	 * @return the default Language, by default the corresponding languageID is Locale.getDefault().getLanguage() 
+	 * @return the default Language, by default the corresponding languageID is <code>Locale.getDefault().getLanguage()</code>.
 	 */
 	public static LanguageCf createDefaultLanguage() {
 		return new LanguageCf(Locale.getDefault().getLanguage());		
 	}
 	
 	/**
-	 * 
-	 * @param languageID the id (@see Locale.getLanguage()) of the LanguageCf
+	 * @param languageID the id (see {@link Locale#getLanguage()}) of the LanguageCf
 	 * @return a LanguageCf with the given languageID
 	 */
 	public static LanguageCf createLanguage(String languageID) {
@@ -76,7 +74,6 @@ implements ILanguageManager
 	}
 	
 	/**
-	 * 
 	 * @param locale The Locale to get the languageID from 
 	 * @return the languageID for the given java.util.Locale
 	 */
@@ -163,8 +160,7 @@ implements ILanguageManager
 
 	private Collection unmodifiableLanguages = null;
 	/**
-	 * 
-	 * @return a java.util.Collection which contains all added org.nightlabs.language.LanguageCf �s
+	 * @return a java.util.Collection which contains all added {@link org.nightlabs.language.LanguageCf}s.
 	 */
 	public Collection getLanguages() {
 		if (unmodifiableLanguages == null)

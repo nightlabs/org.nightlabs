@@ -595,7 +595,7 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 	 * It is NOT called, if {@link #createActionOrContributionItem(IExtension, IConfigurationElement)}
 	 * returned an {@link IAction}. Override it, if you want to initialize your contribution item.
 	 *
-	 * @param action The action as it has been created before by {@link #createActionOrContributionItem(IExtension, IConfigurationElement)}.
+	 * @param contributionItem The contributionItem as it has been created before by {@link #createActionOrContributionItem(IExtension, IConfigurationElement)}.
 	 * @param extension The extension which contributes the action.
 	 * @param element The current element (which matches {@link #getActionElementName()}).
 	 * @throws EPProcessorException If the element's attributes are not correct or another problem occurs.

@@ -41,9 +41,8 @@ import org.nightlabs.base.exceptionhandler.SaveRunnableRunner;
 import org.nightlabs.util.Utils;
 
 /**
- * 
- * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de, <p>
- * <p>		 		 Alex[AT]NightLabs[DOT]de</p>
+ * @author Daniel.Mazurek[AT]NightLabs[DOT]de
+ * @author Alex[AT]NightLabs[DOT]de</p>
  */
 public abstract class AbstractApplication 
 implements IPlatformRunnable
@@ -160,8 +159,8 @@ implements IPlatformRunnable
 	
 	/**
 	 * Creates a display in {@link org.eclipse.ui.PlatformUI} and a new 
-	 * {@link WorkbenchAdvisor} and runs the AbstractApplication.
-	 * @see org.eclipse.core.boot.IPlatformRunnable#run(java.lang.Object)
+	 * {@link org.eclipse.ui.application.WorkbenchAdvisor} and runs the AbstractApplication.
+	 * @see org.eclipse.core.runtime.IPlatformRunnable#run(java.lang.Object)
 	 */
 	public Object run(Object args) 
 	throws Exception 

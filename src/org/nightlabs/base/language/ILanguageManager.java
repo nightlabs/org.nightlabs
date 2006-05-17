@@ -42,7 +42,7 @@ public interface ILanguageManager
 	public void addLanguage(String languageID);
 	
 	/** 
-	 * @return a java.util.Collection which contains org.nightlabs.language.LanguageCf �s
+	 * @return a java.util.Collection which contains @link{org.nightlabs.language.LanguageCf}s
 	 */
 	public Collection getLanguages();
 	
