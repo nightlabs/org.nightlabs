@@ -103,7 +103,7 @@ public class SelectableComposite extends XComposite {
 	/**
 	 * Checks if this Composite is selected or not.
 	 * 
-	 * @return
+	 * @return <code>true</code> if this Composite is selected - <code>false</code> otherwise
 	 */
 	public boolean isSelected() {
 		return selected;
@@ -127,7 +127,7 @@ public class SelectableComposite extends XComposite {
 	 * Backgroundcolor accordingly.
 	 * 
 	 * @param selected
-	 * @param sateMask
+	 * @param stateMask
 	 */
 	public void setSelected(boolean selected, int stateMask) {
 		this.selected = selected;
@@ -153,8 +153,6 @@ public class SelectableComposite extends XComposite {
 	 * Returns the compositeListIdx.
 	 * This is and should only be used in connection
 	 * with a {@link HorizontalMultiColumnCompositeList}.
-	 * 
-	 * @return
 	 */
 	public int getCompositeListIdx() {
 		return compositeListIdx;
@@ -204,7 +202,7 @@ public class SelectableComposite extends XComposite {
 	
 	/**
 	 * Add a listener to this selectable Composite.
-	 * @param selectionListener
+	 * @param listener
 	 */
 	public void addSelectionChangeListener(SelectableCompositeListener listener) {
 		selectionListeners.add(listener);

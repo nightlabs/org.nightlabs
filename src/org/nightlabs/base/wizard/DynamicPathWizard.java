@@ -49,6 +49,7 @@ import org.eclipse.jface.wizard.Wizard;
  *   of the added pages they will appear in the same order as added.
  * </p>
  * <p>
+ *   FIXME!!! WRONG JAVADOC INFORMATION
  *   The second possibility is to set a DynamicWizardPopulator
  *   ({@link #setPopulator(DynamicWizardPopulator)}). After removing
  *   the old dynamic pages the populator will be asked to add its pages by 

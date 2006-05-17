@@ -229,7 +229,7 @@ public class SharedImages
 	
 	/**
 	 * Get the ImageDescriptor for a WizardPage of the given clazz and
-	 * {@link #WIZARD_PAGE_IMAGE_FROMAT} and {@link #DEFAULT_IMAGE_EXTENSION}. 
+	 * {@link #IMAGE_DIMENSION_WIZARD_PAGE} and {@link #IMAGE_FORMAT_DEFAULT}. 
 	 * 
 	 * @param plugin The plugin the image is package in.
 	 * @param clazz The class using the image
@@ -242,8 +242,8 @@ public class SharedImages
 	 * Get the image for the given clazz The image will be
 	 * searched based on the NightLabs coding guidelines.
 	 * This uses {@link #getSharedImage(Plugin, Class, String, String, String)}
-	 * {@link #DEFAULT_IMAGE_FORMAT} and
-	 * {@link #DEFAULT_IMAGE_EXTENSION}
+	 * {@link #IMAGE_DIMENSION_DEFAULT} and
+	 * {@link #IMAGE_FORMAT_DEFAULT}
 	 * 
 	 * @param plugin The plugin the image is package in.
 	 * @param clazz The class using the image
@@ -257,8 +257,8 @@ public class SharedImages
 	 * Get the image for the given clazz The image will be
 	 * searched based on the NightLabs coding guidelines.
 	 * This uses {@link #getSharedImage(Plugin, Class, String, String, String)}
-	 * and passes no suffix, {@link #DEFAULT_IMAGE_FORMAT} and
-	 * {@link #DEFAULT_IMAGE_EXTENSION}
+	 * and passes no suffix, {@link #IMAGE_DIMENSION_DEFAULT} and
+	 * {@link #IMAGE_FORMAT_DEFAULT}
 	 * 
 	 * @param plugin The plugin the image is package in.
 	 * @param clazz The class using the image

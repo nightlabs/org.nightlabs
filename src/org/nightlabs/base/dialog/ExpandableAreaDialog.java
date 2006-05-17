@@ -159,7 +159,6 @@ public class ExpandableAreaDialog extends Dialog {
 	 * Override this method to return the Composite you want to be visible in the
 	 * upper area of the Dialog.
 	 * @param parent Add your Composite as child of this
-	 * @return
 	 */
 	protected Composite createStaticArea(Composite parent){
 		return new Composite(parent,SWT.NONE);
@@ -170,7 +169,6 @@ public class ExpandableAreaDialog extends Dialog {
 	 * Override this method to return the Composite you want to be the client of the
 	 * ExpandableComposite.
 	 * @param parent Add your Composite as child of this
-	 * @return
 	 */
 	protected Composite createExpandableArea(Composite parent){
 		return new Composite(parent,SWT.NONE);
@@ -179,7 +177,6 @@ public class ExpandableAreaDialog extends Dialog {
 	
 	/**
 	 * Returns the expandable area Composite
-	 * @return
 	 * @see #createExpandableArea(Composite)
 	 */
 	public Composite getExpandableArea() {
@@ -187,7 +184,6 @@ public class ExpandableAreaDialog extends Dialog {
 	}
 	/**
 	 * Returns the static area Composite
-	 * @return
 	 * @see #createStaticArea(Composite)
 	 */
 	public Composite getStaticArea() {
@@ -230,7 +226,6 @@ public class ExpandableAreaDialog extends Dialog {
 	/**
 	 * Returns the maximal Width for the dialog.
 	 * Default value is the screens width.
-	 * @return
 	 */
 	public int getMaxWidth() {
 		if ( maxWidth > 0 ) {
@@ -243,7 +238,6 @@ public class ExpandableAreaDialog extends Dialog {
 	/**
 	 * Returns the maximal Height for the dialog.
 	 * Default value is the screens height.
-	 * @return
 	 */
 	public int getMaxHeight() {
 		if ( maxHeight > 0 ) {
@@ -301,7 +295,6 @@ public class ExpandableAreaDialog extends Dialog {
 		 * @param parent
 		 * @param dialog
 		 * @param expandText
-		 * @return
 		 */
 		public Composite createComposite(
 				Composite parent, 

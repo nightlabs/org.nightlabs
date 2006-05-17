@@ -109,7 +109,6 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 	/**
 	 * Checks if a IExceptionHandler is registered for a specific Class
 	 * @param targetType
-	 * @return  
 	 */
 	protected boolean haveHandler(Class targetType){
 		return exceptionHandlers.containsKey(targetType.getName());
@@ -160,7 +159,6 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 	 * a handler for the specific class.  
 	 * Returns null if no handler could be found.
 	 * @param exception
-	 * @return
 	 */
 	public ExceptionHandlerSearchResult searchHandler(Throwable exception){
 		// make sure the registrations where made

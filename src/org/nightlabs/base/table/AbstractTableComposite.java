@@ -116,7 +116,6 @@ public abstract class AbstractTableComposite extends XComposite {
 	 * Set your content and label provider for the tableViewer.
 	 * 
 	 * @param tableViewer The TableViewer.
-	 * @param table A shortcut to <code>tableViewer.getTable()</code>.
 	 */
 	protected abstract void setTableProvider(TableViewer tableViewer);
 

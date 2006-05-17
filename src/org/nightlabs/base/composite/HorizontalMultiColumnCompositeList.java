@@ -138,10 +138,6 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	private Slider slider;
 	
 	
-	/**
-	 * @param parent
-	 * @param style
-	 */
 	public HorizontalMultiColumnCompositeList(Composite parent, int style) {
 		super(parent, style);
 		this.setLayout(new GridLayout());
@@ -172,8 +168,8 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	
 	/**
 	 * Create and add a SelectableComposite
-	 * @param style
-	 * @return
+	 * @param style The style - see {@link SelectableComposite}
+	 * @return the newly created child
 	 */
 	public SelectableComposite createChild(int style) {
 		SelectableComposite child = new SelectableComposite(getCarrier(),style);
@@ -183,7 +179,7 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	
 	/**
 	 * Add a child. 
-	 * @param child
+	 * @param child The child to add
 	 */
 	public void addChild(SelectableComposite child) {
 		child.compositeListIdx = children.size();
@@ -194,8 +190,8 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	/**
 	 * Add a child at the specified position.
 	 * 
-	 * @param child
-	 * @param idx
+	 * @param child The child to add
+	 * @param idx The position to add the child at
 	 */
 	public void addChild(SelectableComposite child, int idx) {
 		child.compositeListIdx = idx;
@@ -211,8 +207,8 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	 * Remove the child at the specified index.
 	 * If dispose id true the Composite will be disposed as well.
 	 *  
-	 * @param idx
-	 * @param dispose
+	 * @param idx Which child to remove
+	 * @param dispose the Composite will be disposed as well if <code>true</code>
 	 */
 	public void removeChild(int idx, boolean dispose) {
 		selectedChildren.remove(children.get(idx));
@@ -237,10 +233,10 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	}
 	
 	/**
-	 * Remove the given child and dispose it if dispose it true.
+	 * Remove the given child and dispose it if dispose is true.
 	 * 
-	 * @param child
-	 * @param dispose
+	 * @param child The child to remove
+	 * @param dispose Whether to dispose the child
 	 */
 	public void removeChild(SelectableComposite child, boolean dispose) {
 		removeChild(child.getCompositeListIdx(), dispose);
@@ -271,7 +267,7 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	 * Remove all children. If dispose is true
 	 * they will be disposed as well.
 	 * 
-	 * @param dispose
+	 * @param dispose Whether to dispose the children
 	 */
 	public void removeAll(boolean dispose) {
 		for (int i=children.size()-1; i>=0; i--){
@@ -319,14 +315,14 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	
 	/**
 	 * Get the current set number of columns.
-	 * @return
+	 * @return the current set number of columns
 	 */
 	public int getNumColumns() {
 		return numColumns;
 	}
 	/**
 	 * Set the number of columns. Default is 1.
-	 * @param numColumns
+	 * @param numColumns The number of columns
 	 */
 	public void setNumColumns(int numColumns) {
 		this.numColumns = numColumns;
@@ -336,7 +332,8 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	 * Check if items in this list are 
 	 * multiselectable.
 	 * 
-	 * @return
+	 * @return <code>true</code> if items in this list are 
+	 * multiselectable
 	 */
 	public boolean isMultiSelect() {
 		return multiSelect;
@@ -356,7 +353,7 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	 * A child should be created with this
 	 * as a parent or use {@link #createChild(int)}.
 	 *  
-	 * @return
+	 * @return the carrier
 	 */
 	public Composite getCarrier() {
 		return carrier;
@@ -369,7 +366,6 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	/**
 	 * Rearranges the children of this list
 	 * and redraws the composite.
-	 * 
 	 */
 	protected void arrangeChildren() {
 		int carrierHeight = carrierWrapper.getSize().y;
@@ -435,7 +431,6 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	
 	/**
 	 * Rearranges the children and the scrollbar.
-	 *
 	 */
 	public void refreshList() {
 		arrangeChildren();

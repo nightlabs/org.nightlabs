@@ -182,7 +182,8 @@ static int checkStyle (int style) {
 /**
  * Adds the argument to the end of the receiver's table.
  *
- * @param string the new item
+ * @param image the new item image
+ * @param text the new item name
  *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the string is null</li>
@@ -192,7 +193,7 @@ static int checkStyle (int style) {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
  *
- * @see #add(String,int)
+ * @see #add(Image, String, int)
  */
 public void add (Image image, String text) {
 	checkWidget();
@@ -211,8 +212,8 @@ public void add (Image image, String text) {
  * index or use <code>add(String)</code>.
  * </p>
  *
- * @param string the new item name
  * @param image the new item image
+ * @param text the new item name
  * @param index the index for the item
  *
  * @exception IllegalArgumentException <ul>
@@ -224,7 +225,7 @@ public void add (Image image, String text) {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
  *
- * @see #add(String)
+ * @see #add(Image, String)
  */
 public void add (Image image, String text, int index) {
 	checkWidget();
@@ -790,7 +791,6 @@ public int indexOf (TableItem item) {
  * returns -1.
  *
  * @param column the search column
- * @param start the zero-relative index at which to begin the search
  * @return the index of the column
  *
  * @exception IllegalArgumentException <ul>

@@ -34,11 +34,6 @@ import org.eclipse.ui.application.WorkbenchAdvisor;
  */
 public abstract class ExceptionHandlingWorkbenchAdvisor extends WorkbenchAdvisor {
 			
-	/**
-	 * Checks the {@link ExceptionHandlerRegistry} for registered {@link ExceptionHandlerRegistryItem} by invoking
-	 * {@link #ExceptionHandlerRegistry.searchHandler(Throwable)}. For the found item the {@link IExceptionHandler.handleException(Throwable)} 
-	 * method is invoked on a unique instance of the eventHandler class (plugin.xml). 
-	 */
 	public void eventLoopException(Throwable exception) {
 		if (!ExceptionHandlerRegistry.syncHandleException(exception))
 			super.eventLoopException(exception);

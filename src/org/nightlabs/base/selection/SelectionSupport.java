@@ -118,7 +118,7 @@ implements ISelectionSupport
 	}
 	
 	/**
-	 * @see ISelectionSupport.contains(o);
+	 * @see ISelectionSupport#contains(Object)
 	 */
 	public boolean contains(Object o) 
 	{

@@ -98,7 +98,6 @@ implements IDynamicPathWizardPage
 	 * Create the WizardPage contents and return the topmost Control.
 	 * 
 	 * @param parent
-	 * @return
 	 */
 	public abstract Control createPageContents(Composite parent);
 

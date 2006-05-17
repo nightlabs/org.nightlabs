@@ -45,10 +45,6 @@ public class ErrorReportWizardCommentPage extends DynamicPathWizardPage
 {
 	private Text textUserComment;
 	
-	/**
-	 * @param pageName
-	 * @param title 
-	 */
 	public ErrorReportWizardCommentPage()
 	{
 		super(ErrorReportWizardCommentPage.class.getName(), NLBasePlugin.getResourceString("errorreport.commentpage.title")); //$NON-NLS-1$

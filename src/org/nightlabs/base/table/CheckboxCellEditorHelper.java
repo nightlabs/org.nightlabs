@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.nightlabs.base.table;
 
 import org.eclipse.jface.viewers.ICellModifier;
@@ -9,14 +6,10 @@ import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.resource.SharedImages;
 
 /**
- * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
- *
+ * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */
 public class CheckboxCellEditorHelper {
 
-	/**
-	 * 
-	 */
 	public CheckboxCellEditorHelper() {
 		super();
 	}

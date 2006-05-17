@@ -59,9 +59,9 @@ public class DisguisedText {
 	 * GridDatas to them assuming that the parent has
 	 * a GridLayout with two free columns in the current row. 
 	 * 
-	 * @param title
-	 * @param parent
-	 * @return
+	 * @param title The title
+	 * @param parent The parent composite
+	 * @return the newly created {@link LabeledDisguisedText}
 	 */
 	public static LabeledDisguisedText createLabeledText(String title, Composite parent) {
 		Label label = new Label(parent, SWT.NONE);

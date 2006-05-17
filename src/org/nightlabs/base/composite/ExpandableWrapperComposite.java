@@ -57,21 +57,11 @@ public class ExpandableWrapperComposite extends ExpandableComposite {
 		}
 	};
 	
-	/**
-	 * @param arg0
-	 * @param arg1
-	 */
 	public ExpandableWrapperComposite(Composite parent, int style) {
 		this(parent, style, ExpandableComposite.TWISTIE);
 		setExpanded(restoreExpansionState());
 	}
 
-	/**
-	 * 
-	 * @param parent
-	 * @param style
-	 * @param expansionStyle
-	 */
 	public ExpandableWrapperComposite(Composite parent, int style, int expansionStyle) {
 		super(parent, style, expansionStyle);
 		setBackground(parent.getBackground());
@@ -80,12 +70,6 @@ public class ExpandableWrapperComposite extends ExpandableComposite {
 		setExpanded(restoreExpansionState());
 	}
 	
-	/**
-	 * 
-	 * @param parent
-	 * @param style
-	 * @param expansionStyle
-	 */
 	public ExpandableWrapperComposite(Composite parent, int style, int expansionStyle, String identifier) {
 		super(parent, style, expansionStyle);
 		setBackground(parent.getBackground());

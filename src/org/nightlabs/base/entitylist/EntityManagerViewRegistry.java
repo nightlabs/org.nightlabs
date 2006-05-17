@@ -156,7 +156,6 @@ public class EntityManagerViewRegistry extends AbstractEPProcessor {
 	 * was registered to.
 	 * 
 	 * @param managerViewID
-	 * @return
 	 */
 	public Set getListViewsForManagerView(String managerViewID) {
 		if (!isProcessed())

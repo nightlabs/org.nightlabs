@@ -44,11 +44,6 @@ public abstract class OKCancelComposite extends XComposite {
 	private Button cancelButton;
 	private Label label;
 
-	/**
-	 * @param parent
-	 * @param style
-	 * @param setLayoutData
-	 */
 	public OKCancelComposite(Composite parent, int style, String text, String okTxt, String cancelTxt) {
 		super(parent, style, XComposite.LAYOUT_MODE_ORDINARY_WRAPPER);
 		if ((text != null) && (!"".equals(text))) {

@@ -77,48 +77,46 @@ public class GeomUtil
 	 * @param target the target rectangle to check if the source rectangle fits in
 	 * @return the a new modified rectangle that it fits in the target rectangle
 	 */
-	public static java.awt.Rectangle checkBounds(java.awt.Rectangle s, java.awt.Rectangle target) 
+	public static java.awt.Rectangle checkBounds(java.awt.Rectangle source, java.awt.Rectangle target) 
 	{
-		if (target.contains(s))
+		if (target.contains(source))
 			return new java.awt.Rectangle(target);
 		else 
 		{
-			java.awt.Rectangle source = new java.awt.Rectangle(s); 			
+			java.awt.Rectangle trimmedSource = new java.awt.Rectangle(source); 			
 			// is source outter target left
-			if (source.x < target.x) {
-				source.x = target.x;
-				if (source.width > target.width)
-					source.width = target.width;
+			if (trimmedSource.x < target.x) {
+				trimmedSource.x = target.x;
+				if (trimmedSource.width > target.width)
+					trimmedSource.width = target.width;
 			}
 			// is source outter target top
-			if (source.y < target.y) {
-				source.y = target.y;
-				if (source.height > target.height)
-					source.height = target.height;
+			if (trimmedSource.y < target.y) {
+				trimmedSource.y = target.y;
+				if (trimmedSource.height > target.height)
+					trimmedSource.height = target.height;
 			}
 			// is source outter target right
-			if (source.getMaxX() > target.getMaxX()) {
-				source.x = (int)target.getMaxX() - source.width;
-				if (source.width > target.width)
-					source.width = target.width;
+			if (trimmedSource.getMaxX() > target.getMaxX()) {
+				trimmedSource.x = (int)target.getMaxX() - trimmedSource.width;
+				if (trimmedSource.width > target.width)
+					trimmedSource.width = target.width;
 			}
 			// is source outter target bottom
-			if (source.getMaxY() > target.getMaxY()) {
-				source.y = (int) target.getMaxY() - source.height;
-				if (source.height > target.height)
-					source.height = target.height; 
+			if (trimmedSource.getMaxY() > target.getMaxY()) {
+				trimmedSource.y = (int) target.getMaxY() - trimmedSource.height;
+				if (trimmedSource.height > target.height)
+					trimmedSource.height = target.height; 
 			}
-			return source;
+			return trimmedSource;
 		}			
 	}
 		
 	/**
-	 * 
-	 * @param r the Rectangle to translate to Origin (0/0) and adjust the size
+	 * @param rect the Rectangle to translate to Origin (0/0) and adjust the size
 	 * @return a new Rectangle with the origin at (0/0) and newWidth = (oldWidth + oldX), 
 	 * newHeight = (oldHeight + oldY), which means that the size of the returned rectangle 
-	 * is always greater than before, if the oldOrigin wasn´t already at (0/0)
-	 * 
+	 * is always greater than before, if the oldOrigin wasn't already at (0/0)
 	 */
 	public static java.awt.Rectangle translateToOriginAndAdjustSize(java.awt.Rectangle rect) 
 	{
@@ -181,7 +179,7 @@ public class GeomUtil
 	 * 
 	 * @param source the source rectangle
 	 * @param target the target rectangle to check 
-	 * @retrun the (if necessary) modified target rectangle
+	 * @return the (if necessary) modified target rectangle
 	 */
 	public static java.awt.Rectangle checkDimension(java.awt.Rectangle source, java.awt.Rectangle target) 
 	{

@@ -204,7 +204,7 @@ public class PartVisibilityTracker {
 		};
 
 		/**
-		 * @param status The status to set.
+		 * @param newStatus The status to set.
 		 */
 		public void setStatus(int newStatus) {
 			if (newStatus == PART_STATUS_NO_VISIBILITY_CHANGE)

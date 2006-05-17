@@ -53,7 +53,7 @@ public class TableSortSelectionListener implements SelectionListener {
 	 *						the sorter this listener uses
 	 * @param defaultDirection
 	 *						the default sorting direction of this Listener. Possible
-	 *						values are {@link SWT.UP} and {@link SWT.DOWN}
+	 *						values are {@link SWT#UP} and {@link SWT#DOWN}
 	 */
 	public TableSortSelectionListener(TableViewer viewer, TableColumn column,
 			AbstractInvertableTableSorter sorter, int defaultDirection) {

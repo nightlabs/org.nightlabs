@@ -80,7 +80,7 @@ implements Serializable
 	}
 
   /**
-	 * @param thrownException The thrownException to set.
+	 * @param error The thrownException to set.
 	 */
 	public void setThrownException(Throwable error)
 	{
