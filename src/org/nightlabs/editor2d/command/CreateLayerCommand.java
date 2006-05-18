@@ -69,7 +69,6 @@ extends CreateDrawComponentCommand
 		drawOrderIndex = getMultiLayerDrawComponent().getCurrentPage().getDrawComponents().indexOf(
         getMultiLayerDrawComponent().getCurrentLayer()) + 1;    
     getMultiLayerDrawComponent().getCurrentPage().addDrawComponent(getLayer(), drawOrderIndex);
-		shapeAdded = true;
     getMultiLayerDrawComponent().setCurrentLayer(getLayer());
 	}	
 	

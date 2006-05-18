@@ -50,7 +50,7 @@ extends AbstractDrawComponentEditPart
   public static final Logger LOGGER = Logger.getLogger(AbstractDrawComponentContainerEditPart.class);
   
   /**
-   * @param drawComponent
+   * @param drawComponentContainer
    */
   public AbstractDrawComponentContainerEditPart(DrawComponentContainer drawComponentContainer) {
     super(drawComponentContainer);

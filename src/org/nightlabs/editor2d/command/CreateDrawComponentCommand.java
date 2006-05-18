@@ -45,8 +45,6 @@ extends Command
 	protected DrawComponent drawComponent;
 	/** DrawComponentContainer to add to. */
 	protected DrawComponentContainer parent;
-	/** True, if newDrawComponent was added to parent. */
-	protected boolean shapeAdded;
 	/** the DrawOrderIndex of the DrawComponentContainer */
 	protected int drawOrderIndex;
 	
@@ -64,12 +62,12 @@ extends Command
 	  super(EditorPlugin.getResourceString("command.create.drawcomponent"));	  
 	}
 		
-	/*
+	/**
 	 * @see org.eclipse.gef.commands.Command#canUndo()
 	 */
 	public boolean canUndo() {
-		return shapeAdded;
-	}
+		return true;
+	}	
 	
 	/*
 	 * @see org.eclipse.gef.commands.Command#execute()
@@ -79,7 +77,6 @@ extends Command
     drawComponent.setBounds(J2DUtil.toAWTRectangle(rect));
 	  
     parent.addDrawComponent(drawComponent);
-    shapeAdded = true;
 		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);
     
     if (drawComponent instanceof DrawComponentContainer) {
@@ -114,8 +111,7 @@ extends Command
 	
 	public void setChild(DrawComponent dc) {
 		drawComponent = dc;
-	}
-	
+	}	
 	public DrawComponent getChild() {
 	  return drawComponent;
 	}

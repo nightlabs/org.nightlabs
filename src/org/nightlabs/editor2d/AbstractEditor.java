@@ -830,17 +830,17 @@ extends J2DGraphicalEditorWithFlyoutPalette
       // Tooltip Preference 
       action = new ShowFigureToolTipAction(this);
       registry.registerAction(action);
-      getPropertyActions().add(action);
+      getPropertyActions().add(action.getId());
 
       // Status Line Preference
       action = new ShowStatusLineAction(this);
       registry.registerAction(action);
-      getPropertyActions().add(action);
+      getPropertyActions().add(action.getId());
       
       // Repaint Action
       action = new RepaintAction(this);
       registry.registerAction(action);
-      getPropertyActions().add(action);
+      getPropertyActions().add(action.getId());
       
 //      // Test Viewer Action
 //      action = new ViewerAction(this);
@@ -849,17 +849,17 @@ extends J2DGraphicalEditorWithFlyoutPalette
       // Print Action
       action = new EditorPrintAction(this);
       registry.registerAction(action);
-      getPropertyActions().add(action);
+      getPropertyActions().add(action.getId());
 
       // Print Preview Action
       action = new EditorPrintPreviewAction(this);
       registry.registerAction(action);
-      getPropertyActions().add(action);
+      getPropertyActions().add(action.getId());
             
       // Print Page Setup Action
       action = new EditorPrintSetupAction(this);
       registry.registerAction(action);
-      getPropertyActions().add(action);      
+      getPropertyActions().add(action.getId());      
     }
     
     /**
@@ -1178,7 +1178,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     {
     	refreshBuffer();    	
       getGraphicalViewer().getControl().redraw();
-      LOGGER.debug("updateViewer!");
+//      LOGGER.debug("updateViewer!");
     }
         
     protected void refreshBuffer() 

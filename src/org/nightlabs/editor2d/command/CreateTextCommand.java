@@ -57,7 +57,6 @@ extends CreateDrawComponentCommand
     drawComponent = new TextDrawComponentImpl(request.getText(), newFont, x, y);
     getTextDrawComponent().setName(request.getText());
     parent.addDrawComponent(drawComponent);
-    shapeAdded = true;
 		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);    
   }
        
