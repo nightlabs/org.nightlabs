@@ -2,14 +2,17 @@
 	<target name="compile.pre">
 	    <mkdir dir="${project.dir}/${lib.dir}"/>
 
+		<copy file="../NightLabsBase/dist/NightLabsBase.jar" todir="${project.dir}/${lib.dir}" failonerror="true" verbose="true"/>
+<!--
 		<copy file="../NightLabsBase/dist/NightLabsBase.jar" todir="${project.dir}/${lib.dir}" failonerror="false" verbose="true"/>
 		<jarlib-resolve property="NightLabsBase.library" failonerror="true" checkextension="false">
 			<extension extensionname="NightLabsBase"/>
 			<location location="${project.dir}/${lib.dir}/NightLabsBase.jar"/>
 			<url
-				url="http://ipanema.nightlabs.org/~nightly/NightLabs/NightLabsBase.jar"
+				url="http://www.jfire.org/~nightly/modules/JFire-Max/HEAD/NightLabsBase.server/NightLabsBase.jar"
 				destdir="${project.dir}/${lib.dir}"/>
 		</jarlib-resolve>
+-->
 
 	</target>
 </project>
