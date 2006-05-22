@@ -29,21 +29,13 @@ package org.nightlabs.editor2d.properties;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.ui.views.properties.PropertySheetPage;
-import org.nightlabs.base.language.ILanguageManager;
-import org.nightlabs.base.language.LanguageAction;
-import org.nightlabs.base.language.LanguageChangeEvent;
-import org.nightlabs.base.language.LanguageChangeListener;
 import org.nightlabs.base.language.LanguageContributionItem;
 import org.nightlabs.base.language.LanguageManager;
-import org.nightlabs.language.LanguageCf;
 
 public class EditorPropertyPage 
 extends PropertySheetPage

@@ -35,8 +35,10 @@ import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.base.property.XTextPropertyDescriptor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ImageDrawComponent;
+import org.nightlabs.editor2d.image.RenderModeMetaData;
 import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
+import org.nightlabs.editor2d.properties.ImageColorConversionPropertyDescriptor;
 
 public class ImagePropertySource 
 extends DrawComponentPropertySource
@@ -74,6 +76,8 @@ extends DrawComponentPropertySource
 //		descriptors.add(createResolutionWidthPD());
 //		// Resolution Height
 //		descriptors.add(createResolutionHeightPD());
+		// Color Conversion
+		descriptors.add(createColorConversionPD());
 		
 		return descriptors;
 	}	
@@ -94,7 +98,22 @@ extends DrawComponentPropertySource
 		} 
 		return super.getPropertyValue(id);
 	}	
-	
+			
+	@Override
+	public void setPropertyValue(Object id, Object value) 
+	{
+		if (id.equals(ImageDrawComponent.PROP_RENDER_MODE_META_DATA)) 
+		{
+			List<RenderModeMetaData> renderModeMetaData = (List<RenderModeMetaData>) value;
+			for (RenderModeMetaData data : renderModeMetaData) {
+				getImageDrawComponent().addRenderModeMetaData(data);
+			}
+			getImageDrawComponent().setRenderMode(getImageDrawComponent().getRenderMode());
+			return;
+		}
+		super.setPropertyValue(id, value);
+	}
+
 	private IResolutionUnit dpiUnit = new DPIResolutionUnit();
 	private Double getResolutionInDPI(ImageDrawComponent img, boolean width) 
 	{
@@ -155,9 +174,11 @@ extends DrawComponentPropertySource
 		return pd;		
 	}
 	
-	// TODO implement ColorConversionPropertyDescriptor with ColorConvertDialog
 	protected PropertyDescriptor createColorConversionPD()
 	{
-		return null;
+		PropertyDescriptor pd = new ImageColorConversionPropertyDescriptor(getImageDrawComponent(), 
+				ImageDrawComponent.PROP_RENDER_MODE_META_DATA, 
+				EditorPlugin.getResourceString("property.colorConversion.label"));
+		return pd;
 	}
 }

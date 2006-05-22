@@ -238,27 +238,35 @@ implements IPropertySource
 	{
 		if (id.equals(DrawComponent.PROP_X)) {
 			drawComponent.setX(((Integer)value).intValue());
+			return;
 		}
 		else if (id.equals(DrawComponent.PROP_Y)) {
 			drawComponent.setY(((Integer)value).intValue());
+			return;
 		}
 		else if (id.equals(DrawComponent.PROP_WIDTH)) {
 			drawComponent.setWidth(((Integer)value).intValue());
+			return;
 		}
 		else if (id.equals(DrawComponent.PROP_HEIGHT)) {
 			drawComponent.setHeight(((Integer)value).intValue());
+			return;
 		}
 		else if (id.equals(DrawComponent.PROP_ROTATION)) {
 			drawComponent.setRotation(((Double)value).doubleValue());
+			return;
 		}		
 		else if (id.equals(DrawComponent.PROP_ROTATION_X)) {
 			drawComponent.setRotationX(((Integer)value).intValue());
+			return;
 		}		
 		else if (id.equals(DrawComponent.PROP_ROTATION_Y)) {
 			drawComponent.setRotationY(((Integer)value).intValue());
+			return;
 		}
 		else if (id.equals(DrawComponent.PROP_NAME)) {
 			drawComponent.setName((String)value);
+			return;
 		}
 	}
 			

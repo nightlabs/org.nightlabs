@@ -281,7 +281,7 @@ implements ISelectionListener
 						
 		createTools(parent);				
     refresh();    
-    deactivateTools(true);
+    deactivateTools(false);
   }
   
   protected void createLayerEntry(Composite parent, Layer l) 
@@ -504,7 +504,8 @@ implements ISelectionListener
 		
 	protected void updateViewer() 
 	{
-		editor.getEditPartViewer().getRootEditPart().refresh();
+		editor.updateViewer();
+//		editor.getEditPartViewer().getRootEditPart().refresh();
 //		editor.getEditorSite().getShell().update();
 	}
 	
@@ -668,37 +669,7 @@ implements ISelectionListener
 		layerComposite.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
 		getToolkit().paintBordersFor(form.getBody());		
   }
-    
-//	public void refresh()
-//	{			
-//		if (layerComposite != null || !layerComposite.isDisposed()) 		
-//		{						
-//			createComposites();
-//			button2Layer.clear();
-//			
-//			if (mldc != null) 
-//			{
-//				for (int i = mldc.getDrawComponents().size()-1; i >= 0; --i)
-//				{
-//					DrawComponent dc  = (DrawComponent) mldc.getDrawComponents().get(i);
-//					if (dc instanceof Layer) {
-//					  Layer l = (Layer) dc; 
-//					  createLayerEntry(layerComposite, l); 
-//					} else {
-//					  LOGGER.debug("dc NOT instanceof Layer, but instanceof "+dc.getClass());
-//					}
-//				}
-//				
-//				if (mldc.getDrawComponents().size() <= 1)			  
-//				  deactivateTools(true);			  
-//				else 
-//				  activateTools();
-//				
-//				form.reflow(true);
-//			}				  
-//		}		
-//	}
-				
+    				
 	public void refresh()
 	{			
 		if (layerComposite != null || !layerComposite.isDisposed()) 		

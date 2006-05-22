@@ -38,7 +38,24 @@ import org.nightlabs.editor2d.render.Renderer;
 public interface RendererFigure 
 extends IFigure
 {
+	/**
+	 * sets the {@link Renderer} for the figure
+	 * 
+	 * @param renderer the Renderer to set
+	 */
   public void setRenderer(Renderer renderer);
+  
+  /**
+   * sets the drawComponent to paint
+   * 
+   * @param drawComponent the drawComponent to paint by the figure
+   */
   public void setDrawComponent(DrawComponent drawComponent);
+  
+  /**
+   * paints the drawComponent with the given renderer on the graphics2D
+   * 
+   * @param graphics the Graphics2D to paint on
+   */
   public void paint(Graphics2D graphics);
 }

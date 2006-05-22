@@ -1187,6 +1187,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	if (mldcEditPart != null) {
   			BufferedFreeformLayer buffer = mldcEditPart.getBufferedFreeformLayer();
   			if (buffer != null) {
+  				LOGGER.debug("Buffer refreshed!");
   				buffer.refresh();
   			}			    		
     	}

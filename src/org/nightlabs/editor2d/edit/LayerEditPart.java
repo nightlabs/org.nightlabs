@@ -73,7 +73,7 @@ extends AbstractDrawComponentContainerEditPart
     return (Layer) getModel();
   }
   
-  /* (non-Javadoc)
+  /**
    * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
    */
   protected List getModelChildren() 
@@ -91,17 +91,15 @@ extends AbstractDrawComponentContainerEditPart
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(Layer.PROP_VISIBLE)) {
 			LOGGER.debug(propertyName +" changed!");
-//			refreshChildren();
-			refresh();
+			refreshChildren();
+//			refresh();
 		}
 	}
 	
   protected IPropertySource getPropertySource()
   {
-    if (propertySource == null)
-    {
-      propertySource =
-        new LayerPropertySource(getLayer());
+    if (propertySource == null){
+      propertySource = new LayerPropertySource(getLayer());
     }
     return propertySource;
   } 
