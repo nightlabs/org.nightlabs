@@ -148,48 +148,7 @@ implements ISelectionListener
       mldc = editor.getMultiLayerDrawComponent();
     }  	
   }
-  
-//  /**
-//   * @see org.eclipse.ui.IWorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
-//   */
-//  public void createPartControl(Composite parent) 
-//  {
-//  	initMultiLayerDrawComponent();
-//  	
-//    // add SelectionChangeListener
-//    getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
-//    
-//    // Create parent layout
-//    GridLayout parentLayout = new GridLayout();
-//    GridData parentData = new GridData();
-//    parent.setLayout(parentLayout);
-//            
-//    // Create LayerComposite
-//    scrollComposite = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-//    scrollComposite.setExpandHorizontal(true);
-//    layerComposite = new Composite(scrollComposite, SWT.NONE);
-//    layerComposite.setSize(scrollComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));    
-//    scrollComposite.setContent(layerComposite);
-//            
-//    GridData layersData = new GridData();
-//    layersData.grabExcessHorizontalSpace = true;
-//    layersData.grabExcessVerticalSpace = true;
-//    layersData.horizontalAlignment = SWT.FILL;
-//    layersData.verticalAlignment = SWT.FILL;
-//    scrollComposite.setLayoutData(layersData);    
-//    scrollComposite.setMinSize(layerComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));    
-//        
-//    GridLayout layerGridLayout = new GridLayout();
-//    layerComposite.setLayout(layerGridLayout);
-//            
-//    // Create Entries    
-//    createTools(parent);
-//    refresh();
-//    scrollComposite.layout(true);
-//    
-//    deactivateTools(true);
-//  }
-  
+    
 	protected void init() 
 	{
 		// init the MultiLayerDrawComponent
@@ -207,19 +166,8 @@ implements ISelectionListener
 	protected ScrolledForm getForm() {
 		return form;
 	}
-	
-//	protected Form form = null;	
-//	protected Form getForm() {
-//		return form;
-//	}
-  	
-//	protected ScrolledForm layerForm = null;
-//	protected ScrolledForm getLayerForm() {
-//		return layerForm;
-//	}
-	
+		
 	protected Composite layerComposite;
-//	protected Composite toolsComposite;
 	
 //  /**
 //   * @see org.eclipse.ui.IWorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -263,7 +211,7 @@ implements ISelectionListener
     
 		toolkit = new XFormToolkit(parent.getDisplay());
 //		toolkit.setCurrentMode(TOOLKIT_MODE.COMPOSITE);				
-		parent.setBackground(toolkit.getBackground());
+		parent.setBackground(getToolkit().getBackground());
 		
 		form = getToolkit().createScrolledForm(parent);
 		form.setLayout(new GridLayout());
@@ -274,8 +222,6 @@ implements ISelectionListener
 		layerComposite = getToolkit().createComposite(form.getBody(), SWT.NONE);
 		layerComposite.setLayout(new GridLayout());
 		layerComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-//		layerComposite.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-//		toolkit.paintBordersFor(form.getBody());
 		toolkit.paintBordersFor(layerComposite);
 		toolkit.paintBordersFor(form.getBody());
 						
@@ -299,7 +245,6 @@ implements ISelectionListener
 			parentComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			
 			// create Visible-Button
-//			Button buttonVisible = getToolkit().createButton(parentComposite, EditorPlugin.getResourceString("layerView.buttonVisible.text"), buttonStyle);
 			Button buttonVisible = getToolkit().createButton(parentComposite, "", buttonStyle);			
 			buttonVisible.setSelection(!l.isVisible());
 			if (l.isVisible()) {
@@ -361,6 +306,7 @@ implements ISelectionListener
 		Composite toolsComposite = getToolkit().createComposite(parent);		
 		toolsComposite.setLayout(new GridLayout(5, false));
 		toolsComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		toolsComposite.setBackground(getToolkit().getBackground());
 		
 		// spacer Label 
 		Label spacerLabel = getToolkit().createLabel(toolsComposite, "");
@@ -369,8 +315,6 @@ implements ISelectionListener
 		// create Buttons		
 		buttonUp = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonUp.text"), 
 				buttonStyle);
-//		buttonUp = new Button(toolsComposite, buttonStyle);
-//		buttonUp.setText(EditorPlugin.getResourceString("layerView.buttonUp.text"));
 //		buttonUp.setImage(UP_ICON);
 		buttonUp.setToolTipText(EditorPlugin.getResourceString("layerView.buttonUp.tooltip"));
 		buttonUp.addSelectionListener(upListener);
@@ -379,8 +323,6 @@ implements ISelectionListener
 		
 		buttonDown = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonDown.text"), 
 				buttonStyle);
-//		buttonDown = new Button(toolsComposite, buttonStyle);
-//		buttonDown.setText(EditorPlugin.getResourceString("layerView.buttonDown.text"));			
 //		buttonDown.setImage(DOWN_ICON);
 		buttonDown.setToolTipText(EditorPlugin.getResourceString("layerView.buttonDown.tooltip"));
 		buttonDown.addSelectionListener(downListener);
@@ -389,8 +331,6 @@ implements ISelectionListener
 		
 		buttonNew = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonNew.text"), 
 				buttonStyle);
-//		buttonNew = new Button(toolsComposite, buttonStyle);
-//		buttonNew.setText(EditorPlugin.getResourceString("layerView.buttonNew.text"));					
 //		buttonNew.setImage(NEW_ICON);
 		buttonNew.setToolTipText(EditorPlugin.getResourceString("layerView.buttonNew.tooltip"));		
 		buttonNew.addSelectionListener(newListener);
@@ -399,8 +339,6 @@ implements ISelectionListener
 		
 		buttonDelete = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonDelete.text"), 
 				buttonStyle);
-//		buttonDelete = new Button(toolsComposite, buttonStyle);
-//		buttonDelete.setText(EditorPlugin.getResourceString("layerView.buttonDelete.text"));							
 //		buttonDelete.setImage(DELETE_ICON);
 		buttonDelete.setToolTipText(EditorPlugin.getResourceString("layerView.buttonDelete.tooltip"));				
 		buttonDelete.addSelectionListener(deleteListener);				
