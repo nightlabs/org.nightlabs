@@ -26,8 +26,8 @@
 
 package org.nightlabs.base.property;
 
-import org.eclipse.jface.util.Assert;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 
@@ -41,19 +41,39 @@ extends AbstractComboBoxCellEditor
   protected String[] items;
 
   /**
+   * the list of images to present in the combo box.
+   */
+  protected Image[] images;
+  
+  /**
    * the SWT style parameter for all contained Composites 
    */
   protected static final int style = SWT.NONE;
   
   public ComboBoxCellEditor(Composite parent, String[] items) 
   {
-    this(parent, items, style);
+    this(parent, items, null, style);
   }
 
   public ComboBoxCellEditor(Composite parent, String[] items, int style) 
   {
+    this(parent, items, null, style);
+  }
+  
+  public ComboBoxCellEditor(Composite parent, String[] items, Image[] images) 
+  {
+    this(parent, items, images, style);
+  }
+  
+  public ComboBoxCellEditor(Composite parent, String[] items, Image[] images, int style) 
+  {
     super(parent, style);
-    setItems(items);
+    if (items == null)
+    	throw new IllegalArgumentException("Param items must not be null!");
+    
+    this.items = items;
+    this.images = images;
+    populateComboBoxItems();
   }
 
   /**
@@ -66,17 +86,23 @@ extends AbstractComboBoxCellEditor
   }
 
   /**
-   * Sets the list of choices for the combo box
-   *
-   * @param items the list of choices for the combo box
+   * Updates the list of choices for the combo box for the current control.
    */
-  public void setItems(String[] items) 
+  protected void populateComboBoxItems() 
   {
-    Assert.isNotNull(items);
-    this.items = items;
-    populateComboBoxItems();
-  }  
-      
+    if (getComboBox() != null && items != null) {
+    	getComboBox().removeAll();
+      for (int i = 0; i < items.length; i++) {
+      	if (images != null && images.length >= i) {
+        	getComboBox().add(images[i], items[i], i);      	      		
+      	} else {
+      		getComboBox().add(null, items[i], i);      	      		      		
+      	}
+      }
+      setValueValid(true);
+    }
+  }
+  
   /**
    * The <code>ComboBoxCellEditor</code> implementation of
    * this <code>CellEditor</code> framework method returns
@@ -87,25 +113,44 @@ extends AbstractComboBoxCellEditor
   protected Object getReturnValue() 
   {
 		return items[getComboBox().getSelectionIndex()];
-  }   
-//  protected Object doGetValue() 
-//  {
-//    return items[getComboBox().getSelectionIndex()]; 
-//  }  
-  
-  /**
-   * Updates the list of choices for the combo box for the current control.
-   */
-  protected void populateComboBoxItems() 
-  {
-    if (getComboBox() != null && items != null) {
-    	getComboBox().removeAll();
-      for (int i = 0; i < items.length; i++)
-      	getComboBox().add(items[i], i);
-
-      setValueValid(true);
-      selection = 0;
-    }
   }
- 
+  
+//  /**
+//   * Sets the list of choices for the combo box
+//   *
+//   * @param items the list of choices for the combo box
+//   */
+//  public void setItems(String[] items) 
+//  {
+//    Assert.isNotNull(items);
+//    this.items = items;
+//    populateComboBoxItems();
+//  }  
+//      
+//  /**
+//   * Sets the list of images for the combo box
+//   *
+//   * @param images the list of images for the combo box
+//   */
+//  public void setImages(Image[] images) 
+//  {
+//    this.images = images;
+//    populateComboBoxItems();
+//  }  
+    
+//  /**
+//   * Updates the list of choices for the combo box for the current control.
+//   */
+//  protected void populateComboBoxItems() 
+//  {
+//    if (getComboBox() != null && items != null) {
+//    	getComboBox().removeAll();
+//      for (int i = 0; i < items.length; i++)
+//      	getComboBox().add(null, items[i], i);
+//
+//      setValueValid(true);
+//      selection = 0;
+//    }
+//  }
+  
 }

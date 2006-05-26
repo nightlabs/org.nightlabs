@@ -42,6 +42,7 @@ import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.nightlabs.base.custom.ColorCombo;
 
 public abstract class AbstractComboBoxCellEditor 
 extends CellEditor
@@ -51,29 +52,38 @@ extends CellEditor
 //		populateComboBoxItems();
 	}
 	
-  /**
-   * the CCombo which will display 
-   */
-	protected CCombo comboBox;
-	public CCombo getComboBox() {
-		return comboBox;
-	}
+//  /**
+//   * the CCombo which will display 
+//   */
+//	protected CCombo comboBox;
+//	public CCombo getComboBox() {
+//		return comboBox;
+//	}
+	
 //	protected Combo comboBox;
 //	public Combo getComboBox() {
 //		return comboBox;
 //	}
+
+  /**
+   * the CCombo which will display 
+   */
+	private ColorCombo comboBox;
+	public ColorCombo getComboBox() {
+		return comboBox;
+	}
 	
   /**
    * The zero-based index of the selected item.
    */
-  protected int selection;	
+  private int selection;	
 	
   /**
    * Creates a CComboBox and adds some listener to it
    */
   protected Control createControl(Composite parent) 
   {	
-	  comboBox = new CCombo(parent, getStyle());
+	  comboBox = new ColorCombo(parent, getStyle());
 //  	comboBox = new Combo(parent, getStyle());
 	  comboBox.setFont(parent.getFont());
 	
