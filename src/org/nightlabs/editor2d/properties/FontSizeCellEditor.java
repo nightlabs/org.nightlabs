@@ -47,7 +47,7 @@ extends ComboBoxCellEditor
 //  }   
   protected Object doGetValue() 
   {      	
-    return new Integer(items[comboBox.getSelectionIndex()]); 
+    return new Integer(items[getComboBox().getSelectionIndex()]); 
   }    
   
   protected void doSetValue(Object value) 
@@ -64,7 +64,7 @@ extends ComboBoxCellEditor
     for (int i=0; i<items.length; i++) {
       String s = items[i];
       if (s.equals(string)) {
-        comboBox.select(i);
+      	getComboBox().select(i);
         break;
       }          
     }

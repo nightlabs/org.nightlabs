@@ -48,11 +48,11 @@ extends ComboBoxCellEditor
    */
   protected Object doGetValue() 
   {
-    if (comboBox.getText().equals(""))
+    if (getComboBox().getText().equals(""))
       return oldValue;
     Double d = null;
     try {
-      d = new Double(comboBox.getText());
+      d = new Double(getComboBox().getText());
     } catch (NumberFormatException e) {
       return oldValue;
     }
