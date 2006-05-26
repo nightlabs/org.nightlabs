@@ -140,4 +140,7 @@ public class FileSelectComposite extends XComposite {
 	
 	protected void modifyText(ModifyEvent e) {	}
 
+	public Text getFileTextControl() {
+		return fileTextControl;
+	}
 }
