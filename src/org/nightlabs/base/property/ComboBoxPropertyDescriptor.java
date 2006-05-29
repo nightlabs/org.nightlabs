@@ -27,7 +27,6 @@
 package org.nightlabs.base.property;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -44,6 +43,7 @@ extends PropertyDescriptor
   {
     super(id, displayName);
     values = valuesArray;
+    setLabelProvider(new ComboBoxLabelProvider(values));
   }
   
   /**
@@ -62,20 +62,4 @@ extends PropertyDescriptor
     return editor;
   }  
 
-  /**
-   * The <code>ComboBoxPropertyDescriptor</code> implementation of this 
-   * <code>IPropertyDescriptor</code> method returns the value set by
-   * the <code>setProvider</code> method or, if no value has been set
-   * it returns a <code>ComboBoxLabelProvider</code> created from the 
-   * valuesArray of this <code>ComboBoxPropertyDescriptor</code>.
-   *
-   * @see #setLabelProvider
-   */
-  public ILabelProvider getLabelProvider() 
-  {
-    if (isLabelProviderSet())
-      return super.getLabelProvider();
-    else
-      return new ComboBoxLabelProvider(values);
-  }  
 }

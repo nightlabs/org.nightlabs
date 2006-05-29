@@ -30,7 +30,6 @@ import java.text.MessageFormat;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyAdapter;
@@ -66,7 +65,7 @@ extends CellEditor
 //	}
 
   /**
-   * the CCombo which will display 
+   * the ColorCombo which will display 
    */
 	private ColorCombo comboBox;
 	public ColorCombo getComboBox() {
@@ -79,7 +78,7 @@ extends CellEditor
   private int selection;	
 	
   /**
-   * Creates a CComboBox and adds some listener to it
+   * Creates a ColorComboBox and adds some listener to it
    */
   protected Control createControl(Composite parent) 
   {	

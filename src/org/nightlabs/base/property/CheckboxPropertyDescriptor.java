@@ -29,7 +29,6 @@ package org.nightlabs.base.property;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 
 public class CheckboxPropertyDescriptor 
@@ -42,6 +41,7 @@ extends XPropertyDescriptor
 	public CheckboxPropertyDescriptor(Object id, String displayName) 
 	{
 		super(id, displayName);
+		setValidator(new BooleanValidator());
 	}
 	
 	/**
