@@ -29,6 +29,7 @@ package org.nightlabs.editor2d.actions;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -91,16 +92,35 @@ extends SelectionAction
 	}	
 	
 	/**
+	 * checks if the selected objects contain minimum so many EditPart or EditPart-Models
+	 * as the given amount of the given class
 	 * 
 	 * @param clazz the Class to search for 
 	 * @param amount the minimum amount of occurences of the given class 
-	 * in the selected objects #
+	 * in the selected objects
 	 * @param model determines if the Class-Check should be performed on the
 	 * selected EditParts or the model (DrawComponent) of the EditParts
 	 * @return true if the selected objects contain minimum so many EditPart
 	 * as the given amount of the given class
 	 */
 	public boolean selectionContains(Class clazz, int amount, boolean model) 
+	{
+		return selectionContains(new Class[] {clazz}, amount, model);
+	}
+
+	/**
+	 * checks if the selected objects contain minimum so many EditPart or EditPart-Models
+	 * as the given amount of the given classes
+	 * 
+	 * @param clazzes a Array of Classes to search for
+	 * @param amount the minimum amount of occurences of the given class 
+	 * in the selected objects
+	 * @param model determines if the Class-Check should be performed on the
+	 * selected EditParts or the model (DrawComponent) of the EditParts
+	 * @return true if the selected objects contain minimum so many EditPart
+	 * as the given amount of the given class
+	 */
+	public boolean selectionContains(Class[] clazzes, int amount, boolean model) 
 	{
 		if (!getSelectedObjects().isEmpty()) 
 		{
@@ -114,25 +134,33 @@ extends SelectionAction
 				else
 					c = editPart.getModel().getClass();
 				
-				if (clazz.isAssignableFrom(c)) {
-					counter++;
-					if (amount == counter)
-						return true;
-				}					
+				for (int i=0; i<clazzes.length; i++) 
+				{
+					Class clazz = clazzes[i];
+					if (clazz.isAssignableFrom(c)) {
+						counter++;
+						if (amount == counter)
+							return true;
+					}										
+				}
 			}
 		}
 		return false;
 	}
 	
+	
 	/**
-	 * A Convenice Method which calls selectionContains with the amount 1 
+	 * A Convenice Method which calls selectionContains with the amount 1
+	 * @param clazz the Class to search for
+	 * @param model determines if the search is performed on the selected EditParts or
+	 * the Model of the EditParts
 	 * @see selectionContains(Class clazz, int amount, boolean model)
 	 */
 	public boolean selectionContains(Class clazz, boolean model) {
 		return selectionContains(clazz, 1, model);
 	}
 	
-	protected static List EMPTY_LIST = new LinkedList(); 
+	protected static List EMPTY_LIST = Collections.EMPTY_LIST; 
 	
 	/**
 	 * 
@@ -143,6 +171,19 @@ extends SelectionAction
 	 * from the given class
 	 */
 	public List getSelection(Class clazz, boolean model) 
+	{
+		return getSelection(new Class[] {clazz}, model);
+	}
+
+	/**
+	 * 
+	 * @param clazzes the Class[] to search for
+	 * @param model determines if the Class-Check should be performed on the
+	 * selected EditParts or the model (DrawComponent) of the EditParts
+	 * @return a List of all objects from the selection which are assignable 
+	 * from the given class
+	 */
+	public List getSelection(Class[] clazzes, boolean model) 
 	{
 		if (!getSelectedObjects().isEmpty()) 
 		{
@@ -156,18 +197,22 @@ extends SelectionAction
 				else
 					c = editPart.getModel().getClass();
 				
-				if (clazz.isAssignableFrom(c)) 
+				for (int i=0; i<clazzes.length; i++) 
 				{
-					if (!model)
-						selection.add(clazz.cast(editPart));
-					else
-						selection.add(clazz.cast(editPart.getModel()));
+					Class clazz = clazzes[i];
+					if (clazz.isAssignableFrom(c)) 
+					{
+						if (!model)
+							selection.add(clazz.cast(editPart));
+						else
+							selection.add(clazz.cast(editPart.getModel()));
+					}					
 				}
 			}
 			return selection;
 		}
 		return EMPTY_LIST;
-	}
+	}	
 	
 	/**
 	 * 
