@@ -88,14 +88,23 @@ public class XComposite extends Composite
 		}
 	}
 
-	public static Layout getLayout(LayoutMode layoutMode)
+	public static GridLayout getLayout(LayoutMode layoutMode)
+	{
+		return getLayout(layoutMode, null);
+	}
+	
+	public static GridLayout getLayout(LayoutMode layoutMode, GridLayout layout)
 	{
 		switch (layoutMode) 
 		{
 			case ORDINARY_WRAPPER:
-				return new GridLayout();
-			case TIGHT_WRAPPER: 
-				GridLayout layout = new GridLayout();
+				if (layout == null)
+					return new GridLayout();
+				else
+					return layout;
+			case TIGHT_WRAPPER:
+				if (layout == null)
+					layout = new GridLayout();					
 				layout.horizontalSpacing = 0;
 				layout.verticalSpacing = 0;
 				layout.marginHeight = 0;
@@ -108,7 +117,7 @@ public class XComposite extends Composite
 			default:
 				throw new IllegalArgumentException("layoutMode = " + layoutMode + " is unknown!");
 		}		
-	}
+	}	
 	
 	public static void setLayoutDataMode(LayoutDataMode layoutDataMode, Control c) 
 	{
