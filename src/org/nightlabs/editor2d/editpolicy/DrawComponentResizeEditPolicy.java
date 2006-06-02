@@ -45,8 +45,6 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
-import org.eclipse.gef.handles.NonResizableHandleKit;
-import org.eclipse.gef.handles.ResizableHandleKit;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.swt.graphics.Color;
 import org.nightlabs.editor2d.EditorStateManager;

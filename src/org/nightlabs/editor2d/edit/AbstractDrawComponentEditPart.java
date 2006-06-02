@@ -97,6 +97,14 @@ implements EditorRequestConstants
     return figure;
   }
       
+  public DrawComponentFigure getDrawComponentFigure() 
+  {
+  	if (getFigure() instanceof DrawComponentFigure) {
+  		return (DrawComponentFigure) getFigure();
+  	}
+  	return null;
+  }
+  
   protected void addRenderer(RendererFigure figure) 
   {
     // add Renderer

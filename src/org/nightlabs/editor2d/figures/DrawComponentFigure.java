@@ -52,8 +52,8 @@ implements RendererFigure
 {
 	public static final Logger LOGGER = Logger.getLogger(DrawComponentFigure.class.getName());
 	
-  protected J2DGraphics j2d;
-  protected Graphics2D g2d;
+  private J2DGraphics j2d;
+  private Graphics2D g2d;
     
   public void paint(Graphics2D graphics) 
   {
@@ -70,10 +70,7 @@ implements RendererFigure
     	  ((J2DRenderContext)rc).paint(drawComponent, graphics);
   	}    	
   }
-    
-//  protected static final java.awt.Rectangle clipRect = new java.awt.Rectangle(-Integer.MAX_VALUE, -Integer.MAX_VALUE,
-//  		Integer.MAX_VALUE, Integer.MAX_VALUE);
-  
+      
   public static void checkDraw2D(Graphics graphics, DrawComponent dc, Renderer r) 
   {
     if (graphics instanceof J2DGraphics) 
@@ -82,8 +79,6 @@ implements RendererFigure
     	j2d.clipRect(null);
       Graphics2D g2d = j2d.createGraphics2D();
       g2d.setClip(null);
-//      g2d.setClip(clipRect);
-//      g2d.setClip(dc.getBounds());
       paintJ2D(g2d, dc, r);      
       g2d.dispose();
     }  	
@@ -105,60 +100,72 @@ implements RendererFigure
     }
   }
       
-  protected Renderer renderer;   
+  private Renderer renderer;   
   public void setRenderer(Renderer renderer) {
     this.renderer = renderer;
   }
   
-  protected DrawComponent drawComponent;  
+  private DrawComponent drawComponent;  
   public void setDrawComponent(DrawComponent drawComponent) {
     this.drawComponent = drawComponent;
   }   
   
+  private boolean contains = true;
+  public void setContains(boolean contains) {
+  	this.contains = contains;
+  }
+  public boolean isContains() {
+  	return contains;
+  }
+  
+  private Area outlineArea = null;  
   public boolean containsPoint(int x, int y) 
   {
-    if (drawComponent != null) {
-      if (drawComponent instanceof ShapeDrawComponent) {
-        ShapeDrawComponent sdc = (ShapeDrawComponent) drawComponent;
-        if (sdc.isFill()) {
-          return sdc.getGeneralShape().contains(x,y);
-        }
-        else 
-        {
-          if (outlineArea == null) 
-          {
-            Rectangle outerBounds = getBounds().getCopy();
-            Rectangle innerBounds = getBounds().getCopy();
-            outerBounds.expand((int)hitTolerance, (int)hitTolerance);
-            innerBounds.shrink((int)hitTolerance, (int)hitTolerance);
-            GeneralShape outerGS = (GeneralShape) sdc.getGeneralShape().clone();
-            GeneralShape innerGS = (GeneralShape) sdc.getGeneralShape().clone();
-            J2DUtil.transformGeneralShape(outerGS, getBounds(), outerBounds);
-            J2DUtil.transformGeneralShape(innerGS, getBounds(), innerBounds);
-            outlineArea = new Area(outerGS);
-            Area innerArea = new Area(innerGS); 
-            outlineArea.exclusiveOr(innerArea);             
+  	if (contains) {
+      if (drawComponent != null) {
+        if (drawComponent instanceof ShapeDrawComponent) {
+          ShapeDrawComponent sdc = (ShapeDrawComponent) drawComponent;
+          if (sdc.isFill()) {
+            return sdc.getGeneralShape().contains(x,y);
           }
-          boolean contains = outlineArea.contains(x,y);
-          outlineArea = null;
-          return contains;
-        }
-      }      
-    }
-    return super.containsPoint(x, y);
+          else 
+          {
+            if (outlineArea == null) 
+            {
+              Rectangle outerBounds = getBounds().getCopy();
+              Rectangle innerBounds = getBounds().getCopy();
+              outerBounds.expand((int)hitTolerance, (int)hitTolerance);
+              innerBounds.shrink((int)hitTolerance, (int)hitTolerance);
+              GeneralShape outerGS = (GeneralShape) sdc.getGeneralShape().clone();
+              GeneralShape innerGS = (GeneralShape) sdc.getGeneralShape().clone();
+              J2DUtil.transformGeneralShape(outerGS, getBounds(), outerBounds);
+              J2DUtil.transformGeneralShape(innerGS, getBounds(), innerBounds);
+              outlineArea = new Area(outerGS);
+              Area innerArea = new Area(innerGS); 
+              outlineArea.exclusiveOr(innerArea);             
+            }
+            boolean contains = outlineArea.contains(x,y);
+            outlineArea = null;
+            return contains;
+          }
+        }      
+      }
+      return super.containsPoint(x, y);  		
+  	} 
+  	else {
+  		return false;
+  	}
   }
   
   public static final double DEFAULT_HIT_TOLERANCE = 3;
-  protected double hitTolerance = DEFAULT_HIT_TOLERANCE;    
+  private double hitTolerance = DEFAULT_HIT_TOLERANCE;    
   public double getHitTolerance() {
     return hitTolerance;
   }
   public void setHitTolerance(double hitTolerance) {
     this.hitTolerance = hitTolerance;
   }
-  
-  protected Area outlineArea;
-  
+    
   protected ZoomListener zoomListener = new ZoomListener() {
     public void zoomChanged(double zoom) {
       hitTolerance = DEFAULT_HIT_TOLERANCE / zoom;
