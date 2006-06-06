@@ -387,7 +387,7 @@ implements EditorRequestConstants
     RotateCommand cmd = new RotateCommand(request);
     double rotation = request.getRotation();
     cmd.setRotation(rotation);
-    LOGGER.debug("getRotateCommand().rotation = "+rotation);
+//    LOGGER.debug("getRotateCommand().rotation = "+rotation);
     return cmd;
   }
   

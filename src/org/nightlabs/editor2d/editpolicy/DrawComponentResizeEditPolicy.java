@@ -381,7 +381,7 @@ implements EditorRequestConstants
     rotationFeedback.setGeneralShape(rotatedShape);
     getFeedbackLayer().repaint();
     
-    LOGGER.debug("rotation = "+rotation);
+//    LOGGER.debug("rotation = "+rotation);
   }  
       
 //  protected void eraseShearFeedback() 

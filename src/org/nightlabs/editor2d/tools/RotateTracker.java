@@ -101,9 +101,9 @@ extends AbstractDragTracker
     }
     getEditorRotateRequest().setLocation(getLocation());
         
-    LOGGER.debug("updateSourceRequest.rotation = "+getEditorRotateRequest().getRotation());
-    LOGGER.debug("rotationCenter = "+rotationCenter);
-    LOGGER.debug("location = "+getLocation());
+//    LOGGER.debug("updateSourceRequest.rotation = "+getEditorRotateRequest().getRotation());
+//    LOGGER.debug("rotationCenter = "+rotationCenter);
+//    LOGGER.debug("location = "+getLocation());
   }
   
   protected EditorRotateRequest getEditorRotateRequest() 
