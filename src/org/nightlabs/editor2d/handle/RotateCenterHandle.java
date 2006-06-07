@@ -64,10 +64,10 @@ extends EditorAbstractHandle
     Rectangle r = getBounds();
     r.shrink(1, 1);
     try {    
+    	g.setBackgroundColor(getFillColor());
       g.fillOval(r);      
+      g.setForegroundColor(getLineColor());
       g.drawOval(r);
-//      g.drawLine(r.x + r.width/2, r.y, r.x + r.width/2, r.y + r.height);
-//      g.drawLine(r.x, r.y + r.height/2, r.x + r.width, r.y + r.height/2);
     } finally {
       //We don't really own rect 'r', so fix it.
       r.expand(1, 1);

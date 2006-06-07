@@ -27,12 +27,14 @@
 
 package org.nightlabs.editor2d.handle;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Locator;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.AbstractHandle;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 
 
@@ -57,9 +59,6 @@ extends AbstractHandle
     super.setBounds(new Rectangle(rect.x, rect.y, DEFAULT_HANDLE_SIZE, DEFAULT_HANDLE_SIZE));
   }  
   
-  /**
-   * 
-   */
   public EditorAbstractHandle() 
   {
     super();
@@ -90,4 +89,20 @@ extends AbstractHandle
    */
   protected abstract DragTracker createDragTracker();
 
+  private Color fillColor = ColorConstants.black;
+  public Color getFillColor() {
+  	return fillColor;
+  }
+  public void setFillColor(Color c) {
+  	this.fillColor = c;
+  }
+  
+  private Color lineColor = ColorConstants.black;
+  public Color getLineColor() {
+  	return lineColor;
+  }
+  public void setLineColor(Color c) {
+  	this.lineColor = c;
+  }
+  
 }
