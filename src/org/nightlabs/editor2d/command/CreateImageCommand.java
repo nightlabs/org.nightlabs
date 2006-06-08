@@ -70,7 +70,7 @@ extends CreateDrawComponentCommand
   
   public void execute() 
   {
-  	super.execute();
+  	super.execute();  	
     try {
     	File file = new File(fileName);
     	FileInputStream fis = new FileInputStream(file);
@@ -81,7 +81,8 @@ extends CreateDrawComponentCommand
     }
     catch (FileNotFoundException e) {
     	throw new RuntimeException(e);    
-    }    
+    }
+//  	super.execute();    
   }  
     
 }

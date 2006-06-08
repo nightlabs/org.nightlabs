@@ -105,14 +105,14 @@ extends AbstractDrawComponentEditPart
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(DrawComponentContainer.CHILD_ADDED)) {
 			LOGGER.debug(propertyName);
-			refreshChildren();			
-//			refresh();
+//			refreshChildren();			
+			refresh();
 			return;
 		}
 		else if (propertyName.equals(DrawComponentContainer.CHILD_REMOVED)) {
 			LOGGER.debug(propertyName);
-			refreshChildren();			
-//			refresh();
+//			refreshChildren();			
+			refresh();
 			return;
 		}		
 	}
