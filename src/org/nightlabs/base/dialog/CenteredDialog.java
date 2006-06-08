@@ -33,6 +33,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Widget;
 
 /**
  * @author Daniel.Mazurek <at> NightLabs <dot> de
@@ -64,5 +65,13 @@ extends Dialog
 		int diffWidth = screenSize.width - shellSize.x;
 		int diffHeight = screenSize.height - shellSize.y;
 		getShell().setLocation(diffWidth/2, diffHeight/2);
+	}	
+	
+	public boolean checkWidget(Widget w) 
+	{
+		if (w != null && !w.isDisposed())
+			return true;
+		else
+			return false;
 	}	
 }
