@@ -23,7 +23,7 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.actions.copy;
 
 import java.util.Iterator;
 import java.util.List;
@@ -35,6 +35,8 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.actions.AbstractEditorAction;
+import org.nightlabs.editor2d.actions.EditorActionConstants;
 import org.nightlabs.editor2d.command.CloneDrawComponentCommand;
 
 /**

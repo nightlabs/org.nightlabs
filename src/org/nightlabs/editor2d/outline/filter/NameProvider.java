@@ -27,7 +27,7 @@
 
 package org.nightlabs.editor2d.outline.filter;
 
-public interface FilterNameProvider
+public interface NameProvider
 {
 	/**
 	 * 

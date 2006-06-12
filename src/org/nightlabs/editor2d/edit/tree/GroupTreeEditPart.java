@@ -23,72 +23,46 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.edit.tree;
 
-import java.util.List;
-
-import org.eclipse.gef.ui.actions.Clipboard;
-import org.eclipse.swt.SWT;
-import org.eclipse.ui.actions.ActionFactory;
-import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.DrawComponent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.views.properties.IPropertySource;
+import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.GroupDrawComponent;
+import org.nightlabs.editor2d.model.GroupPropertySource;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class CopyAction 
-extends AbstractEditorSelectionAction 
+public class GroupTreeEditPart 
+extends DrawComponentContainerTreeEditPart 
 {
-//	public static final String ID = CopyAction.class.getName();
-	public static final String ID = ActionFactory.COPY.getId();
-	
-//	public static final String PROP_COPY_TO_CLIPBOARD = "Added Content to Clipboard";	
-//	public static final Object EMPTY_CLIPBOARD_CONTENT = new Object();
-	
-	/**
-	 * @param editor
-	 * @param style
-	 */
-	public CopyAction(AbstractEditor editor, int style) {
-		super(editor, style);
+	public static Image GROUP_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+			GroupTreeEditPart.class).createImage();	
+
+	public GroupTreeEditPart(GroupDrawComponent model) {
+		super(model);
 	}
 
+	public GroupDrawComponent getGroupDrawComponent() {
+		return (GroupDrawComponent) getModel();
+	}
+	
 	/**
-	 * @param editor
+	 * @see org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart#getImage()
 	 */
-	public CopyAction(AbstractEditor editor) {
-		super(editor);
+	@Override
+	protected Image getImage() {
+		return GROUP_ICON;
 	}
 
-  protected void init() 
+  protected IPropertySource getPropertySource()
   {
-  	super.init();
-  	setText(EditorPlugin.getResourceString("action.copy.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.copy.tooltip"));
-  	setId(ID);
-  	setActionDefinitionId(ID);
-//  	setAccelerator(SWT.CTRL | 'C');
-  } 
+    if (propertySource == null) {
+      propertySource = new GroupPropertySource(getGroupDrawComponent());
+    }
+    return propertySource;
+  } 	
 	
-	/**
-	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
-	*/
-	protected boolean calculateEnabled() {
-		return !getDefaultSelection(false).isEmpty();
-	}
-		
-	/**
-	 * adds all selected DrawComponents to the {@link Clipboard} 
-	 *  
-	 */
-	public void run() 
-	{
-		List dcs = getSelection(DrawComponent.class, true);
-		Clipboard clipboard = Clipboard.getDefault();
-		Object oldContent = clipboard.getContents();
-		clipboard.setContents(dcs);
-		firePropertyChange(EditorActionConstants.PROP_COPY_TO_CLIPBOARD, oldContent, dcs);
-	}	
-					
 }

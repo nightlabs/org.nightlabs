@@ -23,78 +23,86 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.command;
 
-import java.awt.geom.AffineTransform;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
-import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
+import org.nightlabs.editor2d.GroupDrawComponent;
+import org.nightlabs.editor2d.Layer;
+import org.nightlabs.editor2d.impl.GroupDrawComponentImpl;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class MirrorAction 
-extends AbstractEditorSelectionAction 
+public class GroupCommand 
+extends Command 
 {
-	public static final String ID = MirrorAction.class.getName();
-	
-	/**
-	 * @param editor
-	 * @param style
-	 */
-	public MirrorAction(AbstractEditor editor, int style) {
-		super(editor, style);
-	}
 
-	/**
-	 * @param editor
-	 */
-	public MirrorAction(AbstractEditor editor) {
-		super(editor);
-	}
-
-  protected void init() 
-  {
-  	super.init();
-  	setText(EditorPlugin.getResourceString("action.mirror.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.mirror.tooltip"));
-  	setId(ID);
-  } 		
-	
-	/**
-	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
-	*/
-	protected boolean calculateEnabled() {
-		return !getDefaultSelection(false).isEmpty();
-	}
-
-	public void run() 
+	public GroupCommand(Collection<DrawComponent> drawComponents) 
 	{
-		List dcs = getSelection(DrawComponent.class, true);
-		Command cmd = new CompoundCommand();
-		for (Iterator it = dcs.iterator(); it.hasNext(); ) {
-			DrawComponent dc = (DrawComponent) it.next();
-			CreateDrawComponentCommand createCmd = new CreateDrawComponentCommand();
-			DrawComponent clone = (DrawComponent) dc.clone();
-			AffineTransform at = new AffineTransform();
-			// TODO: find out how to mirror with an AffineTransform
-			clone.setName(clone.getName() + getCopyString());
-			createCmd.setChild(clone);
-			createCmd.setParent(dc.getParent());
-			
-			cmd.chain(createCmd);
+		if (drawComponents == null)
+			throw new IllegalArgumentException("Param drawComponents must not be null!");
+		
+		setLabel(EditorPlugin.getResourceString("command.group"));
+		this.drawComponents = drawComponents;
+	}
+
+	private Collection<DrawComponent> drawComponents = null;	
+	private Map<DrawComponent, DrawComponentContainer> drawComponent2OldParent = null;		
+	private Map<DrawComponent, Integer> drawComponent2OldParentIndex = null;	
+	private GroupDrawComponent group = null;	
+
+	@Override
+	public void execute() 
+	{
+		if (!drawComponents.isEmpty()) 
+		{
+			drawComponent2OldParent = new HashMap<DrawComponent, DrawComponentContainer>();
+			drawComponent2OldParentIndex = new HashMap<DrawComponent, Integer>();		
+			Layer currentLayer = null;
+			for (DrawComponent drawComponent : drawComponents) 
+			{
+				if (currentLayer == null) {
+					currentLayer = drawComponent.getRoot().getCurrentLayer();
+					group = new GroupDrawComponentImpl();
+					group.setParent(currentLayer);
+				}				
+				drawComponent2OldParent.put(drawComponent, drawComponent.getParent());
+				drawComponent2OldParentIndex.put(drawComponent, 
+						drawComponent.getParent().getDrawComponents().indexOf(drawComponent));				
+				drawComponent.getParent().removeDrawComponent(drawComponent);
+			}			
+			currentLayer.addDrawComponent(group);						
+			group.addDrawComponents(drawComponents);			
 		}
-		execute(cmd);
 	}
 	
-	protected String getCopyString() 
+	@Override
+	public void redo() 
 	{
-		return " ("+EditorPlugin.getResourceString("action.copy.text")+")";
+		execute();
 	}
+
+	@Override
+	public void undo() 
+	{
+		if (group != null) 
+		{
+			group.removeDrawComponents(drawComponents);
+			group.getParent().removeDrawComponent(group);
+			for (DrawComponent dc : drawComponents) 
+			{
+				DrawComponentContainer oldParent = drawComponent2OldParent.get(dc);
+				int oldIndex = drawComponent2OldParentIndex.get(dc);
+				oldParent.addDrawComponent(dc, oldIndex);
+			}			
+		}
+	}
+	
 }

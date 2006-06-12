@@ -31,8 +31,8 @@ import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartFactory;
 import org.nightlabs.editor2d.edit.GraphicalEditPartFactory;
 import org.nightlabs.editor2d.edit.tree.TreePartFactory;
-import org.nightlabs.editor2d.outline.filter.FilterNameProvider;
-import org.nightlabs.editor2d.util.ModelUtil;
+import org.nightlabs.editor2d.outline.filter.NameProvider;
+import org.nightlabs.editor2d.util.EditorNameProvider;
 
 
 public class Editor  
@@ -60,10 +60,10 @@ extends AbstractEditor
   }
 
 	/**
-	 * @see org.nightlabs.editor2d.AbstractEditor#createFilterNameProvider()
+	 * @see org.nightlabs.editor2d.AbstractEditor#createNameProvider()
 	 */    
-  public FilterNameProvider createFilterNameProvider() {
-		return new ModelUtil();
+  public NameProvider createNameProvider() {
+		return new EditorNameProvider();
 	}
 
 	/**

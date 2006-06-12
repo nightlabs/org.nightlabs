@@ -39,16 +39,18 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.actions.ActionFactory;
-import org.nightlabs.editor2d.actions.CloneAction;
-import org.nightlabs.editor2d.actions.CopyAction;
-import org.nightlabs.editor2d.actions.CutAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
-import org.nightlabs.editor2d.actions.PasteAction;
 import org.nightlabs.editor2d.actions.ResetRotationCenterAction;
 import org.nightlabs.editor2d.actions.RotateAction;
 import org.nightlabs.editor2d.actions.SelectAllWithSameName;
 import org.nightlabs.editor2d.actions.ShowDefaultRenderAction;
+import org.nightlabs.editor2d.actions.copy.CloneAction;
+import org.nightlabs.editor2d.actions.copy.CopyAction;
+import org.nightlabs.editor2d.actions.copy.CutAction;
+import org.nightlabs.editor2d.actions.copy.PasteAction;
+import org.nightlabs.editor2d.actions.group.GroupAction;
+import org.nightlabs.editor2d.actions.group.UnGroupAction;
 import org.nightlabs.editor2d.actions.order.ChangeOrderOneDown;
 import org.nightlabs.editor2d.actions.order.ChangeOrderOneUp;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
@@ -256,6 +258,14 @@ extends ContextMenuProvider
 //  	if (action.isEnabled())
 //  	  manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
   	menuMan.add(action);  	  	
+  	
+  	action = getActionRegistry().getAction(GroupAction.ID);
+  	if (action.isEnabled())
+  		menuMan.add(action);  	  	
+  		
+  	action = getActionRegistry().getAction(UnGroupAction.ID);
+  	if (action.isEnabled())
+  		menuMan.add(action);  	  	  	
   }
   
   protected void buildAlignSubMenu(MenuManager menuMan) 

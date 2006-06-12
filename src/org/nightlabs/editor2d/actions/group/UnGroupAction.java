@@ -23,78 +23,67 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.actions.group;
 
-import java.awt.geom.AffineTransform;
-import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
+import org.nightlabs.editor2d.GroupDrawComponent;
+import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
+import org.nightlabs.editor2d.command.UnGroupCommand;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class MirrorAction 
+public class UnGroupAction 
 extends AbstractEditorSelectionAction 
 {
-	public static final String ID = MirrorAction.class.getName();
+	public static final String ID = UnGroupAction.class.getName();
 	
 	/**
 	 * @param editor
 	 * @param style
 	 */
-	public MirrorAction(AbstractEditor editor, int style) {
+	public UnGroupAction(AbstractEditor editor, int style) {
 		super(editor, style);
 	}
 
 	/**
 	 * @param editor
 	 */
-	public MirrorAction(AbstractEditor editor) {
+	public UnGroupAction(AbstractEditor editor) {
 		super(editor);
 	}
 
-  protected void init() 
-  {
-  	super.init();
-  	setText(EditorPlugin.getResourceString("action.mirror.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.mirror.tooltip"));
-  	setId(ID);
-  } 		
-	
-	/**
-	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
-	*/
-	protected boolean calculateEnabled() {
-		return !getDefaultSelection(false).isEmpty();
+	@Override
+	protected void init() 
+	{
+		setId(ID);
+		setText(EditorPlugin.getResourceString("action.ungroup.text"));
+		setToolTipText(EditorPlugin.getResourceString("action.ungroup.tooltip"));
 	}
 
+	/**
+	 * @see org.nightlabs.editor2d.actions.AbstractEditorSelectionAction#calculateEnabled()
+	 */
+	@Override
+	protected boolean calculateEnabled() 
+	{
+		return selectionContains(GroupDrawComponent.class, true);
+	}
+
+	@Override
 	public void run() 
 	{
-		List dcs = getSelection(DrawComponent.class, true);
-		Command cmd = new CompoundCommand();
-		for (Iterator it = dcs.iterator(); it.hasNext(); ) {
-			DrawComponent dc = (DrawComponent) it.next();
-			CreateDrawComponentCommand createCmd = new CreateDrawComponentCommand();
-			DrawComponent clone = (DrawComponent) dc.clone();
-			AffineTransform at = new AffineTransform();
-			// TODO: find out how to mirror with an AffineTransform
-			clone.setName(clone.getName() + getCopyString());
-			createCmd.setChild(clone);
-			createCmd.setParent(dc.getParent());
-			
-			cmd.chain(createCmd);
+		List<GroupDrawComponent> selection = getSelection(GroupDrawComponent.class, true);
+		CompoundCommand cmd = new CompoundCommand();
+		for (GroupDrawComponent group : selection) {
+			UnGroupCommand ungroupCmd = new UnGroupCommand(group);
+			cmd.add(ungroupCmd);
 		}
 		execute(cmd);
 	}
-	
-	protected String getCopyString() 
-	{
-		return " ("+EditorPlugin.getResourceString("action.copy.text")+")";
-	}
+
 }

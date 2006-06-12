@@ -27,25 +27,15 @@
 
 package org.nightlabs.editor2d.edit;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.Timer;
-
 import org.apache.log4j.Logger;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FigureCanvas;
-import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.gef.CompoundSnapToHelper;
-import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
@@ -54,8 +44,6 @@ import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 import org.eclipse.gef.rulers.RulerProvider;
-import org.eclipse.gef.ui.parts.J2DScrollingGraphicalViewer;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
@@ -162,22 +150,6 @@ extends AbstractDrawComponentContainerEditPart
   {  
     return getMultiLayerDrawComponent().getDrawComponents();
   }	
-
-//  protected List getModelChildren()
-//  {  
-//    List allDrawComponents = new ArrayList(); 
-//    for (Iterator itLayers = getMultiLayerDrawComponent().getDrawComponents().iterator(); itLayers.hasNext(); ) {
-//      Layer l = (Layer) itLayers.next();
-//      l.eAdapters().add(this);
-//      if (l.isVisible()) {
-//        for (Iterator itDrawOrder = l.getDrawComponents().iterator(); itDrawOrder.hasNext(); ) {
-//          DrawComponent dc = (DrawComponent) itDrawOrder.next();
-//          allDrawComponents.add(dc);        
-//        }        
-//      }
-//    }
-//    return allDrawComponents;
-//  }	
 	
   /**
    * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
@@ -228,69 +200,5 @@ extends AbstractDrawComponentContainerEditPart
 //  			return new DeselectAllTracker(this);
 //  	return new MarqueeDragTracker();
 //  }  
-  
-//	protected void addScrollListener() 
-//	{
-//	  EditPartViewer viewer = getRoot().getViewer();
-//	  if (viewer instanceof J2DScrollingGraphicalViewer) {
-//	    J2DScrollingGraphicalViewer j2DViewer = (J2DScrollingGraphicalViewer) viewer;
-//	    FigureCanvas figureCanvas = (FigureCanvas)j2DViewer.getControl();
-//	    Viewport viewport = figureCanvas.getViewport();
-//	    scrollTimer = new Timer(scrollDelay, repaintListener);
-//	    viewport.addPropertyChangeListener(scrollListener);
-//	    LOGGER.debug("ScrollListener added!");
-//	  }
-//	  else {
-//	  	LOGGER.debug("ScrollListener NOT added!");
-//	  }
-//	}  
-//	
-//	protected PropertyChangeListener scrollListener = new PropertyChangeListener()
-//	{	
-//		public void propertyChange(PropertyChangeEvent evt) 
-//		{
-//			if (evt.getPropertyName().equals(Viewport.PROPERTY_VIEW_LOCATION)) 
-//			{
-//				if (scrollTimer.isRunning()) {
-//					scrollTimer.restart();
-//					LOGGER.debug("timer restarted!");
-//				} else {
-//					scrollTimer.start();
-//					LOGGER.debug("timer started!");					
-//				}
-//				LOGGER.debug("Viewer scrolled!");
-//			}
-//		}	
-//	}; 
-//	
-//	protected int scrollDelay = 100;
-//	protected Timer scrollTimer = null;
-//	protected ActionListener repaintListener = new ActionListener()
-//	{	
-//		public void actionPerformed(ActionEvent e) 
-//		{
-//			final long timeAWT = System.currentTimeMillis();
-//			Display.getDefault().asyncExec(new Runnable()
-//			{		
-//				public void run() 
-//				{					
-//					long startTime = System.currentTimeMillis();
-//					long diff = startTime - timeAWT;
-//					LOGGER.debug("diff time between action and asynch run = "+diff);
-//					getBufferedFreeformLayer().refresh();
-//					long endRefresh = System.currentTimeMillis();
-//					long refresh = endRefresh - startTime;
-//					LOGGER.debug("Refresh took "+refresh+" ms!");
-//					refreshVisuals();
-//					long endRepaint = System.currentTimeMillis();
-//					long repaint = endRepaint - startTime;
-//					LOGGER.debug("Repaint took "+repaint+" ms!");
-//					scrollTimer.stop();
-//					LOGGER.debug("Viewer repainted!");
-//					LOGGER.debug("Timer stopped!");					
-//				}
-//			});
-//		}	
-//	};
-	
+  	
 }

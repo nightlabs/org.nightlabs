@@ -23,53 +23,54 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.actions.copy;
 
-import java.awt.geom.AffineTransform;
-import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.swt.SWT;
+import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
+import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
+import org.nightlabs.editor2d.actions.EditorActionConstants;
+import org.nightlabs.editor2d.command.CutDrawComponentCommand;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class MirrorAction 
+public class CutAction 
 extends AbstractEditorSelectionAction 
 {
-	public static final String ID = MirrorAction.class.getName();
+	public static final String ID = ActionFactory.CUT.getId();
 	
 	/**
 	 * @param editor
 	 * @param style
 	 */
-	public MirrorAction(AbstractEditor editor, int style) {
+	public CutAction(AbstractEditor editor, int style) {
 		super(editor, style);
 	}
 
 	/**
 	 * @param editor
 	 */
-	public MirrorAction(AbstractEditor editor) {
+	public CutAction(AbstractEditor editor) {
 		super(editor);
 	}
 
-  protected void init() 
-  {
-  	super.init();
-  	setText(EditorPlugin.getResourceString("action.mirror.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.mirror.tooltip"));
-  	setId(ID);
-  } 		
+	public void init() 
+	{
+		setId(ID);
+		setText(EditorPlugin.getResourceString("action.cut.text"));
+		setToolTipText(EditorPlugin.getResourceString("action.cut.tooltip"));
+		setActionDefinitionId(ID);
+		setAccelerator(SWT.CTRL | 'X');
+	}
 	
-	/**
-	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
-	*/
+  /**
+	 * @return true, if objects are selected, except the RootEditPart or LayerEditParts
+	 */
 	protected boolean calculateEnabled() {
 		return !getDefaultSelection(false).isEmpty();
 	}
@@ -77,24 +78,9 @@ extends AbstractEditorSelectionAction
 	public void run() 
 	{
 		List dcs = getSelection(DrawComponent.class, true);
-		Command cmd = new CompoundCommand();
-		for (Iterator it = dcs.iterator(); it.hasNext(); ) {
-			DrawComponent dc = (DrawComponent) it.next();
-			CreateDrawComponentCommand createCmd = new CreateDrawComponentCommand();
-			DrawComponent clone = (DrawComponent) dc.clone();
-			AffineTransform at = new AffineTransform();
-			// TODO: find out how to mirror with an AffineTransform
-			clone.setName(clone.getName() + getCopyString());
-			createCmd.setChild(clone);
-			createCmd.setParent(dc.getParent());
-			
-			cmd.chain(createCmd);
-		}
-		execute(cmd);
+		CutDrawComponentCommand cutCmd = new CutDrawComponentCommand(dcs);
+		execute(cutCmd);
+		firePropertyChange(EditorActionConstants.PROP_COPY_TO_CLIPBOARD, null, dcs);
 	}
 	
-	protected String getCopyString() 
-	{
-		return " ("+EditorPlugin.getResourceString("action.copy.text")+")";
-	}
 }

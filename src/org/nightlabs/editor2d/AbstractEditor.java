@@ -111,17 +111,19 @@ import org.nightlabs.base.io.FileEditorInput;
 import org.nightlabs.base.io.IOFilterRegistry;
 import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.util.RCPUtil;
-import org.nightlabs.editor2d.actions.CloneAction;
-import org.nightlabs.editor2d.actions.CopyAction;
-import org.nightlabs.editor2d.actions.CutAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
-import org.nightlabs.editor2d.actions.PasteAction;
 import org.nightlabs.editor2d.actions.RepaintAction;
 import org.nightlabs.editor2d.actions.ResetRotationCenterAction;
 import org.nightlabs.editor2d.actions.RotateAction;
 import org.nightlabs.editor2d.actions.SelectAllWithSameName;
 import org.nightlabs.editor2d.actions.ShowDefaultRenderAction;
+import org.nightlabs.editor2d.actions.copy.CloneAction;
+import org.nightlabs.editor2d.actions.copy.CopyAction;
+import org.nightlabs.editor2d.actions.copy.CutAction;
+import org.nightlabs.editor2d.actions.copy.PasteAction;
+import org.nightlabs.editor2d.actions.group.GroupAction;
+import org.nightlabs.editor2d.actions.group.UnGroupAction;
 import org.nightlabs.editor2d.actions.order.ChangeOrderOneDown;
 import org.nightlabs.editor2d.actions.order.ChangeOrderOneUp;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
@@ -136,7 +138,7 @@ import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
-import org.nightlabs.editor2d.outline.filter.FilterNameProvider;
+import org.nightlabs.editor2d.outline.filter.NameProvider;
 import org.nightlabs.editor2d.page.IPredefinedPage;
 import org.nightlabs.editor2d.page.predefined.A4Page;
 import org.nightlabs.editor2d.page.resolution.Resolution;
@@ -256,8 +258,15 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return filterMan;
     }
      
-    public abstract FilterNameProvider createFilterNameProvider();
-       
+    public abstract NameProvider createNameProvider();
+    
+    protected NameProvider nameProvider = null;
+    public NameProvider getFilterNameProvider() {
+    	if (nameProvider == null)
+    		nameProvider = createNameProvider();
+    	return nameProvider;
+    }    
+    
     protected IOFilterMan ioFilterMan;
     public IOFilterMan getIOFilterMan() 
     {
@@ -280,7 +289,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     public AbstractEditor() 
     {
       setEditDomain(new DefaultEditDomain(this));            
-      filterMan = new FilterManager(createFilterNameProvider());           
+      filterMan = new FilterManager(getFilterNameProvider());           
     }
                       
     protected MultiLayerDrawComponent load(IOFilter ioFilter, InputStream input) 
@@ -390,8 +399,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
       // TODO: ContextMenu ID Problem
       getSite().registerContextMenu("org.nightlabs.editor2d.contextmenu", //$NON-NLS-1$
           provider, viewer);
-//      viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer)
-//          .setParent(getCommonKeyHandler()));
       viewer.setKeyHandler(new EditorViewerKeyHandler(viewer)
           .setParent(getCommonKeyHandler()));
             
@@ -436,9 +443,12 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		};
     		
     // should solve redraw problems when undoing things
-    protected CommandStackEventListener commandStackListener = new CommandStackEventListener(){		
-			public void stackChanged(CommandStackEvent event) {
+    protected CommandStackEventListener commandStackListener = new CommandStackEventListener()
+    {		
+			public void stackChanged(CommandStackEvent event) 
+			{
 				updateViewer();
+				// TODO: check for createCommands and set name from NameProvider
 			}		
 		};				
     
@@ -859,7 +869,17 @@ extends J2DGraphicalEditorWithFlyoutPalette
       // Print Page Setup Action
       action = new EditorPrintSetupAction(this);
       registry.registerAction(action);
-      getPropertyActions().add(action.getId());      
+      getPropertyActions().add(action.getId());
+      
+      // Group Action
+      action = new GroupAction(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());
+      
+      // UnGroup Action
+      action = new UnGroupAction(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());      
     }
     
     /**

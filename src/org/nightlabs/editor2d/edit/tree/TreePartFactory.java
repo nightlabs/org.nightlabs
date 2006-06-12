@@ -31,6 +31,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
 import org.nightlabs.editor2d.EllipseDrawComponent;
+import org.nightlabs.editor2d.GroupDrawComponent;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.LineDrawComponent;
@@ -78,6 +79,9 @@ implements EditPartFactory
 
     else if (model instanceof PageDrawComponent)
       return new PageTreeEditPart((PageDrawComponent)model);
+
+    else if (model instanceof GroupDrawComponent)
+      return new GroupTreeEditPart((GroupDrawComponent)model);
   	
     return null;
   }

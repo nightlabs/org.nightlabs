@@ -23,7 +23,7 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.actions.copy;
 
 import java.awt.Rectangle;
 import java.util.Iterator;
@@ -36,6 +36,7 @@ import org.nightlabs.config.ConfigException;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
 import org.nightlabs.editor2d.command.CloneDrawComponentCommand;
 import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
 import org.nightlabs.editor2d.config.QuickOptionsConfigModule;
@@ -97,29 +98,6 @@ extends AbstractEditorSelectionAction
 	protected boolean calculateEnabled() {
 		return !getDefaultSelection(false).isEmpty();
 	}
-
-//	/**
-//	 * clones all selected DrawComponents and combines them
-//	 *  
-//	 */
-//	public void run() 
-//	{
-//		List dcs = getSelection(DrawComponent.class, true);
-//		CompoundCommand cmd = new CompoundCommand();
-//		for (Iterator it = dcs.iterator(); it.hasNext(); ) 
-//		{
-//			DrawComponent dc = (DrawComponent) it.next();
-//			CreateDrawComponentCommand createCmd = new CreateDrawComponentCommand();
-//			DrawComponent clone = (DrawComponent) dc.clone();
-//			clone.setName(clone.getName() + getCopyString());
-//			createCmd.setChild(clone);
-//			createCmd.setParent(dc.getParent());
-//
-//			// TODO: translate clone depending on values in ConfigModule 
-//			cmd.add(createCmd);
-//		}
-//		execute(cmd);
-//	}
 		
 	/**
 	 * clones all selected DrawComponents and combines them to one Command

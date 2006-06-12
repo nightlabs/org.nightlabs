@@ -50,50 +50,26 @@ extends Command
 	
 	protected Rectangle rect;
 	
-	/**
-	 * Create a command that will add a new DrawComponent to a MultiLayerDrawComponent.
-	 * @param parent the MultiLayerDrawComponent that will hold the new element
-	 * @param req     a request to create a new DrawComponent
-	 * @throws IllegalArgumentException if any parameter is null, or the request
-	 * 						  does not provide a new DrawComponent instance
-	 */	
 	public CreateDrawComponentCommand() 
 	{
 	  super(EditorPlugin.getResourceString("command.create.drawcomponent"));	  
 	}
 		
-	/**
-	 * @see org.eclipse.gef.commands.Command#canUndo()
-	 */
 	public boolean canUndo() {
 		return true;
 	}	
 	
-	/*
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
 	public void execute() 
 	{
-    drawComponent.setBounds(J2DUtil.toAWTRectangle(rect));
-	  
+    drawComponent.setBounds(J2DUtil.toAWTRectangle(rect));	  
     parent.addDrawComponent(drawComponent);
-		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);
-    
-    if (drawComponent instanceof DrawComponentContainer) {
-      ((DrawComponentContainer)drawComponent).setParent(parent);
-    }
+		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);		
 	}	
 		
-	/*
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
 	public void redo() { 
     parent.addDrawComponent(drawComponent, drawOrderIndex);    
 	}
 		
-	/*
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
 	public void undo() { 
     parent.removeDrawComponent(drawComponent);
 	}	

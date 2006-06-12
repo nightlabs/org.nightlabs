@@ -52,8 +52,8 @@ public class FilterManager
   
   protected List filters;
   protected List allFilters;
-  protected FilterNameProvider nameProvider = null;  
-  public FilterManager(FilterNameProvider nameProvider) 
+  protected NameProvider nameProvider = null;  
+  public FilterManager(NameProvider nameProvider) 
   {
     super();
     this.nameProvider = nameProvider;

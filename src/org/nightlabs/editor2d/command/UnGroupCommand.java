@@ -23,78 +23,58 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions;
+package org.nightlabs.editor2d.command;
 
-import java.awt.geom.AffineTransform;
-import java.util.Iterator;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
-import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
+import org.nightlabs.editor2d.GroupDrawComponent;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class MirrorAction 
-extends AbstractEditorSelectionAction 
+public class UnGroupCommand 
+extends Command 
 {
-	public static final String ID = MirrorAction.class.getName();
-	
-	/**
-	 * @param editor
-	 * @param style
-	 */
-	public MirrorAction(AbstractEditor editor, int style) {
-		super(editor, style);
-	}
 
-	/**
-	 * @param editor
-	 */
-	public MirrorAction(AbstractEditor editor) {
-		super(editor);
-	}
-
-  protected void init() 
-  {
-  	super.init();
-  	setText(EditorPlugin.getResourceString("action.mirror.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.mirror.tooltip"));
-  	setId(ID);
-  } 		
-	
-	/**
-	*@return true, if objects are selected, except the RootEditPart or LayerEditParts
-	*/
-	protected boolean calculateEnabled() {
-		return !getDefaultSelection(false).isEmpty();
-	}
-
-	public void run() 
+	public UnGroupCommand(GroupDrawComponent group) 
 	{
-		List dcs = getSelection(DrawComponent.class, true);
-		Command cmd = new CompoundCommand();
-		for (Iterator it = dcs.iterator(); it.hasNext(); ) {
-			DrawComponent dc = (DrawComponent) it.next();
-			CreateDrawComponentCommand createCmd = new CreateDrawComponentCommand();
-			DrawComponent clone = (DrawComponent) dc.clone();
-			AffineTransform at = new AffineTransform();
-			// TODO: find out how to mirror with an AffineTransform
-			clone.setName(clone.getName() + getCopyString());
-			createCmd.setChild(clone);
-			createCmd.setParent(dc.getParent());
-			
-			cmd.chain(createCmd);
-		}
-		execute(cmd);
+		if (group == null)
+			throw new IllegalArgumentException("Param group must not be null!");
+		
+		setLabel(EditorPlugin.getResourceString("command.ungroup"));
+		this.group = group;
+	}
+
+	private GroupDrawComponent group = null;
+	private DrawComponentContainer groupParent = null;
+	private Collection<DrawComponent> groupedDcs = null;
+	
+	@Override
+	public void execute() 
+	{
+		groupParent = group.getParent();
+		groupedDcs = new ArrayList<DrawComponent>(group.getDrawComponents());
+		group.removeDrawComponents(groupedDcs);
+		groupParent.addDrawComponents(groupedDcs);
+		groupParent.removeDrawComponent(group);
 	}
 	
-	protected String getCopyString() 
-	{
-		return " ("+EditorPlugin.getResourceString("action.copy.text")+")";
+	@Override
+	public void redo() {
+		execute();
 	}
+	
+	@Override
+	public void undo() 
+	{
+		groupParent.removeDrawComponents(groupedDcs);
+		group.addDrawComponents(groupedDcs);
+		groupParent.addDrawComponent(group);
+	}
+		
 }

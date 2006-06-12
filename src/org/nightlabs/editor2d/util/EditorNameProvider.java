@@ -29,18 +29,19 @@ package org.nightlabs.editor2d.util;
 
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EllipseDrawComponent;
+import org.nightlabs.editor2d.GroupDrawComponent;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.LineDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RectangleDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
-import org.nightlabs.editor2d.outline.filter.FilterNameProvider;
+import org.nightlabs.editor2d.outline.filter.NameProvider;
 
-public class ModelUtil
-implements FilterNameProvider
+public class EditorNameProvider
+implements NameProvider
 {
 
-	public ModelUtil() {
+	public EditorNameProvider() {
 		super();
 	}
 
@@ -70,6 +71,10 @@ implements FilterNameProvider
 		else if (PageDrawComponent.class.isAssignableFrom(c)) {
 			return EditorPlugin.getResourceString("model.pageDrawComponent.name");
 		}		
+		else if (GroupDrawComponent.class.isAssignableFrom(c)) {
+			return EditorPlugin.getResourceString("model.groupDrawComponent.name");
+		}				
+		
 		return EditorPlugin.getResourceString("model.drawComponent.name");
 	}
 }

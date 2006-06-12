@@ -32,6 +32,7 @@ import org.nightlabs.editor2d.Editor2DFactory;
 import org.nightlabs.editor2d.EditorGuide;
 import org.nightlabs.editor2d.EditorRuler;
 import org.nightlabs.editor2d.EllipseDrawComponent;
+import org.nightlabs.editor2d.GroupDrawComponent;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.LineDrawComponent;
@@ -87,6 +88,9 @@ implements CreationFactory
     }
     else if ( targetClass.equals(PageDrawComponent.class)) {
       result = factory.createPageDrawComponent();
+    }
+    else if ( targetClass.equals(GroupDrawComponent.class)) {
+      result = factory.createGroupDrawComponent();
     }
 			
 		return result;

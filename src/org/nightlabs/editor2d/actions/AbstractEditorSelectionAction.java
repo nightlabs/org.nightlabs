@@ -44,11 +44,21 @@ import org.eclipse.swt.widgets.Shell;
 
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.EllipseDrawComponent;
+import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.Layer;
+import org.nightlabs.editor2d.LineDrawComponent;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
+import org.nightlabs.editor2d.RectangleDrawComponent;
+import org.nightlabs.editor2d.TextDrawComponent;
+import org.nightlabs.editor2d.edit.EllipseEditPart;
+import org.nightlabs.editor2d.edit.ImageEditPart;
 import org.nightlabs.editor2d.edit.LayerEditPart;
+import org.nightlabs.editor2d.edit.LineEditPart;
 import org.nightlabs.editor2d.edit.PageEditPart;
+import org.nightlabs.editor2d.edit.RectangleEditPart;
+import org.nightlabs.editor2d.edit.TextEditPart;
 
 public abstract class AbstractEditorSelectionAction 
 extends SelectionAction
@@ -160,7 +170,7 @@ extends SelectionAction
 		return selectionContains(clazz, 1, model);
 	}
 	
-	protected static List EMPTY_LIST = Collections.EMPTY_LIST; 
+	private static List EMPTY_LIST = Collections.EMPTY_LIST; 
 	
 	/**
 	 * 
@@ -266,28 +276,77 @@ extends SelectionAction
 		return EMPTY_LIST;
 	}	
 	
-	protected Collection defaultEditPartExcludeList = null; 
-	protected Collection defaultModelExcludeList = null;
-	public Collection getDefaultExcludeList(boolean model) 
+	private Class[] defaultEditPartExcludes = null; 
+	private Class[] defaultModelExcludes = null;
+	
+	public Class[] getDefaultExcludes(boolean model) 
 	{
 		if (!model) {
-			if (defaultEditPartExcludeList == null) {
-				defaultEditPartExcludeList = new LinkedList();
-				defaultEditPartExcludeList.add(RootEditPart.class);
-				defaultEditPartExcludeList.add(LayerEditPart.class);
-				defaultEditPartExcludeList.add(PageEditPart.class);				
+			if (defaultEditPartExcludes == null) {
+				defaultEditPartExcludes = new Class[3];
+				defaultEditPartExcludes[0] = RootEditPart.class;
+				defaultEditPartExcludes[1] = LayerEditPart.class;
+				defaultEditPartExcludes[2] = PageEditPart.class;				
 			}
-			return defaultEditPartExcludeList;
+			return defaultEditPartExcludes;
 		}
 		else {
-			if (defaultModelExcludeList == null) {
-				defaultModelExcludeList = new LinkedList();
-				defaultModelExcludeList.add(MultiLayerDrawComponent.class);
-				defaultModelExcludeList.add(Layer.class);
-				defaultModelExcludeList.add(PageDrawComponent.class);
+			if (defaultModelExcludes == null) {
+				defaultModelExcludes = new Class[3];
+				defaultModelExcludes[0] = MultiLayerDrawComponent.class;
+				defaultModelExcludes[1] = Layer.class;
+				defaultModelExcludes[2] = PageDrawComponent.class;
 			}
-			return defaultModelExcludeList;
+			return defaultModelExcludes;
 		}
+	}
+		
+	public Collection<Class> getDefaultExcludeList(boolean model) 
+	{
+		Class[] excludes = getDefaultExcludes(model);
+		Collection excludeCollection = new ArrayList<Class>(excludes.length);		
+		for (int i=0; i<excludes.length; i++) {
+			excludeCollection.add(excludes[i]);
+		}
+		return excludeCollection;
+	}
+	
+	private Class[] defaultEditPartIncludes = null; 
+	private Class[] defaultModelIncludes = null;	
+	public Class[] getDefaultIncludes(boolean model) 
+	{
+		if (!model) {
+			if (defaultEditPartIncludes == null) {
+				defaultEditPartIncludes = new Class[5];
+				defaultEditPartIncludes[0] = RectangleEditPart.class;
+				defaultEditPartIncludes[1] = EllipseEditPart.class;
+				defaultEditPartIncludes[2] = LineEditPart.class;
+				defaultEditPartIncludes[3] = ImageEditPart.class;
+				defaultEditPartIncludes[4] = TextEditPart.class;				
+			}
+			return defaultEditPartIncludes;
+		}
+		else {
+			if (defaultModelIncludes == null) {
+				defaultModelIncludes = new Class[5];
+				defaultModelIncludes[0] = RectangleDrawComponent.class;
+				defaultModelIncludes[1] = EllipseDrawComponent.class;
+				defaultModelIncludes[2] = LineDrawComponent.class;
+				defaultModelIncludes[3] = ImageDrawComponent.class;
+				defaultModelIncludes[4] = TextDrawComponent.class;				
+			}
+			return defaultModelIncludes;
+		}
+	}	
+	
+	public Collection<Class> getDefaultIncludeList(boolean model) 
+	{
+		Class[] includes = getDefaultIncludes(model);
+		Collection includeCollection = new ArrayList<Class>(includes.length);		
+		for (int i=0; i<includes.length; i++) {
+			includeCollection.add(includes[i]);
+		}
+		return includeCollection;		
 	}
 	
 	public List getDefaultSelection(boolean model) 
