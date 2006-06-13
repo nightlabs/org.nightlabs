@@ -87,7 +87,7 @@ extends AbstractEditorSelectionAction
 
 	public void run() 
 	{
-		selectEditPart(drawComponentsWithSameName);
+		selectEditParts(drawComponentsWithSameName);
 	}
 
 	protected void init() 

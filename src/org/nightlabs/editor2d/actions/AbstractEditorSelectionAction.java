@@ -403,10 +403,21 @@ extends SelectionAction
 	 * of drawComponents  
 	 * @param drawComponents
 	 */
-	public void selectEditPart(List drawComponents) 
+	public void selectEditParts(List drawComponents) 
 	{
 		List editParts = getEditParts(drawComponents);
 		getGraphicalViewer().setSelection(new StructuredSelection(editParts));
+	}
+
+	/**
+	 * selects the EditParts in the GraphicalViewer for the the given List
+	 * of drawComponents  
+	 * @param drawComponents
+	 */
+	public void selectEditPart(DrawComponent dc) 
+	{
+		EditPart ep = getEditPart(dc);
+		getGraphicalViewer().setSelection(new StructuredSelection(ep));
 	}
 	
 	/**

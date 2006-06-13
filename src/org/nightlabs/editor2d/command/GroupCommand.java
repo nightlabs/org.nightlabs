@@ -57,6 +57,9 @@ extends Command
 	private Map<DrawComponent, DrawComponentContainer> drawComponent2OldParent = null;		
 	private Map<DrawComponent, Integer> drawComponent2OldParentIndex = null;	
 	private GroupDrawComponent group = null;	
+	public GroupDrawComponent getGroup() {
+		return group;
+	}
 
 	@Override
 	public void execute() 

@@ -53,6 +53,9 @@ extends Command
 	private GroupDrawComponent group = null;
 	private DrawComponentContainer groupParent = null;
 	private Collection<DrawComponent> groupedDcs = null;
+	public Collection<DrawComponent> getGroupedDrawComponents() {
+		return groupedDcs;
+	}
 	
 	@Override
 	public void execute() 

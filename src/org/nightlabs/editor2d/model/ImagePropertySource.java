@@ -53,23 +53,40 @@ extends DrawComponentPropertySource
 		return (ImageDrawComponent) drawComponent;
 	}
 	
+//	protected List createPropertyDescriptors() 
+//	{
+//		List descriptors = getDescriptors();
+//		// Name
+//		descriptors.add(createNamePD());
+//		// File Name
+//		descriptors.add(createFileNamePD());
+//		// X
+//		descriptors.add(createXPD());		
+//		// Y		
+//		descriptors.add(createYPD());		
+//		// Width		
+//		descriptors.add(createWidthPD());		
+//		// Height		
+//		descriptors.add(createHeightPD());		
+//		// Rotation		
+//		descriptors.add(createRotationPD());	
+//		// Bit Per Pixel
+//		descriptors.add(createBitsPerPixelPD());
+////		// Resolution Width
+////		descriptors.add(createResolutionWidthPD());
+////		// Resolution Height
+////		descriptors.add(createResolutionHeightPD());
+//		// Color Conversion
+//		descriptors.add(createColorConversionPD());
+//		
+//		return descriptors;
+//	}	
+
 	protected List createPropertyDescriptors() 
 	{
+		super.createPropertyDescriptors();
+		
 		List descriptors = getDescriptors();
-		// Name
-		descriptors.add(createNamePD());
-		// File Name
-		descriptors.add(createFileNamePD());
-		// X
-		descriptors.add(createXPD());		
-		// Y		
-		descriptors.add(createYPD());		
-		// Width		
-		descriptors.add(createWidthPD());		
-		// Height		
-		descriptors.add(createHeightPD());		
-		// Rotation		
-		descriptors.add(createRotationPD());	
 		// Bit Per Pixel
 		descriptors.add(createBitsPerPixelPD());
 //		// Resolution Width
@@ -81,7 +98,7 @@ extends DrawComponentPropertySource
 		
 		return descriptors;
 	}	
-	
+		
 	public Object getPropertyValue(Object id) 
 	{
 		if (id.equals(ImageDrawComponent.PROP_ORIGINAL_FILE_NAME)) {

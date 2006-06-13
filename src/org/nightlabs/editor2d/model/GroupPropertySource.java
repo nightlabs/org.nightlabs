@@ -52,11 +52,9 @@ extends DrawComponentPropertySource {
 	
 	protected List createPropertyDescriptors() 
 	{
+		super.createPropertyDescriptors();
+		
 		List descriptors = getDescriptors();
-		
-		// Name
-		descriptors.add(createNamePD());			
-		
 		// Group Amount
 		descriptors.add(createGroupAmountPropertyDescriptor());
 		

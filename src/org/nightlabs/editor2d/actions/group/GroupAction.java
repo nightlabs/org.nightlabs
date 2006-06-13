@@ -75,6 +75,8 @@ extends AbstractEditorSelectionAction
 		List<DrawComponent> selection = getSelection(getDefaultIncludes(true), true);
 		GroupCommand cmd = new GroupCommand(selection);
 		execute(cmd);
+		if (cmd.getGroup() != null)
+			selectEditPart(cmd.getGroup());
 	}
 	
 }
