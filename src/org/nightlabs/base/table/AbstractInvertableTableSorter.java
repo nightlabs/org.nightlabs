@@ -32,26 +32,31 @@ import org.eclipse.swt.SWT;
 /**
  * @author Christian Soltenborn - http://www.eclipsezone.com/eclipse/forums/t59401.html
  */
-public abstract class AbstractInvertableTableSorter extends InvertableSorter {
-	private final InvertableSorter inverse = new InvertableSorter() {
-		
-		public int compare(Viewer viewer, Object e1, Object e2) {
-			return (-1)*AbstractInvertableTableSorter.this.compare(viewer, e1, e2);
+public abstract class AbstractInvertableTableSorter<T> extends InvertableSorter<T> {
+	private final InvertableSorter inverse = new InvertableSorter<T>() {
+
+		@Override
+		public int _compare(Viewer viewer, T e1, T e2) {
+			return (-1) * AbstractInvertableTableSorter.this.compare(viewer, e1, e2);
 		}
 
+		@Override
 		InvertableSorter getInverseSorter() {
 			return AbstractInvertableTableSorter.this;
 		}
 
+		@Override
 		public int getSortDirection() {
 			return SWT.DOWN;
 		}
 	};
 
+	@Override
 	InvertableSorter getInverseSorter() {
 		return inverse;
 	}
 
+	@Override
 	public int getSortDirection() {
 		return SWT.UP;
 	}
