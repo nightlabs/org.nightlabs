@@ -55,22 +55,14 @@ extends ConfigModule
 		this.showStatusLine = showStatusLine;
 		setChanged(true);
 	}
-	
-//	protected boolean showFeedbackInfo = true;
-//	public boolean isShowFeedbackInfo() {
-//		return showFeedbackInfo;
-//	}
-//	public void setShowFeedbackInfo(boolean showFeedbackInfo) {
-//		this.showFeedbackInfo = showFeedbackInfo;
-//		setChanged(true);
-//	}
-	
+		
 	protected boolean showRollOver = false;
 	public boolean isShowRollOver() {
 		return showRollOver;
 	}
 	public void setShowRollOver(boolean showRollOver) {
 		this.showRollOver = showRollOver;
+		setChanged(true);
 	}
 	
 }

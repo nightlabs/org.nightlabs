@@ -47,8 +47,10 @@ implements ILabelProvider
 		sb.append(" ");
 		sb.append(""+pageSize.getUnit().getUnitSymbol());
 		sb.append(", ");
-		sb.append(""+pageSize.getResolution().getResolution());
+		sb.append(""+pageSize.getResolution().getResolutionX());
 		sb.append(" ");
+		sb.append(""+pageSize.getResolution().getResolutionY());
+		sb.append(" ");		
 		sb.append(""+pageSize.getResolution().getResolutionUnit().getResolutionID());
 		return sb.toString();		
 	}

@@ -30,23 +30,76 @@ package org.nightlabs.editor2d.properties;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.nightlabs.base.language.LanguageContributionItem;
 import org.nightlabs.base.language.LanguageManager;
+import org.nightlabs.editor2d.actions.UnitAction;
+import org.nightlabs.editor2d.model.DrawComponentPropertySource;
+import org.nightlabs.i18n.IUnit;
 
 public class EditorPropertyPage 
 extends PropertySheetPage
 {	
+	public static final Logger LOGGER = Logger.getLogger(EditorPropertyPage.class);
+	
 	public EditorPropertyPage() 
 	{
+		// TODO: make languages selectable
 		super();
 		langMan = LanguageManager.sharedInstance();
-		langMan.addPropertyChangeListener(languageListener);
+		langMan.addPropertyChangeListener(languageListener);		
 	}
 
+	@Override
+	public void createControl(Composite parent) 
+	{
+		super.createControl(parent);
+		
+		IMenuManager menuMan = getSite().getActionBars().getMenuManager();
+		makeUnitActions(menuMan);		
+	}
+
+	private UnitManager unitManager = new UnitManager();
+	public UnitManager getUnitManager() {
+		return unitManager;
+	}
+	public void setUnitManager(UnitManager unitManager) {
+		this.unitManager = unitManager;
+	}
+	
+	protected void makeUnitActions(IMenuManager menuMan) 
+	{
+		for (IUnit unit : getUnitManager().getUnits()) {
+			UnitAction action = new UnitAction(getUnitManager(), unit);
+			menuMan.add(action);
+		}
+	}
+	
+  public void selectionChanged(IWorkbenchPart part, ISelection selection) 
+  {
+  	super.selectionChanged(part, selection);
+    if (selection instanceof IStructuredSelection) 
+    {
+    	Object[] sel = ((IStructuredSelection) selection).toArray();
+    	for (int i=0; i<sel.length; i++) {
+    		Object o = sel[i];
+    		if (o instanceof DrawComponentPropertySource) {
+    			DrawComponentPropertySource dcps = (DrawComponentPropertySource) o;
+    			dcps.setUnit(getUnitManager().getCurrentUnit());
+    			LOGGER.debug("set currentUnit for DrawComponentPropertySource");
+    		}
+    	}
+    }  	
+  }	
+	
 	protected PropertyChangeListener languageListener = new PropertyChangeListener()
 	{	
 		public void propertyChange(PropertyChangeEvent evt) 

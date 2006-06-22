@@ -25,7 +25,6 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.model;
 
-import java.awt.Rectangle;
 import java.util.List;
 
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -34,8 +33,6 @@ import org.nightlabs.base.property.DoublePropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.PageDrawComponent;
-import org.nightlabs.editor2d.page.PageSize;
-import org.nightlabs.editor2d.properties.PageSelectPropertyDescriptor;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -58,23 +55,36 @@ extends DrawComponentPropertySource
 		
 		// Name
 		descriptors.add(createNamePD());			
-		// Resolution
-		descriptors.add(createResolutionPD());
 		// Orientation
 		descriptors.add(createOrientationPD());
+		// Width
+		descriptors.add(createPageWidthPD());
+		// Height
+		descriptors.add(createPageHeightPD());		
 		// Page Size
-		descriptors.add(createPageSizePD());
+//		descriptors.add(createPageSizePD());
+		// Resolution
+//		descriptors.add(createResolutionPD());
 		
 		return descriptors;
 	}
 	
-	protected PropertyDescriptor createResolutionPD() 
+	protected PropertyDescriptor createPageWidthPD() 
 	{
-		PropertyDescriptor desc = new DoublePropertyDescriptor(PageDrawComponent.PROP_RESOLUTION, 
-				EditorPlugin.getResourceString("property.resolution.label"), true);
+		PropertyDescriptor desc = new DoublePropertyDescriptor(PageDrawComponent.PROP_WIDTH,
+				EditorPlugin.getResourceString("property.width.label"), true);
+		desc.setCategory(CATEGORY_GEOM);
 		return desc;
 	}
 	
+	protected PropertyDescriptor createPageHeightPD() 
+	{
+		PropertyDescriptor desc = new DoublePropertyDescriptor(DrawComponent.PROP_HEIGHT,
+				EditorPlugin.getResourceString("property.height.label"), true);
+		desc.setCategory(CATEGORY_GEOM);
+		return desc;
+	}
+		
 	public static String getOrientationString(int orientation) 
 	{
 		if (orientation == PageDrawComponent.ORIENTATION_HORIZONTAL)
@@ -94,39 +104,7 @@ extends DrawComponentPropertySource
 		
 		return -1;
 	}
-	
-//	protected PropertyDescriptor createXPD() 
-//	{
-//		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_X,
-//				EditorPlugin.getResourceString("property.x.label"), true);
-//		desc.setCategory(CATEGORY_GEOM);
-//		return desc;
-//	}
-//	
-//	protected PropertyDescriptor createYPD() 
-//	{
-//		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_Y,
-//				EditorPlugin.getResourceString("property.y.label"), true);
-//		desc.setCategory(CATEGORY_GEOM);
-//		return desc;
-//	}
-//
-//	protected PropertyDescriptor createWidthPD() 
-//	{
-//		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_WIDTH,
-//				EditorPlugin.getResourceString("property.width.label"), true);
-//		desc.setCategory(CATEGORY_GEOM);
-//		return desc;
-//	}
-//
-//	protected PropertyDescriptor createHeightPD() 
-//	{
-//		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_HEIGHT,
-//				EditorPlugin.getResourceString("property.height.label"), true);
-//		desc.setCategory(CATEGORY_GEOM);
-//		return desc;
-//	}	
-	
+		
 	protected PropertyDescriptor createOrientationPD()
 	{
 		String horizontal = getOrientationString(PageDrawComponent.ORIENTATION_HORIZONTAL);
@@ -137,34 +115,47 @@ extends DrawComponentPropertySource
 		return desc;
 	}	
 	
-	protected PropertyDescriptor createPageSizePD()
-	{
-		PropertyDescriptor pd = new PageSelectPropertyDescriptor(PageDrawComponent.PROP_PAGE_BOUNDS,
-				EditorPlugin.getResourceString("property.pageBounds.label"));
-		return pd;
-	}
+//	protected PropertyDescriptor createResolutionPD() 
+//	{
+//		PropertyDescriptor desc = new DoublePropertyDescriptor(PageDrawComponent.PROP_RESOLUTION, 
+//				EditorPlugin.getResourceString("property.resolution.label"), true);
+//		return desc;
+//	}
+	
+//	protected PropertyDescriptor createPageSizePD()
+//	{
+//		PropertyDescriptor pd = new PageSelectPropertyDescriptor(PageDrawComponent.PROP_PAGE_BOUNDS,
+//				EditorPlugin.getResourceString("property.pageBounds.label"));
+//		return pd;
+//	}
 	
 	/**
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
 	public Object getPropertyValue(Object id) 
 	{
-		if (id.equals(PageDrawComponent.PROP_RESOLUTION)) {
-			return getPageDrawComponent().getResolution().getResolution();
-		}
-		else if (id.equals(PageDrawComponent.PROP_ORIENTATION)) {
+		if (id.equals(PageDrawComponent.PROP_ORIENTATION)) {
 			return getOrientationString(getPageDrawComponent().getOrientation());
 		}
 		else if (id.equals(DrawComponent.PROP_NAME)) {
 			return drawComponent.getI18nText().getText(nameLangMan.getCurrentLanguageID());
-		}			
-		else if (id.equals(PageDrawComponent.PROP_PAGE_BOUNDS)) {
-			PageSize pageSize = new PageSize();
-			pageSize.setPageHeight(getPageDrawComponent().getPageBounds().width);
-			pageSize.setPageWidth(getPageDrawComponent().getPageBounds().height);
-			pageSize.setResolution(getPageDrawComponent().getResolution());
-			return pageSize;
 		}
+		else if (id.equals(DrawComponent.PROP_WIDTH)) {
+			return new Double(getValue(getPageDrawComponent().getPageBounds().width, getUnit()));
+		}
+		else if (id.equals(DrawComponent.PROP_HEIGHT)) {
+			return new Double(getValue(getPageDrawComponent().getPageBounds().height, getUnit()));
+		}		
+//		else if (id.equals(MultiLayerDrawComponent.PROP_RESOLUTION)) {
+//			return getPageDrawComponent().getRoot().getResolution().getResolutionX();
+//		}		
+//		else if (id.equals(PageDrawComponent.PROP_PAGE_BOUNDS)) {
+//			PageSize pageSize = new PageSize();
+//			pageSize.setPageHeight(getPageDrawComponent().getPageBounds().width);
+//			pageSize.setPageWidth(getPageDrawComponent().getPageBounds().height);
+//			pageSize.setResolution(getPageDrawComponent().getResolution());
+//			return pageSize;
+//		}
 		return null;
 	}
 	
@@ -173,27 +164,29 @@ extends DrawComponentPropertySource
 	 */	
 	public void setPropertyValue(Object id, Object value) 
 	{
-		if (id.equals(PageDrawComponent.PROP_RESOLUTION)) 
-		{
-			getPageDrawComponent().getResolution().setResolution(((Double)value).doubleValue());
-		}
-		else if (id.equals(PageDrawComponent.PROP_ORIENTATION)) {
+		if (id.equals(PageDrawComponent.PROP_ORIENTATION)) {
 			int newOrientation = getOrientation((String)value);
 			getPageDrawComponent().setOrientation(newOrientation);
 		}
 		else if (id.equals(DrawComponent.PROP_NAME)) {
 			drawComponent.setName((String)value);
 		}
-		else if (id.equals(PageDrawComponent.PROP_PAGE_BOUNDS)) 
-		{
-			PageSize pageSize = (PageSize) value;
-			int defaultX = 25;
-			int defaultY = 25;
-			Rectangle pageBounds = new Rectangle(defaultX, defaultY, 
-					(int)pageSize.getPageWidth(), (int)pageSize.getPageHeight());
-			getPageDrawComponent().setPageBounds(pageBounds);
-			getPageDrawComponent().setResolution(pageSize.getResolution());
-		}		
-		
+//		else if (id.equals(MultiLayerDrawComponent.PROP_RESOLUTION)) 
+//		{
+//			double resolution = ((Double)value).doubleValue();
+//			getPageDrawComponent().getRoot().getResolution().setResolutionX(resolution);
+//			getPageDrawComponent().getRoot().getResolution().setResolutionY(resolution);
+//		}		
+//		else if (id.equals(PageDrawComponent.PROP_PAGE_BOUNDS)) 
+//		{
+//			PageSize pageSize = (PageSize) value;
+//			int defaultX = 25;
+//			int defaultY = 25;
+//			Rectangle pageBounds = new Rectangle(defaultX, defaultY, 
+//					(int)pageSize.getPageWidth(), (int)pageSize.getPageHeight());
+//			getPageDrawComponent().setPageBounds(pageBounds);
+//			getPageDrawComponent().setResolution(pageSize.getResolution());
+//		}				
 	}
+	
 }

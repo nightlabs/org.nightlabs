@@ -23,62 +23,58 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.config;
+package org.nightlabs.editor2d.properties;
 
-import org.nightlabs.config.ConfigModule;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.Collection;
+
+import org.nightlabs.editor2d.page.PageRegistryEP;
+import org.nightlabs.i18n.IUnit;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class QuickOptionsConfigModule 
-extends ConfigModule 
+public class UnitManager 
 {
-
-	public QuickOptionsConfigModule() {
-		super();
-	}
-
-	public static final int DEFAULT_MOVE_TRANSLATION = 25;
-	public static final int DEFAULT_CLONE_DISTANCE = 25;
-	
-	protected int moveTranslationX = DEFAULT_MOVE_TRANSLATION;
-	public int getMoveTranslationX() {
-		return moveTranslationX;
-	}
-	public void setMoveTranslationX(int moveTranslationX) {
-		this.moveTranslationX = moveTranslationX;
-		setChanged();
+	public UnitManager() {		
 	}
 	
-	protected int moveTranslationY = DEFAULT_MOVE_TRANSLATION;
-	public int getMoveTranslationY() {
-		return moveTranslationY;
-	}
-	public void setMoveTranslationY(int moveTranslationY) {
-		this.moveTranslationY = moveTranslationY;
-		setChanged();
-	}
+//	private Collection<IUnit> units = null;
+	public Collection<IUnit> getUnits() {
+		return PageRegistryEP.sharedInstance().getPageRegistry().getUnits();
+	}	
 	
-	protected int cloneDistanceX = DEFAULT_CLONE_DISTANCE;
-	public int getCloneDistanceX() {
-		return cloneDistanceX;
-	}
-	public void setCloneDistanceX(int cloneDistanceX) {
-		this.cloneDistanceX = cloneDistanceX;
-		setChanged();
-	}
-	
-	protected int cloneDistanceY = DEFAULT_CLONE_DISTANCE;
-	public int getCloneDistanceY() {
-		return cloneDistanceY;
-	}
-	public void setCloneDistanceY(int cloneDistanceY) {
-		this.cloneDistanceY = cloneDistanceY;
-		setChanged();
-	}
-	
-	public void init() 
-	{
-		
-	}
+  protected IUnit currentUnit = null;
+  public IUnit getCurrentUnit() {
+  	return currentUnit;
+  }
+  public void setCurrentUnit(IUnit unit) 
+  {
+  	IUnit oldUnit = currentUnit;
+  	this.currentUnit = unit;
+  	getPropertyChangeSupport().firePropertyChange(PROP_CURRENT_UNIT_CHANGED, oldUnit, currentUnit);
+  }
+  
+  public static final String PROP_CURRENT_UNIT_CHANGED = "currentUnit changed";
+  
+  private PropertyChangeSupport pcs = null;
+  protected PropertyChangeSupport getPropertyChangeSupport() {
+  	if (pcs == null)
+  		pcs = new PropertyChangeSupport(this);
+  	return pcs;
+  }
+  
+  public void addPropertyChangeListener(PropertyChangeListener pcl) {    	
+  	getPropertyChangeSupport().addPropertyChangeListener(pcl);
+  }
+  
+  public void removePropertyChangeListener(PropertyChangeListener pcl) {    	
+  	getPropertyChangeSupport().removePropertyChangeListener(pcl);
+  }
+  
+  public static double getFactor(IUnit unit1, IUnit unit2) 
+  {
+  	return unit1.getFactor() * unit2.getFactor();
+  }
 }

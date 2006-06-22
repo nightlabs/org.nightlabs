@@ -139,8 +139,6 @@ implements IAdaptable
         showPage(ID_OUTLINE);
       }
     };
-//    showOutlineAction.setImageDescriptor(ImageDescriptor.createFromFile(
-//      EditorPlugin.class,"icons/outline.gif")); //$NON-NLS-1$
     showOutlineAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
     		EditorPlugin.getDefault(), EditorOutlinePage.class, "Outline"));
     
@@ -152,8 +150,6 @@ implements IAdaptable
         showPage(ID_OVERVIEW);
       }
     };
-//    showOverviewAction.setImageDescriptor(ImageDescriptor.createFromFile(
-//      EditorPlugin.class,"icons/overview.gif")); //$NON-NLS-1$
     showOverviewAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
     		EditorPlugin.getDefault(), EditorOutlinePage.class, "Overview"));
     tbm.add(showOverviewAction);
@@ -194,8 +190,7 @@ implements IAdaptable
     pageBook = new PageBook(parent, SWT.NONE);
     outline = getViewer().createControl(pageBook);
     // TODO J2DCanvas maybe this is only TreeOutline 
-//    overview = new Canvas(pageBook, SWT.NONE);
-    
+//    overview = new Canvas(pageBook, SWT.NONE);    
 //    overview = new J2DCanvas(pageBook, SWT.NONE, new J2DSamplePaintable("TestMessage"));    
     overview = new J2DCanvas(pageBook, SWT.NONE, new MLDCPaintable(editor.getMultiLayerDrawComponent()));    
     pageBook.showPage(outline);

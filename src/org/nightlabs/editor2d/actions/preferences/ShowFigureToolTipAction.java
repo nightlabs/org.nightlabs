@@ -28,12 +28,10 @@ package org.nightlabs.editor2d.actions.preferences;
 import java.util.Iterator;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalEditPart;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
 import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
-import org.nightlabs.editor2d.figures.DrawComponentFigure;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

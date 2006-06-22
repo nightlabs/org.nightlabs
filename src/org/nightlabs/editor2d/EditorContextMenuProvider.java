@@ -103,22 +103,22 @@ extends ContextMenuProvider
   	
   	// Copy
   	action = getActionRegistry().getAction(CopyAction.ID);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
   	  	  	
   	// Paste
   	action = getActionRegistry().getAction(PasteAction.ID);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);  	
   	
   	// Cut
   	action = getActionRegistry().getAction(CutAction.ID);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
   	  	
   	// Delete
   	action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
   	// Direct Edit
@@ -182,19 +182,19 @@ extends ContextMenuProvider
   protected void buildOrderSubMenu(MenuManager menuMan) 
   {
   	IAction action = getActionRegistry().getAction(ChangeOrderToLocalFront.ID);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   	  menuMan.add(action);    
 
   	action = getActionRegistry().getAction(ChangeOrderOneUp.ID);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   	  menuMan.add(action);      	
 
   	action = getActionRegistry().getAction(ChangeOrderOneDown.ID);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   	  menuMan.add(action);      	  	
   	
   	action = getActionRegistry().getAction(ChangeOrderToLocalBack.ID);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   	  menuMan.add(action);    
   	
   	menuMan.add(new Separator());
@@ -260,40 +260,40 @@ extends ContextMenuProvider
   	menuMan.add(action);  	  	
   	
   	action = getActionRegistry().getAction(GroupAction.ID);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   		menuMan.add(action);  	  	
   		
   	action = getActionRegistry().getAction(UnGroupAction.ID);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   		menuMan.add(action);  	  	  	
   }
   
   protected void buildAlignSubMenu(MenuManager menuMan) 
   {
   	IAction action = getActionRegistry().getAction(GEFActionConstants.ALIGN_LEFT);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   	  menuMan.add(action);
 
   	action = getActionRegistry().getAction(GEFActionConstants.ALIGN_CENTER);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   	  menuMan.add(action);
 
   	action = getActionRegistry().getAction(GEFActionConstants.ALIGN_RIGHT);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   	  menuMan.add(action);
   		
   	menuMan.add(new Separator());
   	
   	action = getActionRegistry().getAction(GEFActionConstants.ALIGN_TOP);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   	  menuMan.add(action);
 
   	action = getActionRegistry().getAction(GEFActionConstants.ALIGN_MIDDLE);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   	  menuMan.add(action);
 
   	action = getActionRegistry().getAction(GEFActionConstants.ALIGN_BOTTOM);
-  	if (action.isEnabled())
+//  	if (action.isEnabled())
   	  menuMan.add(action);    
   }
   

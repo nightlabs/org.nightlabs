@@ -142,17 +142,17 @@ extends DrawComponentPropertySource
 		
 		double resolution = -1;
 		if (width)
-			resolution = img.getResolutionWidth().getResolution(); 
+			resolution = img.getResolutionWidth().getResolutionX(); 
 		else
-			resolution = img.getResolutionHeight().getResolution();
+			resolution = img.getResolutionHeight().getResolutionY();
 		
 		if (unit.getResolutionID().equals(dpiUnit.getResolutionID())) {
 			return new Double(resolution);
 		}
 		else 
 		{ 			
-			double oldfactor = dpiUnit.getFactor();
-			double dpiResolution = (resolution * unit.getFactor()) / oldfactor;
+			double oldfactor = dpiUnit.getUnit().getFactor();
+			double dpiResolution = (resolution * unit.getUnit().getFactor()) / oldfactor;
 			return new Double(dpiResolution);
 		}
 	}

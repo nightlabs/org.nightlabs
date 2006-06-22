@@ -115,22 +115,20 @@ extends AbstractEPProcessor
 			if (!checkString(name))
 				throw new EPProcessorException("unit name must not be null nor empty! for element "+element);
 			
-			double factor = 1;
-			try {
-				factor = Double.parseDouble(element.getAttribute(ATTRIBUTE_FACTOR));				
-			} catch (NumberFormatException e) {
-				throw new EPProcessorException("unit "+name+" has no valid factor ("+element.getAttribute(ATTRIBUTE_FACTOR)+")!", e);				
-			}
-			
 			String resolutionID = element.getAttribute(ATTRIBUTE_RESOLUTION_ID);
 			if (!checkString(resolutionID))
 				throw new EPProcessorException("resolutionID must not be null nor empty! for element "+element);
 			
-			IResolutionUnit unit = new ResolutionUnit();
-			unit.setName(Locale.getDefault().getLanguage(), name);
-			unit.setFactor(factor);
-			unit.setResolutionID(resolutionID);
-			registry.addResolutionUnit(unit);
+			IResolutionUnit resUnit = new ResolutionUnit();
+			try {
+				IUnit unit = (IUnit) element.createExecutableExtension("unit");
+				resUnit.setName(Locale.getDefault().getLanguage(), name);
+				resUnit.setResolutionID(resolutionID);
+				resUnit.setUnit(unit);
+				registry.addResolutionUnit(resUnit);				
+			} catch (CoreException ce) {
+				throw new EPProcessorException(ce); 
+			}			
 		}
 		else if (element.getName().equalsIgnoreCase(ELEMENT_PREDEFINED_PAGE)) 
 		{

@@ -27,6 +27,7 @@
 
 package org.nightlabs.editor2d.edit;
 
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,8 +108,8 @@ extends AbstractDrawComponentContainerEditPart
 		
 	  Figure f = new OversizedBufferFreeformLayer();
 	  ((BufferedFreeformLayer)f).init(this);
-//	  addScrollListener();
 	  
+//	  addScrollListener();	  
 //		Figure f = new FreeformLayer();
 		
 		f.setLayoutManager(new FreeformLayout());				
@@ -192,13 +193,16 @@ extends AbstractDrawComponentContainerEditPart
         new MultiLayerDrawComponentPropertySource(getMultiLayerDrawComponent());
     }
     return propertySource;
-  }   
-  
-//  public DragTracker getDragTracker(Request req){
-//  	if (req instanceof SelectionRequest 
-//  		&& ((SelectionRequest)req).getLastButtonPressed() == 3)
-//  			return new DeselectAllTracker(this);
-//  	return new MarqueeDragTracker();
-//  }  
-  	
+  }
+	@Override
+	protected void propertyChanged(PropertyChangeEvent evt) 
+	{
+		String propertyName = evt.getPropertyName();
+		if (propertyName.equals(MultiLayerDrawComponent.PROP_RESOLUTION)) {
+			refresh();
+			return;			
+		}
+		super.propertyChanged(evt);
+	}   
+    
 }

@@ -32,6 +32,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -40,6 +41,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +50,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.J2DGraphics;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -107,6 +110,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
+import org.holongate.j2d.J2DRegistry;
 import org.nightlabs.base.io.FileEditorInput;
 import org.nightlabs.base.io.IOFilterRegistry;
 import org.nightlabs.base.language.LanguageManager;
@@ -140,9 +144,14 @@ import org.nightlabs.editor2d.outline.EditorOutlinePage;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 import org.nightlabs.editor2d.outline.filter.NameProvider;
 import org.nightlabs.editor2d.page.IPredefinedPage;
+import org.nightlabs.editor2d.page.PageRegistry;
+import org.nightlabs.editor2d.page.PageRegistryEP;
 import org.nightlabs.editor2d.page.predefined.A4Page;
+import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
+import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.Resolution;
 import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
+import org.nightlabs.editor2d.preferences.Preferences;
 import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintPreviewAction;
 import org.nightlabs.editor2d.print.EditorPrintSetupAction;
@@ -151,6 +160,7 @@ import org.nightlabs.editor2d.render.RenderModeManager;
 import org.nightlabs.editor2d.rulers.EditorRulerProvider;
 import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 import org.nightlabs.editor2d.viewer.render.RendererRegistry;
+import org.nightlabs.i18n.IUnit;
 import org.nightlabs.io.AbstractIOFilterWithProgress;
 import org.nightlabs.io.IOFilter;
 import org.nightlabs.io.IOFilterMan;
@@ -289,9 +299,18 @@ extends J2DGraphicalEditorWithFlyoutPalette
     public AbstractEditor() 
     {
       setEditDomain(new DefaultEditDomain(this));            
-      filterMan = new FilterManager(getFilterNameProvider());           
+      filterMan = new FilterManager(getFilterNameProvider()); 
+//      initJ2DRegistry();
     }
-                      
+          
+//    protected void initJ2DRegistry() 
+//    {
+//    	Map hints = new HashMap();
+//      hints.put(J2DGraphics.KEY_FIXED_LINEWIDTH, true);
+//      hints.put(J2DGraphics.KEY_USE_JAVA2D, true);
+//    	J2DRegistry.setHints(hints);    	    	
+//    }
+    
     protected MultiLayerDrawComponent load(IOFilter ioFilter, InputStream input) 
     {      
       if (ioFilter != null) 
@@ -506,6 +525,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	
     	if (type == RenderModeManager.class)
     		return getRenderModeManager();
+
+    	if (type == MultiLayerDrawComponent.class)
+    		return getMultiLayerDrawComponent();
     	
       return super.getAdapter(type);
     }
@@ -1137,49 +1159,68 @@ extends J2DGraphicalEditorWithFlyoutPalette
         FileEditorInput fileInput = (FileEditorInput) input; 
         mldc = getMultiLayerDrawComponent();        
         if (!fileInput.isSaved()) {
-        	createNewMultiLayerDrawComponent();
+        	initialzePage();
         } else {        	
           load(fileInput);        	
         }        
 //        System.gc();      	      	
       } 
       else
-      	createNewMultiLayerDrawComponent();
+      	initialzePage();
         
       mldc.setRenderModeManager(getRenderModeManager());      
       getMultiLayerDrawComponent().setLanguageId(getLanguageManager().getCurrentLanguageID());      
     }
-        
-    protected void createNewMultiLayerDrawComponent() 
+               
+    protected void initialzePage() 
     {
+    	LOGGER.debug("initialize Page!");
     	mldc = getMultiLayerDrawComponent();
     	loadAdditional();
+    	    	
+    	String pageID = Preferences.getPreferenceStore().getString(
+    			Preferences.PREF_PREDEFINED_PAGE_ID);
+    	IPredefinedPage defaultPage = getPageRegistry().getPredefinedPage(pageID);
+    	String resolutionUnitID = Preferences.getPreferenceStore().getString(
+    			Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID);
+    	IResolutionUnit resUnit = getPageRegistry().getResolutionUnit(resolutionUnitID);
+    	Resolution resolution = new ResolutionImpl(resUnit, 
+    			Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION)); 
+//    	String unitID = Preferences.getPreferenceStore().getString(
+//    			Preferences.PREF_STANDARD_UNIT_ID);
+//    	setCurrentUnit(getPageRegistry().getUnit(unitID));
     	
-    	// TODO: pageDialog must open somewhere else, to avoid popup at startup
-//  	  CreatePageDialog pageDialog = new CreatePageDialog(getSite().getShell());
-//  	  if (pageDialog.open() == Dialog.OK) 
-//  	  {
-//  	  	double pageHeight = pageDialog.getPageComposite().getPageHeight();
-//  	  	double pageWidth = pageDialog.getPageComposite().getPageWidth();
-//  	  	IUnit unit = pageDialog.getPageComposite().getUnit();
-//  	  	Resolution resolution = pageDialog.getPageComposite().getResolution();
-//  	  	int defaultX = 25;
-//  	  	int defaultY = 25;
-//  	  	Rectangle pageBounds = new Rectangle(defaultX, defaultY, (int)pageWidth, (int)pageHeight);
-//  	  	getMultiLayerDrawComponent().setResolution(resolution);  	  	
-//  	  	getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds);  	  	
-//  	  }
-    	IPredefinedPage defaultPage = new A4Page();
-    	Resolution resolution = new ResolutionImpl();
     	double pageHeight = defaultPage.getPageHeight();
     	double pageWidth = defaultPage.getPageWidth();
+    	
+    	LOGGER.debug("pageHeight = "+pageHeight);
+    	LOGGER.debug("pageWidth = "+pageWidth);
+    	
 	  	int defaultX = 25;
 	  	int defaultY = 25;
+	  	double factorX = resUnit.getUnit().getFactor() * 100; // * 100 because reference for IResolutionUnit is DPCM (cm) and unit for A4Page is mm
+	  	double factorY = resUnit.getUnit().getFactor() * 100; // * 100 because reference for IResolutionUnit is DPCM (cm) and unit for A4Page is mm
+	  	
+    	LOGGER.debug("factorX = "+factorX);
+    	LOGGER.debug("factorY = "+factorY);
+	  	
+	  	pageWidth = factorX * pageWidth;
+	  	pageHeight = factorY * pageHeight;
+
+    	LOGGER.debug("new PageHeight = "+pageHeight);
+    	LOGGER.debug("new PageWidth = "+pageWidth);
+	  	
 	  	Rectangle pageBounds = new Rectangle(defaultX, defaultY, (int)pageWidth, (int)pageHeight);
+	  	LOGGER.debug("pageBounds = "+pageBounds);
+	  	
 	  	getMultiLayerDrawComponent().setResolution(resolution);  	  	
 	  	getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds);  	  	    	    	
     }
-        
+    
+    protected PageRegistry getPageRegistry() {
+    	return PageRegistryEP.sharedInstance().getPageRegistry();
+    }
+    
     protected void loadAdditional() {
       if (!editorSaving) {
         if (getGraphicalViewer() != null) {

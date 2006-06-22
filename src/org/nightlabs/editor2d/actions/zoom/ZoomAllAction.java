@@ -28,11 +28,9 @@
 package org.nightlabs.editor2d.actions.zoom;
 
 import org.eclipse.gef.editparts.ZoomManager;
-
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
-import org.nightlabs.editor2d.custom.EditorImages;
 
 
 public class ZoomAllAction 

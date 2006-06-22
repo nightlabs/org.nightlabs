@@ -23,62 +23,36 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.config;
+package org.nightlabs.editor2d.preferences;
 
-import org.nightlabs.config.ConfigModule;
+import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.nightlabs.editor2d.EditorPlugin;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class QuickOptionsConfigModule 
-extends ConfigModule 
+public class EditorPreferencePage 
+extends PreferencePage 
+implements IWorkbenchPreferencePage
 {
 
-	public QuickOptionsConfigModule() {
-		super();
+	@Override
+	protected Control createContents(Composite parent) 
+	{
+		Label l = new Label(parent, SWT.NONE);
+		l.setText(EditorPlugin.getResourceString("preferences.label.welcome"));
+		l.setLayoutData(new GridData(GridData.FILL_BOTH));
+		return l;
 	}
 
-	public static final int DEFAULT_MOVE_TRANSLATION = 25;
-	public static final int DEFAULT_CLONE_DISTANCE = 25;
-	
-	protected int moveTranslationX = DEFAULT_MOVE_TRANSLATION;
-	public int getMoveTranslationX() {
-		return moveTranslationX;
-	}
-	public void setMoveTranslationX(int moveTranslationX) {
-		this.moveTranslationX = moveTranslationX;
-		setChanged();
-	}
-	
-	protected int moveTranslationY = DEFAULT_MOVE_TRANSLATION;
-	public int getMoveTranslationY() {
-		return moveTranslationY;
-	}
-	public void setMoveTranslationY(int moveTranslationY) {
-		this.moveTranslationY = moveTranslationY;
-		setChanged();
-	}
-	
-	protected int cloneDistanceX = DEFAULT_CLONE_DISTANCE;
-	public int getCloneDistanceX() {
-		return cloneDistanceX;
-	}
-	public void setCloneDistanceX(int cloneDistanceX) {
-		this.cloneDistanceX = cloneDistanceX;
-		setChanged();
-	}
-	
-	protected int cloneDistanceY = DEFAULT_CLONE_DISTANCE;
-	public int getCloneDistanceY() {
-		return cloneDistanceY;
-	}
-	public void setCloneDistanceY(int cloneDistanceY) {
-		this.cloneDistanceY = cloneDistanceY;
-		setChanged();
-	}
-	
-	public void init() 
-	{
-		
-	}
+	public void init(IWorkbench workbench) {
+		noDefaultAndApplyButton();	
+	}	
 }

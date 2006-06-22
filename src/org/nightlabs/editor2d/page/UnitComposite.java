@@ -23,62 +23,83 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.config;
+package org.nightlabs.editor2d.page;
 
-import org.nightlabs.config.ConfigModule;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.i18n.IUnit;
 
 /**
+ * a Composite which has a Combo for selecting {@link IUnit}s
+ * 
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class QuickOptionsConfigModule 
-extends ConfigModule 
+public class UnitComposite 
+extends XComposite 
 {
-
-	public QuickOptionsConfigModule() {
-		super();
-	}
-
-	public static final int DEFAULT_MOVE_TRANSLATION = 25;
-	public static final int DEFAULT_CLONE_DISTANCE = 25;
-	
-	protected int moveTranslationX = DEFAULT_MOVE_TRANSLATION;
-	public int getMoveTranslationX() {
-		return moveTranslationX;
-	}
-	public void setMoveTranslationX(int moveTranslationX) {
-		this.moveTranslationX = moveTranslationX;
-		setChanged();
+	public UnitComposite(Composite parent, int style) {
+		super(parent, style);
+		this.units = new ArrayList<IUnit>(getPageRegistry().getUnits());
+		createComposite(this);
 	}
 	
-	protected int moveTranslationY = DEFAULT_MOVE_TRANSLATION;
-	public int getMoveTranslationY() {
-		return moveTranslationY;
-	}
-	public void setMoveTranslationY(int moveTranslationY) {
-		this.moveTranslationY = moveTranslationY;
-		setChanged();
+	public UnitComposite(Composite parent, int style, Collection<IUnit> units) {
+		super(parent, style);
+		this.units = new ArrayList<IUnit>(units);
+		createComposite(this);
 	}
 	
-	protected int cloneDistanceX = DEFAULT_CLONE_DISTANCE;
-	public int getCloneDistanceX() {
-		return cloneDistanceX;
-	}
-	public void setCloneDistanceX(int cloneDistanceX) {
-		this.cloneDistanceX = cloneDistanceX;
-		setChanged();
-	}
-	
-	protected int cloneDistanceY = DEFAULT_CLONE_DISTANCE;
-	public int getCloneDistanceY() {
-		return cloneDistanceY;
-	}
-	public void setCloneDistanceY(int cloneDistanceY) {
-		this.cloneDistanceY = cloneDistanceY;
-		setChanged();
-	}
-	
-	public void init() 
+	public UnitComposite(Composite parent, int style, LayoutMode layoutMode,
+			LayoutDataMode layoutDataMode, Collection<IUnit> units) 
 	{
-		
+		super(parent, style, layoutMode, layoutDataMode);
+		this.units = new ArrayList<IUnit>(units);
+		createComposite(this);
 	}
+
+	public UnitComposite(Composite parent, int style, LayoutMode layoutMode,
+			LayoutDataMode layoutDataMode) 
+	{
+		super(parent, style, layoutMode, layoutDataMode);
+		this.units = new ArrayList<IUnit>(getPageRegistry().getUnits());
+		createComposite(this);
+	}	
+	
+	private List<IUnit> units = null;
+	private Combo combo = null;
+	public Combo getCombo() {
+		return combo;
+	}
+	
+	protected void createComposite(Composite parent) 
+	{
+		combo = new Combo(parent, SWT.BORDER | SWT.READ_ONLY);
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		for (IUnit unit : units) {
+			combo.add(unit.getUnitSymbol());
+		}
+	}
+	
+	public IUnit getSelectedUnit() {
+		return units.get(combo.getSelectionIndex());
+	}
+	
+	public void selectUnit(IUnit unit) 
+	{
+		int index = units.indexOf(unit);
+		if (index != -1)
+			combo.select(index);
+	}
+	
+	protected PageRegistry getPageRegistry() 
+	{
+		return PageRegistryEP.sharedInstance().getPageRegistry();
+	}	
 }

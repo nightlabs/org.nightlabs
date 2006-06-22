@@ -54,8 +54,8 @@ import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.Resolution;
 import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
-import org.nightlabs.editor2d.page.unit.MMUnit;
 import org.nightlabs.i18n.IUnit;
+import org.nightlabs.i18n.unit.MMUnit;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -141,6 +141,7 @@ extends XComposite
 		c.setLayout(new GridLayout(2, false));
 		c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
+		// TODO: make it possible to determine resolutionX and resolutionY
 		resolutionText = toolkit.createText(c, "", textStyle);
 		resolutionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		resolutionUnitsCombo = toolkit.createCombo(c, SWT.BORDER);
@@ -155,7 +156,7 @@ extends XComposite
 		populateUnitsCombo(registry);
 		populateResolutionUnits(registry);
 		
-		resolutionText.setText(""+getResolution().getResolution());
+		resolutionText.setText(""+getResolution().getResolutionX());
 		addListener();
 	}
 	
@@ -229,7 +230,8 @@ extends XComposite
 			widgetSelected(e);
 		}	
 		public void widgetSelected(SelectionEvent e) {
-			resolution.setResolution(Integer.valueOf(resolutionText.getText()));
+			resolution.setResolutionX(Integer.valueOf(resolutionText.getText()));
+			resolution.setResolutionY(Integer.valueOf(resolutionText.getText()));
 		}	
 	};
 	
@@ -241,7 +243,7 @@ extends XComposite
 		public void widgetSelected(SelectionEvent e) {
 			IResolutionUnit unit = resolutionUnits.get(resolutionUnitsCombo.getSelectionIndex());
 			resolution.setResolutionUnit(unit);
-			resolutionText.setText(""+resolution.getResolution());
+			resolutionText.setText(""+resolution.getResolutionX());
 		}	
 	};	
 
@@ -253,7 +255,7 @@ extends XComposite
 		public void widgetSelected(SelectionEvent e) {
 			IResolutionUnit unit = resolutionUnits.get(resolutionUnitsCombo.getSelectionIndex());
 			resolution.setResolutionUnit(unit);
-			resolutionText.setText(""+resolution.getResolution());
+			resolutionText.setText(""+resolution.getResolutionX());
 		}	
 	};	
 	

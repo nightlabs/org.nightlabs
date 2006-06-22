@@ -289,11 +289,13 @@
       <ResolutionUnit
             factor="2.54"
             name="DPI"
-            resolutionID="DPI"/>
+            resolutionID="DPI"
+            unit="org.nightlabs.i18n.unit.InchUnit"/>
       <ResolutionUnit
             factor="1"
             name="DPCM"
-            resolutionID="DPCM"/>
+            resolutionID="DPCM"
+            unit="org.nightlabs.i18n.unit.CMUnit"/>
       <PredefinedPage
             name="DIN A4"
             page="org.nightlabs.editor2d.page.predefined.A4Page"
@@ -306,7 +308,25 @@
             name="DIN A5"
             page="org.nightlabs.editor2d.page.predefined.A5Page"
             pageID="A5"/>
-   </extension>      
+      <Unit
+            factor="0.35278"
+            name="point"
+            symbol="pt"
+            unitID="point"/>
+   </extension>  
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.nightlabs.editor2d.preferences.EditorPreferencePage"
+            id="org.nightlabs.editor2d"
+            name="%preferences.category.name"/>
+      <page
+            category="org.nightlabs.editor2d"
+            class="org.nightlabs.editor2d.preferences.DocumentPropertiesPreferencePage"
+            id="org.nightlabs.editor2d.resolution"
+            name="%preferences.document.properties.title"/>
+   </extension>
+       
 <!--
    <extension
          point="org.eclipse.ui.popupMenus">

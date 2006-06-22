@@ -103,18 +103,21 @@ http://en.wikipedia.org/wiki/ISO_31-1
                </appInfo>
             </annotation>
          </attribute>
-         <attribute name="factor" type="string" use="required">
-            <annotation>
-               <documentation>
-                  the calculation factor for transforming a value from the standard unit DPCM (dots per centimeter) into this one
-               </documentation>
-            </annotation>
-         </attribute>
          <attribute name="resolutionID" type="string" use="required">
             <annotation>
                <documentation>
                   the unique name of the resolution unit (e.g. DPI)
                </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="unit" type="string" use="required">
+            <annotation>
+               <documentation>
+                  a class which implements the interface org.nightlabs.i18n.IUnit
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.i18n.IUnit"/>
+               </appInfo>
             </annotation>
          </attribute>
       </complexType>

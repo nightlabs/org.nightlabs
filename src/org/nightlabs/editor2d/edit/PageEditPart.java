@@ -56,11 +56,6 @@ extends AbstractDrawComponentContainerEditPart
 	
   protected IFigure createFigure() 
   {    
-//  	DrawComponentFigure f = new ContainerDrawComponentFigure();
-//    f.setDrawComponent(getDrawComponent());    
-//    addRenderer(f);
-    
-//  	IFigure f = new ContainerFreeformLayer();  	
   	RendererFigure f = new PageFreeformFigure();
     f.setDrawComponent(getPageDrawComponent());    
     addRenderer(f);
@@ -80,11 +75,11 @@ extends AbstractDrawComponentContainerEditPart
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{
 		String propertyName = evt.getPropertyName();
-		if (propertyName.equals(PageDrawComponent.PROP_RESOLUTION)) {
-			refresh();
-			return;
-		}
-		else if (propertyName.equals(PageDrawComponent.PROP_ORIENTATION)) {
+//		if (propertyName.equals(PageDrawComponent.PROP_RESOLUTION)) {
+//			refresh();
+//			return;
+//		}
+		if (propertyName.equals(PageDrawComponent.PROP_ORIENTATION)) {
 			refresh();
 			return;
 		}

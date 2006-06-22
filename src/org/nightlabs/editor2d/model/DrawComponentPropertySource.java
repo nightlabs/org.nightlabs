@@ -37,11 +37,18 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.nightlabs.base.language.LanguageManager;
+import org.nightlabs.base.property.DoublePropertyDescriptor;
 import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.page.PageRegistryEP;
+import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
+import org.nightlabs.editor2d.page.unit.DotUnit;
+import org.nightlabs.editor2d.preferences.Preferences;
 import org.nightlabs.editor2d.properties.NamePropertyDescriptor;
 import org.nightlabs.editor2d.properties.RotationPropertyDescriptor;
+import org.nightlabs.editor2d.properties.UnitManager;
+import org.nightlabs.i18n.IUnit;
 import org.nightlabs.language.LanguageCf;
 
 public class DrawComponentPropertySource 
@@ -56,6 +63,11 @@ implements IPropertySource
 	public DrawComponentPropertySource(DrawComponent element) 
 	{
 		this.drawComponent = element;
+		
+		String unitID = Preferences.getPreferenceStore().getString(
+				Preferences.PREF_STANDARD_UNIT_ID);
+		unit = PageRegistryEP.sharedInstance().getPageRegistry().getUnit(unitID);
+		
 		descriptors = createPropertyDescriptors();
 		nameLangMan = LanguageManager.sharedInstance();	
 		nameLangMan.addPropertyChangeListener(langListener);
@@ -75,6 +87,35 @@ implements IPropertySource
 			}
 		}	
 	};
+	
+	private IUnit unit = new DotUnit(new ResolutionImpl());
+	public IUnit getUnit() {
+		return unit;
+	}
+	public void setUnit(IUnit unit) {
+		this.unit = unit;
+	}
+	
+//	public PropertyChangeListener unitListener = new PropertyChangeListener()
+//	{
+//		public void propertyChange(PropertyChangeEvent evt) 
+//		{
+//			if (evt.getPropertyName().equals(UnitManager.PROP_CURRENT_UNIT_CHANGED)) 
+//			{
+//				unit = (IUnit) evt.getNewValue();
+//			}
+//		}			
+//	};
+	
+	public double getValue(int modelValue, IUnit unit) 
+	{
+		return modelValue;
+	}
+		
+	public int getSetValue(double value, IUnit unit) 
+	{
+		return (int) Math.rint(value);
+	}	
 	
 	/**
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getEditableValue()
@@ -125,7 +166,7 @@ implements IPropertySource
 	
 	protected PropertyDescriptor createXPD() 
 	{
-		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_X,
+		PropertyDescriptor desc = new DoublePropertyDescriptor(DrawComponent.PROP_X,
 				EditorPlugin.getResourceString("property.x.label"));
 		desc.setCategory(CATEGORY_GEOM);
 		return desc;
@@ -133,7 +174,7 @@ implements IPropertySource
 	
 	protected PropertyDescriptor createYPD() 
 	{
-		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_Y,
+		PropertyDescriptor desc = new DoublePropertyDescriptor(DrawComponent.PROP_Y,
 				EditorPlugin.getResourceString("property.y.label"));
 		desc.setCategory(CATEGORY_GEOM);
 		return desc;
@@ -141,7 +182,7 @@ implements IPropertySource
 
 	protected PropertyDescriptor createWidthPD() 
 	{
-		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_WIDTH,
+		PropertyDescriptor desc = new DoublePropertyDescriptor(DrawComponent.PROP_WIDTH,
 				EditorPlugin.getResourceString("property.width.label"));
 		desc.setCategory(CATEGORY_GEOM);
 		return desc;
@@ -149,7 +190,7 @@ implements IPropertySource
 
 	protected PropertyDescriptor createHeightPD() 
 	{
-		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_HEIGHT,
+		PropertyDescriptor desc = new DoublePropertyDescriptor(DrawComponent.PROP_HEIGHT,
 				EditorPlugin.getResourceString("property.height.label"));
 		desc.setCategory(CATEGORY_GEOM);
 		return desc;
@@ -194,16 +235,16 @@ implements IPropertySource
 	public Object getPropertyValue(Object id) 
 	{
 		if (id.equals(DrawComponent.PROP_X)) {
-			return new Integer(drawComponent.getX());
+			return new Double(getValue(drawComponent.getX(), getUnit()));
 		}
 		else if (id.equals(DrawComponent.PROP_Y)) {
-			return new Integer(drawComponent.getY());
+			return new Double(getValue(drawComponent.getY(), getUnit()));
 		}
 		else if (id.equals(DrawComponent.PROP_WIDTH)) {
-			return new Integer(drawComponent.getWidth());
+			return new Double(getValue(drawComponent.getWidth(), getUnit()));
 		}
 		else if (id.equals(DrawComponent.PROP_HEIGHT)) {
-			return new Integer(drawComponent.getHeight());
+			return new Double(getValue(drawComponent.getHeight(), getUnit()));
 		}
 		else if (id.equals(DrawComponent.PROP_ROTATION)) {
 			return new Double(drawComponent.getRotation());
@@ -240,19 +281,23 @@ implements IPropertySource
 	public void setPropertyValue(Object id, Object value) 
 	{
 		if (id.equals(DrawComponent.PROP_X)) {
-			drawComponent.setX(((Integer)value).intValue());
+			double x = ((Double)value).doubleValue();
+			drawComponent.setX(getSetValue(x, getUnit()));
 			return;
 		}
 		else if (id.equals(DrawComponent.PROP_Y)) {
-			drawComponent.setY(((Integer)value).intValue());
+			double y = ((Double)value).doubleValue();
+			drawComponent.setY(getSetValue(y, getUnit()));
 			return;
 		}
 		else if (id.equals(DrawComponent.PROP_WIDTH)) {
-			drawComponent.setWidth(((Integer)value).intValue());
+			double width = ((Double)value).doubleValue();
+			drawComponent.setWidth(getSetValue(width, getUnit()));
 			return;
 		}
 		else if (id.equals(DrawComponent.PROP_HEIGHT)) {
-			drawComponent.setHeight(((Integer)value).intValue());
+			double height = ((Double)value).doubleValue();
+			drawComponent.setHeight(getSetValue(height, getUnit()));
 			return;
 		}
 		else if (id.equals(DrawComponent.PROP_ROTATION)) {
