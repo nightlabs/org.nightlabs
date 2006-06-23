@@ -30,14 +30,13 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Layout;
 
 public class XComposite extends Composite
 {
 	private ChildStatusController childStatusController = new ChildStatusController();
 
 	public static enum LayoutMode {
-		ORDINARY_WRAPPER, TIGHT_WRAPPER
+		ORDINARY_WRAPPER, TIGHT_WRAPPER, TOP_BOTTOM_WRAPPER, LEFT_RIGHT_WRAPPER 
 	}
 
 	public static enum LayoutDataMode {
@@ -114,6 +113,22 @@ public class XComposite extends Composite
 				layout.marginTop = 0;
 				layout.marginBottom = 0;
 				return layout;
+			case TOP_BOTTOM_WRAPPER:
+				if (layout == null)
+					layout = new GridLayout();					
+				layout.verticalSpacing = 0;
+				layout.marginHeight = 0;
+				layout.marginTop = 0;
+				layout.marginBottom = 0;
+				return layout;
+			case LEFT_RIGHT_WRAPPER:
+				if (layout == null)
+					layout = new GridLayout();					
+				layout.horizontalSpacing = 0;
+				layout.marginWidth = 0;
+				layout.marginLeft = 0;
+				layout.marginRight = 0;
+				return layout;				
 			default:
 				throw new IllegalArgumentException("layoutMode = " + layoutMode + " is unknown!");
 		}		
@@ -189,19 +204,6 @@ public class XComposite extends Composite
 
 		setLayout(getLayout(layoutMode));
 		setLayoutDataMode(layoutDataMode, this);
-//		switch (layoutDataMode) {
-//			case NONE:
-//				// nothing
-//				break;
-//			case GRID_DATA:
-//				GridData gridData = new GridData(GridData.FILL_BOTH);
-////				gridData.minimumHeight = 1;
-////				gridData.minimumWidth = 1;
-//				setLayoutData(gridData);
-//				break;
-//			default:
-//				throw new IllegalArgumentException("layoutDataMode = " + layoutDataMode + " is unknown!");
-//		}
 	}
 
 	/**

@@ -58,7 +58,7 @@ extends CellEditor
   protected Control createControl(Composite parent) 
   {	
   	Composite panel = new Composite(parent, SWT.DEFAULT);  	
-	  comboBox = new LanguageChooserImageCombo(panel, false);
+	  comboBox = new LanguageChooserImageCombo(panel);
 	  textEditor = new I18nTextEditor(panel, getLanguageChooser());
 	  
 	  return panel;

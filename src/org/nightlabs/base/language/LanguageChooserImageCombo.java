@@ -35,6 +35,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -52,25 +53,27 @@ extends AbstractLanguageChooser
 	protected List languages = new ArrayList();
 	
 	public LanguageChooserImageCombo(Composite parent) {
-		this(parent, true);
+		this(parent, true, true);
 	}
 	
-	public LanguageChooserImageCombo(Composite parent, boolean grabExcessHorizontalSpace)
+	protected SelectionListener comboSelectionListener = new SelectionAdapter() 
+	{
+		public void widgetSelected(SelectionEvent selectionEvent)
+		{
+			LOGGER.debug("new language: "+getLanguage().getLanguageID());
+			fireLanguageChangeEvent();
+		}
+	};
+ 
+	public LanguageChooserImageCombo(Composite parent, boolean showImage, boolean showText)
 	{
 		super(parent, SWT.NONE, true);
-		((GridData)getLayoutData()).grabExcessVerticalSpace = false;
-		((GridData)getLayoutData()).grabExcessHorizontalSpace = grabExcessHorizontalSpace;
+		if (!showImage && !showText)
+			throw new IllegalArgumentException("either showImage or showText must be true!");
+		
 		combo = new ColorCombo(this, SWT.BORDER | SWT.READ_ONLY);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.addSelectionListener(
-				new SelectionAdapter() {
-					public void widgetSelected(SelectionEvent selectionEvent)
-					{
-						LOGGER.debug("new language: "+getLanguage().getLanguageID());
-						fireLanguageChangeEvent();
-					}
-				});
-
+		combo.addSelectionListener(comboSelectionListener);
 		try {
 			// TODO We should load the languages only once into the client!
 			// They usually don't change...
@@ -83,7 +86,12 @@ extends AbstractLanguageChooser
 		  		languageIdx = languages.size();
 		  	languages.add(language);
 		  	Image image = LanguageManager.getImage(language.getLanguageID());
-		  	combo.add(image, language.getNativeName());
+		  	if (showImage && showText)
+		  		combo.add(image, language.getNativeName());
+		  	else if (showImage && !showText)
+		  		combo.add(image, "");
+		  	else if (!showImage && showText)
+		  		combo.add(null, language.getNativeName());		  	
 		  }
 
 		  if (languageIdx < 0)

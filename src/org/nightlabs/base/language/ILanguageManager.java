@@ -27,10 +27,14 @@
 package org.nightlabs.base.language;
 
 import java.util.Collection;
+import java.util.Locale;
+
+import org.nightlabs.language.LanguageCf;
 
 public interface ILanguageManager
 {
 	/** 
+	 * @deprecated use {@link Locale#getDefault()}<code>.getLanguage()</code> instead
 	 * @return the current languageID
 	 */	
 	public String getCurrentLanguageID();
@@ -44,9 +48,10 @@ public interface ILanguageManager
 	/** 
 	 * @return a java.util.Collection which contains @link{org.nightlabs.language.LanguageCf}s
 	 */
-	public Collection getLanguages();
+	public Collection<LanguageCf> getLanguages();
 	
 	/** 
+	 * @deprecated use {@link Locale#setDefault(Locale)} instead
 	 * @param newLanguageID the id of the new Language
 	 */
 	public void setCurrentLanguageID(String newLanguageID); 

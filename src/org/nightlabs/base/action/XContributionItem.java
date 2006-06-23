@@ -29,6 +29,8 @@ package org.nightlabs.base.action;
 import java.lang.reflect.Field;
 
 import org.eclipse.jface.action.ContributionItem;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Control;
 
 public class XContributionItem
 extends ContributionItem
@@ -65,4 +67,16 @@ implements IXContributionItem
 	{
 		this.enabled = enabled;
 	}
+	
+  /**
+   * Computes the width required by control
+   * 
+   * @param control The control to compute width
+   * @return int The width required
+   */
+  protected int computeWidth(Control control) 
+  {
+  	int width = control.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x;
+  	return width;
+  }  	
 }
