@@ -29,24 +29,36 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Collection;
 
+import org.nightlabs.editor2d.page.PageRegistry;
 import org.nightlabs.editor2d.page.PageRegistryEP;
+import org.nightlabs.editor2d.page.unit.DotUnit;
 import org.nightlabs.i18n.IUnit;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
 public class UnitManager 
-{
-	public UnitManager() {		
+{	
+	private Collection<IUnit> units = null;
+	public Collection<IUnit> getUnits() 
+	{
+		if (units == null)
+			units = getPageRegistry().getUnits();
+		return units;
+	}	
+	public void setUnits(Collection<IUnit> units) {
+		this.units = units;
 	}
 	
-//	private Collection<IUnit> units = null;
-	public Collection<IUnit> getUnits() {
-		return PageRegistryEP.sharedInstance().getPageRegistry().getUnits();
-	}	
+	public PageRegistry getPageRegistry() {
+		return PageRegistryEP.sharedInstance().getPageRegistry();
+	}
 	
   protected IUnit currentUnit = null;
-  public IUnit getCurrentUnit() {
+  public IUnit getCurrentUnit() 
+  {
+  	if (currentUnit == null)
+  		currentUnit = getPageRegistry().getUnit(DotUnit.UNIT_ID);   		
   	return currentUnit;
   }
   public void setCurrentUnit(IUnit unit) 
@@ -73,8 +85,8 @@ public class UnitManager
   	getPropertyChangeSupport().removePropertyChangeListener(pcl);
   }
   
-  public static double getFactor(IUnit unit1, IUnit unit2) 
-  {
-  	return unit1.getFactor() * unit2.getFactor();
-  }
+//  public static double getFactor(IUnit unit1, IUnit unit2) 
+//  {
+//  	return unit1.getFactor() * unit2.getFactor();
+//  }
 }

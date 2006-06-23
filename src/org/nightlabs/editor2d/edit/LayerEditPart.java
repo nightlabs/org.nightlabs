@@ -96,7 +96,7 @@ extends AbstractDrawComponentContainerEditPart
 		}
 	}
 	
-  protected IPropertySource getPropertySource()
+  public IPropertySource getPropertySource()
   {
     if (propertySource == null){
       propertySource = new LayerPropertySource(getLayer());

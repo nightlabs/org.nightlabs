@@ -49,7 +49,7 @@ extends ShapeDrawComponentEditPart
 		return (EllipseDrawComponent) getModel();
 	}
 	
-  protected IPropertySource getPropertySource()
+  public IPropertySource getPropertySource()
   {
     if (propertySource == null)
     {

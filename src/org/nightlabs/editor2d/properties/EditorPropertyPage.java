@@ -27,23 +27,12 @@
 
 package org.nightlabs.editor2d.properties;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.nightlabs.base.language.LanguageContributionItem;
-import org.nightlabs.base.language.LanguageManager;
-import org.nightlabs.editor2d.actions.UnitAction;
-import org.nightlabs.editor2d.model.DrawComponentPropertySource;
-import org.nightlabs.i18n.IUnit;
 
 public class EditorPropertyPage 
 extends PropertySheetPage
@@ -52,22 +41,11 @@ extends PropertySheetPage
 	
 	public EditorPropertyPage() 
 	{
-		// TODO: make languages selectable
-		super();
-		langMan = LanguageManager.sharedInstance();
-		langMan.addPropertyChangeListener(languageListener);		
+		super();		
+		unitManager = new UnitManager();		
 	}
 
-	@Override
-	public void createControl(Composite parent) 
-	{
-		super.createControl(parent);
-		
-		IMenuManager menuMan = getSite().getActionBars().getMenuManager();
-		makeUnitActions(menuMan);		
-	}
-
-	private UnitManager unitManager = new UnitManager();
+	private UnitManager unitManager = null;
 	public UnitManager getUnitManager() {
 		return unitManager;
 	}
@@ -75,67 +53,17 @@ extends PropertySheetPage
 		this.unitManager = unitManager;
 	}
 	
-	protected void makeUnitActions(IMenuManager menuMan) 
-	{
-		for (IUnit unit : getUnitManager().getUnits()) {
-			UnitAction action = new UnitAction(getUnitManager(), unit);
-			menuMan.add(action);
-		}
-	}
-	
-  public void selectionChanged(IWorkbenchPart part, ISelection selection) 
-  {
-  	super.selectionChanged(part, selection);
-    if (selection instanceof IStructuredSelection) 
-    {
-    	Object[] sel = ((IStructuredSelection) selection).toArray();
-    	for (int i=0; i<sel.length; i++) {
-    		Object o = sel[i];
-    		if (o instanceof DrawComponentPropertySource) {
-    			DrawComponentPropertySource dcps = (DrawComponentPropertySource) o;
-    			dcps.setUnit(getUnitManager().getCurrentUnit());
-    			LOGGER.debug("set currentUnit for DrawComponentPropertySource");
-    		}
-    	}
-    }  	
-  }	
-	
-	protected PropertyChangeListener languageListener = new PropertyChangeListener()
-	{	
-		public void propertyChange(PropertyChangeEvent evt) 
-		{
-			if (!getControl().isDisposed()) {
-				refresh();
-			}			
-		}	
-	}; 
-	
-//	protected LanguageChangeListener langListener = new LanguageChangeListener()
-//	{	
-//		public void languageChanged(LanguageChangeEvent event) 
-//		{			
-//			if (!getControl().isDisposed()) {
-//				refresh();
-//			}
-//		}	
-//	};
-		
-	protected LanguageManager langMan = null;
-	
-	protected LanguageContributionItem langContribution = null;
   public void makeContributions(IMenuManager menuManager,
       IToolBarManager toolBarManager, IStatusLineManager statusLineManager) 
   {
-//  	langContribution = new LanguageContributionItem(langMan);
+//  	LanguageContributionItem langContribution = new LanguageContributionItem();
 //  	toolBarManager.add(langContribution);
   	
-  	super.makeContributions(menuManager, toolBarManager, statusLineManager);  	
+  	UnitContributionItem unitContributionItem = new UnitContributionItem(getUnitManager());
+  	unitContributionItem.selectUnit(getUnitManager().getCurrentUnit());
+  	toolBarManager.add(unitContributionItem);
   	
-//  	Collection languageActions = makeLanguageActions();
-//  	for (Iterator it = languageActions.iterator(); it.hasNext(); ) {
-//  		LanguageAction action = (LanguageAction) it.next();
-//  		menuManager.add(action);
-//  	}  	
+  	super.makeContributions(menuManager, toolBarManager, statusLineManager);  	  	
   }
   
 //  protected Collection makeLanguageActions() 
@@ -149,4 +77,64 @@ extends PropertySheetPage
 //  	return languageActions;
 //  }
   
+//	protected LanguageChangeListener langListener = new LanguageChangeListener()
+//	{	
+//		public void languageChanged(LanguageChangeEvent event) 
+//		{			
+//			if (!getControl().isDisposed()) {
+//				refresh();
+//			}
+//		}	
+//	};
+  
+//	private PropertyChangeListener languageListener = new PropertyChangeListener()
+//	{	
+//		public void propertyChange(PropertyChangeEvent evt) 
+//		{
+//			if (!getControl().isDisposed()) {
+//				refresh();
+//			}			
+//		}	
+//	};
+	
+//	@Override
+//	public void createControl(Composite parent) 
+//	{
+//		super.createControl(parent);
+//		
+//		IMenuManager menuMan = getSite().getActionBars().getMenuManager();
+//		makeUnitActions(menuMan);		
+//	}
+//	
+//	protected void makeUnitActions(IMenuManager menuMan) 
+//	{
+//		for (IUnit unit : getUnitManager().getUnits()) {
+//			UnitAction action = new UnitAction(getUnitManager(), unit);
+//			menuMan.add(action);
+//		}
+//	}
+//	
+//	public void selectionChanged(IWorkbenchPart part, ISelection selection) 
+//	{
+//		super.selectionChanged(part, selection);
+//	  if (selection instanceof IStructuredSelection) 
+//	  {
+//	  	Object[] sel = ((IStructuredSelection) selection).toArray();
+//	  	for (int i=0; i<sel.length; i++) 
+//	  	{
+//	  		Object o = sel[i];
+//	  		if (o instanceof AbstractDrawComponentEditPart) {
+//	  			AbstractDrawComponentEditPart ep = (AbstractDrawComponentEditPart) o;
+//	  			IPropertySource ps = ep.getPropertySource();
+//	  			if (ps instanceof DrawComponentPropertySource) {
+//	    			DrawComponentPropertySource dcps = (DrawComponentPropertySource) ps;
+//	    			IUnit currentUnit = getUnitManager().getCurrentUnit();
+//	    			dcps.setUnit(currentUnit);
+//	    			LOGGER.debug("set currentUnit "+currentUnit+" for DrawComponentPropertySource "+dcps+" of EditPart "+ep);    				
+//	  			}
+//	  		}
+//	  	}
+//	  }  	
+//	}	
+	
 }

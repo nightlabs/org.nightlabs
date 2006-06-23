@@ -64,7 +64,7 @@ extends AbstractDrawComponentContainerEditPart
 		return f;  
   }	
   
-  protected IPropertySource getPropertySource()
+  public IPropertySource getPropertySource()
   {
     if (propertySource == null) {
       propertySource = new PagePropertySource(getPageDrawComponent());

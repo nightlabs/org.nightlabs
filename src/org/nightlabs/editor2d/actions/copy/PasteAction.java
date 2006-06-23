@@ -30,7 +30,6 @@ import java.util.List;
 
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.swt.SWT;
 import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;

@@ -79,7 +79,7 @@ extends ShapeDrawComponentEditPart
   /* (non-Javadoc)
    * @see com.ibm.itso.sal330r.gefdemo.edit.WorkflowElementEditPart#getPropertySource()
    */
-  protected IPropertySource getPropertySource()
+  public IPropertySource getPropertySource()
   {
     if (propertySource == null)
     {
@@ -89,48 +89,6 @@ extends ShapeDrawComponentEditPart
     return propertySource;
   } 
   
-//  public void notifyChanged(Notification notification)
-//  {
-//    int type = notification.getEventType();
-//    int featureId = notification.getFeatureID(Editor2DPackage.class);
-//   
-//    if (type == Notification.SET)
-//    {
-//      switch (featureId)
-//      {
-//        case Editor2DPackage.TEXT_DRAW_COMPONENT__ANTI_ALIASING : 
-//          LOGGER.debug("TEXT_DRAW_COMPONENT__ANTI_ALIASING Notified!");         
-//          refreshVisuals();
-//          break;
-//        case Editor2DPackage.TEXT_DRAW_COMPONENT__FONT : 
-//          LOGGER.debug("TEXT_DRAW_COMPONENT__FONT Notified!");         
-//          refreshVisuals();
-//          break;              
-//        case Editor2DPackage.TEXT_DRAW_COMPONENT__TEXT : 
-//          LOGGER.debug("TEXT_DRAW_COMPONENT__TEXT Notified!");         
-//          refreshVisuals();
-//          break;
-//        case Editor2DPackage.TEXT_DRAW_COMPONENT__BOLD : 
-//          LOGGER.debug("TEXT_DRAW_COMPONENT__BOLD Notified!");         
-//          refreshVisuals();
-//          break;                        
-//        case Editor2DPackage.TEXT_DRAW_COMPONENT__ITALIC : 
-//          LOGGER.debug("TEXT_DRAW_COMPONENT__ITALIC Notified!");         
-//          refreshVisuals();
-//          break;                        
-//        case Editor2DPackage.TEXT_DRAW_COMPONENT__FONT_SIZE : 
-//          LOGGER.debug("TEXT_DRAW_COMPONENT__FONT_SIZE Notified!");         
-//          refreshVisuals();
-//          break;   
-//        case Editor2DPackage.TEXT_DRAW_COMPONENT__FONT_NAME : 
-//          LOGGER.debug("TEXT_DRAW_COMPONENT__FONT_NAME Notified!");         
-//          refreshVisuals();
-//          break;           
-//      }
-//    }
-//    super.notifyChanged(notification);
-//  }
-
 //  protected IFigure createFigure() 
 //  {
 //    TextFigure textFigure = new TextFigure();

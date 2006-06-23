@@ -49,7 +49,7 @@ extends DrawComponentEditPart
     return (ImageDrawComponent) getModel();
   }
   
-  protected IPropertySource getPropertySource()
+  public IPropertySource getPropertySource()
   {
     if (propertySource == null) 
     {

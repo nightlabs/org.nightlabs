@@ -605,8 +605,12 @@ implements EditorRequestConstants
   protected Point getFeedbackTextLocation(ChangeBoundsRequest request) 
   {
   	Point loc = request.getLocation();
-  	loc.translate(EditorUtil.getScrollOffset(getHost()));
-  	return loc;
+  	if (loc != null) {
+  		loc.translate(EditorUtil.getScrollOffset(getHost()));  	
+  		return loc;  		
+  	} else {
+  		return new Point();
+  	}
   }
   
   protected String getText(ChangeBoundsRequest request) 

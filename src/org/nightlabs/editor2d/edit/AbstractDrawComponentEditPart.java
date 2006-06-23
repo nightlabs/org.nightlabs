@@ -54,9 +54,7 @@ extends AbstractGraphicalEditPart
 implements EditorRequestConstants
 {
   public static final Logger LOGGER = Logger.getLogger(AbstractDrawComponentEditPart.class);
-  
-  protected IPropertySource propertySource = null;
-  
+    
   public AbstractDrawComponentEditPart(DrawComponent drawComponent) 
   {
     setModel(drawComponent);
@@ -212,7 +210,7 @@ implements EditorRequestConstants
     }
   }
       
-  /* (non-Javadoc)
+  /**
    * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
    */
   public Object getAdapter(Class key)
@@ -228,10 +226,11 @@ implements EditorRequestConstants
     return super.getAdapter(key);
   }
   
-  /* (non-Javadoc)
+  protected IPropertySource propertySource = null;  
+  /**
    * @see com.ibm.itso.sal330r.gefdemo.edit.WorkflowElementEditPart#getPropertySource()
    */
-  protected IPropertySource getPropertySource()
+  public IPropertySource getPropertySource()
   {
     if (propertySource == null)
     {

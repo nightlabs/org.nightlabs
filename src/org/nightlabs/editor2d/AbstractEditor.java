@@ -32,7 +32,6 @@ import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -41,7 +40,6 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.EventObject;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +48,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
-import org.eclipse.draw2d.J2DGraphics;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -110,7 +107,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
-import org.holongate.j2d.J2DRegistry;
 import org.nightlabs.base.io.FileEditorInput;
 import org.nightlabs.base.io.IOFilterRegistry;
 import org.nightlabs.base.language.LanguageManager;
@@ -146,11 +142,10 @@ import org.nightlabs.editor2d.outline.filter.NameProvider;
 import org.nightlabs.editor2d.page.IPredefinedPage;
 import org.nightlabs.editor2d.page.PageRegistry;
 import org.nightlabs.editor2d.page.PageRegistryEP;
-import org.nightlabs.editor2d.page.predefined.A4Page;
-import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.Resolution;
 import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
+import org.nightlabs.editor2d.page.unit.DotUnit;
 import org.nightlabs.editor2d.preferences.Preferences;
 import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintPreviewAction;
@@ -415,7 +410,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
       viewer.setEditPartFactory(getEditPartFactory());
       ContextMenuProvider provider = getContextMenuProvider();
       viewer.setContextMenu(provider);
-      // TODO: ContextMenu ID Problem
       getSite().registerContextMenu("org.nightlabs.editor2d.contextmenu", //$NON-NLS-1$
           provider, viewer);
       viewer.setKeyHandler(new EditorViewerKeyHandler(viewer)
@@ -467,7 +461,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			public void stackChanged(CommandStackEvent event) 
 			{
 				updateViewer();
-				// TODO: check for createCommands and set name from NameProvider
 			}		
 		};				
     
@@ -1152,8 +1145,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
     {
       super.setInput(input);
       renderMan = RendererRegistry.sharedInstance().getRenderModeManager();
-//      renderMan.logRegisteredRenderer(1);
-//      renderMan.logRenderContexts();
       
       if (input instanceof FileEditorInput) {
         FileEditorInput fileInput = (FileEditorInput) input; 
@@ -1181,6 +1172,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	String pageID = Preferences.getPreferenceStore().getString(
     			Preferences.PREF_PREDEFINED_PAGE_ID);
     	IPredefinedPage defaultPage = getPageRegistry().getPredefinedPage(pageID);
+    	IUnit pageUnit = defaultPage.getUnit();    	
     	String resolutionUnitID = Preferences.getPreferenceStore().getString(
     			Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID);
     	IResolutionUnit resUnit = getPageRegistry().getResolutionUnit(resolutionUnitID);
@@ -1190,27 +1182,32 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //    			Preferences.PREF_STANDARD_UNIT_ID);
 //    	setCurrentUnit(getPageRegistry().getUnit(unitID));
     	
-    	double pageHeight = defaultPage.getPageHeight();
-    	double pageWidth = defaultPage.getPageWidth();
-    	
+    	// TODO: make this recalulation in MultiLayerDrawComponent.setResolution()
+    	double pageHeight = defaultPage.getPageHeight() * pageUnit.getFactor();
+    	double pageWidth = defaultPage.getPageWidth() * pageUnit.getFactor();    	
+
     	LOGGER.debug("pageHeight = "+pageHeight);
-    	LOGGER.debug("pageWidth = "+pageWidth);
+    	LOGGER.debug("pageWidth = "+pageWidth);    		  	
+
+    	DotUnit dotUnit = (DotUnit) getPageRegistry().getUnit(DotUnit.UNIT_ID);
+    	dotUnit.setResolution(resolution);    	
+    	double factor = 1 / dotUnit.getFactor();
+    	LOGGER.debug("factor = "+factor);
     	
-	  	int defaultX = 25;
-	  	int defaultY = 25;
-	  	double factorX = resUnit.getUnit().getFactor() * 100; // * 100 because reference for IResolutionUnit is DPCM (cm) and unit for A4Page is mm
-	  	double factorY = resUnit.getUnit().getFactor() * 100; // * 100 because reference for IResolutionUnit is DPCM (cm) and unit for A4Page is mm
-	  	
-    	LOGGER.debug("factorX = "+factorX);
-    	LOGGER.debug("factorY = "+factorY);
-	  	
-	  	pageWidth = factorX * pageWidth;
-	  	pageHeight = factorY * pageHeight;
+    	pageWidth = pageWidth * factor;
+    	pageHeight = pageHeight * factor;
 
     	LOGGER.debug("new PageHeight = "+pageHeight);
     	LOGGER.debug("new PageWidth = "+pageWidth);
-	  	
-	  	Rectangle pageBounds = new Rectangle(defaultX, defaultY, (int)pageWidth, (int)pageHeight);
+    	
+//	  	double defaultX = 25;
+//	  	double defaultY = 25;
+//	  	defaultX = defaultX * factor;
+//	  	defaultY = defaultY * factor;
+	  	double defaultX = 0;
+	  	double defaultY = 0;
+    	
+	  	Rectangle pageBounds = new Rectangle((int)defaultX, (int)defaultY, (int)pageWidth, (int)pageHeight);
 	  	LOGGER.debug("pageBounds = "+pageBounds);
 	  	
 	  	getMultiLayerDrawComponent().setResolution(resolution);  	  	

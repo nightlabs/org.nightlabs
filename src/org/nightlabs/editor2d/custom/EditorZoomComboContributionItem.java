@@ -27,6 +27,7 @@
 
 package org.nightlabs.editor2d.custom;
 
+import java.awt.Toolkit;
 import java.text.DecimalFormat;
 
 import org.apache.log4j.Logger;
@@ -107,33 +108,23 @@ extends ContributionItem
   {
   	if (combo == null || combo.isDisposed())
   		return;
-  	//$TODO GTK workaround
-  	try {
-  		if (zoomManager == null) {
-  			combo.setEnabled(false);
-  			combo.setText(""); //$NON-NLS-1$
-  		} else {
-  			if (repopulateCombo) {
-  				combo.setItems(getZoomManager().getZoomLevelsAsText());
-  			}
-  			String zoom = getZoomManager().getZoomAsText();
-  			LOGGER.debug("zoomText = "+zoom);
-  			int index = combo.indexOf(zoom);
-  			if (index != -1)
-  				combo.select(index);
-  			else {
-  				combo.setText(zoom); 
-  				
-//  				zoom = getZoomAsText(oldZoom, 1.0);
-//  				LOGGER.debug("newZoomText = "+zoom);
-//  				combo.setText(zoom);
-  			}
-  			combo.setEnabled(true);
-  		}
-  	} catch (SWTException exception) {
-  		if (!SWT.getPlatform().equals("gtk")) //$NON-NLS-1$
-  			throw exception;
-  	}
+		if (zoomManager == null) {
+			combo.setEnabled(false);
+			combo.setText(""); //$NON-NLS-1$
+		} else {
+			if (repopulateCombo) {
+				combo.setItems(getZoomManager().getZoomLevelsAsText());
+			}
+			String zoom = getZoomManager().getZoomAsText();
+			LOGGER.debug("zoomText = "+zoom);
+			int index = combo.indexOf(zoom);
+			if (index != -1)
+				combo.select(index);
+			else {
+				combo.setText(zoom); 				
+			}
+			combo.setEnabled(true);
+		}
   }
   
   private DecimalFormat format = new DecimalFormat("####%"); //$NON-NLS-1$
@@ -154,31 +145,10 @@ extends ContributionItem
   {	
 		public void zoomChanged(double zoom) 
 		{
+	  	LOGGER.debug("zoom = "+zoom);			
 			refresh(false);
 		}	
 	};
-	
-//  /**
-//   * @see ZoomListener#zoomChanged(double)
-//   */
-//  public void zoomChanged(double zoom) 
-//  {
-//  	if (zoomChangedInternal) {
-//  		refresh(false);
-//  		zoomChangedInternal = false;
-//  	} else {
-////  		oldZoom = zoomManager.getZoom();
-////  		zoomManager.setZoom(getNewZoom());
-//  	}
-//  }
-
-  /**
-   * @see ZoomListener#zoomChanged(double)
-   */
-  public void zoomChanged(double zoom) 
-  {
-  	refresh(false);
-  }
 	
   /**
    * Computes the width required by control
@@ -193,7 +163,6 @@ extends ContributionItem
   	return width;
   }
 	
-  private boolean zoomChangedInternal = false;
   protected SelectionListener comboSelectionListener = new SelectionListener() 
   {
 		public void widgetSelected(SelectionEvent e) 
@@ -202,15 +171,13 @@ extends ContributionItem
 	  	{
 	  		if (combo.getSelectionIndex() >= 0) {
 	  			zoomManager.setZoomAsText(combo.getItem(combo.getSelectionIndex()));
-	  			oldZoom = zoomManager.getZoom();
-	  			zoomChangedInternal = true;
-	  			zoomManager.setZoom(getNewZoom());
+//	  			oldZoom = zoomManager.getZoom();
+//	  			zoomManager.setZoom(getNewZoom());
 	  		}
 	  		else {
 	  			zoomManager.setZoomAsText(combo.getText());
-	  			oldZoom = zoomManager.getZoom();
-	  			zoomChangedInternal = true;
-	  			zoomManager.setZoom(getNewZoom());
+//	  			oldZoom = zoomManager.getZoom();
+//	  			zoomManager.setZoom(getNewZoom());
 	  		}
 	  	}
 	  	refresh(false);
@@ -327,7 +294,7 @@ extends ContributionItem
 		public void partOpened(IWorkbenchPart p) { }
 	};
 
-	private double[] initalZoomValues = new double[] {0.001, 0.01, 0.1, 0.25, 0.5, 1.0, 2.0, 3.0, 5.0, 10.0};
+	private double[] initalZoomValues = new double[] {0.001, 0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 2.0, 3.0, 5.0, 10.0};
 	public double[] getZoomLevels(double factor) 
 	{
 		if (factor == 1)
@@ -353,10 +320,18 @@ extends ContributionItem
   		zoomManager.removeZoomListener(zoomListener);
 
   	zoomManager = zm;
+
+//  	double factor = 1 / getFactor();
+  	double factor = getFactor();  	
+  	LOGGER.debug("factor = "+factor);
   	
-  	double factor = 1 / getMaxFactor();
-		zoomManager.setZoomLevels(getZoomLevels(getMaxFactor()));
-		zoomManager.setUIMultiplier(factor);
+//		zoomManager.setZoomLevels(getZoomLevels(1/factor));
+//  	zoomManager.setZoom(1/factor);  	
+//		zoomManager.setUIMultiplier(factor);
+
+		zoomManager.setZoomLevels(getZoomLevels(factor));
+		zoomManager.setUIMultiplier(1/factor);		
+  	zoomManager.setZoom(factor);  	
   	
   	refresh(true);
 
@@ -367,9 +342,12 @@ extends ContributionItem
 	private Resolution deviceResolution = null;
 	public Resolution getDeviceResolution() 
 	{
-		if (deviceResolution == null)
-			deviceResolution = new ResolutionImpl(new DPIResolutionUnit(), 72, 72);
-		return deviceResolution;
+		if (deviceResolution == null) {
+			int dpi = Toolkit.getDefaultToolkit().getScreenResolution();
+			deviceResolution = new ResolutionImpl(new DPIResolutionUnit(), dpi, dpi);
+			LOGGER.debug("ScreenResolution (DPI) = "+dpi);
+		}
+		return deviceResolution;		
 	}
 	
 	public double getDeviceResolutionX(IResolutionUnit unit) {
@@ -401,33 +379,16 @@ extends ContributionItem
   	return new ResolutionImpl();
   }	
     
-  private IResolutionUnit defaultResolutionUnit = new DPIResolutionUnit();
-  private double oldZoom = 1.0;
-  public double getOldZoom() {
-  	return oldZoom;
-  }
-  
-  public double getNewZoom() 
-  {
-  	LOGGER.debug("oldZoom = "+oldZoom);
-  	LOGGER.debug("factor = "+getMaxFactor());
-  	double newZoom = oldZoom * getMaxFactor(); 
-  	LOGGER.debug("newZoom = "+newZoom);
-  	return newZoom;   
-  }
-  
-  public double getMaxFactor() 
-  {
+  public double getFactor() {
   	return Math.max(getFactorX(), getFactorY());
   }
   
-  public double getFactorX() 
-  {
+  private IResolutionUnit defaultResolutionUnit = new DPIResolutionUnit();  
+  public double getFactorX() {
   	return getDeviceResolutionX(defaultResolutionUnit) / getDocumentResolutionX(defaultResolutionUnit);  	
   }
   
-  public double getFactorY() 
-  {
+  public double getFactorY() {
   	return getDeviceResolutionY(defaultResolutionUnit) / getDocumentResolutionY(defaultResolutionUnit);  	
   }
   

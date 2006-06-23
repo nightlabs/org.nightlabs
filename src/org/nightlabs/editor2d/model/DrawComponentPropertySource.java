@@ -41,13 +41,11 @@ import org.nightlabs.base.property.DoublePropertyDescriptor;
 import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.page.PageRegistry;
 import org.nightlabs.editor2d.page.PageRegistryEP;
-import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
 import org.nightlabs.editor2d.page.unit.DotUnit;
-import org.nightlabs.editor2d.preferences.Preferences;
 import org.nightlabs.editor2d.properties.NamePropertyDescriptor;
 import org.nightlabs.editor2d.properties.RotationPropertyDescriptor;
-import org.nightlabs.editor2d.properties.UnitManager;
 import org.nightlabs.i18n.IUnit;
 import org.nightlabs.language.LanguageCf;
 
@@ -63,11 +61,7 @@ implements IPropertySource
 	public DrawComponentPropertySource(DrawComponent element) 
 	{
 		this.drawComponent = element;
-		
-		String unitID = Preferences.getPreferenceStore().getString(
-				Preferences.PREF_STANDARD_UNIT_ID);
-		unit = PageRegistryEP.sharedInstance().getPageRegistry().getUnit(unitID);
-		
+				
 		descriptors = createPropertyDescriptors();
 		nameLangMan = LanguageManager.sharedInstance();	
 		nameLangMan.addPropertyChangeListener(langListener);
@@ -88,12 +82,26 @@ implements IPropertySource
 		}	
 	};
 	
-	private IUnit unit = new DotUnit(new ResolutionImpl());
-	public IUnit getUnit() {
+	private IUnit unit = null;
+	public IUnit getUnit() 
+	{
+		if (unit == null)
+			unit = getPageRegistry().getUnit(DotUnit.UNIT_ID);
 		return unit;
 	}
 	public void setUnit(IUnit unit) {
 		this.unit = unit;
+	}
+	
+	private DotUnit dotUnit = null;
+	protected DotUnit getDotUnit() {
+		if (dotUnit == null)
+			dotUnit = (DotUnit) getPageRegistry().getUnit(DotUnit.UNIT_ID);
+		return dotUnit;
+	}
+	
+	protected PageRegistry getPageRegistry() {
+		return PageRegistryEP.sharedInstance().getPageRegistry();
 	}
 	
 //	public PropertyChangeListener unitListener = new PropertyChangeListener()
@@ -107,14 +115,29 @@ implements IPropertySource
 //		}			
 //	};
 	
+	// TODO check if this is correct
 	public double getValue(int modelValue, IUnit unit) 
 	{
-		return modelValue;
+		if (unit instanceof DotUnit)
+			return modelValue;
+		else {
+			double unitFactor = unit.getFactor();
+			double dotFactor = getDotUnit().getFactor();
+			return modelValue * unitFactor * dotFactor;
+		}
 	}
 		
+	// TODO check if this is correct	
 	public int getSetValue(double value, IUnit unit) 
 	{
-		return (int) Math.rint(value);
+		if (unit instanceof DotUnit)
+			return (int) Math.rint(value);			
+		else {
+			double unitFactor = unit.getFactor();
+			double dotFactor = getDotUnit().getFactor();
+			double returnVal = value / unitFactor / dotFactor;
+			return (int) Math.rint(returnVal);
+		}
 	}	
 	
 	/**

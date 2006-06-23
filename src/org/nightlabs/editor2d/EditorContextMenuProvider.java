@@ -103,22 +103,22 @@ extends ContextMenuProvider
   	
   	// Copy
   	action = getActionRegistry().getAction(CopyAction.ID);
-//  	if (action.isEnabled())
+  	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
   	  	  	
   	// Paste
   	action = getActionRegistry().getAction(PasteAction.ID);
-//  	if (action.isEnabled())
+  	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);  	
   	
   	// Cut
   	action = getActionRegistry().getAction(CutAction.ID);
-//  	if (action.isEnabled())
+  	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
   	  	
   	// Delete
   	action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
-//  	if (action.isEnabled())
+  	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
   	// Direct Edit
