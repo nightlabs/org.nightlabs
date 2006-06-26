@@ -282,17 +282,15 @@
             symbol="cm"
             unitID="centimetre"/>
       <Unit
-            factor="0.254"
+            factor="0.03937007874015748031496062992126"
             name="inch"
             symbol="in"
             unitID="inch"/>
       <ResolutionUnit
-            factor="2.54"
             name="DPI"
             resolutionID="DPI"
             unit="org.nightlabs.i18n.unit.InchUnit"/>
       <ResolutionUnit
-            factor="1"
             name="DPCM"
             resolutionID="DPCM"
             unit="org.nightlabs.i18n.unit.CMUnit"/>

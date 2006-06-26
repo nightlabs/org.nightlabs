@@ -57,7 +57,7 @@ extends DrawComponentContainerTreeEditPart
 		return GROUP_ICON;
 	}
 
-  protected IPropertySource getPropertySource()
+	public IPropertySource getPropertySource()
   {
     if (propertySource == null) {
       propertySource = new GroupPropertySource(getGroupDrawComponent());

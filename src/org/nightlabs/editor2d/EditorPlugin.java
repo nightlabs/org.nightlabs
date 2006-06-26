@@ -27,20 +27,20 @@
 
 package org.nightlabs.editor2d;
 
-import org.apache.log4j.Logger;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import javax.imageio.spi.IIORegistry;
+
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.J2DGraphics;
-import org.eclipse.ui.plugin.*;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.holongate.j2d.J2DRegistry;
-import org.nightlabs.base.util.ImageUtil;
 import org.nightlabs.io.pcx.PCXImageReaderSPI;
 import org.nightlabs.io.pcx.PCXImageWriterSPI;
 import org.nightlabs.util.FontUtil;
 import org.osgi.framework.BundleContext;
-import java.util.*;
-
-import javax.imageio.ImageIO;
-import javax.imageio.spi.IIORegistry;
 
 /**
  * The main plugin class to be used in the desktop.

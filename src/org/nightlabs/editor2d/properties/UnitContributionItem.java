@@ -28,6 +28,7 @@ package org.nightlabs.editor2d.properties;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.util.Assert;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -50,7 +51,8 @@ import org.nightlabs.i18n.IUnit;
 public class UnitContributionItem 
 extends XContributionItem 
 {
-
+	public static final Logger LOGGER = Logger.getLogger(UnitContributionItem.class);
+	
 	public UnitContributionItem(UnitManager unitManager) 
 	{
 		super();
@@ -60,6 +62,9 @@ extends XContributionItem
 
 	private UnitManager unitManager = null;
 	private Combo combo = null;
+	public Combo getCombo() {
+		return combo;
+	}
 	private List<IUnit> units = null;
 	
   /**
@@ -146,7 +151,11 @@ extends XContributionItem
 		if (index != -1) {
 			if (combo != null)
 				combo.select(index);
+			else
+				LOGGER.debug("combo == null!");
 		}
+		else
+			LOGGER.debug("units does not contain IUnit "+unit);
 	}
 	
 	public IUnit getSelectedUnit() 

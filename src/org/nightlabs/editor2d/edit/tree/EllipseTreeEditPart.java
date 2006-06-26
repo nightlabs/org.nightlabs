@@ -58,7 +58,7 @@ extends DrawComponentTreeEditPart
     return ELLIPSE_ICON;
   }
 
-  protected IPropertySource getPropertySource()
+  public IPropertySource getPropertySource()
   {
     if (propertySource == null)
     {

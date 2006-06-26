@@ -103,19 +103,7 @@ implements IPropertySource
 	protected PageRegistry getPageRegistry() {
 		return PageRegistryEP.sharedInstance().getPageRegistry();
 	}
-	
-//	public PropertyChangeListener unitListener = new PropertyChangeListener()
-//	{
-//		public void propertyChange(PropertyChangeEvent evt) 
-//		{
-//			if (evt.getPropertyName().equals(UnitManager.PROP_CURRENT_UNIT_CHANGED)) 
-//			{
-//				unit = (IUnit) evt.getNewValue();
-//			}
-//		}			
-//	};
-	
-	// TODO check if this is correct
+		
 	public double getValue(int modelValue, IUnit unit) 
 	{
 		if (unit instanceof DotUnit)
@@ -123,11 +111,16 @@ implements IPropertySource
 		else {
 			double unitFactor = unit.getFactor();
 			double dotFactor = getDotUnit().getFactor();
-			return modelValue * unitFactor * dotFactor;
+			double returnVal = (modelValue / dotFactor) * unitFactor;			
+//			LOGGER.debug("unitFactor = "+unitFactor);
+//			LOGGER.debug("dotFator = "+dotFactor);
+//			LOGGER.debug("modelVal in mm = "+ (modelValue / dotFactor));
+//			LOGGER.debug("returnVal = "+returnVal);
+//			LOGGER.debug("");
+			return returnVal;
 		}
 	}
-		
-	// TODO check if this is correct	
+	
 	public int getSetValue(double value, IUnit unit) 
 	{
 		if (unit instanceof DotUnit)
@@ -135,7 +128,12 @@ implements IPropertySource
 		else {
 			double unitFactor = unit.getFactor();
 			double dotFactor = getDotUnit().getFactor();
-			double returnVal = value / unitFactor / dotFactor;
+			double returnVal = (value / unitFactor) * dotFactor;
+//			LOGGER.debug("unitFactor = "+unitFactor);
+//			LOGGER.debug("dotFator = "+dotFactor);
+//			LOGGER.debug("modelVal in "+unit.getUnitID()+" = "+ (value / unitFactor));			
+//			LOGGER.debug("returnVal = "+returnVal);
+//			LOGGER.debug("");			
 			return (int) Math.rint(returnVal);
 		}
 	}	

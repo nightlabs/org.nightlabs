@@ -1186,12 +1186,13 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	double pageHeight = defaultPage.getPageHeight() * pageUnit.getFactor();
     	double pageWidth = defaultPage.getPageWidth() * pageUnit.getFactor();    	
 
-    	LOGGER.debug("pageHeight = "+pageHeight);
-    	LOGGER.debug("pageWidth = "+pageWidth);    		  	
+    	LOGGER.debug("pageHeight = "+pageHeight+" mm");
+    	LOGGER.debug("pageWidth = "+pageWidth+" mm");    		  	
 
     	DotUnit dotUnit = (DotUnit) getPageRegistry().getUnit(DotUnit.UNIT_ID);
     	dotUnit.setResolution(resolution);    	
-    	double factor = 1 / dotUnit.getFactor();
+//    	double factor = 1 / dotUnit.getFactor();
+    	double factor = dotUnit.getFactor();    	
     	LOGGER.debug("factor = "+factor);
     	
     	pageWidth = pageWidth * factor;

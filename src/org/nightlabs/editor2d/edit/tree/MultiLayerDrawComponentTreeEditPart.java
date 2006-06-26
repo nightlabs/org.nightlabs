@@ -33,14 +33,10 @@ import java.util.List;
 
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.editpolicy.DrawComponentContainerEditPolicy;
 import org.nightlabs.editor2d.editpolicy.tree.MultiLayerDrawComponentTreeEditPolicy;
@@ -50,9 +46,7 @@ import org.nightlabs.editor2d.outline.filter.FilterManager;
 
 public class MultiLayerDrawComponentTreeEditPart 
 extends DrawComponentContainerTreeEditPart 
-{
-//  public static Image SUN_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/sun16.gif").createImage();  
-  
+{  
   /**
    * @param model
    */
@@ -60,9 +54,6 @@ extends DrawComponentContainerTreeEditPart
     super(model);
     this.filterMan = filterMan;
   }
-//  public MultiLayerDrawComponentTreeEditPart(MultiLayerDrawComponent model) {
-//    super(model);
-//  }
   
   protected FilterManager filterMan;
   public FilterManager getFilterMan() {
@@ -92,29 +83,6 @@ extends DrawComponentContainerTreeEditPart
   	installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
   }  
   
-//  protected List getModelChildren()
-//  { 
-//  	if (getFilterMan().isAllFilterSet()) {
-//  		return getMultiLayerDrawComponent().getDrawComponents(); 
-//  	}
-//  	else {
-//      List filterChildren = new ArrayList(); 
-//    	for (Iterator itFilter = getFilterMan().getFilters().iterator(); itFilter.hasNext(); ) {
-//    		Class filter = (Class) itFilter.next();
-//        for (Iterator itLayers = getDrawComponentContainer().getDrawComponents().iterator(); itLayers.hasNext(); ) {
-//          Layer l = (Layer) itLayers.next();        
-//          for (Iterator itDrawOrder = l.getDrawComponents().iterator(); itDrawOrder.hasNext(); ) {
-//            DrawComponent dc = (DrawComponent) itDrawOrder.next();
-//      			if (filter.isAssignableFrom(dc.getClass())) {
-//      				filterChildren.add(dc);
-//      			}        
-//          }
-//        }
-//    	}      
-//      return filterChildren;  		
-//  	}
-//  }	
-
   protected List getModelChildren()
   { 
   	if (getFilterMan().isAllFilterSet()) {
@@ -148,7 +116,7 @@ extends DrawComponentContainerTreeEditPart
     return filterChildren;  		  	
   }
   
-  protected IPropertySource getPropertySource()
+  public IPropertySource getPropertySource()
   {
     if (propertySource == null)
     {

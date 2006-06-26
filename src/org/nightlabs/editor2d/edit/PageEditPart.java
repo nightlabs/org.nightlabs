@@ -41,7 +41,6 @@ import org.nightlabs.editor2d.model.PagePropertySource;
 public class PageEditPart 
 extends AbstractDrawComponentContainerEditPart 
 {
-
 	/**
 	 * @param page the PageDrawComponent to initalize this PageEditPart with
 	 */

@@ -31,7 +31,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractPaletteFactory;
-import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.LineDrawComponent;
 import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
@@ -62,7 +61,7 @@ extends DrawComponentTreeEditPart
 	  return (LineDrawComponent) getModel();
 	}
   
-  protected IPropertySource getPropertySource()
+	public IPropertySource getPropertySource()
   {
     if (propertySource == null)
     {

@@ -29,10 +29,8 @@ package org.nightlabs.editor2d.edit.tree;
 
 import java.beans.PropertyChangeEvent;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
-
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractPaletteFactory;
 import org.nightlabs.editor2d.EditorPlugin;
@@ -88,10 +86,7 @@ extends DrawComponentTreeEditPart
 //		}		
 	}
 	
-  /* (non-Javadoc)
-   * @see com.ibm.itso.sal330r.gefdemo.edit.WorkflowElementEditPart#getPropertySource()
-   */
-  protected IPropertySource getPropertySource()
+	public IPropertySource getPropertySource()
   {
     if (propertySource == null)
     {

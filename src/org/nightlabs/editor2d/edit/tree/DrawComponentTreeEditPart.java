@@ -80,7 +80,7 @@ extends AbstractTreeEditPart
   /* (non-Javadoc)
    * @see com.ibm.itso.sal330r.gefdemo.edit.WorkflowElementEditPart#getPropertySource()
    */
-  protected IPropertySource getPropertySource()
+  public IPropertySource getPropertySource()
   {
     if (propertySource == null)
     {

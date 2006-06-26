@@ -60,7 +60,7 @@ extends DrawComponentContainerTreeEditPart
 		return (PageDrawComponent) getDrawComponent();
 	}
 	
-  protected IPropertySource getPropertySource()
+	public IPropertySource getPropertySource()
   {
     if (propertySource == null) {
       propertySource = new PagePropertySource(getPageDrawComponent());

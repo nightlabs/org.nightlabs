@@ -60,7 +60,7 @@ extends DrawComponentContainerTreeEditPart
   	return (Layer) getModel();
   }
   
-  protected IPropertySource getPropertySource()
+  public IPropertySource getPropertySource()
   {
     if (propertySource == null)
     {

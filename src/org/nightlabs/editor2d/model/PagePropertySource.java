@@ -30,8 +30,10 @@ import java.util.List;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.nightlabs.base.property.ComboBoxPropertyDescriptor;
 import org.nightlabs.base.property.DoublePropertyDescriptor;
+import org.nightlabs.base.property.XTextPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
 
 /**
@@ -60,11 +62,13 @@ extends DrawComponentPropertySource
 		// Width
 		descriptors.add(createPageWidthPD());
 		// Height
-		descriptors.add(createPageHeightPD());		
+		descriptors.add(createPageHeightPD());
+		// Resolution Unit
+		descriptors.add(createResolutionUnitPD());		
+		// Resolution Value
+		descriptors.add(createResolutionValuePD());
 		// Page Size
 //		descriptors.add(createPageSizePD());
-		// Resolution
-//		descriptors.add(createResolutionPD());
 		
 		return descriptors;
 	}
@@ -94,7 +98,7 @@ extends DrawComponentPropertySource
 		
 		return null;
 	}
-
+	
 	public static int getOrientation(String orientationString) 
 	{
 		if (orientationString.equals(EditorPlugin.getResourceString("property.orientation.horizontal")))
@@ -114,14 +118,26 @@ extends DrawComponentPropertySource
 				EditorPlugin.getResourceString("property.orientation.label"), values);
 		return desc;
 	}	
+
+	protected PropertyDescriptor createResolutionValuePD() 
+	{
+		PropertyDescriptor desc = new DoublePropertyDescriptor(MultiLayerDrawComponent.PROP_RESOLUTION,
+				EditorPlugin.getResourceString("property.resolution.label"), true);
+		desc.setCategory(CATEGORY_RESOLUTION);
+		return desc;
+	}
+
+	public static final String ID_RESOLUTION_UNIT = "ResolutionUnit";
+	public static final String CATEGORY_RESOLUTION = "Resolution";	
 	
-//	protected PropertyDescriptor createResolutionPD() 
-//	{
-//		PropertyDescriptor desc = new DoublePropertyDescriptor(PageDrawComponent.PROP_RESOLUTION, 
-//				EditorPlugin.getResourceString("property.resolution.label"), true);
-//		return desc;
-//	}
-	
+	protected PropertyDescriptor createResolutionUnitPD() 
+	{
+		PropertyDescriptor desc = new XTextPropertyDescriptor(ID_RESOLUTION_UNIT,
+				EditorPlugin.getResourceString("property.resolutionUnit.label"), true);
+		desc.setCategory(CATEGORY_RESOLUTION);
+		return desc;
+	}
+		
 //	protected PropertyDescriptor createPageSizePD()
 //	{
 //		PropertyDescriptor pd = new PageSelectPropertyDescriptor(PageDrawComponent.PROP_PAGE_BOUNDS,
@@ -146,9 +162,12 @@ extends DrawComponentPropertySource
 		else if (id.equals(DrawComponent.PROP_HEIGHT)) {
 			return new Double(getValue(getPageDrawComponent().getPageBounds().height, getUnit()));
 		}		
-//		else if (id.equals(MultiLayerDrawComponent.PROP_RESOLUTION)) {
-//			return getPageDrawComponent().getRoot().getResolution().getResolutionX();
-//		}		
+		else if (id.equals(MultiLayerDrawComponent.PROP_RESOLUTION)) {
+			return getPageDrawComponent().getRoot().getResolution().getResolutionX();
+		}
+		else if (id.equals(ID_RESOLUTION_UNIT)) {
+			return getPageDrawComponent().getRoot().getResolution().getResolutionUnit().getResolutionID();
+		}				
 //		else if (id.equals(PageDrawComponent.PROP_PAGE_BOUNDS)) {
 //			PageSize pageSize = new PageSize();
 //			pageSize.setPageHeight(getPageDrawComponent().getPageBounds().width);

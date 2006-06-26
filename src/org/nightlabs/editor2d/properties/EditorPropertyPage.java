@@ -31,8 +31,17 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertySheetPage;
-import org.nightlabs.base.language.LanguageContributionItem;
+import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
+import org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart;
+import org.nightlabs.editor2d.model.DrawComponentPropertySource;
+import org.nightlabs.i18n.IUnit;
 
 public class EditorPropertyPage 
 extends PropertySheetPage
@@ -52,20 +61,76 @@ extends PropertySheetPage
 	public void setUnitManager(UnitManager unitManager) {
 		this.unitManager = unitManager;
 	}
-	
+
+	private UnitContributionItem unitContributionItem = null;
   public void makeContributions(IMenuManager menuManager,
       IToolBarManager toolBarManager, IStatusLineManager statusLineManager) 
   {
 //  	LanguageContributionItem langContribution = new LanguageContributionItem();
 //  	toolBarManager.add(langContribution);
   	
-  	UnitContributionItem unitContributionItem = new UnitContributionItem(getUnitManager());
-  	unitContributionItem.selectUnit(getUnitManager().getCurrentUnit());
+  	unitContributionItem = new UnitContributionItem(getUnitManager());
   	toolBarManager.add(unitContributionItem);
   	
   	super.makeContributions(menuManager, toolBarManager, statusLineManager);  	  	
   }
-  
+      		
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) 
+	{
+		if (!listenerAdded) {
+	  	unitContributionItem.getCombo().addSelectionListener(unitListener);
+	  	listenerAdded = true;
+		}			
+		unitContributionItem.selectUnit(getUnitManager().getCurrentUnit());	  							
+	  if (selection instanceof IStructuredSelection) {
+	  	Object[] sel = ((IStructuredSelection) selection).toArray();
+	  	this.selection = sel;
+	  	for (int i=0; i<sel.length; i++) {
+	  		setUnit(sel[i]);
+	  	}
+	  }
+		super.selectionChanged(part, selection);	  
+	}	
+	
+	private Object[] selection = null;
+	private boolean listenerAdded = false;
+	protected SelectionListener unitListener = new SelectionListener()
+	{	
+		public void widgetSelected(SelectionEvent e) 
+		{
+//			LOGGER.debug("unit changed!");
+			if (selection != null) {
+				for (int i = 0; i < selection.length; i++) {
+					setUnit(selection[i]);					
+				}
+			}
+			refresh();
+		}	
+		public void widgetDefaultSelected(SelectionEvent e) {
+			widgetSelected(e);
+		}	
+	};
+
+	protected void setUnit(Object o) 
+	{
+		if (o != null) 
+		{
+			IPropertySource ps = null;
+			if (o instanceof AbstractDrawComponentEditPart)
+				ps = ((AbstractDrawComponentEditPart)o).getPropertySource();
+			else if (o instanceof DrawComponentTreeEditPart)
+				ps = ((DrawComponentTreeEditPart)o).getPropertySource();
+			
+			if (ps != null && ps instanceof DrawComponentPropertySource) 
+			{			
+				DrawComponentPropertySource dcps = (DrawComponentPropertySource) ps;
+				IUnit currentUnit = getUnitManager().getCurrentUnit();
+				dcps.setUnit(currentUnit);
+//				LOGGER.debug("set currentUnit "+currentUnit+" for DrawComponentPropertySource "+dcps);    					    			
+			}			
+		}
+	}
+							
 //  protected Collection makeLanguageActions() 
 //  {
 //  	Collection languageActions = new ArrayList(langMan.getLanguages().size());
@@ -96,45 +161,5 @@ extends PropertySheetPage
 //			}			
 //		}	
 //	};
-	
-//	@Override
-//	public void createControl(Composite parent) 
-//	{
-//		super.createControl(parent);
-//		
-//		IMenuManager menuMan = getSite().getActionBars().getMenuManager();
-//		makeUnitActions(menuMan);		
-//	}
-//	
-//	protected void makeUnitActions(IMenuManager menuMan) 
-//	{
-//		for (IUnit unit : getUnitManager().getUnits()) {
-//			UnitAction action = new UnitAction(getUnitManager(), unit);
-//			menuMan.add(action);
-//		}
-//	}
-//	
-//	public void selectionChanged(IWorkbenchPart part, ISelection selection) 
-//	{
-//		super.selectionChanged(part, selection);
-//	  if (selection instanceof IStructuredSelection) 
-//	  {
-//	  	Object[] sel = ((IStructuredSelection) selection).toArray();
-//	  	for (int i=0; i<sel.length; i++) 
-//	  	{
-//	  		Object o = sel[i];
-//	  		if (o instanceof AbstractDrawComponentEditPart) {
-//	  			AbstractDrawComponentEditPart ep = (AbstractDrawComponentEditPart) o;
-//	  			IPropertySource ps = ep.getPropertySource();
-//	  			if (ps instanceof DrawComponentPropertySource) {
-//	    			DrawComponentPropertySource dcps = (DrawComponentPropertySource) ps;
-//	    			IUnit currentUnit = getUnitManager().getCurrentUnit();
-//	    			dcps.setUnit(currentUnit);
-//	    			LOGGER.debug("set currentUnit "+currentUnit+" for DrawComponentPropertySource "+dcps+" of EditPart "+ep);    				
-//	  			}
-//	  		}
-//	  	}
-//	  }  	
-//	}	
-	
+		
 }

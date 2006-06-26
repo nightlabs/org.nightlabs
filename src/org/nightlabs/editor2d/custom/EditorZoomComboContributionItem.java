@@ -31,14 +31,11 @@ import java.awt.Toolkit;
 import java.text.DecimalFormat;
 
 import org.apache.log4j.Logger;
-import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.gef.editparts.ZoomListener;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
-import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.util.Assert;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -52,6 +49,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbenchPart;
+import org.nightlabs.base.action.XContributionItem;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
@@ -60,7 +58,8 @@ import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
 
 
 public class EditorZoomComboContributionItem 
-extends ContributionItem
+//extends ContributionItem
+extends XContributionItem
 {
 	public static final Logger LOGGER = Logger.getLogger(EditorZoomComboContributionItem.class);
 	
@@ -111,7 +110,8 @@ extends ContributionItem
 		if (zoomManager == null) {
 			combo.setEnabled(false);
 			combo.setText(""); //$NON-NLS-1$
-		} else {
+		} 
+		else {
 			if (repopulateCombo) {
 				combo.setItems(getZoomManager().getZoomLevelsAsText());
 			}
@@ -120,9 +120,8 @@ extends ContributionItem
 			int index = combo.indexOf(zoom);
 			if (index != -1)
 				combo.select(index);
-			else {
+			else
 				combo.setText(zoom); 				
-			}
 			combo.setEnabled(true);
 		}
   }
@@ -149,20 +148,7 @@ extends ContributionItem
 			refresh(false);
 		}	
 	};
-	
-  /**
-   * Computes the width required by control
-   * @param control The control to compute width
-   * @return int The width required
-   */
-  protected int computeWidth(Control control) 
-  {
-  	int width = control.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x;
-  	if (SWT.getPlatform().equals("win32")) //$NON-NLS-1$
-  		width += FigureUtilities.getTextWidth("8", control.getFont()); //$NON-NLS-1$
-  	return width;
-  }
-	
+		
   protected SelectionListener comboSelectionListener = new SelectionListener() 
   {
 		public void widgetSelected(SelectionEvent e) 
@@ -322,12 +308,12 @@ extends ContributionItem
   	zoomManager = zm;
 
 //  	double factor = 1 / getFactor();
-  	double factor = getFactor();  	
+  	double factor = getResolutionFactor();  	
   	LOGGER.debug("factor = "+factor);
   	
 //		zoomManager.setZoomLevels(getZoomLevels(1/factor));
-//  	zoomManager.setZoom(1/factor);  	
-//		zoomManager.setUIMultiplier(factor);
+//		zoomManager.setUIMultiplier(factor);		
+//  	zoomManager.setZoom(factor);  	
 
 		zoomManager.setZoomLevels(getZoomLevels(factor));
 		zoomManager.setUIMultiplier(1/factor);		
@@ -344,8 +330,9 @@ extends ContributionItem
 	{
 		if (deviceResolution == null) {
 			int dpi = Toolkit.getDefaultToolkit().getScreenResolution();
+//			int dpi = 72;
 			deviceResolution = new ResolutionImpl(new DPIResolutionUnit(), dpi, dpi);
-			LOGGER.debug("ScreenResolution (DPI) = "+dpi);
+			LOGGER.debug("ScreenResolution (DPI) = "+dpi);			
 		}
 		return deviceResolution;		
 	}
@@ -358,14 +345,14 @@ extends ContributionItem
 		return getDeviceResolution().getResolutionY(unit);
 	}
 	
-  public double getDocumentResolutionX(IResolutionUnit unit) 
+	protected double getDocumentResolutionX(IResolutionUnit unit) 
   {
   	if (mldc != null) 
   		return mldc.getResolution().getResolutionX(unit);
   	return 1.0;
   }
 
-  public double getDocumentResolutionY(IResolutionUnit unit) 
+	protected double getDocumentResolutionY(IResolutionUnit unit) 
   {
   	if (mldc != null) 
   		return mldc.getResolution().getResolutionY(unit);
@@ -374,21 +361,23 @@ extends ContributionItem
   
   public Resolution getDocumentResolution() 
   {
-  	if (mldc != null)
+  	if (mldc != null) {
+  		LOGGER.debug("DocumentResolution = "+mldc.getResolution().getResolutionX()+" "+mldc.getResolution().getResolutionUnit().getResolutionID());  	  		  		
   		return mldc.getResolution();
+  	}
   	return new ResolutionImpl();
   }	
     
-  public double getFactor() {
-  	return Math.max(getFactorX(), getFactorY());
+  public double getResolutionFactor() {
+  	return Math.max(getResolutionFactorX(), getResolutionFactorY());
   }
   
   private IResolutionUnit defaultResolutionUnit = new DPIResolutionUnit();  
-  public double getFactorX() {
+  protected double getResolutionFactorX() {
   	return getDeviceResolutionX(defaultResolutionUnit) / getDocumentResolutionX(defaultResolutionUnit);  	
   }
   
-  public double getFactorY() {
+  protected double getResolutionFactorY() {
   	return getDeviceResolutionY(defaultResolutionUnit) / getDocumentResolutionY(defaultResolutionUnit);  	
   }
   

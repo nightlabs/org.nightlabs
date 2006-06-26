@@ -54,7 +54,7 @@ extends DrawComponentTreeEditPart
     super(model);
   }
 
-  protected IPropertySource getPropertySource()
+  public IPropertySource getPropertySource()
   {
     if (propertySource == null)
     {

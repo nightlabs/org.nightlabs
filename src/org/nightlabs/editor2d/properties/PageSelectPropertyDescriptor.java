@@ -29,10 +29,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.language.LanguageManager;
-import org.nightlabs.base.property.I18nTextLabelProvider;
 import org.nightlabs.base.property.XPropertyDescriptor;
-import org.nightlabs.base.property.XTextCellEditor;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

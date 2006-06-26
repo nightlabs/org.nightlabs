@@ -25,11 +25,8 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.app;
 
-import org.eclipse.ui.application.ActionBarAdvisor;
-import org.eclipse.ui.application.IActionBarConfigurer;
 import org.nightlabs.base.app.AbstractApplication;
 import org.nightlabs.base.app.AbstractWorkbenchAdvisor;
-import org.nightlabs.base.app.DefaultActionBuilder;
 import org.nightlabs.editor2d.EditorPerspective;
 
 /**
@@ -39,9 +36,6 @@ public class Editor2DWorkbenchAdvisor
 extends AbstractWorkbenchAdvisor 
 {
 
-	/**
-	 * 
-	 */
 	public Editor2DWorkbenchAdvisor() {
 		super();		
 	}
