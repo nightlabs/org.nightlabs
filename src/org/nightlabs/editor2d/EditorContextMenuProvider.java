@@ -56,6 +56,11 @@ import org.nightlabs.editor2d.actions.order.ChangeOrderOneUp;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
 import org.nightlabs.editor2d.actions.order.SendToLayerAction;
+import org.nightlabs.editor2d.actions.shape.ConvertToShapeAction;
+import org.nightlabs.editor2d.actions.shape.ShapeExclusiveOrAction;
+import org.nightlabs.editor2d.actions.shape.ShapeIntersectAction;
+import org.nightlabs.editor2d.actions.shape.ShapeSubtractAction;
+import org.nightlabs.editor2d.actions.shape.ShapeUnionAction;
 
 
 public class EditorContextMenuProvider 
@@ -155,6 +160,12 @@ extends ContextMenuProvider
   	buildOrderSubMenu(orderSubMenu);
   	if (!orderSubMenu.isEmpty())
   		manager.appendToGroup(GEFActionConstants.GROUP_REST, orderSubMenu);  	
+
+  	// Order SubMenu
+  	MenuManager shapeSubMenu = new MenuManager(EditorPlugin.getResourceString("menu.shape"));
+  	buildShapeSubMenu(shapeSubMenu);
+  	if (!shapeSubMenu.isEmpty())
+  		manager.appendToGroup(GEFActionConstants.GROUP_REST, shapeSubMenu);  	
   	
 //  	action = getActionRegistry().getAction(ActionFactory.SAVE.getId());
 //  	manager.appendToGroup(GEFActionConstants.GROUP_SAVE, action);
@@ -238,11 +249,6 @@ extends ContextMenuProvider
   	if (action.isEnabled())
   	  menuMan.add(action);
   	  	
-  	// Edit Shape Action
-  	action = getActionRegistry().getAction(EditShapeAction.ID);
-  	if (action.isEnabled())
-  	  menuMan.add(action);
-
   	// Rotate Action
   	action = getActionRegistry().getAction(RotateAction.ID);
   	if (action.isEnabled())
@@ -303,4 +309,38 @@ extends ContextMenuProvider
     action = getActionRegistry().getAction(SelectAllWithSameName.ID);
     menuMan.add(action);    
   }  
+  
+  protected void buildShapeSubMenu(MenuManager menuMan)
+  {
+    IAction action;
+    // Convert To Shape Action
+    action = getActionRegistry().getAction(ConvertToShapeAction.ID);
+    menuMan.add(action);    
+    
+  	// Edit Shape Action
+  	action = getActionRegistry().getAction(EditShapeAction.ID);
+  	if (action.isEnabled())
+  	  menuMan.add(action);
+  	
+  	// Shape Union
+  	action = getActionRegistry().getAction(ShapeUnionAction.ID);
+//  	if (action.isEnabled())
+  	  menuMan.add(action);    
+
+    // Shape Intersection
+    action = getActionRegistry().getAction(ShapeIntersectAction.ID);
+//    if (action.isEnabled())
+    menuMan.add(action);    
+
+    // Shape Subtract
+    action = getActionRegistry().getAction(ShapeSubtractAction.ID);
+//    if (action.isEnabled())
+    menuMan.add(action);    
+
+    // Shape Subtract
+    action = getActionRegistry().getAction(ShapeExclusiveOrAction.ID);
+//    if (action.isEnabled())
+    menuMan.add(action);        
+  }  
+  
 }

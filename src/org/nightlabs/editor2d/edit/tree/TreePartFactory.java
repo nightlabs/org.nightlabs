@@ -38,6 +38,7 @@ import org.nightlabs.editor2d.LineDrawComponent;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RectangleDrawComponent;
+import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 
@@ -82,6 +83,9 @@ implements EditPartFactory
 
     else if (model instanceof GroupDrawComponent)
       return new GroupTreeEditPart((GroupDrawComponent)model);
+
+    else if (model instanceof ShapeDrawComponent)
+      return new ShapeTreeEditPart((ShapeDrawComponent)model);
   	
     return null;
   }

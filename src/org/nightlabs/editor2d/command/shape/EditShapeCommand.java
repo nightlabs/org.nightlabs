@@ -25,7 +25,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.editor2d.command;
+package org.nightlabs.editor2d.command.shape;
 
 import java.awt.geom.PathIterator;
 

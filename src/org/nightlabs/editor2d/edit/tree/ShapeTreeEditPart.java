@@ -23,58 +23,45 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.editpolicy;
+package org.nightlabs.editor2d.edit.tree;
 
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.views.properties.IPropertySource;
+import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
-import org.nightlabs.editor2d.command.shape.EditShapeCommand;
-import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
-import org.nightlabs.editor2d.request.EditorEditShapeRequest;
+import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditShapeContainerXYLayoutEditPolicy 
-extends FeedbackContainerXYLayoutEditPolicy 
+public class ShapeTreeEditPart 
+extends DrawComponentTreeEditPart 
 {
+	public static Image SHAPE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+			ShapeTreeEditPart.class).createImage();	
 
-	public EditShapeContainerXYLayoutEditPolicy() {
-		super();
+	/**
+	 * @param drawComponent
+	 */
+	public ShapeTreeEditPart(ShapeDrawComponent shapeDrawComponent) {
+		super(shapeDrawComponent);
 	}
 
-	public Command getCommand(Request request) 
-  {    
-  	if (REQ_EDIT_SHAPE.equals(request.getType()))
-  		return getEditShapeCommand((EditorEditShapeRequest)request);
-    
-  	return super.getCommand(request);
-  }  
+	@Override
+	protected Image getImage() {
+		return SHAPE_ICON;
+	}
+
+	public ShapeDrawComponent getShapeDrawComponent() {
+		return (ShapeDrawComponent) getDrawComponent();
+	}
 	
-  /**
-   * Returns the command contribution for the given edit shape request. 
-   * By default, the request is redispatched to the host's parent as a {@link
-   * org.nightlabs.editor2d.request.EditorRequestConstants#REQ_EDIT_SHAPE}.  
-   * The parent's editpolicies determine how to perform the resize based on the layout manager in use.
-   * @param request the edit shape request
-   * @return the command contribution obtained from the parent
-   */
-  protected Command getEditShapeCommand(EditorEditShapeRequest request) 
+	public IPropertySource getPropertySource()
   {
-    EditShapeCommand editShapeCommand = null;
-    if (editShapeCommand == null) 
-    {
-    	editShapeCommand = new EditShapeCommand();
-    	ShapeDrawComponentEditPart sdcEP = (ShapeDrawComponentEditPart) request.getTargetEditPart();
-    	ShapeDrawComponent sdc = sdcEP.getShapeDrawComponent();
-    	editShapeCommand.setShapeDrawComponent(sdc);
-    	editShapeCommand.setPathSegmentIndex(request.getPathSegmentIndex());
-    	editShapeCommand.setLabel(EditorPlugin.getResourceString("command.edit.shape"));      
+    if (propertySource == null) {
+      propertySource = new ShapeDrawComponentPropertySource(getShapeDrawComponent());
     }
-  	Point modelPoint = getConstraintPointFor(request.getLocation());
-  	editShapeCommand.setLocation(modelPoint); 
-		return editShapeCommand;		
-  } 	
+    return propertySource;
+  }  	
 }

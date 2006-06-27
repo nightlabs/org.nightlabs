@@ -48,22 +48,6 @@ implements EditorRequestConstants
   public EditShapeAction(IWorkbenchPart part) {
     super(part);
   }
-
-  /**
-   * returns <code>true</code> if there is exactly 1 EditPart selected that understand
-   * a request of type: {@link EditorRequestConstants#REQ_EDIT_SHAPE}.
-   * @return <code>true</code> if enabled
-   */
-  protected boolean calculateEnabled() 
-  {
-    if (EditorStateManager.getCurrentState() != EditorStateManager.STATE_EDIT_SHAPE) 
-    {
-    	if (getSelectedObjects().size() == 1 && (getSelectedObjects().get(0) instanceof ShapeDrawComponentEditPart)) {    		
-        return true;    		
-    	} 
-    }    
-    return false;
-  }
   
   /**
    * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#init()
@@ -91,4 +75,20 @@ implements EditorRequestConstants
   	}   	          
   }
     
+  /**
+   * returns <code>true</code> if there is exactly 1 EditPart selected that understand
+   * a request of type: {@link EditorRequestConstants#REQ_EDIT_SHAPE}.
+   * @return <code>true</code> if enabled
+   */
+  protected boolean calculateEnabled() 
+  {
+    if (EditorStateManager.getCurrentState() != EditorStateManager.STATE_EDIT_SHAPE) 
+    {
+    	if (getSelectedObjects().size() == 1 && (getSelectedObjects().get(0) instanceof ShapeDrawComponentEditPart)) {    		
+        return true;    		
+    	} 
+    }    
+    return false;
+  }
+  
 }

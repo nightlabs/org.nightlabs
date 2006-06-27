@@ -23,58 +23,68 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.editpolicy;
+package org.nightlabs.editor2d.actions.shape;
 
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.Command;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.ShapeDrawComponent;
-import org.nightlabs.editor2d.command.shape.EditShapeCommand;
+import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
+import org.nightlabs.editor2d.command.shape.AbstractBooleanOperationCommand;
 import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
-import org.nightlabs.editor2d.request.EditorEditShapeRequest;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditShapeContainerXYLayoutEditPolicy 
-extends FeedbackContainerXYLayoutEditPolicy 
+public abstract class AbstractBooleanOperationAction 
+extends AbstractEditorSelectionAction 
 {
 
-	public EditShapeContainerXYLayoutEditPolicy() {
-		super();
+	/**
+	 * @param editor
+	 * @param style
+	 */
+	public AbstractBooleanOperationAction(AbstractEditor editor, int style) {
+		super(editor, style);
 	}
 
-	public Command getCommand(Request request) 
-  {    
-  	if (REQ_EDIT_SHAPE.equals(request.getType()))
-  		return getEditShapeCommand((EditorEditShapeRequest)request);
-    
-  	return super.getCommand(request);
-  }  
+	/**
+	 * @param editor
+	 */
+	public AbstractBooleanOperationAction(AbstractEditor editor) {
+		super(editor);
+	}
+
+	protected abstract void init();
 	
-  /**
-   * Returns the command contribution for the given edit shape request. 
-   * By default, the request is redispatched to the host's parent as a {@link
-   * org.nightlabs.editor2d.request.EditorRequestConstants#REQ_EDIT_SHAPE}.  
-   * The parent's editpolicies determine how to perform the resize based on the layout manager in use.
-   * @param request the edit shape request
-   * @return the command contribution obtained from the parent
-   */
-  protected Command getEditShapeCommand(EditorEditShapeRequest request) 
-  {
-    EditShapeCommand editShapeCommand = null;
-    if (editShapeCommand == null) 
-    {
-    	editShapeCommand = new EditShapeCommand();
-    	ShapeDrawComponentEditPart sdcEP = (ShapeDrawComponentEditPart) request.getTargetEditPart();
-    	ShapeDrawComponent sdc = sdcEP.getShapeDrawComponent();
-    	editShapeCommand.setShapeDrawComponent(sdc);
-    	editShapeCommand.setPathSegmentIndex(request.getPathSegmentIndex());
-    	editShapeCommand.setLabel(EditorPlugin.getResourceString("command.edit.shape"));      
-    }
-  	Point modelPoint = getConstraintPointFor(request.getLocation());
-  	editShapeCommand.setLocation(modelPoint); 
-		return editShapeCommand;		
-  } 	
+	@Override
+	protected boolean calculateEnabled() 
+	{
+		if (selectionContains(ShapeDrawComponent.class, 2, true) && getSelectedObjects().size() == 2)
+		{
+			if (getPrimarySelectedShape().getBounds().intersects(getSecondarySelectedShape().getBounds()))
+				return true;			
+		}		
+		return false;
+	}
+
+	protected ShapeDrawComponent getPrimarySelectedShape() 
+	{
+		ShapeDrawComponentEditPart sep = (ShapeDrawComponentEditPart) getPrimarySelected();
+		return sep.getShapeDrawComponent();
+	}
+	
+	protected ShapeDrawComponent getSecondarySelectedShape() 
+	{
+		ShapeDrawComponentEditPart sep = (ShapeDrawComponentEditPart) getSelectedObjects().get(1);
+		return sep.getShapeDrawComponent();
+	}
+	
+	protected abstract AbstractBooleanOperationCommand getBooleanCommand(
+			ShapeDrawComponent primary, ShapeDrawComponent secondary);
+
+	@Override
+	public void run() 
+	{
+		execute(getBooleanCommand(getPrimarySelectedShape(), getSecondarySelectedShape()));
+	}
+		
 }

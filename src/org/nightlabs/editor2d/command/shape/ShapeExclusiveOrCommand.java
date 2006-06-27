@@ -23,58 +23,36 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.editpolicy;
+package org.nightlabs.editor2d.command.shape;
 
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.Command;
+import java.awt.geom.Area;
+
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
-import org.nightlabs.editor2d.command.shape.EditShapeCommand;
-import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
-import org.nightlabs.editor2d.request.EditorEditShapeRequest;
+import org.nightlabs.editor2d.j2d.GeneralShape;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditShapeContainerXYLayoutEditPolicy 
-extends FeedbackContainerXYLayoutEditPolicy 
+public class ShapeExclusiveOrCommand 
+extends AbstractBooleanOperationCommand 
 {
 
-	public EditShapeContainerXYLayoutEditPolicy() {
-		super();
+	/**
+	 * @param primary
+	 * @param secondary
+	 */
+	public ShapeExclusiveOrCommand(ShapeDrawComponent primary, ShapeDrawComponent secondary) 
+	{
+		super(primary, secondary);
+		setLabel(EditorPlugin.getResourceString("command.exclusiveOr.text"));
 	}
 
-	public Command getCommand(Request request) 
-  {    
-  	if (REQ_EDIT_SHAPE.equals(request.getType()))
-  		return getEditShapeCommand((EditorEditShapeRequest)request);
-    
-  	return super.getCommand(request);
-  }  
-	
-  /**
-   * Returns the command contribution for the given edit shape request. 
-   * By default, the request is redispatched to the host's parent as a {@link
-   * org.nightlabs.editor2d.request.EditorRequestConstants#REQ_EDIT_SHAPE}.  
-   * The parent's editpolicies determine how to perform the resize based on the layout manager in use.
-   * @param request the edit shape request
-   * @return the command contribution obtained from the parent
-   */
-  protected Command getEditShapeCommand(EditorEditShapeRequest request) 
-  {
-    EditShapeCommand editShapeCommand = null;
-    if (editShapeCommand == null) 
-    {
-    	editShapeCommand = new EditShapeCommand();
-    	ShapeDrawComponentEditPart sdcEP = (ShapeDrawComponentEditPart) request.getTargetEditPart();
-    	ShapeDrawComponent sdc = sdcEP.getShapeDrawComponent();
-    	editShapeCommand.setShapeDrawComponent(sdc);
-    	editShapeCommand.setPathSegmentIndex(request.getPathSegmentIndex());
-    	editShapeCommand.setLabel(EditorPlugin.getResourceString("command.edit.shape"));      
-    }
-  	Point modelPoint = getConstraintPointFor(request.getLocation());
-  	editShapeCommand.setLocation(modelPoint); 
-		return editShapeCommand;		
-  } 	
+	@Override
+	protected GeneralShape performOperation(Area area1, Area area2) 
+	{
+		area1.exclusiveOr(area2);
+		return new GeneralShape(area1);
+	}
+
 }

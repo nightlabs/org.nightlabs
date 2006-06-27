@@ -130,9 +130,15 @@ import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
 import org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction;
 import org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction;
+import org.nightlabs.editor2d.actions.shape.ConvertToShapeAction;
+import org.nightlabs.editor2d.actions.shape.ShapeExclusiveOrAction;
+import org.nightlabs.editor2d.actions.shape.ShapeIntersectAction;
+import org.nightlabs.editor2d.actions.shape.ShapeSubtractAction;
+import org.nightlabs.editor2d.actions.shape.ShapeUnionAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomPageAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
+import org.nightlabs.editor2d.command.shape.ShapeUnionCommand;
 import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.impl.LayerImpl;
@@ -894,7 +900,32 @@ extends J2DGraphicalEditorWithFlyoutPalette
       // UnGroup Action
       action = new UnGroupAction(this);
       registry.registerAction(action);
-      getSelectionActions().add(action.getId());      
+      getSelectionActions().add(action.getId());
+      
+      // Convert To Shape
+      action = new ConvertToShapeAction(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());
+      
+      // Shape Union
+      action = new ShapeUnionAction(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());            
+
+      // Shape Intersection
+      action = new ShapeIntersectAction(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());            
+
+      // Shape Subtract
+      action = new ShapeSubtractAction(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());            
+
+      // Shape Exclusive Or
+      action = new ShapeExclusiveOrAction(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());                  
     }
     
     /**

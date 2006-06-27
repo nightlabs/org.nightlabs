@@ -23,58 +23,66 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.editpolicy;
+package org.nightlabs.editor2d.command.shape;
 
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
-import org.nightlabs.editor2d.command.shape.EditShapeCommand;
-import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
-import org.nightlabs.editor2d.request.EditorEditShapeRequest;
+import org.nightlabs.editor2d.impl.ShapeDrawComponentImpl;
+import org.nightlabs.editor2d.j2d.GeneralShape;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditShapeContainerXYLayoutEditPolicy 
-extends FeedbackContainerXYLayoutEditPolicy 
+public class ConvertToShapeCommand 
+extends Command 
 {
 
-	public EditShapeContainerXYLayoutEditPolicy() {
+	public ConvertToShapeCommand(ShapeDrawComponent sdc) 
+	{
 		super();
+		setLabel(EditorPlugin.getResourceString("command.convertToShape.text"));
+		this.sdc = sdc;
 	}
 
-	public Command getCommand(Request request) 
-  {    
-  	if (REQ_EDIT_SHAPE.equals(request.getType()))
-  		return getEditShapeCommand((EditorEditShapeRequest)request);
-    
-  	return super.getCommand(request);
-  }  
+	private ShapeDrawComponent sdc = null;
+	private ShapeDrawComponent convertedShape = null;	
+	private DrawComponentContainer parent = null;
+	private int drawOrderIndex = -1;
 	
-  /**
-   * Returns the command contribution for the given edit shape request. 
-   * By default, the request is redispatched to the host's parent as a {@link
-   * org.nightlabs.editor2d.request.EditorRequestConstants#REQ_EDIT_SHAPE}.  
-   * The parent's editpolicies determine how to perform the resize based on the layout manager in use.
-   * @param request the edit shape request
-   * @return the command contribution obtained from the parent
-   */
-  protected Command getEditShapeCommand(EditorEditShapeRequest request) 
-  {
-    EditShapeCommand editShapeCommand = null;
-    if (editShapeCommand == null) 
-    {
-    	editShapeCommand = new EditShapeCommand();
-    	ShapeDrawComponentEditPart sdcEP = (ShapeDrawComponentEditPart) request.getTargetEditPart();
-    	ShapeDrawComponent sdc = sdcEP.getShapeDrawComponent();
-    	editShapeCommand.setShapeDrawComponent(sdc);
-    	editShapeCommand.setPathSegmentIndex(request.getPathSegmentIndex());
-    	editShapeCommand.setLabel(EditorPlugin.getResourceString("command.edit.shape"));      
-    }
-  	Point modelPoint = getConstraintPointFor(request.getLocation());
-  	editShapeCommand.setLocation(modelPoint); 
-		return editShapeCommand;		
-  } 	
+	@Override
+	public void execute() 
+	{
+		parent = sdc.getParent();
+		drawOrderIndex = parent.getDrawComponents().indexOf(sdc);
+		
+		GeneralShape newShape = new GeneralShape(sdc.getGeneralShape());
+		ShapeDrawComponent convertedShape = new ShapeDrawComponentImpl();
+		convertedShape.setGeneralShape(newShape);
+		convertedShape.setFill(sdc.isFill());
+		convertedShape.setFillColor(sdc.getFillColor());
+		convertedShape.setLineColor(sdc.getLineColor());
+		convertedShape.setLineStyle(sdc.getLineStyle());
+		convertedShape.setLineWidth(sdc.getLineWidth());
+		convertedShape.setRotationMember(sdc.getRotation());
+		convertedShape.setRenderMode(sdc.getRenderMode());
+		
+		parent.removeDrawComponent(sdc);
+		parent.addDrawComponent(convertedShape, drawOrderIndex);
+	}
+
+	@Override
+	public void redo() 
+	{
+		execute();
+	}
+
+	@Override
+	public void undo() 
+	{
+		parent.removeDrawComponent(convertedShape);
+		parent.addDrawComponent(sdc, drawOrderIndex);
+	}
+	
 }

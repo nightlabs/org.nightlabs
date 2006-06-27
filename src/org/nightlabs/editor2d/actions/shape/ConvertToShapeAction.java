@@ -23,58 +23,64 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.editpolicy;
+package org.nightlabs.editor2d.actions.shape;
 
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.Command;
+import java.util.List;
+
+import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
-import org.nightlabs.editor2d.command.shape.EditShapeCommand;
-import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
-import org.nightlabs.editor2d.request.EditorEditShapeRequest;
+import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
+import org.nightlabs.editor2d.command.shape.ConvertToShapeCommand;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditShapeContainerXYLayoutEditPolicy 
-extends FeedbackContainerXYLayoutEditPolicy 
+public class ConvertToShapeAction 
+extends AbstractEditorSelectionAction 
 {
-
-	public EditShapeContainerXYLayoutEditPolicy() {
-		super();
+	public static final String ID = ConvertToShapeAction.class.getName();
+	
+	/**
+	 * @param editor
+	 * @param style
+	 */
+	public ConvertToShapeAction(AbstractEditor editor, int style) {
+		super(editor, style);
 	}
 
-	public Command getCommand(Request request) 
-  {    
-  	if (REQ_EDIT_SHAPE.equals(request.getType()))
-  		return getEditShapeCommand((EditorEditShapeRequest)request);
-    
-  	return super.getCommand(request);
-  }  
+	/**
+	 * @param editor
+	 */
+	public ConvertToShapeAction(AbstractEditor editor) {
+		super(editor);
+	}
 	
-  /**
-   * Returns the command contribution for the given edit shape request. 
-   * By default, the request is redispatched to the host's parent as a {@link
-   * org.nightlabs.editor2d.request.EditorRequestConstants#REQ_EDIT_SHAPE}.  
-   * The parent's editpolicies determine how to perform the resize based on the layout manager in use.
-   * @param request the edit shape request
-   * @return the command contribution obtained from the parent
-   */
-  protected Command getEditShapeCommand(EditorEditShapeRequest request) 
-  {
-    EditShapeCommand editShapeCommand = null;
-    if (editShapeCommand == null) 
-    {
-    	editShapeCommand = new EditShapeCommand();
-    	ShapeDrawComponentEditPart sdcEP = (ShapeDrawComponentEditPart) request.getTargetEditPart();
-    	ShapeDrawComponent sdc = sdcEP.getShapeDrawComponent();
-    	editShapeCommand.setShapeDrawComponent(sdc);
-    	editShapeCommand.setPathSegmentIndex(request.getPathSegmentIndex());
-    	editShapeCommand.setLabel(EditorPlugin.getResourceString("command.edit.shape"));      
-    }
-  	Point modelPoint = getConstraintPointFor(request.getLocation());
-  	editShapeCommand.setLocation(modelPoint); 
-		return editShapeCommand;		
-  } 	
+	@Override
+	protected void init() 
+	{
+		setId(ID);
+		setText(EditorPlugin.getResourceString("action.convertToShape.text"));
+		setToolTipText(EditorPlugin.getResourceString("action.convertToShape.tooltip"));		
+	}
+
+	@Override
+	public void run() 
+	{
+		List<ShapeDrawComponent> shapes = getSelection(ShapeDrawComponent.class, true);
+		for (ShapeDrawComponent shape : shapes) {
+			ConvertToShapeCommand cmd = new ConvertToShapeCommand(shape);
+			execute(cmd);
+		}
+	}
+
+	@Override
+	protected boolean calculateEnabled() 
+	{
+		if (selectionContains(ShapeDrawComponent.class, true) && getSelectedObjects().size() == 1)
+			return true;
+		
+		return false;
+	}
+
 }
