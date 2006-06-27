@@ -104,6 +104,7 @@ implements IPropertySource
 		return PageRegistryEP.sharedInstance().getPageRegistry();
 	}
 		
+	// TODO: format value so that only 3 digits after the comma are visible
 	public double getValue(int modelValue, IUnit unit) 
 	{
 		if (unit instanceof DotUnit)
@@ -121,6 +122,7 @@ implements IPropertySource
 		}
 	}
 	
+	// TODO: format value so that only 3 digits after the comma are visible	
 	public int getSetValue(double value, IUnit unit) 
 	{
 		if (unit instanceof DotUnit)

@@ -32,8 +32,12 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
+import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
+import org.nightlabs.editor2d.page.resolution.Resolution;
+import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
 import org.nightlabs.editor2d.page.resolution.ResolutionUnit;
+import org.nightlabs.editor2d.page.unit.PixelUnit;
 import org.nightlabs.i18n.IUnit;
 import org.nightlabs.i18n.Unit;
 
@@ -62,6 +66,7 @@ extends AbstractEPProcessor
 		}
 		return sharedInstance;
 	}
+	
 	protected PageRegistryEP() {
 		super();
 	}
@@ -107,7 +112,8 @@ extends AbstractEPProcessor
 			if (checkString(symbol))
 				unit.setUnitSymbol(symbol);
 			
-			registry.addUnit(unit);
+//			registry.addUnit(unit);
+			getPageRegistry().addUnit(unit);
 		}
 		else if (element.getName().equalsIgnoreCase(ELEMENT_RESOLUTION_UNIT)) 
 		{
@@ -125,7 +131,8 @@ extends AbstractEPProcessor
 				resUnit.setName(Locale.getDefault().getLanguage(), name);
 				resUnit.setResolutionID(resolutionID);
 				resUnit.setUnit(unit);
-				registry.addResolutionUnit(resUnit);				
+//				registry.addResolutionUnit(resUnit);
+				getPageRegistry().addResolutionUnit(resUnit);								
 			} catch (CoreException ce) {
 				throw new EPProcessorException(ce); 
 			}			
@@ -144,7 +151,8 @@ extends AbstractEPProcessor
 				IPredefinedPage page = (IPredefinedPage) element.createExecutableExtension("page");
 				page.setName(Locale.getDefault().getLanguage(), name);
 				page.setPageID(pageID);
-				registry.addPredefinedPage(page);
+//				registry.addPredefinedPage(page);
+				getPageRegistry().addPredefinedPage(page);				
 			} catch (CoreException ce) {
 				throw new EPProcessorException(ce); 
 			}
@@ -152,8 +160,28 @@ extends AbstractEPProcessor
 		}
 	}
 
-	protected PageRegistry registry = PageRegistry.sharedInstance();
-	public PageRegistry getPageRegistry() {
+//	protected PageRegistry registry = PageRegistry.sharedInstance();
+//	public PageRegistry getPageRegistry() 
+//	{
+//		return registry;
+//	}
+
+	protected PageRegistry registry = null;
+	public PageRegistry getPageRegistry() 
+	{
+		if (registry == null) {
+			registry = PageRegistry.sharedInstance();
+			addPixelUnit(registry);
+		}
 		return registry;
+	}
+	
+	protected void addPixelUnit(PageRegistry pageRegistry) 
+	{
+//		int dpi = Toolkit.getDefaultToolkit().getScreenResolution();
+		int dpi = 72;		
+		Resolution screenResolution = new ResolutionImpl(new DPIResolutionUnit(), dpi);
+		PixelUnit pixelUnit = new PixelUnit(screenResolution);
+		pageRegistry.addUnit(pixelUnit);
 	}
 }

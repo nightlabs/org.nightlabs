@@ -58,7 +58,6 @@ import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
 
 
 public class EditorZoomComboContributionItem 
-//extends ContributionItem
 extends XContributionItem
 {
 	public static final Logger LOGGER = Logger.getLogger(EditorZoomComboContributionItem.class);
@@ -157,13 +156,9 @@ extends XContributionItem
 	  	{
 	  		if (combo.getSelectionIndex() >= 0) {
 	  			zoomManager.setZoomAsText(combo.getItem(combo.getSelectionIndex()));
-//	  			oldZoom = zoomManager.getZoom();
-//	  			zoomManager.setZoom(getNewZoom());
 	  		}
 	  		else {
 	  			zoomManager.setZoomAsText(combo.getText());
-//	  			oldZoom = zoomManager.getZoom();
-//	  			zoomManager.setZoom(getNewZoom());
 	  		}
 	  	}
 	  	refresh(false);
@@ -307,14 +302,9 @@ extends XContributionItem
 
   	zoomManager = zm;
 
-//  	double factor = 1 / getFactor();
   	double factor = getResolutionFactor();  	
   	LOGGER.debug("factor = "+factor);
   	
-//		zoomManager.setZoomLevels(getZoomLevels(1/factor));
-//		zoomManager.setUIMultiplier(factor);		
-//  	zoomManager.setZoom(factor);  	
-
 		zoomManager.setZoomLevels(getZoomLevels(factor));
 		zoomManager.setUIMultiplier(1/factor);		
   	zoomManager.setZoom(factor);  	

@@ -52,35 +52,6 @@ extends DrawComponentPropertySource
 	protected ImageDrawComponent getImageDrawComponent() {
 		return (ImageDrawComponent) drawComponent;
 	}
-	
-//	protected List createPropertyDescriptors() 
-//	{
-//		List descriptors = getDescriptors();
-//		// Name
-//		descriptors.add(createNamePD());
-//		// File Name
-//		descriptors.add(createFileNamePD());
-//		// X
-//		descriptors.add(createXPD());		
-//		// Y		
-//		descriptors.add(createYPD());		
-//		// Width		
-//		descriptors.add(createWidthPD());		
-//		// Height		
-//		descriptors.add(createHeightPD());		
-//		// Rotation		
-//		descriptors.add(createRotationPD());	
-//		// Bit Per Pixel
-//		descriptors.add(createBitsPerPixelPD());
-////		// Resolution Width
-////		descriptors.add(createResolutionWidthPD());
-////		// Resolution Height
-////		descriptors.add(createResolutionHeightPD());
-//		// Color Conversion
-//		descriptors.add(createColorConversionPD());
-//		
-//		return descriptors;
-//	}	
 
 	protected List createPropertyDescriptors() 
 	{
@@ -89,12 +60,12 @@ extends DrawComponentPropertySource
 		List descriptors = getDescriptors();
 		// Bit Per Pixel
 		descriptors.add(createBitsPerPixelPD());
-//		// Resolution Width
-//		descriptors.add(createResolutionWidthPD());
-//		// Resolution Height
-//		descriptors.add(createResolutionHeightPD());
+		// Resolution
+		descriptors.add(createResolutionPD());		
 		// Color Conversion
 		descriptors.add(createColorConversionPD());
+		// Original File Name
+		descriptors.add(createOriginalFileNamePD());
 		
 		return descriptors;
 	}	
@@ -107,12 +78,12 @@ extends DrawComponentPropertySource
 		else if (id.equals(ImageDrawComponent.PROP_BITS_PER_PIXEL)) {
 			return getImageDrawComponent().getBitsPerPixel();
 		}
-		else if (id.equals(ImageDrawComponent.PROP_RESOLUTION_WIDTH)) {
-			return getResolutionInDPI(getImageDrawComponent(), true);
+		else if (id.equals(ImageDrawComponent.PROP_RESOLUTION)) {
+			return getResolutionInDPI(getImageDrawComponent());
 		}
-		else if (id.equals(ImageDrawComponent.PROP_RESOLUTION_HEIGHT)) {
-			return getResolutionInDPI(getImageDrawComponent(), false);
-		} 
+		else if (id.equals(ImageDrawComponent.PROP_ORIGINAL_FILE_NAME)) {
+			return getImageDrawComponent().getOriginalImageFileName();
+		}		
 		return super.getPropertyValue(id);
 	}	
 			
@@ -132,25 +103,14 @@ extends DrawComponentPropertySource
 	}
 
 	private IResolutionUnit dpiUnit = new DPIResolutionUnit();
-	private Double getResolutionInDPI(ImageDrawComponent img, boolean width) 
+	private Double getResolutionInDPI(ImageDrawComponent img) 
 	{
-		IResolutionUnit unit = null;
-		if (width)
-			unit = img.getResolutionWidth().getResolutionUnit();
-		else
-			unit = img.getResolutionHeight().getResolutionUnit();
+		IResolutionUnit unit = img.getImageResolution().getResolutionUnit();
+		double resolution = img.getImageResolution().getResolutionX(); 
 		
-		double resolution = -1;
-		if (width)
-			resolution = img.getResolutionWidth().getResolutionX(); 
-		else
-			resolution = img.getResolutionHeight().getResolutionY();
-		
-		if (unit.getResolutionID().equals(dpiUnit.getResolutionID())) {
+		if (unit.getResolutionID().equals(dpiUnit.getResolutionID()))
 			return new Double(resolution);
-		}
-		else 
-		{ 			
+		else { 			
 			double oldfactor = dpiUnit.getUnit().getFactor();
 			double dpiResolution = (resolution * unit.getUnit().getFactor()) / oldfactor;
 			return new Double(dpiResolution);
@@ -174,28 +134,30 @@ extends DrawComponentPropertySource
 		pd.setCategory(CATEGORY_IMAGE);
 		return pd;
 	}
-	
-	protected PropertyDescriptor createResolutionWidthPD() 
+		
+	protected PropertyDescriptor createResolutionPD() 
 	{
-		PropertyDescriptor pd = new DoublePropertyDescriptor(ImageDrawComponent.PROP_RESOLUTION_WIDTH, 
-				EditorPlugin.getResourceString("property.resolutionWidth.label"), true);
+		PropertyDescriptor pd = new DoublePropertyDescriptor(ImageDrawComponent.PROP_RESOLUTION, 
+				EditorPlugin.getResourceString("property.resolution.label"), true);
 		pd.setCategory(CATEGORY_IMAGE);
 		return pd;		
 	}
-	
-	protected PropertyDescriptor createResolutionHeightPD() 
-	{
-		PropertyDescriptor pd = new DoublePropertyDescriptor(ImageDrawComponent.PROP_RESOLUTION_HEIGHT, 
-				EditorPlugin.getResourceString("property.resolutionHeight.label"), true);
-		pd.setCategory(CATEGORY_IMAGE);
-		return pd;		
-	}
-	
+		
 	protected PropertyDescriptor createColorConversionPD()
 	{
 		PropertyDescriptor pd = new ImageColorConversionPropertyDescriptor(getImageDrawComponent(), 
 				ImageDrawComponent.PROP_RENDER_MODE_META_DATA, 
 				EditorPlugin.getResourceString("property.colorConversion.label"));
+		pd.setCategory(CATEGORY_IMAGE);		
 		return pd;
 	}
+	
+	protected PropertyDescriptor createOriginalFileNamePD()
+	{
+		PropertyDescriptor pd = new XTextPropertyDescriptor(ImageDrawComponent.PROP_ORIGINAL_FILE_NAME, 
+				EditorPlugin.getResourceString("property.originalFileName.label"), true);
+		pd.setCategory(CATEGORY_IMAGE);		
+		return pd;
+	}
+	
 }

@@ -1182,19 +1182,16 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //    			Preferences.PREF_STANDARD_UNIT_ID);
 //    	setCurrentUnit(getPageRegistry().getUnit(unitID));
     	
-    	// TODO: make this recalulation in MultiLayerDrawComponent.setResolution()
     	double pageHeight = defaultPage.getPageHeight() * pageUnit.getFactor();
     	double pageWidth = defaultPage.getPageWidth() * pageUnit.getFactor();    	
-
-    	LOGGER.debug("pageHeight = "+pageHeight+" mm");
-    	LOGGER.debug("pageWidth = "+pageWidth+" mm");    		  	
-
     	DotUnit dotUnit = (DotUnit) getPageRegistry().getUnit(DotUnit.UNIT_ID);
     	dotUnit.setResolution(resolution);    	
-//    	double factor = 1 / dotUnit.getFactor();
     	double factor = dotUnit.getFactor();    	
-    	LOGGER.debug("factor = "+factor);
     	
+    	LOGGER.debug("factor = "+factor);
+    	LOGGER.debug("pageHeight = "+pageHeight+" mm");
+    	LOGGER.debug("pageWidth = "+pageWidth+" mm");    		  	
+    	    	
     	pageWidth = pageWidth * factor;
     	pageHeight = pageHeight * factor;
 
