@@ -32,8 +32,6 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
-import org.nightlabs.classloader.DelegatingClassLoader;
-import org.nightlabs.classsharing.ClasssharingPlugin;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 
@@ -60,13 +58,13 @@ extends WorkbenchAdvisor
 
 			if (classSharing)
 			{
-				if (isSystemClassLoaderDelegating()) {
-					LOGGER.debug("Initializing classsharing ...");
-					ClasssharingPlugin.initializeClassSharing();
-					LOGGER.debug("Initializing classsharing ... DONE");
-				}
-				else
-					LOGGER.error("classsharing is enabled, but system classloader is NOT an instance of DelegatingClassLoader! Cannot initialize classsharing!");
+//				if (isSystemClassLoaderDelegating()) {
+//					LOGGER.debug("Initializing classsharing ...");
+//					ClasssharingPlugin.initializeClassSharing();
+//					LOGGER.debug("Initializing classsharing ... DONE");
+//				}
+//				else
+//					LOGGER.error("classsharing is enabled, but system classloader is NOT an instance of DelegatingClassLoader! Cannot initialize classsharing!");
 			}
 			else
 				LOGGER.debug("classsharing is disabled - NOT initialized.");
@@ -84,9 +82,9 @@ extends WorkbenchAdvisor
 		this.classSharing = classSharing;
 	}	
 	
-	public static boolean isSystemClassLoaderDelegating() {
-		return ClassLoader.getSystemClassLoader() instanceof DelegatingClassLoader;
-	}	
+//	public static boolean isSystemClassLoaderDelegating() {
+//		return ClassLoader.getSystemClassLoader() instanceof DelegatingClassLoader;
+//	}	
 	
 	
 	/**
