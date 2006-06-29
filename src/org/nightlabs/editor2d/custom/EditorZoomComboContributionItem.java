@@ -319,8 +319,8 @@ extends XContributionItem
 	public Resolution getDeviceResolution() 
 	{
 		if (deviceResolution == null) {
-			int dpi = Toolkit.getDefaultToolkit().getScreenResolution();
-//			int dpi = 72;
+//			int dpi = Toolkit.getDefaultToolkit().getScreenResolution();
+			int dpi = 72;
 			deviceResolution = new ResolutionImpl(new DPIResolutionUnit(), dpi, dpi);
 			LOGGER.debug("ScreenResolution (DPI) = "+dpi);			
 		}

@@ -54,7 +54,7 @@ extends CreateDrawComponentCommand
     int x = getLocation().x;
     int y = getLocation().y;
     Font newFont = new Font(request.getFontName(), request.getFontStyle(), request.getFontSize());    
-    drawComponent = new TextDrawComponentImpl(request.getText(), newFont, x, y);
+    drawComponent = new TextDrawComponentImpl(request.getText(), newFont, x, y, parent, true);
     getTextDrawComponent().setName(request.getText());
     parent.addDrawComponent(drawComponent);
 		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);    

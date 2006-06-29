@@ -31,9 +31,8 @@ import java.util.List;
 
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
-
 import org.nightlabs.base.property.CheckboxPropertyDescriptor;
-import org.nightlabs.base.property.IntPropertyDescriptor;
+import org.nightlabs.base.property.XTextPropertyDescriptor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.properties.FontNamePropertyDescriptor;
@@ -76,18 +75,7 @@ extends ShapeDrawComponentPropertySource
 		desc.setCategory(CATEGORY_FONT);
 		return desc;
 	}
-	
-	protected PropertyDescriptor createFontSizePD() 
-	{
-//	PropertyDescriptor desc = new FontSizePropertyDescriptor(TextDrawComponent.PROP_FONT_SIZE,
-//	EditorPlugin.getResourceString("property.fontsize.label"));
-//  desc.setCategory(CATEGORY_FONT);		
-		PropertyDescriptor desc = new IntPropertyDescriptor(TextDrawComponent.PROP_FONT_SIZE,
-				EditorPlugin.getResourceString("property.fontsize.label"));
-		desc.setCategory(CATEGORY_FONT);
-		return desc;
-	}
-	
+		
 	protected PropertyDescriptor createBoldPD() 
 	{
 		PropertyDescriptor desc = new CheckboxPropertyDescriptor(TextDrawComponent.PROP_BOLD,
@@ -112,29 +100,65 @@ extends ShapeDrawComponentPropertySource
 		return desc;
 	}
 	
+//	protected PropertyDescriptor createFontSizePD() 
+//	{
+////	PropertyDescriptor desc = new FontSizePropertyDescriptor(TextDrawComponent.PROP_FONT_SIZE,
+////	EditorPlugin.getResourceString("property.fontsize.label"));
+////  desc.setCategory(CATEGORY_FONT);		
+//		PropertyDescriptor desc = new IntPropertyDescriptor(TextDrawComponent.PROP_FONT_SIZE,
+//				EditorPlugin.getResourceString("property.fontsize.label"));
+//		desc.setCategory(CATEGORY_FONT);
+//		return desc;
+//	}
+
+	protected PropertyDescriptor createFontSizePD() 
+	{
+//		boolean editable = !getTextDrawComponent().isTransformed();
+		PropertyDescriptor desc = new XTextPropertyDescriptor(TextDrawComponent.PROP_FONT_SIZE,
+				EditorPlugin.getResourceString("property.fontsize.label"));
+		desc.setCategory(CATEGORY_FONT);
+		return desc;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) 
-	{
-		super.setPropertyValue(id, value);
-		
+	{		
 		if (id.equals(TextDrawComponent.PROP_FONT_NAME)) {
 			getTextDrawComponent().setFontName((String)value);
-		}
-		else if (id.equals(TextDrawComponent.PROP_FONT_SIZE)) {
-			getTextDrawComponent().setFontSize(((Integer)value).intValue());
+			return;
 		}
 		else if (id.equals(TextDrawComponent.PROP_BOLD)) {
 			getTextDrawComponent().setBold(((Boolean)value).booleanValue());
+			return;			
 		}
 		else if (id.equals(TextDrawComponent.PROP_ITALIC)) {
 			getTextDrawComponent().setItalic(((Boolean)value).booleanValue());
+			return;			
 		}
 		else if (id.equals(TextDrawComponent.PROP_TEXT)) {
 			getTextDrawComponent().setText((String)value);
+			return;			
 		}
-
+//		else if (id.equals(TextDrawComponent.PROP_FONT_SIZE)) {
+//			getTextDrawComponent().setFontSize(((Integer)value).intValue());
+//			return;			
+//		}
+		else if (id.equals(TextDrawComponent.PROP_FONT_SIZE)) 
+		{
+			int fontSize;
+			try {
+				fontSize = Integer.valueOf((String)value);	
+				LOGGER.debug("new fontSize = "+fontSize);
+			} catch (NumberFormatException nfe) {
+				fontSize = getTextDrawComponent().getFontSize();
+				LOGGER.debug("NumberFormatException for fontSize = "+value);				
+			}
+			getTextDrawComponent().setFontSize(fontSize);
+			return;			
+		}		
+		super.setPropertyValue(id, value);		
 	}		
 	
 	/* (non-Javadoc)
@@ -142,28 +166,29 @@ extends ShapeDrawComponentPropertySource
 	 */
 	public Object getPropertyValue(Object id) 
 	{
-		Object o = super.getPropertyValue(id);
-		if (o != null) 
-			return o;
-		else 
-		{
-			if (id.equals(TextDrawComponent.PROP_FONT_NAME)) {
-				return getTextDrawComponent().getFontName();
-			}
-			else if (id.equals(TextDrawComponent.PROP_FONT_SIZE)) {
-				return new Integer(getTextDrawComponent().getFontSize());
-			}
-			else if (id.equals(TextDrawComponent.PROP_BOLD)) {
-				return new Boolean(getTextDrawComponent().isBold());
-			}
-			else if (id.equals(TextDrawComponent.PROP_ITALIC)) {
-				return new Boolean(getTextDrawComponent().isItalic());
-			}
-			else if (id.equals(TextDrawComponent.PROP_TEXT)) {
-				return getTextDrawComponent().getText();
-			}
-
-			return null;			
+		if (id.equals(TextDrawComponent.PROP_FONT_NAME)) {
+			return getTextDrawComponent().getFontName();
 		}
+		else if (id.equals(TextDrawComponent.PROP_BOLD)) {
+			return new Boolean(getTextDrawComponent().isBold());
+		}
+		else if (id.equals(TextDrawComponent.PROP_ITALIC)) {
+			return new Boolean(getTextDrawComponent().isItalic());
+		}
+		else if (id.equals(TextDrawComponent.PROP_TEXT)) {
+			return getTextDrawComponent().getText();
+		}
+//		else if (id.equals(TextDrawComponent.PROP_FONT_SIZE)) {
+//			return new Integer(getTextDrawComponent().getFontSize());
+//		}
+		else if (id.equals(TextDrawComponent.PROP_FONT_SIZE)) 
+		{
+			if (!getTextDrawComponent().isTransformed())
+				return new String(new Integer(getTextDrawComponent().getFontSize()).toString());
+			else
+				return EditorPlugin.getResourceString("property.fontSizeUndefined.label");
+		}				
+		return super.getPropertyValue(id);
 	}			
+	
 }

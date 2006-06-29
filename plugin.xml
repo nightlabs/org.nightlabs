@@ -307,7 +307,7 @@
             page="org.nightlabs.editor2d.page.predefined.A5Page"
             pageID="A5"/>
       <Unit
-            factor="0.35278"
+            factor="2.8346278133681047678439820851522"
             name="point"
             symbol="pt"
             unitID="point"/>

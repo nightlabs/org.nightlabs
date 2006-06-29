@@ -80,9 +80,9 @@ implements CreationFactory
 		else if ( targetClass.equals(LineDrawComponent.class)) {
 		  result = factory.createLineDrawComponent();
 		}
-    else if ( targetClass.equals(TextDrawComponent.class)) {
-      result = factory.createTextDrawComponent();
-    }
+//    else if ( targetClass.equals(TextDrawComponent.class)) {
+//      result = factory.createTextDrawComponent();
+//    }
     else if ( targetClass.equals(ImageDrawComponent.class)) {
       result = factory.createImageDrawComponent();
     }

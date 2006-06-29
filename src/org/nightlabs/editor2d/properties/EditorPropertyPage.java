@@ -98,7 +98,7 @@ extends PropertySheetPage
 	{	
 		public void widgetSelected(SelectionEvent e) 
 		{
-//			LOGGER.debug("unit changed!");
+			LOGGER.debug("unit changed!");
 			if (selection != null) {
 				for (int i = 0; i < selection.length; i++) {
 					setUnit(selection[i]);					
