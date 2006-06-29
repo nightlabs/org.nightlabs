@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JDO Plugin
+Bundle-SymbolicName: org.nightlabs.jdo
+Bundle-Version: 1.0.0
+Bundle-ClassPath: org.nightlabs.jdo.jar,
+ lib/NightLabsJDO.jar
+Bundle-Activator: org.nightlabs.jdo.JdoPlugin
+Bundle-Vendor: NightLabs.com
+Bundle-Localization: plugin
+Export-Package: org.nightlabs.jdo,
+ org.nightlabs.jdo.notification,
+ org.nightlabs.jdo.search
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.nightlabs.base,
+ org.nightlabs.jfire.base.j2ee
+Eclipse-LazyStart: true
