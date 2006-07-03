@@ -2,7 +2,8 @@ Manifest-Version: 1.0
 Generated-from: 1140596560679;type=2
 Bundle-ManifestVersion: 2
 Bundle-Name: NightLabs Base plugin
-Bundle-SymbolicName: org.nightlabs.base; singleton:=true
+Bundle-SymbolicName: org.nightlabs.base; 
+ singleton:=true
 Bundle-Version: 1.0.0
 Bundle-ClassPath: org.nightlabs.base.jar,
  lib/NightLabsBase.jar,
