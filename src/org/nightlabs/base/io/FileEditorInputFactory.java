@@ -28,6 +28,7 @@ package org.nightlabs.base.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.ui.IElementFactory;
@@ -35,21 +36,32 @@ import org.eclipse.ui.IMemento;
 
 public class FileEditorInputFactory implements IElementFactory {
 
-	public static final String FILENAME_KEY = "fileName";
+	public static final String CLASSNAME_KEY = "org.nightlabs.base.io.fileeditorinput.classname";
+	public static final String FILENAME_KEY = "org.nightlabs.base.io.fileeditorinput.fileName";
 	
 	public FileEditorInputFactory() {
 		super();
 	}
 
 	public IAdaptable createElement(IMemento memento) {
-		String fileName = memento.getString(FILENAME_KEY);
-//		if (fileName != null) {
+		try {
+			String className = memento.getString(CLASSNAME_KEY);
+			Class clazz = Class.forName(className);
+			Constructor constructor = clazz.getConstructor(new Class[] {File.class});
+			String fileName = memento.getString(FILENAME_KEY);
+			return (IAdaptable)constructor.newInstance(new Object[] {new File(fileName)});
+			
+		} catch (Throwable t) {			
+			t.printStackTrace();
+			
+			// fallback to FileEditorInput
+			String fileName = memento.getString(FILENAME_KEY);
+//			if (fileName != null) {
 			File file = new File(fileName);
 			FileEditorInput input = new FileEditorInput(file);
 			return input;
-//		}
-//		// TODO: check if this may cause errors
-//		return null;
+			
+		}
 	}
 
 	public static void storeFileEditorInput(IMemento memento, FileEditorInput input) {
@@ -57,6 +69,7 @@ public class FileEditorInputFactory implements IElementFactory {
 			return;
 
 		try {
+			memento.putString(CLASSNAME_KEY, input.getClass().getName());
 			memento.putString(FILENAME_KEY, input.getFile().getCanonicalPath());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
