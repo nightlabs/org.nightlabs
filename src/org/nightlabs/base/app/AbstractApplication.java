@@ -35,7 +35,7 @@ import org.eclipse.core.runtime.IPlatformRunnable;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
-
+import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlingThreadGroup;
 import org.nightlabs.base.exceptionhandler.SaveRunnableRunner;
 import org.nightlabs.util.Utils;
@@ -48,8 +48,13 @@ public abstract class AbstractApplication
 implements IPlatformRunnable
 {
 	public static final Logger LOGGER = Logger.getLogger(AbstractApplication.class);
+
+	/**
+	 * The system properties hold the name of the application accessible via this key (it's set by {@link #setSystemProperty()}).
+	 * Use <code>System.getProperty(APPLICATION_SYSTEM_PROPERTY_NAME)</code> to get the application name.
+	 */
 	public static final String APPLICATION_SYSTEM_PROPERTY_NAME = "nightlabs.base.application.name";
-	
+
 	public AbstractApplication() 
 	{
 		super();
@@ -156,7 +161,7 @@ implements IPlatformRunnable
 		}
 //		System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" = "+System.getProperty(APPLICATION_SYSTEM_PROPERTY_NAME));    
 	}
-	
+
 	/**
 	 * Creates a display in {@link org.eclipse.ui.PlatformUI} and a new 
 	 * {@link org.eclipse.ui.application.WorkbenchAdvisor} and runs the AbstractApplication.
@@ -166,12 +171,14 @@ implements IPlatformRunnable
 	throws Exception 
 	{
 		try {
+			NLBasePlugin.getDefault().setApplication(this);
+			this.arguments = (String[]) args;
 			SafeRunnable.setRunner(new SaveRunnableRunner());
 			applicationThread.start();
 			synchronized (mutex) {
 				mutex.wait();
 			}
-			
+
 			if (applicationThread.getPlatformResultCode() == PlatformUI.RETURN_RESTART) 
 				return IPlatformRunnable.EXIT_RESTART; 
 			else 
@@ -180,9 +187,21 @@ implements IPlatformRunnable
 			if (Display.getCurrent() != null)
 				Display.getCurrent().dispose();
 		}
-	}	
-	
-	
+	}
+
+	private String[] arguments = null;
+
+	/**
+	 * This method returns the program arguments. Note, that they are <code>null</code> until {@link #run(Object)} has been
+	 * called!
+	 *
+	 * @return The program arguments as passed to the command.
+	 */
+	public String[] getArguments()
+	{
+		return arguments;
+	}
+
 	private ExceptionHandlingThreadGroup threadGroup = null;	
 	protected ThreadGroup getThreadGroup() 
 	{
@@ -190,14 +209,14 @@ implements IPlatformRunnable
 			threadGroup = new ExceptionHandlingThreadGroup(getApplicationName()+"ThreadGroup");
 		return threadGroup;
 	}
-	
+
 	private AbstractApplicationThread applicationThread = null;
 	protected void init() 
 	{
 		applicationName = initApplicationName();
 		applicationThread = initApplicationThread(getThreadGroup());
 	}
-	
+
 	/**
 	 * 
 	 * @return the name of the Application

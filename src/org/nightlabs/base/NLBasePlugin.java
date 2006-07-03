@@ -27,6 +27,7 @@
 package org.nightlabs.base;
 
 import org.eclipse.ui.plugin.*;
+import org.nightlabs.base.app.AbstractApplication;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.exceptionhandler.SimpleExceptionHandlerRegistry;
 import org.osgi.framework.BundleContext;
@@ -94,5 +95,19 @@ public class NLBasePlugin extends AbstractUIPlugin {
 	 */
 	public ResourceBundle getResourceBundle() {
 		return resourceBundle;
+	}
+
+	private AbstractApplication application = null;
+
+	public AbstractApplication getApplication()
+	{
+		return application;
+	}
+	public void setApplication(AbstractApplication application)
+	{
+		if (this.application != null && this.application != application)
+			throw new IllegalStateException("Cannot overwrite application! It is already initialized!");
+
+		this.application = application;
 	}
 }
