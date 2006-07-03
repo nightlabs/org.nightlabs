@@ -35,13 +35,12 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Control;
 import org.holongate.j2d.IPaintable;
 import org.holongate.j2d.J2DUtilities;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
-import org.nightlabs.editor2d.render.J2DRenderContext;
 import org.nightlabs.editor2d.render.RenderContext;
 import org.nightlabs.editor2d.render.Renderer;
+import org.nightlabs.editor2d.render.j2d.J2DRenderContext;
 
 public class MLDCPaintable implements IPaintable
 {

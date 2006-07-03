@@ -39,10 +39,9 @@ import org.eclipse.gef.editparts.ZoomListener;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.j2d.GeneralShape;
-import org.nightlabs.editor2d.render.J2DRenderContext;
-import org.nightlabs.editor2d.render.RenderContext;
 import org.nightlabs.editor2d.render.Renderer;
 import org.nightlabs.editor2d.util.J2DUtil;
+import org.nightlabs.editor2d.util.RenderUtil;
 
 
 public class DrawComponentFigure 
@@ -64,11 +63,7 @@ implements RendererFigure
   {
   	if (renderer == null && drawComponent != null)
   		renderer = drawComponent.getRenderer();
-  	if (renderer != null) {
-  		RenderContext rc = renderer.getRenderContext();
-  		if (rc != null && rc instanceof J2DRenderContext)
-    	  ((J2DRenderContext)rc).paint(drawComponent, graphics);
-  	}    	
+  	RenderUtil.paintJ2DRenderer(renderer, drawComponent, graphics);  	
   }
       
   public static void checkDraw2D(Graphics graphics, DrawComponent dc, Renderer r) 

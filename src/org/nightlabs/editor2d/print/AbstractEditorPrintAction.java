@@ -37,8 +37,9 @@ import org.eclipse.swt.printing.PrinterData;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.actions.AbstractEditorAction;
-import org.nightlabs.editor2d.render.J2DRenderContext;
+import org.nightlabs.editor2d.render.RenderContext;
 import org.nightlabs.editor2d.render.Renderer;
+import org.nightlabs.editor2d.render.j2d.J2DRenderContext;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -89,13 +90,11 @@ extends AbstractEditorAction
 		{
 			Graphics2D g2d = (Graphics2D) graphics;
 			Renderer r = getDrawComponent().getRenderer();
-			if (r.getRenderContext() instanceof J2DRenderContext) {
+			if (r.getRenderContext() instanceof J2DRenderContext)
 				j2drc = (J2DRenderContext) r.getRenderContext();
-			}						
-			
-//			LOGGER.debug("pageFormat in printable");
-//			PrintUtil.logPageFormat(pageFormat);
-			
+			else
+				j2drc = (J2DRenderContext) r.getRenderContext(J2DRenderContext.RENDER_CONTEXT_TYPE_JAVA2D);
+						
 			// Print only 1 Page
 			if (pageIndex >= 1) {
         return Printable.NO_SUCH_PAGE;
