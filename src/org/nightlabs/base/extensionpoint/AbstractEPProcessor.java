@@ -55,9 +55,16 @@ import org.eclipse.core.runtime.Platform;
 public abstract class AbstractEPProcessor 
 implements IEPProcessor
 {
+	/**
+	 * Return the extension-point id here this EPProcessor should process.
+	 */
 	public abstract String getExtensionPointID();
 	
+	/**
+	 * Process all extension to the extension-point defined by {@link #getExtensionPointID()}
+	 */
 	public abstract void processElement(IExtension extension, IConfigurationElement element) throws EPProcessorException;
+	
 	
 	private List<IEPProcessListener> processListeners;
 	
