@@ -27,6 +27,7 @@ package org.nightlabs.editor2d.actions.copy;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
@@ -43,6 +44,7 @@ public class CutAction
 extends AbstractEditorSelectionAction 
 {
 	public static final String ID = ActionFactory.CUT.getId();
+	public static final Logger LOGGER = Logger.getLogger(CutAction.class);
 	
 	/**
 	 * @param editor
@@ -68,13 +70,30 @@ extends AbstractEditorSelectionAction
 		setAccelerator(SWT.CTRL | 'X');
 	}
 	
+//  /**
+//	 * @return true, if objects are selected, except the RootEditPart or LayerEditParts
+//	 */
+//	protected boolean calculateEnabled() 
+//	{
+//		boolean enabled = !getDefaultSelection(true).isEmpty();
+//		LOGGER.debug("calculateEnbaled = "+enabled);
+//		LOGGER.debug("getDefaultSelection(true) = ");
+//		for (Iterator iter = getDefaultSelection(true).iterator(); iter.hasNext();) {
+//			DrawComponent element = (DrawComponent) iter.next();
+//			LOGGER.debug("selected element = "+element);
+//		}
+//		LOGGER.debug("");		
+//		return enabled;
+//	}
+
   /**
 	 * @return true, if objects are selected, except the RootEditPart or LayerEditParts
 	 */
-	protected boolean calculateEnabled() {
-		return !getDefaultSelection(false).isEmpty();
+	protected boolean calculateEnabled() 
+	{
+		return !getDefaultSelection(true).isEmpty();
 	}
-
+	
 	public void run() 
 	{
 		List dcs = getSelection(DrawComponent.class, true);

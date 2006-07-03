@@ -28,7 +28,6 @@ package org.nightlabs.editor2d.actions.copy;
 import java.util.List;
 
 import org.eclipse.gef.ui.actions.Clipboard;
-import org.eclipse.swt.SWT;
 import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;

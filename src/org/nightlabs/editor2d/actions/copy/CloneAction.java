@@ -29,7 +29,6 @@ import java.awt.Rectangle;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
@@ -38,7 +37,6 @@ import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
 import org.nightlabs.editor2d.command.CloneDrawComponentCommand;
-import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
 import org.nightlabs.editor2d.config.QuickOptionsConfigModule;
 
 /**

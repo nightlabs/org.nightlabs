@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.RootEditPart;
@@ -43,25 +44,31 @@ import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EllipseDrawComponent;
+import org.nightlabs.editor2d.GroupDrawComponent;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.LineDrawComponent;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RectangleDrawComponent;
+import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.edit.EllipseEditPart;
+import org.nightlabs.editor2d.edit.GroupEditPart;
 import org.nightlabs.editor2d.edit.ImageEditPart;
 import org.nightlabs.editor2d.edit.LayerEditPart;
 import org.nightlabs.editor2d.edit.LineEditPart;
+import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
 import org.nightlabs.editor2d.edit.PageEditPart;
 import org.nightlabs.editor2d.edit.RectangleEditPart;
+import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
 import org.nightlabs.editor2d.edit.TextEditPart;
 
 public abstract class AbstractEditorSelectionAction 
 extends SelectionAction
 {
-
+	public static final Logger LOGGER = Logger.getLogger(AbstractEditorSelectionAction.class);
+	
 	public AbstractEditorSelectionAction(AbstractEditor editor, int style) {
 		super(editor, style);
 	}
@@ -120,7 +127,7 @@ extends SelectionAction
 	 * checks if the selected objects contain minimum so many EditPart or EditPart-Models
 	 * as the given amount of the given classes
 	 * 
-	 * @param clazzes a Array of Classes to search for
+	 * @param clazzes an Array of classes to search for
 	 * @param amount the minimum amount of occurences of the given class 
 	 * in the selected objects
 	 * @param model determines if the Class-Check should be performed on the
@@ -189,7 +196,7 @@ extends SelectionAction
 	 * @param model determines if the Class-Check should be performed on the
 	 * selected EditParts or the model (DrawComponent) of the EditParts
 	 * @return a List of all objects from the selection which are assignable 
-	 * from the given class
+	 * from the given classes
 	 */
 	public List getSelection(Class[] clazzes, boolean model) 
 	{
@@ -220,59 +227,59 @@ extends SelectionAction
 			return selection;
 		}
 		return EMPTY_LIST;
-	}	
-	
-	/**
-	 * 
-	 * @param excludeClasses a Collection of Class-Objects which should be excluded
-	 * from the selection
-	 * @param model determines if the Class-Check should be performed on the
-	 * selected EditParts or the model (DrawComponent) of the EditParts
-	 * @return a List of all selected objects (editParts or DrawComponents, determined by model), 
-	 * except those who are assignableFrom a Class included in the excludeList
-	 * @see Class#isAssignableFrom(Class)
-	 */
-	public List getSelection(Collection excludeClasses, boolean model) 
-	{
-		if (!getSelectedObjects().isEmpty()) 
-		{
-			List selection = new ArrayList();
-			for (Iterator it = getSelectedObjects().iterator(); it.hasNext(); ) 
-			{
-				EditPart editPart = (EditPart) it.next();
-				Class c = null;
-				if (!model)
-					c = editPart.getClass();
-				else
-					c = editPart.getModel().getClass();
-				
-				for (Iterator itExclude = excludeClasses.iterator(); itExclude.hasNext(); ) 
-				{
-					Class clazz = (Class) itExclude.next();
-						
-					if (clazz.isAssignableFrom(c)) 
-					{
-						if (!model) {
-							if (selection.contains(editPart))
-								selection.remove(editPart);
-						}
-						else {
-							if (selection.contains(editPart.getModel()))
-								selection.remove(editPart.getModel());							
-						}																			
-					}
-					else {
-						if (!model)
-							selection.add(editPart);
-						else
-							selection.add(editPart.getModel());						
-					}
-				}
-			}
-			return selection;
-		}
-		return EMPTY_LIST;
-	}	
+	}
+		
+//	/**
+//	 * 
+//	 * @param excludeClasses a Collection of Class-Objects which should be excluded
+//	 * from the selection
+//	 * @param model determines if the Class-Check should be performed on the
+//	 * selected EditParts or the model (DrawComponent) of the EditParts
+//	 * @return a List of all selected objects (editParts or DrawComponents, determined by model), 
+//	 * except those who are assignableFrom a Class included in the excludeList
+//	 * @see Class#isAssignableFrom(Class)
+//	 */
+//	public List getSelection(Collection excludeClasses, boolean model) 
+//	{
+//		if (!getSelectedObjects().isEmpty()) 
+//		{
+//			List selection = new ArrayList();
+//			for (Iterator it = getSelectedObjects().iterator(); it.hasNext(); ) 
+//			{
+//				EditPart editPart = (EditPart) it.next();
+//				Class c = null;
+//				if (!model)
+//					c = editPart.getClass();
+//				else
+//					c = editPart.getModel().getClass();
+//				
+//				for (Iterator itExclude = excludeClasses.iterator(); itExclude.hasNext(); ) 
+//				{
+//					Class clazz = (Class) itExclude.next();
+//						
+//					if (clazz.isAssignableFrom(c)) 
+//					{
+//						if (!model) {
+//							if (selection.contains(editPart))
+//								selection.remove(editPart);
+//						}
+//						else {
+//							if (selection.contains(editPart.getModel()))
+//								selection.remove(editPart.getModel());							
+//						}																			
+//					}
+//					else {
+//						if (!model)
+//							selection.add(editPart);
+//						else
+//							selection.add(editPart.getModel());						
+//					}
+//				}
+//			}
+//			return selection;
+//		}
+//		return EMPTY_LIST;
+//	}	
 	
 	private Class[] defaultEditPartExcludes = null; 
 	private Class[] defaultModelExcludes = null;
@@ -281,10 +288,11 @@ extends SelectionAction
 	{
 		if (!model) {
 			if (defaultEditPartExcludes == null) {
-				defaultEditPartExcludes = new Class[3];
-				defaultEditPartExcludes[0] = RootEditPart.class;
+				defaultEditPartExcludes = new Class[4];
+				defaultEditPartExcludes[0] = RootEditPart.class;							
 				defaultEditPartExcludes[1] = LayerEditPart.class;
-				defaultEditPartExcludes[2] = PageEditPart.class;				
+				defaultEditPartExcludes[2] = PageEditPart.class;
+				defaultEditPartExcludes[3] = MultiLayerDrawComponentEditPart.class;				
 			}
 			return defaultEditPartExcludes;
 		}
@@ -299,14 +307,18 @@ extends SelectionAction
 		}
 	}
 		
+	private Collection<Class> defaultExcludeList = null;
 	public Collection<Class> getDefaultExcludeList(boolean model) 
 	{
-		Class[] excludes = getDefaultExcludes(model);
-		Collection excludeCollection = new ArrayList<Class>(excludes.length);		
-		for (int i=0; i<excludes.length; i++) {
-			excludeCollection.add(excludes[i]);
+		if (defaultExcludeList == null) 
+		{
+			Class[] excludes = getDefaultExcludes(model);
+			defaultExcludeList = new ArrayList<Class>(excludes.length);		
+			for (int i=0; i<excludes.length; i++) {
+				defaultExcludeList.add(excludes[i]);
+			}			
 		}
-		return excludeCollection;
+		return defaultExcludeList;
 	}
 	
 	private Class[] defaultEditPartIncludes = null; 
@@ -315,41 +327,48 @@ extends SelectionAction
 	{
 		if (!model) {
 			if (defaultEditPartIncludes == null) {
-				defaultEditPartIncludes = new Class[5];
+				defaultEditPartIncludes = new Class[7];
 				defaultEditPartIncludes[0] = RectangleEditPart.class;
 				defaultEditPartIncludes[1] = EllipseEditPart.class;
 				defaultEditPartIncludes[2] = LineEditPart.class;
 				defaultEditPartIncludes[3] = ImageEditPart.class;
-				defaultEditPartIncludes[4] = TextEditPart.class;				
+				defaultEditPartIncludes[4] = TextEditPart.class;			
+				defaultEditPartIncludes[5] = GroupEditPart.class;
+				defaultEditPartIncludes[6] = ShapeDrawComponentEditPart.class;				
 			}
 			return defaultEditPartIncludes;
 		}
 		else {
 			if (defaultModelIncludes == null) {
-				defaultModelIncludes = new Class[5];
+				defaultModelIncludes = new Class[7];
 				defaultModelIncludes[0] = RectangleDrawComponent.class;
 				defaultModelIncludes[1] = EllipseDrawComponent.class;
 				defaultModelIncludes[2] = LineDrawComponent.class;
 				defaultModelIncludes[3] = ImageDrawComponent.class;
-				defaultModelIncludes[4] = TextDrawComponent.class;				
+				defaultModelIncludes[4] = TextDrawComponent.class;
+				defaultModelIncludes[5] = GroupDrawComponent.class;
+				defaultModelIncludes[6] = ShapeDrawComponent.class;				
 			}
 			return defaultModelIncludes;
 		}
 	}	
 	
+	private Collection<Class> defaultIncludeList = null;
 	public Collection<Class> getDefaultIncludeList(boolean model) 
 	{
-		Class[] includes = getDefaultIncludes(model);
-		Collection includeCollection = new ArrayList<Class>(includes.length);		
-		for (int i=0; i<includes.length; i++) {
-			includeCollection.add(includes[i]);
+		if (defaultIncludeList == null) {
+			Class[] includes = getDefaultIncludes(model);
+			defaultIncludeList = new ArrayList<Class>(includes.length);		
+			for (int i=0; i<includes.length; i++) {
+				defaultIncludeList.add(includes[i]);
+			}			
 		}
-		return includeCollection;		
+		return defaultIncludeList;		
 	}
 	
 	public List getDefaultSelection(boolean model) 
 	{
-		return getSelection(getDefaultExcludeList(model), model);
+		return getSelection(getDefaultIncludes(model), model);		
 	}
 	
 	public IStructuredSelection getStructuredSelection() {
@@ -425,10 +444,5 @@ extends SelectionAction
 	public Shell getShell() {
 		return getEditor().getSite().getShell();
 	}
-
-	public void dispose() 
-	{
-		super.dispose();		
-	}	
 		
 }

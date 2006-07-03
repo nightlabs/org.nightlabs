@@ -42,6 +42,7 @@ import org.eclipse.gef.ui.actions.ZoomInRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomOutRetargetAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -55,12 +56,20 @@ import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.RepaintAction;
 import org.nightlabs.editor2d.actions.RepaintRetargetAction;
 import org.nightlabs.editor2d.actions.RotateAction;
+import org.nightlabs.editor2d.actions.copy.CopyAction;
+import org.nightlabs.editor2d.actions.copy.CutAction;
+import org.nightlabs.editor2d.actions.copy.PasteAction;
 import org.nightlabs.editor2d.actions.order.ChangeOrderOneDown;
 import org.nightlabs.editor2d.actions.order.ChangeOrderOneUp;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront;
 import org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction;
 import org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction;
+import org.nightlabs.editor2d.actions.shape.ConvertToShapeAction;
+import org.nightlabs.editor2d.actions.shape.ShapeExclusiveOrAction;
+import org.nightlabs.editor2d.actions.shape.ShapeIntersectAction;
+import org.nightlabs.editor2d.actions.shape.ShapeSubtractAction;
+import org.nightlabs.editor2d.actions.shape.ShapeUnionAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllRetargetAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomPageAction;
@@ -85,31 +94,52 @@ extends ActionBarContributor
    */
   protected void buildActions() 
   {
+  	// Undo / Redo
   	addRetargetAction(new UndoRetargetAction());
   	addRetargetAction(new RedoRetargetAction());
+  	
+  	// Delete
   	addRetargetAction(new DeleteRetargetAction());
   	  	
+  	// Cut / Copy / Paste
+  	addRetargetAction(new RetargetAction(CopyAction.ID, 
+  			EditorPlugin.getResourceString("action.copy.text")));
+  	addRetargetAction(new RetargetAction(PasteAction.ID, 
+  			EditorPlugin.getResourceString("action.paste.text")));
+  	addRetargetAction(new RetargetAction(CutAction.ID, 
+  			EditorPlugin.getResourceString("action.cut.text")));
+  	
+  	// Alignment
   	addRetargetAction(new AlignmentRetargetAction(PositionConstants.LEFT));
   	addRetargetAction(new AlignmentRetargetAction(PositionConstants.CENTER));
   	addRetargetAction(new AlignmentRetargetAction(PositionConstants.RIGHT));
   	addRetargetAction(new AlignmentRetargetAction(PositionConstants.TOP));
   	addRetargetAction(new AlignmentRetargetAction(PositionConstants.MIDDLE));
   	addRetargetAction(new AlignmentRetargetAction(PositionConstants.BOTTOM));
-  	  	
   	addRetargetAction(new MatchWidthRetargetAction());
   	addRetargetAction(new MatchHeightRetargetAction());
   	
+  	// Order
+  	addRetargetAction(new RetargetAction(ChangeOrderToLocalFront.ID,
+  		EditorPlugin.getResourceString("action.changeOrderToLocalFront.text")));
+  	addRetargetAction(new RetargetAction(ChangeOrderOneUp.ID,
+    		EditorPlugin.getResourceString("action.changeOrderOneUp.text")));
+  	addRetargetAction(new RetargetAction(ChangeOrderOneDown.ID,
+    		EditorPlugin.getResourceString("action.changeOrderOneDown.text")));
+  	addRetargetAction(new RetargetAction(ChangeOrderToLocalBack.ID,
+    		EditorPlugin.getResourceString("action.changeOrderToLocalBack.text")));
+  	
+  	// Ruler / Grid
   	addRetargetAction(new RetargetAction(
   			GEFActionConstants.TOGGLE_RULER_VISIBILITY, 
-  			GEFMessages.ToggleRulerVisibility_Label, IAction.AS_CHECK_BOX));
-  	
+  			GEFMessages.ToggleRulerVisibility_Label, IAction.AS_CHECK_BOX));  	
   	addRetargetAction(new RetargetAction(
   			GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY, 
   			GEFMessages.ToggleSnapToGeometry_Label, IAction.AS_CHECK_BOX));
-
   	addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY, 
   			GEFMessages.ToggleGrid_Label, IAction.AS_CHECK_BOX));
 
+  	// Zoom
   	addRetargetAction(new ZoomInRetargetAction());
   	addRetargetAction(new ZoomOutRetargetAction());  	
   	addRetargetAction(new ZoomAllRetargetAction());
@@ -117,13 +147,13 @@ extends ActionBarContributor
   	addRetargetAction(new ZoomPageRetargetAction());
   	  	
   	addRetargetAction(new RetargetAction(ShowFigureToolTipAction.ID, 
-  			EditorPlugin.getResourceString("action.showFigureToolTip.text"), IAction.AS_CHECK_BOX));
-  	
+  			EditorPlugin.getResourceString("action.showFigureToolTip.text"), IAction.AS_CHECK_BOX));  	
   	addRetargetAction(new RetargetAction(ShowStatusLineAction.ID,
   			EditorPlugin.getResourceString("action.statusLine.text"), IAction.AS_CHECK_BOX));
   	
   	addRetargetAction(new RepaintRetargetAction());
-  	  	
+  	
+  	// Print
   	addRetargetAction(new RetargetAction(EditorPrintAction.ID, 
   			EditorPlugin.getResourceString("action.print.text")));  	
   	addRetargetAction(new RetargetAction(EditorPrintPreviewAction.ID, 
@@ -131,13 +161,25 @@ extends ActionBarContributor
   	addRetargetAction(new RetargetAction(EditorPrintSetupAction.ID, 
   			EditorPlugin.getResourceString("action.printPageSetup.text")));  	
   	
-//	addRetargetAction(new DirectEditRetargetAction());   
-//	addRetargetAction(new ViewerRetargetAction());  	
+  	// Shape Actions
+  	addRetargetAction(new RetargetAction(ConvertToShapeAction.ID,
+  			EditorPlugin.getResourceString("action.convertToShape.text")));
+  	addRetargetAction(new RetargetAction(EditShapeAction.ID,
+  			EditorPlugin.getResourceString("action.editshape.text")));
+  	addRetargetAction(new RetargetAction(ShapeUnionAction.ID,
+  			EditorPlugin.getResourceString("action.shapeUnion.text")));
+  	addRetargetAction(new RetargetAction(ShapeSubtractAction.ID,
+  			EditorPlugin.getResourceString("action.shapeSubtract.text")));
+  	addRetargetAction(new RetargetAction(ShapeIntersectAction.ID,
+  			EditorPlugin.getResourceString("action.shapeIntersection.text")));
+  	addRetargetAction(new RetargetAction(ShapeExclusiveOrAction.ID,
+  			EditorPlugin.getResourceString("action.shapeExclusiveOr.text")));  	
   }
 
   public static final String ID_VIEW_MENU = IWorkbenchActionConstants.M_VIEW;
   public static final String ID_EDIT_MENU = IWorkbenchActionConstants.M_EDIT;
   public static final String ID_FILE_MENU = IWorkbenchActionConstants.M_FILE;
+  public static final String ID_SHAPE_MENU = "shape";
   
   /**
    * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToMenu(IMenuManager)
@@ -159,33 +201,43 @@ extends ActionBarContributor
   		fileMenu.insertAfter(EditorPrintPreviewAction.ID, getAction(EditorPrintSetupAction.ID));
     	fileMenu.insertAfter(EditorPrintSetupAction.ID, new Separator());  				  		
   	}
-  	  	
+
+  	// Edit
   	editMenu = new MenuManager(EditorPlugin.getResourceString("menu.edit"), ID_EDIT_MENU);
+  	
+  	// Undo / Redo
   	editMenu.add(getAction(ActionFactory.UNDO.getId()));
   	editMenu.add(getAction(ActionFactory.REDO.getId()));
-  	
   	editMenu.add(new Separator());
-  	editMenu.add(getAction(GEFActionConstants.ALIGN_LEFT));
-  	editMenu.add(getAction(GEFActionConstants.ALIGN_CENTER));
-  	editMenu.add(getAction(GEFActionConstants.ALIGN_RIGHT));
   	
-  	editMenu.add(new Separator());
-  	editMenu.add(getAction(GEFActionConstants.ALIGN_TOP));
-  	editMenu.add(getAction(GEFActionConstants.ALIGN_MIDDLE));
-  	editMenu.add(getAction(GEFActionConstants.ALIGN_BOTTOM));
+  	// Copy / Cut / Paste
+  	editMenu.add(getAction(CopyAction.ID));
+  	editMenu.add(getAction(PasteAction.ID));
+  	editMenu.add(getAction(CutAction.ID));
+  	editMenu.add(new Separator());  	
   	
-  	editMenu.add(new Separator());	
-  	editMenu.add(getAction(GEFActionConstants.MATCH_WIDTH));
-  	editMenu.add(getAction(GEFActionConstants.MATCH_HEIGHT));  	
+  	// Delete
+  	editMenu.add(getAction(ActionFactory.DELETE.getId()));
+  	editMenu.add(new Separator());  	
+  	
+  	// Edit - Align  	
+//  	IMenuManager alignMenu = new MenuManager(EditorPlugin.getResourceString("menu.align"));
+//  	buildAlignMenu(alignMenu);
+//  	editMenu.add(alignMenu);
+  	addAlignActions(editMenu);  	
   	  	
+  	// Edit - Order  	
+  	editMenu.add(new Separator());
+//  	IMenuManager orderMenu = new MenuManager(EditorPlugin.getResourceString("menu.order"));
+//  	buildOrderMenu(orderMenu);
+//  	editMenu.add(orderMenu);  	
+  	addOrderActions(editMenu);  	
+  	
   	menubar.insertAfter(IWorkbenchActionConstants.M_FILE, editMenu);  	
   	
+  	// View
   	viewMenu = new MenuManager(EditorPlugin.getResourceString("menu.view"), ID_VIEW_MENU);
-  	viewMenu.add(getAction(GEFActionConstants.ZOOM_IN));
-  	viewMenu.add(getAction(GEFActionConstants.ZOOM_OUT));
-  	viewMenu.add(getAction(ZoomAllAction.ID));
-  	viewMenu.add(getAction(ZoomSelectionAction.ID));
-  	viewMenu.add(getAction(ZoomPageAction.ID));
+  	addZoomActions(viewMenu);
   	
   	viewMenu.add(new Separator());
   	viewMenu.add(getAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY));
@@ -197,8 +249,17 @@ extends ActionBarContributor
   	viewMenu.add(getAction(ShowStatusLineAction.ID));
   	
   	menubar.insertAfter(ID_EDIT_MENU, viewMenu);
+  	
+  	// Shape
+  	shapeMenu = new MenuManager(EditorPlugin.getResourceString("menu.shape"), ID_SHAPE_MENU);
+  	shapeMenu.add(getAction(ConvertToShapeAction.ID));
+  	shapeMenu.add(getAction(EditShapeAction.ID));
+  	shapeMenu.add(new Separator());
+  	addBooleanShapeActions(shapeMenu);
+  	
+  	menubar.insertAfter(ID_VIEW_MENU, shapeMenu);  	
   }
-    
+  
   protected IMenuManager viewMenu = null;
   protected IMenuManager getViewMenu() {
   	return viewMenu;
@@ -213,6 +274,58 @@ extends ActionBarContributor
   protected IMenuManager getFileMenu() {
   	return fileMenu;
   }
+
+  protected IMenuManager shapeMenu = null;
+  protected IMenuManager getShapeMenu() {
+  	return shapeMenu;
+  }
+  
+  protected void addOrderActions(IContributionManager cm) 
+  {
+  	cm.add(getAction(ChangeOrderToLocalFront.ID));
+  	cm.add(getAction(ChangeOrderOneUp.ID));  	
+  	cm.add(getAction(ChangeOrderOneDown.ID));  	
+  	cm.add(getAction(ChangeOrderToLocalBack.ID));  	  	
+  }
+  
+  protected void addAlignActions(IContributionManager cm)
+  {
+  	cm.add(getAction(GEFActionConstants.ALIGN_LEFT));
+  	cm.add(getAction(GEFActionConstants.ALIGN_CENTER));
+  	cm.add(getAction(GEFActionConstants.ALIGN_RIGHT));  	
+  	cm.add(new Separator());
+  	cm.add(getAction(GEFActionConstants.ALIGN_TOP));
+  	cm.add(getAction(GEFActionConstants.ALIGN_MIDDLE));
+  	cm.add(getAction(GEFActionConstants.ALIGN_BOTTOM));  	
+  	cm.add(new Separator());	
+  	cm.add(getAction(GEFActionConstants.MATCH_WIDTH));
+  	cm.add(getAction(GEFActionConstants.MATCH_HEIGHT));  	  	
+  }
+  
+  protected void addZoomActions(IContributionManager cm) 
+  {
+  	IAction zoomInAction = getAction(GEFActionConstants.ZOOM_IN);
+  	zoomInAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
+  			EditorPlugin.getDefault(), EditorActionBarContributor.class, "ZoomIn"));
+  	cm.add(zoomInAction);
+
+  	IAction zoomOutAction = getAction(GEFActionConstants.ZOOM_OUT);
+  	zoomOutAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
+  			EditorPlugin.getDefault(), EditorActionBarContributor.class, "ZoomOut"));  	
+  	cm.add(zoomOutAction);
+
+  	cm.add(getAction(ZoomAllAction.ID));
+  	cm.add(getAction(ZoomSelectionAction.ID));
+  	cm.add(getAction(ZoomPageAction.ID));  	
+  }
+
+  protected void addBooleanShapeActions(IContributionManager cm) 
+  {
+  	cm.add(getAction(ShapeUnionAction.ID));
+  	cm.add(getAction(ShapeIntersectAction.ID));  	
+  	cm.add(getAction(ShapeSubtractAction.ID));
+  	cm.add(getAction(ShapeExclusiveOrAction.ID));  	
+  }
   
   /**
    * Add actions to the given toolbar.
@@ -221,51 +334,30 @@ extends ActionBarContributor
   public void contributeToToolBar(IToolBarManager tbm) 
   {
   	super.contributeToToolBar(tbm);
+  	// Undo / Redo
   	tbm.add(getAction(ActionFactory.UNDO.getId()));
-  	tbm.add(getAction(ActionFactory.REDO.getId()));
-  	  	  	
+  	tbm.add(getAction(ActionFactory.REDO.getId()));  	  	  	
   	tbm.add(new Separator());
-  	tbm.add(getAction(GEFActionConstants.ALIGN_LEFT));
-  	tbm.add(getAction(GEFActionConstants.ALIGN_CENTER));
-  	tbm.add(getAction(GEFActionConstants.ALIGN_RIGHT));
   	
+  	// Align
+  	addAlignActions(tbm);  	
   	tbm.add(new Separator());
-  	tbm.add(getAction(GEFActionConstants.ALIGN_TOP));
-  	tbm.add(getAction(GEFActionConstants.ALIGN_MIDDLE));
-  	tbm.add(getAction(GEFActionConstants.ALIGN_BOTTOM));
   	
-  	tbm.add(new Separator());	
-  	tbm.add(getAction(GEFActionConstants.MATCH_WIDTH));
-  	tbm.add(getAction(GEFActionConstants.MATCH_HEIGHT));
-  	
-  	tbm.add(new Separator());	
+  	// Zoom
   	String[] zoomStrings = new String[] {	ZoomManager.FIT_ALL, 
   											ZoomManager.FIT_HEIGHT, 
-  											ZoomManager.FIT_WIDTH	};
-  	  	
-//  	tbm.add(new ZoomComboContributionItem(getPage(), zoomStrings));
+  											ZoomManager.FIT_WIDTH	};  	  	
   	tbm.add(new EditorZoomComboContributionItem(getPage(), zoomStrings));
-
-  	IAction zoomInAction = getAction(GEFActionConstants.ZOOM_IN);
-  	zoomInAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
-  			EditorPlugin.getDefault(), EditorActionBarContributor.class, "ZoomIn"));
-  	tbm.add(zoomInAction);
-
-  	IAction zoomOutAction = getAction(GEFActionConstants.ZOOM_OUT);
-  	zoomOutAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
-  			EditorPlugin.getDefault(), EditorActionBarContributor.class, "ZoomOut"));  	
-  	tbm.add(zoomOutAction);
+  	addZoomActions(tbm);  	
+  	tbm.add(new Separator());
   	
-  	tbm.add(getAction(ZoomAllAction.ID));
-  	tbm.add(getAction(ZoomSelectionAction.ID));
-  	tbm.add(getAction(ZoomPageAction.ID));
-  	
-  	tbm.add(new Separator());	
+  	// RenderModes
   	RenderModeManager renderMan = RendererRegistry.sharedInstance().getRenderModeManager();
   	if (renderMan.getRenderModes().size() > 1)
-  		tbm.add(new RenderModeContributionItem(getPage()));  	  		
-  	
+  		tbm.add(new RenderModeContributionItem(getPage()));  	  		  	
   	tbm.add(new Separator());
+  	
+  	// Repaint
   	tbm.add(getAction(RepaintAction.ID));
 //  	tbm.add(getAction(ViewerAction.ID));
   }  
