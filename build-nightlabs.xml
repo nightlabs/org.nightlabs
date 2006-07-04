@@ -17,15 +17,41 @@
     - build-nightlabs-deploy.post.xml
 -->
 <project default="dist">
-	<!-- Initialize all needed properties -->
-  <target name="init">
+	
+  <target name="init.osgi.pre">
+  	<!-- check if we have an osgi bundle manifest -->
+  	<available file="META-INF/MANIFEST.MF" property="osgi.manifest.available"/>
+  </target>
+  	
+  <target name="init.osgi" depends="init.osgi.pre" if="osgi.manifest.available">
+    <property file="META-INF/MANIFEST.MF"/>  	
+    <!-- use magic regexp style to extract the bundle's
+         name from the MANIFEST.MF
+         could be Bundle-SymbolicName: my.bundle.name; other-prop:=propvalue; ...
+    -->
+    <loadfile
+      property="project.name"
+      srcFile="META-INF/MANIFEST.MF">
+      <filterchain>
+        <tokenfilter>
+          <containsregex
+              pattern="^Bundle-SymbolicName:\s*(.+)\;.*$"
+              replace="\1"/>
+        </tokenfilter>
+        <striplinebreaks/>
+      </filterchain>
+    </loadfile>
+  </target>
+	
+  <!-- Initialize all needed properties -->
+  <target name="init" depends="init.osgi">
   	<!-- Set the name of this file. Is there another way?? -->
   	<property name="build.file" value="build-nightlabs.xml"/>
 
   	<property file="build-nightlabs-path.properties"/>
     <property file="build-nightlabs.properties"/>
     <property file="build.properties"/>
-    <property file="META-INF/MANIFEST.MF"/>
+  	
     <xmlproperty file="plugin.xml" collapseAttributes="true"/>
 
   	<condition property="javac.debug" value="true">
