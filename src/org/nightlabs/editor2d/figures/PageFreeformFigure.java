@@ -54,11 +54,11 @@ extends ContainerFreeformLayer
 		DrawComponentFigure.paintJ2D(graphics, drawComponent, renderer);
 	}  
 	
-	/**
-	 * Overridden to paint bounds of page and children
-	 */
-	public void paint(Graphics graphics) 
-	{
-		DrawComponentFigure.checkDraw2D(graphics, drawComponent, renderer);
-	}	
+//	/**
+//	 * Overridden to paint bounds of page and children
+//	 */
+//	public void paint(Graphics graphics) 
+//	{
+//		DrawComponentFigure.checkDraw2D(graphics, drawComponent, renderer);
+//	}	
 }

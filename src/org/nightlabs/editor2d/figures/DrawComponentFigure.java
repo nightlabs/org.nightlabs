@@ -29,6 +29,7 @@ package org.nightlabs.editor2d.figures;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.eclipse.draw2d.Figure;
@@ -37,8 +38,12 @@ import org.eclipse.draw2d.J2DGraphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.editparts.ZoomListener;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.DrawComponentContainer;
+import org.nightlabs.editor2d.IVisible;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.render.Draw2DRenderContext;
+import org.nightlabs.editor2d.render.RenderContext;
 import org.nightlabs.editor2d.render.Renderer;
 import org.nightlabs.editor2d.util.J2DUtil;
 import org.nightlabs.editor2d.util.RenderUtil;
@@ -66,18 +71,18 @@ implements RendererFigure
   	RenderUtil.paintJ2DRenderer(renderer, drawComponent, graphics);  	
   }
       
-  public static void checkDraw2D(Graphics graphics, DrawComponent dc, Renderer r) 
-  {
-    if (graphics instanceof J2DGraphics) 
-    {
-    	J2DGraphics j2d = (J2DGraphics) graphics;
-    	j2d.clipRect(null);
-      Graphics2D g2d = j2d.createGraphics2D();
-      g2d.setClip(null);
-      paintJ2D(g2d, dc, r);      
-      g2d.dispose();
-    }  	
-  }
+//  public static void checkDraw2D(Graphics graphics, DrawComponent dc, Renderer r) 
+//  {
+//    if (graphics instanceof J2DGraphics) 
+//    {
+//    	J2DGraphics j2d = (J2DGraphics) graphics;
+//    	j2d.clipRect(null);
+//      Graphics2D g2d = j2d.createGraphics2D();
+//      g2d.setClip(null);
+//      paintJ2D(g2d, dc, r);      
+//      g2d.dispose();
+//    }  	
+//  }
   
   public void paint(Graphics graphics) 
   {  	
@@ -91,7 +96,8 @@ implements RendererFigure
       g2d.dispose();
     }
     else {
-    	// TODO: paint with Draw2DRenderContext
+//    	paintDrawComponent(drawComponent, graphics);
+//    	LOGGER.debug("paint Draw2D");
     }
   }
       
@@ -177,5 +183,47 @@ implements RendererFigure
 		
 		return super.getBounds();
 	}  
-       
+ 
+	public static void paintDraw2DRenderer(Renderer r, DrawComponent dc, Graphics g) 
+	{
+		if (r != null && dc != null && g != null) 
+		{				
+			RenderContext rc = r.getRenderContext();
+			if (rc instanceof Draw2DRenderContext) {
+				LOGGER.debug("rc instanceof Draw2DRenderContext");
+				((Draw2DRenderContext)rc).paint(dc, g);					
+			}
+			else {
+				rc = r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE);
+				if (rc != null) {
+					LOGGER.debug("r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE) != null!");					
+					Draw2DRenderContext d2drc = (Draw2DRenderContext) rc;
+					d2drc.paint(dc, g);										
+				} else
+					LOGGER.debug("r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE) == null!");					
+			}
+		}					
+	}
+	
+	public static void paintDrawComponent(DrawComponent dc, Graphics g) 
+	{
+		if (dc instanceof DrawComponentContainer) 
+		{
+			if (dc instanceof IVisible) {
+				IVisible visible = (IVisible) dc; 
+				if (!visible.isVisible())
+					return;
+			} 
+			DrawComponentContainer dcContainer = (DrawComponentContainer) dc;
+			for (Iterator it = dcContainer.getDrawComponents().iterator(); it.hasNext(); ) {
+				DrawComponent drawComponent = (DrawComponent) it.next();
+				paintDrawComponent(drawComponent, g);
+			}
+		}
+		else {
+			Renderer r = dc.getRenderer();
+			paintDraw2DRenderer(r, dc, g);			
+		}		
+	}
+	
 }

@@ -45,6 +45,7 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editparts.J2DScalableFreeformRootEditPart;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.parts.ContentOutlinePage;
@@ -63,11 +64,12 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageBook;
 import org.holongate.j2d.J2DCanvas;
+import org.holongate.j2d.J2DSamplePaintable;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorContextMenuProvider;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.j2dswt.MLDCPaintable;
+import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 
 
@@ -189,10 +191,10 @@ implements IAdaptable
   public void createControl(Composite parent){
     pageBook = new PageBook(parent, SWT.NONE);
     outline = getViewer().createControl(pageBook);
-    // TODO J2DCanvas maybe this is only TreeOutline 
+ 
 //    overview = new Canvas(pageBook, SWT.NONE);    
-//    overview = new J2DCanvas(pageBook, SWT.NONE, new J2DSamplePaintable("TestMessage"));    
-    overview = new J2DCanvas(pageBook, SWT.NONE, new MLDCPaintable(editor.getMultiLayerDrawComponent()));    
+//    overview = new J2DCanvas(pageBook, SWT.NONE, new J2DSamplePaintable("TestMessage"));        
+    overview = new J2DCanvas(pageBook, SWT.NONE, new DrawComponentPaintable(editor.getMultiLayerDrawComponent()));    
     pageBook.showPage(outline);
     configureOutlineViewer();
     hookOutlineViewer();
@@ -227,13 +229,38 @@ implements IAdaptable
     setContents(editor.getMultiLayerDrawComponent());
   }
   
+  protected void initializeOverview() 
+  {
+    LightweightSystem lws = new LightweightSystem(overview);
+    RootEditPart rep = editor.getOutlineGraphicalViewer().getRootEditPart();
+    if (rep instanceof ScalableFreeformRootEditPart) {
+      ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart)rep;
+      thumbnail = new ScrollableThumbnail((Viewport)root.getFigure());
+      thumbnail.setBorder(new MarginBorder(3));
+      thumbnail.setSource(root.getLayer(LayerConstants.PRINTABLE_LAYERS));
+//      thumbnail.setSource(root.getFigure());      
+      lws.setContents(thumbnail);
+      disposeListener = new DisposeListener() {
+        public void widgetDisposed(DisposeEvent e) {
+          if (thumbnail != null) {
+            thumbnail.deactivate();
+            thumbnail = null;
+          }
+        }
+      };
+      editor.getEditor().addDisposeListener(disposeListener);
+    }
+  }
+  
 //  protected void initializeOverview() 
 //  {
-//    LightweightSystem lws = new LightweightSystem(overview);
+//    LightweightSystem lws = new J2DLightweightSystem(overview);
+////  	LightweightSystem lws = new J2DLightweightSystem();
 //    RootEditPart rep = editor.getOutlineGraphicalViewer().getRootEditPart();
-//    if (rep instanceof ScalableFreeformRootEditPart) {
-//      ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart)rep;
-//      thumbnail = new ScrollableThumbnail((Viewport)root.getFigure());
+//    if (rep instanceof J2DScalableFreeformRootEditPart) {
+//    	J2DScalableFreeformRootEditPart root = (J2DScalableFreeformRootEditPart)rep;
+////      thumbnail = new J2DScrollableThumbnail((Viewport)root.getFigure());
+//      thumbnail = new ScrollableThumbnail((Viewport)root.getFigure());    	
 //      thumbnail.setBorder(new MarginBorder(3));
 //      thumbnail.setSource(root.getLayer(LayerConstants.PRINTABLE_LAYERS));
 //      lws.setContents(thumbnail);
@@ -248,29 +275,6 @@ implements IAdaptable
 //      editor.getEditor().addDisposeListener(disposeListener);
 //    }
 //  }
-  protected void initializeOverview() 
-  {
-    LightweightSystem lws = new J2DLightweightSystem(overview);
-//  	LightweightSystem lws = new J2DLightweightSystem();
-    RootEditPart rep = editor.getOutlineGraphicalViewer().getRootEditPart();
-    if (rep instanceof J2DScalableFreeformRootEditPart) {
-    	J2DScalableFreeformRootEditPart root = (J2DScalableFreeformRootEditPart)rep;
-//      thumbnail = new J2DScrollableThumbnail((Viewport)root.getFigure());
-      thumbnail = new ScrollableThumbnail((Viewport)root.getFigure());    	
-      thumbnail.setBorder(new MarginBorder(3));
-      thumbnail.setSource(root.getLayer(LayerConstants.PRINTABLE_LAYERS));
-      lws.setContents(thumbnail);
-      disposeListener = new DisposeListener() {
-        public void widgetDisposed(DisposeEvent e) {
-          if (thumbnail != null) {
-            thumbnail.deactivate();
-            thumbnail = null;
-          }
-        }
-      };
-      editor.getEditor().addDisposeListener(disposeListener);
-    }
-  }
   
   public void setContents(Object contents) {
     getViewer().setContents(contents);
@@ -290,7 +294,8 @@ implements IAdaptable
       showOutlineAction.setChecked(false);
       showOverviewAction.setChecked(true);
       pageBook.showPage(overview);
-      thumbnail.setVisible(true);
+      if (thumbnail != null)      
+      	thumbnail.setVisible(true);
     }
   }
   

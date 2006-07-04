@@ -27,6 +27,7 @@ package org.nightlabs.editor2d.render;
 
 import java.awt.Shape;
 
+import org.apache.log4j.Logger;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.swt.graphics.Path;
 import org.nightlabs.base.util.ColorUtil;
@@ -40,6 +41,7 @@ import org.nightlabs.editor2d.viewer.util.AWTSWTUtil;
 public class Draw2DShapeDefaultRenderer 
 extends Draw2DBaseRenderer 
 {
+	public static final Logger LOGGER = Logger.getLogger(Draw2DShapeDefaultRenderer.class);
 	
 	public Draw2DShapeDefaultRenderer() 
 	{
@@ -57,7 +59,9 @@ extends Draw2DBaseRenderer
     g.setForegroundColor(ColorUtil.toSWTColor(sdc.getLineColor()));
     g.setLineWidth(sdc.getLineWidth());
     g.setLineStyle(convertLineStyle(sdc.getLineStyle()));
-    g.drawPath(path);   
+    g.drawPath(path);  
+    
+    LOGGER.debug("shape painted!");
 	}
 	
 	protected Path convertShape(Shape s) 

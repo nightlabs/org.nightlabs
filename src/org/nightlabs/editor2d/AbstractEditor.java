@@ -457,6 +457,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			public void controlResized(ControlEvent e) {
 //				if (e.getSource().equals(getGraphicalViewer().getControl())) {
 					updateViewer();
+					LOGGER.debug("Control resized!");
 //				}
 			}		
 		};
@@ -1265,7 +1266,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     {
     	refreshBuffer();    	
       getGraphicalViewer().getControl().redraw();
-//      LOGGER.debug("updateViewer!");
+      LOGGER.debug("updateViewer!");
     }
         
     protected void refreshBuffer() 
