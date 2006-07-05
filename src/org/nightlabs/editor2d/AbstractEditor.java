@@ -1230,15 +1230,11 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	LOGGER.debug("new PageHeight = "+pageHeight);
     	LOGGER.debug("new PageWidth = "+pageWidth);
     	
-//	  	double defaultX = 25;
-//	  	double defaultY = 25;
-//	  	defaultX = defaultX * factor;
-//	  	defaultY = defaultY * factor;
 	  	double defaultX = 0;
 	  	double defaultY = 0;
     	
 	  	Rectangle pageBounds = new Rectangle((int)defaultX, (int)defaultY, (int)pageWidth, (int)pageHeight);
-	  	LOGGER.debug("pageBounds = "+pageBounds);
+	  	LOGGER.debug("pageBounds = "+pageBounds);	  	
 	  	
 	  	getMultiLayerDrawComponent().setResolution(resolution);  	  	
 	  	getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds);  	  	    	    	

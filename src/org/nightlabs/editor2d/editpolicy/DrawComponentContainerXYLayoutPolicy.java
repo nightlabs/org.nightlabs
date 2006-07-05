@@ -58,6 +58,7 @@ import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorGuide;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.command.ChangeGuideCommand;
 import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
@@ -539,9 +540,19 @@ implements EditorRequestConstants
   	
   public DrawComponentContainer getDrawComponentContainer() 
   {
+  	// TODO: why current layer and not just the container
     DrawComponentContainer container = (DrawComponentContainer)getHost().getModel();
     return container.getRoot().getCurrentLayer();    
   }
+
+  public MultiLayerDrawComponent getModelRoot() 
+  {
+  	if (getHost().getModel() instanceof DrawComponent) {
+  		DrawComponent dc = (DrawComponent) getHost().getModel();
+  		return dc.getRoot();
+  	}
+  	return null;
+  }  
   
 	protected Command createAddCommand(Request request, EditPart childEditPart, 
 			Object constraint) 

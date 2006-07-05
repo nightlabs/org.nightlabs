@@ -82,7 +82,9 @@ extends XContributionItem
   	combo.addSelectionListener(comboSelectionListener);  		  	
   	for (IUnit unit : units) {
 			combo.add(unit.getUnitSymbol());
-		}  	
+		}
+  	selectUnit(unitManager.getCurrentUnit());
+  	
   	if (toolitem != null)
   		toolitem.setWidth(computeWidth(comp));  	
   	return comp;

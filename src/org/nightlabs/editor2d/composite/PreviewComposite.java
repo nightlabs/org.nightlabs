@@ -7,7 +7,6 @@
 **/
 package org.nightlabs.editor2d.composite;
 
-import org.eclipse.gef.internal.InternalImages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -20,9 +19,14 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.holongate.j2d.J2DCanvas;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.EditorActionBarContributor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
+import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
+import org.nightlabs.editor2d.page.resolution.Resolution;
+import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
 import org.nightlabs.editor2d.render.RenderModeManager;
 import org.nightlabs.editor2d.viewer.action.RenderModeContributionItem;
 
@@ -83,6 +87,10 @@ extends Composite
 		setLayout(new GridLayout());
 		setLayoutData(new GridData(GridData.FILL_BOTH));
 		createCanvas(this);		
+		
+		zoom = getResolutionFactor();
+		applyZoom(zoom);
+		updateZoomLabel();			
 	}
 			
 	protected boolean renderModes;
@@ -92,6 +100,15 @@ extends Composite
 	protected Button zoomInButton;
 	protected Button zoomOutButton;
 	protected Label zoomLabel;
+	
+	protected double getResolutionFactor() 
+	{
+		double screenResolutionDPI = 72;
+		double documentResolutionDPI = getDrawComponent().getRoot().getResolution().
+			getResolutionX(new DPIResolutionUnit());
+		double factor = screenResolutionDPI / documentResolutionDPI;
+		return factor;
+	}
 	
 	protected DrawComponent drawComponent;	
 	public DrawComponent getDrawComponent() {
@@ -138,12 +155,14 @@ extends Composite
 			Composite beginComp = new XComposite(buttonBar, SWT.NONE);
 			beginComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			zoomInButton = new Button(buttonBar, SWT.PUSH);
-			zoomInButton.setImage(InternalImages.DESC_ZOOM_IN.createImage());
+			zoomInButton.setImage(SharedImages.getSharedImage(EditorPlugin.getDefault(), 
+					EditorActionBarContributor.class, "ZoomIn"));			
 			zoomInButton.addSelectionListener(zoomListener);
 			zoomLabel = new Label(buttonBar, SWT.NONE);
 			updateZoomLabel();
 			zoomOutButton = new Button(buttonBar, SWT.PUSH);
-			zoomOutButton.setImage(InternalImages.DESC_ZOOM_OUT.createImage());
+			zoomOutButton.setImage(SharedImages.getSharedImage(EditorPlugin.getDefault(), 
+					EditorActionBarContributor.class, "ZoomOut"));			
 			zoomOutButton.addSelectionListener(zoomListener);
 			
 			if (renderModes) {
@@ -172,21 +191,26 @@ extends Composite
 	}	
 	
 	protected double zoom = 1;
-	protected double zoomStep = 0.2d;
-	protected SelectionListener zoomListener = new SelectionListener(){	
+	private double initalZoomStep = 0.2d;
+	protected double getZoomStep() {
+		return initalZoomStep * getResolutionFactor();
+	}
+	
+	protected SelectionListener zoomListener = new SelectionListener()
+	{	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
 		}	
 		public void widgetSelected(SelectionEvent e) 
 		{
 			if (e.getSource().equals(zoomInButton)) {
-				zoom += zoomStep;	
+				zoom += getZoomStep();				
 				applyZoom(zoom);
 				updateZoomLabel();
 				updateCanvas();
 			}
 			else if (e.getSource().equals(zoomOutButton)) {
-				zoom -= zoomStep;
+				zoom -= getZoomStep();				
 				applyZoom(zoom);
 				updateZoomLabel();				
 				updateCanvas();				
@@ -195,14 +219,14 @@ extends Composite
 	};
 	
 	protected void updateZoomLabel() {
-		double z = Math.floor(zoom * 100);
+//		double z = Math.floor(zoom * 100);
+		double z = Math.floor(zoom * 100) / getResolutionFactor();		
 		zoomLabel.setText(z + "%");
 	}	
 	
 	public void updateCanvas() 
 	{
 		if (canvas != null) {
-//			paintable = new DrawComponentPaintable(getSectionDrawComponent());
 			paintable = new DrawComponentPaintable(getDrawComponent());
 			canvas.setPaintable(paintable);
 			canvas.repaint();			

@@ -39,6 +39,18 @@ import org.nightlabs.i18n.IUnit;
  */
 public class UnitManager 
 {	
+	public UnitManager() {
+		super();
+		getUnits();
+		getCurrentUnit();
+	}
+	
+	public UnitManager(Collection<IUnit> units, IUnit currentUnit) {
+		super();
+		setUnits(units);
+		setCurrentUnit(currentUnit);
+	}
+	
 	private Collection<IUnit> units = null;
 	public Collection<IUnit> getUnits() 
 	{
@@ -63,9 +75,19 @@ public class UnitManager
   }
   public void setCurrentUnit(IUnit unit) 
   {
+  	if (!getUnits().contains(unit))
+  		throw new IllegalArgumentException("Param unit is not contained in getUnits()!");
+  	
   	IUnit oldUnit = currentUnit;
   	this.currentUnit = unit;
   	getPropertyChangeSupport().firePropertyChange(PROP_CURRENT_UNIT_CHANGED, oldUnit, currentUnit);
+  }
+  
+  public void setCurrentUnit(String unitID) {
+  	for (IUnit unit : getUnits()) {
+			if (unit.getUnitID().equals(unitID))
+				setCurrentUnit(unit);
+		}
   }
   
   public static final String PROP_CURRENT_UNIT_CHANGED = "currentUnit changed";
@@ -85,8 +107,4 @@ public class UnitManager
   	getPropertyChangeSupport().removePropertyChangeListener(pcl);
   }
   
-//  public static double getFactor(IUnit unit1, IUnit unit2) 
-//  {
-//  	return unit1.getFactor() * unit2.getFactor();
-//  }
 }

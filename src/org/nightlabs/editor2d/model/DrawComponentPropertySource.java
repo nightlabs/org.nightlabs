@@ -46,6 +46,7 @@ import org.nightlabs.editor2d.page.PageRegistryEP;
 import org.nightlabs.editor2d.page.unit.DotUnit;
 import org.nightlabs.editor2d.properties.NamePropertyDescriptor;
 import org.nightlabs.editor2d.properties.RotationPropertyDescriptor;
+import org.nightlabs.editor2d.util.UnitUtil;
 import org.nightlabs.i18n.IUnit;
 import org.nightlabs.language.LanguageCf;
 
@@ -107,37 +108,13 @@ implements IPropertySource
 	// TODO: format value so that only 3 digits after the comma are visible
 	public double getValue(int modelValue, IUnit unit) 
 	{
-		if (unit instanceof DotUnit)
-			return modelValue;
-		else {
-			double unitFactor = unit.getFactor();
-			double dotFactor = getDotUnit().getFactor();
-			double returnVal = (modelValue / dotFactor) * unitFactor;			
-//			LOGGER.debug("unitFactor = "+unitFactor);
-//			LOGGER.debug("dotFator = "+dotFactor);
-//			LOGGER.debug("modelVal in mm = "+ (modelValue / dotFactor));
-//			LOGGER.debug("returnVal = "+returnVal);
-//			LOGGER.debug("");
-			return returnVal;
-		}
+		return UnitUtil.getUnitValue(modelValue, getDotUnit(), unit);
 	}
 	
 	// TODO: format value so that only 3 digits after the comma are visible	
 	public int getSetValue(double value, IUnit unit) 
 	{
-		if (unit instanceof DotUnit)
-			return (int) Math.rint(value);			
-		else {
-			double unitFactor = unit.getFactor();
-			double dotFactor = getDotUnit().getFactor();
-			double returnVal = (value / unitFactor) * dotFactor;
-//			LOGGER.debug("unitFactor = "+unitFactor);
-//			LOGGER.debug("dotFator = "+dotFactor);
-//			LOGGER.debug("modelVal in "+unit.getUnitID()+" = "+ (value / unitFactor));			
-//			LOGGER.debug("returnVal = "+returnVal);
-//			LOGGER.debug("");			
-			return (int) Math.rint(returnVal);
-		}
+		return UnitUtil.getModelValue(value, getDotUnit(), unit);
 	}	
 	
 	/**

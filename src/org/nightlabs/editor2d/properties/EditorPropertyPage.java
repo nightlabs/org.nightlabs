@@ -51,6 +51,7 @@ extends PropertySheetPage
 	public EditorPropertyPage() 
 	{
 		super();		
+		// TODO: maybe get unitManager from AbstractEditor
 		unitManager = new UnitManager();		
 	}
 
