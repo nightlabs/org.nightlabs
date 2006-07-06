@@ -63,13 +63,6 @@ extends AbstractEditorSelectionAction
 		super(editor);
 	}
 
-//	/**
-//	 *@return true, if objects are selected
-//	 */
-//	protected boolean calculateEnabled() {
-//		return !getSelectedObjects().isEmpty();
-//	}
-
 	/**
 	 *@return true, if objects are selected, except the RootEditPart or LayerEditParts
 	 */
@@ -83,7 +76,8 @@ extends AbstractEditorSelectionAction
 	 */
 	public void run() 
 	{
-		List dcs = getSelection(DrawComponent.class, true);
+		List<DrawComponent> dcs = getSelectionAsList(DrawComponent.class, true);
+//		Collection<DrawComponent> dcs = getSelection(DrawComponent.class, true);		
 		if (!dcs.isEmpty()) 
 		{
 			if (getPrimarySelected().getModel() instanceof DrawComponent) {

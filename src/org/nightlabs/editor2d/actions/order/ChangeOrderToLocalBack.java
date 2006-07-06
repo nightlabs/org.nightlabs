@@ -28,7 +28,6 @@ package org.nightlabs.editor2d.actions.order;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
 
 /**
@@ -83,24 +82,5 @@ extends AbstractChangeOrderSelectionAction
 	{
 		return primarySelected.getParent();		 		
 	}
-		
-//	/** 
-//	 *@return the firstIndex of the drawComponents-List from 
-//	 * the currentLayer
-//	 *@see MultiLayerDrawComponent#getCurrentLayer()    
-//	 */
-//	public int getNewIndex() 
-//	{
-//		return 0;
-//	}
-//	
-//	/**
-//	 * @return the currentLayer
-//	 * @see MultiLayerDrawComponent#getCurrentLayer()
-//	 */
-//	public DrawComponentContainer getContainer() 
-//	{
-//		return getCurrentLayer();		
-//	}
-	
+			
 }

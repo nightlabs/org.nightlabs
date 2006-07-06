@@ -23,65 +23,49 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.actions.order;
+package org.nightlabs.editor2d.command;
 
-import org.nightlabs.editor2d.AbstractEditor;
+import org.eclipse.gef.commands.Command;
+import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.actions.EditorCommandConstants;
 
 /**
- * changes the order of the selected Objects to the front
- * of the currentLayer
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class ChangeOrderToLocalFront 
-extends AbstractChangeOrderSelectionAction 
+public class OrphanChildCommand 
+extends Command 
 {
-	public static final String ID = ChangeOrderToLocalFront.class.getName();
+
+	public OrphanChildCommand(DrawComponent child) 
+	{
+		super();
+		setLabel(EditorPlugin.getResourceString("command.orphanChildren.text"));
+		this.child = child;
+	}
+
+	private DrawComponent child = null;
+	private DrawComponentContainer parent = null;	
+	private int index = -1;
 	
-	/**
-	 * @param editor
-	 * @param style
-	 */
-	public ChangeOrderToLocalFront(AbstractEditor editor, int style) {
-		super(editor, style);
-	}
-
-	/**
-	 * @param editor
-	 */
-	public ChangeOrderToLocalFront(AbstractEditor editor) {
-		super(editor);
-	}
-
-	public void init() 
+	@Override
+	public void execute() 
 	{
-		setText(EditorPlugin.getResourceString("action.changeOrderToLocalFront.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.changeOrderToLocalFront.tooltip"));
-		setId(ID);
-		setActionDefinitionId(EditorCommandConstants.ORDER_TO_LOCAL_FRONT_ID);
+		parent = child.getParent();
+		index = parent.getDrawComponents().indexOf(child);
+		parent.removeDrawComponent(child);
+	}
+
+	@Override
+	public void redo() 
+	{
+		execute();
+	}
+
+	@Override
+	public void undo() 
+	{
+		parent.addDrawComponent(child, index);
 	}
 	
-	/** 
-	 *@return the lastIndex of the drawComponents-List from 
-	 * the parent of the primary selected drawComponent    
-	 */
-	public int getNewIndex() 
-	{
-		int lastIndex = 0;
-		DrawComponentContainer parent = primarySelected.getParent();
-		if (parent.getDrawComponents().size() != 1)
-			 lastIndex = parent.getDrawComponents().size() -1;
-		return lastIndex;		
-	}
-
-	/**
-	 * @return the parent of the primary selected DrawComponent
-	 */
-	public DrawComponentContainer getContainer() 
-	{
-		return primarySelected.getParent();		 		
-	}
-		
 }

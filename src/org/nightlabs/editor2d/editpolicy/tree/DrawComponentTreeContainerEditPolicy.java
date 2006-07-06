@@ -32,19 +32,20 @@ import java.util.List;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.gef.editpolicies.TreeContainerEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
-
+import org.eclipse.gef.requests.GroupRequest;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
 import org.nightlabs.editor2d.command.DrawComponentReorderCommand;
-import org.nightlabs.editor2d.util.J2DUtil;
+import org.nightlabs.editor2d.command.OrphanChildCommand;
 
 
 public class DrawComponentTreeContainerEditPolicy 
@@ -55,13 +56,14 @@ extends TreeContainerEditPolicy
     CreateDrawComponentCommand cmd = new CreateDrawComponentCommand();
 		Rectangle rect;
 		if(r == null) {
-			rect = new Rectangle();
-			rect.setSize(new Dimension(-1,-1));
+//			rect = new Rectangle();
+//			rect.setSize(new Dimension(-1, -1));
+			rect = new Rectangle(0, 0, 10, 10);			
 		} 
 		else {
 		  rect = r;
 		}
-		cmd.setLocation(rect);
+		cmd.setBounds(rect);
 		cmd.setParent((DrawComponentContainer)getHost().getModel());
 		cmd.setChild(child);
 		cmd.setLabel(label);
@@ -76,7 +78,7 @@ extends TreeContainerEditPolicy
 		command.setDebugLabel("Add in DrawComponentTreeContainerEditPolicy");//$NON-NLS-1$
 		List editparts = request.getEditParts();
 		int index = findIndexOfTreeItemAt(request.getLocation());
-		
+				
 		for(int i = 0; i < editparts.size(); i++) 
 		{
 		  EditPart child = (EditPart)editparts.get(i);
@@ -95,14 +97,14 @@ extends TreeContainerEditPolicy
 		}
 		return command;
 	}
-
+  
 	protected Command getCreateCommand(CreateRequest request)
 	{
-		DrawComponent child = (DrawComponent)request.getNewObject();
-		int index = findIndexOfTreeItemAt(request.getLocation());
-//		return createCreateCommand(child, null, index, EditorPlugin.getResourceString("command_create_drawcomponent"));//$NON-NLS-1$
-		Rectangle bounds = J2DUtil.toDraw2D(child.getBounds());
-		return createCreateCommand(child, bounds, index, EditorPlugin.getResourceString("command.create.drawcomponent"));//$NON-NLS-1$
+//		DrawComponent child = (DrawComponent)request.getNewObject();
+//		int index = findIndexOfTreeItemAt(request.getLocation());
+//		Rectangle bounds = J2DUtil.toDraw2D(child.getBounds());
+//		return createCreateCommand(child, bounds, index, EditorPlugin.getResourceString("command.create.drawcomponent"));//$NON-NLS-1$
+		return null;
 	}
 
 	protected Command getMoveChildrenCommand(ChangeBoundsRequest request)
@@ -140,4 +142,26 @@ extends TreeContainerEditPolicy
 		return false;
 	}
 
+// ************************* Orphan Tree Childs when added from other container ************
+	protected Command getOrphanChildrenCommand(GroupRequest request) 
+	{
+		List<EditPart> parts = request.getEditParts();
+		CompoundCommand result = 
+			new CompoundCommand(EditorPlugin.getResourceString("command.orphanChildren.text"));
+		for (int i = 0; i < parts.size(); i++) {
+			DrawComponent child = (DrawComponent)((EditPart)parts.get(i)).getModel();
+			OrphanChildCommand orphan = new OrphanChildCommand(child);  		
+			result.add(orphan);
+		}
+		return result.unwrap();
+	}
+
+	@Override
+	public Command getCommand(Request req) 
+	{
+		if (req.getType().equals(REQ_ORPHAN_CHILDREN))
+			return getOrphanChildrenCommand((GroupRequest)req);		
+		return super.getCommand(req);
+	}
+		
 }

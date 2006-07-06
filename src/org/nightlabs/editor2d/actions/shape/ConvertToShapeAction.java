@@ -25,7 +25,7 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.actions.shape;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
@@ -67,7 +67,8 @@ extends AbstractEditorSelectionAction
 	@Override
 	public void run() 
 	{
-		List<ShapeDrawComponent> shapes = getSelection(ShapeDrawComponent.class, true);
+//		List<ShapeDrawComponent> shapes = getSelection(ShapeDrawComponent.class, true);
+		Collection<ShapeDrawComponent> shapes = getSelection(ShapeDrawComponent.class, true);		
 		for (ShapeDrawComponent shape : shapes) {
 			ConvertToShapeCommand cmd = new ConvertToShapeCommand(shape);
 			execute(cmd);

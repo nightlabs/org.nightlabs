@@ -27,7 +27,6 @@
 
 package org.nightlabs.editor2d.custom;
 
-import java.awt.Toolkit;
 import java.text.DecimalFormat;
 
 import org.apache.log4j.Logger;

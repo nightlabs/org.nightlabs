@@ -39,6 +39,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.actions.ActionFactory;
+import org.nightlabs.editor2d.actions.DeleteAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
 import org.nightlabs.editor2d.actions.ResetRotationCenterAction;
@@ -121,15 +122,20 @@ extends ContextMenuProvider
   	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
   	  	
+//  	// Delete
+//  	action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
+//  	if (action.isEnabled())
+//  		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+  	
   	// Delete
-  	action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
+  	action = getActionRegistry().getAction(DeleteAction.ID);
   	if (action.isEnabled())
   		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-
-  	// Direct Edit
-  	action = getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
-  	if (action.isEnabled())
-  		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+  	
+//  	// Direct Edit
+//  	action = getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
+//  	if (action.isEnabled())
+//  		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
   	
   	// View SubMenu
   	MenuManager viewsubmenu = new MenuManager(EditorPlugin.getResourceString("menu.view"));  	 

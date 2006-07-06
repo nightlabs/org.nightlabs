@@ -77,7 +77,7 @@ extends FeedbackContainerXYLayoutEditPolicy
 			create.setParent(getDrawComponentContainer());
 			
 			Rectangle constraint = (Rectangle)getConstraintFor(request);
-			create.setLocation(constraint);			
+			create.setBounds(constraint);			
 			
 			Command cmd = chainGuideAttachmentCommand(request, newPart, create, true);
 			return chainGuideAttachmentCommand(request, newPart, cmd, false);			
@@ -102,7 +102,7 @@ extends FeedbackContainerXYLayoutEditPolicy
 		else 
 		  constraint = (Rectangle)getConstraintFor((EditorBoundsRequest)request);
 		
-		create.setLocation(constraint);
+		create.setBounds(constraint);
     
 		Command cmd = chainGuideAttachmentCommand(request, newPart, create, true);
 		return chainGuideAttachmentCommand(request, newPart, cmd, false);				      			    	  
@@ -142,7 +142,7 @@ extends FeedbackContainerXYLayoutEditPolicy
       
     Rectangle constraint = new Rectangle();
     constraint = (Rectangle)getConstraintFor((EditorBoundsRequest)request);    
-    create.setLocation(constraint);
+    create.setBounds(constraint);
     
     return create;
   }  
@@ -155,7 +155,7 @@ extends FeedbackContainerXYLayoutEditPolicy
     create.setChild(newPart);     
     create.setParent(getDrawComponentContainer());    
     Rectangle constraint = (Rectangle)getConstraintFor(request);
-    create.setLocation(constraint);  
+    create.setBounds(constraint);  
     return create;
   }
   

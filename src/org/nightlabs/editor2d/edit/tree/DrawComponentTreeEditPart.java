@@ -35,7 +35,6 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.editpolicy.DrawComponentEditPolicy;
 import org.nightlabs.editor2d.editpolicy.tree.DrawComponentTreeEditPolicy;
@@ -56,9 +55,6 @@ extends AbstractTreeEditPart
     super(drawComponent);
   } 
   
-  /* (non-Javadoc)
-   * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
-   */
   public Object getAdapter(Class key)
   {
     /* override the default behavior defined in AbstractEditPart
@@ -72,14 +68,8 @@ extends AbstractTreeEditPart
     return super.getAdapter(key);
   }  
   
-  /* (non-Javadoc)
-   * @see org.eclipse.gef.editparts.AbstractTreeEditPart#getImage()
-   */
   protected abstract Image getImage();
   
-  /* (non-Javadoc)
-   * @see com.ibm.itso.sal330r.gefdemo.edit.WorkflowElementEditPart#getPropertySource()
-   */
   public IPropertySource getPropertySource()
   {
     if (propertySource == null)
@@ -90,9 +80,6 @@ extends AbstractTreeEditPart
     return propertySource;
   }
   
-  /* (non-Javadoc)
-   * @see org.eclipse.gef.editparts.AbstractTreeEditPart#getText()
-   */
   protected String getText()
   {
   	return getDrawComponent().getName();
@@ -106,10 +93,6 @@ extends AbstractTreeEditPart
     return (DrawComponent) getModel();
   }  
     
-
-  /* (non-Javadoc)
-   * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
-   */
   public void activate()
   {
     if (isActive())
@@ -121,10 +104,6 @@ extends AbstractTreeEditPart
     super.activate();
   }
 
-
-  /* (non-Javadoc)
-   * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
-   */
   public void deactivate()
   {
     if (!isActive())
@@ -169,6 +148,7 @@ extends AbstractTreeEditPart
   protected void createEditPolicies() 
   {
   	installEditPolicy(EditPolicy.COMPONENT_ROLE, new DrawComponentEditPolicy());
+//  	installEditPolicy(EditPolicy.COMPONENT_ROLE, new DrawComponentTreeComponentEditPolicy());  	
   	installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new DrawComponentTreeEditPolicy());
   }
   

@@ -25,7 +25,7 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.actions.copy;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
@@ -96,7 +96,8 @@ extends AbstractEditorSelectionAction
 	
 	public void run() 
 	{
-		List dcs = getSelection(DrawComponent.class, true);
+//		List<DrawComponent> dcs = getSelection(DrawComponent.class, true);
+		Collection<DrawComponent> dcs = getSelection(DrawComponent.class, true);		
 		CutDrawComponentCommand cutCmd = new CutDrawComponentCommand(dcs);
 		execute(cutCmd);
 		firePropertyChange(EditorActionConstants.PROP_COPY_TO_CLIPBOARD, null, dcs);

@@ -27,7 +27,6 @@ package org.nightlabs.editor2d.figures;
 
 import java.awt.Graphics2D;
 
-import org.eclipse.draw2d.Graphics;
 import org.nightlabs.editor2d.PageDrawComponent;
 
 /**

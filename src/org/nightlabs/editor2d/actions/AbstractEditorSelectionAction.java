@@ -30,7 +30,9 @@ package org.nightlabs.editor2d.actions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -78,6 +80,8 @@ extends SelectionAction
 	}
 
 	protected abstract boolean calculateEnabled(); 
+	protected abstract void init();	
+	public abstract void run();	
 
 	public boolean isActiveEditor()
 	{
@@ -162,8 +166,7 @@ extends SelectionAction
 		}
 		return false;
 	}
-	
-	
+		
 	/**
 	 * A Convenice Method which calls selectionContains with the amount 1
 	 * @param clazz the Class to search for
@@ -176,16 +179,16 @@ extends SelectionAction
 	}
 	
 	private static List EMPTY_LIST = Collections.EMPTY_LIST; 
-	
+			
 	/**
 	 * 
 	 * @param clazz the Class to search for
 	 * @param model determines if the Class-Check should be performed on the
 	 * selected EditParts or the model (DrawComponent) of the EditParts
-	 * @return a List of all objects from the selection which are assignable 
+	 * @return a Collection of all objects from the selection which are assignable 
 	 * from the given class
 	 */
-	public List getSelection(Class clazz, boolean model) 
+	public Collection getSelection(Class clazz, boolean model) 
 	{
 		return getSelection(new Class[] {clazz}, model);
 	}
@@ -198,11 +201,11 @@ extends SelectionAction
 	 * @return a List of all objects from the selection which are assignable 
 	 * from the given classes
 	 */
-	public List getSelection(Class[] clazzes, boolean model) 
+	public Collection getSelection(Class[] clazzes, boolean model) 
 	{
 		if (!getSelectedObjects().isEmpty()) 
 		{
-			List selection = new ArrayList();
+			Collection selection = new HashSet();			
 			for (Iterator it = getSelectedObjects().iterator(); it.hasNext(); ) 
 			{
 				EditPart editPart = (EditPart) it.next();
@@ -217,10 +220,10 @@ extends SelectionAction
 					Class clazz = clazzes[i];
 					if (clazz.isAssignableFrom(c)) 
 					{
-						if (!model)
-							selection.add(clazz.cast(editPart));
+						if (!model) 
+							selection.add(clazz.cast(editPart));							
 						else
-							selection.add(clazz.cast(editPart.getModel()));
+							selection.add(clazz.cast(editPart.getModel()));							
 					}					
 				}
 			}
@@ -228,58 +231,62 @@ extends SelectionAction
 		}
 		return EMPTY_LIST;
 	}
-		
-//	/**
-//	 * 
-//	 * @param excludeClasses a Collection of Class-Objects which should be excluded
-//	 * from the selection
-//	 * @param model determines if the Class-Check should be performed on the
-//	 * selected EditParts or the model (DrawComponent) of the EditParts
-//	 * @return a List of all selected objects (editParts or DrawComponents, determined by model), 
-//	 * except those who are assignableFrom a Class included in the excludeList
-//	 * @see Class#isAssignableFrom(Class)
-//	 */
-//	public List getSelection(Collection excludeClasses, boolean model) 
-//	{
-//		if (!getSelectedObjects().isEmpty()) 
-//		{
-//			List selection = new ArrayList();
-//			for (Iterator it = getSelectedObjects().iterator(); it.hasNext(); ) 
-//			{
-//				EditPart editPart = (EditPart) it.next();
-//				Class c = null;
-//				if (!model)
-//					c = editPart.getClass();
-//				else
-//					c = editPart.getModel().getClass();
-//				
-//				for (Iterator itExclude = excludeClasses.iterator(); itExclude.hasNext(); ) 
-//				{
-//					Class clazz = (Class) itExclude.next();
-//						
-//					if (clazz.isAssignableFrom(c)) 
-//					{
-//						if (!model) {
-//							if (selection.contains(editPart))
-//								selection.remove(editPart);
-//						}
-//						else {
-//							if (selection.contains(editPart.getModel()))
-//								selection.remove(editPart.getModel());							
-//						}																			
-//					}
-//					else {
-//						if (!model)
-//							selection.add(editPart);
-//						else
-//							selection.add(editPart.getModel());						
-//					}
-//				}
-//			}
-//			return selection;
-//		}
-//		return EMPTY_LIST;
-//	}	
+			
+	/**
+	 * 
+	 * @param clazz the Class to search for
+	 * @param model determines if the Class-Check should be performed on the
+	 * selected EditParts or the model (DrawComponent) of the EditParts
+	 * @return a Collection of all objects from the selection which are assignable 
+	 * from the given class
+	 */
+	public List getSelectionAsList(Class clazz, boolean model) 
+	{
+		return getSelectionAsList(new Class[] {clazz}, model);
+	}
+	
+	/**
+	 * 
+	 * @param clazzes the Class[] to search for
+	 * @param model determines if the Class-Check should be performed on the
+	 * selected EditParts or the model (DrawComponent) of the EditParts
+	 * @return a List of all objects from the selection which are assignable 
+	 * from the given classes
+	 */
+	public List getSelectionAsList(Class[] clazzes, boolean model) 
+	{
+		if (!getSelectedObjects().isEmpty()) 
+		{
+			List selection = new LinkedList();			
+			for (Iterator it = getSelectedObjects().iterator(); it.hasNext(); ) 
+			{
+				EditPart editPart = (EditPart) it.next();
+				Class c = null;
+				if (!model)
+					c = editPart.getClass();
+				else
+					c = editPart.getModel().getClass();
+				
+				for (int i=0; i<clazzes.length; i++) 
+				{
+					Class clazz = clazzes[i];
+					if (clazz.isAssignableFrom(c)) 
+					{
+						Object o = null;
+						if (!model)
+							o = clazz.cast(editPart);
+						else
+							o = clazz.cast(editPart.getModel());
+							
+						if (!selection.contains(o))
+							selection.add(o);													
+					}					
+				}
+			}
+			return selection;
+		}
+		return EMPTY_LIST;
+	}
 	
 	private Class[] defaultEditPartExcludes = null; 
 	private Class[] defaultModelExcludes = null;
@@ -366,7 +373,11 @@ extends SelectionAction
 		return defaultIncludeList;		
 	}
 	
-	public List getDefaultSelection(boolean model) 
+//	public List getDefaultSelection(boolean model) 
+//	{
+//		return getSelection(getDefaultIncludes(model), model);		
+//	}
+	public Collection getDefaultSelection(boolean model) 
 	{
 		return getSelection(getDefaultIncludes(model), model);		
 	}

@@ -48,9 +48,6 @@ extends DrawComponentContainerTreeEditPart
 		super(model);
 	}
 
-	/**
-	 * @see org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart#getImage()
-	 */
 	@Override
 	protected Image getImage() {
 		return PAGE_ICON;
@@ -60,6 +57,7 @@ extends DrawComponentContainerTreeEditPart
 		return (PageDrawComponent) getDrawComponent();
 	}
 	
+	@Override	
 	public IPropertySource getPropertySource()
   {
     if (propertySource == null) {
@@ -67,4 +65,14 @@ extends DrawComponentContainerTreeEditPart
     }
     return propertySource;
   }  
+	
+  /**
+   * Creates and installs pertinent EditPolicies.
+   */
+  protected void createEditPolicies() 
+  {
+    // TODO: Must override EditPolicy.TREE_CONTAINER_ROLE with a EditPolicy which does
+    // support dragging of layers   	
+  	super.createEditPolicies();
+  }	
 }

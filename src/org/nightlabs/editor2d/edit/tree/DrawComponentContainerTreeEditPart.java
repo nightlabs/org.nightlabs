@@ -56,9 +56,8 @@ extends DrawComponentTreeEditPart
   protected void createEditPolicies() 
   {
   	super.createEditPolicies();
-  	installEditPolicy(EditPolicy.CONTAINER_ROLE, new DrawComponentContainerEditPolicy());
+  	installEditPolicy(EditPolicy.CONTAINER_ROLE, new DrawComponentContainerEditPolicy());  	
   	installEditPolicy(EditPolicy.TREE_CONTAINER_ROLE, new DrawComponentTreeContainerEditPolicy());
-  	//If this editpart is the contents of the viewer, then it is not deletable!
   	if (getParent() instanceof RootEditPart)
   		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
   }
@@ -96,31 +95,5 @@ extends DrawComponentTreeEditPart
 			refreshChildren();			
 		}		
 	}  
-  
-//  /**
-//   * Returns the children of this from the model,
-//   * as this is capable enough of holding EditParts.
-//   *
-//   * @return  List of children.
-//   */
-//  protected List getModelChildren() 
-//  {
-//  	if (!getFilterMan().isAllFilterSet()) {
-//    	List filterChildren = new ArrayList();
-//    	for (Iterator itFilter = getFilterMan().getFilters().iterator(); itFilter.hasNext(); ) {
-//    		Class filter = (Class) itFilter.next();
-//    		for (Iterator it = getDrawComponentContainer().getDrawComponents().iterator(); it.hasNext(); ) {
-//    			DrawComponent dc = (DrawComponent) it.next();
-//    			if (filter.isAssignableFrom(dc.getClass())) {
-//    				filterChildren.add(dc);
-//    			}
-//    		}
-//    	}
-//    	return filterChildren;  		
-//  	}
-//  	else {
-//  		return getDrawComponentContainer().getDrawComponents();
-//  	}
-//  }    
-  
+    
 }

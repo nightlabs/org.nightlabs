@@ -42,16 +42,11 @@ extends DrawComponentContainerTreeEditPart
 	public static Image LAYER_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
 			LayerView.class).createImage();	
 	  
-  /**
-   * @param drawComponent
-   */
   public LayerTreeEditPart(Layer layer) {
     super(layer);
   }
 
-  /* (non-Javadoc)
-   * @see org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart#getIcon()
-   */
+	@Override  
   public Image getImage() {
     return LAYER_ICON;
   }  
@@ -60,6 +55,7 @@ extends DrawComponentContainerTreeEditPart
   	return (Layer) getModel();
   }
   
+	@Override
   public IPropertySource getPropertySource()
   {
     if (propertySource == null)
@@ -69,4 +65,15 @@ extends DrawComponentContainerTreeEditPart
     }
     return propertySource;
   } 
+  
+  /**
+   * Creates and installs pertinent EditPolicies.
+   */
+  protected void createEditPolicies() 
+  {
+    // TODO: Must override EditPolicy.TREE_CONTAINER_ROLE with a EditPolicy which does
+    // support dragging of layers   	
+  	super.createEditPolicies();
+  }
+  
 }

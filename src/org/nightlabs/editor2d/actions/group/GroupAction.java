@@ -25,7 +25,7 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.actions.group;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
@@ -72,7 +72,8 @@ extends AbstractEditorSelectionAction
 	@Override
 	public void run() 
 	{
-		List<DrawComponent> selection = getSelection(getDefaultIncludes(true), true);
+//		List<DrawComponent> selection = getSelection(getDefaultIncludes(true), true);
+		Collection<DrawComponent> selection = getSelection(getDefaultIncludes(true), true);		
 		GroupCommand cmd = new GroupCommand(selection);
 		execute(cmd);
 		if (cmd.getGroup() != null)

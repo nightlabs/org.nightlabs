@@ -67,7 +67,8 @@ extends AbstractEditorAction
   	setText(EditorPlugin.getResourceString("action.paste.text"));
   	setToolTipText(EditorPlugin.getResourceString("action.paste.tooltip"));
   	setId(ID);
-  	setActionDefinitionId(ID);
+//  	setActionDefinitionId(ID);
+  	setActionDefinitionId("org.eclipse.ui.edit.paste");  	
 //  	setAccelerator(SWT.CTRL | 'P');
   } 
 	

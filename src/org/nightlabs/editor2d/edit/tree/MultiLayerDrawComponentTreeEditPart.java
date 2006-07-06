@@ -31,15 +31,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
-import org.nightlabs.editor2d.editpolicy.DrawComponentContainerEditPolicy;
-import org.nightlabs.editor2d.editpolicy.tree.MultiLayerDrawComponentTreeEditPolicy;
 import org.nightlabs.editor2d.model.MultiLayerDrawComponentPropertySource;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 
@@ -71,17 +67,13 @@ extends DrawComponentContainerTreeEditPart
     return null;
   }
 
-  /**
-   * Creates and installs pertinent EditPolicies.
-   */
-  protected void createEditPolicies() 
-  {
-  	super.createEditPolicies();
-  	installEditPolicy(EditPolicy.CONTAINER_ROLE, new DrawComponentContainerEditPolicy());
-  	installEditPolicy(EditPolicy.TREE_CONTAINER_ROLE, new MultiLayerDrawComponentTreeEditPolicy());
-  	//If this editpart is the contents of the viewer, then it is not deletable!
-  	installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
-  }  
+//  protected void createEditPolicies() 
+//  {
+//  	super.createEditPolicies();
+//  	installEditPolicy(EditPolicy.CONTAINER_ROLE, new DrawComponentContainerEditPolicy());
+//  	installEditPolicy(EditPolicy.TREE_CONTAINER_ROLE, new MultiLayerDrawComponentTreeEditPolicy());
+//  	installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
+//  }  
   
   protected List getModelChildren()
   { 

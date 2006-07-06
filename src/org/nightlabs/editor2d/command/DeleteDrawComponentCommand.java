@@ -47,9 +47,6 @@ extends Command
 	
 	/** True, if child was removed from its parent. */	
 	protected boolean wasRemoved;
-
-	/** the Deletion String */
-	public static final String DELETE_DRAWCOMPONENT = EditorPlugin.getResourceString("command.delete.drawcomponent");
   
 	/**
 	 * Create a command that will remove the shape from its parent.
@@ -62,21 +59,15 @@ extends Command
 		if (parent == null || child == null) {
 			throw new IllegalArgumentException("Neither param parent not param child may be null!");
 		}
-		setLabel(DELETE_DRAWCOMPONENT);
+		setLabel(EditorPlugin.getResourceString("command.delete.drawcomponent"));
 		this.parent = parent;
 		this.child = child;
 	}	
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.commands.Command#canUndo()
-	 */
 	public boolean canUndo() {
 		return wasRemoved;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
 	public void execute() 
 	{
 	  index = parent.getDrawComponents().indexOf(child);
@@ -86,17 +77,12 @@ extends Command
     wasRemoved = true;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
 	public void redo() 
 	{	  
-    parent.removeDrawComponent(index);
+//    parent.removeDrawComponent(index);
+		parent.removeDrawComponent(child);		
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
 	public void undo() 
 	{	  
     parent.addDrawComponent(child, index);    

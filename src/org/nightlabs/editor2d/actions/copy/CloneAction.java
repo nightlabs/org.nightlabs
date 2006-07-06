@@ -26,8 +26,8 @@
 package org.nightlabs.editor2d.actions.copy;
 
 import java.awt.Rectangle;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.gef.commands.CompoundCommand;
 import org.nightlabs.config.Config;
@@ -64,7 +64,6 @@ extends AbstractEditorSelectionAction
 
   protected void init() 
   {
-  	super.init();
   	setText(EditorPlugin.getResourceString("action.clone.text"));
   	setToolTipText(EditorPlugin.getResourceString("action.clone.tooltip"));
   	setId(ID);
@@ -103,11 +102,12 @@ extends AbstractEditorSelectionAction
 	 */
 	public void run() 
 	{
-		List dcs = getSelection(DrawComponent.class, true);
+//		List<DrawComponent> dcs = getSelection(DrawComponent.class, true);
+		Collection<DrawComponent> dcs = getSelection(DrawComponent.class, true);		
 		CompoundCommand cmd = new CompoundCommand();
-		for (Iterator it = dcs.iterator(); it.hasNext(); ) 
+		for (Iterator<DrawComponent> it = dcs.iterator(); it.hasNext(); ) 
 		{
-			DrawComponent dc = (DrawComponent) it.next();
+			DrawComponent dc = it.next();
 			CloneDrawComponentCommand cloneCmd = new CloneDrawComponentCommand(dc, dc.getParent());
 			int distX = getConfigModule().getCloneDistanceX();
 			int distY = getConfigModule().getCloneDistanceY();

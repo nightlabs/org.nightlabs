@@ -27,7 +27,6 @@ package org.nightlabs.editor2d.actions.preferences;
 
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.actions.EditorCommandConstants;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

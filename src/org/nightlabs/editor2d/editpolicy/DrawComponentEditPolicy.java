@@ -38,9 +38,7 @@ import org.nightlabs.editor2d.command.DeleteDrawComponentCommand;
 public class DrawComponentEditPolicy 
 extends ComponentEditPolicy
 {
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.editpolicies.ComponentEditPolicy#createDeleteCommand(org.eclipse.gef.requests.GroupRequest)
-	 */
+
 	protected Command createDeleteCommand(GroupRequest deleteRequest) 
 	{
 		Object parent = getHost().getParent().getModel();
@@ -50,4 +48,5 @@ extends ComponentEditPolicy
 		}
 		return super.createDeleteCommand(deleteRequest);	  
 	}
+	
 }

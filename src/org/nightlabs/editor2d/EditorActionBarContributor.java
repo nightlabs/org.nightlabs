@@ -52,6 +52,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.base.util.RCPUtil;
+import org.nightlabs.editor2d.actions.DeleteAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.RepaintAction;
 import org.nightlabs.editor2d.actions.RepaintRetargetAction;
@@ -59,6 +60,8 @@ import org.nightlabs.editor2d.actions.RotateAction;
 import org.nightlabs.editor2d.actions.copy.CopyAction;
 import org.nightlabs.editor2d.actions.copy.CutAction;
 import org.nightlabs.editor2d.actions.copy.PasteAction;
+import org.nightlabs.editor2d.actions.group.GroupAction;
+import org.nightlabs.editor2d.actions.group.UnGroupAction;
 import org.nightlabs.editor2d.actions.order.ChangeOrderOneDown;
 import org.nightlabs.editor2d.actions.order.ChangeOrderOneUp;
 import org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack;
@@ -99,7 +102,9 @@ extends ActionBarContributor
   	addRetargetAction(new RedoRetargetAction());
   	
   	// Delete
-  	addRetargetAction(new DeleteRetargetAction());
+//  	addRetargetAction(new DeleteRetargetAction());
+  	addRetargetAction(new RetargetAction(DeleteAction.ID, 
+  			EditorPlugin.getResourceString("action.delete.text")));  	
   	  	
   	// Cut / Copy / Paste
   	addRetargetAction(new RetargetAction(CopyAction.ID, 
@@ -108,6 +113,12 @@ extends ActionBarContributor
   			EditorPlugin.getResourceString("action.paste.text")));
   	addRetargetAction(new RetargetAction(CutAction.ID, 
   			EditorPlugin.getResourceString("action.cut.text")));
+  	
+  	// Group
+  	addRetargetAction(new RetargetAction(GroupAction.ID,
+  			EditorPlugin.getResourceString("action.group.text")));
+  	addRetargetAction(new RetargetAction(UnGroupAction.ID,
+  			EditorPlugin.getResourceString("action.ungroup.text")));
   	
   	// Alignment
   	addRetargetAction(new AlignmentRetargetAction(PositionConstants.LEFT));
@@ -217,7 +228,13 @@ extends ActionBarContributor
   	editMenu.add(new Separator());  	
   	
   	// Delete
-  	editMenu.add(getAction(ActionFactory.DELETE.getId()));
+//  	editMenu.add(getAction(ActionFactory.DELETE.getId()));
+  	editMenu.add(getAction(DeleteAction.ID));  	
+  	editMenu.add(new Separator());  	
+  	
+  	// Group
+  	editMenu.add(getAction(GroupAction.ID));
+  	editMenu.add(getAction(UnGroupAction.ID));
   	editMenu.add(new Separator());  	
   	
   	// Edit - Align  	

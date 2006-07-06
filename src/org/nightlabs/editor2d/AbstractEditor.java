@@ -111,6 +111,7 @@ import org.nightlabs.base.io.FileEditorInput;
 import org.nightlabs.base.io.IOFilterRegistry;
 import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.util.RCPUtil;
+import org.nightlabs.editor2d.actions.DeleteAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
 import org.nightlabs.editor2d.actions.RepaintAction;
@@ -138,7 +139,6 @@ import org.nightlabs.editor2d.actions.shape.ShapeUnionAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomPageAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
-import org.nightlabs.editor2d.command.shape.ShapeUnionCommand;
 import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.impl.LayerImpl;
@@ -175,12 +175,12 @@ extends J2DGraphicalEditorWithFlyoutPalette
 {
     public static final Logger LOGGER = Logger.getLogger(Editor.class);
 
-    protected boolean savePreviouslyNeeded = false;
-    protected RulerComposite rulerComp;
+    private boolean savePreviouslyNeeded = false;
+    private RulerComposite rulerComp;
     
-    protected TreeViewer treeViewer;    
-    protected EditorOutlinePage outlinePage;
-    protected boolean editorSaving = false;
+    private TreeViewer treeViewer;    
+    private EditorOutlinePage outlinePage;
+    private boolean editorSaving = false;
     
     protected static final String PALETTE_DOCK_LOCATION = "Dock location"; //$NON-NLS-1$
     protected static final String PALETTE_SIZE = "Palette Size"; //$NON-NLS-1$
@@ -203,7 +203,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     }
     
     public abstract MultiLayerDrawComponent createMultiLayerDrawComponent();    
-    protected MultiLayerDrawComponent mldc = null;  
+    private MultiLayerDrawComponent mldc = null;  
     public MultiLayerDrawComponent getMultiLayerDrawComponent() 
     {
       if (mldc == null) {
@@ -213,7 +213,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     }
       
     public abstract EditPartFactory createEditPartFactory(); 
-    protected EditPartFactory editPartFactory = null;
+    private EditPartFactory editPartFactory = null;
     public EditPartFactory getEditPartFactory() 
     {
       if (editPartFactory == null)
@@ -223,7 +223,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     }      
         
     public abstract EditPartFactory createOutlineEditPartFactory();
-    protected EditPartFactory outlineEditPartFactory = null;
+    private EditPartFactory outlineEditPartFactory = null;
     public EditPartFactory getOutlineEditPartFactory() 
     {
       if (outlineEditPartFactory == null)
@@ -233,7 +233,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     }     
         
     public abstract ContextMenuProvider createContextMenuProvider();    
-    protected ContextMenuProvider contextMenuProvider = null;
+    private ContextMenuProvider contextMenuProvider = null;
     public ContextMenuProvider getContextMenuProvider() 
     {
       if (contextMenuProvider == null)
@@ -242,7 +242,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return contextMenuProvider;
     }    
     
-    protected PaletteRoot paletteRoot = null;
+    private PaletteRoot paletteRoot = null;
     public PaletteRoot getPaletteRoot() 
     {
     	if (paletteRoot == null) {
@@ -251,12 +251,10 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	return paletteRoot;
     }
         
-    /** Cache save-request status. */
-    protected boolean saveAlreadyRequested;
     /** KeyHandler with common bindings for both the Outline View and the Editor. */
-    protected KeyHandler sharedKeyHandler;
+    private KeyHandler sharedKeyHandler;
 
-    protected RenderModeManager renderMan = null;
+    private RenderModeManager renderMan = null;
     public RenderModeManager getRenderModeManager() {
       return renderMan;
     }     
@@ -264,21 +262,21 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //      return getMultiLayerDrawComponent().getRenderModeManager();
 //    } 
     
-    protected FilterManager filterMan = null;
+    private FilterManager filterMan = null;
     public FilterManager getFilterManager() {
       return filterMan;
     }
      
     public abstract NameProvider createNameProvider();
     
-    protected NameProvider nameProvider = null;
+    private NameProvider nameProvider = null;
     public NameProvider getFilterNameProvider() {
     	if (nameProvider == null)
     		nameProvider = createNameProvider();
     	return nameProvider;
     }    
     
-    protected IOFilterMan ioFilterMan;
+    private IOFilterMan ioFilterMan;
     public IOFilterMan getIOFilterMan() 
     {
     	if (ioFilterMan == null)
@@ -287,7 +285,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	return ioFilterMan;
     }
         
-    protected LanguageManager langMan;
+    private LanguageManager langMan;
     public LanguageManager getLanguageManager() 
     {
     	if (langMan == null)
@@ -381,7 +379,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
       }    	    	
     }
     
-    protected ScalableFreeformRootEditPart rootEditPart;
+    private ScalableFreeformRootEditPart rootEditPart;
     public ScalableFreeformRootEditPart getRootEditPart() 
     {
       if (rootEditPart == null)
@@ -390,12 +388,12 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return rootEditPart;
     }
     
-    protected ViewerManager viewerManager;
+    private ViewerManager viewerManager;
     public ViewerManager getViewerManager() {
     	return viewerManager;
     }
     
-    protected DescriptorManager descriptorManager;
+    private DescriptorManager descriptorManager;
     public DescriptorManager getDescriptorManager() {
     	return descriptorManager;
     }
@@ -463,7 +461,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		};
     		
     // should solve redraw problems when undoing things
-    protected CommandStackEventListener commandStackListener = new CommandStackEventListener()
+    private CommandStackEventListener commandStackListener = new CommandStackEventListener()
     {		
 			public void stackChanged(CommandStackEvent event) 
 			{
@@ -605,7 +603,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
             getActionRegistry().getAction(ActionFactory.DELETE.getId()));
         sharedKeyHandler.put(
             KeyStroke.getPressed(SWT.F2, 0),
-            getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));     
+            getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
+      	// TODO: register more common keys        
       }
       return sharedKeyHandler;
     }
@@ -619,7 +618,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
         
     public abstract AbstractPaletteFactory createPaletteFactory();   
     
-    protected AbstractPaletteFactory paletteFactory = null;
+    private AbstractPaletteFactory paletteFactory = null;
     public AbstractPaletteFactory getPaletteFactory() 
     {
     	if (paletteFactory == null) {
@@ -673,7 +672,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	super.initializeActionRegistry();
 
     	// TODO: find out why global keyBindings not work only on base of Extension-Points
-    	// (org.eclipse.ui.bindings + commands) nor on EditorActionBarContributor.declareGlobalActionKeys()
+    	// (org.eclipse.ui.bindings + commands) nor on EditorActionBarContributor.declareGlobalActionKeys()  
     	IKeyBindingService keyBindingService = getSite().getKeyBindingService();
     	for (Iterator<IAction> it = getActionRegistry().getActions(); it.hasNext(); ) {
     		keyBindingService.registerAction(it.next());
@@ -719,9 +718,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
       ActionRegistry registry = getActionRegistry();
       IAction action;
       
-//      action = new CopyTemplateAction(this);
-//      registry.registerAction(action);
-
       // Match Actions
       action = new MatchWidthAction(this);
       registry.registerAction(action);
@@ -731,13 +727,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
       registry.registerAction(action);
       getSelectionActions().add(action.getId());
       
-//      action = new EditorPasteTemplateAction(this);
+//      action = new DirectEditAction((IWorkbenchPart)this);
 //      registry.registerAction(action);
 //      getSelectionActions().add(action.getId());
-
-      action = new DirectEditAction((IWorkbenchPart)this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
 
       // Alignment Actions
       action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.LEFT);
@@ -926,7 +918,12 @@ extends J2DGraphicalEditorWithFlyoutPalette
       // Shape Exclusive Or
       action = new ShapeExclusiveOrAction(this);
       registry.registerAction(action);
-      getSelectionActions().add(action.getId());                  
+      getSelectionActions().add(action.getId());     
+      
+      // Delete
+      action = new DeleteAction(this);
+      registry.registerAction(action);
+      getSelectionActions().add(action.getId());      
     }
     
     /**
@@ -1072,7 +1069,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return true;
     }
     
-    protected PropertyChangeListener progressListener = new PropertyChangeListener()
+    private PropertyChangeListener progressListener = new PropertyChangeListener()
     {
   		public void propertyChange(PropertyChangeEvent evt) 
   		{
@@ -1089,7 +1086,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
   		}			
   	};
     
-    protected ProgressMonitorDialog progressMonitor; 
+  	private ProgressMonitorDialog progressMonitor; 
     protected ProgressMonitorDialog getProgressMonitor() 
     {
     	if (progressMonitor == null) {
@@ -1277,7 +1274,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     	}
     }
     
-    protected MultiLayerDrawComponentEditPart mldcEditPart = null;
+    private MultiLayerDrawComponentEditPart mldcEditPart = null;
     protected MultiLayerDrawComponentEditPart getModelRootEditPart() 
     {
     	if (getRootEditPart().getChildren().size() == 1) {
@@ -1333,7 +1330,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     freeMemory();
   }
    
-  protected PageFormat pageFormat = PrinterJob.getPrinterJob().defaultPage();
+  private PageFormat pageFormat = PrinterJob.getPrinterJob().defaultPage();
 	public PageFormat getPageFormat() {
 		return pageFormat;
 	}

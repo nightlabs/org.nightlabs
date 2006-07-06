@@ -28,9 +28,7 @@
 package org.nightlabs.editor2d.actions;
 
 import org.eclipse.gef.ui.actions.SelectionAction;
-import org.eclipse.swt.SWT;
 import org.eclipse.ui.IWorkbenchPart;
-
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EditorStateManager;
 import org.nightlabs.editor2d.request.EditorRequestConstants;

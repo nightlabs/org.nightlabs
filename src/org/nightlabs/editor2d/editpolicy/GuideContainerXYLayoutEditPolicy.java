@@ -52,15 +52,6 @@ implements EditorRequestConstants
 	public GuideContainerXYLayoutEditPolicy() {
 		super();
 	}
-//	public GuideContainerXYLayoutEditPolicy(EditPart host) {
-//		super();
-//		this.host = host;
-//	}
-//
-//	protected EditPart host = null;
-//	public EditPart getHost() {
-//		return host;
-//	}
 	
 	protected Command createAddCommand(Request request, EditPart childEditPart, 
 			Object constraint) 
@@ -68,21 +59,12 @@ implements EditorRequestConstants
 	  DrawComponent part = (DrawComponent)childEditPart.getModel();
 		Rectangle rect = (Rectangle)constraint;
 
-		// TODO: maybe uncomment for Container related things
-//		AddDrawComponentCommand add = new AddDrawComponentCommand();
-//		add.setParent((MultiLayerDrawComponent)getHost().getModel());
-//		add.setChild(part);
-//		add.setLocation(rect);
-//		add.setLabel(EditorPlugin.getResourceString("command_add_command"));
-//		add.setDebugLabel("MLDC_XYEP add drawComponent");//$NON-NLS-1$
-
 		SetConstraintCommand setConstraint = new SetConstraintCommand();
 		setConstraint.setBounds(J2DUtil.toAWTRectangle(rect));
 		setConstraint.setPart(part);
 		setConstraint.setLabel(EditorPlugin.getResourceString("command.add.drawComponent"));
 		setConstraint.setDebugLabel("MLDC_XYEP setConstraint");//$NON-NLS-1$
 		
-//		Command cmd = add.chain(setConstraint);
 		Command cmd = setConstraint;
 		cmd = chainGuideAttachmentCommand(request, part, cmd, true);
 		cmd = chainGuideAttachmentCommand(request, part, cmd, false);

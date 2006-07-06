@@ -25,7 +25,7 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.actions.copy;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.ui.actions.ActionFactory;
@@ -61,11 +61,11 @@ extends AbstractEditorSelectionAction
 
   protected void init() 
   {
-  	super.init();
   	setText(EditorPlugin.getResourceString("action.copy.text"));
   	setToolTipText(EditorPlugin.getResourceString("action.copy.tooltip"));
   	setId(ID);
-  	setActionDefinitionId(ID);
+//  	setActionDefinitionId(ID);
+  	setActionDefinitionId("org.eclipse.ui.edit.copy");  	
 //  	setAccelerator(SWT.CTRL | 'C');
   } 
 	
@@ -82,7 +82,8 @@ extends AbstractEditorSelectionAction
 	 */
 	public void run() 
 	{
-		List dcs = getSelection(DrawComponent.class, true);
+//		List<DrawComponent> dcs = getSelection(DrawComponent.class, true);
+		Collection<DrawComponent> dcs = getSelection(DrawComponent.class, true);		
 		Clipboard clipboard = Clipboard.getDefault();
 		Object oldContent = clipboard.getContents();
 		clipboard.setContents(dcs);

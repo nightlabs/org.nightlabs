@@ -36,25 +36,25 @@ public class DrawComponentContainerEditPolicy
 extends ContainerEditPolicy 
 {
 
-  /* (non-Javadoc)
-   * @see org.eclipse.gef.editpolicies.ContainerEditPolicy#getCreateCommand(org.eclipse.gef.requests.CreateRequest)
-   */
   protected Command getCreateCommand(CreateRequest request) {
     return null;
   }
   
 //  public Command getOrphanChildrenCommand(GroupRequest request) 
 //  {
-//  	List parts = request.getEditParts();
+//  	List<EditPart> parts = request.getEditParts();
 //  	CompoundCommand result = 
-//  		new CompoundCommand(EditorPlugin.getResourceString("command_orphan_children"));
+//  		new CompoundCommand(EditorPlugin.getResourceString("command.orphanChildren.text"));
 //  	for (int i = 0; i < parts.size(); i++) {
-//  		OrphanChildCommand orphan = new OrphanChildCommand();
-//  		orphan.setChild((LogicSubpart)((EditPart)parts.get(i)).getModel());
-//  		orphan.setParent((LogicDiagram)getHost().getModel());
-//  		orphan.setLabel(LogicMessages.LogicElementEditPolicy_OrphanCommandLabelText);
+////  		OrphanChildCommand orphan = new OrphanChildCommand();
+////  		orphan.setChild((DrawComponent)((EditPart)parts.get(i)).getModel());
+////  		orphan.setParent((DrawComponentContainer)getHost().getModel());
+////  		orphan.setLabel(EditorPlugin.getResourceString("command.orphanChildren.text"));
+//  		DrawComponent child = (DrawComponent)((EditPart)parts.get(i)).getModel();
+//  		OrphanChildCommand orphan = new OrphanChildCommand(child);  		
 //  		result.add(orphan);
 //  	}
 //  	return result.unwrap();
-//  }  
+//  }
+  
 }

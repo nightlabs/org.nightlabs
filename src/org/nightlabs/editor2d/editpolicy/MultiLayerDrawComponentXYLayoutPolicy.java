@@ -37,13 +37,6 @@ extends DrawComponentContainerXYLayoutPolicy
 {
   public static final Logger LOGGER = Logger.getLogger(MultiLayerDrawComponentXYLayoutPolicy.class);
   
-	/** 
-	 * Create a new instance of this edit policy.
-	 * @param layout a non-null XYLayout instance. This should be the layout of the editpart's 
-	 *              figure where this instance is installed.
-	 * @throws IllegalArgumentException if layout is null 
-	 * @see DiagramEditPart#createEditPolicies()
-	 */
 	public MultiLayerDrawComponentXYLayoutPolicy(XYLayout layout)
 	{
 	  super(layout);

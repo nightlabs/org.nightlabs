@@ -47,17 +47,22 @@ extends Command
 	protected DrawComponentContainer parent;
 	/** the DrawOrderIndex of the DrawComponentContainer */
 	protected int drawOrderIndex;
-	
+	/** the bounds of the created drawComponent **/
 	protected Rectangle rect;
 	
 	public CreateDrawComponentCommand() 
 	{
 	  super(EditorPlugin.getResourceString("command.create.drawcomponent"));	  
 	}
-		
-	public boolean canUndo() {
-		return true;
-	}	
+
+	public CreateDrawComponentCommand(DrawComponent dc, DrawComponentContainer parent, int index) 
+	{
+	  super();
+	  setLabel(EditorPlugin.getResourceString("command.create.drawcomponent"));
+	  this.drawComponent = dc;
+	  this.parent = parent;
+	  this.drawOrderIndex = index;
+	}
 	
 	public void execute() 
 	{
@@ -78,10 +83,10 @@ extends Command
 		parent = newParent;
 	}	
 	
-	public void setLocation(Rectangle r) {
+	public void setBounds(Rectangle r) {
 		rect = r;
 	}	
-	protected Rectangle getLocation() {
+	protected Rectangle getBounds() {
 		return rect;
 	}
 	

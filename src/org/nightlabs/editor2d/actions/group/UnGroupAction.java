@@ -25,7 +25,7 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.actions.group;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.gef.commands.CompoundCommand;
 import org.nightlabs.editor2d.AbstractEditor;
@@ -77,7 +77,8 @@ extends AbstractEditorSelectionAction
 	@Override
 	public void run() 
 	{
-		List<GroupDrawComponent> selection = getSelection(GroupDrawComponent.class, true);
+//		List<GroupDrawComponent> selection = getSelection(GroupDrawComponent.class, true);		
+		Collection<GroupDrawComponent> selection = getSelection(GroupDrawComponent.class, true);		
 		CompoundCommand cmd = new CompoundCommand();
 		for (GroupDrawComponent group : selection) {
 			UnGroupCommand ungroupCmd = new UnGroupCommand(group);

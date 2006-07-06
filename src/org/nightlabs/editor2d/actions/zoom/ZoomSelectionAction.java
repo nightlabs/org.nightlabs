@@ -27,8 +27,8 @@
 
 package org.nightlabs.editor2d.actions.zoom;
 
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -58,7 +58,6 @@ extends AbstractEditorSelectionAction
 
   protected void init() 
   {
-  	super.init();
   	setText(EditorPlugin.getResourceString("action.zoom.selection.label"));
   	setToolTipText(EditorPlugin.getResourceString("action.zoom.selection.tooltip"));
   	setId(ID);  	
@@ -71,7 +70,8 @@ extends AbstractEditorSelectionAction
    */
   protected boolean calculateEnabled() 
   {
-  	List selectedObjects = getDefaultSelection(false);
+//  	List selectedObjects = getDefaultSelection(false);
+  	Collection selectedObjects = getDefaultSelection(false);  	
     if (!selectedObjects.isEmpty()) 
     {
     	for (Iterator it = selectedObjects.iterator(); it.hasNext(); ) 

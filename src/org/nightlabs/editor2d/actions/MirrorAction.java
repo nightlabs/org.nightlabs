@@ -25,9 +25,8 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.actions;
 
-import java.awt.geom.AffineTransform;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -61,7 +60,6 @@ extends AbstractEditorSelectionAction
 
   protected void init() 
   {
-  	super.init();
   	setText(EditorPlugin.getResourceString("action.mirror.text"));
   	setToolTipText(EditorPlugin.getResourceString("action.mirror.tooltip"));
   	setId(ID);
@@ -76,13 +74,14 @@ extends AbstractEditorSelectionAction
 
 	public void run() 
 	{
-		List dcs = getSelection(DrawComponent.class, true);
+//		List<DrawComponent> dcs = getSelection(DrawComponent.class, true);
+		Collection<DrawComponent> dcs = getSelection(DrawComponent.class, true);		
 		Command cmd = new CompoundCommand();
-		for (Iterator it = dcs.iterator(); it.hasNext(); ) {
-			DrawComponent dc = (DrawComponent) it.next();
+		for (Iterator<DrawComponent> it = dcs.iterator(); it.hasNext(); ) {
+			DrawComponent dc = it.next();
 			CreateDrawComponentCommand createCmd = new CreateDrawComponentCommand();
 			DrawComponent clone = (DrawComponent) dc.clone();
-			AffineTransform at = new AffineTransform();
+//			AffineTransform at = new AffineTransform();
 			// TODO: find out how to mirror with an AffineTransform
 			clone.setName(clone.getName() + getCopyString());
 			createCmd.setChild(clone);
