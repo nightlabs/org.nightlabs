@@ -34,6 +34,8 @@ import org.eclipse.gef.Request;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.editor2d.EditorStateManager;
 import org.nightlabs.editor2d.ShapeDrawComponent;
+import org.nightlabs.editor2d.editpolicy.EditorEditPolicy;
+import org.nightlabs.editor2d.editpolicy.EditorEditShapePolicy;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
 import org.nightlabs.editor2d.request.EditorEditShapeRequest;
@@ -136,39 +138,39 @@ extends DrawComponentEditPart
   	return getShapeDrawComponent().getGeneralShape();
   }
       
-  /**
-   * Overridden to return a default <code>DragTracker</code> for GraphicalEditParts.
-   * @see org.eclipse.gef.EditPart#getDragTracker(Request)
-   */
-  public DragTracker getDragTracker(Request request) 
-  { 
-    if (request.getType().equals(REQ_EDIT_SHAPE)) {
-      EditorEditShapeRequest req = (EditorEditShapeRequest) request; 
-      return new ShapeEditTracker(this, req.getPathSegmentIndex());
-    }
-          
-  	return super.getDragTracker(request);
-  }
-    
-  public void performRequest(Request req) 
-  {
-    // TODO: set somehow the EditShapeMode to the corresponding ShapeFigure 
-    if (req.getType().equals(REQ_EDIT_SHAPE)) 
-    {
-      EditorEditShapeRequest request = (EditorEditShapeRequest) req;
-      EditorStateManager.setEditShapeMode(this);      
-    }
-    
-    super.performRequest(req);
-  }
-          
-  public boolean understandsRequest(Request req) 
-  {
-    if (req.getType().equals(REQ_EDIT_SHAPE))
-      return true;
-    
-    return super.understandsRequest(req);
-  }
+//  /**
+//   * Overridden to return a default <code>DragTracker</code> for GraphicalEditParts.
+//   * @see org.eclipse.gef.EditPart#getDragTracker(Request)
+//   */
+//  public DragTracker getDragTracker(Request request) 
+//  { 
+//    if (request.getType().equals(REQ_EDIT_SHAPE)) {
+//      EditorEditShapeRequest req = (EditorEditShapeRequest) request; 
+//      return new ShapeEditTracker(this, req.getPathSegmentIndex());
+//    }
+//          
+//  	return super.getDragTracker(request);
+//  }
+//    
+//  public void performRequest(Request req) 
+//  {
+//    // TODO: set somehow the EditShapeMode to the corresponding ShapeFigure 
+//    if (req.getType().equals(REQ_EDIT_SHAPE)) 
+//    {
+//      EditorEditShapeRequest request = (EditorEditShapeRequest) req;
+//      EditorStateManager.setEditShapeMode(this);      
+//    }
+//    
+//    super.performRequest(req);
+//  }
+//          
+//  public boolean understandsRequest(Request req) 
+//  {
+//    if (req.getType().equals(REQ_EDIT_SHAPE))
+//      return true;
+//    
+//    return super.understandsRequest(req);
+//  }
   
   public IPropertySource getPropertySource()
   {
@@ -178,5 +180,13 @@ extends DrawComponentEditPart
         new ShapeDrawComponentPropertySource(getShapeDrawComponent());
     }
     return propertySource;
-  }  
+  }
+
+	@Override
+	protected void createEditPolicies() 
+	{
+		super.createEditPolicies();
+		installEditPolicy(EditorEditPolicy.EDIT_SHAPE_ROLE, new EditorEditShapePolicy());
+	}  
+    
 }

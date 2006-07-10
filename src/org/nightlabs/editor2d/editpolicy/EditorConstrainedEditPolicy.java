@@ -26,52 +26,40 @@
 package org.nightlabs.editor2d.editpolicy;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.Command;
-import org.nightlabs.editor2d.command.RotateCenterCommand;
-import org.nightlabs.editor2d.command.RotateCommand;
-import org.nightlabs.editor2d.request.EditorRotateCenterRequest;
-import org.nightlabs.editor2d.request.EditorRotateRequest;
+import org.eclipse.gef.editpolicies.GraphicalEditPolicy;
+import org.nightlabs.editor2d.request.EditorRequestConstants;
 import org.nightlabs.editor2d.util.EditorUtil;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class RotateContainerXYLayoutEditPolicy 
-extends FeedbackContainerXYLayoutEditPolicy
+public class EditorConstrainedEditPolicy 
+extends GraphicalEditPolicy
+implements EditorRequestConstants
 {
 
-	public RotateContainerXYLayoutEditPolicy() {
-		super();
+	public EditorConstrainedEditPolicy() {
 	}
 
-  public Command getCommand(Request request) 
-  {    
-    if (request instanceof EditorRotateRequest)
-      return getRotateCommand((EditorRotateRequest)request);
+  public Point getConstraintFor(Point point){
+    return EditorUtil.toAbsolute((GraphicalEditPart)getHost(), point);
+  } 
 
-    if (request instanceof EditorRotateCenterRequest)
-      return getRotateCenterCommand((EditorRotateCenterRequest)request);
-    
-  	return super.getCommand(request);
-  }  
-	
-  protected Command getRotateCenterCommand(EditorRotateCenterRequest request) 
-  {
-    RotateCenterCommand cmd = new RotateCenterCommand(request);
-    Point rotationCenter = request.getRotationCenter().getCopy();
-    rotationCenter = EditorUtil.toAbsolute(getHost(), rotationCenter.x, rotationCenter.y);
-    cmd.setRotationCenter(rotationCenter);    
-    LOGGER.debug("cmd.rotationCenter = "+rotationCenter);
-    return cmd;
+  protected Point getScrollOffset() {
+    return EditorUtil.getScrollOffset(getHost());
   }
   
-  protected Command getRotateCommand(EditorRotateRequest request) 
-  {
-    RotateCommand cmd = new RotateCommand(request);
-    double rotation = request.getRotation();
-    cmd.setRotation(rotation);
-    LOGGER.debug("getRotateCommand().rotation = "+rotation);
-    return cmd;
-  }  
+  public Rectangle getConstraintFor(Rectangle rectangle) {
+    return EditorUtil.oldToAbsolute((GraphicalEditPart)getHost(), rectangle);
+  }
+
+//	@Override
+//	public EditPart getTargetEditPart(Request request) {
+//		return super.getTargetEditPart(request);		
+//	}  
+    
 }

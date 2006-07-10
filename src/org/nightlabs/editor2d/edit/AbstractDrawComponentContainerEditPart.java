@@ -37,7 +37,6 @@ import org.eclipse.draw2d.XYLayout;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.editpolicy.DrawComponentContainerEditPolicy;
 import org.nightlabs.editor2d.editpolicy.DrawComponentContainerXYLayoutPolicy;
 import org.nightlabs.editor2d.editpolicy.DrawComponentEditPolicy;
 import org.nightlabs.editor2d.editpolicy.EditorEditPolicy;
@@ -71,33 +70,21 @@ extends AbstractDrawComponentEditPart
   	return (DrawComponentContainer) getModel();
   }
   
-  /* (non-Javadoc)
-   * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
-   */
   protected void createEditPolicies() 
   {
+  	// generic delete policy
     installEditPolicy(EditPolicy.COMPONENT_ROLE, new DrawComponentEditPolicy());
-		installEditPolicy(EditPolicy.CONTAINER_ROLE, new DrawComponentContainerEditPolicy());
+//		installEditPolicy(EditPolicy.CONTAINER_ROLE, new DrawComponentContainerEditPolicy());
+    
+		// handles constraint changes (e.g. moving and/or resizing) of model elements
+		// and creation of new model elements		
 		XYLayout layout = (XYLayout) getContentPane().getLayoutManager();
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new DrawComponentContainerXYLayoutPolicy(layout));					
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new DrawComponentContainerXYLayoutPolicy(layout));
+		// disable selection feedback for this edit part		
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, null);	
+		// show snap feedback 		
 		installEditPolicy(EditorEditPolicy.SNAP_FEEDBACK_ROLE, new SnapFeedbackPolicy()); //$NON-NLS-1$		
   }  
-
-//  /* (non-Javadoc)
-//   * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
-//   */
-//  protected void createEditPolicies() 
-//  {
-//    installEditPolicy(EditPolicy.COMPONENT_ROLE, new DrawComponentEditPolicy());
-//		installEditPolicy(EditPolicy.CONTAINER_ROLE, new DrawComponentContainerEditPolicy());
-//		XYLayout layout = (XYLayout) getContentPane().getLayoutManager();
-//		installEditPolicy(EditPolicy.LAYOUT_ROLE, new CreateContainerXYLayoutEditPolicy());					
-//		installEditPolicy(EditorEditPolicy.ROTATE_ROLE, new RotateContainerXYLayoutEditPolicy());		
-//		installEditPolicy(EditorEditPolicy.EDIT_SHAPE_ROLE, new EditShapeContainerXYLayoutEditPolicy());		
-//		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, null);	
-//		installEditPolicy(EditorEditPolicy.SNAP_FEEDBACK_ROLE, new SnapFeedbackPolicy()); //$NON-NLS-1$		
-//  }  
     
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{

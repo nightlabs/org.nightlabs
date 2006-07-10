@@ -33,9 +33,7 @@ import java.util.List;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
-
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.editpolicy.DrawComponentContainerEditPolicy;
 import org.nightlabs.editor2d.editpolicy.tree.DrawComponentTreeContainerEditPolicy;
 
 public abstract class DrawComponentContainerTreeEditPart 
@@ -56,7 +54,8 @@ extends DrawComponentTreeEditPart
   protected void createEditPolicies() 
   {
   	super.createEditPolicies();
-  	installEditPolicy(EditPolicy.CONTAINER_ROLE, new DrawComponentContainerEditPolicy());  	
+//  	installEditPolicy(EditPolicy.CONTAINER_ROLE, new DrawComponentContainerEditPolicy());
+  	// generic Edit Policy for moving, deleting and adding children in a Tree
   	installEditPolicy(EditPolicy.TREE_CONTAINER_ROLE, new DrawComponentTreeContainerEditPolicy());
   	if (getParent() instanceof RootEditPart)
   		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());

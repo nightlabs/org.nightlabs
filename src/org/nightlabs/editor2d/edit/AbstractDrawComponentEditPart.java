@@ -335,14 +335,14 @@ implements EditorRequestConstants
             
   public boolean understandsRequest(Request req) 
   {
-    if (req.getType().equals(REQ_ROTATE))
-      return true;
-
-    else if (req.getType().equals(REQ_EDIT_ROTATE_CENTER))
-      return true;
-
-    else if (req.getType().equals(REQ_SHEAR))
-      return true;
+//    if (req.getType().equals(REQ_ROTATE))
+//      return true;
+//
+//    else if (req.getType().equals(REQ_EDIT_ROTATE_CENTER))
+//      return true;
+//
+//    else if (req.getType().equals(REQ_SHEAR))
+//      return true;
     
     return super.understandsRequest(req);
   }  

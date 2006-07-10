@@ -26,8 +26,6 @@
 package org.nightlabs.editor2d.editpolicy;
 
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateRequest;
@@ -38,10 +36,8 @@ import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
 import org.nightlabs.editor2d.command.CreateImageCommand;
 import org.nightlabs.editor2d.command.CreateShapeCommand;
 import org.nightlabs.editor2d.command.CreateTextCommand;
-import org.nightlabs.editor2d.command.ShearCommand;
 import org.nightlabs.editor2d.request.EditorBoundsRequest;
 import org.nightlabs.editor2d.request.EditorCreateRequest;
-import org.nightlabs.editor2d.request.EditorShearRequest;
 import org.nightlabs.editor2d.request.ImageCreateRequest;
 import org.nightlabs.editor2d.request.LineCreateRequest;
 import org.nightlabs.editor2d.request.TextCreateRequest;
@@ -102,15 +98,14 @@ extends FeedbackContainerXYLayoutEditPolicy
 		else 
 		  constraint = (Rectangle)getConstraintFor((EditorBoundsRequest)request);
 		
-		create.setBounds(constraint);
-    
+		create.setBounds(constraint);    
 		Command cmd = chainGuideAttachmentCommand(request, newPart, create, true);
 		return chainGuideAttachmentCommand(request, newPart, cmd, false);				      			    	  
 	}	
 	
-  protected EditPolicy createChildEditPolicy(EditPart child) {  	
-  	return new DrawComponentResizeEditPolicy();
-  }
+//  protected EditPolicy createChildEditPolicy(EditPart child) {  	
+//  	return new DrawComponentResizeEditPolicy();
+//  }
   
   public Command getCommand(Request request) 
   {
@@ -120,19 +115,19 @@ extends FeedbackContainerXYLayoutEditPolicy
     if (request instanceof ImageCreateRequest)
       return getCreateImageCommand((ImageCreateRequest)request);
     
-    if (request instanceof EditorShearRequest)
-      return getShearCommand((EditorShearRequest) request);
+//    if (request instanceof EditorShearRequest)
+//      return getShearCommand((EditorShearRequest) request);
       
   	return super.getCommand(request);
   }  
   
-  protected Command getShearCommand(EditorShearRequest request) 
-  {
-    ShearCommand cmd = new ShearCommand();
-    cmd.setEditParts(request.getEditParts());
-    cmd.setAffineTransform(request.getAffineTransform());
-    return cmd;
-  }
+//  protected Command getShearCommand(EditorShearRequest request) 
+//  {
+//    ShearCommand cmd = new ShearCommand();
+//    cmd.setEditParts(request.getEditParts());
+//    cmd.setAffineTransform(request.getAffineTransform());
+//    return cmd;
+//  }
   
   public Command getCreateTextCommand(TextCreateRequest request) 
   {

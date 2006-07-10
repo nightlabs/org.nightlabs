@@ -35,7 +35,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.XYLayout;
 import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.SnapToGeometry;
@@ -43,14 +42,12 @@ import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
-import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.config.PreferencesConfigModule;
-import org.nightlabs.editor2d.editpolicy.MultiLayerDrawComponentXYLayoutPolicy;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
 import org.nightlabs.editor2d.model.MultiLayerDrawComponentPropertySource;
@@ -124,20 +121,11 @@ extends AbstractDrawComponentContainerEditPart
 		return null;
 	}
 	
-	/* 
-	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
-	 */
 	protected void createEditPolicies()
 	{
+		super.createEditPolicies();
 		// disallows the removal of this edit part from its parent
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());		
-		// handles constraint changes (e.g. moving and/or resizing) of model elements
-		// and creation of new model elements
-		XYLayout layout = (XYLayout) getContentPane().getLayoutManager();
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new MultiLayerDrawComponentXYLayoutPolicy(layout));		
-		// disable selection feedback for this edit part
-		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, null);	
-		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy()); //$NON-NLS-1$		
 	}
 
 	public MultiLayerDrawComponent getMultiLayerDrawComponent() {

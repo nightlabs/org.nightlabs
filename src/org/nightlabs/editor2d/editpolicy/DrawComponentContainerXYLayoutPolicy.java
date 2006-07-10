@@ -65,24 +65,15 @@ import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
 import org.nightlabs.editor2d.command.CreateImageCommand;
 import org.nightlabs.editor2d.command.CreateShapeCommand;
 import org.nightlabs.editor2d.command.CreateTextCommand;
-import org.nightlabs.editor2d.command.RotateCenterCommand;
-import org.nightlabs.editor2d.command.RotateCommand;
 import org.nightlabs.editor2d.command.SetConstraintCommand;
-import org.nightlabs.editor2d.command.ShearCommand;
-import org.nightlabs.editor2d.command.shape.EditShapeCommand;
-import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
 import org.nightlabs.editor2d.figures.AbstractShapeFigure;
 import org.nightlabs.editor2d.figures.FeedbackShapeFigure;
 import org.nightlabs.editor2d.figures.ShapeFigure;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.request.EditorBoundsRequest;
 import org.nightlabs.editor2d.request.EditorCreateRequest;
-import org.nightlabs.editor2d.request.EditorEditShapeRequest;
 import org.nightlabs.editor2d.request.EditorLocationRequest;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
-import org.nightlabs.editor2d.request.EditorRotateCenterRequest;
-import org.nightlabs.editor2d.request.EditorRotateRequest;
-import org.nightlabs.editor2d.request.EditorShearRequest;
 import org.nightlabs.editor2d.request.ImageCreateRequest;
 import org.nightlabs.editor2d.request.LineCreateRequest;
 import org.nightlabs.editor2d.request.TextCreateRequest;
@@ -344,54 +335,28 @@ implements EditorRequestConstants
 	
   public Command getCommand(Request request) 
   {
-  	if (REQ_EDIT_SHAPE.equals(request.getType()))
-  		return getEditShapeCommand((EditorEditShapeRequest)request);
-
     if (request instanceof TextCreateRequest)
       return getCreateTextCommand((TextCreateRequest)request);
-    
-    if (request instanceof EditorRotateRequest)
-      return getRotateCommand((EditorRotateRequest)request);
-
-    if (request instanceof EditorRotateCenterRequest)
-      return getRotateCenterCommand((EditorRotateCenterRequest)request);
-    
+        
     if (request instanceof ImageCreateRequest)
       return getCreateImageCommand((ImageCreateRequest)request);
     
-    if (request instanceof EditorShearRequest)
-      return getShearCommand((EditorShearRequest) request);
+//    if (request instanceof EditorShearRequest)
+//      return getShearCommand((EditorShearRequest) request);
       
+    LOGGER.debug("getCommand(Request = "+request+")");
+    
   	return super.getCommand(request);
   }  
   
-  protected Command getShearCommand(EditorShearRequest request) 
-  {
-    ShearCommand cmd = new ShearCommand();
-    cmd.setEditParts(request.getEditParts());
-    cmd.setAffineTransform(request.getAffineTransform());
-    return cmd;
-  }
-  
-  protected Command getRotateCenterCommand(EditorRotateCenterRequest request) 
-  {
-    RotateCenterCommand cmd = new RotateCenterCommand(request);
-    Point rotationCenter = request.getRotationCenter().getCopy();
-    rotationCenter = EditorUtil.toAbsolute(getHost(), rotationCenter.x, rotationCenter.y);
-    cmd.setRotationCenter(rotationCenter);    
-    LOGGER.debug("cmd.rotationCenter = "+rotationCenter);
-    return cmd;
-  }
-  
-  protected Command getRotateCommand(EditorRotateRequest request) 
-  {
-    RotateCommand cmd = new RotateCommand(request);
-    double rotation = request.getRotation();
-    cmd.setRotation(rotation);
-//    LOGGER.debug("getRotateCommand().rotation = "+rotation);
-    return cmd;
-  }
-  
+//  protected Command getShearCommand(EditorShearRequest request) 
+//  {
+//    ShearCommand cmd = new ShearCommand();
+//    cmd.setEditParts(request.getEditParts());
+//    cmd.setAffineTransform(request.getAffineTransform());
+//    return cmd;
+//  }
+    
   public Command getCreateTextCommand(TextCreateRequest request) 
   {
     // TODO: Optimize Command (dont create each time a new Command)
@@ -416,32 +381,7 @@ implements EditorRequestConstants
     create.setBounds(constraint);  
     return create;
   }
-  
-  /**
-   * Returns the command contribution for the given edit shape request. 
-   * By default, the request is redispatched to the host's parent as a {@link
-   * org.nightlabs.editor2d.request.EditorRequestConstants#REQ_EDIT_SHAPE}.  
-   * The parent's editpolicies determine how to perform the resize based on the layout manager in use.
-   * @param request the edit shape request
-   * @return the command contribution obtained from the parent
-   */
-  protected Command getEditShapeCommand(EditorEditShapeRequest request) 
-  {
-    EditShapeCommand editShapeCommand = null;
-    if (editShapeCommand == null) 
-    {
-    	editShapeCommand = new EditShapeCommand();
-    	ShapeDrawComponentEditPart sdcEP = (ShapeDrawComponentEditPart) request.getTargetEditPart();
-    	ShapeDrawComponent sdc = sdcEP.getShapeDrawComponent();
-    	editShapeCommand.setShapeDrawComponent(sdc);
-    	editShapeCommand.setPathSegmentIndex(request.getPathSegmentIndex());
-    	editShapeCommand.setLabel(EditorPlugin.getResourceString("command.edit.shape"));      
-    }
-  	Point modelPoint = getConstraintPointFor(request.getLocation());
-  	editShapeCommand.setLocation(modelPoint); 
-		return editShapeCommand;		
-  } 
-      		
+        		
   protected Color outlineColor = ColorConstants.black;
   protected Color getOutlineColor() {
   	return outlineColor;
@@ -683,106 +623,100 @@ implements EditorRequestConstants
 	  else
 	  	return createDefaultSizeOnDropFeedback();	  	  
 	}	  
-    
-	//protected void showSizeOnDropFeedback(CreateRequest request) 
-	//{
-	//  if (request instanceof EditorCreateRequest)
-	//    showSizeOnDropFeedback((EditorCreateRequest)request);
-	//  else
-	//    super.showSizeOnDropFeedback(request);
-	//}
 			
 //************************* BEGIN Text Feedback ******************************
-	protected void eraseSizeOnDropFeedback(Request request) 
-	{
-		LOGGER.debug("eraseSizeOnDropFeedback!");
-		
-		super.eraseSizeOnDropFeedback(request);								
-		if (showFeedbackText) {
-			eraseFeedbackText();
-		}		
-	}	
-	
-	protected void showSizeOnDropFeedback(CreateRequest request) 
-	{
-	  if (request instanceof EditorCreateRequest)
-	    showSizeOnDropFeedback((EditorCreateRequest)request);
-	  else
-	    super.showSizeOnDropFeedback(request);
-	  
-	  if (showFeedbackText) {
-	  	showFeedbackText(request);
-	  }
-	}	
-		
-	protected boolean showFeedbackText = true;	
-  protected Label feedbackText;
-  
-  protected Label getFeedbackTextFigure()
-  {
-  	if (feedbackText == null)
-  		feedbackText = createFeedbackTextFigure("");
-  	return feedbackText;
-  }
-  
-  protected Rectangle getInitialFeedbackBounds() 
-  {
-  	return Rectangle.SINGLETON;
-  }
-  
-  protected Label createFeedbackTextFigure(String text) 
-  {       	
-    Label l = new Label(text);
-    l.setForegroundColor(getOutlineColor());
-  	l.setBounds(getInitialFeedbackBounds());
-  	addFeedback(l);
-  	return l;
-  }  
-  
-  protected void showFeedbackText(CreateRequest request) 
-  {
-  	Label feedbackText = getFeedbackTextFigure();  	
-  	feedbackText.setText(getText(request));
-  	feedbackText.setLocation(getFeedbackTextLocation(request));
-  	feedbackText.setSize(100, 20);
-  	  	
-  	getFeedbackLayer().repaint();  	
-  }
-  
-  protected Point getFeedbackTextLocation(CreateRequest request) 
-  {
-  	// TODO: set location always on mouse location 
-  	Point loc = request.getLocation();
-  	Dimension size = request.getSize();
-//  	Rectangle feedbackBounds = getSizeOnDropFeedback().getBounds();
-  	Point location = new Point(loc.x + size.width, loc.y + size.height);
-  	location.translate(EditorUtil.getScrollOffset(getHost()));
-  	return location;  	
-  }
-    
-  protected String getText(CreateRequest request) 
-  {
-  	Point relativeSize = new Point(request.getSize().width, request.getSize().height);
-  	Point absoluteSize = EditorUtil.toAbsolute(getHost(), relativeSize.x, relativeSize.y);
-  	  	
-  	String width = "W";
-  	String height = "H";
-  	StringBuffer sb = new StringBuffer();
-  	sb.append(width+" ");
-  	sb.append(absoluteSize.x);
-  	sb.append(", ");
-  	sb.append(height+" ");
-  	sb.append(absoluteSize.y);
-  	return sb.toString();
-  }
-  
-  protected void eraseFeedbackText() 
-  {
-    if (feedbackText != null)
-      removeFeedback(feedbackText);
-    
-    feedbackText = null;
-  }  
+//	protected void eraseSizeOnDropFeedback(Request request) 
+//	{
+//		LOGGER.debug("eraseSizeOnDropFeedback!");
+//		
+//		super.eraseSizeOnDropFeedback(request);								
+//		if (showFeedbackText) {
+//			eraseFeedbackText();
+//		}		
+//	}	
+//	
+//	protected void showSizeOnDropFeedback(CreateRequest request) 
+//	{
+//	  if (request instanceof EditorCreateRequest)
+//	    showSizeOnDropFeedback((EditorCreateRequest)request);
+//	  else
+//	    super.showSizeOnDropFeedback(request);
+//	  
+//	  if (showFeedbackText) {
+//	  	showFeedbackText(request);
+//	  }
+//	}	
+//		
+//	protected boolean showFeedbackText = true;	
+//  protected Label feedbackText;
+//  
+//  protected Label getFeedbackTextFigure()
+//  {
+//  	if (feedbackText == null)
+//  		feedbackText = createFeedbackTextFigure("");
+//  	return feedbackText;
+//  }
+//  
+//  protected Rectangle getInitialFeedbackBounds() 
+//  {
+//  	return Rectangle.SINGLETON;
+//  }
+//  
+//  protected Label createFeedbackTextFigure(String text) 
+//  {       	
+//    Label l = new Label(text);
+//    l.setForegroundColor(getOutlineColor());
+//  	l.setBounds(getInitialFeedbackBounds());
+//  	addFeedback(l);
+//  	return l;
+//  }  
+//  
+//  protected void showFeedbackText(CreateRequest request) 
+//  {
+//  	Label feedbackText = getFeedbackTextFigure();  	
+//  	feedbackText.setText(getText(request));
+//  	feedbackText.setLocation(getFeedbackTextLocation(request));
+//  	feedbackText.setSize(100, 20);
+//  	  	
+//  	getFeedbackLayer().repaint();  	
+//  	
+//  	LOGGER.debug("showFeedbackText!");  	
+//  }
+//  
+//  protected Point getFeedbackTextLocation(CreateRequest request) 
+//  {
+//  	// TODO: set location always on mouse location 
+//  	Point loc = request.getLocation();
+//  	Dimension size = request.getSize();
+////  	Rectangle feedbackBounds = getSizeOnDropFeedback().getBounds();
+//  	Point location = new Point(loc.x + size.width, loc.y + size.height);
+//  	location.translate(EditorUtil.getScrollOffset(getHost()));
+//  	return location;  	
+//  }
+//    
+//  protected String getText(CreateRequest request) 
+//  {
+//  	Point relativeSize = new Point(request.getSize().width, request.getSize().height);
+//  	Point absoluteSize = EditorUtil.toAbsolute(getHost(), relativeSize.x, relativeSize.y);
+//  	  	
+//  	String width = "W";
+//  	String height = "H";
+//  	StringBuffer sb = new StringBuffer();
+//  	sb.append(width+" ");
+//  	sb.append(absoluteSize.x);
+//  	sb.append(", ");
+//  	sb.append(height+" ");
+//  	sb.append(absoluteSize.y);
+//  	return sb.toString();
+//  }
+//  
+//  protected void eraseFeedbackText() 
+//  {
+//    if (feedbackText != null)
+//      removeFeedback(feedbackText);
+//    
+//    feedbackText = null;
+//  }  
     
 //************************* END Text Feedback ******************************  
 }
