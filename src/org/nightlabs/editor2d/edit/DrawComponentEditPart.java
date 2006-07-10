@@ -45,15 +45,6 @@ extends AbstractDrawComponentEditPart
 		super(drawComponent);
 	}
 	
-//	/** 
-//	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
-//	 */
-//	protected void createEditPolicies()
-//	{
-//		// allow removal of the associated model element
-//		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DrawComponentEditPolicy());
-//	}
-
 	/** 
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
@@ -61,7 +52,7 @@ extends AbstractDrawComponentEditPart
 	{
 		// allow removal of the associated model element
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DrawComponentEditPolicy());
-		installEditPolicy(EditorEditPolicy.ROTATE_ROLE, new EditorRotateEditPolicy());		
+//		installEditPolicy(EditorEditPolicy.ROTATE_ROLE, new EditorRotateEditPolicy());		
 	}
 	
 }

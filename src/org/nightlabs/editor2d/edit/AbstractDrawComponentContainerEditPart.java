@@ -40,6 +40,7 @@ import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.editpolicy.DrawComponentContainerXYLayoutPolicy;
 import org.nightlabs.editor2d.editpolicy.DrawComponentEditPolicy;
 import org.nightlabs.editor2d.editpolicy.EditorEditPolicy;
+import org.nightlabs.editor2d.editpolicy.EditorRotateEditPolicy;
 import org.nightlabs.editor2d.figures.ContainerDrawComponentFigure;
 
 
@@ -83,9 +84,11 @@ extends AbstractDrawComponentEditPart
 		// disable selection feedback for this edit part		
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, null);	
 		// show snap feedback 		
-		installEditPolicy(EditorEditPolicy.SNAP_FEEDBACK_ROLE, new SnapFeedbackPolicy()); //$NON-NLS-1$		
+		installEditPolicy(EditorEditPolicy.SNAP_FEEDBACK_ROLE, new SnapFeedbackPolicy()); //$NON-NLS-1$
+		
+//		installEditPolicy(EditorEditPolicy.ROTATE_ROLE, new EditorRotateEditPolicy());			
   }  
-    
+      
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{
 		super.propertyChanged(evt);

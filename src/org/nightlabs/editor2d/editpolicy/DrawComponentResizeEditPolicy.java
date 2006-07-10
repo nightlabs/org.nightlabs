@@ -27,6 +27,7 @@
 
 package org.nightlabs.editor2d.editpolicy;
 
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -41,6 +43,7 @@ import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.swt.graphics.Color;
@@ -49,10 +52,16 @@ import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
 import org.nightlabs.editor2d.figures.ShapeFigure;
 import org.nightlabs.editor2d.handle.EditorNonResizableHandleKit;
 import org.nightlabs.editor2d.handle.EditorResizableHandleKit;
+import org.nightlabs.editor2d.handle.RotateCenterHandle;
 import org.nightlabs.editor2d.handle.RotateHandleKit;
 import org.nightlabs.editor2d.handle.ShapeEditHandleKit;
+import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.request.EditorEditShapeRequest;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
+import org.nightlabs.editor2d.request.EditorRotateCenterRequest;
+import org.nightlabs.editor2d.request.EditorRotateRequest;
 import org.nightlabs.editor2d.util.EditorUtil;
+import org.nightlabs.editor2d.util.J2DUtil;
 import org.nightlabs.editor2d.util.feedback.FeedbackUtil;
 
 
@@ -62,6 +71,24 @@ implements EditorRequestConstants
 {
   public static final Logger LOGGER = Logger.getLogger(DrawComponentResizeEditPolicy.class);
      
+  public DrawComponentResizeEditPolicy() 
+  {
+  	this(true, true);
+  }
+ 
+  public DrawComponentResizeEditPolicy(boolean rotation, boolean scale) 
+  {
+  	super();
+  	this.rotation = rotation;
+  	this.scale = scale;
+  	if (!scale)
+//  		setResizeDirections(-1);
+  		setResizeDirections(PositionConstants.NONE);  		
+  }
+  
+  private boolean rotation = true;
+  private boolean scale = true;
+  
   /**
    * Creates the figure used for feedback.
    * @return the new feedback figure
@@ -73,15 +100,64 @@ implements EditorRequestConstants
   	addFeedback(figure);
   	return figure;
   }
-             
+       
+  protected Polyline createPolylineFigure(GraphicalEditPart part) 
+  {      
+    ShapeDrawComponentEditPart sdcEP = (ShapeDrawComponentEditPart) part;
+    Polyline polyline = J2DUtil.toPolyline(sdcEP.getGeneralShape());      
+    polyline.setLineStyle(2);
+    polyline.setXOR(true);
+    polyline.setFill(true);
+    polyline.setBackgroundColor(FeedbackUtil.DEFAULT_PAINT_DESCRIPTOR.getBackgroundColor());
+    polyline.setForegroundColor(FeedbackUtil.DEFAULT_PAINT_DESCRIPTOR.getForegroundColor());    
+        
+    // transform each point to absolute
+  	for (int i=0; i<polyline.getPoints().size(); i++) {
+  	  Point p = polyline.getPoints().getPoint(i);
+  	  Point newPoint = getConstraintFor(p);
+  	  polyline.getPoints().setPoint(newPoint, i);
+  	}    
+    
+  	return polyline;
+  }
+      
   protected ShapeFigure getCustomFeedbackFigure(Object modelPart) 
   {
   	return FeedbackUtil.getCustomFeedbackFigure(modelPart);
   }  
   
+  /**
+   * @see org.eclipse.gef.editpolicies.NonResizableEditPolicy#initialFeedbackRectangle()
+   */
   protected Rectangle getInitialFeedbackBounds() 
   {
+//    LOGGER.debug("InitalFeedbackBounds = "+getHostFigure().getBounds());
   	return getHostFigure().getBounds();
+  }
+
+  /**
+   * @see org.eclipse.gef.EditPolicy#understandsRequest(org.eclipse.gef.Request)
+   */
+  public boolean understandsRequest(Request request) 
+  {
+  	if (REQ_EDIT_SHAPE.equals(request.getType()))
+  		return true;
+  	
+  	if (rotation) {
+    	if (request instanceof EditorRotateRequest)
+    		return true;
+    	if (request instanceof EditorRotateCenterRequest)
+    		return true;  		    	
+  	}
+  		
+  	if (REQ_RESIZE.equals(request.getType())) {
+  		if (scale)
+  			return true;
+  		else
+  			return false;
+  	}
+
+  	return super.understandsRequest(request);
   }
     
   protected List createSelectionHandles() 
@@ -106,8 +182,10 @@ implements EditorRequestConstants
     	// WORKAROUND: use own ResizableHandleKit and NonResizeableHandleKit
     	// because MoveHandle are created with white line by default instead of black line
     	int directions = getResizeDirections();
-    	if (directions == 0)
+    	if (directions == 0) {
     		EditorNonResizableHandleKit.addHandles((GraphicalEditPart)getHost(), list);
+    		return list;
+    	}
     	else if (directions != -1) {
     		EditorResizableHandleKit.addMoveHandle((GraphicalEditPart)getHost(), list);
     		if ((directions & PositionConstants.EAST) != 0)
@@ -157,9 +235,13 @@ implements EditorRequestConstants
     					PositionConstants.NORTH_EAST);
     		else
     			EditorNonResizableHandleKit.addHandle((GraphicalEditPart)getHost(), list, 
-    						PositionConstants.NORTH_EAST);	
-    	} else
-    		EditorResizableHandleKit.addHandles((GraphicalEditPart)getHost(), list);    	    	
+    						PositionConstants.NORTH_EAST);
+    		
+    		return list;
+    	} else {
+    		EditorResizableHandleKit.addHandles((GraphicalEditPart)getHost(), list);
+    		return list;
+    	}    	    	
     }
    	return list;    
 //  	return super.createSelectionHandles();  	  	   	
@@ -190,7 +272,285 @@ implements EditorRequestConstants
   	
   	handles = null;
   }  
-            
+  
+  public void eraseSourceFeedback(Request request) 
+  {
+    if (request.getType().equals(REQ_EDIT_SHAPE))
+      eraseEditShapeFeedback((EditorEditShapeRequest)request);
+    
+    else if (request.getType().equals(REQ_ROTATE))
+    	if (rotation)
+    		eraseRotateFeedback((EditorRotateRequest)request);
+    else if (request.getType().equals(REQ_EDIT_ROTATE_CENTER))
+    	if (rotation)
+    		eraseEditRotateCenterFeedback((EditorRotateCenterRequest)request);
+//    else if (request.getType().equals(REQ_SHEAR))
+//      eraseShearFeedback();        
+    if (REQ_RESIZE.equals(request.getType())) 
+    {
+    	if (scale)
+    		eraseChangeBoundsFeedback((ChangeBoundsRequest)request);
+    	else
+    		return;
+    }       
+    else
+      super.eraseSourceFeedback(request);
+  }  
+
+  /**
+   * Erases drag feedback.  This method called whenever an erase feedback request is
+   * received of the appropriate type.
+   * @param request the request
+   */  
+  protected void eraseEditShapeFeedback(EditorEditShapeRequest request) 
+  {
+  	if (feedback != null) {
+  		removeFeedback(feedback);
+  	}
+  	feedback = null;    
+  }
+    
+  protected void eraseEditRotateCenterFeedback(EditorRotateCenterRequest request) 
+  {
+  	if (feedback != null) {
+  		removeFeedback(feedback);
+  	}
+  	feedback = null;    
+  }
+  
+//  public void showSourceFeedback(Request request) 
+//  {
+//    if (request.getType().equals(REQ_EDIT_SHAPE))
+//      showEditShapeFeedback((EditorEditShapeRequest)request);    
+//    else if (request.getType().equals(REQ_ROTATE))    	
+//      showRotateFeedback((EditorRotateRequest)request);
+//    else if (request.getType().equals(REQ_EDIT_ROTATE_CENTER))
+//      showEditRotateCenterFeedback((EditorRotateCenterRequest)request);
+////    else if (request.getType().equals(REQ_SHEAR))
+////      showShearFeedback((EditorShearRequest)request);        
+//    else  
+//      super.showSourceFeedback(request);
+//  }
+
+  public void showSourceFeedback(Request request) 
+  {
+    if (request.getType().equals(REQ_EDIT_SHAPE))
+      showEditShapeFeedback((EditorEditShapeRequest)request);    
+    else if (request.getType().equals(REQ_ROTATE))
+    	if (rotation)
+    		showRotateFeedback((EditorRotateRequest)request);
+    else if (request.getType().equals(REQ_EDIT_ROTATE_CENTER))
+    	if (rotation)
+    		showEditRotateCenterFeedback((EditorRotateCenterRequest)request);
+    if (REQ_RESIZE.equals(request.getType())) 
+    {
+    	if (scale)
+    		showChangeBoundsFeedback((ChangeBoundsRequest)request);
+    	else
+    		return;
+    }    	   
+    else  
+      super.showSourceFeedback(request);
+  }
+  
+//  protected ShapeFigure getShearFeedbackFigure() 
+//  {
+//    if (feedback == null) {
+//      feedback = createDragSourceFeedbackFigure();       
+//    	PrecisionRectangle rect = new PrecisionRectangle(getInitialFeedbackBounds().getCopy());
+//    	feedback.setBounds(getConstraintFor(rect));
+//    }      
+//    return (ShapeFigure) feedback;
+//  }
+  
+  protected Rectangle rotateCenterBounds;
+  protected void showEditRotateCenterFeedback(EditorRotateCenterRequest request)
+  {
+    IFigure feedback = getEditRotateCenterFeedback(request);
+    Point location = request.getRotationCenter();
+    location.translate(getScrollOffset());
+    Point feedbackLocation = location.getCopy();
+    feedbackLocation.translate(-rotateCenterBounds.width/2, -rotateCenterBounds.height/2);
+    feedback.setLocation(feedbackLocation);
+    feedback.repaint();
+    
+    LOGGER.debug("feedBack.location = "+feedback.getBounds());
+  }
+  
+  protected IFigure createEditRotateCenterFeedback(EditorRotateCenterRequest request) 
+  {
+    RotateCenterHandle figure = new RotateCenterHandle(request.getEditParts()); 
+    request.setMultiple(figure.isMultiple());
+    figure.setBackgroundColor(FeedbackUtil.DEFAULT_PAINT_DESCRIPTOR.getBackgroundColor());
+    figure.setForegroundColor(FeedbackUtil.DEFAULT_PAINT_DESCRIPTOR.getForegroundColor());         
+    return figure;
+  }
+  
+  protected IFigure getEditRotateCenterFeedback(EditorRotateCenterRequest request) 
+  {
+    if (feedback == null) {
+      feedback = createEditRotateCenterFeedback(request);
+      rotateCenterBounds = feedback.getBounds();
+      addFeedback(feedback);
+    }
+    return feedback;
+  }
+  
+  protected Polyline getPolylineFeedback() 
+  {
+  	if (feedback == null) {    	
+  	  feedback = createPolylineFigure((GraphicalEditPart)getHost());  	  
+    	addFeedback(feedback);  	  
+  	}
+  	return (Polyline) feedback;    
+  }
+  
+  protected void eraseRotateFeedback(EditorRotateRequest request) 
+  {
+    if (feedback != null)
+      removeFeedback(feedback);
+    
+    feedback = null;
+    rotatedShape = null;
+    unrotatedShape = null;
+    rotationCenter = null;
+    rotationOffset = Double.MAX_VALUE;
+  }
+  
+  protected final AffineTransform at =  new AffineTransform();
+  protected Point rotationCenter;
+  protected GeneralShape unrotatedShape;
+  protected GeneralShape rotatedShape;
+  protected double rotationOffset = Double.MAX_VALUE;
+  protected void showRotateFeedback(EditorRotateRequest request) 
+  {
+    ShapeFigure rotationFeedback = getRotateFeedbackFigure();
+      	
+    if (unrotatedShape == null)
+      unrotatedShape = (GeneralShape) rotationFeedback.getGeneralShape().clone();     
+      
+    if (rotationCenter == null && request.getRotationCenter() != null)      
+      rotationCenter = getConstraintFor(request.getRotationCenter());         
+    
+    Point location = request.getLocation();
+    location.translate(getScrollOffset());
+     
+    if (rotationOffset == Double.MAX_VALUE)
+      rotationOffset = EditorUtil.calcRotation(location, rotationCenter);
+    
+    double rotationTmp = EditorUtil.calcRotation(location, rotationCenter);
+    double rotation = - (rotationTmp - rotationOffset);
+    request.setRotation(rotation);
+    double rotationInRadinans = Math.toRadians(rotation);
+    at.setToIdentity();
+    at.rotate(rotationInRadinans, rotationCenter.x, rotationCenter.y);
+//    rotationFeedback.transform(at);
+    rotatedShape = (GeneralShape) unrotatedShape.clone();
+    rotatedShape.transform(at);
+    rotationFeedback.setGeneralShape(rotatedShape);
+    getFeedbackLayer().repaint();
+    
+//    LOGGER.debug("rotation = "+rotation);
+  }  
+      
+//  protected void eraseShearFeedback() 
+//  {
+//    if (feedback != null)
+//      removeFeedback(feedback);
+//    
+//    feedback = null;
+//    rotatedShape = null;
+//    unrotatedShape = null;
+//  }
+  
+//  protected void showShearFeedback(EditorShearRequest request) 
+//  {
+//    ShapeFigure shearFeedback = getShearFeedbackFigure();
+//    if (unrotatedShape == null)
+//      unrotatedShape = (GeneralShape) shearFeedback.getGeneralShape().clone();     
+//    
+//    Point location = request.getLocation();
+//    location.translate(getScrollOffset());    
+//    LOGGER.debug("location = "+location);
+//    
+//    Rectangle bounds = request.getShearBounds();
+//    LOGGER.debug("shearBounds = "+bounds);
+//    
+//    AffineTransform at = getShearTransform(location, bounds, request.getDirection());
+//    rotatedShape = (GeneralShape) unrotatedShape.clone();
+//    rotatedShape.transform(at);
+//    shearFeedback.setGeneralShape(rotatedShape);
+//    getFeedbackLayer().repaint();        
+//    
+//    request.setAffineTransform(at);    
+//  }  
+  
+//  protected AffineTransform getShearTransform(Point location, Rectangle bounds, int direction)  
+//  {
+//    double shear = 0.0d;
+//    double idleShear = 0.0d;
+//    at.setToIdentity();
+//    switch(direction)
+//    {
+//    	case(PositionConstants.WEST):
+//    	case(PositionConstants.EAST):
+//    	  double heightMiddle = bounds.y + bounds.height/2;
+//    		double y = location.y;
+//    		double distanceY = heightMiddle - y;
+//    	  double height = bounds.height;
+//    		shear = distanceY / height;
+//    		at.shear(idleShear, shear);
+//    		break;
+//    	case(PositionConstants.NORTH):
+//    	case(PositionConstants.SOUTH):
+//    	  double widthMiddle = bounds.x + bounds.width/2;
+//    		double x = location.x;
+//    		double distanceX = widthMiddle - x;
+//    	  double width = bounds.width;
+//    		shear = distanceX / width;
+//    		at.shear(shear, idleShear);
+//    		break;
+//    }
+//		LOGGER.debug("shear = "+shear);    
+//    return at;
+//  }  
+  
+  protected ShapeFigure getRotateFeedbackFigure() 
+  {
+    if (feedback == null) {
+//      feedback = createRotateFeedbackFigure();
+      feedback = createDragSourceFeedbackFigure(); 
+      
+    	PrecisionRectangle rect = new PrecisionRectangle(getInitialFeedbackBounds().getCopy());
+    	feedback.setBounds(getConstraintFor(rect));
+    }      
+    return (ShapeFigure) feedback;
+  }
+    
+  protected void showEditShapeFeedback(EditorEditShapeRequest request) 
+  {    
+  	Polyline polyline = getPolylineFeedback();
+  	Point newPoint = new Point(request.getLocation().x, request.getLocation().y);
+  	newPoint.translate(getScrollOffset());
+  	polyline.setPoint(newPoint, request.getPathSegmentIndex());  	         	       
+  }
+  
+  protected ShapeFigure getEditShapeFeedbackFigure() 
+  {
+  	if (feedback == null)
+  		feedback = createEditShapeFeedbackFigure();
+  	return (ShapeFigure) feedback;
+  }
+  
+//  protected ShapeFigure createEditShapeFeedbackFigure() 
+  protected IFigure createEditShapeFeedbackFigure()
+  {  	
+    IFigure figure = getCustomFeedbackFigure(getHost().getModel());    
+  	figure.setBounds(getInitialFeedbackBounds());
+  	addFeedback(figure);
+  	return figure;    
+  }
+      
   public Rectangle getConstraintFor(Rectangle rectangle) {
     return EditorUtil.oldToAbsolute((GraphicalEditPart)getHost(), rectangle);
   }
@@ -305,9 +665,7 @@ implements EditorRequestConstants
   	feedbackText.setLocation(getFeedbackTextLocation(request));  	
   	feedbackText.setSize(100, 20);
   	  	
-  	getFeedbackLayer().repaint();
-  	
-  	LOGGER.debug("showFeedbackText!");
+  	getFeedbackLayer().repaint();  	
   }  
   
   protected static final Dimension EMPTY_DIMENSION = new Dimension(0,0);

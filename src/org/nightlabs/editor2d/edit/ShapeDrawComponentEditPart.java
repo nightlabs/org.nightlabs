@@ -182,11 +182,11 @@ extends DrawComponentEditPart
     return propertySource;
   }
 
-	@Override
-	protected void createEditPolicies() 
-	{
-		super.createEditPolicies();
-		installEditPolicy(EditorEditPolicy.EDIT_SHAPE_ROLE, new EditorEditShapePolicy());
-	}  
+//	@Override
+//	protected void createEditPolicies() 
+//	{
+//		super.createEditPolicies();
+////		installEditPolicy(EditorEditPolicy.EDIT_SHAPE_ROLE, new EditorEditShapePolicy());
+//	}  
     
 }
