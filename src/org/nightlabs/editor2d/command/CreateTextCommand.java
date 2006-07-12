@@ -27,11 +27,9 @@
 
 package org.nightlabs.editor2d.command;
 
-import java.awt.Font;
-
+import org.nightlabs.editor2d.Editor2DFactory;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.TextDrawComponent;
-import org.nightlabs.editor2d.impl.TextDrawComponentImpl;
 import org.nightlabs.editor2d.request.TextCreateRequest;
 
 public class CreateTextCommand  
@@ -49,15 +47,27 @@ extends CreateDrawComponentCommand
   	return (TextDrawComponent) getChild();
   }
     
+//  public void execute() 
+//  {
+//    int x = getBounds().x;
+//    int y = getBounds().y;
+//    Font newFont = new Font(request.getFontName(), request.getFontStyle(), request.getFontSize());    
+//    drawComponent = new TextDrawComponentImpl(request.getText(), newFont, x, y, parent);
+//    getTextDrawComponent().setName(request.getText());
+//    parent.addDrawComponent(drawComponent);
+//		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);    
+//  }
+
   public void execute() 
   {
     int x = getBounds().x;
     int y = getBounds().y;
-    Font newFont = new Font(request.getFontName(), request.getFontStyle(), request.getFontSize());    
-    drawComponent = new TextDrawComponentImpl(request.getText(), newFont, x, y, parent);
+    Editor2DFactory factory = request.getModelCreationFactory().getFactory();
+    drawComponent = factory.createTextDrawComponent(request.getText(), request.getFontName(), request.getFontSize(), 
+    		request.getFontStyle(), x, y, parent);
     getTextDrawComponent().setName(request.getText());
     parent.addDrawComponent(drawComponent);
 		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);    
   }
-       
+  
 }

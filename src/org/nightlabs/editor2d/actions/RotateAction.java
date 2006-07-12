@@ -50,7 +50,6 @@ implements EditorRequestConstants
   	setText(EditorPlugin.getResourceString("action.rotate.text"));
   	setToolTipText(EditorPlugin.getResourceString("action.rotate.tooltip"));
   	setId(ID);
-//  	setImageDescriptor(ImageDescriptor.createFromFile(EditorPlugin.class,"icons/editShape16.gif"));
   	setActionDefinitionId(EditorCommandConstants.ROTATE_ID);  
 //  	setAccelerator(SWT.CTRL | 'R');
   } 

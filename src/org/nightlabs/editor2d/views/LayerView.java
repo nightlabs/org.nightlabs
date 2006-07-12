@@ -444,7 +444,8 @@ implements ISelectionListener
 		public void widgetSelected(SelectionEvent e) 
 		{    
 		  LOGGER.debug("NEW widgetSelected()");
-		  CreateLayerCommand addLayer = new CreateLayerCommand(mldc);
+//		  CreateLayerCommand addLayer = new CreateLayerCommand(mldc);
+		  CreateLayerCommand addLayer = new CreateLayerCommand(mldc, editor.getModelFactory());		  
 		  executeCommand(addLayer);
 		}
 	};

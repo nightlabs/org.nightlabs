@@ -28,16 +28,19 @@
 package org.nightlabs.editor2d.tools;
 
 import org.eclipse.gef.Request;
-import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.tools.CreationTool;
 import org.eclipse.jface.dialogs.Dialog;
 import org.nightlabs.editor2d.dialog.CreateTextDialog;
+import org.nightlabs.editor2d.model.IModelCreationFactory;
 import org.nightlabs.editor2d.request.TextCreateRequest;
 
 public class TextTool 
 extends CreationTool
 {
-
+	public TextTool(IModelCreationFactory factory) {
+		super(factory);
+	}
+	
   /**
    * Creates a {@link TextCreateRequest} and sets this tool's factory on the request.
    * @see org.eclipse.gef.tools.TargetingTool#createTargetRequest()
@@ -70,8 +73,4 @@ extends CreationTool
     return false;
   } 
     
-  public TextTool(CreationFactory factory) {
-    super(factory);
-  }
-
 }

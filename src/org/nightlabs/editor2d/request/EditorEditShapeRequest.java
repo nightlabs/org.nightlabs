@@ -36,6 +36,12 @@ extends SelectionRequest
 implements EditorRequestConstants,
 					 EditorLocationRequest
 {
+  public EditorEditShapeRequest() 
+  {
+    super();
+    setType(REQ_EDIT_SHAPE);
+  }
+  
   protected int pathSegmentIndex;  
   public int getPathSegmentIndex() {
     return pathSegmentIndex;
@@ -44,6 +50,14 @@ implements EditorRequestConstants,
     this.pathSegmentIndex = pathSegmentIndex;
   }
     
+  protected EditPart targetEditPart;  
+  public EditPart getTargetEditPart() {
+    return targetEditPart;
+  }
+  public void setTargetEditPart(EditPart targetEditPart) {
+    this.targetEditPart = targetEditPart;
+  }
+  
 //  protected Point mouseLocation;
 //  /**
 //   * Returns the location of the mouse pointer.
@@ -62,28 +76,5 @@ implements EditorRequestConstants,
 //  public void setLocation(Point location) {
 //  	this.mouseLocation = location;
 //  }
-  
-  protected EditPart targetEditPart;  
-  public EditPart getTargetEditPart() {
-    return targetEditPart;
-  }
-  public void setTargetEditPart(EditPart targetEditPart) {
-    this.targetEditPart = targetEditPart;
-  }
-    
-  public EditorEditShapeRequest() 
-  {
-    super();
-    setType(REQ_EDIT_SHAPE);
-  }
-
-  /**
-   * @param type
-   */
-  public EditorEditShapeRequest(Object type) 
-  {
-    super();
-    setType(type);
-  }
-
+      
 }

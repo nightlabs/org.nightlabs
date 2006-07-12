@@ -99,20 +99,28 @@ implements EditorRequestConstants
   public DrawComponentContainerXYLayoutPolicy(XYLayout layout) {
 //    super();
 //    setXyLayout(layout);
-  	this(layout, true, true);
+  	this(layout, true, true, true);
   }  
 
   public DrawComponentContainerXYLayoutPolicy(XYLayout layout, boolean rotation, 
   		boolean scale) 
   {
+  	this(layout, rotation, scale, rotation);
+  }
+  
+  public DrawComponentContainerXYLayoutPolicy(XYLayout layout, boolean rotation, 
+  		boolean scale, boolean rotationCenter) 
+  {
     super();
     setXyLayout(layout);
     this.rotation = rotation;
     this.scale = scale;
+    this.rotationCenter = rotationCenter;
   }
   
   private boolean rotation = true;
   private boolean scale = true;
+  private boolean rotationCenter = true;
   
   /**
    * @see org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy#createAddCommand(org.eclipse.gef.EditPart, java.lang.Object)
@@ -369,11 +377,14 @@ implements EditorRequestConstants
     {
       if (request instanceof EditorRotateRequest)
         return getRotateCommand((EditorRotateRequest)request);
-      
-      if (request instanceof EditorRotateCenterRequest)
-        return getRotateCenterCommand((EditorRotateCenterRequest)request);      
     }
-            
+
+    if (rotationCenter)
+    {      
+      if (request instanceof EditorRotateCenterRequest)
+        return getRotateCenterCommand((EditorRotateCenterRequest)request);          	
+    }
+    
   	if (REQ_RESIZE_CHILDREN.equals(request.getType())) {
   		if (scale)
     		return getResizeChildrenCommand((ChangeBoundsRequest)request);

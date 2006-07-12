@@ -31,6 +31,10 @@ package org.nightlabs.editor2d.request;
 public class TextCreateRequest 
 extends EditorCreateRequest 
 {  
+  public TextCreateRequest() {
+    super();
+  }
+  
   protected String fontName;
   public String getFontName() {
     return fontName;
@@ -62,13 +66,5 @@ extends EditorCreateRequest
   public void setFontStyle(int fontStyle) {
     this.fontStyle = fontStyle;
   }
-  
-  public TextCreateRequest() {
-    super();
-  }
-
-  public TextCreateRequest(Object type) {
-    super(type);
-  }
-  
+    
 }

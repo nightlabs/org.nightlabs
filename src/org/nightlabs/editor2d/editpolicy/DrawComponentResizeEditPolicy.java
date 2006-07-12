@@ -29,7 +29,11 @@ package org.nightlabs.editor2d.editpolicy;
 
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 
 import org.apache.log4j.Logger;
 import org.eclipse.draw2d.ColorConstants;
@@ -78,16 +82,22 @@ implements EditorRequestConstants
  
   public DrawComponentResizeEditPolicy(boolean rotation, boolean scale) 
   {
+  	this(rotation, scale, rotation);
+  }
+
+  public DrawComponentResizeEditPolicy(boolean rotation, boolean scale, boolean rotationCenter) 
+  {
   	super();
   	this.rotation = rotation;
-  	this.scale = scale;
+  	this.rotateCenter = rotationCenter;
+  	this.scale = scale;  	
   	if (!scale)
-//  		setResizeDirections(-1);
   		setResizeDirections(PositionConstants.NONE);  		
   }
   
   private boolean rotation = true;
   private boolean scale = true;
+  private boolean rotateCenter = true;
   
   /**
    * Creates the figure used for feedback.
@@ -146,10 +156,13 @@ implements EditorRequestConstants
   	if (rotation) {
     	if (request instanceof EditorRotateRequest)
     		return true;
-    	if (request instanceof EditorRotateCenterRequest)
-    		return true;  		    	
   	}
-  		
+
+  	if (rotateCenter) {
+    	if (request instanceof EditorRotateCenterRequest)
+    		return true;  		    	  		
+  	}
+  	
   	if (REQ_RESIZE.equals(request.getType())) {
   		if (scale)
   			return true;
@@ -281,11 +294,14 @@ implements EditorRequestConstants
     else if (request.getType().equals(REQ_ROTATE))
     	if (rotation)
     		eraseRotateFeedback((EditorRotateRequest)request);
+    
     else if (request.getType().equals(REQ_EDIT_ROTATE_CENTER))
-    	if (rotation)
+    	if (rotateCenter)
     		eraseEditRotateCenterFeedback((EditorRotateCenterRequest)request);
+    
 //    else if (request.getType().equals(REQ_SHEAR))
-//      eraseShearFeedback();        
+//      eraseShearFeedback();
+    
     if (REQ_RESIZE.equals(request.getType())) 
     {
     	if (scale)
@@ -340,7 +356,7 @@ implements EditorRequestConstants
     	if (rotation)
     		showRotateFeedback((EditorRotateRequest)request);
     else if (request.getType().equals(REQ_EDIT_ROTATE_CENTER))
-    	if (rotation)
+    	if (rotateCenter)
     		showEditRotateCenterFeedback((EditorRotateCenterRequest)request);
     if (REQ_RESIZE.equals(request.getType())) 
     {
@@ -422,6 +438,7 @@ implements EditorRequestConstants
   protected GeneralShape unrotatedShape;
   protected GeneralShape rotatedShape;
   protected double rotationOffset = Double.MAX_VALUE;
+  
   protected void showRotateFeedback(EditorRotateRequest request) 
   {
     ShapeFigure rotationFeedback = getRotateFeedbackFigure();
@@ -437,22 +454,62 @@ implements EditorRequestConstants
      
     if (rotationOffset == Double.MAX_VALUE)
       rotationOffset = EditorUtil.calcRotation(location, rotationCenter);
-    
-    double rotationTmp = EditorUtil.calcRotation(location, rotationCenter);
+        
+    // calculated the rotation angle based on mouseLocation and rotatioCenter
+    double rotationTmp = EditorUtil.calcRotation(location, rotationCenter);    
     double rotation = - (rotationTmp - rotationOffset);
+    
+    LOGGER.debug("unconstrained rotation = "+rotation);
+    
+    // if the rotation request is constrained get the closest value
+    if (request.isConstrainedRotation()) 
+    {
+    	rotation = getClosestValue(request.getConstrainedValues(), rotation);    	
+    	LOGGER.debug("constrained rotation = "+rotation);    	
+    }
+      	
     request.setRotation(rotation);
     double rotationInRadinans = Math.toRadians(rotation);
+    
     at.setToIdentity();
     at.rotate(rotationInRadinans, rotationCenter.x, rotationCenter.y);
-//    rotationFeedback.transform(at);
     rotatedShape = (GeneralShape) unrotatedShape.clone();
     rotatedShape.transform(at);
     rotationFeedback.setGeneralShape(rotatedShape);
     getFeedbackLayer().repaint();
     
-//    LOGGER.debug("rotation = "+rotation);
+    LOGGER.debug("rotation = "+rotation);    
   }  
-      
+  
+  protected double getClosestValue(List<Double> values, double rotation) 
+  {
+  	Collections.sort(values);
+  	double rotationToChoose = rotation;
+  	for (int i=0; i<values.size(); i++) {
+  		double d = values.get(i);
+  		if (rotation < d) 
+  		{
+  			double lastVal;
+  			double middle;
+  			if (i > 0) {
+  				lastVal = values.get(i-1);
+  				middle = d - lastVal;
+  			}
+  			else {
+  				lastVal = values.get(values.size()-1);
+  				middle = lastVal - d;
+  			}
+  			
+  			double diff = rotation - middle;
+  			if (diff > 0)
+  				return d;
+  			else
+  				return lastVal;
+  		}
+  	}
+  	return rotationToChoose;  	
+  }
+  
 //  protected void eraseShearFeedback() 
 //  {
 //    if (feedback != null)

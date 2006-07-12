@@ -34,10 +34,9 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.SnapToHelper;
-import org.eclipse.gef.requests.CreationFactory;
-
 import org.nightlabs.editor2d.command.CreateShapeCommand;
 import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.model.IModelCreationFactory;
 import org.nightlabs.editor2d.request.EditorCreateRequest;
 import org.nightlabs.editor2d.util.EditorGeneralShapeFactory;
 
@@ -47,7 +46,8 @@ extends EditorCreationTool
 {
   public static final Logger LOGGER = Logger.getLogger(RectangleTool.class);
   
-  public RectangleTool(CreationFactory aFactory) 
+//  public RectangleTool(CreationFactory aFactory) 
+  public RectangleTool(IModelCreationFactory aFactory)  
   {
     super(aFactory);
   }  

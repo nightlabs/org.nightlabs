@@ -182,15 +182,15 @@ extends J2DGraphicalEditorWithFlyoutPalette
     private EditorOutlinePage outlinePage;
     private boolean editorSaving = false;
     
-    protected static final String PALETTE_DOCK_LOCATION = "Dock location"; //$NON-NLS-1$
-    protected static final String PALETTE_SIZE = "Palette Size"; //$NON-NLS-1$
-    protected static final String PALETTE_STATE = "Palette state"; //$NON-NLS-1$
-    protected static final int DEFAULT_PALETTE_SIZE = 130;
-    
-    static {
-      EditorPlugin.getDefault().getPreferenceStore().setDefault(
-          PALETTE_SIZE, DEFAULT_PALETTE_SIZE);
-    }
+//    protected static final String PALETTE_DOCK_LOCATION = "Dock location"; //$NON-NLS-1$
+//    protected static final String PALETTE_SIZE = "Palette Size"; //$NON-NLS-1$
+//    protected static final String PALETTE_STATE = "Palette state"; //$NON-NLS-1$
+//    protected static final int DEFAULT_PALETTE_SIZE = 130;
+//    
+//    static {
+//      EditorPlugin.getDefault().getPreferenceStore().setDefault(
+//          PALETTE_SIZE, DEFAULT_PALETTE_SIZE);
+//    }
     
     protected void closeEditor(boolean save) 
     {
@@ -299,6 +299,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     {
       setEditDomain(new DefaultEditDomain(this));            
       filterMan = new FilterManager(getFilterNameProvider()); 
+      getModelFactory();
 //      initJ2DRegistry();
     }
           
@@ -1360,4 +1361,15 @@ extends J2DGraphicalEditorWithFlyoutPalette
     LOGGER.debug("Free Memory AFTER GC  = "+freeMemory);
     LOGGER.debug("");  	
   }	
+  
+  private Editor2DFactory factory = null;
+  public Editor2DFactory getModelFactory() 
+  {
+  	if (factory == null) {
+  		factory = createModelFactory();
+  	}
+  	return factory;
+  }
+  
+  protected abstract Editor2DFactory createModelFactory();
 }

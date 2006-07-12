@@ -36,35 +36,33 @@ import org.nightlabs.editor2d.MultiLayerDrawComponent;
 public class CreateLayerCommand  
 extends CreateDrawComponentCommand
 {		 
-	public CreateLayerCommand(MultiLayerDrawComponent parent)
+//	public CreateLayerCommand(MultiLayerDrawComponent parent)
+//	{
+//		if (parent == null) {
+//			throw new IllegalArgumentException("Param parent (MultiLayerDrawComponent) must not be null!");
+//		}	  
+//	  this.parent = parent;
+//	  setLabel(EditorPlugin.getResourceString("command.create.layer"));	  
+//	}
+
+	public CreateLayerCommand(MultiLayerDrawComponent parent, Editor2DFactory factory)
 	{
 		if (parent == null) {
 			throw new IllegalArgumentException("Param parent (MultiLayerDrawComponent) must not be null!");
 		}	  
 	  this.parent = parent;
+	  this.factory = factory;
 	  setLabel(EditorPlugin.getResourceString("command.create.layer"));	  
 	}
 	
-//	/* (non-Javadoc)
-//	 * @see org.eclipse.gef.commands.Command#execute()
-//	 */
-//	public void execute() 
-//	{
-//	  drawComponent = Editor2DFactory.eINSTANCE.createLayer();
-//	  
-//    getLayer().setParent(getMultiLayerDrawComponent());
-//		drawOrderIndex = getMultiLayerDrawComponent().getDrawComponents().indexOf(
-//        getMultiLayerDrawComponent().getCurrentLayer()) + 1;    
-//    getMultiLayerDrawComponent().addDrawComponent(getLayer(), drawOrderIndex);
-//		shapeAdded = true;
-//    getMultiLayerDrawComponent().setCurrentLayer(getLayer());
-//	}
+	private Editor2DFactory factory = null;
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	public void execute() 
 	{
-	  drawComponent = Editor2DFactory.eINSTANCE.createLayer();	  
+	  drawComponent = factory.createLayer();	  
     getLayer().setParent(getMultiLayerDrawComponent().getCurrentPage());
 		drawOrderIndex = getMultiLayerDrawComponent().getCurrentPage().getDrawComponents().indexOf(
         getMultiLayerDrawComponent().getCurrentLayer()) + 1;    

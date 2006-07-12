@@ -189,4 +189,5 @@ extends DrawComponentEditPart
 ////		installEditPolicy(EditorEditPolicy.EDIT_SHAPE_ROLE, new EditorEditShapePolicy());
 //	}  
     
+  
 }

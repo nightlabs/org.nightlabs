@@ -199,7 +199,7 @@ public class EditorUtil
     if (editParts == null)
       throw new IllegalArgumentException("Param editParts must not be null!");
     
-    EditPartViewer viewer= null;
+    EditPartViewer viewer = null;
     if (!editParts.isEmpty()) {
       Object o = editParts.get(0);
       if (o instanceof EditPart) {

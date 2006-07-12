@@ -27,15 +27,23 @@
 
 package org.nightlabs.editor2d;
 
-import org.eclipse.gef.requests.CreationFactory;
-
+import org.nightlabs.editor2d.model.IModelCreationFactory;
 import org.nightlabs.editor2d.model.ModelCreationFactory;
 
 
 public class EditorPaletteFactory
 extends AbstractPaletteFactory
 {
-  public CreationFactory getCreationFactory(Class targetClass) {          
-    return new ModelCreationFactory(targetClass);
+//  public CreationFactory getCreationFactory(Class targetClass) {          
+//    return new ModelCreationFactory(targetClass);
+//  }
+	  
+	public EditorPaletteFactory(Editor2DFactory factory) {
+		super(factory);
+	}
+	
+  public IModelCreationFactory getCreationFactory(Class targetClass) {          
+    return new ModelCreationFactory(targetClass, getFactory());
   } 
+	
 }

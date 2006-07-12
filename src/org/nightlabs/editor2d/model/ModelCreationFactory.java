@@ -27,7 +27,6 @@
 
 package org.nightlabs.editor2d.model;
 
-import org.eclipse.gef.requests.CreationFactory;
 import org.nightlabs.editor2d.Editor2DFactory;
 import org.nightlabs.editor2d.EditorGuide;
 import org.nightlabs.editor2d.EditorRuler;
@@ -42,21 +41,26 @@ import org.nightlabs.editor2d.RectangleDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 
 public class ModelCreationFactory 
-implements CreationFactory
+//implements CreationFactory
+implements IModelCreationFactory
 {
 	protected Class targetClass;
+	protected Editor2DFactory factory;
 	
-	public ModelCreationFactory( Class targetClass ) {
+	public ModelCreationFactory(Class targetClass, Editor2DFactory factory) {
 		this.targetClass = targetClass;
+		this.factory = factory;
+	}
+	
+	public Editor2DFactory getFactory() {
+		return factory;
 	}
 	
 	/* 
 	 * @see org.eclipse.gef.requests.CreationFactory#getNewObject()
 	 */
 	public Object getNewObject()
-	{	  
-	  Editor2DFactory factory = Editor2DFactory.eINSTANCE;
-	  	  
+	{	  	  	  
 		Object result = null;
 			
 		if( targetClass.equals(RectangleDrawComponent.class)) {
@@ -80,9 +84,9 @@ implements CreationFactory
 		else if ( targetClass.equals(LineDrawComponent.class)) {
 		  result = factory.createLineDrawComponent();
 		}
-//    else if ( targetClass.equals(TextDrawComponent.class)) {
-//      result = factory.createTextDrawComponent();
-//    }
+    else if ( targetClass.equals(TextDrawComponent.class)) {
+      result = factory.createTextDrawComponent();
+    }
     else if ( targetClass.equals(ImageDrawComponent.class)) {
       result = factory.createImageDrawComponent();
     }

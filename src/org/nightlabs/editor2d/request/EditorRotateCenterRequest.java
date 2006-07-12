@@ -36,6 +36,12 @@ import org.eclipse.gef.requests.SelectionRequest;
 public class EditorRotateCenterRequest 
 extends SelectionRequest 
 {
+	public EditorRotateCenterRequest() 
+	{
+		super();
+		setType(EditorRequestConstants.REQ_EDIT_ROTATE_CENTER);
+	}
+	
   protected Point rotationCenter;  
   public Point getRotationCenter() {
     return rotationCenter;

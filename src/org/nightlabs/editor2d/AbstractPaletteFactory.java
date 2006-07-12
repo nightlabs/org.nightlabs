@@ -34,12 +34,12 @@ import org.eclipse.gef.palette.PaletteGroup;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.palette.PaletteSeparator;
 import org.eclipse.gef.palette.ToolEntry;
-import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.base.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.resource.SharedImages.ImageFormat;
+import org.nightlabs.editor2d.model.IModelCreationFactory;
 import org.nightlabs.editor2d.tools.EditorSelectionToolEntry;
 import org.nightlabs.editor2d.tools.EllipseToolEntry;
 import org.nightlabs.editor2d.tools.ImageToolEntry;
@@ -50,10 +50,17 @@ import org.nightlabs.editor2d.tools.ZoomToolEntry;
 
 public abstract class AbstractPaletteFactory 
 {
-  public AbstractPaletteFactory() {
+  public AbstractPaletteFactory(Editor2DFactory factory) 
+  {
     super();
+    this.factory = factory;
   }
-    
+	
+  protected Editor2DFactory factory = null;
+  public Editor2DFactory getFactory() {
+  	return factory;
+  }
+  
   /** Default palette size. */
   protected static final int DEFAULT_PALETTE_SIZE = 125;
   /** Preference ID used to persist the palette location. */
@@ -63,7 +70,8 @@ public abstract class AbstractPaletteFactory
   /** Preference ID used to persist the flyout palette's state. */
   protected static final String PALETTE_STATE = "PaletteFactory.State";
   
-  public abstract CreationFactory getCreationFactory(Class targetClass);
+//  public abstract CreationFactory getCreationFactory(Class targetClass);
+  public abstract IModelCreationFactory getCreationFactory(Class targetClass);  
   
   /**
    * Return a FlyoutPreferences instance used to save/load the preferences of a flyout palette.

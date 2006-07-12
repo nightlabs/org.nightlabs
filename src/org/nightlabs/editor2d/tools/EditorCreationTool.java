@@ -34,30 +34,35 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToHelper;
-import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.tools.CreationTool;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
-
+import org.nightlabs.editor2d.model.IModelCreationFactory;
 import org.nightlabs.editor2d.request.EditorCreateRequest;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
 
 
 public abstract class EditorCreationTool 
 extends CreationTool 
-//extends TargetingTool
 implements EditorRequestConstants
 {
   protected SnapToHelper helper;
   
   public static final Logger LOGGER = Logger.getLogger(EditorCreationTool.class);
     
-  /**
-   * @param aFactory
-   */
-  public EditorCreationTool(CreationFactory aFactory) {
-    super(aFactory);
+//  /**
+//   * @param aFactory
+//   */
+//  public EditorCreationTool(CreationFactory aFactory) {
+//    super(aFactory);
+//  }
+  public EditorCreationTool(IModelCreationFactory factory) {
+    super(factory);
   }
 
+  public IModelCreationFactory getModelCreationFactory() {
+  	return (IModelCreationFactory) getFactory();
+  }
+  
   /**
    * Creates a {@link EditorCreateRequest} and sets this tool's factory on the request.
    * @see org.eclipse.gef.tools.TargetingTool#createTargetRequest()

@@ -28,6 +28,8 @@
 package org.nightlabs.editor2d.request;
 
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.requests.SelectionRequest;
@@ -39,27 +41,21 @@ implements EditorRequestConstants,
            EditorLocationRequest,
            EditorGroupRequest
 {  
-  public EditorRotateRequest() {
+  public EditorRotateRequest() 
+  {
     super();
+    setType(EditorRequestConstants.REQ_ROTATE);
   }
   
-  protected Point rotationCenter;  
+  private Point rotationCenter;  
   public Point getRotationCenter() {
     return rotationCenter;
   }
   public void setRotationCenter(Point rotationCenter) {
     this.rotationCenter = rotationCenter;
   }
-  
-  protected boolean constrainedRotation = false;
-  public boolean isConstrainedRotation() {
-    return constrainedRotation;
-  }
-  public void setConstrainedRotation(boolean constrainedRotation) {
-    this.constrainedRotation = constrainedRotation;
-  }
-  
-  protected double rotation = 0;
+    
+  private double rotation = 0;
   public double getRotation() {
     return rotation;
   }
@@ -67,7 +63,7 @@ implements EditorRequestConstants,
     this.rotation = rotation;
   }
   
-  protected List parts;
+  private List parts;
   public List getEditParts() {
     return parts;
   }
@@ -75,7 +71,7 @@ implements EditorRequestConstants,
     parts = list;
   }  
   
-  protected int direction;  
+  private int direction;  
   public int getDirection() {
     return direction;
   }
@@ -83,11 +79,36 @@ implements EditorRequestConstants,
     this.direction = direction;
   }
   
-  protected boolean multiple = false;  
+  private boolean multiple = false;  
   public boolean isMultiple() {
     return multiple;
   }
   public void setMultiple(boolean multiple) {
     this.multiple = multiple;
   }
+  
+  private boolean constrainedRotation = false;
+  public boolean isConstrainedRotation() {
+    return constrainedRotation;
+  }
+  public void setConstrainedRotation(boolean constrainedRotation) {
+    this.constrainedRotation = constrainedRotation;
+  }
+  
+//  private SortedSet<Double> constrainedValues = null;
+//	public SortedSet<Double> getConstrainedValues() {
+//		return constrainedValues;
+//	}
+//	public void setConstrainedValues(SortedSet<Double> constrainedValues) {
+//		this.constrainedValues = constrainedValues;
+//	}
+
+  private List<Double> constrainedValues = null;
+	public List<Double> getConstrainedValues() {
+		return constrainedValues;
+	}
+	public void setConstrainedValues(List<Double> constrainedValues) {
+		this.constrainedValues = constrainedValues;
+	}
+  
 }

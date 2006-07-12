@@ -32,6 +32,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.Request;
 import org.eclipse.swt.graphics.Cursor;
 
+import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.custom.EditorCursors;
 import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
 import org.nightlabs.editor2d.request.EditorRotateRequest;
@@ -46,11 +47,16 @@ extends AbstractDragTracker
   public RotateTracker(AbstractDrawComponentEditPart owner, int direction)
   {
     super(owner);
+    // TODO: direction is never used
     this.direction = direction;
   }
 
   protected AbstractDrawComponentEditPart getAbstractDrawComponentEditPart() {
     return (AbstractDrawComponentEditPart) owner;
+  }
+  
+  protected DrawComponent getDrawComponent() {
+  	return getAbstractDrawComponentEditPart().getDrawComponent();
   }
   
   /**
@@ -61,10 +67,14 @@ extends AbstractDragTracker
     EditorRotateRequest rotateRequest = new EditorRotateRequest();
     rotateRequest.setType(REQ_ROTATE);
     rotateRequest.setLocation(getLocation());   
-    rotateRequest.setEditParts(getCurrentViewer().getSelectedEditParts());    
+    rotateRequest.setEditParts(getCurrentViewer().getSelectedEditParts());
+    if (getDrawComponent().getConstrainedRotationValues() != null) {
+    	rotateRequest.setConstrainedRotation(true);
+    	rotateRequest.setConstrainedValues(getDrawComponent().getConstrainedRotationValues());
+    }
     return rotateRequest;
   }
-        
+  
   protected String getCommandName() 
   {
     return REQ_ROTATE;
@@ -93,17 +103,14 @@ extends AbstractDragTracker
 	      getEditorRotateRequest().setMultiple(true);
 	    }
 	    else {      
-        rotationCenter = new Point(getAbstractDrawComponentEditPart().getDrawComponent().getRotationX(),
+        rotationCenter = new Point(
+        		getAbstractDrawComponentEditPart().getDrawComponent().getRotationX(),
             getAbstractDrawComponentEditPart().getDrawComponent().getRotationY());
         getEditorRotateRequest().setRotationCenter(rotationCenter);
         getEditorRotateRequest().setMultiple(false);        
 	    }                  
     }
-    getEditorRotateRequest().setLocation(getLocation());
-        
-//    LOGGER.debug("updateSourceRequest.rotation = "+getEditorRotateRequest().getRotation());
-//    LOGGER.debug("rotationCenter = "+rotationCenter);
-//    LOGGER.debug("location = "+getLocation());
+    getEditorRotateRequest().setLocation(getLocation());        
   }
   
   protected EditorRotateRequest getEditorRotateRequest() 

@@ -54,5 +54,5 @@ extends AbstractDrawComponentEditPart
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DrawComponentEditPolicy());
 //		installEditPolicy(EditorEditPolicy.ROTATE_ROLE, new EditorRotateEditPolicy());		
 	}
-	
+		
 }

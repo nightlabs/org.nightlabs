@@ -33,6 +33,7 @@ import org.nightlabs.editor2d.Editor2DFactory;
 import org.nightlabs.editor2d.EditorGuide;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EditorRuler;
+import org.nightlabs.editor2d.impl.EditorGuideImpl;
 
 public class CreateGuideCommand 
 extends Command 
@@ -41,12 +42,22 @@ extends Command
   private EditorRuler parent;
   private int position;
 
-  public CreateGuideCommand(EditorRuler parent, int position) {
+  public CreateGuideCommand(EditorRuler parent, int position) 
+  {
   	super(EditorPlugin.getResourceString("command.create.guide"));
   	this.parent = parent;
   	this.position = position;
   }
 
+//  private Editor2DFactory factory = null;
+//  public CreateGuideCommand(EditorRuler parent, int position, Editor2DFactory factory) 
+//  {
+//  	super(EditorPlugin.getResourceString("command.create.guide"));
+//  	this.parent = parent;
+//  	this.position = position;
+//  	this.factory = factory;
+//  }
+  
   public boolean canUndo() {
   	return true;
   }
@@ -54,7 +65,8 @@ extends Command
   public void execute() 
   {
     if (guide == null)
-      guide = Editor2DFactory.eINSTANCE.createEditorGuide();
+//      guide = factory.createEditorGuide();
+    	guide = new EditorGuideImpl();    	
     
   	guide.setPosition(position);
   	guide.setHorizontal(!parent.isHorizontal());

@@ -31,6 +31,7 @@ import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartFactory;
 import org.nightlabs.editor2d.edit.GraphicalEditPartFactory;
 import org.nightlabs.editor2d.edit.tree.TreePartFactory;
+import org.nightlabs.editor2d.impl.Editor2DFactoryImpl;
 import org.nightlabs.editor2d.outline.filter.NameProvider;
 import org.nightlabs.editor2d.util.EditorNameProvider;
 
@@ -67,19 +68,27 @@ extends AbstractEditor
 	}
 
 	/**
+	 * @see org.nightlabs.editor2d.AbstractEditor#createModelFactory()
+	 */  		
+	public Editor2DFactory createModelFactory() {
+		return new Editor2DFactoryImpl();
+	}
+	
+	/**
 	 * @see org.nightlabs.editor2d.AbstractEditor#createMultiLayerDrawComponent()
 	 */    
 	public MultiLayerDrawComponent createMultiLayerDrawComponent() {
-    MultiLayerDrawComponent mldc = Editor2DFactory.eINSTANCE.createMultiLayerDrawComponent();
+//    MultiLayerDrawComponent mldc = Editor2DFactory.eINSTANCE.createMultiLayerDrawComponent();
+		MultiLayerDrawComponent mldc = getModelFactory().createMultiLayerDrawComponent();		
     return mldc;
   }
-
+	
 	/**
 	 * @see org.nightlabs.editor2d.AbstractEditor#createPaletteFactory()
 	 */  	
 	public AbstractPaletteFactory createPaletteFactory() {
-		return new EditorPaletteFactory();
+		return new EditorPaletteFactory(getModelFactory());
 	}
-		
+			
 }
   

@@ -28,38 +28,23 @@
 package org.nightlabs.editor2d.tools;
 
 import org.eclipse.gef.Tool;
-import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
-import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.nightlabs.editor2d.model.IModelCreationFactory;
 
 
 public class RectangleToolEntry 
-extends CombinedTemplateCreationEntry 
-{
-  /**
-   * The creation factory used with the returned creation tool.
-   */
-  protected final CreationFactory factory;
-  
-  /**
-   * @param label
-   * @param shortDesc
-   * @param iconSmall
-   * @param iconLarge
-   */
+//extends CombinedTemplateCreationEntry 
+extends EditorTemplateCreationEntry
+{  
   public RectangleToolEntry(String label, String shortDesc, Object template, 
-      CreationFactory factory, ImageDescriptor iconSmall, ImageDescriptor iconLarge) 
+      IModelCreationFactory factory, ImageDescriptor iconSmall, ImageDescriptor iconLarge) 
   {
     super(label, shortDesc, template, factory, iconSmall, iconLarge);
-    this.factory = factory;
   }
 
-  /* (non-Javadoc)
-   * @see org.eclipse.gef.palette.ToolEntry#createTool()
-   */
   public Tool createTool() 
   {
-    return new RectangleTool(factory);
+    return new RectangleTool(getModelCreationFactory());
   }
 
 }

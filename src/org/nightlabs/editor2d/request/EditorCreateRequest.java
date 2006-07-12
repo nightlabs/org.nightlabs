@@ -32,6 +32,7 @@ import org.eclipse.draw2d.Shape;
 import org.eclipse.gef.requests.CreateRequest;
 
 import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.model.IModelCreationFactory;
 
 
 public class EditorCreateRequest 
@@ -84,4 +85,7 @@ implements EditorShapeRequest,
     this.useShape = useShape;
   }
       
+  public IModelCreationFactory getModelCreationFactory() {
+  	return (IModelCreationFactory) getFactory();
+  }
 }

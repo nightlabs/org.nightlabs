@@ -45,7 +45,6 @@ public class RotateHandleKit
 
   public static void addHandles(List selectedEditParts, List handles) 
   {
-    int counter = 0;
     for (Iterator it = selectedEditParts.iterator(); it.hasNext(); ) {      
       GraphicalEditPart editPart = (GraphicalEditPart) it.next();
       if (editPart instanceof AbstractDrawComponentEditPart)
@@ -61,7 +60,6 @@ public class RotateHandleKit
     return handle;
   }
   
-//  protected static void createHandles(GraphicalEditPart owner, List handles)
   protected static void createRotateHandles(AbstractDrawComponentEditPart owner, List handles)
   {
     handles.add(createRotateHandle(owner, PositionConstants.NORTH_WEST));

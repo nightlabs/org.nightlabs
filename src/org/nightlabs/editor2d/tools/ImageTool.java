@@ -38,7 +38,6 @@ import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.tools.CreationTool;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.FileDialog;
@@ -47,6 +46,7 @@ import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.command.CreateImageCommand;
 import org.nightlabs.editor2d.dialog.ConvertImageDialog;
 import org.nightlabs.editor2d.image.RenderModeMetaData;
+import org.nightlabs.editor2d.model.IModelCreationFactory;
 import org.nightlabs.editor2d.request.ImageCreateRequest;
 
 public class ImageTool 
@@ -54,11 +54,13 @@ extends CreationTool
 {
 	public static final Logger LOGGER = Logger.getLogger(ImageTool.class);
 	
-  public ImageTool(CreationFactory aFactory) {
+//  public ImageTool(CreationFactory aFactory) {
+  public ImageTool(IModelCreationFactory aFactory) {	
     this(aFactory, false);
   }
 
-  public ImageTool(CreationFactory aFactory, boolean colorConversion) 
+//  public ImageTool(CreationFactory aFactory, boolean colorConversion) 
+  public ImageTool(IModelCreationFactory aFactory, boolean colorConversion)  
   {
     super(aFactory);
     this.colorConversion = colorConversion;

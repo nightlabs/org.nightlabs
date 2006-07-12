@@ -28,24 +28,21 @@
 package org.nightlabs.editor2d.tools;
 
 import org.eclipse.gef.Tool;
-import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
-import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.nightlabs.editor2d.model.IModelCreationFactory;
 
 public class ImageToolEntry 
-extends CombinedTemplateCreationEntry 
-{
-  protected final CreationFactory factory;
-  
+//extends CombinedTemplateCreationEntry 
+extends EditorTemplateCreationEntry
+{  
   public ImageToolEntry(String label, String shortDesc, Object template, 
-      CreationFactory factory, ImageDescriptor iconSmall, ImageDescriptor iconLarge)
+      IModelCreationFactory factory, ImageDescriptor iconSmall, ImageDescriptor iconLarge)
   {
     super(label, shortDesc, template, factory, iconSmall, iconLarge);
-    this.factory = factory;
   }
   
   public Tool createTool() 
   {
-    return new ImageTool(factory);
+    return new ImageTool(getModelCreationFactory());
   }   
 }
