@@ -27,6 +27,9 @@
 
 package org.nightlabs.editor2d.properties;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
@@ -34,18 +37,26 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import org.nightlabs.base.property.ComboBoxLabelProvider;
+import org.nightlabs.editor2d.DrawComponent;
 
-public class RotationPropertyDescriptor 
-//extends ComboBoxPropertyDescriptor 
+public class RotationPropertyDescriptor  
 extends PropertyDescriptor
 {
   public static final String[] defaultRotations = new String[] {"-180", "-90", "-45", "0", "45", "90", "180"};
   
-  public RotationPropertyDescriptor(Object id, String displayName) 
+//  public RotationPropertyDescriptor(Object id, String displayName) 
+//  {
+//    super(id, displayName);
+//  }
+
+  public RotationPropertyDescriptor(Object id, String displayName, DrawComponent dc) 
   {
     super(id, displayName);
+    this.dc = dc;
   }
 
+  private DrawComponent dc = null;
+  
   /**
    * The <code>ComboBoxPropertyDescriptor</code> implementation of this 
    * <code>IPropertyDescriptor</code> method creates and returns a new
@@ -56,11 +67,28 @@ extends PropertyDescriptor
    */
   public CellEditor createPropertyEditor(Composite parent) 
   {
-    CellEditor editor = new RotationCellEditor(parent, defaultRotations, SWT.NONE);
+  	CellEditor editor = null;  	
+  	if (dc.getConstrainedRotationValues() == null)
+  		editor = new RotationCellEditor(parent, defaultRotations, SWT.NONE);
+  	else {
+  		List<Double> constrainedValues = dc.getConstrainedRotationValues();
+  		editor = new RotationCellEditor(parent, getValuesAsString(constrainedValues), SWT.READ_ONLY);
+  	}
     if (getValidator() != null)
       editor.setValidator(getValidator());
     return editor;
   }    
+  
+  protected String[] getValuesAsString(Collection<Double> values) 
+  {
+  	String[] strings = new String[values.size()];
+  	int counter = 0;
+  	for (Double d : values) {
+			strings[counter] = Double.toString(d);
+			counter++;
+		}
+  	return strings;
+  }
   
   public ILabelProvider getLabelProvider() 
   {

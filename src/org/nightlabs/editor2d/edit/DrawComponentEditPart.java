@@ -28,11 +28,8 @@
 package org.nightlabs.editor2d.edit;
 
 import org.eclipse.gef.EditPolicy;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.editpolicy.DrawComponentEditPolicy;
-import org.nightlabs.editor2d.editpolicy.EditorEditPolicy;
-import org.nightlabs.editor2d.editpolicy.EditorRotateEditPolicy;
 
 public abstract class DrawComponentEditPart 
 extends AbstractDrawComponentEditPart

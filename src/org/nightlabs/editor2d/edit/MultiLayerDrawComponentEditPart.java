@@ -170,9 +170,6 @@ extends AbstractDrawComponentContainerEditPart
   	return super.getAdapter(adapter);
   }  
   
-  /* (non-Javadoc)
-   * @see com.ibm.itso.sal330r.gefdemo.edit.WorkflowElementEditPart#getPropertySource()
-   */
   public IPropertySource getPropertySource()
   {
     if (propertySource == null)
@@ -182,6 +179,7 @@ extends AbstractDrawComponentContainerEditPart
     }
     return propertySource;
   }
+  
 	@Override
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{

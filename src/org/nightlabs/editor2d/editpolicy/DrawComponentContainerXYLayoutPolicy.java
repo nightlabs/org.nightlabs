@@ -366,7 +366,7 @@ implements EditorRequestConstants
   }	
 	
   public Command getCommand(Request request) 
-  {
+  {  	
     if (request instanceof TextCreateRequest)
       return getCreateTextCommand((TextCreateRequest)request);
     

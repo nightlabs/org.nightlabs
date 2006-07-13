@@ -27,13 +27,16 @@
 
 package org.nightlabs.editor2d.model;
 
+import java.awt.Color;
 import java.util.List;
 
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
+import org.nightlabs.base.property.AWTColorPropertyDescriptor;
 import org.nightlabs.base.property.CheckboxPropertyDescriptor;
 import org.nightlabs.base.property.XTextPropertyDescriptor;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.properties.FontNamePropertyDescriptor;
 
@@ -52,8 +55,23 @@ extends ShapeDrawComponentPropertySource
 		
 	protected List createPropertyDescriptors() 
 	{
-		List descriptors = super.createPropertyDescriptors();
+//		List descriptors = super.createPropertyDescriptors();		
+		List descriptors = getDescriptors();
 		
+		// Name
+		descriptors.add(createNamePD());				
+		// X
+		descriptors.add(createXPD());		
+		// Y		
+		descriptors.add(createYPD());		
+		// Width		
+		descriptors.add(createWidthPD());		
+		// Height		
+		descriptors.add(createHeightPD());		
+		// Rotation		
+		descriptors.add(createRotationPD());
+		// Color
+		descriptors.add(createColorPD());
 		// Font Name
 		descriptors.add(createFontNamePD());		
 		// Font Size
@@ -100,6 +118,14 @@ extends ShapeDrawComponentPropertySource
 		return desc;
 	}
 	
+	protected PropertyDescriptor createColorPD()
+	{
+		PropertyDescriptor desc = new AWTColorPropertyDescriptor(ShapeDrawComponent.PROP_FILL_COLOR, 
+				EditorPlugin.getResourceString("property.color.label"));
+		desc.setCategory(CATEGORY_COLORS);
+		return desc;
+	}
+	
 //	protected PropertyDescriptor createFontSizePD() 
 //	{
 ////	PropertyDescriptor desc = new FontSizePropertyDescriptor(TextDrawComponent.PROP_FONT_SIZE,
@@ -129,15 +155,15 @@ extends ShapeDrawComponentPropertySource
 			getTextDrawComponent().setFontName((String)value);
 			return;
 		}
-		else if (id.equals(TextDrawComponent.PROP_BOLD)) {
+		if (id.equals(TextDrawComponent.PROP_BOLD)) {
 			getTextDrawComponent().setBold(((Boolean)value).booleanValue());
 			return;			
 		}
-		else if (id.equals(TextDrawComponent.PROP_ITALIC)) {
+		if (id.equals(TextDrawComponent.PROP_ITALIC)) {
 			getTextDrawComponent().setItalic(((Boolean)value).booleanValue());
 			return;			
 		}
-		else if (id.equals(TextDrawComponent.PROP_TEXT)) {
+		if (id.equals(TextDrawComponent.PROP_TEXT)) {
 			getTextDrawComponent().setText((String)value);
 			return;			
 		}
@@ -145,7 +171,7 @@ extends ShapeDrawComponentPropertySource
 //			getTextDrawComponent().setFontSize(((Integer)value).intValue());
 //			return;			
 //		}
-		else if (id.equals(TextDrawComponent.PROP_FONT_SIZE)) 
+		if (id.equals(TextDrawComponent.PROP_FONT_SIZE)) 
 		{
 			int fontSize;
 			try {
@@ -157,6 +183,10 @@ extends ShapeDrawComponentPropertySource
 			}
 			getTextDrawComponent().setFontSize(fontSize);
 			return;			
+		}		
+		if (id.equals(ShapeDrawComponent.PROP_FILL_COLOR)) {
+			getTextDrawComponent().setFillColor((Color)value);
+			getTextDrawComponent().setLineColor((Color)value);			
 		}		
 		super.setPropertyValue(id, value);		
 	}		

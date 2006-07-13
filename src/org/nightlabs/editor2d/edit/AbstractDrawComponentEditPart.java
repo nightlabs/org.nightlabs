@@ -36,7 +36,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -333,17 +332,17 @@ implements EditorRequestConstants
       element.removePropertyChangeListener(listener);
   }
             
-  public boolean understandsRequest(Request req) 
-  {
+//  public boolean understandsRequest(Request req) 
+//  {
 //    if (req.getType().equals(REQ_ROTATE))
 //      return true;
 //
 //    else if (req.getType().equals(REQ_EDIT_ROTATE_CENTER))
 //      return true;
 //
-//    else if (req.getType().equals(REQ_SHEAR))
-//      return true;
-    
-    return super.understandsRequest(req);
-  }  
+////    else if (req.getType().equals(REQ_SHEAR))
+////      return true;
+//    
+//    return super.understandsRequest(req);
+//  }  
 }

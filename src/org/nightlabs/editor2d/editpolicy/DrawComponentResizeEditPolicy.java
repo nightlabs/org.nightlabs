@@ -30,10 +30,7 @@ package org.nightlabs.editor2d.editpolicy;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
 
 import org.apache.log4j.Logger;
 import org.eclipse.draw2d.ColorConstants;
@@ -342,8 +339,8 @@ implements EditorRequestConstants
 //      showRotateFeedback((EditorRotateRequest)request);
 //    else if (request.getType().equals(REQ_EDIT_ROTATE_CENTER))
 //      showEditRotateCenterFeedback((EditorRotateCenterRequest)request);
-////    else if (request.getType().equals(REQ_SHEAR))
-////      showShearFeedback((EditorShearRequest)request);        
+//    else if (request.getType().equals(REQ_SHEAR))
+//      showShearFeedback((EditorShearRequest)request);        
 //    else  
 //      super.showSourceFeedback(request);
 //  }
@@ -364,7 +361,9 @@ implements EditorRequestConstants
     		showChangeBoundsFeedback((ChangeBoundsRequest)request);
     	else
     		return;
-    }    	   
+    }
+//    else if (request.getType().equals(REQ_SHEAR))
+//      showShearFeedback((EditorShearRequest)request);  
     else  
       super.showSourceFeedback(request);
   }
@@ -433,7 +432,7 @@ implements EditorRequestConstants
     rotationOffset = Double.MAX_VALUE;
   }
   
-  protected final AffineTransform at =  new AffineTransform();
+  protected final AffineTransform at = new AffineTransform();
   protected Point rotationCenter;
   protected GeneralShape unrotatedShape;
   protected GeneralShape rotatedShape;
@@ -459,13 +458,13 @@ implements EditorRequestConstants
     double rotationTmp = EditorUtil.calcRotation(location, rotationCenter);    
     double rotation = - (rotationTmp - rotationOffset);
     
-    LOGGER.debug("unconstrained rotation = "+rotation);
+//    LOGGER.debug("unconstrained rotation = "+rotation);
     
     // if the rotation request is constrained get the closest value
     if (request.isConstrainedRotation()) 
     {
     	rotation = getClosestValue(request.getConstrainedValues(), rotation);    	
-    	LOGGER.debug("constrained rotation = "+rotation);    	
+//    	LOGGER.debug("constrained rotation = "+rotation);    	
     }
       	
     request.setRotation(rotation);
@@ -478,36 +477,48 @@ implements EditorRequestConstants
     rotationFeedback.setGeneralShape(rotatedShape);
     getFeedbackLayer().repaint();
     
-    LOGGER.debug("rotation = "+rotation);    
+//    LOGGER.debug("rotation = "+rotation);    
   }  
   
   protected double getClosestValue(List<Double> values, double rotation) 
   {
   	Collections.sort(values);
-  	double rotationToChoose = rotation;
-  	for (int i=0; i<values.size(); i++) {
+  	rotation = checkRotation(rotation);
+  	double rotationToChoose = rotation;  	
+  	double diffUp = Double.MAX_VALUE;
+  	double closestUp = Double.MAX_VALUE;  	
+  	double diffDown = -Double.MAX_VALUE;
+  	double closestDown = -Double.MAX_VALUE;
+  	
+  	for (int i=0; i<values.size(); i++) 
+  	{
   		double d = values.get(i);
-  		if (rotation < d) 
-  		{
-  			double lastVal;
-  			double middle;
-  			if (i > 0) {
-  				lastVal = values.get(i-1);
-  				middle = d - lastVal;
-  			}
-  			else {
-  				lastVal = values.get(values.size()-1);
-  				middle = lastVal - d;
-  			}
-  			
-  			double diff = rotation - middle;
-  			if (diff > 0)
-  				return d;
-  			else
-  				return lastVal;
+  		double diff = rotation - d;
+  		if (diff > 0) {
+  			diffUp = Math.min(diff, diffUp);
+  			if (diffUp == diff)
+  				closestUp = d;
   		}
+  		else {
+  			diffDown = Math.max(diff, diffDown);
+  			if (diffDown == diff)
+  				closestDown = d;
+  		}
+  		
+  		double closest = Math.min(Math.abs(closestUp), Math.abs(closestDown));
+  		rotationToChoose = closest;
   	}
   	return rotationToChoose;  	
+  }
+  
+  // converts a negative rotation into a positive 
+  protected double checkRotation(double rotation) 
+  {
+  	if (rotation > 0)
+  		return rotation;
+  	else {
+  		return rotation += 360;
+  	}
   }
   
 //  protected void eraseShearFeedback() 
@@ -575,9 +586,7 @@ implements EditorRequestConstants
   protected ShapeFigure getRotateFeedbackFigure() 
   {
     if (feedback == null) {
-//      feedback = createRotateFeedbackFigure();
-      feedback = createDragSourceFeedbackFigure(); 
-      
+      feedback = createDragSourceFeedbackFigure();       
     	PrecisionRectangle rect = new PrecisionRectangle(getInitialFeedbackBounds().getCopy());
     	feedback.setBounds(getConstraintFor(rect));
     }      

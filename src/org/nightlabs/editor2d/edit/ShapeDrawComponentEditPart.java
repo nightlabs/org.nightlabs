@@ -29,17 +29,10 @@ package org.nightlabs.editor2d.edit;
 
 import java.beans.PropertyChangeEvent;
 
-import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.Request;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.nightlabs.editor2d.EditorStateManager;
 import org.nightlabs.editor2d.ShapeDrawComponent;
-import org.nightlabs.editor2d.editpolicy.EditorEditPolicy;
-import org.nightlabs.editor2d.editpolicy.EditorEditShapePolicy;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
-import org.nightlabs.editor2d.request.EditorEditShapeRequest;
-import org.nightlabs.editor2d.tools.ShapeEditTracker;
 
 
 //public abstract class ShapeDrawComponentEditPart 

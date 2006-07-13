@@ -199,7 +199,7 @@ implements IPropertySource
 	protected PropertyDescriptor createRotationPD() 
 	{
 		PropertyDescriptor desc = new RotationPropertyDescriptor(DrawComponent.PROP_ROTATION,
-				EditorPlugin.getResourceString("property.rotation.label"));
+				EditorPlugin.getResourceString("property.rotation.label"), drawComponent);
 		desc.setCategory(CATEGORY_ROTATION);		
 		return desc;
 	}
@@ -207,7 +207,8 @@ implements IPropertySource
 	protected PropertyDescriptor createRotationXPD() 
 	{
 		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_ROTATION_X,
-				EditorPlugin.getResourceString("property.rotationx.label"));
+				EditorPlugin.getResourceString("property.rotationx.label"), 
+				!drawComponent.isChangedRotationCenterAllowed());
 		desc.setCategory(CATEGORY_ROTATION);		
 		return desc;
 	}
@@ -215,7 +216,8 @@ implements IPropertySource
 	protected PropertyDescriptor createRotationYPD() 
 	{
 		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_ROTATION_Y,
-				EditorPlugin.getResourceString("property.rotationy.label"));
+				EditorPlugin.getResourceString("property.rotationy.label"),
+				!drawComponent.isChangedRotationCenterAllowed());
 		desc.setCategory(CATEGORY_ROTATION);		
 		return desc;
 	}

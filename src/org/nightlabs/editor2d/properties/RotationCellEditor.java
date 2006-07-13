@@ -28,7 +28,6 @@
 package org.nightlabs.editor2d.properties;
 
 import org.eclipse.swt.widgets.Composite;
-
 import org.nightlabs.base.property.ComboBoxCellEditor;
 
 public class RotationCellEditor 
@@ -37,7 +36,7 @@ extends ComboBoxCellEditor
   public RotationCellEditor(Composite parent, String[] items, int style) {
     super(parent, items, style);
   }
-
+  
   /**
    * The <code>ComboBoxCellEditor</code> implementation of
    * this <code>CellEditor</code> framework method returns

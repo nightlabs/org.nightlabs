@@ -28,8 +28,6 @@
 package org.nightlabs.editor2d.request;
 
 import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.requests.SelectionRequest;
