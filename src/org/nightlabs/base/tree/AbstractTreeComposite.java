@@ -28,13 +28,11 @@ package org.nightlabs.base.tree;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
-
 import org.nightlabs.base.composite.XComposite;
 
 public abstract class AbstractTreeComposite extends XComposite {
@@ -53,7 +51,7 @@ public abstract class AbstractTreeComposite extends XComposite {
 	}
 	
 	public AbstractTreeComposite(Composite parent, int style, boolean setLayoutData, boolean init, boolean headerVisible) {
-		super(parent, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER, setLayoutData ? XComposite.LAYOUT_DATA_MODE_GRID_DATA:  XComposite.LAYOUT_DATA_MODE_NONE);
+		super(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER, setLayoutData ? XComposite.LayoutDataMode.GRID_DATA:  XComposite.LayoutDataMode.NONE);
 		treeViewer = new TreeViewer(this, style);
 		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		treeViewer.getTree().setHeaderVisible(headerVisible);
@@ -108,5 +106,8 @@ public abstract class AbstractTreeComposite extends XComposite {
 		return treeViewer.getSelection();
 	}
 	
+	public void setInput(Object input) {
+		treeViewer.setInput(input);
+	}
 	
 }
