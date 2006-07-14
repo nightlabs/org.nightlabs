@@ -1,7 +1,6 @@
 /* *****************************************************************************
  * NightLabs Editor2D - Graphical editor framework                             *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
- * Project author: Daniel Mazurek <Daniel.Mazurek [at] nightlabs [dot] org>    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
  * modify it under the terms of the GNU Lesser General Public                  *
@@ -24,53 +23,43 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
+package org.nightlabs.editor2d.command;
 
-package org.nightlabs.editor2d.tools;
-
-import org.eclipse.gef.Request;
-import org.eclipse.gef.tools.CreationTool;
-import org.eclipse.jface.dialogs.Dialog;
-import org.nightlabs.editor2d.dialog.CreateTextDialog;
-import org.nightlabs.editor2d.model.IModelCreationFactory;
+import org.nightlabs.editor2d.Editor2DFactory;
+import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.request.TextCreateRequest;
 
-public class TextTool 
-extends CreationTool
+/**
+ * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
+ */
+public abstract class AbstractCreateTextCommand
+extends CreateDrawComponentCommand
 {
-	public TextTool(IModelCreationFactory factory) {
-		super(factory);
+  protected TextCreateRequest request;  
+	public AbstractCreateTextCommand(TextCreateRequest request) 
+	{
+    super();  
+    this.request = request; 
 	}
+
+//	public abstract String getLabel();
+	public abstract TextDrawComponent createTextDrawComponent(TextCreateRequest request, int x, int y);
 	
-  /**
-   * Creates a {@link TextCreateRequest} and sets this tool's factory on the request.
-   * @see org.eclipse.gef.tools.TargetingTool#createTargetRequest()
-   */
-  protected Request createTargetRequest() 
-  {
-    TextCreateRequest request = new TextCreateRequest();
-    request.setFactory(getFactory());
-    return request;
-  }  
-  
-  public TextCreateRequest getTextCreateRequest() 
-  {
-    return (TextCreateRequest) getTargetRequest();
+  protected TextDrawComponent getTextDrawComponent() {
+  	return (TextDrawComponent) getChild();
+  }
+
+  protected Editor2DFactory getFactory() {
+  	return request.getModelCreationFactory().getFactory();
   }
   
-  protected boolean handleButtonDown(int button) 
+  public void execute() 
   {
-    CreateTextDialog dialog = new CreateTextDialog(
-        getCurrentViewer().getControl().getShell(), 
-        getTextCreateRequest()
-      );
-    dialog.open();
-        
-    if (dialog.getReturnCode() == Dialog.OK) 
-    {
-      performCreation(1);
-      return true;
-    }
-    return false;
-  } 
-    
+    int x = getBounds().x;
+    int y = getBounds().y;
+    drawComponent = createTextDrawComponent(request, x, y);
+    getTextDrawComponent().setName(request.getText());
+    parent.addDrawComponent(drawComponent);
+		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);    
+  }	
 }

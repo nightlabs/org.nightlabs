@@ -27,47 +27,44 @@
 
 package org.nightlabs.editor2d.command;
 
-import org.nightlabs.editor2d.Editor2DFactory;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.request.TextCreateRequest;
 
 public class CreateTextCommand  
-extends CreateDrawComponentCommand
+extends AbstractCreateTextCommand
 {  
   protected TextCreateRequest request;  
   public CreateTextCommand(TextCreateRequest request) 
   {
-    super();
-    setLabel(EditorPlugin.getResourceString("command.create.text"));  
+    super(request);  
+    setLabel(EditorPlugin.getResourceString("command.create.text"));
     this.request = request; 
   }
-
+  
   protected TextDrawComponent getTextDrawComponent() {
   	return (TextDrawComponent) getChild();
   }
-    
+
+	@Override
+	public TextDrawComponent createTextDrawComponent(TextCreateRequest request, int x, int y) 
+	{
+		return getFactory().createTextDrawComponent(
+				request.getText(), request.getFontName(), request.getFontSize(), 
+				request.getFontStyle(), x, y, parent);		 
+	}
+	
 //  public void execute() 
 //  {
 //    int x = getBounds().x;
 //    int y = getBounds().y;
-//    Font newFont = new Font(request.getFontName(), request.getFontStyle(), request.getFontSize());    
-//    drawComponent = new TextDrawComponentImpl(request.getText(), newFont, x, y, parent);
+//    Editor2DFactory factory = request.getModelCreationFactory().getFactory();
+//    drawComponent = factory.createTextDrawComponent(request.getText(), request.getFontName(), request.getFontSize(), 
+//    		request.getFontStyle(), x, y, parent);
 //    getTextDrawComponent().setName(request.getText());
 //    parent.addDrawComponent(drawComponent);
 //		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);    
 //  }
 
-  public void execute() 
-  {
-    int x = getBounds().x;
-    int y = getBounds().y;
-    Editor2DFactory factory = request.getModelCreationFactory().getFactory();
-    drawComponent = factory.createTextDrawComponent(request.getText(), request.getFontName(), request.getFontSize(), 
-    		request.getFontStyle(), x, y, parent);
-    getTextDrawComponent().setName(request.getText());
-    parent.addDrawComponent(drawComponent);
-		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);    
-  }
   
 }
