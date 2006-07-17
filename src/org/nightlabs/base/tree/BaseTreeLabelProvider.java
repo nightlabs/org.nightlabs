@@ -44,4 +44,5 @@ public class BaseTreeLabelProvider extends TableLabelProvider {
 	public Image getImage(Object element) {
 		return getColumnImage(element, 0);
 	}
+	
 }

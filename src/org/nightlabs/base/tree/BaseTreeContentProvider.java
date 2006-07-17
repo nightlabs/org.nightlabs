@@ -36,6 +36,11 @@ public class BaseTreeContentProvider extends TreeContentProvider {
 	public boolean hasChildren(Object element) {
 		return ((TreeNode)element).hasChildren();
 	}
+	
+	@Override
+	public Object[] getChildren(Object parentElement) {
+		return ((TreeNode)parentElement).getChildren().toArray();
+	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
