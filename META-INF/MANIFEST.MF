@@ -57,5 +57,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.draw2d,
  org.eclipse.gef
 Eclipse-LazyStart: true
-vvvEclipse-RegisterBuddy: org.nightlabs.base
 Eclipse-BuddyPolicy: registered
