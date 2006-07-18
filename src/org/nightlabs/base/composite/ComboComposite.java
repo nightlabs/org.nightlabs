@@ -79,6 +79,8 @@ extends XComposite
 		this.types = types;
 		this.typeDescriptors = typeDescriptors;
 		this.typeImages = typeImages;
+//		setLayout(getLayout(LayoutMode.TIGHT_WRAPPER));
+		setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		populateCombo();
 	}
 
