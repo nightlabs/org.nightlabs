@@ -52,10 +52,12 @@ import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.internal.Workbench;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
 
@@ -491,5 +493,42 @@ public class RCPUtil
   	}
   	return null;
   }	
+  
+  /**
+   * Returns the either the active {@link IWorkbenchPage}
+   * or the first found. If none can be found <code>null</code>
+   * will be returned.
+   * 
+   * @return An {@link IWorkbenchPage} or null
+   */
+  public static IWorkbenchPage searchWorkbenchPage() {
+		IWorkbenchWindow window = getActiveWorkbenchWindow();
+		if (window == null)
+			return null;
+		IWorkbenchPage[] pages = window.getPages();
+		if (pages.length > 0)
+			return pages[0];
+		else
+			return null;			             
+  }
+  
+  /**
+   * Tries to find a reference for the given part somewhere in the Workbench and returns it.
+   * If a reference can not be found <code>null</code> will be returned.
+   * 
+   * @param part The part to search a reference for
+   */
+  public static IWorkbenchPartReference searchPartReference(IWorkbenchPart part) {
+		IWorkbenchWindow window = getActiveWorkbenchWindow();
+		if (window == null)
+			return null;
+		IWorkbenchPage[] pages = window.getPages();
+		for (int i = 0; i < pages.length; i++) {
+			IWorkbenchPartReference ref = pages[i].getReference(part);
+			if (ref != null)
+				return ref;
+		}
+		return null;
+  }
 	
 }

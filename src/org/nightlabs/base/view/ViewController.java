@@ -36,9 +36,13 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.nightlabs.base.composite.FadeableComposite;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.part.PartVisibilityListener;
+import org.nightlabs.base.part.PartVisibilityTracker;
 import org.nightlabs.base.util.RCPUtil;
 
 /**
@@ -57,6 +61,16 @@ import org.nightlabs.base.util.RCPUtil;
  * Views are managed when they register themselves by {@link #registerView(ControllableView)}.
  * The registratin of a View should be done in its constructor. See {@link org.nightlabs.base.view.ControllableView}
  * for more information on how to use them with a ViewController. 
+ * 
+ * A ViewController is responsible for somehow creating or listening to event 
+ * that might cause the visibility of its registered views to change and 
+ * use the ViewController API like {@link #updateViews()} to update the registered views.
+ * 
+ * Note that ViewController is also linked to the {@link PartVisibilityTracker}. Whenever the registered
+ * View's real content was created it will call {@link PartVisibilityListener#partVisible(org.eclipse.ui.IWorkbenchPartReference)}
+ * on all registrations that implement {@link PartVisibilityListener}. {@link PartVisibilityListener#partHidden(org.eclipse.ui.IWorkbenchPartReference)}
+ * is called accordingly when the "ConditionUnsatisfiedComposite" is created. Both times the 
+ * partReference parameter for the listeners callback method might be null.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  * @see #createNewConditionUnsatisfiedComposite(Composite)
@@ -87,10 +101,10 @@ public abstract class ViewController {
 		 * @param parent
 		 */
 		public void createViewControl(Composite parent) {
-			wrapper = new XComposite(parent, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+			wrapper = new XComposite(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
 			stackLayout = new StackLayout();
 			wrapper.setLayout(stackLayout);
-			conditionWrapper = new XComposite(wrapper, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+			conditionWrapper = new XComposite(wrapper, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
 			createNewConditionUnsatisfiedComposite(conditionWrapper);
 			createFadeableWrapper();
 			internalPartsCreated = true;			
@@ -108,19 +122,26 @@ public abstract class ViewController {
 		/**
 		 * Updates the view according to the current login-state.
 		 */
-		public void updateView() {
-			if (!internalPartsCreated)
-				return;
-			doCreateContents();
-			if (view.canDisplayView()) { 
-				stackLayout.topControl = fadeableWrapper;
-				setViewActionsVisible(true);
-			}
-			else { 
-				stackLayout.topControl = conditionWrapper;
-				setViewActionsVisible(false);
-			}
-			wrapper.layout(true, true);
+		protected void updateView() {
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					if (!internalPartsCreated)
+						return;
+					doCreateContents();
+					if (view.canDisplayView()) { 
+						stackLayout.topControl = fadeableWrapper;
+						setViewActionsVisible(true);
+						callPartVisibilityListener(view, PartVisibilityListenerMethod.partVisible);
+					}
+					else { 
+						stackLayout.topControl = conditionWrapper;
+						setViewActionsVisible(false);
+						callPartVisibilityListener(view, PartVisibilityListenerMethod.partHidden);
+					}
+					wrapper.layout(true, true);
+					
+				}
+			});
 		}
 		
 		/**
@@ -172,7 +193,7 @@ public abstract class ViewController {
 	 * key: ControllableView view
 	 * value: ControlledView controlledView
 	 */
-	private Map controlledViews = new HashMap();
+	private Map<ControllableView, ControlledView> controlledViews = new HashMap<ControllableView, ControlledView>();
 	
 	/**
 	 * Update all registered Views according to their satus returned by
@@ -217,10 +238,14 @@ public abstract class ViewController {
 	 * Dispose the real contents of all registered Views.
 	 */
 	protected void disposeViewsContents() {
-		for (Iterator iter = controlledViews.keySet().iterator(); iter.hasNext();) {
-			ControllableView view = (ControllableView) iter.next();
-			disposeViewContents(view);
-		}
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				for (Iterator iter = controlledViews.keySet().iterator(); iter.hasNext();) {
+					ControllableView view = (ControllableView) iter.next();
+					disposeViewContents(view);
+				}
+			}
+		});
 	}
 	
 	/**
@@ -266,6 +291,25 @@ public abstract class ViewController {
 					}
 			);
 			controlledView.updateView();
+		}
+	}
+	
+	private enum PartVisibilityListenerMethod {
+		partVisible,
+		partHidden
+	}
+	
+	private void callPartVisibilityListener(ControllableView listenerView, PartVisibilityListenerMethod listenerMethod) {
+		if (listenerView instanceof IWorkbenchPart) {
+			int partStatus = PartVisibilityTracker.sharedInstance().getPartVisibilityStatus((IWorkbenchPart)listenerView);
+			if (partStatus != PartVisibilityTracker.PART_STATUS_HIDDEN)
+				if (listenerView instanceof PartVisibilityListener) {
+					IWorkbenchPartReference partRef = RCPUtil.searchPartReference((IWorkbenchPart)listenerView);						
+					if (listenerMethod == PartVisibilityListenerMethod.partVisible)
+						((PartVisibilityListener)listenerView).partVisible(partRef);
+					if (listenerMethod == PartVisibilityListenerMethod.partHidden)
+						((PartVisibilityListener)listenerView).partHidden(partRef);
+				}
 		}
 	}
 }
