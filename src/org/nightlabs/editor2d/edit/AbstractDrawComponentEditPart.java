@@ -81,6 +81,7 @@ implements EditorRequestConstants
   		getFigure().setToolTip(null);
   }
   
+  @Override
   protected IFigure createFigure() 
   {
   	RendererFigure figure = new DrawComponentFigure();  
@@ -143,14 +144,16 @@ implements EditorRequestConstants
   {
     return (RendererFigure) getFigure();
   }
-  /* 
+  
+  /** 
    * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
    */
   protected abstract void createEditPolicies();
   
-  /* 
+  /** 
    * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
    */
+  @Override  
   public void activate()
   {
     if (isActive())
@@ -162,9 +165,10 @@ implements EditorRequestConstants
     super.activate();
   }
   
-  /* 
+  /**
    * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
    */
+  @Override  
   public void deactivate()
   {
     if (!isActive())
@@ -179,7 +183,8 @@ implements EditorRequestConstants
   public DrawComponent getDrawComponent() {
     return (DrawComponent) getModel();
   }
-        
+    
+  @Override  
   protected void refreshVisuals()
   {
     Rectangle r = new Rectangle(J2DUtil.toDraw2D(getDrawComponent().getBounds()));
@@ -212,6 +217,7 @@ implements EditorRequestConstants
   /**
    * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
    */
+  @Override  
   public Object getAdapter(Class key)
   {
     /* override the default behavior defined in AbstractEditPart
@@ -225,10 +231,8 @@ implements EditorRequestConstants
     return super.getAdapter(key);
   }
   
-  protected IPropertySource propertySource = null;  
-  /**
-   * @see com.ibm.itso.sal330r.gefdemo.edit.WorkflowElementEditPart#getPropertySource()
-   */
+  protected IPropertySource propertySource = null;
+  
   public IPropertySource getPropertySource()
   {
     if (propertySource == null)

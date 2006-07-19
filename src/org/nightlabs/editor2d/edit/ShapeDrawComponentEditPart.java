@@ -39,13 +39,58 @@ import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
 public class ShapeDrawComponentEditPart
 extends DrawComponentEditPart 
 {
-  /**
-   * @param drawComponent
-   */
   public ShapeDrawComponentEditPart(ShapeDrawComponent shapeDrawComponent) {
     super(shapeDrawComponent);
   }
 
+  public ShapeDrawComponent getShapeDrawComponent() {
+    return (ShapeDrawComponent) getModel();
+  }
+   
+  public GeneralShape getGeneralShape() {
+  	return getShapeDrawComponent().getGeneralShape();
+  }
+    
+  public IPropertySource getPropertySource()
+  {
+    if (propertySource == null)
+    {
+      propertySource =
+        new ShapeDrawComponentPropertySource(getShapeDrawComponent());
+    }
+    return propertySource;
+  }
+  
+	protected void propertyChanged(PropertyChangeEvent evt) 
+	{
+		super.propertyChanged(evt);
+		String propertyName = evt.getPropertyName();
+		if (propertyName.equals(ShapeDrawComponent.PROP_FILL_COLOR)) {
+			LOGGER.debug(propertyName +" changed!");
+			refreshVisuals();			
+		}
+		else if (propertyName.equals(ShapeDrawComponent.PROP_LINE_COLOR)) {
+			LOGGER.debug(propertyName +" changed!");
+			refreshVisuals();			
+		}
+		else if (propertyName.equals(ShapeDrawComponent.PROP_FILL)) {
+			LOGGER.debug(propertyName +" changed!");
+			refreshVisuals();			
+		}
+		else if (propertyName.equals(ShapeDrawComponent.PROP_LINE_STYLE)) {
+			LOGGER.debug(propertyName +" changed!");
+			refreshVisuals();			
+		}
+		else if (propertyName.equals(ShapeDrawComponent.PROP_LINE_WIDTH)) {
+			LOGGER.debug(propertyName +" changed!");
+			refreshVisuals();			
+		}
+		else if (propertyName.equals(ShapeDrawComponent.PROP_GENERAL_SHAPE)) {
+			LOGGER.debug(propertyName +" changed!");
+			refreshVisuals();			
+		}		
+	}
+  
 //  /**
 //   * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
 //   */
@@ -92,45 +137,7 @@ extends DrawComponentEditPart
 //  {
 //  	return (PathShapeFigure) getFigure();
 //  }
-  		
-	protected void propertyChanged(PropertyChangeEvent evt) 
-	{
-		super.propertyChanged(evt);
-		String propertyName = evt.getPropertyName();
-		if (propertyName.equals(ShapeDrawComponent.PROP_FILL_COLOR)) {
-			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
-		}
-		else if (propertyName.equals(ShapeDrawComponent.PROP_LINE_COLOR)) {
-			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
-		}
-		else if (propertyName.equals(ShapeDrawComponent.PROP_FILL)) {
-			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
-		}
-		else if (propertyName.equals(ShapeDrawComponent.PROP_LINE_STYLE)) {
-			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
-		}
-		else if (propertyName.equals(ShapeDrawComponent.PROP_LINE_WIDTH)) {
-			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
-		}
-		else if (propertyName.equals(ShapeDrawComponent.PROP_GENERAL_SHAPE)) {
-			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
-		}		
-	}
-		
-  public ShapeDrawComponent getShapeDrawComponent() {
-    return (ShapeDrawComponent) getModel();
-  }
-   
-  public GeneralShape getGeneralShape() {
-  	return getShapeDrawComponent().getGeneralShape();
-  }
-      
+  		      
 //  /**
 //   * Overridden to return a default <code>DragTracker</code> for GraphicalEditParts.
 //   * @see org.eclipse.gef.EditPart#getDragTracker(Request)
@@ -164,16 +171,6 @@ extends DrawComponentEditPart
 //    
 //    return super.understandsRequest(req);
 //  }
-  
-  public IPropertySource getPropertySource()
-  {
-    if (propertySource == null)
-    {
-      propertySource =
-        new ShapeDrawComponentPropertySource(getShapeDrawComponent());
-    }
-    return propertySource;
-  }
 
 //	@Override
 //	protected void createEditPolicies() 
@@ -181,6 +178,5 @@ extends DrawComponentEditPart
 //		super.createEditPolicies();
 ////		installEditPolicy(EditorEditPolicy.EDIT_SHAPE_ROLE, new EditorEditShapePolicy());
 //	}  
-    
-  
+      
 }

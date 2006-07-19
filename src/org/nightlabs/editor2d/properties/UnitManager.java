@@ -28,10 +28,9 @@ package org.nightlabs.editor2d.properties;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.nightlabs.editor2d.page.PageRegistry;
-import org.nightlabs.editor2d.page.PageRegistryEP;
-import org.nightlabs.editor2d.page.unit.DotUnit;
 import org.nightlabs.i18n.IUnit;
 
 /**
@@ -39,49 +38,64 @@ import org.nightlabs.i18n.IUnit;
  */
 public class UnitManager 
 {	
-	public UnitManager() {
-		super();
-		getUnits();
-		getCurrentUnit();
-	}
+//	public UnitManager() {
+//		super();
+//		getUnits();
+//		getCurrentUnit();
+//	}
 	
-	public UnitManager(Collection<IUnit> units, IUnit currentUnit) {
-		super();
+	public UnitManager(Set<IUnit> units, IUnit currentUnit) 
+	{
+		if (units == null || units.isEmpty())
+			throw new IllegalArgumentException("Param units must not be null nor empty!");
+		
 		setUnits(units);
 		setCurrentUnit(currentUnit);
 	}
-	
-	private Collection<IUnit> units = null;
-	public Collection<IUnit> getUnits() 
-	{
-		if (units == null)
-			units = getPageRegistry().getUnits();
+				
+	private Set<IUnit> units = null;
+	public Set<IUnit> getUnits() {
 		return units;
 	}	
-	public void setUnits(Collection<IUnit> units) {
+	public void setUnits(Set<IUnit> units) {
 		this.units = units;
 	}
-	
-	public PageRegistry getPageRegistry() {
-		return PageRegistryEP.sharedInstance().getPageRegistry();
-	}
-	
+		
   protected IUnit currentUnit = null;
   public IUnit getCurrentUnit() 
   {
-  	if (currentUnit == null)
-  		currentUnit = getPageRegistry().getUnit(DotUnit.UNIT_ID);   		
+  	if (currentUnit == null)   		
+  		currentUnit = units.iterator().next();
+  	
   	return currentUnit;
   }
+  
+//  public void setCurrentUnit(IUnit unit) 
+//  {
+//  	if (!getUnits().contains(unit))
+//  		throw new IllegalArgumentException("Param unit is not contained in getUnits()!");
+//  	
+//  	IUnit oldUnit = currentUnit;
+//  	this.currentUnit = unit;
+//  	getPropertyChangeSupport().firePropertyChange(PROP_CURRENT_UNIT_CHANGED, oldUnit, currentUnit);
+//  }
   public void setCurrentUnit(IUnit unit) 
   {
-  	if (!getUnits().contains(unit))
-  		throw new IllegalArgumentException("Param unit is not contained in getUnits()!");
+  	if (unit == null)
+  		throw new IllegalArgumentException("Param unit must not be null!");
+  	
+  	if (!getUnits().contains(unit)) 
+  	{
+  		Set<IUnit> oldUnits = new HashSet<IUnit>(units);
+  		units.add(unit);
+  		getPropertyChangeSupport().firePropertyChange(PROP_UNIT_ADDED, oldUnits, units);
+  	}
   	
   	IUnit oldUnit = currentUnit;
   	this.currentUnit = unit;
   	getPropertyChangeSupport().firePropertyChange(PROP_CURRENT_UNIT_CHANGED, oldUnit, currentUnit);
   }
+
   
   public void setCurrentUnit(String unitID) {
   	for (IUnit unit : getUnits()) {
@@ -91,6 +105,7 @@ public class UnitManager
   }
   
   public static final String PROP_CURRENT_UNIT_CHANGED = "currentUnit changed";
+  public static final String PROP_UNIT_ADDED = "Unit added";  
   
   private PropertyChangeSupport pcs = null;
   protected PropertyChangeSupport getPropertyChangeSupport() {

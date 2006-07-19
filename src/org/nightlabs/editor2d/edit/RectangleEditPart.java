@@ -27,17 +27,14 @@
 
 package org.nightlabs.editor2d.edit;
 
-import org.nightlabs.editor2d.ShapeDrawComponent;
+import org.nightlabs.editor2d.RectangleDrawComponent;
 
 
 public class RectangleEditPart 
 extends ShapeDrawComponentEditPart 
 {
-  /**
-   * @param drawComponent
-   */
-  public RectangleEditPart(ShapeDrawComponent drawComponent) {
-    super(drawComponent);
+  public RectangleEditPart(RectangleDrawComponent rect) {
+    super(rect);
   }
 
 //  /* (non-Javadoc)

@@ -38,9 +38,6 @@ import org.nightlabs.editor2d.model.EllipsePropertySource;
 public class EllipseEditPart 
 extends ShapeDrawComponentEditPart 
 {
-  /**
-   * @param drawComponent
-   */
   public EllipseEditPart(EllipseDrawComponent drawComponent) {
     super(drawComponent);
   }
@@ -65,11 +62,13 @@ extends ShapeDrawComponentEditPart
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(EllipseDrawComponent.PROP_END_ANGLE)) {
 			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
+			refreshVisuals();	
+			return;
 		}
 		else if (propertyName.equals(EllipseDrawComponent.PROP_START_ANGLE)) {
 			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
+			refreshVisuals();
+			return;
 		}		
 	}
        

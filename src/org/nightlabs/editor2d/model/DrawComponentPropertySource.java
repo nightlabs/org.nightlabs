@@ -61,14 +61,17 @@ implements IPropertySource
 	
 	public DrawComponentPropertySource(DrawComponent element) 
 	{
-		this.drawComponent = element;
-				
+		this.drawComponent = element;				
 		descriptors = createPropertyDescriptors();
 		nameLangMan = LanguageManager.sharedInstance();	
 		nameLangMan.addPropertyChangeListener(langListener);
 	}
 	
 	protected DrawComponent drawComponent;	
+	public DrawComponent getDrawComponent() {
+		return drawComponent;
+	}
+	
 	protected LanguageManager nameLangMan;	
 	
 	protected PropertyChangeListener langListener = new PropertyChangeListener()
@@ -97,7 +100,9 @@ implements IPropertySource
 	private DotUnit dotUnit = null;
 	protected DotUnit getDotUnit() {
 		if (dotUnit == null)
-			dotUnit = (DotUnit) getPageRegistry().getUnit(DotUnit.UNIT_ID);
+//			dotUnit = (DotUnit) getPageRegistry().getUnit(DotUnit.UNIT_ID);
+			dotUnit = getDrawComponent().getRoot().getModelUnit();			
+		
 		return dotUnit;
 	}
 	

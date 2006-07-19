@@ -49,9 +49,6 @@ extends AbstractDrawComponentContainerEditPart
     super(layer);
   }
 	
-  /**
-   * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
-   */
   protected IFigure createFigure() 
   {    
 //    IFigure f = new FreeformLayer();    
@@ -73,9 +70,6 @@ extends AbstractDrawComponentContainerEditPart
     return (Layer) getModel();
   }
   
-  /**
-   * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
-   */
   protected List getModelChildren() 
   {  
     if (getLayer().isVisible()) {
@@ -92,8 +86,9 @@ extends AbstractDrawComponentContainerEditPart
 		if (propertyName.equals(Layer.PROP_VISIBLE)) {
 			LOGGER.debug(propertyName +" changed!");
 			refreshChildren();
-//			refresh();
+			return;
 		}
+		// TODO: implement Layer.PROP_EDITABLE
 	}
 	
   public IPropertySource getPropertySource()

@@ -40,7 +40,6 @@ import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.editpolicy.DrawComponentContainerXYLayoutPolicy;
 import org.nightlabs.editor2d.editpolicy.DrawComponentEditPolicy;
 import org.nightlabs.editor2d.editpolicy.EditorEditPolicy;
-import org.nightlabs.editor2d.editpolicy.EditorRotateEditPolicy;
 import org.nightlabs.editor2d.figures.ContainerDrawComponentFigure;
 
 
@@ -56,7 +55,7 @@ extends AbstractDrawComponentEditPart
     super(drawComponentContainer);
   }
 
-//  protected abstract IFigure createFigure();
+  @Override
   protected IFigure createFigure() 
   {
     ContainerDrawComponentFigure figure = new ContainerDrawComponentFigure();
@@ -71,6 +70,7 @@ extends AbstractDrawComponentEditPart
   	return (DrawComponentContainer) getModel();
   }
   
+  @Override  
   protected void createEditPolicies() 
   {
   	// generic delete policy
@@ -88,7 +88,8 @@ extends AbstractDrawComponentEditPart
 		
 //		installEditPolicy(EditorEditPolicy.ROTATE_ROLE, new EditorRotateEditPolicy());			
   }  
-      
+    
+  @Override  
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{
 		super.propertyChanged(evt);
@@ -105,6 +106,7 @@ extends AbstractDrawComponentEditPart
 		}		
 	}
 	
+  @Override  
   protected List getModelChildren()
   {
     return getDrawComponentContainer().getDrawComponents();

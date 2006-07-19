@@ -39,8 +39,11 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EventObject;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -157,6 +160,7 @@ import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintPreviewAction;
 import org.nightlabs.editor2d.print.EditorPrintSetupAction;
 import org.nightlabs.editor2d.properties.EditorPropertyPage;
+import org.nightlabs.editor2d.properties.UnitManager;
 import org.nightlabs.editor2d.render.RenderModeManager;
 import org.nightlabs.editor2d.rulers.EditorRulerProvider;
 import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
@@ -181,17 +185,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     private TreeViewer treeViewer;    
     private EditorOutlinePage outlinePage;
     private boolean editorSaving = false;
-    
-//    protected static final String PALETTE_DOCK_LOCATION = "Dock location"; //$NON-NLS-1$
-//    protected static final String PALETTE_SIZE = "Palette Size"; //$NON-NLS-1$
-//    protected static final String PALETTE_STATE = "Palette state"; //$NON-NLS-1$
-//    protected static final int DEFAULT_PALETTE_SIZE = 130;
-//    
-//    static {
-//      EditorPlugin.getDefault().getPreferenceStore().setDefault(
-//          PALETTE_SIZE, DEFAULT_PALETTE_SIZE);
-//    }
-    
+        
     protected void closeEditor(boolean save) 
     {
       getSite().getPage().closeEditor(AbstractEditor.this, save);      
@@ -202,7 +196,20 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return getMultiLayerDrawComponent();
     }
     
-    public abstract MultiLayerDrawComponent createMultiLayerDrawComponent();    
+    private UnitManager unitManager = null;
+    public UnitManager getUnitManager() 
+    {
+    	if (unitManager == null) 
+    	{
+    		// TODO: update dotunit if resolution changes);    		
+    		Collection<IUnit> units = PageRegistryEP.sharedInstance().getPageRegistry().getUnits();
+    		unitManager = new UnitManager(new HashSet<IUnit>(units), 
+    				getMultiLayerDrawComponent().getModelUnit());
+    	}
+    	return unitManager;
+    }
+    
+    protected abstract MultiLayerDrawComponent createMultiLayerDrawComponent();    
     private MultiLayerDrawComponent mldc = null;  
     public MultiLayerDrawComponent getMultiLayerDrawComponent() 
     {
@@ -212,7 +219,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return mldc;
     }
       
-    public abstract EditPartFactory createEditPartFactory(); 
+    protected abstract EditPartFactory createEditPartFactory(); 
     private EditPartFactory editPartFactory = null;
     public EditPartFactory getEditPartFactory() 
     {
@@ -222,7 +229,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return editPartFactory;
     }      
         
-    public abstract EditPartFactory createOutlineEditPartFactory();
+    protected abstract EditPartFactory createOutlineEditPartFactory();
     private EditPartFactory outlineEditPartFactory = null;
     public EditPartFactory getOutlineEditPartFactory() 
     {
@@ -232,7 +239,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return outlineEditPartFactory;
     }     
         
-    public abstract ContextMenuProvider createContextMenuProvider();    
+    protected abstract ContextMenuProvider createContextMenuProvider();    
     private ContextMenuProvider contextMenuProvider = null;
     public ContextMenuProvider getContextMenuProvider() 
     {
@@ -267,7 +274,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return filterMan;
     }
      
-    public abstract NameProvider createNameProvider();
+    protected abstract NameProvider createNameProvider();
     
     private NameProvider nameProvider = null;
     public NameProvider getFilterNameProvider() {
@@ -516,8 +523,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
         return getGraphicalViewer().getProperty(ZoomManager.class.toString());
         
     	if (type == org.eclipse.ui.views.properties.IPropertySheetPage.class) {
-//    		PropertySheetPage page = new EditorPropertyPage(getLanguageManager());
-    		PropertySheetPage page = new EditorPropertyPage();    		
+    		PropertySheetPage page = new EditorPropertyPage(getUnitManager());    		
     		page.setRootEntry(new UndoablePropertySheetEntry(getCommandStack()));
     		return page;
     	}
@@ -617,7 +623,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
       return getPaletteFactory().createPalettePreferences();
     }
         
-    public abstract AbstractPaletteFactory createPaletteFactory();   
+    protected abstract AbstractPaletteFactory createPaletteFactory();   
     
     private AbstractPaletteFactory paletteFactory = null;
     public AbstractPaletteFactory getPaletteFactory() 
@@ -1190,7 +1196,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
       	initialzePage();
         
       mldc.setRenderModeManager(getRenderModeManager());      
-      getMultiLayerDrawComponent().setLanguageId(getLanguageManager().getCurrentLanguageID());      
+      getMultiLayerDrawComponent().setLanguageId(getLanguageManager().getCurrentLanguageID());
+ 
+	  	getUnitManager().setCurrentUnit(getMultiLayerDrawComponent().getModelUnit());      
     }
                
     protected void initialzePage() 
@@ -1235,7 +1243,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	  	LOGGER.debug("pageBounds = "+pageBounds);	  	
 	  	
 	  	getMultiLayerDrawComponent().setResolution(resolution);  	  	
-	  	getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds);  	  	    	    	
+	  	getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 	  	
     }
     
     protected PageRegistry getPageRegistry() {

@@ -37,8 +37,7 @@ import org.nightlabs.editor2d.model.TextPropertySource;
 public class TextEditPart 
 extends ShapeDrawComponentEditPart 
 {
-  public TextEditPart(TextDrawComponent text) 
-  {
+  public TextEditPart(TextDrawComponent text) {
     super(text);
   }
 
@@ -52,39 +51,40 @@ extends ShapeDrawComponentEditPart
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(TextDrawComponent.PROP_FONT)) {
 			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
+			refreshVisuals();	
+			return;
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_FONT_NAME)) {
 			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
+			refreshVisuals();
+			return;			
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_FONT_SIZE)) {
 			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
+			refreshVisuals();
+			return;			
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_TEXT)) {
 			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
+			refreshVisuals();
+			return;			
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_BOLD)) {
 			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
+			refreshVisuals();
+			return;			
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_ITALIC)) {
 			LOGGER.debug(propertyName +" changed!");
-			refreshVisuals();			
+			refreshVisuals();
+			return;			
 		}		
 	}
 	
-  /* (non-Javadoc)
-   * @see com.ibm.itso.sal330r.gefdemo.edit.WorkflowElementEditPart#getPropertySource()
-   */
   public IPropertySource getPropertySource()
   {
-    if (propertySource == null)
-    {
-      propertySource =
-        new TextPropertySource(getTextDrawComponent());
+    if (propertySource == null){
+      propertySource = new TextPropertySource(getTextDrawComponent());
     }
     return propertySource;
   } 

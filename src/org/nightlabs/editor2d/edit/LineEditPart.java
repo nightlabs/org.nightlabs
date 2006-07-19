@@ -56,22 +56,4 @@ extends ShapeDrawComponentEditPart
 		}
 	}
 	
-//  public void notifyChanged(Notification notification)
-//  {
-//    int type = notification.getEventType();
-//    int featureId = notification.getFeatureID(Editor2DPackage.class);
-//   
-//    // TODO: add Notification method for setting PathSegments to model
-//    if (type == Notification.SET)
-//    {
-//      switch (featureId)
-//      {
-//	      case Editor2DPackage.LINE_DRAW_COMPONENT__CONNECT : 
-//	        LOGGER.debug("LINE_DRAW_COMPONENT__CONNECT Notified!");	      	
-//		      refreshVisuals();
-//		      break;              
-//      }
-//    }
-//    super.notifyChanged(notification);
-//  }	
 }

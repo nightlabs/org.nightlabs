@@ -87,10 +87,7 @@ extends AbstractDrawComponentContainerEditPart
   	return prefConfMod;
   }
   
-	//  public static UpdateManager updateManager = null;	
-	/* 
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
-	 */
+//  public static UpdateManager updateManager = null;	
 	protected IFigure createFigure()
 	{
 //	  SmartUpdateFreeformLayer f = new SmartUpdateFreeformLayer(this);

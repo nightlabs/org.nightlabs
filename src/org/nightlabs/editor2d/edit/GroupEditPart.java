@@ -47,9 +47,6 @@ extends AbstractDrawComponentContainerEditPart
 {
 	public static final Logger LOGGER = Logger.getLogger(GroupEditPart.class);
 	
-	/**
-	 * @param drawComponentContainer
-	 */
 	public GroupEditPart(GroupDrawComponent group) {
 		super(group);
 	}

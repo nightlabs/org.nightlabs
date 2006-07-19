@@ -44,8 +44,7 @@ extends AbstractDrawComponentContainerEditPart
 	/**
 	 * @param page the PageDrawComponent to initalize this PageEditPart with
 	 */
-	public PageEditPart(PageDrawComponent page) 
-	{
+	public PageEditPart(PageDrawComponent page) {
 		super(page);
 	}
 

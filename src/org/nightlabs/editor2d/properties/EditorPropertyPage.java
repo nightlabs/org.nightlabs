@@ -48,13 +48,18 @@ extends PropertySheetPage
 {	
 	public static final Logger LOGGER = Logger.getLogger(EditorPropertyPage.class);
 	
-	public EditorPropertyPage() 
+//	public EditorPropertyPage() 
+//	{
+//		super();		
+//		unitManager = new UnitManager();		
+//	}
+
+	public EditorPropertyPage(UnitManager unitManager) 
 	{
 		super();		
-		// TODO: maybe get unitManager from AbstractEditor
-		unitManager = new UnitManager();		
+		this.unitManager = unitManager;		
 	}
-
+	
 	private UnitManager unitManager = null;
 	public UnitManager getUnitManager() {
 		return unitManager;

@@ -34,17 +34,11 @@ import org.nightlabs.editor2d.editpolicy.DrawComponentEditPolicy;
 public abstract class DrawComponentEditPart 
 extends AbstractDrawComponentEditPart
 {
-	/**
-	 * @param drawComponent
-	 */
 	public DrawComponentEditPart(DrawComponent drawComponent)
 	{
 		super(drawComponent);
 	}
 	
-	/** 
-	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
-	 */
 	protected void createEditPolicies()
 	{
 		// allow removal of the associated model element

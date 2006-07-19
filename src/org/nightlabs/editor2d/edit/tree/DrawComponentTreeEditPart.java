@@ -164,48 +164,58 @@ extends AbstractTreeEditPart
 		if (propertyName.equals(DrawComponent.PROP_BOUNDS)) {
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
+			return;
 		}
 		else if (propertyName.equals(DrawComponent.PROP_HEIGHT)) {
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
+			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_WIDTH)) {
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
+			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_X)) {
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
+			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_Y)) {
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
+			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_ROTATION)) {
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
+			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_ROTATION_X)) {
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
+			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_ROTATION_Y)) {
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
+			return;			
 		}						
 		else if (propertyName.equals(DrawComponent.PROP_RENDER_MODE)) {
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
+			return;			
 		}		
 		else if (propertyName.equals(DrawComponent.PROP_NAME)) {
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
+			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_LANGUAGE_ID)) {
 //			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
-		}			
-		
+			return;			
+		}					
 	}  
 	
 }

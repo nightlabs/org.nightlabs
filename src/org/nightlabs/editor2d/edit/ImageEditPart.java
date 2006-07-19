@@ -49,6 +49,7 @@ extends DrawComponentEditPart
     return (ImageDrawComponent) getModel();
   }
   
+  @Override  
   public IPropertySource getPropertySource()
   {
     if (propertySource == null) 
@@ -59,6 +60,7 @@ extends DrawComponentEditPart
     return propertySource;
   }
   
+  @Override  
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{
 		super.propertyChanged(evt);

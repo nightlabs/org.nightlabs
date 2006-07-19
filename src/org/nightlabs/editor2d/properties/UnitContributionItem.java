@@ -25,7 +25,10 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.properties;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -58,6 +61,8 @@ extends XContributionItem
 		super();
 		this.unitManager = unitManager;
 		units = new ArrayList<IUnit>(unitManager.getUnits());
+		unitManager.addPropertyChangeListener(currentUnitListener);
+		unitManager.addPropertyChangeListener(unitAddedListener);
 	}
 
 	private UnitManager unitManager = null;
@@ -67,6 +72,30 @@ extends XContributionItem
 	}
 	private List<IUnit> units = null;
 	
+//  /**
+//   * Creates and returns the control for this contribution item
+//   * under the given parent composite.
+//   *
+//   * @param parent the parent composite
+//   * @return the new control
+//   */
+//  protected Control createControl(Composite parent) 
+//  {
+//  	Composite comp = new XComposite(parent, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER);
+//  	combo = new Combo(comp, SWT.BORDER | SWT.READ_ONLY);
+//  	combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//  	combo.addSelectionListener(comboSelectionListener);  		  	
+////  	for (IUnit unit : units) {
+////			combo.add(unit.getUnitSymbol());
+////		}
+////  	selectUnit(unitManager.getCurrentUnit());
+//  	refresh();
+//  	
+//  	if (toolitem != null)
+//  		toolitem.setWidth(computeWidth(comp));  	
+//  	return comp;
+//  }
+
   /**
    * Creates and returns the control for this contribution item
    * under the given parent composite.
@@ -80,16 +109,12 @@ extends XContributionItem
   	combo = new Combo(comp, SWT.BORDER | SWT.READ_ONLY);
   	combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
   	combo.addSelectionListener(comboSelectionListener);  		  	
-  	for (IUnit unit : units) {
-			combo.add(unit.getUnitSymbol());
-		}
-  	selectUnit(unitManager.getCurrentUnit());
-  	
+  	refresh();  	
   	if (toolitem != null)
   		toolitem.setWidth(computeWidth(comp));  	
   	return comp;
   }
-  
+	
 	protected ToolItem toolitem = null;	  
 	 /**
    * The control item implementation of this <code>IContributionItem</code>
@@ -147,6 +172,22 @@ extends XContributionItem
 		}	
 	};  
 	
+	protected PropertyChangeListener unitAddedListener = new PropertyChangeListener()
+	{	
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(UnitManager.PROP_UNIT_ADDED)) 
+				refresh();
+		}	
+	};
+
+	protected PropertyChangeListener currentUnitListener = new PropertyChangeListener()
+	{	
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(UnitManager.PROP_CURRENT_UNIT_CHANGED)) 
+		  	selectUnit(unitManager.getCurrentUnit());
+		}	
+	};
+	
 	public void selectUnit(IUnit unit) 
 	{
 		int index = units.indexOf(unit);
@@ -168,4 +209,13 @@ extends XContributionItem
 		return null;
 	}
 		
+	protected void refresh() 
+	{
+		units = new LinkedList<IUnit>(unitManager.getUnits());
+		combo.removeAll();
+  	for (IUnit unit : units) {
+			combo.add(unit.getUnitSymbol());
+		}
+  	selectUnit(unitManager.getCurrentUnit());		
+	}
 }
