@@ -167,10 +167,6 @@ extends ShapeDrawComponentPropertySource
 			getTextDrawComponent().setText((String)value);
 			return;			
 		}
-//		else if (id.equals(TextDrawComponent.PROP_FONT_SIZE)) {
-//			getTextDrawComponent().setFontSize(((Integer)value).intValue());
-//			return;			
-//		}
 		if (id.equals(TextDrawComponent.PROP_FONT_SIZE)) 
 		{
 			int fontSize;
