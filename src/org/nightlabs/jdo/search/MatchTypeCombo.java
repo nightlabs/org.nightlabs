@@ -34,6 +34,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -63,7 +65,7 @@ public abstract class MatchTypeCombo extends XComposite {
 	 * @param comboStyle
 	 */
 	public MatchTypeCombo(Composite parent, int wrapperStyle, int comboStyle) {
-		super(parent, wrapperStyle, XComposite.LAYOUT_MODE_TIGHT_WRAPPER, XComposite.LAYOUT_DATA_MODE_NONE);
+		super(parent, wrapperStyle, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 		combo = new Combo(this, comboStyle);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		for (int i = 0; i < MatchTypeCombo.KNOWN_MATCH_TYPES.length; i++) {

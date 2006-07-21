@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.j2ee.InitialContextProvider;
 import org.nightlabs.jdo.JdoPlugin;
 
@@ -104,7 +105,7 @@ public abstract class AbstractItemBasedSearchFilterProviderComposite extends Com
 		itemList.setLayoutData(itemListCompositeLData);
 		
 		
-		controlsComposite = new XComposite(this, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		controlsComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		((GridLayout)controlsComposite.getLayout()).numColumns = 3;
 		((GridLayout)controlsComposite.getLayout()).horizontalSpacing = 10;
 		((GridLayout)controlsComposite.getLayout()).makeColumnsEqualWidth = false;

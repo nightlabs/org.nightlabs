@@ -41,6 +41,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 
 /**
@@ -63,7 +65,7 @@ public class SearchFilterItemList
 	}
 	
 	protected void createListWrapperAndLayout() {
-		listWrapper = new XComposite(this, SWT.BORDER, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		listWrapper = new XComposite(this, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
 		GridData listWrapperLData = new GridData();
 		listWrapperLData.grabExcessHorizontalSpace = true;
 		listWrapperLData.horizontalAlignment = SWT.FILL;		
@@ -89,7 +91,7 @@ public class SearchFilterItemList
 		private SearchFilterItemList itemList;
 		
 		public SearchFilterItemEditorCloser(Composite parent, int style, SearchFilterItemList itemList, SearchFilterItemEditor editor) {
-			super(parent, style, XComposite.LAYOUT_MODE_TIGHT_WRAPPER, XComposite.LAYOUT_DATA_MODE_NONE);
+			super(parent, style, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 			GridData gd = new GridData();
 			gd.horizontalAlignment = SWT.RIGHT;
 			gd.widthHint = 30;
@@ -128,8 +130,8 @@ public class SearchFilterItemList
 			XComposite wrapper = new XComposite(
 					listWrapper, 
 					SWT.BORDER, 
-					XComposite.LAYOUT_MODE_TIGHT_WRAPPER,
-					XComposite.LAYOUT_DATA_MODE_NONE
+					LayoutMode.TIGHT_WRAPPER,
+					LayoutDataMode.NONE
 				);
 			((GridLayout)wrapper.getLayout()).numColumns = 2;
 			GridData wrapperLData = new GridData();
