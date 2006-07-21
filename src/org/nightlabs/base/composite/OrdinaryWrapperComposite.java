@@ -56,9 +56,8 @@ public class OrdinaryWrapperComposite extends XComposite {
 	 */
 	public OrdinaryWrapperComposite(Composite parent, int style, boolean setLayoutData) {
 		super(
-				parent, style,
-				LAYOUT_MODE_ORDINARY_WRAPPER,
-				setLayoutData ? LAYOUT_DATA_MODE_GRID_DATA : LAYOUT_DATA_MODE_NONE);
+				parent, style, LayoutMode.ORDINARY_WRAPPER, 
+				setLayoutData ? LayoutDataMode.GRID_DATA : LayoutDataMode.NONE);				
 	}
 
 }

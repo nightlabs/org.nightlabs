@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 
 /**
@@ -58,7 +59,7 @@ public abstract class AbstractTableComposite extends XComposite {
 	}
 	
 	public AbstractTableComposite(Composite parent, int style, boolean initTable, int viewerStyle) {
-		super(parent, style, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 //		GridLayout thisLayout = new GridLayout();
 //		this.setLayout(thisLayout);
 //

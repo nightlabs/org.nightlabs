@@ -52,8 +52,8 @@ implements EntityManager
 	public EntityManagementOrdinaryComposite(Composite parent, int style, boolean doSetLayoutData)
 	{
 		super(parent, style,
-				XComposite.LAYOUT_MODE_ORDINARY_WRAPPER,
-				doSetLayoutData ? XComposite.LAYOUT_DATA_MODE_GRID_DATA : XComposite.LAYOUT_DATA_MODE_NONE);
+				LayoutMode.ORDINARY_WRAPPER,
+				doSetLayoutData ? LayoutDataMode.GRID_DATA : LayoutDataMode.NONE);
 		dataChangedListeners = new HashSet();
 	}
 

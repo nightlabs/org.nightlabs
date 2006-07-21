@@ -33,6 +33,8 @@ import java.util.List;
 import org.eclipse.swt.widgets.Composite;
 
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.language.LanguageCf;
 
 /**
@@ -52,8 +54,8 @@ public abstract class AbstractLanguageChooser
 	public AbstractLanguageChooser(Composite parent, int style,
 			boolean setLayoutData)
 	{
-		super(parent, style, XComposite.LAYOUT_MODE_TIGHT_WRAPPER,
-				setLayoutData ? XComposite.LAYOUT_DATA_MODE_GRID_DATA : LAYOUT_DATA_MODE_NONE);
+		super(parent, style, LayoutMode.TIGHT_WRAPPER, 
+				setLayoutData ? LayoutDataMode.GRID_DATA : LayoutDataMode.NONE);
 	}
 	
 	/**

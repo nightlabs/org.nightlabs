@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * Button area associated to one or more EntityManager.
@@ -71,7 +72,7 @@ public class EntityManagementButtonArea extends XComposite {
 	 * @param associatedManagers An array of all Managers associated to this area. (e.g. several ManagementComposites or one ManagementView). 
 	 */
 	public EntityManagementButtonArea(Composite parent, int style, EntityManager[] associatedManagers) {
-		super(parent, style, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		managers = new ArrayList();
 		if (associatedManagers != null) {
 			for (int i = 0; i < associatedManagers.length; i++) {

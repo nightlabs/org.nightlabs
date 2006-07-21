@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.*;
 
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.base.wizard.DynamicPathWizard;
 import org.nightlabs.base.wizard.DynamicPathWizardPage;
 
@@ -56,7 +57,7 @@ public class ErrorReportWizardCommentPage extends DynamicPathWizardPage
 	 */
 	public Control createPageContents(Composite parent)
 	{	
-		XComposite page = new XComposite(parent, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 //    GridLayout layout = new GridLayout();
 //    //layout.
 //    page.setLayout(layout);

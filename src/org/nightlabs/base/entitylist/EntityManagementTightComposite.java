@@ -33,6 +33,8 @@ import java.util.Set;
 import org.eclipse.swt.widgets.Composite;
 
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 
 /**
@@ -51,8 +53,8 @@ public abstract class EntityManagementTightComposite extends XComposite implemen
 	public EntityManagementTightComposite(Composite parent, int style, boolean doSetLayoutData)
 	{
 		super(parent, style,
-				XComposite.LAYOUT_MODE_TIGHT_WRAPPER,
-				doSetLayoutData ? XComposite.LAYOUT_DATA_MODE_GRID_DATA : XComposite.LAYOUT_DATA_MODE_NONE);
+				LayoutMode.TIGHT_WRAPPER,
+				doSetLayoutData ? LayoutDataMode.GRID_DATA : LayoutDataMode.NONE);
 		dataChangedListeners = new HashSet();
 	}
 

@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.language.LanguageCf;
 
@@ -69,7 +70,7 @@ public class I18nTextEditor extends XComposite
 	}
 	public I18nTextEditor(Composite parent, LanguageChooser languageChooser, String caption)
 	{
-		super(parent, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		getGridData().grabExcessVerticalSpace = false;
 
 		if (languageChooser == null)

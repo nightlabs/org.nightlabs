@@ -29,6 +29,8 @@ package org.nightlabs.base.composite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * A composite for wrapping other composites and no insets.
@@ -62,8 +64,7 @@ public class TightWrapperComposite extends XComposite
 	public TightWrapperComposite(Composite parent, int style, boolean setLayoutData) {
 		super(
 				parent, style,
-				LAYOUT_MODE_TIGHT_WRAPPER,
-				setLayoutData ? LAYOUT_DATA_MODE_GRID_DATA : LAYOUT_DATA_MODE_NONE);
-	}
+				LayoutMode.TIGHT_WRAPPER, 
+				setLayoutData ? LayoutDataMode.GRID_DATA : LayoutDataMode.NONE);	}
 
 }

@@ -47,6 +47,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Slider;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * Takes SelectableComposite s and display them in a
@@ -141,7 +142,7 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	public HorizontalMultiColumnCompositeList(Composite parent, int style) {
 		super(parent, style);
 		this.setLayout(new GridLayout());
-		wrapper = new XComposite(this, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		wrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		carrierWrapper = new Composite(wrapper,SWT.NONE);
 		carrierWrapper.setLayout(null);

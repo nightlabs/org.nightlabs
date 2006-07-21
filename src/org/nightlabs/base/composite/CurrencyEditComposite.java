@@ -56,7 +56,7 @@ public class CurrencyEditComposite extends XComposite
 	 */
 	public CurrencyEditComposite(Composite parent, Currency _currency)
 	{
-		super(parent, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		this.currency = _currency;
 
 		getGridLayout().numColumns = 2;

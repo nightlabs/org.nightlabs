@@ -55,28 +55,17 @@ public class FileSelectComposite extends XComposite {
 		super(parent, style);
 		createContents(caption);
 	}
-
+	
 	/**
 	 * @param parent
 	 * @param style
-	 * @param layoutMode
 	 */
-	public FileSelectComposite(Composite parent, int style, int layoutMode, String caption) {
-		super(parent, style, layoutMode);		
-		createContents(caption);
-	}
-
-	/**
-	 * @param parent
-	 * @param style
-	 * @param layoutMode
-	 * @param layoutDataMode
-	 */
-	public FileSelectComposite(Composite parent, int style, int layoutMode,
-			int layoutDataMode, String caption) {
+	public FileSelectComposite(Composite parent, int style, LayoutMode layoutMode, 
+			LayoutDataMode layoutDataMode, String caption) 
+	{
 		super(parent, style, layoutMode, layoutDataMode);
 		createContents(caption);
-	}
+	}	
 	
 	private Text fileTextControl;
 	private Button browseButton;

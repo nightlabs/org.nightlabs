@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Text;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 public class TimerText extends XComposite
 {
@@ -70,7 +71,7 @@ public class TimerText extends XComposite
 
 	public TimerText(Composite parent, int style, TimerText otherTimerTextToSynchronizeWith)
 	{
-		super(parent, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		getGridData().grabExcessVerticalSpace = false;
 		text = new Text(this, style);
 		text.setLayoutData(new GridData(GridData.FILL_BOTH));

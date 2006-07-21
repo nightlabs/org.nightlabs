@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Text;
 
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.base.wizard.DynamicPathWizardPage;
 
 /**
@@ -56,7 +57,7 @@ public class ErrorReportWizardSummaryPage extends DynamicPathWizardPage
 	 */
 	public Control createPageContents(Composite parent)
 	{
-    XComposite page = new XComposite(parent, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+    XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
     page.setLayoutData(new GridData(GridData.FILL_BOTH));
     
     Label label = new Label(page, SWT.NONE);

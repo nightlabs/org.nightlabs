@@ -140,21 +140,13 @@ public class FadeableComposite extends XComposite implements Fadeable
 	}
 
 	/**
-	 * @see XComposite#XComposite(Composite, int, int)
+	 * @see XComposite#XComposite(Composite, int)
 	 */
-	public FadeableComposite(Composite parent, int style, int layoutMode, int layoutDataMode)
-	{
-		super(parent, style, layoutMode, layoutDataMode);
-	}
-
-	/**
-	 * @see XComposite#XComposite(Composite, int, int, int)
-	 */
-	public FadeableComposite(Composite parent, int style, int layoutMode)
+	public FadeableComposite(Composite parent, int style, LayoutMode layoutMode) 
 	{
 		super(parent, style, layoutMode);
-	}
-
+	}	
+	
 	/**
 	 * This method must be called on the SWT GUI thread!
 	 * <p>

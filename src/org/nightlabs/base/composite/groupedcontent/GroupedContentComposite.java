@@ -40,6 +40,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -76,11 +78,11 @@ public class GroupedContentComposite extends XComposite {
 	 * @param setLayoutData
 	 */
 	public GroupedContentComposite(Composite parent, int style, boolean setLayoutData) {
-		super(parent, style, XComposite.LAYOUT_MODE_ORDINARY_WRAPPER,
-				setLayoutData ? XComposite.LAYOUT_DATA_MODE_GRID_DATA : LAYOUT_DATA_MODE_NONE);
+		super(parent, style, LayoutMode.ORDINARY_WRAPPER, 
+				setLayoutData ? LayoutDataMode.GRID_DATA : LayoutDataMode.NONE);
 		getGridLayout().numColumns = 2;
 
-		tableWrapper = new XComposite(this, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER, XComposite.LAYOUT_DATA_MODE_NONE);
+		tableWrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 		GridData tableGD = new GridData(GridData.FILL_BOTH);
 		tableGD.grabExcessHorizontalSpace = false;
 		tableGD.widthHint = 150;

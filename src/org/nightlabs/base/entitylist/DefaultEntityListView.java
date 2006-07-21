@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * @author Niklas Schiffler <nick@nightlabs.de>
@@ -167,7 +168,7 @@ public abstract class DefaultEntityListView
 //    TabFolder composite = new TabFolder(parent, SWT.NULL);
 //    composite.setLayout(gridLayout);
 
-  	XComposite wrapper = new XComposite(parent, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+  	XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
     filterCombo = new Combo(wrapper, SWT.READ_ONLY);
     filterCombo.addSelectionListener(this);
     

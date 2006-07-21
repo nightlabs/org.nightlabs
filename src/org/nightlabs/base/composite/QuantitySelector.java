@@ -44,7 +44,7 @@ public abstract class QuantitySelector extends XComposite
 
 	public QuantitySelector(Composite parent)
 	{
-		super(parent, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		getGridData().grabExcessHorizontalSpace = false;
 		getGridData().grabExcessVerticalSpace = false;
 
@@ -54,7 +54,7 @@ public abstract class QuantitySelector extends XComposite
 			quickQtyButtons[i].setData(new Integer(i + 1));
 			quickQtyButtons[i].addSelectionListener(buttonSelectionListener);
 		}
-		spacer = new XComposite(this, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		spacer = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		spacer.setLayoutData(new GridData(4, 1));
 		varQtySpinner = new Spinner(this, SWT.BORDER);
 		varQtySpinner.setMinimum(1);

@@ -31,6 +31,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.nightlabs.base.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * A Label above a Text wrapped in a Composite. 
@@ -57,9 +59,8 @@ public class LabeledText extends XComposite {
 			boolean setLayoutData
 	) {
 		super(parent, wrapperStyle,
-				XComposite.LAYOUT_MODE_TIGHT_WRAPPER,
-				setLayoutData ? XComposite.LAYOUT_DATA_MODE_GRID_DATA : LAYOUT_DATA_MODE_NONE);
-
+				LayoutMode.TIGHT_WRAPPER, 
+				setLayoutData ? LayoutDataMode.GRID_DATA : LayoutDataMode.NONE);
 //		this.setLayout(new GridLayout());
 		getGridLayout().verticalSpacing = 5;
 		this.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

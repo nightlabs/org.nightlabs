@@ -97,7 +97,7 @@ public class DateTimeEditComposite extends XComposite
 	 */
 	public DateTimeEditComposite(Composite parent, long flags, Date date, String caption)
 	{
-		super(parent, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		this.flags = flags;
 		this.getGridData().grabExcessHorizontalSpace = false;
 		this.getGridData().grabExcessVerticalSpace = false;

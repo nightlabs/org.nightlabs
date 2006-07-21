@@ -45,13 +45,13 @@ public abstract class OKCancelComposite extends XComposite {
 	private Label label;
 
 	public OKCancelComposite(Composite parent, int style, String text, String okTxt, String cancelTxt) {
-		super(parent, style, XComposite.LAYOUT_MODE_ORDINARY_WRAPPER);
+		super(parent, style, LayoutMode.ORDINARY_WRAPPER);
 		if ((text != null) && (!"".equals(text))) {
 			label = new Label(this, SWT.WRAP);
 			label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_BEGINNING));
 			label.setText(text);
 		}
-		XComposite buttonWrapper = new XComposite(this, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		XComposite buttonWrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		buttonWrapper.getGridLayout().numColumns = 2;
 		okButton = new Button(buttonWrapper, SWT.PUSH);
 		GridData okGD = new GridData();
