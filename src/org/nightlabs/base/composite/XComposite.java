@@ -40,70 +40,34 @@ public class XComposite extends Composite
 	}
 
 	public static enum LayoutDataMode {
-		NONE, GRID_DATA
+		NONE, GRID_DATA, GRID_DATA_HORIZONTAL
 	}
 
-//	/**
-//	 * @deprecated Use {@link LayoutMode} instead!
-//	 */
-//	public static final int LAYOUT_MODE_ORDINARY_WRAPPER = 0;
-//
-//	/**
-//	 * @deprecated Use {@link LayoutMode} instead!
-//	 */
-//	public static final int LAYOUT_MODE_TIGHT_WRAPPER = 1;
-//
-//	/**
-//	 * @deprecated Use {@link LayoutDataMode} instead!
-//	 */
-//	public static final int LAYOUT_DATA_MODE_NONE = 0;
-//
-//	/**
-//	 * @deprecated Use {@link LayoutDataMode} instead!
-//	 */
-//	public static final int LAYOUT_DATA_MODE_GRID_DATA = 1;
-//
-//	public static LayoutMode int2LayoutMode(int layoutMode)
-//	{
-//		switch (layoutMode) {
-//			case LAYOUT_MODE_ORDINARY_WRAPPER:
-//				return LayoutMode.ORDINARY_WRAPPER;
-//			case LAYOUT_MODE_TIGHT_WRAPPER:
-//				return LayoutMode.TIGHT_WRAPPER;
-//			default:
-//				throw new IllegalArgumentException("Illegal layout mode: " + layoutMode);
-//		}
-//	}
-//
-//	public static LayoutDataMode int2LayoutDataMode(int layoutDataMode)
-//	{
-//		switch (layoutDataMode) {
-//			case LAYOUT_DATA_MODE_NONE:
-//				return LayoutDataMode.NONE;
-//			case LAYOUT_DATA_MODE_GRID_DATA:
-//				return LayoutDataMode.GRID_DATA;
-//			default:
-//				throw new IllegalArgumentException("Illegal layout data mode: " + layoutDataMode);
-//		}
-//	}
-
+	/**
+	 * returns a GridLayout for the given layoutMode
+	 * @return a GridLayout for the given layoutMode
+	 */
 	public static GridLayout getLayout(LayoutMode layoutMode)
 	{
 		return getLayout(layoutMode, null);
 	}
 	
+	/**
+	 * modifies a GridLayout to the appropriate {@link LayoutMode}
+	 * 
+	 * @param layoutMode the layoutMode to set
+	 * @param layout the GridLayout to modify
+	 * @return the modified GridLayout
+	 */
 	public static GridLayout getLayout(LayoutMode layoutMode, GridLayout layout)
 	{
+		if (layout == null)
+			layout = new GridLayout();
 		switch (layoutMode) 
 		{
 			case ORDINARY_WRAPPER:
-				if (layout == null)
-					return new GridLayout();
-				else
-					return layout;
+				return layout;
 			case TIGHT_WRAPPER:
-				if (layout == null)
-					layout = new GridLayout();					
 				layout.horizontalSpacing = 0;
 				layout.verticalSpacing = 0;
 				layout.marginHeight = 0;
@@ -114,16 +78,12 @@ public class XComposite extends Composite
 				layout.marginBottom = 0;
 				return layout;
 			case TOP_BOTTOM_WRAPPER:
-				if (layout == null)
-					layout = new GridLayout();					
 				layout.verticalSpacing = 0;
 				layout.marginHeight = 0;
 				layout.marginTop = 0;
 				layout.marginBottom = 0;
 				return layout;
 			case LEFT_RIGHT_WRAPPER:
-				if (layout == null)
-					layout = new GridLayout();					
 				layout.horizontalSpacing = 0;
 				layout.marginWidth = 0;
 				layout.marginLeft = 0;
@@ -145,14 +105,18 @@ public class XComposite extends Composite
 				GridData gridData = new GridData(GridData.FILL_BOTH);
 				c.setLayoutData(gridData);
 				break;
+			case GRID_DATA_HORIZONTAL:
+				GridData gridData2 = new GridData(GridData.FILL_HORIZONTAL);
+				c.setLayoutData(gridData2);
+				break;				
 			default:
 				throw new IllegalArgumentException("layoutDataMode = " + layoutDataMode + " is unknown!");
 		}	 
 	}
 	
 	/**
-	 * Calls {@link #XComposite(Composite, int, int)} with
-	 * <code>layoutMode = </code>{@link #LAYOUT_MODE_ORDINARY_WRAPPER}.
+	 * Calls {@link #XComposite(Composite, int, LayoutMode)} with
+	 * <code>layoutMode = </code> {@link LayoutMode#ORDINARY_WRAPPER}
 	 */
 	public XComposite(Composite parent, int style)
 	{
@@ -194,16 +158,49 @@ public class XComposite extends Composite
 //		this(parent, style, int2LayoutMode(layoutMode), int2LayoutDataMode(layoutDataMode));	
 //	}
 
+	/**
+	 * Calls {@link #XComposite(Composite, int, LayoutMode, LayoutDataMode)}
+	 * with <code>layoutDataMode = </code> {@link LayoutDataMode#GRID_DATA}
+	 * 
+	 * @param parent the parent Composite
+	 * @param style the SWT style flag
+	 * @param layoutMode the layoutMode to set
+	 * 
+	 * @see LayoutMode
+	 * @see LayoutDataMode
+	 */
 	public XComposite(Composite parent, int style, LayoutMode layoutMode)
 	{
 		this(parent, style, layoutMode, LayoutDataMode.GRID_DATA);
 	}
 
+	/**
+	 * Calls {@link #XComposite(Composite, int, LayoutMode, LayoutDataMode)}
+	 * with <code>layoutMode = </code> {@link LayoutMode#ORDINARY_WRAPPER}
+	 * 
+	 * @param parent the parent Composite
+	 * @param style the SWT style flag
+	 * @param layoutDataMode the LayoutDataMode to set
+	 *
+	 * @see LayoutMode
+	 * @see LayoutDataMode 
+	 */
 	public XComposite(Composite parent, int style, LayoutDataMode layoutDataMode)
 	{
 		this(parent, style, LayoutMode.ORDINARY_WRAPPER, layoutDataMode);
 	}
 
+	/**
+	 * creates a Composite with the appropriate layoutMode and layoutDataMode
+	 * 
+	 * @param parent the parent Composite
+	 * @param style the SWT style flag
+	 * @param layoutMode the layoutMode to set
+	 * @param layoutDataMode the LayoutDataMode to set
+	 * 
+	 * @see LayoutMode
+	 * @see LayoutDataMode  
+	 */
 	public XComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
 		super(parent, style);
