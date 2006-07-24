@@ -75,16 +75,15 @@ import org.eclipse.swt.widgets.Widget;
 public class ColorCombo 
 extends Composite
 {
-	Text text;
-	int visibleItemCount = 5;
-	Shell popup;
-	Button arrow;
-	boolean hasFocus;
-	Listener listener, filter;
-	Color foreground, background;
-	Font font;	
-	Table table;
-
+	private Text text;
+	private int visibleItemCount = 5;
+	private Shell popup;
+	private Button arrow;
+	private boolean hasFocus;
+	private Listener listener, filter;
+	private Color foreground, background;
+	private Font font;	
+	private Table table;
 	
 /**
  * Constructs a new instance of this class given its parent
