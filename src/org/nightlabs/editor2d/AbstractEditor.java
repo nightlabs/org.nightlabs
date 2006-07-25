@@ -43,7 +43,6 @@ import java.util.Collection;
 import java.util.EventObject;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +71,6 @@ import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.AlignmentAction;
-import org.eclipse.gef.ui.actions.DirectEditAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.MatchHeightAction;
 import org.eclipse.gef.ui.actions.MatchWidthAction;
@@ -459,7 +457,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
     }
      
     // should solve redraw problems when resizing the viewer
-    protected ControlListener resizeListener = new ControlAdapter(){		
+    private ControlListener resizeListener = new ControlAdapter(){		
 			public void controlResized(ControlEvent e) {
 //				if (e.getSource().equals(getGraphicalViewer().getControl())) {
 					updateViewer();

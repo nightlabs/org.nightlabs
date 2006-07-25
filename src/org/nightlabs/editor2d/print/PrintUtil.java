@@ -73,19 +73,34 @@ public class PrintUtil
 		return "No valid orientation";
 	}	
 	
+//	public static void prepareGraphics(Graphics2D g2d, DrawComponent dc, PageFormat pageFormat) 
+//	{		
+//		Rectangle dcBounds = GeomUtil.translateToOrigin(dc.getBounds());				
+//		Rectangle pageRectangle = new Rectangle(0, 0, 
+//				(int)pageFormat.getImageableWidth(), (int)pageFormat.getImageableHeight());		
+//		
+//		Point2D scales = GeomUtil.calcScale(dcBounds, pageRectangle);		
+//		double scale = Math.min(scales.getX(), scales.getY()); 
+//		double translateX = (((double)pageFormat.getImageableX()) - (dc.getX() * scale ));
+//		double translateY = (((double)pageFormat.getImageableY()) - (dc.getY() * scale )); 		
+//		g2d.translate(translateX, translateY);		
+//		g2d.scale(scale, scale);		
+//	}
+
 	public static void prepareGraphics(Graphics2D g2d, DrawComponent dc, PageFormat pageFormat) 
 	{		
-		Rectangle dcBounds = GeomUtil.translateToOrigin(dc.getBounds());				
+		Rectangle dcBounds = GeomUtil.translateToOrigin(dc.getBounds());
+		
 		Rectangle pageRectangle = new Rectangle(0, 0, 
 				(int)pageFormat.getImageableWidth(), (int)pageFormat.getImageableHeight());		
 		
 		Point2D scales = GeomUtil.calcScale(dcBounds, pageRectangle);		
 		double scale = Math.min(scales.getX(), scales.getY()); 
 		double translateX = (((double)pageFormat.getImageableX()) - (dc.getX() * scale ));
-		double translateY = (((double)pageFormat.getImageableY()) - (dc.getY() * scale )); 
-//		g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());		
+		double translateY = (((double)pageFormat.getImageableY()) - (dc.getY() * scale )); 		
 		g2d.translate(translateX, translateY);		
 		g2d.scale(scale, scale);		
 	}
+	
 	
 }

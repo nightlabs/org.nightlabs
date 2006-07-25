@@ -37,7 +37,6 @@ import org.eclipse.swt.printing.PrinterData;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.actions.AbstractEditorAction;
-import org.nightlabs.editor2d.render.RenderContext;
 import org.nightlabs.editor2d.render.Renderer;
 import org.nightlabs.editor2d.render.j2d.J2DRenderContext;
 
@@ -109,7 +108,7 @@ extends AbstractEditorAction
 	};	
 	
 	public static void prepareGraphics(Graphics2D g2d, DrawComponent dc, PageFormat pageFormat) 
-	{
+	{		
 		long startTime = System.currentTimeMillis();
 		PrintUtil.prepareGraphics(g2d, dc, pageFormat);
 		long endTime = System.currentTimeMillis() - startTime;

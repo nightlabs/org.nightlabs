@@ -87,64 +87,22 @@ extends CenteredDialog
 		newShell.setSize(350, 325);		
 	}	
 	
-	protected PageFormat pageFormat; 
+	private PageFormat pageFormat; 
 	public PageFormat getPageFormat() {
 		return pageFormat;
 	}
-	protected DrawComponent drawComponent;
-	protected J2DCanvas canvas;
-	protected IPaintable paintable;
-		
-//	protected Button fitPage;
-//	protected Button fitWidth;
-//	protected Button fitHeight;
-//	
-//	protected int fit = FIT_PAGE;
-//	public static final int FIT_PAGE = 1;
-//	public static final int FIT_HEIGHT = 2;
-//	public static final int FIT_WIDTH = 3;
-//	
-//	protected SelectionListener fitPageSelectionListener = new SelectionListener()
-//	{	
-//		public void widgetDefaultSelected(SelectionEvent e) {
-//			widgetSelected(e);
-//		}	
-//		public void widgetSelected(SelectionEvent e) {
-//			fit = FIT_PAGE;
-//			refresh();
-//		}	
-//	};
-//
-//	protected SelectionListener fitWidthSelectionListener = new SelectionListener()
-//	{	
-//		public void widgetDefaultSelected(SelectionEvent e) {
-//			widgetSelected(e);
-//		}	
-//		public void widgetSelected(SelectionEvent e) {
-//			fit = FIT_WIDTH;
-//			refresh();
-//		}	
-//	};	
-//
-//	protected SelectionListener fitHeightSelectionListener = new SelectionListener()
-//	{	
-//		public void widgetDefaultSelected(SelectionEvent e) {
-//			widgetSelected(e);
-//		}	
-//		public void widgetSelected(SelectionEvent e) {
-//			fit = FIT_HEIGHT;
-//			refresh();
-//		}	
-//	};	
-	
-	protected Button alignHorizontal;
-	protected Button alignVertical;
+	private DrawComponent drawComponent;
+	private J2DCanvas canvas;
+	private IPaintable paintable;
+			
+	private Button alignHorizontal;
+	private Button alignVertical;
 
-	protected int align = HORIZONTAL_ALIGNMENT;
+	private int align = HORIZONTAL_ALIGNMENT;
 	public static final int HORIZONTAL_ALIGNMENT = PageFormat.LANDSCAPE;
 	public static final int VERTICAL_ALIGNMENT = PageFormat.PORTRAIT;
 	
-	protected SelectionListener alignVerticalListener = new SelectionListener()
+	private SelectionListener alignVerticalListener = new SelectionListener()
 	{	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -155,7 +113,7 @@ extends CenteredDialog
 		}	
 	};		
 
-	protected SelectionListener alignHorizontalListener = new SelectionListener()
+	private SelectionListener alignHorizontalListener = new SelectionListener()
 	{	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -166,21 +124,21 @@ extends CenteredDialog
 		}	
 	};		
 		
-//	protected Text marginTopWidget;
-//	protected Text marginBottomWidget;
-//	protected Text marginLeftWidget;
-//	protected Text marginRightWidget;
-	protected Spinner marginTopWidget;
-	protected Spinner marginBottomWidget;
-	protected Spinner marginLeftWidget;
-	protected Spinner marginRightWidget;
+//	private Text marginTopWidget;
+//	private Text marginBottomWidget;
+//	private Text marginLeftWidget;
+//	private Text marginRightWidget;
+	private Spinner marginTopWidget;
+	private Spinner marginBottomWidget;
+	private Spinner marginLeftWidget;
+	private Spinner marginRightWidget;
 	
-	protected double marginTop;
-	protected double marginBottom;
-	protected double marginLeft;
-	protected double marginRight;
+	private double marginTop;
+	private double marginBottom;
+	private double marginLeft;
+	private double marginRight;
 	
-//	protected SelectionListener marginListener = new SelectionAdapter()
+//	private SelectionListener marginListener = new SelectionAdapter()
 //	{	
 //		public void widgetSelected(SelectionEvent e) 
 //		{
@@ -203,7 +161,7 @@ extends CenteredDialog
 //			refresh();
 //		}	
 //	};
-	protected SelectionListener marginListener = new SelectionAdapter()
+	private SelectionListener marginListener = new SelectionAdapter()
 	{	
 		public void widgetSelected(SelectionEvent e) 
 		{
@@ -377,14 +335,14 @@ extends CenteredDialog
 		canvas.repaint();	
 	}
 		
-	protected ControlListener canvasResizeListener = new ControlAdapter() {	
+	private ControlListener canvasResizeListener = new ControlAdapter() {	
 		public void controlResized(ControlEvent e) {
 //			refresh();
 		}	
 	};
 		
-	protected Rectangle pageRectangle;
-	protected Rectangle imageablePageRectangle;
+	private Rectangle pageRectangle;
+	private Rectangle imageablePageRectangle;
 					
 	protected void initPage(PageFormat pf) 
 	{
@@ -415,14 +373,14 @@ extends CenteredDialog
 //		LOGGER.debug("marginRight = " + marginRight);		
 	}		
 	
-	protected Rectangle dcBounds;
-	protected Rectangle canvasBounds;
+	private Rectangle dcBounds;
+	private Rectangle canvasBounds;
 	
-	protected double scale = 1;
-//	protected double scaleX = 1;
-//	protected double scaleY = 1;
+	private double scale = 1;
+//	private double scaleX = 1;
+//	private double scaleY = 1;
 		
-	protected double canvasScaleFactor = 4;
+	private double canvasScaleFactor = 4;
 	protected void setCanvasSize() 
 	{
 		GridData canvasData = new GridData();
@@ -460,21 +418,21 @@ extends CenteredDialog
 		scale = Math.min(scales.getX(), scales.getY());
 		translateCanvas();
 		
-//		LOGGER.debug("dcBounds = " + dcBounds);
-//		LOGGER.debug("canvasBounds = " + canvasBounds);
-//		LOGGER.debug("shrinkedCanvasBounds = " + shrinkedCanvasBounds);
-//		LOGGER.debug("imageablePageRectangle = " + imageablePageRectangle);
-//		LOGGER.debug("scale = "+scale);
-//		LOGGER.debug("translateX = "+translateX);		
-//		LOGGER.debug("translateY = "+translateY);
-//		LOGGER.debug("");
+		LOGGER.debug("dcBounds = " + dcBounds);
+		LOGGER.debug("canvasBounds = " + canvasBounds);
+		LOGGER.debug("shrinkedCanvasBounds = " + shrinkedCanvasBounds);
+		LOGGER.debug("imageablePageRectangle = " + imageablePageRectangle);
+		LOGGER.debug("scale = "+scale);
+		LOGGER.debug("translateX = "+translateX);		
+		LOGGER.debug("translateY = "+translateY);
+		LOGGER.debug("");
 				
 		setCanvasZoom(scale);		
 		updateCanvas();
 	}			
 		
-	protected double translateX = 0; 
-	protected double translateY = 0;
+	private double translateX = 0; 
+	private double translateY = 0;
 	protected void translateCanvas() 
 	{
 		AffineTransform initalAT = canvas.getPaintableManager().getInitialTransform();
@@ -485,7 +443,7 @@ extends CenteredDialog
 		canvas.getPaintableManager().setInitialTransform(at);		
 	}
 		
-	protected PaintListener canvasPaintListener = new PaintListener()
+	private PaintListener canvasPaintListener = new PaintListener()
 	{	
 		public void paintControl(PaintEvent e) 
 		{

@@ -43,13 +43,11 @@ extends AbstractEditorPrintAction
 	public static final String ID = ActionFactory.PRINT.getId();
 	public static final Logger LOGGER = Logger.getLogger(EditorPrintAction.class);
 	
-	public EditorPrintAction(AbstractEditor editor, int style) 
-	{
+	public EditorPrintAction(AbstractEditor editor, int style) {
 		super(editor, style);
 	}
 
-	public EditorPrintAction(AbstractEditor editor) 
-	{
+	public EditorPrintAction(AbstractEditor editor) {
 		super(editor);
 	}
 					
@@ -64,9 +62,6 @@ extends AbstractEditorPrintAction
 		setActionDefinitionId(ID);
 	}
 			
-//	protected DrawComponent drawComponent = null;
-//	protected J2DRenderContext j2drc = null;
-
 	public void run() 
 	{
 //		drawComponent = getEditor().getMultiLayerDrawComponent();		
@@ -86,23 +81,5 @@ extends AbstractEditorPrintAction
       }
     }									
 	}
-	
-//	protected Printable printable = new Printable()
-//	{	
-//		public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) 
-//		throws PrinterException 
-//		{
-//			Graphics2D g2d = (Graphics2D) graphics; 
-//			prepareGraphics(g2d, drawComponent, pageFormat);
-//			
-//			if (pageIndex >= 1) {
-//        return Printable.NO_SUCH_PAGE;
-//			}
-//			if (j2drc != null) {
-//				j2drc.paint(drawComponent, g2d);
-//			}
-//			return Printable.PAGE_EXISTS;
-//		}	
-//	};
-	
+		
 }
