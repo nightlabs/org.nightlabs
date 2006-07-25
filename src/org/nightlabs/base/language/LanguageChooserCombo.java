@@ -38,7 +38,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.language.LanguageCf;
 
@@ -51,7 +50,10 @@ import org.nightlabs.language.LanguageCf;
 public class LanguageChooserCombo
 	extends AbstractLanguageChooser
 {
-	public static final Logger LOGGER = Logger.getLogger(LanguageChooserCombo.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(LanguageChooserCombo.class);
 
 	private Combo combo;
 	private List languages = new ArrayList();
@@ -72,7 +74,7 @@ public class LanguageChooserCombo
 				new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent selectionEvent)
 					{
-						LOGGER.debug("new language: "+getLanguage().getLanguageID());
+						logger.debug("new language: "+getLanguage().getLanguageID());
 						fireLanguageChangeEvent();
 					}
 				});

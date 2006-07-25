@@ -56,7 +56,10 @@ public class PartVisibilityTracker {
 	public static final int PART_STATUS_VISIBLE = 2;
 	public static final int PART_STATUS_HIDDEN = 4;
 	
-	protected static Logger LOGGER = Logger.getLogger(PartVisibilityTracker.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(PartVisibilityTracker.class);
 	
 	/**
 	 * An instance of this listener will to the active WorkbenchPage and tracks
@@ -360,7 +363,7 @@ public class PartVisibilityTracker {
 	public void removeVisibilityListener(IWorkbenchPart part, PartVisibilityListener listener) {
 		PartStatus status = getPartStatus(part);
 		if (status == null) {
-			LOGGER.warn("Autocreation of PartStatus failed status is null, can not remove Listener "+listener);
+			logger.warn("Autocreation of PartStatus failed status is null, can not remove Listener "+listener);
 			return;
 		}
 		status.removeListener(listener);

@@ -47,7 +47,10 @@ import org.nightlabs.util.Utils;
 public abstract class AbstractApplication 
 implements IPlatformRunnable
 {
-	public static final Logger LOGGER = Logger.getLogger(AbstractApplication.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(AbstractApplication.class);
 
 	/**
 	 * The system properties hold the name of the application accessible via this key (it's set by {@link #setSystemProperty()}).
@@ -140,7 +143,7 @@ implements IPlatformRunnable
 		getLogDir();
 		setSystemProperty();
 		PropertyConfigurator.configure(logConfFileName);
-		LOGGER.info(getApplicationName()+" started.");
+		logger.info(getApplicationName()+" started.");
 	}	
 	
 	/**

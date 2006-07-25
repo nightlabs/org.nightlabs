@@ -29,10 +29,7 @@ package org.nightlabs.base.exceptionhandler;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-
-import org.nightlabs.base.exceptionhandler.errorreport.ErrorReport;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -40,7 +37,10 @@ import org.nightlabs.base.exceptionhandler.errorreport.ErrorReport;
  */
 public class OutOfMemoryErrorDialog extends DefaultErrorDialog {
 	
-	private static final Logger LOGGER = Logger.getLogger(OutOfMemoryErrorDialog.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(OutOfMemoryErrorDialog.class);
 	
 	protected static final int RESTART_WORKBENCH_ID = DefaultErrorDialog.SEND_ERROR_REPORT_ID + 10;
 	
@@ -54,11 +54,11 @@ public class OutOfMemoryErrorDialog extends DefaultErrorDialog {
 	protected void buttonPressed(int id) {
 		if (id == RESTART_WORKBENCH_ID) {
 			try {
-				LOGGER.info("Trying to restart the workbench due to OutOfMemoryError");
+				logger.info("Trying to restart the workbench due to OutOfMemoryError");
 				if (!PlatformUI.getWorkbench().restart()) {
 					System.exit(1);
 				}
-				LOGGER.info("Close successful, restarting");
+				logger.info("Close successful, restarting");
 			} catch (Throwable t) {
 				System.exit(1);
 			}

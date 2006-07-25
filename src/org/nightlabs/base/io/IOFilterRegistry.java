@@ -26,10 +26,8 @@
 
 package org.nightlabs.base.io;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
-
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 import org.nightlabs.io.IOFilter;
@@ -39,7 +37,6 @@ public class IOFilterRegistry
 extends AbstractEPProcessor 
 {
 	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.ioFilterRegistry";
-	public static final Logger LOGGER = Logger.getLogger(IOFilterRegistry.class.getName());
 	
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;

@@ -43,7 +43,10 @@ import org.nightlabs.config.ConfigException;
 public abstract class AbstractWorkbenchAdvisor 
 extends WorkbenchAdvisor 
 {
-	public static Logger LOGGER = Logger.getLogger(AbstractWorkbenchAdvisor.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(AbstractWorkbenchAdvisor.class);
 	
 	public AbstractWorkbenchAdvisor() 
 	{
@@ -67,7 +70,7 @@ extends WorkbenchAdvisor
 //					LOGGER.error("classsharing is enabled, but system classloader is NOT an instance of DelegatingClassLoader! Cannot initialize classsharing!");
 			}
 			else
-				LOGGER.debug("classsharing is disabled - NOT initialized.");
+				logger.debug("classsharing is disabled - NOT initialized.");
 				
 
 			initConfig();
@@ -126,7 +129,7 @@ extends WorkbenchAdvisor
 		try {
 			org.nightlabs.config.Config.sharedInstance().saveConfFile();
 		} catch (ConfigException e) {
-			LOGGER.error("Saving config failed!", e);
+			logger.error("Saving config failed!", e);
 		}
 		return superResult;
 	}

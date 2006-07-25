@@ -48,7 +48,10 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de> 
  */
 public class ExceptionHandlerRegistry extends AbstractEPProcessor {
-	public static final Logger LOGGER = Logger.getLogger(ExceptionHandlerRegistry.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(ExceptionHandlerRegistry.class);
 	
 	private Map exceptionHandlers = new HashMap();
 
@@ -66,7 +69,7 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 		{
 //			if (exceptionHandlers.containsKey(targetType))
 //				throw new DuplicateHandlerRegistryException("An exceptionHandler was already defined for "+targetType);
-			LOGGER.debug("An exceptionHandler was already defined for "+targetType+" !");
+			logger.debug("An exceptionHandler was already defined for "+targetType+" !");
 			
 			exceptionHandlers.put(targetType,handler);
 		}
@@ -253,7 +256,7 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 							handlerSearch.getHandler().handleException(
 									thread,exception, handlerSearch.getTriggerException());
 						} catch(Throwable x) {
-							LOGGER.fatal("Exception occured while handling exception on GUI thread!", x);
+							logger.fatal("Exception occured while handling exception on GUI thread!", x);
 						}
 					}
 				};
@@ -264,12 +267,12 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 					Display.getDefault().syncExec(runnable);
 				
 			} catch (Throwable ex) {
-				LOGGER.fatal("Exception occured while handling exception on causing thread!", ex);
+				logger.fatal("Exception occured while handling exception on causing thread!", ex);
 		  }
 			return true;
 		}
 		else {
-			LOGGER.fatal("Did not find an ExceptionHandler for this Throwable!", exception);
+			logger.fatal("Did not find an ExceptionHandler for this Throwable!", exception);
 			return false;
 		}
 	}

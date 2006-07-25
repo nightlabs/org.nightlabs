@@ -91,7 +91,10 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
  */
 public abstract class AbstractActionRegistry extends AbstractEPProcessor
 {
-	private static final Logger LOGGER = Logger.getLogger(AbstractActionRegistry.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(AbstractActionRegistry.class);
 
 	/**
 	 * key: String articleEditActionID<br/>
@@ -486,24 +489,24 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 			}
 
 			if (firstRun && (lastMenuRawSize == menuRaw.size())) {
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Could not add the following contributions to the menu (kind " + kind + "):");
+				if (logger.isDebugEnabled()) {
+					logger.debug("Could not add the following contributions to the menu (kind " + kind + "):");
 					for (Iterator it = menuRaw.iterator(); it.hasNext(); ) {
 						ItemDescriptor item = (ItemDescriptor) it.next();
 						if (item instanceof ActionDescriptor) {
-							LOGGER.debug("    Action with id=" + ((ActionDescriptor)item).getAction().getId());
+							logger.debug("    Action with id=" + ((ActionDescriptor)item).getAction().getId());
 						}
 						else if (item instanceof MenuDescriptor) {
-							LOGGER.debug("    Menu with id=" + ((MenuDescriptor)item).getId());
+							logger.debug("    Menu with id=" + ((MenuDescriptor)item).getId());
 						}
 						else if (item instanceof SeparatorDescriptor) {
-							LOGGER.debug("    Separator with name=" + ((SeparatorDescriptor)item).getName());
+							logger.debug("    Separator with name=" + ((SeparatorDescriptor)item).getName());
 						}
 						else if (item instanceof GroupMarkerDescriptor) {
-							LOGGER.debug("    GroupMarker with name=" + ((GroupMarkerDescriptor)item).getName());
+							logger.debug("    GroupMarker with name=" + ((GroupMarkerDescriptor)item).getName());
 						}
 						else
-							LOGGER.debug("    " + item);
+							logger.debug("    " + item);
 					}
 				}
 				break;
@@ -703,14 +706,14 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 				if (ELEMENT_NAME_SEPARATOR.equals(child.getName())) {
 					String name = child.getAttribute(ATTRIBUTE_NAME_SEPARATOR_NAME);
 					if (child.getAttribute(ATTRIBUTE_NAME_SEPARATOR_PATH) != null)
-						LOGGER.warn("There is a separator's path specified within a menu. This path will be ignored! You should not specify a path when using a separator inside of a menu! plugin=" + extension.getNamespace()+ " extension-point=" + getExtensionPointID());
+						logger.warn("There is a separator's path specified within a menu. This path will be ignored! You should not specify a path when using a separator inside of a menu! plugin=" + extension.getNamespace()+ " extension-point=" + getExtensionPointID());
 
 					menuDescriptor.addSubItem(new SeparatorDescriptor(name));
 				}
 				else if (ELEMENT_NAME_GROUP_MARKER.equals(child.getName())) {
 					String name = child.getAttribute(ATTRIBUTE_NAME_GROUP_MARKER_NAME);
 					if (child.getAttribute(ATTRIBUTE_NAME_GROUP_MARKER_PATH) != null)
-						LOGGER.warn("There is a group-marker's path specified within a menu. This path will be ignored! You should not specify a path when using a group-marker inside of a menu! plugin=" + extension.getNamespace()+ " extension-point=" + getExtensionPointID());
+						logger.warn("There is a group-marker's path specified within a menu. This path will be ignored! You should not specify a path when using a group-marker inside of a menu! plugin=" + extension.getNamespace()+ " extension-point=" + getExtensionPointID());
 
 					menuDescriptor.addSubItem(new GroupMarkerDescriptor(name));
 				}

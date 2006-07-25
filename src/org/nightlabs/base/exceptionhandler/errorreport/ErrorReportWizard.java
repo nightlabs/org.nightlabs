@@ -39,7 +39,11 @@ import org.nightlabs.config.Config;
  */
 public class ErrorReportWizard extends DynamicPathWizard
 {
-	public static final Logger LOGGER = Logger.getLogger(ErrorReportWizard.class) ;
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(ErrorReportWizard.class) ;
+	
 	private ErrorReport errorReport;
   private ErrorReportWizardEntryPage entryPage;
 	private ErrorReportWizardCommentPage sendExceptionPage;
@@ -88,7 +92,7 @@ public class ErrorReportWizard extends DynamicPathWizard
 			sender.sendErrorReport(errorReport);
 			return true;
 		} catch (Throwable e) {
-			LOGGER.fatal("Sending ErrorReport failed!", e); //$NON-NLS-1$
+			logger.fatal("Sending ErrorReport failed!", e); //$NON-NLS-1$
 			new MessageDialog(
 					getShell(),
 					NLBasePlugin.getResourceString("errorreport.wizard.sendingfailed"), //$NON-NLS-1$

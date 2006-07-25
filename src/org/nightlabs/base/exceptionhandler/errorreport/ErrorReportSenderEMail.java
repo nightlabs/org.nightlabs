@@ -42,7 +42,10 @@ import org.nightlabs.config.Config;
 
 public class ErrorReportSenderEMail implements ErrorReportSender
 {
-	public static final Logger LOGGER = Logger.getLogger(ErrorReportSenderEMail.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(ErrorReportSenderEMail.class);
 
 	public ErrorReportSenderEMail()
 	{
@@ -91,7 +94,7 @@ public class ErrorReportSenderEMail implements ErrorReportSender
 			Transport.send(msg);
 			System.out.println("Message was sent!");
 		} catch (Exception e) {
-			LOGGER.fatal("Sending error report by eMail failed.", e);
+			logger.fatal("Sending error report by eMail failed.", e);
 		}
 	}
 

@@ -47,7 +47,10 @@ import org.nightlabs.language.LanguageCf;
 public class LanguageChooserImageCombo 
 extends AbstractLanguageChooser
 {
-	public static final Logger LOGGER = Logger.getLogger(LanguageChooserImageCombo.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(LanguageChooserImageCombo.class);
 	
 	protected ColorCombo combo;
 	protected List languages = new ArrayList();
@@ -60,7 +63,7 @@ extends AbstractLanguageChooser
 	{
 		public void widgetSelected(SelectionEvent selectionEvent)
 		{
-			LOGGER.debug("new language: "+getLanguage().getLanguageID());
+			logger.debug("new language: "+getLanguage().getLanguageID());
 			fireLanguageChangeEvent();
 		}
 	};

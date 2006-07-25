@@ -46,7 +46,10 @@ import org.nightlabs.language.LanguageCf;
 public class LanguageChooserList
 	extends AbstractLanguageChooser
 {
-	public static final Logger LOGGER = Logger.getLogger(LanguageChooserList.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(LanguageChooserList.class);
 	
 	private LanguageTableContentProvider contentProvider;
 	private LanguageTableLabelProvider labelProvider;
@@ -70,7 +73,7 @@ public class LanguageChooserList
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event)
 			{
-				LOGGER.debug("new language: "+getLanguage().getLanguageID());
+				logger.debug("new language: "+getLanguage().getLanguageID());
 				fireLanguageChangeEvent();
 			}
 		});

@@ -27,7 +27,6 @@
 package org.nightlabs.base.exceptionhandler;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +52,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
 import org.nightlabs.base.exceptionhandler.errorreport.ErrorReport;
 import org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardDialog;
 import org.nightlabs.base.util.RCPUtil;
@@ -70,6 +68,12 @@ import org.nightlabs.base.util.RCPUtil;
  *
  */
 public class DefaultErrorDialog extends IconAndMessageDialog {
+	
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(DefaultErrorDialog.class);
+
 	/**
 	 * Reserve room for this many list items.
 	 */
@@ -83,8 +87,6 @@ public class DefaultErrorDialog extends IconAndMessageDialog {
 	protected static final int SEND_ERROR_REPORT_ID = IDialogConstants.CLIENT_ID + 1;
 	
 	private static final Map<Class,DefaultErrorDialog> DIALOGS = new HashMap<Class,DefaultErrorDialog>(10);
-	
-	public static final Logger LOGGER = Logger.getLogger(DefaultErrorDialog.class);
 	
 	/**
 	 * The Details button.
@@ -146,7 +148,7 @@ public class DefaultErrorDialog extends IconAndMessageDialog {
 			}
 			catch(Exception e) 
 			{
-				LOGGER.fatal("Error occured when trying to instantiate " + theClass.getSimpleName() + " with default constructor.", e);
+				logger.fatal("Error occured when trying to instantiate " + theClass.getSimpleName() + " with default constructor.", e);
 				return false;
 			}						
 		}
