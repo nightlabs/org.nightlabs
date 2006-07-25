@@ -454,8 +454,11 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.classloader.IDelegatingClassLoader#findDelegateResources(java.lang.String, boolean)
 	 */
-	public List<URL> findDelegateResources(String name,
-			boolean returnAfterFoundFirst) throws IOException {
+	public List<URL> findDelegateResources(
+			String name,
+			boolean returnAfterFoundFirst)
+	throws IOException
+	{
 		synchronized(foundResources) {
 			ResourceSearchResult rsr = (ResourceSearchResult)foundResources.get(name);
 			if (rsr != null) {
@@ -518,7 +521,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 				}
 			}
 	
-			// now check whether one of the delegates can deliver the class
+			// now check whether one of the delegates can deliver the resource
 			for (Iterator it = delegates.iterator(); it.hasNext(); ) {
 				ResourceFinder delegate = (ResourceFinder) it.next();
 				List<URL> delegateRes = delegate.getResources(name, returnAfterFoundFirst);

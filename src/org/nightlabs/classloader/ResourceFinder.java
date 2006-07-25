@@ -39,6 +39,10 @@ public interface ResourceFinder {
 	 * If returnAfterFoundFirst is true, it should immediately return, after it found one resource matching
 	 * the name. If it is false, it should search all JARs and directories and collect all resources that
 	 * match.
+	 * <p>
+	 * This method is called by {@link ClassLoadingDelegator#findDelegateResources(String, boolean)}, if the resource
+	 * was not already searched for before.
+	 * </p>
 	 *
 	 * @param name The name of the resource as it is given to the ClassLoader in findResource(...) and findResources(...)
 	 * @param returnAfterFoundFirst Whether to find only one resource [called by ClassLoader.findResource(...)] or all [called by ClassLoader.findResources(...)].
