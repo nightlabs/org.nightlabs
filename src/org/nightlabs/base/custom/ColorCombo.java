@@ -120,6 +120,10 @@ public ColorCombo (Composite parent, int style) {
 	if ((style & SWT.READ_ONLY) != 0) textStyle |= SWT.READ_ONLY;
 	if ((style & SWT.FLAT) != 0) textStyle |= SWT.FLAT;
 	text = new Text (this, textStyle);
+	// Workaround to avoid grey background if style == SWT.READ_ONLY;
+	if (isReadOnly())	
+		text.setBackground(getDefaultBackgroundColor());
+
 	int arrowStyle = SWT.ARROW | SWT.DOWN;
 	if ((style & SWT.FLAT) != 0) arrowStyle |= SWT.FLAT;
 	arrow = new Button (this, arrowStyle);
@@ -171,6 +175,26 @@ public ColorCombo (Composite parent, int style) {
 	
 	createPopup(null, -1);
 	initAccessible();
+}
+
+// Custom Method to determine default bg Color of a text to avoid grey bg if style == SWT.READ_ONLY
+private Color getDefaultBackgroundColor() {
+	Text t = new Text(this, SWT.NONE);
+	Color bg = t.getBackground();
+	t.dispose();
+	return bg;
+}
+
+// Custom Method to which avoid the selecting of the text if the style == SWT.READ_ONLY
+private void textSelectAll()  
+{
+//	if ( (getStyle() & SWT.READ_ONLY) == 0)
+	if (isReadOnly())
+		text.selectAll ();			
+}
+
+private boolean isReadOnly() {
+	return (getStyle() & SWT.READ_ONLY) != 0;
 }
 
 static int checkStyle (int style) {
@@ -731,7 +755,8 @@ void handleFocus (int type) {
 	switch (type) {
 		case SWT.FocusIn: {
 			if (hasFocus) return;
-			if (getEditable ()) text.selectAll ();
+//			if (getEditable ()) text.selectAll ();
+			if (getEditable ()) textSelectAll();			
 			hasFocus = true;
 			Shell shell = getShell ();
 			shell.removeListener (SWT.Deactivate, listener);
@@ -949,7 +974,8 @@ void listEvent (Event event) {
 			int index = table.getSelectionIndex ();
 			if (index == -1) return;
 			text.setText (table.getItem (index).getText());
-			text.selectAll ();
+//			text.selectAll ();
+			textSelectAll();			
 			table.setSelection (index);
 			Event e = new Event ();
 			e.time = event.time;
@@ -1219,7 +1245,8 @@ public void select (int index) {
 	if (0 <= index && index < table.getItemCount()) {
 		if (index != getSelectionIndex()) {
 			text.setText (table.getItem (index).getText());
-			text.selectAll ();
+//			text.selectAll ();
+			textSelectAll();
 			table.select (index);
 			table.showSelection ();
 		}
@@ -1382,7 +1409,8 @@ public void setText (String string) {
 		return;
 	}
 	text.setText (string);
-	text.selectAll ();
+//	text.selectAll ();
+	textSelectAll();	
 	table.setSelection (index);
 	table.showSelection ();
 }
@@ -1473,7 +1501,8 @@ void textEvent (Event event) {
 				event.doit = false;
 				if ((event.stateMask & SWT.ALT) != 0) {
 					boolean dropped = isDropped ();
-					text.selectAll ();
+//					text.selectAll ();
+					textSelectAll();					
 					if (!dropped) setFocus ();
 					dropDown (!dropped);
 					break;
@@ -1527,7 +1556,8 @@ void textEvent (Event event) {
 			if (event.button != 1) return;
 			if (text.getEditable ()) return;
 			boolean dropped = isDropped ();
-			text.selectAll ();
+//			text.selectAll ();
+			textSelectAll();			
 			if (!dropped) setFocus ();
 			dropDown (!dropped);
 			break;
@@ -1535,7 +1565,8 @@ void textEvent (Event event) {
 		case SWT.MouseUp: {
 			if (event.button != 1) return;
 			if (text.getEditable ()) return;
-			text.selectAll ();
+//			text.selectAll ();
+			textSelectAll();			
 			break;
 		}
 		case SWT.Traverse: {		
