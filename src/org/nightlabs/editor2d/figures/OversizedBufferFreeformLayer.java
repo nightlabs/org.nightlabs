@@ -62,7 +62,10 @@ public class OversizedBufferFreeformLayer
 extends Layer
 implements FreeformFigure, BufferedFreeformLayer
 {
-	public static final Logger LOGGER = Logger.getLogger(OversizedBufferFreeformLayer.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(OversizedBufferFreeformLayer.class);
 	
 	public static final Rectangle INIT_BOUNDS = new Rectangle(-Integer.MAX_VALUE / 2, -Integer.MAX_VALUE / 2, Integer.MAX_VALUE, Integer.MAX_VALUE);
 	
@@ -208,7 +211,7 @@ implements FreeformFigure, BufferedFreeformLayer
 					}				
 				}
 				if (debug) {
-					LOGGER.debug("buffer created in "+(System.currentTimeMillis()-time)+" ms");
+					logger.debug("buffer created in "+(System.currentTimeMillis()-time)+" ms");
 //					LOGGER.debug("currentZoom = " + currentZoom);
 //					LOGGER.debug("absoluteBufferTranslation = "+ absoluteBufferTranslation);
 //					LOGGER.debug("offsetTranslation = " + offsetTranslation);
@@ -278,7 +281,7 @@ implements FreeformFigure, BufferedFreeformLayer
 			super.paint(graphics);
 		}
 		if (debug)
-			LOGGER.debug("painted in "+(System.currentTimeMillis()-time));
+			logger.debug("painted in "+(System.currentTimeMillis()-time));
 	}
 			
 	protected void clearBuffer() 
@@ -290,7 +293,7 @@ implements FreeformFigure, BufferedFreeformLayer
 		bufferedImage = null;
 		childBounds = null;
 		if (debug)
-			LOGGER.debug("buffer cleared()");
+			logger.debug("buffer cleared()");
 	}
 		
 	/**

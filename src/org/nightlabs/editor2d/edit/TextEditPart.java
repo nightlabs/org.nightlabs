@@ -37,6 +37,12 @@ import org.nightlabs.editor2d.model.TextPropertySource;
 public class TextEditPart 
 extends ShapeDrawComponentEditPart 
 {
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
+			.getLogger(TextEditPart.class);
+	
   public TextEditPart(TextDrawComponent text) {
     super(text);
   }
@@ -50,32 +56,32 @@ extends ShapeDrawComponentEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(TextDrawComponent.PROP_FONT)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();	
 			return;
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_FONT_NAME)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_FONT_SIZE)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_TEXT)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_BOLD)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_ITALIC)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();
 			return;			
 		}		

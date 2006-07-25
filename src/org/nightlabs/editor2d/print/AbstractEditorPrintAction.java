@@ -46,7 +46,10 @@ import org.nightlabs.editor2d.render.j2d.J2DRenderContext;
 public abstract class AbstractEditorPrintAction 
 extends AbstractEditorAction 
 {
-	public static final Logger LOGGER = Logger.getLogger(AbstractEditorPrintAction.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(AbstractEditorPrintAction.class);
 	
 	/**
 	 * @param editor
@@ -112,7 +115,7 @@ extends AbstractEditorAction
 		long startTime = System.currentTimeMillis();
 		PrintUtil.prepareGraphics(g2d, dc, pageFormat);
 		long endTime = System.currentTimeMillis() - startTime;
-		LOGGER.debug("prepareGraphics took "+endTime+" ms!");
+		logger.debug("prepareGraphics took "+endTime+" ms!");
 	}
 	
 	public DrawComponent getDrawComponent() {

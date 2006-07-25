@@ -54,7 +54,10 @@ import org.nightlabs.i18n.IUnit;
 public class UnitContributionItem 
 extends XContributionItem 
 {
-	public static final Logger LOGGER = Logger.getLogger(UnitContributionItem.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(UnitContributionItem.class);
 	
 	public UnitContributionItem(UnitManager unitManager) 
 	{
@@ -195,10 +198,10 @@ extends XContributionItem
 			if (combo != null)
 				combo.select(index);
 			else
-				LOGGER.debug("combo == null!");
+				logger.debug("combo == null!");
 		}
 		else
-			LOGGER.debug("units does not contain IUnit "+unit);
+			logger.debug("units does not contain IUnit "+unit);
 	}
 	
 	public IUnit getSelectedUnit() 

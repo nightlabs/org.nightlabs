@@ -31,14 +31,12 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.J2DGraphics;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.editparts.ZoomListener;
-
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.util.J2DUtil;
 import org.nightlabs.editor2d.util.RenderUtil;
@@ -47,8 +45,6 @@ public class AbstractShapeFigure
 extends Shape 
 implements ShapeFigure
 {
-  public static final Logger LOGGER = Logger.getLogger(AbstractShapeFigure.class);
-  
   protected J2DGraphics j2d;  
   protected AffineTransform at = new AffineTransform();
   protected GeneralShape gp;

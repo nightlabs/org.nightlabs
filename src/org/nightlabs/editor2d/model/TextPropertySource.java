@@ -43,6 +43,12 @@ import org.nightlabs.editor2d.properties.FontNamePropertyDescriptor;
 public class TextPropertySource 
 extends ShapeDrawComponentPropertySource 
 {
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
+			.getLogger(TextPropertySource.class);
+	
 	public TextPropertySource(TextDrawComponent text) {
 		super(text);
 	}
@@ -172,10 +178,10 @@ extends ShapeDrawComponentPropertySource
 			int fontSize;
 			try {
 				fontSize = Integer.valueOf((String)value);	
-				LOGGER.debug("new fontSize = "+fontSize);
+				logger.debug("new fontSize = "+fontSize);
 			} catch (NumberFormatException nfe) {
 				fontSize = getTextDrawComponent().getFontSize();
-				LOGGER.debug("NumberFormatException for fontSize = "+value);				
+				logger.debug("NumberFormatException for fontSize = "+value);				
 			}
 			getTextDrawComponent().setFontSize(fontSize);
 			return;			

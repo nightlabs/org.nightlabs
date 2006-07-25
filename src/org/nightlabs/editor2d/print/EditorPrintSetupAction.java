@@ -40,7 +40,11 @@ public class EditorPrintSetupAction
 extends AbstractEditorPrintAction
 {
 	public static final String ID = EditorPrintSetupAction.class.getName();
-	public static final Logger LOGGER = Logger.getLogger(EditorPrintSetupAction.class);
+	
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(EditorPrintSetupAction.class);
 
 	/**
 	 * @param editor
@@ -68,10 +72,10 @@ extends AbstractEditorPrintAction
 	{
 		PrinterJob printJob = PrinterJob.getPrinterJob();
 //		PageFormat defaultPageFormat = printJob.defaultPage();
-		LOGGER.debug("Page Setup before Modification");
+		logger.debug("Page Setup before Modification");
 		PrintUtil.logPageFormat(getPageFormat());		
 		PageFormat pageFormat = printJob.pageDialog(getPageFormat());
-		LOGGER.debug("Page Setup after Modification");
+		logger.debug("Page Setup after Modification");
 		PrintUtil.logPageFormat(pageFormat);
 		setPageFormat(pageFormat);
 	}

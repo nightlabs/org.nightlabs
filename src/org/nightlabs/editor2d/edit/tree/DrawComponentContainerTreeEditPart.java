@@ -39,6 +39,12 @@ import org.nightlabs.editor2d.editpolicy.tree.DrawComponentTreeContainerEditPoli
 public abstract class DrawComponentContainerTreeEditPart 
 extends DrawComponentTreeEditPart 
 {
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
+			.getLogger(DrawComponentContainerTreeEditPart.class);
+	
   /**
    * Constructor initializes this with the given model.
    *
@@ -86,11 +92,11 @@ extends DrawComponentTreeEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(DrawComponentContainer.CHILD_ADDED)) {
-			LOGGER.debug(propertyName);
+			logger.debug(propertyName);
 			refreshChildren();			
 		}
 		else if (propertyName.equals(DrawComponentContainer.CHILD_REMOVED)) {
-			LOGGER.debug(propertyName);
+			logger.debug(propertyName);
 			refreshChildren();			
 		}		
 	}  

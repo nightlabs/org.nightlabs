@@ -45,7 +45,10 @@ import org.nightlabs.editor2d.model.GroupPropertySource;
 public class GroupEditPart 
 extends AbstractDrawComponentContainerEditPart 
 {
-	public static final Logger LOGGER = Logger.getLogger(GroupEditPart.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(GroupEditPart.class);
 	
 	public GroupEditPart(GroupDrawComponent group) {
 		super(group);
@@ -70,7 +73,7 @@ extends AbstractDrawComponentContainerEditPart
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(DrawComponentContainer.CHILD_ADDED)) 
 		{
-			LOGGER.debug(propertyName);
+			logger.debug(propertyName);
 			Collection<DrawComponent> children = (Collection<DrawComponent>) evt.getNewValue();
 			if (children != null) 
 			{
@@ -84,7 +87,7 @@ extends AbstractDrawComponentContainerEditPart
 						if (figure instanceof DrawComponentFigure) {
 							DrawComponentFigure dcFigure = (DrawComponentFigure) figure;
 							dcFigure.setContains(false);
-							LOGGER.debug("DrawComponentFigure found and set contains to false!");
+							logger.debug("DrawComponentFigure found and set contains to false!");
 						}					
 					}
 				}
@@ -94,7 +97,7 @@ extends AbstractDrawComponentContainerEditPart
 		}
 		else if (propertyName.equals(DrawComponentContainer.CHILD_REMOVED)) 
 		{
-			LOGGER.debug(propertyName);
+			logger.debug(propertyName);
 			Collection<DrawComponent> newChildren = (Collection<DrawComponent>) evt.getNewValue();
 			Collection<DrawComponent> oldChildren = (Collection<DrawComponent>) evt.getOldValue();
 			if (newChildren != null && oldChildren != null) 
@@ -110,7 +113,7 @@ extends AbstractDrawComponentContainerEditPart
 						if (figure instanceof DrawComponentFigure) {
 							DrawComponentFigure dcFigure = (DrawComponentFigure) figure;
 							dcFigure.setContains(true);
-							LOGGER.debug("DrawComponentFigure found and set contains to true!");
+							logger.debug("DrawComponentFigure found and set contains to true!");
 						}					
 					}
 				}

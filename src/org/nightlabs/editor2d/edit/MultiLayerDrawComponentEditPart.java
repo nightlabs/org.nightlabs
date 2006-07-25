@@ -31,7 +31,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
@@ -56,8 +55,6 @@ import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 public class MultiLayerDrawComponentEditPart 
 extends AbstractDrawComponentContainerEditPart
 {  
-  public static final Logger LOGGER = Logger.getLogger(MultiLayerDrawComponentEditPart.class);
-  
 	public MultiLayerDrawComponentEditPart(MultiLayerDrawComponent mldc) 
 	{
 	  super(mldc);

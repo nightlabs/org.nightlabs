@@ -41,7 +41,10 @@ import org.nightlabs.editor2d.viewer.util.AWTSWTUtil;
 public class Draw2DShapeDefaultRenderer 
 extends Draw2DBaseRenderer 
 {
-	public static final Logger LOGGER = Logger.getLogger(Draw2DShapeDefaultRenderer.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(Draw2DShapeDefaultRenderer.class);
 	
 	public Draw2DShapeDefaultRenderer() 
 	{
@@ -61,7 +64,7 @@ extends Draw2DBaseRenderer
     g.setLineStyle(convertLineStyle(sdc.getLineStyle()));
     g.drawPath(path);  
     
-    LOGGER.debug("shape painted!");
+    logger.debug("shape painted!");
 	}
 	
 	protected Path convertShape(Shape s) 

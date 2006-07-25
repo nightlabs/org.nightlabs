@@ -41,7 +41,11 @@ public class EditorPrintAction
 extends AbstractEditorPrintAction
 {
 	public static final String ID = ActionFactory.PRINT.getId();
-	public static final Logger LOGGER = Logger.getLogger(EditorPrintAction.class);
+	
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(EditorPrintAction.class);
 	
 	public EditorPrintAction(AbstractEditor editor, int style) {
 		super(editor, style);
@@ -69,7 +73,7 @@ extends AbstractEditorPrintAction
 		printJob.setJobName(getEditor().getTitle());
 		
 		PageFormat pf = printJob.defaultPage(getPageFormat());		
-		LOGGER.debug("PageFormat in EditorPrintAction");
+		logger.debug("PageFormat in EditorPrintAction");
 		PrintUtil.logPageFormat(pf);
 		
     printJob.setPrintable(printable);

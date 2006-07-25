@@ -59,7 +59,10 @@ import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 
 public class ViewerManager 
 {
-  public static final Logger LOGGER = Logger.getLogger(ViewerManager.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(ViewerManager.class);
   
   protected ScrollingGraphicalViewer viewer = null;
   protected Viewport viewport = null;
@@ -86,7 +89,7 @@ public class ViewerManager
   protected void initExcludeListRef() 
   {
     List excludeList = new ArrayList();
-    LOGGER.debug("root = "+root);
+    logger.debug("root = "+root);
     excludeList.add(root);
     excludeListRef = new ExcludeListRef(excludeList);    
   } 
@@ -272,7 +275,7 @@ public class ViewerManager
       	getFeedbackLayer().add(rollOverFigure); 
     	}
     	long addEnd = System.currentTimeMillis() - addStart;
-    	LOGGER.debug("addRollOver took "+addEnd+" ms!");
+    	logger.debug("addRollOver took "+addEnd+" ms!");
     }  	  	
   }
 

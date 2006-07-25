@@ -94,7 +94,10 @@ public class DrawComponentContainerXYLayoutPolicy
 extends XYLayoutEditPolicy 
 implements EditorRequestConstants
 {
-  public static final Logger LOGGER = Logger.getLogger(DrawComponentContainerXYLayoutPolicy.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(DrawComponentContainerXYLayoutPolicy.class);
   
   public DrawComponentContainerXYLayoutPolicy(XYLayout layout) {
 //    super();
@@ -415,7 +418,7 @@ implements EditorRequestConstants
     Point rotationCenter = request.getRotationCenter().getCopy();
     rotationCenter = EditorUtil.toAbsolute(getHost(), rotationCenter.x, rotationCenter.y);
     cmd.setRotationCenter(rotationCenter);    
-    LOGGER.debug("cmd.rotationCenter = "+rotationCenter);
+    logger.debug("cmd.rotationCenter = "+rotationCenter);
     return cmd;
   }
   
@@ -709,7 +712,7 @@ implements EditorRequestConstants
 	 */
 	protected IFigure createSizeOnDropFeedback(CreateRequest createRequest) 
 	{	  
-	  LOGGER.debug("createSizeOnDropFeedback!");
+	  logger.debug("createSizeOnDropFeedback!");
 	  
 	  if (createRequest instanceof EditorCreateRequest) 
 	  {
@@ -723,7 +726,7 @@ implements EditorRequestConstants
 //************************* BEGIN Text Feedback ******************************
 	protected void eraseSizeOnDropFeedback(Request request) 
 	{
-		LOGGER.debug("eraseSizeOnDropFeedback!");
+		logger.debug("eraseSizeOnDropFeedback!");
 		
 		super.eraseSizeOnDropFeedback(request);								
 		if (showFeedbackText) {

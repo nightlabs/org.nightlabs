@@ -27,7 +27,6 @@ package org.nightlabs.editor2d.actions.copy;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
@@ -44,7 +43,6 @@ public class CutAction
 extends AbstractEditorSelectionAction 
 {
 	public static final String ID = ActionFactory.CUT.getId();
-	public static final Logger LOGGER = Logger.getLogger(CutAction.class);
 	
 	/**
 	 * @param editor

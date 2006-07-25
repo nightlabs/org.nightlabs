@@ -27,7 +27,6 @@ package org.nightlabs.editor2d.render;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.Graphics;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
@@ -38,8 +37,6 @@ import org.nightlabs.editor2d.DrawComponentContainer;
 public class Draw2DBaseRenderer 
 implements Draw2DRenderContext 
 {
-	public static final Logger LOGGER = Logger.getLogger(Draw2DBaseRenderer.class);
-	
 	public Draw2DBaseRenderer() 
 	{
 		super();

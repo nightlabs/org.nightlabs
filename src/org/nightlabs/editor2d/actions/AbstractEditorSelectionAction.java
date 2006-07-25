@@ -35,7 +35,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.RootEditPart;
@@ -69,8 +68,6 @@ import org.nightlabs.editor2d.edit.TextEditPart;
 public abstract class AbstractEditorSelectionAction 
 extends SelectionAction
 {
-	public static final Logger LOGGER = Logger.getLogger(AbstractEditorSelectionAction.class);
-	
 	public AbstractEditorSelectionAction(AbstractEditor editor, int style) {
 		super(editor, style);
 	}

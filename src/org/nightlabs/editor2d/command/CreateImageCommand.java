@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.image.RenderModeMetaData;
@@ -42,7 +41,6 @@ import org.nightlabs.editor2d.image.RenderModeMetaData;
 public class CreateImageCommand 
 extends CreateDrawComponentCommand 
 {
-	public static final Logger LOGGER = Logger.getLogger(CreateImageCommand.class);
   public CreateImageCommand() 
   {
     super();

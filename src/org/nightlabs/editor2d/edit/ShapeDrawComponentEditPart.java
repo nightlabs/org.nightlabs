@@ -39,6 +39,12 @@ import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
 public class ShapeDrawComponentEditPart
 extends DrawComponentEditPart 
 {
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
+			.getLogger(ShapeDrawComponentEditPart.class);
+	
   public ShapeDrawComponentEditPart(ShapeDrawComponent shapeDrawComponent) {
     super(shapeDrawComponent);
   }
@@ -66,27 +72,27 @@ extends DrawComponentEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(ShapeDrawComponent.PROP_FILL_COLOR)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}
 		else if (propertyName.equals(ShapeDrawComponent.PROP_LINE_COLOR)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}
 		else if (propertyName.equals(ShapeDrawComponent.PROP_FILL)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}
 		else if (propertyName.equals(ShapeDrawComponent.PROP_LINE_STYLE)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}
 		else if (propertyName.equals(ShapeDrawComponent.PROP_LINE_WIDTH)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}
 		else if (propertyName.equals(ShapeDrawComponent.PROP_GENERAL_SHAPE)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}		
 	}

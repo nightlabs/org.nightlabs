@@ -46,7 +46,10 @@ import org.nightlabs.editor2d.util.feedback.FeedbackUtil;
 public class EditorEditShapePolicy 
 extends EditorFeedbackPolicy 
 {
-	public static final Logger LOGGER = Logger.getLogger(EditorEditShapePolicy.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(EditorEditShapePolicy.class);
 	
 	public EditorEditShapePolicy() {
 
@@ -58,7 +61,7 @@ extends EditorFeedbackPolicy
   	if (REQ_EDIT_SHAPE.equals(request.getType()))
   		return getEditShapeCommand((EditorEditShapeRequest)request);
     
-    LOGGER.debug("getCommand(Request = "+request+")");
+    logger.debug("getCommand(Request = "+request+")");
     
   	return super.getCommand(request);
   }  

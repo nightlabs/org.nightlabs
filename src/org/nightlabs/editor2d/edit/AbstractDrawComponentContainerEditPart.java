@@ -46,7 +46,10 @@ import org.nightlabs.editor2d.figures.ContainerDrawComponentFigure;
 public abstract class AbstractDrawComponentContainerEditPart 
 extends AbstractDrawComponentEditPart 
 {
-  public static final Logger LOGGER = Logger.getLogger(AbstractDrawComponentContainerEditPart.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(AbstractDrawComponentContainerEditPart.class);
   
   /**
    * @param drawComponentContainer
@@ -95,12 +98,12 @@ extends AbstractDrawComponentEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(DrawComponentContainer.CHILD_ADDED)) {
-			LOGGER.debug(propertyName);
+			logger.debug(propertyName);
 			refresh();
 			return;
 		}
 		else if (propertyName.equals(DrawComponentContainer.CHILD_REMOVED)) {
-			LOGGER.debug(propertyName);
+			logger.debug(propertyName);
 			refresh();
 			return;
 		}		

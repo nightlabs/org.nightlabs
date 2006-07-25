@@ -27,7 +27,6 @@
 
 package org.nightlabs.editor2d.tools;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
@@ -47,8 +46,6 @@ import org.nightlabs.editor2d.util.J2DUtil;
 public class LineTool 
 extends EditorCreationTool 
 {
-  public static final Logger LOGGER = Logger.getLogger(LineTool.class);  
-  
 //  public LineTool(CreationFactory factory) {
   public LineTool(IModelCreationFactory factory) {  
     super(factory);

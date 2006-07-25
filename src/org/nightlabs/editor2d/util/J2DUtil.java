@@ -32,11 +32,9 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.swt.graphics.Rectangle;
-
 import org.nightlabs.base.util.ColorUtil;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 
@@ -44,9 +42,6 @@ import org.nightlabs.editor2d.j2d.GeneralShape;
 public class J2DUtil
 extends ColorUtil
 {
-
-  public static final Logger LOGGER = Logger.getLogger(J2DUtil.class);
-  
 	public static org.eclipse.draw2d.geometry.Point toDraw2D(Point2D p) {
 	  return new org.eclipse.draw2d.geometry.Point(p.getX(), p.getY());
 	}

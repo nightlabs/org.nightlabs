@@ -94,7 +94,10 @@ import org.nightlabs.editor2d.util.ImageUtil;
 public class ConvertImageComposite 
 extends XComposite 
 {
-	public static final Logger LOGGER = Logger.getLogger(ConvertImageComposite.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(ConvertImageComposite.class);
 	
 	/**
 	 * @param parent
@@ -248,7 +251,7 @@ extends XComposite
 		convertCanvas.repaint();
 		
 		long end = System.currentTimeMillis() - start;
-		LOGGER.debug("init took "+end+" ms!");
+		logger.debug("init took "+end+" ms!");
 	}
 	
 	protected SelectionListener horizontalScrollListener = new SelectionListener()
@@ -475,7 +478,7 @@ extends XComposite
 				scale = tmpScale; 
 				rescaleOp = createRescaleOp(scale);				
 			}			
-			LOGGER.debug("Canvas resized!");
+			logger.debug("Canvas resized!");
 			
 			refresh();
 		}	
@@ -485,7 +488,7 @@ extends XComposite
 	{
 		AffineTransform at = new AffineTransform();
 		at.scale(scale, scale);
-		LOGGER.debug("image scale factor = "+scale);
+		logger.debug("image scale factor = "+scale);
 		return new AffineTransformOp(at, scaleInterpolationType);		
 	}
 	
@@ -529,7 +532,7 @@ extends XComposite
 	
 	protected void refresh() 
 	{		
-		LOGGER.debug("refresh!");
+		logger.debug("refresh!");
 		long start = System.currentTimeMillis();
 				
 		if (colorModel == bw) {			
@@ -545,7 +548,7 @@ extends XComposite
 		}						
 		rescaleImages();
 		long end = System.currentTimeMillis() - start;
-		LOGGER.debug("refresh took "+end+" ms!");
+		logger.debug("refresh took "+end+" ms!");
 	}		
 			
 //	private BufferedImage colorConvertJAI(BufferedImage original, ColorModel colorModel,
@@ -590,7 +593,7 @@ extends XComposite
 		try {
 			RenderedImage img = renderModeMetaData.getRendererDelegate().render(renderMode, null, original, renderModeMetaData);
 			long end = System.currentTimeMillis() - startTime;
-			LOGGER.debug("Color Convert took "+end+" ms!");
+			logger.debug("Color Convert took "+end+" ms!");
 			return img;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -653,7 +656,7 @@ extends XComposite
 		repaintCanvas();
 		
 		long end = System.currentTimeMillis() - start;
-		LOGGER.debug("rescaleImages took "+end+" ms!");
+		logger.debug("rescaleImages took "+end+" ms!");
 	}
 							
 	private void convertBlackWhite() 
@@ -667,7 +670,7 @@ extends XComposite
 			RenderedImage img = convertBlackWhiteWithDithering(dst, bitsPerPixel);
 			if (img != null) {
 				convertImage = convertToBufferedImage(img);
-				LOGGER.debug("Dithering worked!");				
+				logger.debug("Dithering worked!");				
 			}
 		} catch (Exception e) {
 			convertImage = convertBlackWhiteWithoutDithering(originalImage);
@@ -676,7 +679,7 @@ extends XComposite
 		
 	private BufferedImage convertBlackWhiteWithoutDithering(BufferedImage img) 
 	{
-		LOGGER.debug("Dithering skipped!");					
+		logger.debug("Dithering skipped!");					
 		return convertToBufferedImage(colorConvertJDK(img, bw, renderHints));
 //	return ImageUtil.cloneImage(img, BufferedImage.TYPE_BYTE_BINARY);		
 	}
@@ -725,7 +728,7 @@ extends XComposite
 		try {
 			RenderedImage img = renderModeMetaData.getRendererDelegate().render(renderMode, null, src, renderModeMetaData);
 			long end = System.currentTimeMillis() - startTime;
-			LOGGER.debug("Dithering took "+end+" ms!");
+			logger.debug("Dithering took "+end+" ms!");
 			return img;
 		} catch (Exception e) {
 			throw new RuntimeException(e);

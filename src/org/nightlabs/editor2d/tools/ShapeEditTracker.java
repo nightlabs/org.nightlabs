@@ -29,10 +29,8 @@ package org.nightlabs.editor2d.tools;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
-
 import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.request.EditorEditShapeRequest;
@@ -41,8 +39,6 @@ import org.nightlabs.editor2d.request.EditorEditShapeRequest;
 public class ShapeEditTracker 
 extends AbstractDragTracker 
 {
-  public static final Logger LOGGER = Logger.getLogger(ShapeEditTracker.class);
-  
   protected ShapeDrawComponentEditPart getShapeDrawComponentEditPart() {
     return (ShapeDrawComponentEditPart) owner;
   }

@@ -41,7 +41,10 @@ import org.nightlabs.editor2d.DrawComponent;
  */
 public class PrintUtil 
 {
-	public static final Logger LOGGER = Logger.getLogger(PrintUtil.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(PrintUtil.class);
 	
 	public PrintUtil() {
 		super();
@@ -49,14 +52,14 @@ public class PrintUtil
 
 	public static void logPageFormat(PageFormat pf) 
 	{
-		LOGGER.debug("PageFormat Width = "+pf.getWidth());
-		LOGGER.debug("PageFormat Height = "+pf.getHeight());		
-		LOGGER.debug("PageFormat ImageableX = "+pf.getImageableX());
-		LOGGER.debug("PageFormat ImageableY = "+pf.getImageableY());
-		LOGGER.debug("PageFormat ImageableWidth = "+pf.getImageableWidth());
-		LOGGER.debug("PageFormat ImageableHeight = "+pf.getImageableHeight());
-		LOGGER.debug("PageFormat Orientation = "+getOrientationAsString(pf.getOrientation()));	
-		LOGGER.debug("");
+		logger.debug("PageFormat Width = "+pf.getWidth());
+		logger.debug("PageFormat Height = "+pf.getHeight());		
+		logger.debug("PageFormat ImageableX = "+pf.getImageableX());
+		logger.debug("PageFormat ImageableY = "+pf.getImageableY());
+		logger.debug("PageFormat ImageableWidth = "+pf.getImageableWidth());
+		logger.debug("PageFormat ImageableHeight = "+pf.getImageableHeight());
+		logger.debug("PageFormat Orientation = "+getOrientationAsString(pf.getOrientation()));	
+		logger.debug("");
 	}
 	
 	protected static String getOrientationAsString(int orientation) 

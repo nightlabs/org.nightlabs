@@ -40,6 +40,12 @@ import org.nightlabs.editor2d.model.TextPropertySource;
 public class TextTreeEditPart 
 extends DrawComponentTreeEditPart 
 {
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
+			.getLogger(TextTreeEditPart.class);
+	
 //  public static final Image TEXT_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/text16.gif").createImage();
 	public static final Image TEXT_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
 			AbstractPaletteFactory.class, "Text").createImage();		
@@ -61,7 +67,7 @@ extends DrawComponentTreeEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(TextDrawComponent.PROP_FONT)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}
 //		else if (propertyName.equals(TextDrawComponent.PROP_FONT_NAME)) {
@@ -73,7 +79,7 @@ extends DrawComponentTreeEditPart
 //			refreshVisuals();			
 //		}
 		else if (propertyName.equals(TextDrawComponent.PROP_TEXT)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}
 //		else if (propertyName.equals(TextDrawComponent.PROP_BOLD)) {

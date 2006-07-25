@@ -57,7 +57,10 @@ import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
 public class EditorViewerKeyHandler 
 extends GraphicalViewerKeyHandler 
 {
-	public static final Logger LOGGER = Logger.getLogger(EditorViewerKeyHandler.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(EditorViewerKeyHandler.class);
 	
 	/**
 	 * @param viewer
@@ -213,7 +216,7 @@ extends GraphicalViewerKeyHandler
 			getCommandStack().execute(compoundCmd);
 		}
 		
-		LOGGER.debug("Translate Command executed");		
+		logger.debug("Translate Command executed");		
 	}	
 	
 	/**

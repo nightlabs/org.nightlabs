@@ -81,7 +81,11 @@ public class LayerView
 extends ViewPart 
 implements ISelectionListener
 {
-  public static final Logger LOGGER = Logger.getLogger(LayerView.class);  
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(LayerView.class);
+	
   public static final String ID_VIEW = LayerView.class.getName();  
   
   public static final Image DELETE_ICON = SharedImages.DELETE_16x16.createImage();  
@@ -126,7 +130,7 @@ implements ISelectionListener
   {
     if (getSite().getPage().getActiveEditor() instanceof AbstractEditor) 
     {
-      LOGGER.debug("getSite().getPage().getActiveEditor() instanceof Editor!");
+      logger.debug("getSite().getPage().getActiveEditor() instanceof Editor!");
       editor = (AbstractEditor) getSite().getPage().getActiveEditor();
       RootEditPart rootEditPart = editor.getOutlineGraphicalViewer().getRootEditPart();
       List children = rootEditPart.getChildren();
@@ -356,7 +360,7 @@ implements ISelectionListener
 				Layer currLayer = (Layer) button2Layer.get(t);
 				if (!mldc.getCurrentLayer().equals(currLayer)) {
 					mldc.setCurrentLayer(currLayer);
-					LOGGER.debug("Layer "+currLayer.getName()+" = CurrentLayer");
+					logger.debug("Layer "+currLayer.getName()+" = CurrentLayer");
 					refresh();				  
 				}
 			} else {
@@ -373,7 +377,7 @@ implements ISelectionListener
       {
         Text text = (Text) e.getSource();
         String layerName = text.getText();
-        LOGGER.debug("New LayerName = "+layerName);
+        logger.debug("New LayerName = "+layerName);
         Layer l = (Layer) button2Layer.get(text);
         l.setName(layerName);        
       }		  
@@ -384,7 +388,7 @@ implements ISelectionListener
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-			LOGGER.debug("VISIBLE widgetSelected()");
+			logger.debug("VISIBLE widgetSelected()");
 			
 			Button b = (Button) e.getSource();
 			if (button2Layer.containsKey(b)) {
@@ -410,7 +414,7 @@ implements ISelectionListener
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-		  LOGGER.debug("EDITABLE widgetSelected()");
+		  logger.debug("EDITABLE widgetSelected()");
 			
 			Button b = (Button) e.getSource();
 			if (button2Layer.containsKey(b)) {
@@ -443,7 +447,7 @@ implements ISelectionListener
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-		  LOGGER.debug("NEW widgetSelected()");
+		  logger.debug("NEW widgetSelected()");
 //		  CreateLayerCommand addLayer = new CreateLayerCommand(mldc);
 		  CreateLayerCommand addLayer = new CreateLayerCommand(mldc, editor.getModelFactory());		  
 		  executeCommand(addLayer);
@@ -454,7 +458,7 @@ implements ISelectionListener
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-		  LOGGER.debug("DELETE widgetSelected()");
+		  logger.debug("DELETE widgetSelected()");
 			
 		  Layer currentLayer = mldc.getCurrentLayer();
 		  DeleteLayerCommand layerCommand = new DeleteLayerCommand(mldc, currentLayer);
@@ -471,7 +475,7 @@ implements ISelectionListener
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-		  LOGGER.debug("UP widgetSelected()");
+		  logger.debug("UP widgetSelected()");
 		  int oldIndex = OrderUtil.indexOf(getCurrentLayer());
 		  int lastIndex = OrderUtil.getLastIndex(mldc);
 		  int newIndex = oldIndex + 1;
@@ -488,7 +492,7 @@ implements ISelectionListener
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-		  LOGGER.debug("DOWN widgetSelected()"); 
+		  logger.debug("DOWN widgetSelected()"); 
 		  int oldIndex = OrderUtil.indexOf(getCurrentLayer());
 		  int firstIndex = 0;
 		  int newIndex = oldIndex - 1;
@@ -614,7 +618,7 @@ implements ISelectionListener
 					  Layer l = (Layer) dc; 
 					  createLayerEntry(layerComposite, l); 
 					} else {
-					  LOGGER.debug("dc NOT instanceof Layer, but instanceof "+dc.getClass());
+					  logger.debug("dc NOT instanceof Layer, but instanceof "+dc.getClass());
 					}
 				}				
 				if (mldc.getCurrentPage().getDrawComponents().size() <= 1)			  

@@ -175,1207 +175,1210 @@ public abstract class AbstractEditor
 extends J2DGraphicalEditorWithFlyoutPalette
 //extends GraphicalEditorWithFlyoutPalette
 {
-    public static final Logger LOGGER = Logger.getLogger(Editor.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(Editor.class);
 
-    private boolean savePreviouslyNeeded = false;
-    private RulerComposite rulerComp;
-    
-    private TreeViewer treeViewer;    
-    private EditorOutlinePage outlinePage;
-    private boolean editorSaving = false;
-        
-    protected void closeEditor(boolean save) 
-    {
-      getSite().getPage().closeEditor(AbstractEditor.this, save);      
-      System.gc();
-    }
-    
-    public Object getModel() {
-      return getMultiLayerDrawComponent();
-    }
-    
-    private UnitManager unitManager = null;
-    public UnitManager getUnitManager() 
-    {
-    	if (unitManager == null) 
-    	{
-    		// TODO: update dotunit if resolution changes);    		
-    		Collection<IUnit> units = PageRegistryEP.sharedInstance().getPageRegistry().getUnits();
-    		unitManager = new UnitManager(new HashSet<IUnit>(units), 
-    				getMultiLayerDrawComponent().getModelUnit());
-    	}
-    	return unitManager;
-    }
-    
-    protected abstract MultiLayerDrawComponent createMultiLayerDrawComponent();    
-    private MultiLayerDrawComponent mldc = null;  
-    public MultiLayerDrawComponent getMultiLayerDrawComponent() 
-    {
-      if (mldc == null) {
-        mldc = createMultiLayerDrawComponent();
-      }      
-      return mldc;
-    }
-      
-    protected abstract EditPartFactory createEditPartFactory(); 
-    private EditPartFactory editPartFactory = null;
-    public EditPartFactory getEditPartFactory() 
-    {
-      if (editPartFactory == null)
-        editPartFactory = createEditPartFactory();;
-      
-      return editPartFactory;
-    }      
-        
-    protected abstract EditPartFactory createOutlineEditPartFactory();
-    private EditPartFactory outlineEditPartFactory = null;
-    public EditPartFactory getOutlineEditPartFactory() 
-    {
-      if (outlineEditPartFactory == null)
-        outlineEditPartFactory = createOutlineEditPartFactory();
-      
-      return outlineEditPartFactory;
-    }     
-        
-    protected abstract ContextMenuProvider createContextMenuProvider();    
-    private ContextMenuProvider contextMenuProvider = null;
-    public ContextMenuProvider getContextMenuProvider() 
-    {
-      if (contextMenuProvider == null)
-      	contextMenuProvider = createContextMenuProvider();
-      
-      return contextMenuProvider;
-    }    
-    
-    private PaletteRoot paletteRoot = null;
-    public PaletteRoot getPaletteRoot() 
-    {
-    	if (paletteRoot == null) {
-    		paletteRoot = getPaletteFactory().createPalette();
-    	}
-    	return paletteRoot;
-    }
-        
-    /** KeyHandler with common bindings for both the Outline View and the Editor. */
-    private KeyHandler sharedKeyHandler;
+	private boolean savePreviouslyNeeded = false;
+	private RulerComposite rulerComp;
 
-    private RenderModeManager renderMan = null;
-    public RenderModeManager getRenderModeManager() {
-      return renderMan;
-    }     
-//    public RenderModeManager getRenderModeManager() {
-//      return getMultiLayerDrawComponent().getRenderModeManager();
-//    } 
-    
-    private FilterManager filterMan = null;
-    public FilterManager getFilterManager() {
-      return filterMan;
-    }
-     
-    protected abstract NameProvider createNameProvider();
-    
-    private NameProvider nameProvider = null;
-    public NameProvider getFilterNameProvider() {
-    	if (nameProvider == null)
-    		nameProvider = createNameProvider();
-    	return nameProvider;
-    }    
-    
-    private IOFilterMan ioFilterMan;
-    public IOFilterMan getIOFilterMan() 
-    {
-    	if (ioFilterMan == null)
-    		ioFilterMan = IOFilterRegistry.sharedInstance().getIOFilterMan();
-    		
-    	return ioFilterMan;
-    }
-        
-    private LanguageManager langMan;
-    public LanguageManager getLanguageManager() 
-    {
-    	if (langMan == null)
-    		langMan = new LanguageManager();
-    	
-    	return langMan;
-    }
-    
-    /** Create a new Editor instance. This is called by the Workspace. */
-    public AbstractEditor() 
-    {
-      setEditDomain(new DefaultEditDomain(this));            
-      filterMan = new FilterManager(getFilterNameProvider()); 
-      getModelFactory();
-//      initJ2DRegistry();
-    }
-          
-//    protected void initJ2DRegistry() 
-//    {
-//    	Map hints = new HashMap();
-//      hints.put(J2DGraphics.KEY_FIXED_LINEWIDTH, true);
-//      hints.put(J2DGraphics.KEY_USE_JAVA2D, true);
-//    	J2DRegistry.setHints(hints);    	    	
-//    }
-    
-    protected MultiLayerDrawComponent load(IOFilter ioFilter, InputStream input) 
-    {      
-      if (ioFilter != null) 
-      {
-        try {
-        	MultiLayerDrawComponent mldc = (MultiLayerDrawComponent) ioFilter.read(input);
-        	mldc.setRenderModeManager(getRenderModeManager());
-          return mldc;        	
-        } 
-        catch (Exception e) {
-        	throw new RuntimeException("There occured an Error while reading with IOFilter "+ioFilter+" from InpuStream "+input, e);
-        }          
-      }
-      return null;
-    }
-    
-    protected void load(FileEditorInput fileInput, IProgressMonitor monitor) 
-    {
-    	IOFilter ioFilter = getIOFilterMan().getIOFilter(fileInput.getFile());
-    	if (ioFilter != null) 
-    	{
-    		try {    		
-	    		if (ioFilter instanceof IOFilterWithProgress) 
-	    		{	    			
-	    			IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
-	    			progressFilter.addPropertyChangeListener(progressListener);	    			
-	    			monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), progressFilter.getTotalWork());
-	    			mldc = load(ioFilter, new FileInputStream(fileInput.getFile()));
-	    			progressFilter.removePropertyChangeListener(progressListener);
-	    			return;
-	    		}
-	    		else
-	    			monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), 2);	    			
-	    			mldc = load(ioFilter, new FileInputStream(fileInput.getFile()));
-	    			return;
-				} catch (FileNotFoundException e) {
-					throw new RuntimeException(e);
-				} finally {
-    			monitor.done();
+	private TreeViewer treeViewer;    
+	private EditorOutlinePage outlinePage;
+	private boolean editorSaving = false;
+
+	protected void closeEditor(boolean save) 
+	{
+		getSite().getPage().closeEditor(AbstractEditor.this, save);      
+		System.gc();
+	}
+
+	public Object getModel() {
+		return getMultiLayerDrawComponent();
+	}
+
+	private UnitManager unitManager = null;
+	public UnitManager getUnitManager() 
+	{
+		if (unitManager == null) 
+		{
+			// TODO: update dotunit if resolution changes);    		
+			Collection<IUnit> units = PageRegistryEP.sharedInstance().getPageRegistry().getUnits();
+			unitManager = new UnitManager(new HashSet<IUnit>(units), 
+					getMultiLayerDrawComponent().getModelUnit());
+		}
+		return unitManager;
+	}
+
+	protected abstract MultiLayerDrawComponent createMultiLayerDrawComponent();    
+	private MultiLayerDrawComponent mldc = null;  
+	public MultiLayerDrawComponent getMultiLayerDrawComponent() 
+	{
+		if (mldc == null) {
+			mldc = createMultiLayerDrawComponent();
+		}      
+		return mldc;
+	}
+
+	protected abstract EditPartFactory createEditPartFactory(); 
+	private EditPartFactory editPartFactory = null;
+	public EditPartFactory getEditPartFactory() 
+	{
+		if (editPartFactory == null)
+			editPartFactory = createEditPartFactory();;
+
+			return editPartFactory;
+	}      
+
+	protected abstract EditPartFactory createOutlineEditPartFactory();
+	private EditPartFactory outlineEditPartFactory = null;
+	public EditPartFactory getOutlineEditPartFactory() 
+	{
+		if (outlineEditPartFactory == null)
+			outlineEditPartFactory = createOutlineEditPartFactory();
+
+		return outlineEditPartFactory;
+	}     
+
+	protected abstract ContextMenuProvider createContextMenuProvider();    
+	private ContextMenuProvider contextMenuProvider = null;
+	public ContextMenuProvider getContextMenuProvider() 
+	{
+		if (contextMenuProvider == null)
+			contextMenuProvider = createContextMenuProvider();
+
+		return contextMenuProvider;
+	}    
+
+	private PaletteRoot paletteRoot = null;
+	public PaletteRoot getPaletteRoot() 
+	{
+		if (paletteRoot == null) {
+			paletteRoot = getPaletteFactory().createPalette();
+		}
+		return paletteRoot;
+	}
+
+	/** KeyHandler with common bindings for both the Outline View and the Editor. */
+	private KeyHandler sharedKeyHandler;
+
+	private RenderModeManager renderMan = null;
+	public RenderModeManager getRenderModeManager() {
+		return renderMan;
+	}     
+//	public RenderModeManager getRenderModeManager() {
+//	return getMultiLayerDrawComponent().getRenderModeManager();
+//	} 
+
+	private FilterManager filterMan = null;
+	public FilterManager getFilterManager() {
+		return filterMan;
+	}
+
+	protected abstract NameProvider createNameProvider();
+
+	private NameProvider nameProvider = null;
+	public NameProvider getFilterNameProvider() {
+		if (nameProvider == null)
+			nameProvider = createNameProvider();
+		return nameProvider;
+	}    
+
+	private IOFilterMan ioFilterMan;
+	public IOFilterMan getIOFilterMan() 
+	{
+		if (ioFilterMan == null)
+			ioFilterMan = IOFilterRegistry.sharedInstance().getIOFilterMan();
+
+		return ioFilterMan;
+	}
+
+	private LanguageManager langMan;
+	public LanguageManager getLanguageManager() 
+	{
+		if (langMan == null)
+			langMan = new LanguageManager();
+
+		return langMan;
+	}
+
+	/** Create a new Editor instance. This is called by the Workspace. */
+	public AbstractEditor() 
+	{
+		setEditDomain(new DefaultEditDomain(this));            
+		filterMan = new FilterManager(getFilterNameProvider()); 
+		getModelFactory();
+//		initJ2DRegistry();
+	}
+
+//	protected void initJ2DRegistry() 
+//	{
+//	Map hints = new HashMap();
+//	hints.put(J2DGraphics.KEY_FIXED_LINEWIDTH, true);
+//	hints.put(J2DGraphics.KEY_USE_JAVA2D, true);
+//	J2DRegistry.setHints(hints);    	    	
+//	}
+
+	protected MultiLayerDrawComponent load(IOFilter ioFilter, InputStream input) 
+	{      
+		if (ioFilter != null) 
+		{
+			try {
+				MultiLayerDrawComponent mldc = (MultiLayerDrawComponent) ioFilter.read(input);
+				mldc.setRenderModeManager(getRenderModeManager());
+				return mldc;        	
+			} 
+			catch (Exception e) {
+				throw new RuntimeException("There occured an Error while reading with IOFilter "+ioFilter+" from InpuStream "+input, e);
+			}          
+		}
+		return null;
+	}
+
+	protected void load(FileEditorInput fileInput, IProgressMonitor monitor) 
+	{
+		IOFilter ioFilter = getIOFilterMan().getIOFilter(fileInput.getFile());
+		if (ioFilter != null) 
+		{
+			try {    		
+				if (ioFilter instanceof IOFilterWithProgress) 
+				{	    			
+					IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
+					progressFilter.addPropertyChangeListener(progressListener);	    			
+					monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), progressFilter.getTotalWork());
+					mldc = load(ioFilter, new FileInputStream(fileInput.getFile()));
+					progressFilter.removePropertyChangeListener(progressListener);
+					return;
 				}
-    	}
-    }
-        
-    protected void load(FileEditorInput fileInput) 
-    {    	
-    	final FileEditorInput input = fileInput;
-    	IRunnableWithProgress runnable = new IRunnableWithProgress()
-    	{			
-				public void run(IProgressMonitor monitor) 
-				throws InvocationTargetException, InterruptedException 
-				{
-          try {
-            load(input, monitor);      
-          } 
-          catch (Exception e) {
-          	throw new RuntimeException(e);
-          }					
-				}			
-			};
-			
-      try {
-        getProgressMonitor().run(false, false, runnable);
-        setPartName(input.getName());
-      }
-      catch (Exception e) {
-      	throw new RuntimeException(e);
-      }    	    	
-    }
-    
-    private ScalableFreeformRootEditPart rootEditPart;
-    public ScalableFreeformRootEditPart getRootEditPart() 
-    {
-      if (rootEditPart == null)
-        rootEditPart = new J2DScalableFreeformRootEditPart();
-      
-      return rootEditPart;
-    }
-    
-    private ViewerManager viewerManager;
-    public ViewerManager getViewerManager() {
-    	return viewerManager;
-    }
-    
-    private DescriptorManager descriptorManager;
-    public DescriptorManager getDescriptorManager() {
-    	return descriptorManager;
-    }
-    
-    protected void configureGraphicalViewer() 
-    {
-      super.configureGraphicalViewer();
-      ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer)getGraphicalViewer();
-            
-      List zoomLevels = new ArrayList(3);
-      zoomLevels.add(ZoomManager.FIT_ALL);
-      zoomLevels.add(ZoomManager.FIT_WIDTH);
-      zoomLevels.add(ZoomManager.FIT_HEIGHT);
-      getRootEditPart().getZoomManager().setZoomLevelContributions(zoomLevels);
+				else
+					monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), 2);	    			
+				mldc = load(ioFilter, new FileInputStream(fileInput.getFile()));
+				return;
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException(e);
+			} finally {
+				monitor.done();
+			}
+		}
+	}
 
-      viewer.setRootEditPart(getRootEditPart());
-
-      viewer.setEditPartFactory(getEditPartFactory());
-      ContextMenuProvider provider = getContextMenuProvider();
-      viewer.setContextMenu(provider);
-      getSite().registerContextMenu("org.nightlabs.editor2d.contextmenu", //$NON-NLS-1$
-          provider, viewer);
-      viewer.setKeyHandler(new EditorViewerKeyHandler(viewer)
-          .setParent(getCommonKeyHandler()));
-            
-      loadProperties();
-
-      // Actions
-      IAction showRulers = new ToggleRulerVisibilityAction(getGraphicalViewer());
-      getActionRegistry().registerAction(showRulers);
-      
-      IAction snapAction = new ToggleSnapToGeometryAction(getGraphicalViewer());
-      getActionRegistry().registerAction(snapAction);
-
-      IAction showGrid = new ToggleGridAction(getGraphicalViewer());
-      getActionRegistry().registerAction(showGrid);
-      
-      Listener listener = new Listener() {
-        public void handleEvent(Event event) {
-          handleActivationChanged(event);
-        }
-      };
-      getGraphicalControl().addListener(SWT.Activate, listener);
-      getGraphicalControl().addListener(SWT.Deactivate, listener);  
-      
-      // TODO Workaround to fix grey bg in editor
-      getGraphicalControl().setBackground(new Color(null, 255, 255, 255));
-
-      // ViewerManager
-      viewerManager = new ViewerManager(viewer, getEditorSite().getActionBars().getStatusLineManager());
-      configureViewerManager();  
-            
-      getGraphicalControl().addControlListener(resizeListener);
-      getCommandStack().addCommandStackEventListener(commandStackListener);
-    }
-     
-    // should solve redraw problems when resizing the viewer
-    private ControlListener resizeListener = new ControlAdapter(){		
-			public void controlResized(ControlEvent e) {
-//				if (e.getSource().equals(getGraphicalViewer().getControl())) {
-					updateViewer();
-					LOGGER.debug("Control resized!");
-//				}
-			}		
-		};
-    		
-    // should solve redraw problems when undoing things
-    private CommandStackEventListener commandStackListener = new CommandStackEventListener()
-    {		
-			public void stackChanged(CommandStackEvent event) 
+	protected void load(FileEditorInput fileInput) 
+	{    	
+		final FileEditorInput input = fileInput;
+		IRunnableWithProgress runnable = new IRunnableWithProgress()
+		{			
+			public void run(IProgressMonitor monitor) 
+			throws InvocationTargetException, InterruptedException 
 			{
-				updateViewer();
-			}		
-		};				
-    
-    /* (non-Javadoc)
-     * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util.EventObject)
-     */    
-    public void commandStackChanged(EventObject event) 
-    {
-      if (isDirty()){
-        if (!savePreviouslyNeeded()) {
-          setSavePreviouslyNeeded(true);
-          firePropertyChange(IEditorPart.PROP_DIRTY);
-        }
-      }
-      else {
-        setSavePreviouslyNeeded(false);
-        firePropertyChange(IEditorPart.PROP_DIRTY);
-      }
-      super.commandStackChanged(event);
-    }  
+				try {
+					load(input, monitor);      
+				} 
+				catch (Exception e) {
+					throw new RuntimeException(e);
+				}					
+			}			
+		};
 
-    /* (non-Javadoc)
-     * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#createPaletteViewerProvider()
-     */
-    protected PaletteViewerProvider createPaletteViewerProvider() {
-      return new PaletteViewerProvider(getEditDomain()) {
-        protected void configurePaletteViewer(PaletteViewer viewer) {
-          super.configurePaletteViewer(viewer);
-          // create a drag source listener for this palette viewer
-          // together with an appropriate transfer drop target listener, this will enable
-          // model element creation by dragging a CombinatedTemplateCreationEntries 
-          // from the palette into the editor
-          // @see ShapesEditor#createTransferDropTargetListener()
-          viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
-        }
-      };
-    }
+		try {
+			getProgressMonitor().run(false, false, runnable);
+			setPartName(input.getName());
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}    	    	
+	}
 
-    public Object getAdapter(Class type)
-    {
-      if (type == IContentOutlinePage.class) {
-    	  treeViewer = new TreeViewer();
-        outlinePage = new EditorOutlinePage(this, treeViewer);        
-        return outlinePage;
-      }
-      if (type == ZoomManager.class)
-        return getGraphicalViewer().getProperty(ZoomManager.class.toString());
-        
-    	if (type == org.eclipse.ui.views.properties.IPropertySheetPage.class) {
-    		PropertySheetPage page = new EditorPropertyPage(getUnitManager());    		
-    		page.setRootEntry(new UndoablePropertySheetEntry(getCommandStack()));
-    		return page;
-    	}
-    	
-    	if (type == RenderModeManager.class)
-    		return getRenderModeManager();
+	private ScalableFreeformRootEditPart rootEditPart;
+	public ScalableFreeformRootEditPart getRootEditPart() 
+	{
+		if (rootEditPart == null)
+			rootEditPart = new J2DScalableFreeformRootEditPart();
 
-    	if (type == MultiLayerDrawComponent.class)
-    		return getMultiLayerDrawComponent();
-    	
-      return super.getAdapter(type);
-    }
-    
-    protected Control getGraphicalControl() {
-      return rulerComp;
-    }
-      
-//    /**
-//     * Create a transfer drop target listener. When using a CombinedTemplateCreationEntry
-//     * tool in the palette, this will enable model element creation by dragging from the palette.
-//     * @see #createPaletteViewerProvider()
-//     */
-//    protected TransferDropTargetListener createTransferDropTargetListener() {
-//      return new TemplateTransferDropTargetListener(getGraphicalViewer()) {
-//        protected CreationFactory getFactory(Object template) {
-//          return new SimpleFactory((Class) template);
-//        }
-//      };
-//    }
+		return rootEditPart;
+	}
 
-    public void doSave(IProgressMonitor monitor) 
-    {
-      try {      	
-      	FileEditorInput input = (FileEditorInput) getEditorInput();
-      	if (!input.isSaved()) {
-      		doSaveAs();
-      		return;
-      	}
-      	
-      	File file = input.getFile();
-      	String inputName = input.getName();
-      	LOGGER.debug("inputName = "+inputName);
-        
-        if (file.exists() 
-            || org.eclipse.jface.dialogs.MessageDialogWithToggle.openConfirm(getSite().getShell(),
-                EditorPlugin.getResourceString("resource.create.file"),
-                EditorPlugin.getResourceString("resource.fileNotExists.1")
-                + " "
-                + file.getName() 
-                + " "
-                + EditorPlugin.getResourceString("resource.fileNotExists.2")))
-        {
-          editorSaving = true;
-          saveProperties();
-          save(file, monitor);
-          getCommandStack().markSaveLocation();
-        }
-      }
-      catch (WriteException e){
-      	throw new RuntimeException(e);      	
-      }   
-    }
+	private ViewerManager viewerManager;
+	public ViewerManager getViewerManager() {
+		return viewerManager;
+	}
 
-    /* (non-Javadoc)
-     * @see org.eclipse.ui.ISaveablePart#doSaveAs()
-     */
-    public void doSaveAs() 
-    {
-      performSaveAs();      
-    }
+	private DescriptorManager descriptorManager;
+	public DescriptorManager getDescriptorManager() {
+		return descriptorManager;
+	}
 
-    /**
-     * Returns the KeyHandler with common bindings for both the Outline and Graphical Views.
-     * For example, delete is a common action.
-     */
-    public KeyHandler getCommonKeyHandler() 
-    {
-      if (sharedKeyHandler == null) {
-        sharedKeyHandler = new KeyHandler();
+	protected void configureGraphicalViewer() 
+	{
+		super.configureGraphicalViewer();
+		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer)getGraphicalViewer();
 
-        // Add key and action pairs to sharedKeyHandler
-        sharedKeyHandler.put(
-            KeyStroke.getPressed(SWT.DEL, 127, 0),
-            getActionRegistry().getAction(ActionFactory.DELETE.getId()));
-        sharedKeyHandler.put(
-            KeyStroke.getPressed(SWT.F2, 0),
-            getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
-      	// TODO: register more common keys        
-      }
-      return sharedKeyHandler;
-    }
+		List zoomLevels = new ArrayList(3);
+		zoomLevels.add(ZoomManager.FIT_ALL);
+		zoomLevels.add(ZoomManager.FIT_WIDTH);
+		zoomLevels.add(ZoomManager.FIT_HEIGHT);
+		getRootEditPart().getZoomManager().setZoomLevelContributions(zoomLevels);
 
-    /**
-     * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getPalettePreferences()
-     */
-    protected FlyoutPreferences getPalettePreferences() {
-      return getPaletteFactory().createPalettePreferences();
-    }
-        
-    protected abstract AbstractPaletteFactory createPaletteFactory();   
-    
-    private AbstractPaletteFactory paletteFactory = null;
-    public AbstractPaletteFactory getPaletteFactory() 
-    {
-    	if (paletteFactory == null) {
-    		paletteFactory = createPaletteFactory();
-    	}
-    	return paletteFactory;
-    }
-    
-    protected void handleActivationChanged(Event event) 
-    {
-      IAction copy = null;
-      if (event.type == SWT.Deactivate)
-        copy = getActionRegistry().getAction(ActionFactory.COPY.getId());
-      if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.COPY.getId()) 
-          != copy) {
-        getEditorSite().getActionBars().setGlobalActionHandler(
-            ActionFactory.COPY.getId(), copy);
-        getEditorSite().getActionBars().updateActionBars();
-      }
-    }  
-    
-    /**
-     * Set up the editor's inital content (after creation).
-     * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#initializeGraphicalViewer()
-     */
-    protected void initializeGraphicalViewer() 
-    {
-      GraphicalViewer graphicalViewer = getGraphicalViewer();
-      graphicalViewer.setContents(getModel()); // set the contents of this editor
-      
-      graphicalViewer.getControl().setBackground(new Color(null, 255, 255, 255));
-      graphicalViewer.getControl().setForeground(new Color(null, 255, 255, 255));      
-//      // listen for dropped parts
-//      graphicalViewer.addDropTargetListener(createTransferDropTargetListener());   
-      
-      // DescriptorManager
-      descriptorManager = new DescriptorManager();
-      configureDescriptorManager();      
-      if (getModelRootEditPart() != null) {
-      	getModelRootEditPart().setDescriptorManager(getDescriptorManager());
-      } else {
-      	LOGGER.debug("DescriptorManager for MultiLayerDrawComponentEditPart not set, because it is null!");
-      }
-      viewerManager.setDescriptorManager(getDescriptorManager());      
-      
-      configureFilterManager();      
-    }
+		viewer.setRootEditPart(getRootEditPart());
 
-    protected void initializeActionRegistry() 
-    {
-    	super.initializeActionRegistry();
+		viewer.setEditPartFactory(getEditPartFactory());
+		ContextMenuProvider provider = getContextMenuProvider();
+		viewer.setContextMenu(provider);
+		getSite().registerContextMenu("org.nightlabs.editor2d.contextmenu", //$NON-NLS-1$
+				provider, viewer);
+		viewer.setKeyHandler(new EditorViewerKeyHandler(viewer)
+		.setParent(getCommonKeyHandler()));
 
-    	// TODO: find out why global keyBindings not work only on base of Extension-Points
-    	// (org.eclipse.ui.bindings + commands) nor on EditorActionBarContributor.declareGlobalActionKeys()  
-    	IKeyBindingService keyBindingService = getSite().getKeyBindingService();
-    	for (Iterator<IAction> it = getActionRegistry().getActions(); it.hasNext(); ) {
-    		keyBindingService.registerAction(it.next());
-    	} 	
-    }     
-    
-    protected void configureFilterManager() 
-    {
-    	Map class2DrawComponents = getMultiLayerDrawComponent().getClass2DrawComponents();
-    	for (Iterator it = class2DrawComponents.keySet().iterator(); it.hasNext(); ) {
-    		Class c = (Class) it.next();
-    		getFilterManager().addFilter(c);
-    	}
-  		getMultiLayerDrawComponent().addPropertyChangeListener(getFilterManager().getTypeListener());    		
-  		getFilterManager().ignoreClass(LayerImpl.class);    	
-    }
+		loadProperties();
 
-    /**
-     * By Default this Method does nothing, but Inheritans can override this Method to define 
-     * excluded EditParts, ignored classes or an exclusive class
-     * 
-     * @see org.nightlabs.editor2d.ViewerManager
-     */
-    protected void configureViewerManager()
-    {
-    	
-    }
-    
-    /**
-     * By Default this Method does nothing, but Inheritans can override this Method to add 
-     * Descriptors for special classes to the DescriptorManager
-     * 
-     * @see DescriptorManager#addDescriptor(org.nightlabs.editor2d.viewer.descriptor.IDrawComponentDescriptor, Class) 
-     */
-    protected void configureDescriptorManager() 
-    {
-    	
-    }
-    
-    protected void createActions() 
-    {
-      super.createActions();
-      ActionRegistry registry = getActionRegistry();
-      IAction action;
-      
-      // Match Actions
-      action = new MatchWidthAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
-      
-      action = new MatchHeightAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
-      
-//      action = new DirectEditAction((IWorkbenchPart)this);
-//      registry.registerAction(action);
-//      getSelectionActions().add(action.getId());
+		// Actions
+		IAction showRulers = new ToggleRulerVisibilityAction(getGraphicalViewer());
+		getActionRegistry().registerAction(showRulers);
 
-      // Alignment Actions
-      action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.LEFT);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
+		IAction snapAction = new ToggleSnapToGeometryAction(getGraphicalViewer());
+		getActionRegistry().registerAction(snapAction);
 
-      action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.RIGHT);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
+		IAction showGrid = new ToggleGridAction(getGraphicalViewer());
+		getActionRegistry().registerAction(showGrid);
 
-      action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.TOP);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
+		Listener listener = new Listener() {
+			public void handleEvent(Event event) {
+				handleActivationChanged(event);
+			}
+		};
+		getGraphicalControl().addListener(SWT.Activate, listener);
+		getGraphicalControl().addListener(SWT.Deactivate, listener);  
 
-      action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.BOTTOM);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
+		// TODO Workaround to fix grey bg in editor
+		getGraphicalControl().setBackground(new Color(null, 255, 255, 255));
 
-      action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.CENTER);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
+		// ViewerManager
+		viewerManager = new ViewerManager(viewer, getEditorSite().getActionBars().getStatusLineManager());
+		configureViewerManager();  
 
-      action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.MIDDLE);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
-      
-      // ZoomIn
-      action = new ZoomInAction(getRootEditPart().getZoomManager());
-      registry.registerAction(action);      
-      getSite().getKeyBindingService().registerAction(action);
+		getGraphicalControl().addControlListener(resizeListener);
+		getCommandStack().addCommandStackEventListener(commandStackListener);
+	}
 
-      // ZoomOut
-      action = new ZoomOutAction(getRootEditPart().getZoomManager());
-      registry.registerAction(action);      
-      getSite().getKeyBindingService().registerAction(action);
+	// should solve redraw problems when resizing the viewer
+	private ControlListener resizeListener = new ControlAdapter(){		
+		public void controlResized(ControlEvent e) {
+//			if (e.getSource().equals(getGraphicalViewer().getControl())) {
+			updateViewer();
+			logger.debug("Control resized!");
+//			}
+		}		
+	};
 
-      // Zoom All
-      action = new ZoomAllAction(getRootEditPart().getZoomManager());
-      registry.registerAction(action);      
-      
-      // Zoom Selection
-      action = new ZoomSelectionAction(this);      
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
-            
-      // Zoom Page
-      action = new ZoomPageAction(this, getRootEditPart().getZoomManager());      
-      registry.registerAction(action);
-      getPropertyActions().add(action.getId());
-      
-      // Edit Shape Action
-      action = new EditShapeAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
-      
-      // Rotate Action
-      action = new RotateAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
-      
-      // Normal Selection Action
-      action = new NormalSelectionAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());   
-      
-      // Reset Rotation Center Action
-      action = new ResetRotationCenterAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
-      
-      // Show Default View (Renderer) Action
-      action = new ShowDefaultRenderAction(this);
-      registry.registerAction(action);
+	// should solve redraw problems when undoing things
+	private CommandStackEventListener commandStackListener = new CommandStackEventListener()
+	{		
+		public void stackChanged(CommandStackEvent event) 
+		{
+			updateViewer();
+		}		
+	};				
 
-      // Select all with same name
-      action = new SelectAllWithSameName(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());    
-      
-      // Clone (Duplicate) Action
-      action = new CloneAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());   
-            
-      // Order Actions
-      action = new ChangeOrderToLocalFront(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());    
+	/* (non-Javadoc)
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util.EventObject)
+	 */    
+	public void commandStackChanged(EventObject event) 
+	{
+		if (isDirty()){
+			if (!savePreviouslyNeeded()) {
+				setSavePreviouslyNeeded(true);
+				firePropertyChange(IEditorPart.PROP_DIRTY);
+			}
+		}
+		else {
+			setSavePreviouslyNeeded(false);
+			firePropertyChange(IEditorPart.PROP_DIRTY);
+		}
+		super.commandStackChanged(event);
+	}  
 
-      action = new ChangeOrderToLocalBack(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());    
-      
-      action = new ChangeOrderOneDown(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());    
+	/* (non-Javadoc)
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#createPaletteViewerProvider()
+	 */
+	protected PaletteViewerProvider createPaletteViewerProvider() {
+		return new PaletteViewerProvider(getEditDomain()) {
+			protected void configurePaletteViewer(PaletteViewer viewer) {
+				super.configurePaletteViewer(viewer);
+				// create a drag source listener for this palette viewer
+				// together with an appropriate transfer drop target listener, this will enable
+				// model element creation by dragging a CombinatedTemplateCreationEntries 
+				// from the palette into the editor
+				// @see ShapesEditor#createTransferDropTargetListener()
+				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
+			}
+		};
+	}
 
-      action = new ChangeOrderOneUp(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());    
-      
-      // Paste Action
-      PasteAction pasteAction = new PasteAction(this);
-      registry.registerAction(pasteAction);
-      getPropertyActions().add(pasteAction.getId());
-      getSite().getKeyBindingService().registerAction(pasteAction);
-           
-      // Cut Action
-      CutAction cutAction = new CutAction(this);
-      registry.registerAction(cutAction);
-      getSelectionActions().add(cutAction.getId());
-      cutAction.addPropertyChangeListener(pasteAction.cutListener);
-      getSite().getKeyBindingService().registerAction(cutAction);      
-            
-      // Copy Action
-      CopyAction copyAction = new CopyAction(this);
-      registry.registerAction(copyAction);
-      getSelectionActions().add(copyAction.getId());  
-      copyAction.addPropertyChangeListener(pasteAction.copyListener);
-      getSite().getKeyBindingService().registerAction(copyAction);      
-            
-      // Tooltip Preference 
-      action = new ShowFigureToolTipAction(this);
-      registry.registerAction(action);
-      getPropertyActions().add(action.getId());
+	public Object getAdapter(Class type)
+	{
+		if (type == IContentOutlinePage.class) {
+			treeViewer = new TreeViewer();
+			outlinePage = new EditorOutlinePage(this, treeViewer);        
+			return outlinePage;
+		}
+		if (type == ZoomManager.class)
+			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
 
-      // Status Line Preference
-      action = new ShowStatusLineAction(this);
-      registry.registerAction(action);
-      getPropertyActions().add(action.getId());
-      
-      // Repaint Action
-      action = new RepaintAction(this);
-      registry.registerAction(action);
-      getPropertyActions().add(action.getId());
-      
-//      // Test Viewer Action
-//      action = new ViewerAction(this);
-//      registry.registerAction(action);
-      
-      // Print Action
-      action = new EditorPrintAction(this);
-      registry.registerAction(action);
-      getPropertyActions().add(action.getId());
+		if (type == org.eclipse.ui.views.properties.IPropertySheetPage.class) {
+			PropertySheetPage page = new EditorPropertyPage(getUnitManager());    		
+			page.setRootEntry(new UndoablePropertySheetEntry(getCommandStack()));
+			return page;
+		}
 
-      // Print Preview Action
-      action = new EditorPrintPreviewAction(this);
-      registry.registerAction(action);
-      getPropertyActions().add(action.getId());
-            
-      // Print Page Setup Action
-      action = new EditorPrintSetupAction(this);
-      registry.registerAction(action);
-      getPropertyActions().add(action.getId());
-      
-      // Group Action
-      action = new GroupAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
-      
-      // UnGroup Action
-      action = new UnGroupAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
-      
-      // Convert To Shape
-      action = new ConvertToShapeAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());
-      
-      // Shape Union
-      action = new ShapeUnionAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());            
+		if (type == RenderModeManager.class)
+			return getRenderModeManager();
 
-      // Shape Intersection
-      action = new ShapeIntersectAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());            
+		if (type == MultiLayerDrawComponent.class)
+			return getMultiLayerDrawComponent();
 
-      // Shape Subtract
-      action = new ShapeSubtractAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());            
+		return super.getAdapter(type);
+	}
 
-      // Shape Exclusive Or
-      action = new ShapeExclusiveOrAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());     
-      
-      // Delete
-      action = new DeleteAction(this);
-      registry.registerAction(action);
-      getSelectionActions().add(action.getId());      
-    }
-    
-    /**
-     * @see org.eclipse.gef.ui.parts.GraphicalEditor#createGraphicalViewer(org.eclipse.swt.widgets.Composite)
-     */
-    protected void createGraphicalViewer(Composite parent) 
-    {
-      rulerComp = new RulerComposite(parent, SWT.NONE);
-      super.createGraphicalViewer(rulerComp);
-      rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());      
-    }  
-    
-    public FigureCanvas getEditor(){
-      return (FigureCanvas)getGraphicalViewer().getControl();
-    }
-    
-    public boolean isDirty() {
-      return isSaveOnCloseNeeded();
-    }
+	protected Control getGraphicalControl() {
+		return rulerComp;
+	}
 
-    public boolean isSaveOnCloseNeeded() {
-      return getCommandStack().isDirty();
-    }
-    
-    protected void loadProperties() 
-    {
-      // Ruler properties
-      EditorRuler ruler = getMultiLayerDrawComponent().getLeftRuler();
-      RulerProvider provider = null;
-      if (ruler != null) {
-        provider = new EditorRulerProvider(ruler);
-      }
-      getGraphicalViewer().setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
-      ruler = getMultiLayerDrawComponent().getTopRuler();
-      provider = null;
-      if (ruler != null) {
-        provider = new EditorRulerProvider(ruler);
-      }
-      getGraphicalViewer().setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER, provider);
-      getGraphicalViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, 
-          new Boolean(getMultiLayerDrawComponent().isRulersEnabled()));
-      
-      // Snap to Geometry property
-      getGraphicalViewer().setProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED, 
-          new Boolean(getMultiLayerDrawComponent().isSnapToGeometry()));
-      
-      // Grid properties
-      getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_ENABLED, 
-          new Boolean(getMultiLayerDrawComponent().isGridEnabled()));
-      // We keep grid visibility and enablement in sync
-      getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE, 
-          new Boolean(getMultiLayerDrawComponent().isGridEnabled()));
-      
-      // Zoom
-      ZoomManager manager = (ZoomManager)getGraphicalViewer()
-          .getProperty(ZoomManager.class.toString());
-      if (manager != null)
-        manager.setZoom(getMultiLayerDrawComponent().getZoom());      	            
-    }
-    
-    /**
-     * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
-     */
-    public boolean isSaveAsAllowed() {
-      return true;
-    }
+//	/**
+//* Create a transfer drop target listener. When using a CombinedTemplateCreationEntry
+//	* tool in the palette, this will enable model element creation by dragging from the palette.
+//	* @see #createPaletteViewerProvider()
+//	*/
+//	protected TransferDropTargetListener createTransferDropTargetListener() {
+//	return new TemplateTransferDropTargetListener(getGraphicalViewer()) {
+//	protected CreationFactory getFactory(Object template) {
+//	return new SimpleFactory((Class) template);
+//	}
+//	};
+//	}
 
-    protected boolean savePreviouslyNeeded() {
-      return savePreviouslyNeeded;
-    }
-    
-    protected void saveProperties() 
-    {
-      getMultiLayerDrawComponent().setRulersEnabled(((Boolean)getGraphicalViewer()
-          .getProperty(RulerProvider.PROPERTY_RULER_VISIBILITY)).booleanValue());
-      getMultiLayerDrawComponent().setGridEnabled(((Boolean)getGraphicalViewer()
-          .getProperty(SnapToGrid.PROPERTY_GRID_ENABLED)).booleanValue());
-      getMultiLayerDrawComponent().setSnapToGeometry(((Boolean)getGraphicalViewer()
-          .getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED)).booleanValue());
-      ZoomManager manager = (ZoomManager)getGraphicalViewer()
-          .getProperty(ZoomManager.class.toString());
-      if (manager != null)
-        getMultiLayerDrawComponent().setZoom(manager.getZoom());
-    }
-    
-    protected void setSavePreviouslyNeeded(boolean value) {
-      savePreviouslyNeeded = value;
-    }  
-    
-//    protected void superSetInput(IEditorInput input) 
-//    {
-//      // The workspace never changes for an editor.  So, removing and re-adding the 
-//      // resourceListener is not necessary.  But it is being done here for the sake
-//      // of proper implementation.  Plus, the resourceListener needs to be added 
-//      // to the workspace the first time around.
-//      if(getEditorInput() != null) {
-//        IFile file = ((FileEditorInput)getEditorInput()).getFile();
-//        file.getWorkspace().removeResourceChangeListener(resourceListener);
-//      }
-//      
-//      super.setInput(input);
-//      
-//      if(getEditorInput() != null && getEditorInput() instanceof FileEditorInput) {
-//        IFile file = ((FileEditorInput)getEditorInput()).getFile();
-//        file.getWorkspace().addResourceChangeListener(resourceListener);
-//        setTitle(file.getName());
-//      }
-//    }
-    
-    protected boolean performSaveAs() 
-    {
-      FileDialog dialog = new FileDialog(getSite().getWorkbenchWindow().getShell(), SWT.SAVE);
-      String inputFileName = getEditorInput().getName();
-      dialog.setFileName(inputFileName);      
-      String[] fileExtensions = getIOFilterMan().getAvailableFileExtensionsAsStrings();      
-      if (fileExtensions != null)
-      	dialog.setFilterExtensions(fileExtensions);
-      
-      String fullPath = dialog.open();
-      // Cancel pressed
-      if (fullPath == null)
-      	return false;
-            
-      final File file = new File(fullPath);  
-      
-      if (!file.exists()) {
-      	save(file);
-      }
-      else {
-      	int returnVal = RCPUtil.showConfirmOverwriteDialog(file.getName());
-      	if (returnVal == SWT.OK)
-      		save(file);
-      	else 
-      		return false;
-      }
-      try {
-        getCommandStack().markSaveLocation();
-      } 
-      catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-      
-      return true;
-    }
-    
-    private PropertyChangeListener progressListener = new PropertyChangeListener()
-    {
-  		public void propertyChange(PropertyChangeEvent evt) 
-  		{
-  			Object newValue = evt.getNewValue();
-  			String propertyName = evt.getPropertyName();
-  			if (propertyName.equals(AbstractIOFilterWithProgress.PROGRESS_CHANGED)) {
-  				int work = ((Integer)newValue).intValue();
-  				getProgressMonitor().getProgressMonitor().internalWorked(work); 
-  			}
-  			else if (propertyName.equals(AbstractIOFilterWithProgress.SUBTASK_FINISHED)) {
-  				String subTaskName = (String) newValue;
-  				getProgressMonitor().getProgressMonitor().subTask(subTaskName);  				
-  			}
-  		}			
-  	};
-    
-  	private ProgressMonitorDialog progressMonitor; 
-    protected ProgressMonitorDialog getProgressMonitor() 
-    {
-    	if (progressMonitor == null) {
-    		progressMonitor = new ProgressMonitorDialog(getSite().getWorkbenchWindow().getShell());    		
-    	}
-    	return progressMonitor;
-    }
-    
-    protected void save(File f) 
-    {
-    	final File file = f;    	
-    	IRunnableWithProgress runnable = new IRunnableWithProgress()
-    	{			
-				public void run(IProgressMonitor monitor) 
-				throws InvocationTargetException, InterruptedException 
-				{
-          saveProperties();
-          try {
-            save(file, monitor);      
-          } 
-          catch (Exception e) {
-          	throw new RuntimeException(e);
-          }					
-				}			
-			};
-			
-      try {
-        getProgressMonitor().run(false, false, runnable);
-        setPartName(file.getName());
-      }
-      catch (Exception e) {
-      	throw new RuntimeException(e);
-      }    	
-    }    
-                  
-    /**
-     * Saves the Model under the specified path.
-     * 
-     * @param file the file to save
-     * @param progressMonitor The ProgressMonitor to show the save Progress
-     */
-    protected void save(File file, IProgressMonitor progressMonitor)
-    throws WriteException
-    {
-      if (null == progressMonitor)
-          progressMonitor = new NullProgressMonitor();
-            
-      // use IOFilterMan
-      IOFilter ioFilter = getIOFilterMan().getIOFilter(file);      
-      if (ioFilter != null) 
-      {
-      	try {
-        	if (ioFilter instanceof IOFilterWithProgress) {      		
-        		IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
-        		progressMonitor.beginTask(EditorPlugin.getResourceString("resource.save") +" "+ file.getName(), progressFilter.getTotalWork());      		
-        		progressFilter.addPropertyChangeListener(progressListener);      		
-        		saveFile(file, progressFilter, progressMonitor);
-        		progressFilter.removePropertyChangeListener(progressListener); 
-        	}
-        	else {
-        		progressMonitor.beginTask(EditorPlugin.getResourceString("resource.save") +" "+ file.getName(), 2);      		
-        		saveFile(file, ioFilter, progressMonitor);      		
-        	}      		
-      	} finally {
-      		progressMonitor.done();
-      	}
-      }
-    }     
-    
-    protected void saveFile(File file, IOFilter ioFilter, IProgressMonitor monitor) 
-    throws WriteException
-    {
-    	try {        	
-      	String fileName = file.getCanonicalPath();
-        LOGGER.info("Save File "+fileName);
-        FileOutputStream fos = new FileOutputStream(fileName);          
-        ioFilter.write(getMultiLayerDrawComponent(), fos);      		
-    	} catch (Exception e) {
-//    		throw new WriteException(file, "an error occured while writing", e);
-    		throw new RuntimeException(e);
-    	}    	
-    }
-                        		
-    protected void setInput(IEditorInput input)
-    {
-      super.setInput(input);
-      renderMan = RendererRegistry.sharedInstance().getRenderModeManager();
-      
-      if (input instanceof FileEditorInput) {
-        FileEditorInput fileInput = (FileEditorInput) input; 
-        mldc = getMultiLayerDrawComponent();        
-        if (!fileInput.isSaved()) {
-        	initialzePage();
-        } else {        	
-          load(fileInput);        	
-        }        
-//        System.gc();      	      	
-      } 
-      else
-      	initialzePage();
-        
-      mldc.setRenderModeManager(getRenderModeManager());      
-      getMultiLayerDrawComponent().setLanguageId(getLanguageManager().getCurrentLanguageID());
- 
-	  	getUnitManager().setCurrentUnit(getMultiLayerDrawComponent().getModelUnit());      
-    }
-               
-    protected void initialzePage() 
-    {
-    	LOGGER.debug("initialize Page!");
-    	mldc = getMultiLayerDrawComponent();
-    	loadAdditional();
-    	    	
-    	String pageID = Preferences.getPreferenceStore().getString(
-    			Preferences.PREF_PREDEFINED_PAGE_ID);
-    	IPredefinedPage defaultPage = getPageRegistry().getPredefinedPage(pageID);
-    	IUnit pageUnit = defaultPage.getUnit();    	
-    	String resolutionUnitID = Preferences.getPreferenceStore().getString(
-    			Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID);
-    	IResolutionUnit resUnit = getPageRegistry().getResolutionUnit(resolutionUnitID);
-    	Resolution resolution = new ResolutionImpl(resUnit, 
-    			Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION)); 
-//    	String unitID = Preferences.getPreferenceStore().getString(
-//    			Preferences.PREF_STANDARD_UNIT_ID);
-//    	setCurrentUnit(getPageRegistry().getUnit(unitID));
-    	
-    	double pageHeight = defaultPage.getPageHeight() * pageUnit.getFactor();
-    	double pageWidth = defaultPage.getPageWidth() * pageUnit.getFactor();    	
-    	DotUnit dotUnit = (DotUnit) getPageRegistry().getUnit(DotUnit.UNIT_ID);
-    	dotUnit.setResolution(resolution);    	
-    	double factor = dotUnit.getFactor();    	
-    	
-    	LOGGER.debug("factor = "+factor);
-    	LOGGER.debug("pageHeight = "+pageHeight+" mm");
-    	LOGGER.debug("pageWidth = "+pageWidth+" mm");    		  	
-    	    	
-    	pageWidth = pageWidth * factor;
-    	pageHeight = pageHeight * factor;
+	public void doSave(IProgressMonitor monitor) 
+	{
+		try {      	
+			FileEditorInput input = (FileEditorInput) getEditorInput();
+			if (!input.isSaved()) {
+				doSaveAs();
+				return;
+			}
 
-    	LOGGER.debug("new PageHeight = "+pageHeight);
-    	LOGGER.debug("new PageWidth = "+pageWidth);
-    	
-	  	double defaultX = 0;
-	  	double defaultY = 0;
-    	
-	  	Rectangle pageBounds = new Rectangle((int)defaultX, (int)defaultY, (int)pageWidth, (int)pageHeight);
-	  	LOGGER.debug("pageBounds = "+pageBounds);	  	
-	  	
-	  	getMultiLayerDrawComponent().setResolution(resolution);  	  	
-	  	getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 	  	
-    }
-    
-    protected PageRegistry getPageRegistry() {
-    	return PageRegistryEP.sharedInstance().getPageRegistry();
-    }
-    
-    protected void loadAdditional() {
-      if (!editorSaving) {
-        if (getGraphicalViewer() != null) {
-          getGraphicalViewer().setContents(getMultiLayerDrawComponent());
-          loadProperties();
-        }        
-      }    	
-    }
-                
-    public EditPartViewer getEditPartViewer() 
-    {
-      return (EditPartViewer) getGraphicalViewer();
-    }
-    
-    public void updateViewer() 
-    {
-    	refreshBuffer();    	
-      getGraphicalViewer().getControl().redraw();
-      LOGGER.debug("updateViewer!");
-    }
-        
-    protected void refreshBuffer() 
-    {
-    	MultiLayerDrawComponentEditPart mldcEditPart = getModelRootEditPart();
-    	if (mldcEditPart != null) {
-  			BufferedFreeformLayer buffer = mldcEditPart.getBufferedFreeformLayer();
-  			if (buffer != null) {
-//  				LOGGER.debug("Buffer refreshed!");
-  				buffer.refresh();
-  			}			    		
-    	}
-    }
-    
-    private MultiLayerDrawComponentEditPart mldcEditPart = null;
-    protected MultiLayerDrawComponentEditPart getModelRootEditPart() 
-    {
-    	if (getRootEditPart().getChildren().size() == 1) {
-    		EditPart editPart = (EditPart) getRootEditPart().getChildren().get(0);
-      	if (editPart != null) {
-      		if (editPart instanceof MultiLayerDrawComponentEditPart) {
-      			return mldcEditPart = (MultiLayerDrawComponentEditPart) editPart;
-      		}
-      	}
-    	}    		
-    	return mldcEditPart;
-    }
-    
-//   **************** BEGIN public Methods for EditorOutlinePage ******************** 
-    public GraphicalViewer getOutlineGraphicalViewer() {
-      return getGraphicalViewer();
-    }
-    
-    public SelectionSynchronizer getOutlineSelectionSynchronizer() {
-      return getSelectionSynchronizer();
-    }
-    
-    public DefaultEditDomain getOutlineEditDomain() {
-      return getEditDomain();
-    }
-    
-    public ActionRegistry getOutlineActionRegistry() {
-      return getActionRegistry();
-    }
-//  **************** END public Methods for EditorOutlinePage **********************  
-        
-  public void dispose() 
-  {
-    super.dispose();
-    mldc = null;
-    if (outlinePage != null)
-      outlinePage.dispose();
-    outlinePage = null; 
-    rootEditPart = null;
-    if (rulerComp != null)
-      rulerComp.dispose();
-    rulerComp = null;
-    treeViewer = null;
-    viewerManager = null;
-    
-    if (contextMenuProvider != null)
-      contextMenuProvider.dispose();
-    
-    contextMenuProvider = null;
-    editPartFactory = null;
-    paletteRoot = null;    
-    
-    freeMemory();
-  }
-   
-  private PageFormat pageFormat = PrinterJob.getPrinterJob().defaultPage();
+			File file = input.getFile();
+			String inputName = input.getName();
+			logger.debug("inputName = "+inputName);
+
+			if (file.exists() 
+					|| org.eclipse.jface.dialogs.MessageDialogWithToggle.openConfirm(getSite().getShell(),
+							EditorPlugin.getResourceString("resource.create.file"),
+							EditorPlugin.getResourceString("resource.fileNotExists.1")
+							+ " "
+							+ file.getName() 
+							+ " "
+							+ EditorPlugin.getResourceString("resource.fileNotExists.2")))
+			{
+				editorSaving = true;
+				saveProperties();
+				save(file, monitor);
+				getCommandStack().markSaveLocation();
+			}
+		}
+		catch (WriteException e){
+			throw new RuntimeException(e);      	
+		}   
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.ISaveablePart#doSaveAs()
+	 */
+	public void doSaveAs() 
+	{
+		performSaveAs();      
+	}
+
+	/**
+	 * Returns the KeyHandler with common bindings for both the Outline and Graphical Views.
+	 * For example, delete is a common action.
+	 */
+	public KeyHandler getCommonKeyHandler() 
+	{
+		if (sharedKeyHandler == null) {
+			sharedKeyHandler = new KeyHandler();
+
+			// Add key and action pairs to sharedKeyHandler
+			sharedKeyHandler.put(
+					KeyStroke.getPressed(SWT.DEL, 127, 0),
+					getActionRegistry().getAction(ActionFactory.DELETE.getId()));
+			sharedKeyHandler.put(
+					KeyStroke.getPressed(SWT.F2, 0),
+					getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
+			// TODO: register more common keys        
+		}
+		return sharedKeyHandler;
+	}
+
+	/**
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getPalettePreferences()
+	 */
+	protected FlyoutPreferences getPalettePreferences() {
+		return getPaletteFactory().createPalettePreferences();
+	}
+
+	protected abstract AbstractPaletteFactory createPaletteFactory();   
+
+	private AbstractPaletteFactory paletteFactory = null;
+	public AbstractPaletteFactory getPaletteFactory() 
+	{
+		if (paletteFactory == null) {
+			paletteFactory = createPaletteFactory();
+		}
+		return paletteFactory;
+	}
+
+	protected void handleActivationChanged(Event event) 
+	{
+		IAction copy = null;
+		if (event.type == SWT.Deactivate)
+			copy = getActionRegistry().getAction(ActionFactory.COPY.getId());
+		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.COPY.getId()) 
+				!= copy) {
+			getEditorSite().getActionBars().setGlobalActionHandler(
+					ActionFactory.COPY.getId(), copy);
+			getEditorSite().getActionBars().updateActionBars();
+		}
+	}  
+
+	/**
+	 * Set up the editor's inital content (after creation).
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#initializeGraphicalViewer()
+	 */
+	protected void initializeGraphicalViewer() 
+	{
+		GraphicalViewer graphicalViewer = getGraphicalViewer();
+		graphicalViewer.setContents(getModel()); // set the contents of this editor
+
+		graphicalViewer.getControl().setBackground(new Color(null, 255, 255, 255));
+		graphicalViewer.getControl().setForeground(new Color(null, 255, 255, 255));      
+//		// listen for dropped parts
+//		graphicalViewer.addDropTargetListener(createTransferDropTargetListener());   
+
+		// DescriptorManager
+		descriptorManager = new DescriptorManager();
+		configureDescriptorManager();      
+		if (getModelRootEditPart() != null) {
+			getModelRootEditPart().setDescriptorManager(getDescriptorManager());
+		} else {
+			logger.debug("DescriptorManager for MultiLayerDrawComponentEditPart not set, because it is null!");
+		}
+		viewerManager.setDescriptorManager(getDescriptorManager());      
+
+		configureFilterManager();      
+	}
+
+	protected void initializeActionRegistry() 
+	{
+		super.initializeActionRegistry();
+
+		// TODO: find out why global keyBindings not work only on base of Extension-Points
+		// (org.eclipse.ui.bindings + commands) nor on EditorActionBarContributor.declareGlobalActionKeys()  
+		IKeyBindingService keyBindingService = getSite().getKeyBindingService();
+		for (Iterator<IAction> it = getActionRegistry().getActions(); it.hasNext(); ) {
+			keyBindingService.registerAction(it.next());
+		} 	
+	}     
+
+	protected void configureFilterManager() 
+	{
+		Map class2DrawComponents = getMultiLayerDrawComponent().getClass2DrawComponents();
+		for (Iterator it = class2DrawComponents.keySet().iterator(); it.hasNext(); ) {
+			Class c = (Class) it.next();
+			getFilterManager().addFilter(c);
+		}
+		getMultiLayerDrawComponent().addPropertyChangeListener(getFilterManager().getTypeListener());    		
+		getFilterManager().ignoreClass(LayerImpl.class);    	
+	}
+
+	/**
+	 * By Default this Method does nothing, but Inheritans can override this Method to define 
+	 * excluded EditParts, ignored classes or an exclusive class
+	 * 
+	 * @see org.nightlabs.editor2d.ViewerManager
+	 */
+	protected void configureViewerManager()
+	{
+
+	}
+
+	/**
+	 * By Default this Method does nothing, but Inheritans can override this Method to add 
+	 * Descriptors for special classes to the DescriptorManager
+	 * 
+	 * @see DescriptorManager#addDescriptor(org.nightlabs.editor2d.viewer.descriptor.IDrawComponentDescriptor, Class) 
+	 */
+	protected void configureDescriptorManager() 
+	{
+
+	}
+
+	protected void createActions() 
+	{
+		super.createActions();
+		ActionRegistry registry = getActionRegistry();
+		IAction action;
+
+		// Match Actions
+		action = new MatchWidthAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new MatchHeightAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+//		action = new DirectEditAction((IWorkbenchPart)this);
+//		registry.registerAction(action);
+//		getSelectionActions().add(action.getId());
+
+		// Alignment Actions
+		action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.LEFT);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.RIGHT);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.TOP);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.BOTTOM);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.CENTER);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new AlignmentAction((IWorkbenchPart)this, PositionConstants.MIDDLE);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		// ZoomIn
+		action = new ZoomInAction(getRootEditPart().getZoomManager());
+		registry.registerAction(action);      
+		getSite().getKeyBindingService().registerAction(action);
+
+		// ZoomOut
+		action = new ZoomOutAction(getRootEditPart().getZoomManager());
+		registry.registerAction(action);      
+		getSite().getKeyBindingService().registerAction(action);
+
+		// Zoom All
+		action = new ZoomAllAction(getRootEditPart().getZoomManager());
+		registry.registerAction(action);      
+
+		// Zoom Selection
+		action = new ZoomSelectionAction(this);      
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		// Zoom Page
+		action = new ZoomPageAction(this, getRootEditPart().getZoomManager());      
+		registry.registerAction(action);
+		getPropertyActions().add(action.getId());
+
+		// Edit Shape Action
+		action = new EditShapeAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		// Rotate Action
+		action = new RotateAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		// Normal Selection Action
+		action = new NormalSelectionAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());   
+
+		// Reset Rotation Center Action
+		action = new ResetRotationCenterAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		// Show Default View (Renderer) Action
+		action = new ShowDefaultRenderAction(this);
+		registry.registerAction(action);
+
+		// Select all with same name
+		action = new SelectAllWithSameName(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());    
+
+		// Clone (Duplicate) Action
+		action = new CloneAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());   
+
+		// Order Actions
+		action = new ChangeOrderToLocalFront(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());    
+
+		action = new ChangeOrderToLocalBack(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());    
+
+		action = new ChangeOrderOneDown(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());    
+
+		action = new ChangeOrderOneUp(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());    
+
+		// Paste Action
+		PasteAction pasteAction = new PasteAction(this);
+		registry.registerAction(pasteAction);
+		getPropertyActions().add(pasteAction.getId());
+		getSite().getKeyBindingService().registerAction(pasteAction);
+
+		// Cut Action
+		CutAction cutAction = new CutAction(this);
+		registry.registerAction(cutAction);
+		getSelectionActions().add(cutAction.getId());
+		cutAction.addPropertyChangeListener(pasteAction.cutListener);
+		getSite().getKeyBindingService().registerAction(cutAction);      
+
+		// Copy Action
+		CopyAction copyAction = new CopyAction(this);
+		registry.registerAction(copyAction);
+		getSelectionActions().add(copyAction.getId());  
+		copyAction.addPropertyChangeListener(pasteAction.copyListener);
+		getSite().getKeyBindingService().registerAction(copyAction);      
+
+		// Tooltip Preference 
+		action = new ShowFigureToolTipAction(this);
+		registry.registerAction(action);
+		getPropertyActions().add(action.getId());
+
+		// Status Line Preference
+		action = new ShowStatusLineAction(this);
+		registry.registerAction(action);
+		getPropertyActions().add(action.getId());
+
+		// Repaint Action
+		action = new RepaintAction(this);
+		registry.registerAction(action);
+		getPropertyActions().add(action.getId());
+
+//		// Test Viewer Action
+//		action = new ViewerAction(this);
+//		registry.registerAction(action);
+
+		// Print Action
+		action = new EditorPrintAction(this);
+		registry.registerAction(action);
+		getPropertyActions().add(action.getId());
+
+		// Print Preview Action
+		action = new EditorPrintPreviewAction(this);
+		registry.registerAction(action);
+		getPropertyActions().add(action.getId());
+
+		// Print Page Setup Action
+		action = new EditorPrintSetupAction(this);
+		registry.registerAction(action);
+		getPropertyActions().add(action.getId());
+
+		// Group Action
+		action = new GroupAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		// UnGroup Action
+		action = new UnGroupAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		// Convert To Shape
+		action = new ConvertToShapeAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		// Shape Union
+		action = new ShapeUnionAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());            
+
+		// Shape Intersection
+		action = new ShapeIntersectAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());            
+
+		// Shape Subtract
+		action = new ShapeSubtractAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());            
+
+		// Shape Exclusive Or
+		action = new ShapeExclusiveOrAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());     
+
+		// Delete
+		action = new DeleteAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());      
+	}
+
+	/**
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#createGraphicalViewer(org.eclipse.swt.widgets.Composite)
+	 */
+	protected void createGraphicalViewer(Composite parent) 
+	{
+		rulerComp = new RulerComposite(parent, SWT.NONE);
+		super.createGraphicalViewer(rulerComp);
+		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());      
+	}  
+
+	public FigureCanvas getEditor(){
+		return (FigureCanvas)getGraphicalViewer().getControl();
+	}
+
+	public boolean isDirty() {
+		return isSaveOnCloseNeeded();
+	}
+
+	public boolean isSaveOnCloseNeeded() {
+		return getCommandStack().isDirty();
+	}
+
+	protected void loadProperties() 
+	{
+		// Ruler properties
+		EditorRuler ruler = getMultiLayerDrawComponent().getLeftRuler();
+		RulerProvider provider = null;
+		if (ruler != null) {
+			provider = new EditorRulerProvider(ruler);
+		}
+		getGraphicalViewer().setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
+		ruler = getMultiLayerDrawComponent().getTopRuler();
+		provider = null;
+		if (ruler != null) {
+			provider = new EditorRulerProvider(ruler);
+		}
+		getGraphicalViewer().setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER, provider);
+		getGraphicalViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, 
+				new Boolean(getMultiLayerDrawComponent().isRulersEnabled()));
+
+		// Snap to Geometry property
+		getGraphicalViewer().setProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED, 
+				new Boolean(getMultiLayerDrawComponent().isSnapToGeometry()));
+
+		// Grid properties
+		getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_ENABLED, 
+				new Boolean(getMultiLayerDrawComponent().isGridEnabled()));
+		// We keep grid visibility and enablement in sync
+		getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE, 
+				new Boolean(getMultiLayerDrawComponent().isGridEnabled()));
+
+		// Zoom
+		ZoomManager manager = (ZoomManager)getGraphicalViewer()
+		.getProperty(ZoomManager.class.toString());
+		if (manager != null)
+			manager.setZoom(getMultiLayerDrawComponent().getZoom());      	            
+	}
+
+	/**
+	 * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
+	 */
+	public boolean isSaveAsAllowed() {
+		return true;
+	}
+
+	protected boolean savePreviouslyNeeded() {
+		return savePreviouslyNeeded;
+	}
+
+	protected void saveProperties() 
+	{
+		getMultiLayerDrawComponent().setRulersEnabled(((Boolean)getGraphicalViewer()
+				.getProperty(RulerProvider.PROPERTY_RULER_VISIBILITY)).booleanValue());
+		getMultiLayerDrawComponent().setGridEnabled(((Boolean)getGraphicalViewer()
+				.getProperty(SnapToGrid.PROPERTY_GRID_ENABLED)).booleanValue());
+		getMultiLayerDrawComponent().setSnapToGeometry(((Boolean)getGraphicalViewer()
+				.getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED)).booleanValue());
+		ZoomManager manager = (ZoomManager)getGraphicalViewer()
+		.getProperty(ZoomManager.class.toString());
+		if (manager != null)
+			getMultiLayerDrawComponent().setZoom(manager.getZoom());
+	}
+
+	protected void setSavePreviouslyNeeded(boolean value) {
+		savePreviouslyNeeded = value;
+	}  
+
+//	protected void superSetInput(IEditorInput input) 
+//{
+//	// The workspace never changes for an editor.  So, removing and re-adding the 
+//	// resourceListener is not necessary.  But it is being done here for the sake
+//	// of proper implementation.  Plus, the resourceListener needs to be added 
+//	// to the workspace the first time around.
+//	if(getEditorInput() != null) {
+//	IFile file = ((FileEditorInput)getEditorInput()).getFile();
+//	file.getWorkspace().removeResourceChangeListener(resourceListener);
+//	}
+
+//	super.setInput(input);
+
+//	if(getEditorInput() != null && getEditorInput() instanceof FileEditorInput) {
+//	IFile file = ((FileEditorInput)getEditorInput()).getFile();
+//	file.getWorkspace().addResourceChangeListener(resourceListener);
+//	setTitle(file.getName());
+//	}
+//	}
+
+	protected boolean performSaveAs() 
+	{
+		FileDialog dialog = new FileDialog(getSite().getWorkbenchWindow().getShell(), SWT.SAVE);
+		String inputFileName = getEditorInput().getName();
+		dialog.setFileName(inputFileName);      
+		String[] fileExtensions = getIOFilterMan().getAvailableFileExtensionsAsStrings();      
+		if (fileExtensions != null)
+			dialog.setFilterExtensions(fileExtensions);
+
+		String fullPath = dialog.open();
+		// Cancel pressed
+		if (fullPath == null)
+			return false;
+
+		final File file = new File(fullPath);  
+
+		if (!file.exists()) {
+			save(file);
+		}
+		else {
+			int returnVal = RCPUtil.showConfirmOverwriteDialog(file.getName());
+			if (returnVal == SWT.OK)
+				save(file);
+			else 
+				return false;
+		}
+		try {
+			getCommandStack().markSaveLocation();
+		} 
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+		return true;
+	}
+
+	private PropertyChangeListener progressListener = new PropertyChangeListener()
+	{
+		public void propertyChange(PropertyChangeEvent evt) 
+		{
+			Object newValue = evt.getNewValue();
+			String propertyName = evt.getPropertyName();
+			if (propertyName.equals(AbstractIOFilterWithProgress.PROGRESS_CHANGED)) {
+				int work = ((Integer)newValue).intValue();
+				getProgressMonitor().getProgressMonitor().internalWorked(work); 
+			}
+			else if (propertyName.equals(AbstractIOFilterWithProgress.SUBTASK_FINISHED)) {
+				String subTaskName = (String) newValue;
+				getProgressMonitor().getProgressMonitor().subTask(subTaskName);  				
+			}
+		}			
+	};
+
+	private ProgressMonitorDialog progressMonitor; 
+	protected ProgressMonitorDialog getProgressMonitor() 
+	{
+		if (progressMonitor == null) {
+			progressMonitor = new ProgressMonitorDialog(getSite().getWorkbenchWindow().getShell());    		
+		}
+		return progressMonitor;
+	}
+
+	protected void save(File f) 
+	{
+		final File file = f;    	
+		IRunnableWithProgress runnable = new IRunnableWithProgress()
+		{			
+			public void run(IProgressMonitor monitor) 
+			throws InvocationTargetException, InterruptedException 
+			{
+				saveProperties();
+				try {
+					save(file, monitor);      
+				} 
+				catch (Exception e) {
+					throw new RuntimeException(e);
+				}					
+			}			
+		};
+
+		try {
+			getProgressMonitor().run(false, false, runnable);
+			setPartName(file.getName());
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}    	
+	}    
+
+	/**
+	 * Saves the Model under the specified path.
+	 * 
+	 * @param file the file to save
+	 * @param progressMonitor The ProgressMonitor to show the save Progress
+	 */
+	protected void save(File file, IProgressMonitor progressMonitor)
+	throws WriteException
+	{
+		if (null == progressMonitor)
+			progressMonitor = new NullProgressMonitor();
+
+		// use IOFilterMan
+		IOFilter ioFilter = getIOFilterMan().getIOFilter(file);      
+		if (ioFilter != null) 
+		{
+			try {
+				if (ioFilter instanceof IOFilterWithProgress) {      		
+					IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
+					progressMonitor.beginTask(EditorPlugin.getResourceString("resource.save") +" "+ file.getName(), progressFilter.getTotalWork());      		
+					progressFilter.addPropertyChangeListener(progressListener);      		
+					saveFile(file, progressFilter, progressMonitor);
+					progressFilter.removePropertyChangeListener(progressListener); 
+				}
+				else {
+					progressMonitor.beginTask(EditorPlugin.getResourceString("resource.save") +" "+ file.getName(), 2);      		
+					saveFile(file, ioFilter, progressMonitor);      		
+				}      		
+			} finally {
+				progressMonitor.done();
+			}
+		}
+	}     
+
+	protected void saveFile(File file, IOFilter ioFilter, IProgressMonitor monitor) 
+	throws WriteException
+	{
+		try {        	
+			String fileName = file.getCanonicalPath();
+			logger.info("Save File "+fileName);
+			FileOutputStream fos = new FileOutputStream(fileName);          
+			ioFilter.write(getMultiLayerDrawComponent(), fos);      		
+		} catch (Exception e) {
+//			throw new WriteException(file, "an error occured while writing", e);
+			throw new RuntimeException(e);
+		}    	
+	}
+
+	protected void setInput(IEditorInput input)
+	{
+		super.setInput(input);
+		renderMan = RendererRegistry.sharedInstance().getRenderModeManager();
+
+		if (input instanceof FileEditorInput) {
+			FileEditorInput fileInput = (FileEditorInput) input; 
+			mldc = getMultiLayerDrawComponent();        
+			if (!fileInput.isSaved()) {
+				initialzePage();
+			} else {        	
+				load(fileInput);        	
+			}        
+//			System.gc();      	      	
+		} 
+		else
+			initialzePage();
+
+		mldc.setRenderModeManager(getRenderModeManager());      
+		getMultiLayerDrawComponent().setLanguageId(getLanguageManager().getCurrentLanguageID());
+
+		getUnitManager().setCurrentUnit(getMultiLayerDrawComponent().getModelUnit());      
+	}
+
+	protected void initialzePage() 
+	{
+		logger.debug("initialize Page!");
+		mldc = getMultiLayerDrawComponent();
+		loadAdditional();
+
+		String pageID = Preferences.getPreferenceStore().getString(
+				Preferences.PREF_PREDEFINED_PAGE_ID);
+		IPredefinedPage defaultPage = getPageRegistry().getPredefinedPage(pageID);
+		IUnit pageUnit = defaultPage.getUnit();    	
+		String resolutionUnitID = Preferences.getPreferenceStore().getString(
+				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID);
+		IResolutionUnit resUnit = getPageRegistry().getResolutionUnit(resolutionUnitID);
+		Resolution resolution = new ResolutionImpl(resUnit, 
+				Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION)); 
+//		String unitID = Preferences.getPreferenceStore().getString(
+//		Preferences.PREF_STANDARD_UNIT_ID);
+//		setCurrentUnit(getPageRegistry().getUnit(unitID));
+
+		double pageHeight = defaultPage.getPageHeight() * pageUnit.getFactor();
+		double pageWidth = defaultPage.getPageWidth() * pageUnit.getFactor();    	
+		DotUnit dotUnit = (DotUnit) getPageRegistry().getUnit(DotUnit.UNIT_ID);
+		dotUnit.setResolution(resolution);    	
+		double factor = dotUnit.getFactor();    	
+
+		logger.debug("factor = "+factor);
+		logger.debug("pageHeight = "+pageHeight+" mm");
+		logger.debug("pageWidth = "+pageWidth+" mm");    		  	
+
+		pageWidth = pageWidth * factor;
+		pageHeight = pageHeight * factor;
+
+		logger.debug("new PageHeight = "+pageHeight);
+		logger.debug("new PageWidth = "+pageWidth);
+
+		double defaultX = 0;
+		double defaultY = 0;
+
+		Rectangle pageBounds = new Rectangle((int)defaultX, (int)defaultY, (int)pageWidth, (int)pageHeight);
+		logger.debug("pageBounds = "+pageBounds);	  	
+
+		getMultiLayerDrawComponent().setResolution(resolution);  	  	
+		getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 	  	
+	}
+
+	protected PageRegistry getPageRegistry() {
+		return PageRegistryEP.sharedInstance().getPageRegistry();
+	}
+
+	protected void loadAdditional() {
+		if (!editorSaving) {
+			if (getGraphicalViewer() != null) {
+				getGraphicalViewer().setContents(getMultiLayerDrawComponent());
+				loadProperties();
+			}        
+		}    	
+	}
+
+	public EditPartViewer getEditPartViewer() 
+	{
+		return (EditPartViewer) getGraphicalViewer();
+	}
+
+	public void updateViewer() 
+	{
+		refreshBuffer();    	
+		getGraphicalViewer().getControl().redraw();
+		logger.debug("updateViewer!");
+	}
+
+	protected void refreshBuffer() 
+	{
+		MultiLayerDrawComponentEditPart mldcEditPart = getModelRootEditPart();
+		if (mldcEditPart != null) {
+			BufferedFreeformLayer buffer = mldcEditPart.getBufferedFreeformLayer();
+			if (buffer != null) {
+//				LOGGER.debug("Buffer refreshed!");
+				buffer.refresh();
+			}			    		
+		}
+	}
+
+	private MultiLayerDrawComponentEditPart mldcEditPart = null;
+	protected MultiLayerDrawComponentEditPart getModelRootEditPart() 
+	{
+		if (getRootEditPart().getChildren().size() == 1) {
+			EditPart editPart = (EditPart) getRootEditPart().getChildren().get(0);
+			if (editPart != null) {
+				if (editPart instanceof MultiLayerDrawComponentEditPart) {
+					return mldcEditPart = (MultiLayerDrawComponentEditPart) editPart;
+				}
+			}
+		}    		
+		return mldcEditPart;
+	}
+
+//	**************** BEGIN public Methods for EditorOutlinePage ******************** 
+	public GraphicalViewer getOutlineGraphicalViewer() {
+		return getGraphicalViewer();
+	}
+
+	public SelectionSynchronizer getOutlineSelectionSynchronizer() {
+		return getSelectionSynchronizer();
+	}
+
+	public DefaultEditDomain getOutlineEditDomain() {
+		return getEditDomain();
+	}
+
+	public ActionRegistry getOutlineActionRegistry() {
+		return getActionRegistry();
+	}
+//	**************** END public Methods for EditorOutlinePage **********************  
+
+	public void dispose() 
+	{
+		super.dispose();
+		mldc = null;
+		if (outlinePage != null)
+			outlinePage.dispose();
+		outlinePage = null; 
+		rootEditPart = null;
+		if (rulerComp != null)
+			rulerComp.dispose();
+		rulerComp = null;
+		treeViewer = null;
+		viewerManager = null;
+
+		if (contextMenuProvider != null)
+			contextMenuProvider.dispose();
+
+		contextMenuProvider = null;
+		editPartFactory = null;
+		paletteRoot = null;    
+
+		freeMemory();
+	}
+
+	private PageFormat pageFormat = PrinterJob.getPrinterJob().defaultPage();
 	public PageFormat getPageFormat() {
 		return pageFormat;
 	}
 	public void setPageFormat(PageFormat pageFormat) {
 		this.pageFormat = pageFormat;
 	}
-  
-  protected void freeMemory() 
-  {
-    Runtime runTime = Runtime.getRuntime();
-    long maxMemory = runTime.maxMemory();
-    long freeMemory = runTime.freeMemory();
-    long totalMemory = runTime.totalMemory();    
-    long startTime = System.currentTimeMillis();
-        
-    LOGGER.debug("Total Memory BEFORE GC = "+totalMemory);
-    LOGGER.debug("Max Memory BEFORE GC   = "+maxMemory);
-    LOGGER.debug("Free Memory BEFORE GC  = "+freeMemory);    
-    LOGGER.debug("GC Begin!");
-    
-    runTime.gc();
-    long newTime = System.currentTimeMillis() - startTime;
-    
-    LOGGER.debug("GC took "+newTime+" ms");        
-    LOGGER.debug("Total Memory AFTER GC = "+totalMemory);
-    LOGGER.debug("Max Memory AFTER GC   = "+maxMemory);
-    LOGGER.debug("Free Memory AFTER GC  = "+freeMemory);
-    LOGGER.debug("");  	
-  }	
-  
-  private Editor2DFactory factory = null;
-  public Editor2DFactory getModelFactory() 
-  {
-  	if (factory == null) {
-  		factory = createModelFactory();
-  	}
-  	return factory;
-  }
-  
-  protected abstract Editor2DFactory createModelFactory();
+
+	protected void freeMemory() 
+	{
+		Runtime runTime = Runtime.getRuntime();
+		long maxMemory = runTime.maxMemory();
+		long freeMemory = runTime.freeMemory();
+		long totalMemory = runTime.totalMemory();    
+		long startTime = System.currentTimeMillis();
+
+		logger.debug("Total Memory BEFORE GC = "+totalMemory);
+		logger.debug("Max Memory BEFORE GC   = "+maxMemory);
+		logger.debug("Free Memory BEFORE GC  = "+freeMemory);    
+		logger.debug("GC Begin!");
+
+		runTime.gc();
+		long newTime = System.currentTimeMillis() - startTime;
+
+		logger.debug("GC took "+newTime+" ms");        
+		logger.debug("Total Memory AFTER GC = "+totalMemory);
+		logger.debug("Max Memory AFTER GC   = "+maxMemory);
+		logger.debug("Free Memory AFTER GC  = "+freeMemory);
+		logger.debug("");  	
+	}	
+
+	private Editor2DFactory factory = null;
+	public Editor2DFactory getModelFactory() 
+	{
+		if (factory == null) {
+			factory = createModelFactory();
+		}
+		return factory;
+	}
+
+	protected abstract Editor2DFactory createModelFactory();
 }

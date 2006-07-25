@@ -27,11 +27,9 @@
 
 package org.nightlabs.editor2d.tools;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.Request;
 import org.eclipse.swt.graphics.Cursor;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.custom.EditorCursors;
 import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
@@ -41,7 +39,6 @@ import org.nightlabs.editor2d.util.EditorUtil;
 public class RotateTracker 
 extends AbstractDragTracker 
 {
-  public static final Logger LOGGER = Logger.getLogger(RotateTracker.class);  
   protected int direction; 
   
   public RotateTracker(AbstractDrawComponentEditPart owner, int direction)

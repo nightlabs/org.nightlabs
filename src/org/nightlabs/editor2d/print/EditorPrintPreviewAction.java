@@ -29,7 +29,6 @@ import java.awt.print.PageFormat;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
@@ -42,7 +41,6 @@ public class EditorPrintPreviewAction
 extends AbstractEditorPrintAction
 {
 	public static final String ID = EditorPrintPreviewAction.class.getName();
-	public static final Logger LOGGER = Logger.getLogger(EditorPrintPreviewAction.class);
 	
 	/**
 	 * @param editor

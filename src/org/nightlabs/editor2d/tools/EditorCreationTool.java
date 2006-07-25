@@ -27,7 +27,6 @@
 
 package org.nightlabs.editor2d.tools;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
@@ -47,8 +46,6 @@ implements EditorRequestConstants
 {
   protected SnapToHelper helper;
   
-  public static final Logger LOGGER = Logger.getLogger(EditorCreationTool.class);
-    
 //  /**
 //   * @param aFactory
 //   */

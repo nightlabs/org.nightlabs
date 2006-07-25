@@ -35,7 +35,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.apache.log4j.Logger;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.tools.CreationTool;
@@ -52,8 +51,6 @@ import org.nightlabs.editor2d.request.ImageCreateRequest;
 public class ImageTool 
 extends CreationTool 
 {
-	public static final Logger LOGGER = Logger.getLogger(ImageTool.class);
-	
 //  public ImageTool(CreationFactory aFactory) {
   public ImageTool(IModelCreationFactory aFactory) {	
     this(aFactory, false);

@@ -54,7 +54,10 @@ public class DrawComponentFigure
 extends Figure
 implements RendererFigure
 {
-	public static final Logger LOGGER = Logger.getLogger(DrawComponentFigure.class.getName());
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(DrawComponentFigure.class.getName());
 	
   private J2DGraphics j2d;
   private Graphics2D g2d;
@@ -190,17 +193,17 @@ implements RendererFigure
 		{				
 			RenderContext rc = r.getRenderContext();
 			if (rc instanceof Draw2DRenderContext) {
-				LOGGER.debug("rc instanceof Draw2DRenderContext");
+				logger.debug("rc instanceof Draw2DRenderContext");
 				((Draw2DRenderContext)rc).paint(dc, g);					
 			}
 			else {
 				rc = r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE);
 				if (rc != null) {
-					LOGGER.debug("r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE) != null!");					
+					logger.debug("r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE) != null!");					
 					Draw2DRenderContext d2drc = (Draw2DRenderContext) rc;
 					d2drc.paint(dc, g);										
 				} else
-					LOGGER.debug("r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE) == null!");					
+					logger.debug("r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE) == null!");					
 			}
 		}					
 	}

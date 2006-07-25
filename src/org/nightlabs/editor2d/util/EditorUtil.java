@@ -31,7 +31,6 @@ import java.awt.Font;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
@@ -46,8 +45,6 @@ import org.nightlabs.math.MathUtil;
 
 public class EditorUtil 
 {
-  public static final Logger LOGGER = Logger.getLogger(EditorUtil.class);
-  
   public EditorUtil() {
     super();
   }

@@ -31,7 +31,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -52,8 +51,6 @@ public abstract class AbstractDrawComponentEditPart
 extends AbstractGraphicalEditPart
 implements EditorRequestConstants
 {
-  public static final Logger LOGGER = Logger.getLogger(AbstractDrawComponentEditPart.class);
-    
   public AbstractDrawComponentEditPart(DrawComponent drawComponent) 
   {
     setModel(drawComponent);

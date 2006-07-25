@@ -40,7 +40,10 @@ import org.holongate.j2d.IPaintable;
 public class BufferedImagePaintable 
 implements IPaintable 
 {
-	public static final Logger LOGGER = Logger.getLogger(BufferedImagePaintable.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(BufferedImagePaintable.class);
 	
 	private RenderedImage image = null;
 	public BufferedImagePaintable(RenderedImage bi) {
@@ -54,14 +57,14 @@ implements IPaintable
 	public void paint(Control control, Graphics2D g2d) 
 	{
 		if (image == null) {
-			LOGGER.debug("image = null!");
+			logger.debug("image = null!");
 			return;			
 		}
 		
 		long start = System.currentTimeMillis();
 		g2d.drawRenderedImage(image, null);
 		long end = System.currentTimeMillis() - start;		
-		LOGGER.debug("paint took "+end+" ms!");
+		logger.debug("paint took "+end+" ms!");
 	}
 
 	/**

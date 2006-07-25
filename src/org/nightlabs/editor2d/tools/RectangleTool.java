@@ -27,7 +27,6 @@
 
 package org.nightlabs.editor2d.tools;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Point;
@@ -44,8 +43,6 @@ import org.nightlabs.editor2d.util.EditorGeneralShapeFactory;
 public class RectangleTool 
 extends EditorCreationTool 
 {
-  public static final Logger LOGGER = Logger.getLogger(RectangleTool.class);
-  
 //  public RectangleTool(CreationFactory aFactory) 
   public RectangleTool(IModelCreationFactory aFactory)  
   {

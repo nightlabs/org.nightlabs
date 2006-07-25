@@ -39,7 +39,10 @@ public class ImageEditPart
 //extends AbstractDrawComponentEditPart 
 extends DrawComponentEditPart
 {
-  public static final Logger LOGGER = Logger.getLogger(ImageEditPart.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(ImageEditPart.class);
   
   public ImageEditPart(ImageDrawComponent drawComponent) {
     super(drawComponent);
@@ -66,7 +69,7 @@ extends DrawComponentEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(ImageDrawComponent.PROP_IMAGE)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}
 	}    

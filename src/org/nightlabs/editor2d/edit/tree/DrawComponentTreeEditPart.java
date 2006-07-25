@@ -44,7 +44,6 @@ import org.nightlabs.editor2d.model.DrawComponentPropertySource;
 public abstract class DrawComponentTreeEditPart 
 extends AbstractTreeEditPart 
 {
-  public static final Logger LOGGER = Logger.getLogger(DrawComponentTreeEditPart.class);  
   protected IPropertySource propertySource = null;
     
   /**

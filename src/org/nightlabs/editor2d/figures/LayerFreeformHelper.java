@@ -29,7 +29,6 @@ package org.nightlabs.editor2d.figures;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.FigureListener;
 import org.eclipse.draw2d.FreeformFigure;
 import org.eclipse.draw2d.FreeformListener;
@@ -41,8 +40,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 public class LayerFreeformHelper 
 implements FreeformListener
 {
-  public static final Logger LOGGER = Logger.getLogger(LayerFreeformHelper.class);
-  
   class ChildTracker implements FigureListener {
   	public void figureMoved(IFigure source) {
   		invalidate();

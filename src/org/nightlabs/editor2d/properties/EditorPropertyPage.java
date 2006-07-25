@@ -46,7 +46,10 @@ import org.nightlabs.i18n.IUnit;
 public class EditorPropertyPage 
 extends PropertySheetPage
 {	
-	public static final Logger LOGGER = Logger.getLogger(EditorPropertyPage.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(EditorPropertyPage.class);
 	
 //	public EditorPropertyPage() 
 //	{
@@ -104,7 +107,7 @@ extends PropertySheetPage
 	{	
 		public void widgetSelected(SelectionEvent e) 
 		{
-			LOGGER.debug("unit changed!");
+			logger.debug("unit changed!");
 			if (selection != null) {
 				for (int i = 0; i < selection.length; i++) {
 					setUnit(selection[i]);					

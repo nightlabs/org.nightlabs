@@ -69,7 +69,10 @@ import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
 public class J2DPrintDialog 
 extends CenteredDialog 
 {
-	public static final Logger LOGGER = Logger.getLogger(J2DPrintDialog.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(J2DPrintDialog.class);
 	
 	public J2DPrintDialog(Shell parentShell, DrawComponent dc, PageFormat pageFormat) 
 	{
@@ -394,7 +397,7 @@ extends CenteredDialog
 				
 	protected void refresh() 
 	{		
-		LOGGER.debug("refresh");
+		logger.debug("refresh");
 		
 		switch (align) {
 			case(HORIZONTAL_ALIGNMENT):
@@ -407,7 +410,7 @@ extends CenteredDialog
 		initPage(pageFormat);	
 		setCanvasSize();
 		
-		LOGGER.debug("dcBounds(original) = " + drawComponent.getBounds());
+		logger.debug("dcBounds(original) = " + drawComponent.getBounds());
 		dcBounds = GeomUtil.translateToOrigin(drawComponent.getBounds());				
 		canvasBounds = GeomUtil.toAWTRectangle(canvas.getClientArea());										
 		Rectangle shrinkedCanvasBounds = new Rectangle(0, 0, 
@@ -418,14 +421,14 @@ extends CenteredDialog
 		scale = Math.min(scales.getX(), scales.getY());
 		translateCanvas();
 		
-		LOGGER.debug("dcBounds = " + dcBounds);
-		LOGGER.debug("canvasBounds = " + canvasBounds);
-		LOGGER.debug("shrinkedCanvasBounds = " + shrinkedCanvasBounds);
-		LOGGER.debug("imageablePageRectangle = " + imageablePageRectangle);
-		LOGGER.debug("scale = "+scale);
-		LOGGER.debug("translateX = "+translateX);		
-		LOGGER.debug("translateY = "+translateY);
-		LOGGER.debug("");
+		logger.debug("dcBounds = " + dcBounds);
+		logger.debug("canvasBounds = " + canvasBounds);
+		logger.debug("shrinkedCanvasBounds = " + shrinkedCanvasBounds);
+		logger.debug("imageablePageRectangle = " + imageablePageRectangle);
+		logger.debug("scale = "+scale);
+		logger.debug("translateX = "+translateX);		
+		logger.debug("translateY = "+translateY);
+		logger.debug("");
 				
 		setCanvasZoom(scale);		
 		updateCanvas();

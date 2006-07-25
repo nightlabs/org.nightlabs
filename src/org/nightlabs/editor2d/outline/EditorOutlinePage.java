@@ -32,9 +32,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.draw2d.J2DLightweightSystem;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.Viewport;
@@ -44,7 +42,6 @@ import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.RootEditPart;
-import org.eclipse.gef.editparts.J2DScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -64,7 +61,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageBook;
 import org.holongate.j2d.J2DCanvas;
-import org.holongate.j2d.J2DSamplePaintable;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorContextMenuProvider;
@@ -77,8 +73,6 @@ public class EditorOutlinePage
 extends ContentOutlinePage 
 implements IAdaptable 
 {
-	public static final Logger LOGGER = Logger.getLogger(EditorOutlinePage.class.getName()); 
-	
   static final int ID_OUTLINE  = 0;
   static final int ID_OVERVIEW = 1;
   static final int ID_FILTER 	 = 3;

@@ -32,7 +32,6 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -56,8 +55,6 @@ implements IPropertySource
 	public static final String CATEGORY_NAME = EditorPlugin.getResourceString("property.category.name");
 	public static final String CATEGORY_GEOM = EditorPlugin.getResourceString("property.category.geom");		
 	public static final String CATEGORY_ROTATION = EditorPlugin.getResourceString("property.category.rotation");
-	
-	public static final Logger LOGGER = Logger.getLogger(DrawComponentPropertySource.class);
 	
 	public DrawComponentPropertySource(DrawComponent element) 
 	{

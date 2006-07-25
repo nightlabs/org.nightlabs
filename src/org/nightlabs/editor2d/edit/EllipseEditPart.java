@@ -38,6 +38,12 @@ import org.nightlabs.editor2d.model.EllipsePropertySource;
 public class EllipseEditPart 
 extends ShapeDrawComponentEditPart 
 {
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
+			.getLogger(EllipseEditPart.class);
+	
   public EllipseEditPart(EllipseDrawComponent drawComponent) {
     super(drawComponent);
   }
@@ -61,12 +67,12 @@ extends ShapeDrawComponentEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(EllipseDrawComponent.PROP_END_ANGLE)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();	
 			return;
 		}
 		else if (propertyName.equals(EllipseDrawComponent.PROP_START_ANGLE)) {
-			LOGGER.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!");
 			refreshVisuals();
 			return;
 		}		

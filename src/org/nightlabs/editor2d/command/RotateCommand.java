@@ -31,11 +31,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.request.EditorRotateRequest;
@@ -43,7 +41,6 @@ import org.nightlabs.editor2d.request.EditorRotateRequest;
 public class RotateCommand 
 extends Command 
 {
-  public static final Logger LOGGER = Logger.getLogger(RotateCommand.class);  
   protected Map dc2Rotation; 
   protected Map dc2RotationCenter;
   protected EditorRotateRequest request;

@@ -27,7 +27,6 @@ package org.nightlabs.editor2d.actions;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -45,8 +44,6 @@ public class DeleteAction
 extends AbstractEditorSelectionAction 
 {
 	public static final String ID = ActionFactory.DELETE.getId();
-	
-	public static final Logger LOGGER = Logger.getLogger(DeleteAction.class);
 	
 	/**
 	 * @param editor

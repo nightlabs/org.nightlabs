@@ -27,10 +27,8 @@
 
 package org.nightlabs.editor2d.request;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.gef.requests.CreateRequest;
-
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.model.IModelCreationFactory;
 
@@ -40,8 +38,6 @@ extends CreateRequest
 implements EditorShapeRequest,
 					 EditorBoundsRequest
 {
-  public static final Logger LOGGER = Logger.getLogger(EditorCreateRequest.class);
-  
   public static final int BOUNDS_FIX_MODE = 1;
   public static final int BOUNDS_UNFIX_MODE = 2;
   

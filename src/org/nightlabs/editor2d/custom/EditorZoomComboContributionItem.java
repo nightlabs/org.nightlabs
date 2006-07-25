@@ -59,7 +59,10 @@ import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
 public class EditorZoomComboContributionItem 
 extends XContributionItem
 {
-	public static final Logger LOGGER = Logger.getLogger(EditorZoomComboContributionItem.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(EditorZoomComboContributionItem.class);
 	
 	private Combo combo = null;
   private String[] initStrings = null;
@@ -114,7 +117,7 @@ extends XContributionItem
 				combo.setItems(getZoomManager().getZoomLevelsAsText());
 			}
 			String zoom = getZoomManager().getZoomAsText();
-			LOGGER.debug("zoomText = "+zoom);
+			logger.debug("zoomText = "+zoom);
 			int index = combo.indexOf(zoom);
 			if (index != -1)
 				combo.select(index);
@@ -142,7 +145,7 @@ extends XContributionItem
   {	
 		public void zoomChanged(double zoom) 
 		{
-	  	LOGGER.debug("zoom = "+zoom);			
+	  	logger.debug("zoom = "+zoom);			
 			refresh(false);
 		}	
 	};
@@ -302,7 +305,7 @@ extends XContributionItem
   	zoomManager = zm;
 
   	double factor = getResolutionFactor();  	
-  	LOGGER.debug("factor = "+factor);
+  	logger.debug("factor = "+factor);
   	
 		zoomManager.setZoomLevels(getZoomLevels(factor));
 		zoomManager.setUIMultiplier(1/factor);		
@@ -321,7 +324,7 @@ extends XContributionItem
 //			int dpi = Toolkit.getDefaultToolkit().getScreenResolution();
 			int dpi = 72;
 			deviceResolution = new ResolutionImpl(new DPIResolutionUnit(), dpi, dpi);
-			LOGGER.debug("ScreenResolution (DPI) = "+dpi);			
+			logger.debug("ScreenResolution (DPI) = "+dpi);			
 		}
 		return deviceResolution;		
 	}
@@ -351,7 +354,7 @@ extends XContributionItem
   public Resolution getDocumentResolution() 
   {
   	if (mldc != null) {
-  		LOGGER.debug("DocumentResolution = "+mldc.getResolution().getResolutionX()+" "+mldc.getResolution().getResolutionUnit().getResolutionID());  	  		  		
+  		logger.debug("DocumentResolution = "+mldc.getResolution().getResolutionX()+" "+mldc.getResolution().getResolutionUnit().getResolutionID());  	  		  		
   		return mldc.getResolution();
   	}
   	return new ResolutionImpl();

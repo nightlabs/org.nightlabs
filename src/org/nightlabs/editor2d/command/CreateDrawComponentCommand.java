@@ -27,10 +27,8 @@
 
 package org.nightlabs.editor2d.command;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
@@ -39,8 +37,6 @@ import org.nightlabs.editor2d.util.J2DUtil;
 public class CreateDrawComponentCommand 
 extends Command
 {
-  public static final Logger LOGGER = Logger.getLogger(CreateDrawComponentCommand.class);
-  
 	/** The DrawComponent to add */
 	protected DrawComponent drawComponent;
 	/** DrawComponentContainer to add to. */

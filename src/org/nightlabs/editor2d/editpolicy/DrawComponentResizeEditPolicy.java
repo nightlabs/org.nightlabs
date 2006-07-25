@@ -70,7 +70,10 @@ public class DrawComponentResizeEditPolicy
 extends ResizableEditPolicy 
 implements EditorRequestConstants
 {
-  public static final Logger LOGGER = Logger.getLogger(DrawComponentResizeEditPolicy.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(DrawComponentResizeEditPolicy.class);
      
   public DrawComponentResizeEditPolicy() 
   {
@@ -389,7 +392,7 @@ implements EditorRequestConstants
     feedback.setLocation(feedbackLocation);
     feedback.repaint();
     
-    LOGGER.debug("feedBack.location = "+feedback.getBounds());
+    logger.debug("feedBack.location = "+feedback.getBounds());
   }
   
   protected IFigure createEditRotateCenterFeedback(EditorRotateCenterRequest request) 

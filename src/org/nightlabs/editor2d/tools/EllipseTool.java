@@ -44,8 +44,6 @@ import org.nightlabs.editor2d.util.EditorGeneralShapeFactory;
 public class EllipseTool 
 extends EditorCreationTool 
 {
-  public static final Logger LOGGER = Logger.getLogger(EllipseTool.class);
-  
 //  public EllipseTool(CreationFactory aFactory) 
   public EllipseTool(IModelCreationFactory aFactory)  
   {

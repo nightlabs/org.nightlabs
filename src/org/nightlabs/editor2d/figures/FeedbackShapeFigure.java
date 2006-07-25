@@ -27,17 +27,13 @@
 
 package org.nightlabs.editor2d.figures;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.geometry.Rectangle;
-
 import org.nightlabs.editor2d.util.J2DUtil;
 
 
 public class FeedbackShapeFigure 
 extends AbstractShapeFigure 
 {
-  public static final Logger LOGGER = Logger.getLogger(FeedbackShapeFigure.class);
-  
   public void setBounds(Rectangle newBounds) 
   {
   	Rectangle oldBounds = getBounds();

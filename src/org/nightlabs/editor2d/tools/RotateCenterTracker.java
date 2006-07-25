@@ -39,7 +39,10 @@ import org.nightlabs.editor2d.request.EditorRotateCenterRequest;
 public class RotateCenterTracker 
 extends AbstractDragTracker  
 {
-  public static final Logger LOGGER = Logger.getLogger(RotateCenterTracker.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(RotateCenterTracker.class);
   
   public RotateCenterTracker(AbstractDrawComponentEditPart owner) {
     super(owner);
@@ -69,7 +72,7 @@ extends AbstractDragTracker
   protected void updateSourceRequest() 
   {
     getEditorRotateCenterRequest().setRotationCenter(getLocation());
-    LOGGER.debug("rotationCenter = "+getLocation());
+    logger.debug("rotationCenter = "+getLocation());
   }
   
   protected EditorRotateCenterRequest getEditorRotateCenterRequest() 

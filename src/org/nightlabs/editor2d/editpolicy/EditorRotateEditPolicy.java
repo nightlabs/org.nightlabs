@@ -52,7 +52,10 @@ public class EditorRotateEditPolicy
 //extends EditorConstrainedEditPolicy
 extends EditorFeedbackPolicy
 {
-	public static final Logger LOGGER = Logger.getLogger(EditorRotateEditPolicy.class);
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(EditorRotateEditPolicy.class);
 	
 	public EditorRotateEditPolicy() {
 
@@ -67,7 +70,7 @@ extends EditorFeedbackPolicy
     if (request instanceof EditorRotateCenterRequest)
       return getRotateCenterCommand((EditorRotateCenterRequest)request);
     
-    LOGGER.debug("getCommand(Request = "+request+")");
+    logger.debug("getCommand(Request = "+request+")");
     
   	return super.getCommand(request);
   }  
@@ -78,7 +81,7 @@ extends EditorFeedbackPolicy
     Point rotationCenter = request.getRotationCenter().getCopy();
     rotationCenter = EditorUtil.toAbsolute(getHost(), rotationCenter.x, rotationCenter.y);
     cmd.setRotationCenter(rotationCenter);    
-    LOGGER.debug("cmd.rotationCenter = "+rotationCenter);
+    logger.debug("cmd.rotationCenter = "+rotationCenter);
     return cmd;
   }
   
@@ -87,7 +90,7 @@ extends EditorFeedbackPolicy
     RotateCommand cmd = new RotateCommand(request);
     double rotation = request.getRotation();
     cmd.setRotation(rotation);
-    LOGGER.debug("getRotateCommand().rotation = "+rotation);
+    logger.debug("getRotateCommand().rotation = "+rotation);
     return cmd;
   }  
 	
@@ -148,7 +151,7 @@ extends EditorFeedbackPolicy
     feedback.setLocation(feedbackLocation);
     feedback.repaint();
     
-    LOGGER.debug("feedBack.location = "+feedback.getBounds());
+    logger.debug("feedBack.location = "+feedback.getBounds());
   }
   
   protected IFigure createEditRotateCenterFeedback(EditorRotateCenterRequest request) 
