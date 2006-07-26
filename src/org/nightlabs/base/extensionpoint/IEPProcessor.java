@@ -31,8 +31,10 @@ import org.eclipse.core.runtime.IExtension;
 
 /**
  * @author Alexander Bieber
+ * @author Marco Schulze - Marco at NightLabs dot de
  */
-public interface IEPProcessor {
+public interface IEPProcessor
+{
 	String getExtensionPointID();
 	
 	void processElement(IExtension extension, IConfigurationElement element) throws EPProcessorException;
