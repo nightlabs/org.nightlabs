@@ -1,7 +1,6 @@
 /* *****************************************************************************
  * NightLabs Editor2D - Graphical editor framework                             *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
- * Project author: Daniel Mazurek <Daniel.Mazurek [at] nightlabs [dot] org>    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
  * modify it under the terms of the GNU Lesser General Public                  *
@@ -24,63 +23,27 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-
 package org.nightlabs.editor2d.request;
 
-import org.eclipse.draw2d.Shape;
 import org.eclipse.gef.requests.CreateRequest;
-import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.model.IModelCreationFactory;
 
-
+/**
+ * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
+ */
 public class EditorCreateRequest 
 extends CreateRequest 
-implements EditorShapeRequest,
-					 EditorBoundsRequest
+implements EditorBoundsRequest
 {
-  public static final int BOUNDS_FIX_MODE = 1;
-  public static final int BOUNDS_UNFIX_MODE = 2;
-  
-  public EditorCreateRequest() {
-    super();
-  }
 
-  public EditorCreateRequest(Object type) {
-    super(type);
-  }  
-  
-  protected int mode = BOUNDS_UNFIX_MODE;    
-  public int getMode() {
-    return mode;
-  }
-  public void setMode(int mode) {
-    this.mode = mode;
-  }
-  
-  protected GeneralShape gp;
-  public GeneralShape getGeneralShape() {
-    return gp;
-  }  
-  public void setGeneralShape(GeneralShape gp) {
-    this.gp = gp;
-  }
-  
-  protected Shape shape;  
-  public Shape getShape() {
-    return shape;
-  }
-  public void setShape(Shape shape) {
-    this.shape = shape;
-  }  
-  
-  protected boolean useShape = false;    
-  public boolean isUseShape() {
-    return useShape;
-  }
-  public void setUseShape(boolean useShape) {
-    this.useShape = useShape;
-  }
-      
+	public EditorCreateRequest() {
+		super();
+	}
+
+	public EditorCreateRequest(Object type) {
+		super(type);
+	}	
+	
   public IModelCreationFactory getModelCreationFactory() {
   	return (IModelCreationFactory) getFactory();
   }
