@@ -96,6 +96,8 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -456,7 +458,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		configureViewerManager();  
 
 		getGraphicalControl().addControlListener(resizeListener);
-		getCommandStack().addCommandStackEventListener(commandStackListener);
+//		getCommandStack().addCommandStackEventListener(commandStackListener);
 	}
 
 	// should solve redraw problems when resizing the viewer
@@ -469,14 +471,14 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		}		
 	};
 
-	// should solve redraw problems when undoing things
-	private CommandStackEventListener commandStackListener = new CommandStackEventListener()
-	{		
-		public void stackChanged(CommandStackEvent event) 
-		{
-			updateViewer();
-		}		
-	};				
+//	// should solve redraw problems when undoing things
+//	private CommandStackEventListener commandStackListener = new CommandStackEventListener()
+//	{		
+//		public void stackChanged(CommandStackEvent event) 
+//		{
+//			updateViewer();
+//		}		
+//	};				
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util.EventObject)
@@ -494,6 +496,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 		super.commandStackChanged(event);
+		// should solve redraw problems when undoing things
+		updateViewer();
 	}  
 
 	/* (non-Javadoc)
@@ -520,9 +524,13 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			outlinePage = new EditorOutlinePage(this, treeViewer);        
 			return outlinePage;
 		}
-		if (type == ZoomManager.class)
-			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
-
+//		if (type == ZoomManager.class)
+//			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
+		if (type == ZoomManager.class) {
+			if (getGraphicalViewer() != null)
+				return getGraphicalViewer().getProperty(ZoomManager.class.toString());
+		}			
+		
 		if (type == org.eclipse.ui.views.properties.IPropertySheetPage.class) {
 			PropertySheetPage page = new EditorPropertyPage(getUnitManager());    		
 			page.setRootEntry(new UndoablePropertySheetEntry(getCommandStack()));
@@ -939,7 +947,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	 */
 	protected void createGraphicalViewer(Composite parent) 
 	{
-		rulerComp = new RulerComposite(parent, SWT.NONE);
+		rulerComp = new RulerComposite(parent, SWT.NONE);		
+//		rulerComp.setLayout(new GridLayout());
+//		rulerComp.setLayoutData(new GridData(GridData.FILL_BOTH));		
 		super.createGraphicalViewer(rulerComp);
 		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());      
 	}  

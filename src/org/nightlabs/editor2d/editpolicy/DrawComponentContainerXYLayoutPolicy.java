@@ -76,7 +76,7 @@ import org.nightlabs.editor2d.figures.FeedbackShapeFigure;
 import org.nightlabs.editor2d.figures.ShapeFigure;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.request.EditorBoundsRequest;
-import org.nightlabs.editor2d.request.EditorCreateRequest;
+import org.nightlabs.editor2d.request.EditorCreateShapeRequest;
 import org.nightlabs.editor2d.request.EditorEditShapeRequest;
 import org.nightlabs.editor2d.request.EditorLocationRequest;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
@@ -302,14 +302,14 @@ implements EditorRequestConstants
 	}		
 	
 	/**
-	 * Generates a draw2d constraint for the given <code>EditorCreateRequest</code>. If the
-	 * EditorCreateRequest has a size, {@link #getConstraintFor(Rectangle)} is called with a
+	 * Generates a draw2d constraint for the given <code>EditorCreateShapeRequest</code>. If the
+	 * EditorCreateShapeRequest has a size, {@link #getConstraintFor(Rectangle)} is called with a
 	 * Rectangle of that size and the result is returned. This is used during size-on-drop
 	 * creation. Otherwise, {@link #getConstraintFor(Point)} is returned.
 	 * <P>
-	 * The EditorCreateRequest location is relative the Viewer. The location is made
+	 * The EditorCreateShapeRequest location is relative the Viewer. The location is made
 	 * layout-relative before calling one of the methods mentioned above.
-	 * @param request the EditorCreateRequest
+	 * @param request the EditorCreateShapeRequest
 	 * @return a draw2d constraint
 	 */
 	protected Object getConstraintFor(CreateRequest request) 
@@ -486,7 +486,7 @@ implements EditorRequestConstants
   	return outlineColor;
   }
   
-	protected IFigure createSizeOnDropFeedback(EditorCreateRequest editorRequest) 
+	protected IFigure createSizeOnDropFeedback(EditorCreateShapeRequest editorRequest) 
 	{
     Rectangle constrainedBounds = (Rectangle)getConstraintFor((EditorBoundsRequest)editorRequest);	    
     
@@ -506,7 +506,7 @@ implements EditorRequestConstants
       GeneralShape gp = editorRequest.getGeneralShape();
 	    if (gp != null) 
 	    {
-	      if (editorRequest.getMode() == EditorCreateRequest.BOUNDS_FIX_MODE) 
+	      if (editorRequest.getMode() == EditorCreateShapeRequest.BOUNDS_FIX_MODE) 
 	      {
 			    ShapeFigure shapeFigure = new AbstractShapeFigure();			    			    
 			    shapeFigure.setGeneralShape(gp);			    
@@ -537,7 +537,7 @@ implements EditorRequestConstants
 	 * <P>
 	 * The EditorBoundsRequest location is relative the Viewer. The location is made
 	 * layout-relative before calling one of the methods mentioned above.
-	 * @param request the EditorCreateRequest
+	 * @param request the EditorCreateShapeRequest
 	 * @return a draw2d constraint
 	 */
 	protected Object getConstraintFor(EditorBoundsRequest request) 
@@ -569,7 +569,7 @@ implements EditorRequestConstants
    * 
    * The EditorLocationRequest location is relative the Viewer. The location is made
    * layout-relative before calling one of the methods mentioned above.
-   * @param request the EditorCreateRequest
+   * @param request the EditorCreateShapeRequest
    * @return a draw2d constraint
    */
   protected Point getConstraintFor(EditorLocationRequest request) 
@@ -623,9 +623,9 @@ implements EditorRequestConstants
 	
 	protected Command getCreateCommand(CreateRequest request) 
 	{ 
-	  if (request instanceof EditorCreateRequest) 
+	  if (request instanceof EditorCreateShapeRequest) 
 	  {	      
-	    EditorCreateRequest req = (EditorCreateRequest) request;	    
+	    EditorCreateShapeRequest req = (EditorCreateShapeRequest) request;	    
 	    return getEditorCreateCommand(req);
 	  } 
 	  else {
@@ -642,7 +642,7 @@ implements EditorRequestConstants
 	  }		
 	}
 	
-	protected Command getEditorCreateCommand(EditorCreateRequest request) 
+	protected Command getEditorCreateCommand(EditorCreateShapeRequest request) 
 	{
 	  // TODO: Optimize Command (dont create each time a new Command)
     CreateShapeCommand create = new CreateShapeCommand();	    
@@ -670,7 +670,7 @@ implements EditorRequestConstants
 	 * Places the feedback Polyline where the User indicated.
 	 * @see LayoutEditPolicy#showSizeOnDropFeedback(CreateRequest)
 	 */
-	protected void showSizeOnDropFeedback(EditorCreateRequest request) 
+	protected void showSizeOnDropFeedback(EditorCreateShapeRequest request) 
 	{		  	  	  
 		Point p = request.getLocation().getCopy();
 		Dimension size = request.getSize().getCopy();
@@ -714,9 +714,9 @@ implements EditorRequestConstants
 	{	  
 	  logger.debug("createSizeOnDropFeedback!");
 	  
-	  if (createRequest instanceof EditorCreateRequest) 
+	  if (createRequest instanceof EditorCreateShapeRequest) 
 	  {
-	    EditorCreateRequest editorRequest = (EditorCreateRequest) createRequest;
+	    EditorCreateShapeRequest editorRequest = (EditorCreateShapeRequest) createRequest;
 	    return createSizeOnDropFeedback(editorRequest);
 	  }
 	  else
@@ -736,8 +736,8 @@ implements EditorRequestConstants
 	
 	protected void showSizeOnDropFeedback(CreateRequest request) 
 	{
-	  if (request instanceof EditorCreateRequest)
-	    showSizeOnDropFeedback((EditorCreateRequest)request);
+	  if (request instanceof EditorCreateShapeRequest)
+	    showSizeOnDropFeedback((EditorCreateShapeRequest)request);
 	  else
 	    super.showSizeOnDropFeedback(request);
 	  

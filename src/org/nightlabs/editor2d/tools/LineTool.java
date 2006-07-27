@@ -38,7 +38,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.nightlabs.editor2d.command.CreateShapeCommand;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.model.IModelCreationFactory;
-import org.nightlabs.editor2d.request.EditorCreateRequest;
+import org.nightlabs.editor2d.request.EditorCreateShapeRequest;
 import org.nightlabs.editor2d.request.LineCreateRequest;
 import org.nightlabs.editor2d.util.J2DUtil;
 
@@ -52,7 +52,7 @@ extends EditorCreationTool
   }
   
   /**
-   * Creates a {@link EditorCreateRequest} and sets this tool's factory on the request.
+   * Creates a {@link EditorCreateShapeRequest} and sets this tool's factory on the request.
    * @see org.eclipse.gef.tools.TargetingTool#createTargetRequest()
    */
   protected Request createTargetRequest() 
@@ -118,7 +118,7 @@ extends EditorCreationTool
     		creationBounds = new Rectangle(p2.x, p2.y, p2.x+1, p2.y+1);    		
     		
     	  getLineCreateRequest().setLocation(getLocation());
-    	  getLineCreateRequest().setMode(EditorCreateRequest.BOUNDS_FIX_MODE);
+    	  getLineCreateRequest().setMode(EditorCreateShapeRequest.BOUNDS_FIX_MODE);
     		getLineCreateRequest().setCreationBounds(creationBounds);
     	  
     		stateTransition(STATE_INITIAL, STATE_DRAG_IN_PROGRESS);
@@ -199,7 +199,7 @@ extends EditorCreationTool
     return false;
   }
          
-  protected void updateShape(EditorCreateRequest request) 
+  protected void updateShape(EditorCreateShapeRequest request) 
   { 
 	  Point p = getRealLocation();
 	  Point p2 = getLocation();

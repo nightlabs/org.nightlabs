@@ -37,7 +37,7 @@ import org.eclipse.gef.SnapToHelper;
 import org.nightlabs.editor2d.command.CreateShapeCommand;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.model.IModelCreationFactory;
-import org.nightlabs.editor2d.request.EditorCreateRequest;
+import org.nightlabs.editor2d.request.EditorCreateShapeRequest;
 import org.nightlabs.editor2d.util.EditorGeneralShapeFactory;
 
 
@@ -85,7 +85,7 @@ extends EditorCreationTool
   
   protected void updateTargetRequest() 
   {
-  	EditorCreateRequest req = (EditorCreateRequest) getCreateRequest();
+  	EditorCreateShapeRequest req = (EditorCreateShapeRequest) getCreateRequest();
   	if (isInState(STATE_DRAG_IN_PROGRESS)) 
   	{
   		Point loq = getStartLocation();

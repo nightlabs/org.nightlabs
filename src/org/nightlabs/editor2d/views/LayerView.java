@@ -97,15 +97,15 @@ implements ISelectionListener
   public static final Image LOCK_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Lock");
   public static final Image UNLOCK_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Unlocked");  
       
-  protected MultiLayerDrawComponent mldc;
-  protected AbstractEditor editor;
-  protected Map button2Layer = new HashMap();
-  protected Button buttonUp;
-  protected Button buttonDown;
-  protected Button buttonNew;
-  protected Button buttonDelete;
+  private MultiLayerDrawComponent mldc;
+  private AbstractEditor editor;
+  private Map button2Layer = new HashMap();
+  private Button buttonUp;
+  private Button buttonDown;
+  private Button buttonNew;
+  private Button buttonDelete;
   
-  protected Color currentLayerColor; 
+  private Color currentLayerColor; 
   protected Color getCurrentLayerColor() 
   {
   	if (currentLayerColor == null)
@@ -113,7 +113,7 @@ implements ISelectionListener
   	return currentLayerColor;
   }
 
-  protected Color toolButtonColor;
+  private Color toolButtonColor;
   protected Color getToolButtonColor() 
   {
   	if (toolButtonColor == null)
@@ -132,14 +132,17 @@ implements ISelectionListener
     {
       logger.debug("getSite().getPage().getActiveEditor() instanceof Editor!");
       editor = (AbstractEditor) getSite().getPage().getActiveEditor();
-      RootEditPart rootEditPart = editor.getOutlineGraphicalViewer().getRootEditPart();
-      List children = rootEditPart.getChildren();
-      if (!children.isEmpty()) {
-        EditPart editPart = (EditPart) children.get(0);
-        if (editPart instanceof MultiLayerDrawComponentEditPart) {
-          MultiLayerDrawComponentEditPart mldcEditPart = (MultiLayerDrawComponentEditPart) editPart;
-          mldcEditPart.addEditPartListener(mldcListener);
-        }
+      if (editor.getOutlineGraphicalViewer() != null) 
+      {
+        RootEditPart rootEditPart = editor.getOutlineGraphicalViewer().getRootEditPart();
+        List children = rootEditPart.getChildren();
+        if (!children.isEmpty()) {
+          EditPart editPart = (EditPart) children.get(0);
+          if (editPart instanceof MultiLayerDrawComponentEditPart) {
+            MultiLayerDrawComponentEditPart mldcEditPart = (MultiLayerDrawComponentEditPart) editPart;
+            mldcEditPart.addEditPartListener(mldcListener);
+          }
+        }      	
       }
       mldc = editor.getMultiLayerDrawComponent();
     }  	
@@ -153,48 +156,18 @@ implements ISelectionListener
     getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);		
 	}
 	
-	protected XFormToolkit toolkit = null;
+	private XFormToolkit toolkit = null;
 	protected XFormToolkit getToolkit() {
 		return toolkit;
 	}
 	
-	protected ScrolledForm form = null;	
+	private ScrolledForm form = null;	
 	protected ScrolledForm getForm() {
 		return form;
 	}
 		
-	protected Composite layerComposite;
-	
-//  /**
-//   * @see org.eclipse.ui.IWorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
-//   */
-//  public void createPartControl(Composite parent) 
-//  {   	
-//    init();
-//            
-//		toolkit = new XFormToolkit(parent.getDisplay());
-//		form = getToolkit().createForm(parent);
-//		form.getBody().setLayout(new GridLayout());
-//		form.getBody().setLayoutData(new GridData(GridData.FILL_BOTH));
-//               		
-//		layerForm = getToolkit().createScrolledForm(form.getBody());
-//		layerForm.getBody().setLayout(new GridLayout());
-//		layerForm.getBody().setLayoutData(new GridData(GridData.FILL_BOTH));	
-//		
-//		layerComposite = getToolkit().createComposite(layerForm.getBody(), SWT.BORDER);
-//		layerComposite.setLayout(new GridLayout());
-//		layerComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		toolsComposite = getToolkit().createComposite(form.getBody());
-//		toolsComposite.setLayout(new GridLayout());
-//		toolsComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		
-//		createTools(parent);		
-//		
-//    refresh();    
-//    deactivateTools(true);
-//  }
-	
+	private Composite layerComposite;
+		
   /**
    * @see org.eclipse.ui.IWorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
    */
@@ -254,7 +227,7 @@ implements ISelectionListener
 			buttonVisible.setLayoutData(new GridData(GridData.BEGINNING));
 			
 			buttonVisible.addSelectionListener(visibleListener);		
-			buttonVisible.addDisposeListener(visibleDisposeListener);
+//			buttonVisible.addDisposeListener(visibleDisposeListener);
 			
 //			// create Editable-Button
 //			Button buttonEditble = getToolkit().createButton(parentComposite, EditorPlugin.getResourceString("layerView.buttonLocked.text"), buttonStyle);		
@@ -280,7 +253,7 @@ implements ISelectionListener
 			text.setLayoutData(new GridData(GridData.FILL_BOTH));		  								
 			text.addSelectionListener(textListener);
 			text.addFocusListener(focusListener);
-			text.addDisposeListener(textDisposeListener);
+//			text.addDisposeListener(textDisposeListener);
 			
 			// add newLayer to button2Layer
 			button2Layer.put(buttonVisible, l);
@@ -314,7 +287,7 @@ implements ISelectionListener
 //		buttonUp.setImage(UP_ICON);
 		buttonUp.setToolTipText(EditorPlugin.getResourceString("layerView.buttonUp.tooltip"));
 		buttonUp.addSelectionListener(upListener);
-		buttonUp.addDisposeListener(upDisposeListener);
+//		buttonUp.addDisposeListener(upDisposeListener);
 		buttonUp.setBackground(getToolButtonColor());
 		
 		buttonDown = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonDown.text"), 
@@ -322,7 +295,7 @@ implements ISelectionListener
 //		buttonDown.setImage(DOWN_ICON);
 		buttonDown.setToolTipText(EditorPlugin.getResourceString("layerView.buttonDown.tooltip"));
 		buttonDown.addSelectionListener(downListener);
-		buttonDown.addDisposeListener(downDisposeListener);
+//		buttonDown.addDisposeListener(downDisposeListener);
 		buttonDown.setBackground(getToolButtonColor());	
 		
 		buttonNew = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonNew.text"), 
@@ -330,7 +303,7 @@ implements ISelectionListener
 //		buttonNew.setImage(NEW_ICON);
 		buttonNew.setToolTipText(EditorPlugin.getResourceString("layerView.buttonNew.tooltip"));		
 		buttonNew.addSelectionListener(newListener);
-		buttonNew.addDisposeListener(newDisposeListener);
+//		buttonNew.addDisposeListener(newDisposeListener);
 		buttonNew.setBackground(getToolButtonColor());		
 		
 		buttonDelete = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonDelete.text"), 
@@ -338,7 +311,7 @@ implements ISelectionListener
 //		buttonDelete.setImage(DELETE_ICON);
 		buttonDelete.setToolTipText(EditorPlugin.getResourceString("layerView.buttonDelete.tooltip"));				
 		buttonDelete.addSelectionListener(deleteListener);				
-		buttonDelete.addDisposeListener(deleteDisposeListener);
+//		buttonDelete.addDisposeListener(deleteDisposeListener);
 		buttonDelete.setBackground(getToolButtonColor());		
 	}
 	
@@ -350,7 +323,7 @@ implements ISelectionListener
   	form.setFocus();
   }
 
-  protected FocusAdapter focusListener = new FocusAdapter() 
+  private FocusAdapter focusListener = new FocusAdapter() 
   {
     public void focusGained(FocusEvent e) 
     {
@@ -369,7 +342,7 @@ implements ISelectionListener
     }
   }; 
   
-  protected SelectionListener textListener = new SelectionAdapter() 
+  private SelectionListener textListener = new SelectionAdapter() 
 	{ 
 		public void widgetDefaultSelected(SelectionEvent e) 
 		{    
@@ -384,7 +357,7 @@ implements ISelectionListener
 		}
 	};  
    	
-	protected SelectionListener visibleListener = new SelectionAdapter() 
+	private SelectionListener visibleListener = new SelectionAdapter() 
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
@@ -410,7 +383,7 @@ implements ISelectionListener
 		}
 	};  
 
-	protected SelectionListener editableListener = new SelectionAdapter() 
+	private SelectionListener editableListener = new SelectionAdapter() 
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
@@ -443,7 +416,7 @@ implements ISelectionListener
 //		editor.getEditorSite().getShell().update();
 	}
 	
-	protected SelectionListener newListener = new SelectionAdapter() 
+	private SelectionListener newListener = new SelectionAdapter() 
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
@@ -454,7 +427,7 @@ implements ISelectionListener
 		}
 	};
 
-	protected SelectionListener deleteListener = new SelectionAdapter() 
+	private SelectionListener deleteListener = new SelectionAdapter() 
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
@@ -471,7 +444,7 @@ implements ISelectionListener
 		return mldc.getCurrentLayer();
 	}
 	
-	protected SelectionListener upListener = new SelectionAdapter() 
+	private SelectionListener upListener = new SelectionAdapter() 
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
@@ -488,7 +461,7 @@ implements ISelectionListener
 		}
 	};
 	
-	protected SelectionListener downListener = new SelectionAdapter() 
+	private SelectionListener downListener = new SelectionAdapter() 
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
@@ -510,7 +483,7 @@ implements ISelectionListener
 		editor.getOutlineEditDomain().getCommandStack().execute(cmd);
 	}
 	
-	protected CommandStackListener commandStackListener = new CommandStackListener() 
+	private CommandStackListener commandStackListener = new CommandStackListener() 
 	{
     /* (non-Javadoc)
      * @see org.eclipse.gef.commands.CommandStackListener#commandStackChanged(java.util.EventObject)
@@ -522,7 +495,7 @@ implements ISelectionListener
     }
   };
 
-  protected EditPartListener mldcListener = new EditPartListener.Stub() 
+  private EditPartListener mldcListener = new EditPartListener.Stub() 
   {
     /**
      * @see org.eclipse.gef.EditPartListener#childAdded(org.eclipse.gef.EditPart, int)
@@ -637,54 +610,54 @@ implements ISelectionListener
     super.dispose();
   }
   
-  protected DisposeListener visibleDisposeListener = new DisposeListener() {	
-		public void widgetDisposed(DisposeEvent e) {
-			Button b = (Button) e.getSource();
-			b.removeSelectionListener(visibleListener);
-		}	
-	};
-
-  protected DisposeListener editableDisposeListener = new DisposeListener() {	
-		public void widgetDisposed(DisposeEvent e) {
-			Button b = (Button) e.getSource();
-			b.removeSelectionListener(editableListener);
-		}	
-	};
-
-  protected DisposeListener textDisposeListener = new DisposeListener() {	
-		public void widgetDisposed(DisposeEvent e) {
-			Text t = (Text) e.getSource();
-			t.removeSelectionListener(textListener);
-			t.removeFocusListener(focusListener);
-		}	
-	};
-	
-  protected DisposeListener upDisposeListener = new DisposeListener() {	
-		public void widgetDisposed(DisposeEvent e) {
-			Button b = (Button) e.getSource();
-			b.removeSelectionListener(upListener);
-		}	
-	};
-	
-  protected DisposeListener downDisposeListener = new DisposeListener() {	
-		public void widgetDisposed(DisposeEvent e) {
-			Button b = (Button) e.getSource();
-			b.removeSelectionListener(downListener);
-		}	
-	};
-	
-  protected DisposeListener newDisposeListener = new DisposeListener() {	
-		public void widgetDisposed(DisposeEvent e) {
-			Button b = (Button) e.getSource();
-			b.removeSelectionListener(newListener);
-		}	
-	};		
-
-  protected DisposeListener deleteDisposeListener = new DisposeListener() {	
-		public void widgetDisposed(DisposeEvent e) {
-			Button b = (Button) e.getSource();
-			b.removeSelectionListener(newListener);
-		}	
-	};		
+//  private DisposeListener visibleDisposeListener = new DisposeListener() {	
+//		public void widgetDisposed(DisposeEvent e) {
+//			Button b = (Button) e.getSource();
+//			b.removeSelectionListener(visibleListener);
+//		}	
+//	};
+//
+//	private DisposeListener editableDisposeListener = new DisposeListener() {	
+//		public void widgetDisposed(DisposeEvent e) {
+//			Button b = (Button) e.getSource();
+//			b.removeSelectionListener(editableListener);
+//		}	
+//	};
+//
+//	private DisposeListener textDisposeListener = new DisposeListener() {	
+//		public void widgetDisposed(DisposeEvent e) {
+//			Text t = (Text) e.getSource();
+//			t.removeSelectionListener(textListener);
+//			t.removeFocusListener(focusListener);
+//		}	
+//	};
+//	
+//	private DisposeListener upDisposeListener = new DisposeListener() {	
+//		public void widgetDisposed(DisposeEvent e) {
+//			Button b = (Button) e.getSource();
+//			b.removeSelectionListener(upListener);
+//		}	
+//	};
+//	
+//	private DisposeListener downDisposeListener = new DisposeListener() {	
+//		public void widgetDisposed(DisposeEvent e) {
+//			Button b = (Button) e.getSource();
+//			b.removeSelectionListener(downListener);
+//		}	
+//	};
+//	
+//	private DisposeListener newDisposeListener = new DisposeListener() {	
+//		public void widgetDisposed(DisposeEvent e) {
+//			Button b = (Button) e.getSource();
+//			b.removeSelectionListener(newListener);
+//		}	
+//	};		
+//
+//	private DisposeListener deleteDisposeListener = new DisposeListener() {	
+//		public void widgetDisposed(DisposeEvent e) {
+//			Button b = (Button) e.getSource();
+//			b.removeSelectionListener(newListener);
+//		}	
+//	};		
 	
 }

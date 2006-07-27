@@ -36,7 +36,7 @@ import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.tools.CreationTool;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.nightlabs.editor2d.model.IModelCreationFactory;
-import org.nightlabs.editor2d.request.EditorCreateRequest;
+import org.nightlabs.editor2d.request.EditorCreateShapeRequest;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
 
 
@@ -61,12 +61,12 @@ implements EditorRequestConstants
   }
   
   /**
-   * Creates a {@link EditorCreateRequest} and sets this tool's factory on the request.
+   * Creates a {@link EditorCreateShapeRequest} and sets this tool's factory on the request.
    * @see org.eclipse.gef.tools.TargetingTool#createTargetRequest()
    */
   protected Request createTargetRequest() 
   {
-  	EditorCreateRequest request = new EditorCreateRequest();
+  	EditorCreateShapeRequest request = new EditorCreateShapeRequest();
   	request.setFactory(getFactory());
   	return request;
   }
@@ -89,8 +89,8 @@ implements EditorRequestConstants
     return p;
   }
   
-  protected EditorCreateRequest getEditorCreateRequest() {
-  	return (EditorCreateRequest)getTargetRequest();
+  protected EditorCreateShapeRequest getEditorCreateRequest() {
+  	return (EditorCreateShapeRequest)getTargetRequest();
   }  
     
   /**

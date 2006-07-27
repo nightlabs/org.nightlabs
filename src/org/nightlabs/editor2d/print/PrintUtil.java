@@ -28,12 +28,18 @@ package org.nightlabs.editor2d.print;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.print.PageFormat;
 
 import org.apache.log4j.Logger;
 import org.nightlabs.base.util.GeomUtil;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.PageDrawComponent;
+import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.page.unit.ResolutionUnit;
+import org.nightlabs.editor2d.util.UnitUtil;
+import org.nightlabs.i18n.IUnit;
 
 /**
  * @author Daniel.Mazurek <at> NightLabs <dot> de
@@ -76,23 +82,26 @@ public class PrintUtil
 		return "No valid orientation";
 	}	
 	
-//	public static void prepareGraphics(Graphics2D g2d, DrawComponent dc, PageFormat pageFormat) 
-//	{		
-//		Rectangle dcBounds = GeomUtil.translateToOrigin(dc.getBounds());				
-//		Rectangle pageRectangle = new Rectangle(0, 0, 
-//				(int)pageFormat.getImageableWidth(), (int)pageFormat.getImageableHeight());		
-//		
-//		Point2D scales = GeomUtil.calcScale(dcBounds, pageRectangle);		
-//		double scale = Math.min(scales.getX(), scales.getY()); 
-//		double translateX = (((double)pageFormat.getImageableX()) - (dc.getX() * scale ));
-//		double translateY = (((double)pageFormat.getImageableY()) - (dc.getY() * scale )); 		
-//		g2d.translate(translateX, translateY);		
-//		g2d.scale(scale, scale);		
-//	}
-
 	public static void prepareGraphics(Graphics2D g2d, DrawComponent dc, PageFormat pageFormat) 
-	{		
+	{
+		if (logger.isDebugEnabled())
+			logger.debug("dc.getBounds() = "+dc.getBounds());
+		
 		Rectangle dcBounds = GeomUtil.translateToOrigin(dc.getBounds());
+		
+		if (logger.isDebugEnabled())
+			logger.debug("originBounds = "+dcBounds);
+		
+//		Point2D resolutionScale = UnitUtil.getResolutionScale(72, dc);
+//		GeneralShape gs = new GeneralShape(dcBounds);
+//		AffineTransform scaleAT = AffineTransform.getScaleInstance(resolutionScale.getX(), resolutionScale.getY());
+//		gs.transform(scaleAT);
+//		dcBounds = gs.getBounds();
+//		
+//		if (logger.isDebugEnabled()) {
+//			logger.debug("resolutionScale = "+resolutionScale);
+//			logger.debug("dcBounds = "+dcBounds);
+//		}
 		
 		Rectangle pageRectangle = new Rectangle(0, 0, 
 				(int)pageFormat.getImageableWidth(), (int)pageFormat.getImageableHeight());		
@@ -102,8 +111,42 @@ public class PrintUtil
 		double translateX = (((double)pageFormat.getImageableX()) - (dc.getX() * scale ));
 		double translateY = (((double)pageFormat.getImageableY()) - (dc.getY() * scale )); 		
 		g2d.translate(translateX, translateY);		
-		g2d.scale(scale, scale);		
-	}
-	
+		g2d.scale(scale, scale);
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("pageRectangle = "+pageRectangle);
+			logger.debug("scale = "+scale);
+			logger.debug("translateX = "+translateX);
+			logger.debug("translateY = "+translateY);			
+		}
+	}	
+
+	public static void prepareGraphics(Graphics2D g2d, PageDrawComponent page, PageFormat pageFormat) 
+	{
+		if (logger.isDebugEnabled())
+			logger.debug("page.getBounds() = "+page.getBounds());
+		
+		Rectangle pageBounds = GeomUtil.translateToOrigin(page.getBounds());
+		
+		if (logger.isDebugEnabled())
+			logger.debug("originBounds = "+pageBounds);
+				
+		Rectangle pageRectangle = new Rectangle(0, 0, 
+				(int)pageFormat.getImageableWidth(), (int)pageFormat.getImageableHeight());		
+		
+		Point2D scales = GeomUtil.calcScale(pageBounds, pageRectangle);		
+		double scale = Math.min(scales.getX(), scales.getY()); 
+		double translateX = (((double)pageFormat.getImageableX()) - (page.getX() * scale ));
+		double translateY = (((double)pageFormat.getImageableY()) - (page.getY() * scale )); 		
+		g2d.translate(translateX, translateY);		
+		g2d.scale(scale, scale);
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("pageRectangle = "+pageRectangle);
+			logger.debug("scale = "+scale);
+			logger.debug("translateX = "+translateX);
+			logger.debug("translateY = "+translateY);			
+		}
+	}	
 	
 }

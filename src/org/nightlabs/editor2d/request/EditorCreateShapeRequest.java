@@ -27,17 +27,58 @@
 
 package org.nightlabs.editor2d.request;
 
-import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.Shape;
+import org.nightlabs.editor2d.j2d.GeneralShape;
 
 
-public class LineCreateRequest 
-extends EditorCreateShapeRequest 
+public class EditorCreateShapeRequest  
+extends EditorCreateRequest
+implements EditorShapeRequest
 {
-  protected Rectangle creationBounds;  
-  public Rectangle getCreationBounds() {
-    return creationBounds;
+  public static final int BOUNDS_FIX_MODE = 1;
+  public static final int BOUNDS_UNFIX_MODE = 2;
+  
+  public EditorCreateShapeRequest() {
+    super();
   }
-  public void setCreationBounds(Rectangle creationBounds) {
-    this.creationBounds = creationBounds;
+
+  public EditorCreateShapeRequest(Object type) {
+    super(type);
+  }  
+  
+  protected int mode = BOUNDS_UNFIX_MODE;    
+  public int getMode() {
+    return mode;
   }
+  public void setMode(int mode) {
+    this.mode = mode;
+  }
+  
+  protected GeneralShape gp;
+  public GeneralShape getGeneralShape() {
+    return gp;
+  }  
+  public void setGeneralShape(GeneralShape gp) {
+    this.gp = gp;
+  }
+  
+  protected Shape shape;  
+  public Shape getShape() {
+    return shape;
+  }
+  public void setShape(Shape shape) {
+    this.shape = shape;
+  }  
+  
+  protected boolean useShape = false;    
+  public boolean isUseShape() {
+    return useShape;
+  }
+  public void setUseShape(boolean useShape) {
+    this.useShape = useShape;
+  }
+      
+//  public IModelCreationFactory getModelCreationFactory() {
+//  	return (IModelCreationFactory) getFactory();
+//  }
 }

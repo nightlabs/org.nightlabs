@@ -29,7 +29,7 @@ package org.nightlabs.editor2d.request;
 
 
 public class TextCreateRequest 
-extends EditorCreateRequest 
+extends EditorCreateShapeRequest 
 {  
   public TextCreateRequest() {
     super();

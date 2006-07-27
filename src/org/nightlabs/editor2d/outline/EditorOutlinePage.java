@@ -205,9 +205,12 @@ implements IAdaptable
 //    outlinePage = null;
   }
   
+//  public Object getAdapter(Class type) {
+//    if (type == ZoomManager.class)
+//      return editor.getOutlineGraphicalViewer().getProperty(ZoomManager.class.toString());
+//    return null;
+//  }
   public Object getAdapter(Class type) {
-    if (type == ZoomManager.class)
-      return editor.getOutlineGraphicalViewer().getProperty(ZoomManager.class.toString());
     return null;
   }
 
