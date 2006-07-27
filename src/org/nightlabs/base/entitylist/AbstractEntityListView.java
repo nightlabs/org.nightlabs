@@ -40,14 +40,14 @@ import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
-import org.nightlabs.base.view.ControllableView;
+import org.nightlabs.base.part.ControllablePart;
 
 /**
  * @author Niklas Schiffler <nick@nightlabs.de>
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public abstract class AbstractEntityListView extends ViewPart  implements EntityManagementViewStateChangedListener, ControllableView
+public abstract class AbstractEntityListView extends ViewPart  implements EntityManagementViewStateChangedListener, ControllablePart
 {
   
 	private Map entityLists;
@@ -223,7 +223,7 @@ public abstract class AbstractEntityListView extends ViewPart  implements Entity
 	
 	public void viewActivated(String viewID) 
 	{
-		if (!canDisplayView())
+		if (!canDisplayPart())
 			return;
 		List lists = EntityManagerViewRegistry.sharedInstance().getManagedEntitiesForManagerViewID(viewID);
 		if(lists == null)

@@ -247,7 +247,7 @@ public abstract class DefaultEntityListView
 
 
 	public void setSelectedEntityList(String entityListID) {
-		if (!canDisplayView())
+		if (!canDisplayPart())
 			return;
 		if ((filterCombo.getSelectionIndex() < 0) && (getEntityListCount() > 0))
 			filterCombo.select(0);
