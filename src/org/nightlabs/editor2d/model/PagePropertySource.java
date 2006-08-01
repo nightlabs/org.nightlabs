@@ -28,6 +28,8 @@ package org.nightlabs.editor2d.model;
 import java.util.List;
 
 import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.nightlabs.base.property.CheckboxCellEditor;
+import org.nightlabs.base.property.CheckboxPropertyDescriptor;
 import org.nightlabs.base.property.ComboBoxPropertyDescriptor;
 import org.nightlabs.base.property.DoublePropertyDescriptor;
 import org.nightlabs.base.property.XTextPropertyDescriptor;
@@ -69,6 +71,8 @@ extends DrawComponentPropertySource
 		descriptors.add(createResolutionValuePD());
 		// Page Size
 //		descriptors.add(createPageSizePD());
+		// Show Page Bounds
+		descriptors.add(createShowPageBoundsPD());
 		
 		return descriptors;
 	}
@@ -119,6 +123,14 @@ extends DrawComponentPropertySource
 		return desc;
 	}	
 
+	protected PropertyDescriptor createShowPageBoundsPD()
+	{
+		PropertyDescriptor desc = new CheckboxPropertyDescriptor(PageDrawComponent.PROP_SHOW_PAGE_BOUNDS,
+				EditorPlugin.getResourceString("property.showPageBounds.label"));
+		desc.setCategory(CATEGORY_PAGE);
+		return desc;
+	}	
+		
 	protected PropertyDescriptor createResolutionValuePD() 
 	{
 		PropertyDescriptor desc = new DoublePropertyDescriptor(MultiLayerDrawComponent.PROP_RESOLUTION,
@@ -129,6 +141,7 @@ extends DrawComponentPropertySource
 
 	public static final String ID_RESOLUTION_UNIT = "ResolutionUnit";
 	public static final String CATEGORY_RESOLUTION = "Resolution";	
+	public static final String CATEGORY_PAGE = "Page";	
 	
 	protected PropertyDescriptor createResolutionUnitPD() 
 	{
@@ -167,7 +180,10 @@ extends DrawComponentPropertySource
 		}
 		else if (id.equals(ID_RESOLUTION_UNIT)) {
 			return getPageDrawComponent().getRoot().getResolution().getResolutionUnit().getResolutionID();
-		}				
+		}
+		else if (id.equals(PageDrawComponent.PROP_SHOW_PAGE_BOUNDS)) {
+			return getPageDrawComponent().isShowPageBounds();
+		}						
 //		else if (id.equals(PageDrawComponent.PROP_PAGE_BOUNDS)) {
 //			PageSize pageSize = new PageSize();
 //			pageSize.setPageHeight(getPageDrawComponent().getPageBounds().width);
@@ -190,6 +206,9 @@ extends DrawComponentPropertySource
 		else if (id.equals(DrawComponent.PROP_NAME)) {
 			drawComponent.setName((String)value);
 		}
+		else if (id.equals(PageDrawComponent.PROP_SHOW_PAGE_BOUNDS)) {
+			getPageDrawComponent().setShowPageBounds((Boolean)value);
+		}		
 //		else if (id.equals(MultiLayerDrawComponent.PROP_RESOLUTION)) 
 //		{
 //			double resolution = ((Double)value).doubleValue();

@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -67,8 +68,7 @@ extends AbstractEditorPrintAction
 	}
 			
 	public void run() 
-	{
-//		drawComponent = getEditor().getMultiLayerDrawComponent();		
+	{		
 		PrinterJob printJob = PrinterJob.getPrinterJob();
 		printJob.setJobName(getEditor().getTitle());
 		
@@ -76,7 +76,7 @@ extends AbstractEditorPrintAction
 		logger.debug("PageFormat in EditorPrintAction");
 		PrintUtil.logPageFormat(pf);
 		
-    printJob.setPrintable(printable);
+    printJob.setPrintable(getPrintable(PrintConstant.FIT_PAGE));
     if (printJob.printDialog()) {
       try {
       	printJob.print();

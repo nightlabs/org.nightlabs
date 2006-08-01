@@ -78,13 +78,17 @@ extends AbstractDrawComponentContainerEditPart
 //			return;
 //		}
 		if (propertyName.equals(PageDrawComponent.PROP_ORIENTATION)) {
-			refresh();
+			refreshVisuals();
 			return;
 		}
-		else if (propertyName.equals(PageDrawComponent.PROP_PAGE_BOUNDS)) {
-			refresh();
+		if (propertyName.equals(PageDrawComponent.PROP_PAGE_BOUNDS)) {
+			refreshVisuals();
 			return;
-		}		
+		}
+		if (propertyName.equals(PageDrawComponent.PROP_PAGE_BOUNDS)) {
+			refreshVisuals();
+			return;
+		}				
 		super.propertyChanged(evt);		
 	}
 }

@@ -36,7 +36,9 @@ import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.printing.PrinterData;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.actions.AbstractEditorAction;
+import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
 import org.nightlabs.editor2d.render.Renderer;
 import org.nightlabs.editor2d.render.j2d.J2DRenderContext;
 
@@ -84,41 +86,90 @@ extends AbstractEditorAction
 		getEditor().setPageFormat(pageFormat);
 	}
 	
-	protected J2DRenderContext j2drc = null;
-	protected Printable printable = new Printable()
-	{	
-		public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) 
-		throws PrinterException 
-		{
-			Graphics2D g2d = (Graphics2D) graphics;
-			Renderer r = getDrawComponent().getRenderer();
-			if (r.getRenderContext() instanceof J2DRenderContext)
-				j2drc = (J2DRenderContext) r.getRenderContext();
-			else
-				j2drc = (J2DRenderContext) r.getRenderContext(J2DRenderContext.RENDER_CONTEXT_TYPE_JAVA2D);
-						
-			// Print only 1 Page
-			if (pageIndex >= 1) {
-        return Printable.NO_SUCH_PAGE;
-			}
-			if (j2drc != null) {
-				prepareGraphics(g2d, getDrawComponent(), pageFormat);				
-				j2drc.paint(getDrawComponent(), g2d);
-				return Printable.PAGE_EXISTS;
-			}
-			return Printable.NO_SUCH_PAGE;
-		}	
-	};	
-	
-	public static void prepareGraphics(Graphics2D g2d, DrawComponent dc, PageFormat pageFormat) 
-	{		
-		long startTime = System.currentTimeMillis();
-		PrintUtil.prepareGraphics(g2d, dc, pageFormat);
-		long endTime = System.currentTimeMillis() - startTime;
-		logger.debug("prepareGraphics took "+endTime+" ms!");
+	public Printable getPrintable(PrintConstant printConstant) 
+	{
+		switch (printConstant) {
+			case FIT_ALL:
+				return new EditorPrintable(getDrawComponent(), printConstant, 1);
+			case FIT_PAGE:
+				return new EditorPrintable(getDrawComponent(), printConstant, 1);				
+		}
+		return new EditorPrintable(getDrawComponent(), printConstant, 1);		
 	}
 	
 	public DrawComponent getDrawComponent() {
 		return getMultiLayerDrawComponent();
 	}
+	
+//	protected J2DRenderContext j2drc = null;
+//	private Printable dcPrintable = new Printable()
+//	{	
+//		public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) 
+//		throws PrinterException 
+//		{
+//			Graphics2D g2d = (Graphics2D) graphics;
+//			Renderer r = getDrawComponent().getRenderer();
+//			if (r.getRenderContext() instanceof J2DRenderContext)
+//				j2drc = (J2DRenderContext) r.getRenderContext();
+//			else
+//				j2drc = (J2DRenderContext) r.getRenderContext(J2DRenderContext.RENDER_CONTEXT_TYPE_JAVA2D);
+//						
+//			// Print only 1 Page
+//			if (pageIndex >= 1) {
+//        return Printable.NO_SUCH_PAGE;
+//			}
+//			if (j2drc != null) {
+//				prepareGraphics(g2d, getDrawComponent(), pageFormat);				
+//				j2drc.paint(getDrawComponent(), g2d);
+//				return Printable.PAGE_EXISTS;
+//			}
+//			return Printable.NO_SUCH_PAGE;
+//		}	
+//	};	
+//
+//	private Printable pagePrintable = new Printable()
+//	{	
+//		public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) 
+//		throws PrinterException 
+//		{
+//			Graphics2D g2d = (Graphics2D) graphics;
+//			Renderer r = getPageDrawComponent().getRenderer();
+//			if (r.getRenderContext() instanceof J2DRenderContext)
+//				j2drc = (J2DRenderContext) r.getRenderContext();
+//			else
+//				j2drc = (J2DRenderContext) r.getRenderContext(J2DRenderContext.RENDER_CONTEXT_TYPE_JAVA2D);
+//						
+//			// Print only 1 Page
+//			if (pageIndex >= 1) {
+//        return Printable.NO_SUCH_PAGE;
+//			}
+//			if (j2drc != null) {
+//				prepareGraphics(g2d, getPageDrawComponent(), pageFormat);				
+//				j2drc.paint(getPageDrawComponent(), g2d);
+//				return Printable.PAGE_EXISTS;
+//			}
+//			return Printable.NO_SUCH_PAGE;
+//		}	
+//	};	
+			
+//	public static void prepareGraphics(Graphics2D g2d, DrawComponent dc, PageFormat pageFormat) 
+//	{		
+//		long startTime = System.currentTimeMillis();
+//		PrintUtil.prepareGraphics(g2d, dc, pageFormat);
+//		long endTime = System.currentTimeMillis() - startTime;
+//		logger.debug("prepareGraphics took "+endTime+" ms!");
+//	}
+//	
+//	public static void prepareGraphics(Graphics2D g2d, PageDrawComponent page, PageFormat pageFormat) 
+//	{		
+//		long startTime = System.currentTimeMillis();
+//		PrintUtil.prepareGraphics(g2d, page, pageFormat);		
+//		long endTime = System.currentTimeMillis() - startTime;
+//		logger.debug("prepareGraphics took "+endTime+" ms!");
+//	}
+//		
+//	public PageDrawComponent getPageDrawComponent() {
+//		return getMultiLayerDrawComponent().getCurrentPage();
+//	}
+	
 }

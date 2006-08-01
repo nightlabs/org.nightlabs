@@ -32,6 +32,7 @@ import java.awt.print.PrinterJob;
 import org.eclipse.jface.dialogs.Dialog;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -74,7 +75,8 @@ extends AbstractEditorPrintAction
 			PageFormat pageFormat = printDialog.getPageFormat();
 			PrinterJob printJob = PrinterJob.getPrinterJob();
 			printJob.setJobName(getEditor().getTitle());
-			printJob.setPrintable(printable, pageFormat);	
+//			printJob.setPrintable(printable, pageFormat);	
+			printJob.setPrintable(getPrintable(PrintConstant.FIT_PAGE), pageFormat);			
 			try {
 				printJob.print();				
 			} catch (PrinterException pe) {
