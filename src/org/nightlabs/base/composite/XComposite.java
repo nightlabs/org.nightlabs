@@ -235,7 +235,7 @@ public class XComposite extends Composite
 	}
 
 	/**
-	 * This is a conenience method.
+	 * This is a convenience method.
 	 *
 	 * @return Returns the same instance as <tt>Control.getLayoutData()</tt>, but you don't need to cast anymore.
 	 * @see org.eclipse.swt.widgets.Control#getLayoutData()
