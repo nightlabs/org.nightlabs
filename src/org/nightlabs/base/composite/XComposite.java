@@ -52,6 +52,10 @@ public class XComposite extends Composite
 		return getLayout(layoutMode, null);
 	}
 	
+	public static GridLayout getLayout(LayoutMode layoutMode, GridLayout layout)
+	{
+		return getLayout(layoutMode, layout, 1);
+	}
 	/**
 	 * modifies a GridLayout to the appropriate {@link LayoutMode}
 	 * 
@@ -59,10 +63,10 @@ public class XComposite extends Composite
 	 * @param layout the GridLayout to modify
 	 * @return the modified GridLayout
 	 */
-	public static GridLayout getLayout(LayoutMode layoutMode, GridLayout layout)
+	public static GridLayout getLayout(LayoutMode layoutMode, GridLayout layout, int cols)
 	{
 		if (layout == null)
-			layout = new GridLayout();
+			layout = new GridLayout(cols, false);
 		switch (layoutMode) 
 		{
 			case ORDINARY_WRAPPER:
@@ -203,12 +207,29 @@ public class XComposite extends Composite
 	 */
 	public XComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
+		this(parent, style, layoutMode, layoutDataMode, 1);
+	}
+	
+	/**
+	 * creates a Composite with the appropriate layoutMode and layoutDataMode and the specified number of columns.
+	 * 
+	 * @param parent the parent Composite
+	 * @param style the SWT style flag
+	 * @param layoutMode the layoutMode to set
+	 * @param layoutDataMode the LayoutDataMode to set
+	 * @param cols the number of columns of the grid layout
+	 * 
+	 * @see LayoutMode
+	 * @see LayoutDataMode
+	 */
+	public XComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode, int cols)
+	{
 		super(parent, style);
 
 		this.setForeground(parent.getForeground());
 		this.setBackground(parent.getBackground());
 
-		setLayout(getLayout(layoutMode));
+		setLayout(getLayout(layoutMode, null, cols));
 		setLayoutDataMode(layoutDataMode, this);
 	}
 

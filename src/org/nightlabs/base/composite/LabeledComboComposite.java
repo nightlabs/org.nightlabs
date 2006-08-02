@@ -41,10 +41,10 @@ public class LabeledComboComposite extends XComposite {
 	private Label label;
 
 	public LabeledComboComposite(Composite parent, int style, boolean setLayoutData) {
-		super(parent, style, LayoutMode.TIGHT_WRAPPER,
+		super(parent, style, LayoutMode.LEFT_RIGHT_WRAPPER,
 				setLayoutData ? LayoutDataMode.GRID_DATA : LayoutDataMode.NONE);				
 		label = new Label(this, SWT.NONE);
-		combo = new Combo(this, SWT.NONE);
+		combo = new Combo(this, style);
 	}
 
 	public Combo getCombo() {
