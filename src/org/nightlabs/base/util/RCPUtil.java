@@ -29,6 +29,8 @@ package org.nightlabs.base.util;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -531,4 +533,23 @@ public class RCPUtil
 		return null;
   }
 	
+  /**
+   * logs all parents and its layoutData of the given control to the given logger
+   * 
+   * @param control the {@link Control} to log its parents
+   * @param logger the logger to log
+   * @param logLevel the logLevel to use
+   */
+	public static void logControlParents(Control control, Logger logger, Level logLevel) 
+	{
+		Composite parent = control.getParent();
+		if (parent != null) 
+		{
+			logger.log(logLevel, "control = "+control);
+			logger.log(logLevel, "control.getLayoutData() = "+control.getLayoutData());			
+			logger.log(logLevel, "parent = "+parent);			
+			logger.log(logLevel, "parent.getLayout() = "+parent.getLayout());			
+			logControlParents(parent, logger, logLevel);
+		}
+	}  
 }
