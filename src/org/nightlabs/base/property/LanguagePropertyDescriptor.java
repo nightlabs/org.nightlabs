@@ -31,6 +31,8 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import org.nightlabs.base.celleditor.LanguageCellEditor;
+import org.nightlabs.base.labelprovider.LanguageLabelProvider;
 import org.nightlabs.i18n.I18nText;
 
 public class LanguagePropertyDescriptor 

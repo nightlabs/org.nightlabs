@@ -23,54 +23,89 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
+package org.nightlabs.base.celleditor;
 
-package org.nightlabs.base.property;
-
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
-import org.nightlabs.base.celleditor.XTextCellEditor;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Spinner;
 
 /**
- * @author Daniel.Mazurek <at> NightLabs <dot> de
+ * @author Daniel.Mazurek <at> Nightlabs <dot> de
  *
  */
-public class XTextPropertyDescriptor 
-//extends TextPropertyDescriptor 
-extends XPropertyDescriptor
+public class XSpinnerCellEditor 
+extends XCellEditor 
 {
+//	public XSpinnerCellEditor() {
+//		super();
+//	}
 
-	/**
-	 * @param id
-	 * @param displayName
-	 */
-	public XTextPropertyDescriptor(Object id, String displayName) {
-		super(id, displayName);
+	public XSpinnerCellEditor(Composite parent) {
+		this(parent, SWT.NONE, false);
 	}
 
-	/**
-	 * @param id
-	 * @param displayName
-	 * @param readOnly
-	 */
-	public XTextPropertyDescriptor(Object id, String displayName, boolean readOnly) {
-		super(id, displayName, readOnly);
+	public XSpinnerCellEditor(Composite parent, int style) {
+		this(parent, style, false);
+	}
+
+	public XSpinnerCellEditor(Composite parent, int style, boolean readOnly) {
+		this(parent, style, readOnly, 0, Integer.MAX_VALUE);
+	}
+
+	public XSpinnerCellEditor(Composite parent, int style, boolean readOnly,
+			int minimum, int maximum) 
+	{
+		this(parent, style, readOnly, minimum, maximum, SWT.NONE);
+	}
+
+	public XSpinnerCellEditor(Composite parent, int style, boolean readOnly,
+			int minimum, int maximum, int spinnerStyle) 
+	{
+//		super(parent, style, readOnly);
+		this.minimum = minimum;
+		this.maximum = maximum;
+		this.spinnerStyle = spinnerStyle;
+		create(parent);
+		setReadOnly(readOnly);		
 	}
 	
-  /**
-   * The <code>TextPropertyDescriptor</code> implementation of this 
-   * <code>IPropertyDescriptor</code> method creates and returns a new
-   * <code>XTextCellEditor</code>.
-   * <p>
-   * The editor is configured with the current validator if there is one. 
-   * </p>
-   */
-  public CellEditor createPropertyEditor(Composite parent) 
-  {
-    CellEditor editor = new XTextCellEditor(parent, SWT.NONE, readOnly);
-    if (getValidator() != null)
-        editor.setValidator(getValidator());
-    return editor;
-  }	
+	private int spinnerStyle = SWT.None;
+	private int minimum = 0;
+	private int maximum = Integer.MAX_VALUE;	
+	
+	@Override
+	protected Control createControl(Composite parent) 
+	{
+		Spinner spinner = new Spinner(parent, spinnerStyle);
+		spinner.setMinimum(minimum);
+		spinner.setMaximum(maximum);		
+		return spinner;
+	}
+	
+	@Override
+	protected Object doGetValue() {		
+		return getSpinner().getSelection();		
+	}
+	
+	@Override
+	protected void doSetValue(Object value) {
+		checkReadOnly();
+		if (value instanceof Integer)
+			getSpinner().setSelection((Integer)value);
+		if (value instanceof Float)
+			getSpinner().setSelection(((Float)value).intValue());		
+		if (value instanceof Double)
+			getSpinner().setSelection(((Double)value).intValue());				
+	}	
+	
+	@Override
+	protected void doSetFocus() {
+		getControl().setFocus();		
+	}
+	
+	public Spinner getSpinner() {
+		return (Spinner) getControl();
+	}
+	
 }

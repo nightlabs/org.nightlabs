@@ -24,61 +24,86 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.base.property;
+package org.nightlabs.base.celleditor;
 
-import org.eclipse.jface.util.Assert;
-import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 
-public class DoubleCellEditor 
-//extends CellEditor 
+
+public class CheckboxCellEditor  
+//extends CellEditor
 extends XCellEditor
 {
-  protected Text text;
-  
-  public DoubleCellEditor() {
+  protected Button checkbox;
+	
+  public CheckboxCellEditor() {
     super();
   }
 
-  public DoubleCellEditor(Composite parent) {
+  /**
+   * @param parent
+   */
+  public CheckboxCellEditor(Composite parent) {
     super(parent);
   }
 
-  public DoubleCellEditor(Composite parent, int style) {
+  /**
+   * @param parent
+   * @param style
+   */
+  public CheckboxCellEditor(Composite parent, int style) {
     super(parent, style);
   }
-
-  public DoubleCellEditor(Composite parent, int style, boolean readOnly) {
-    super(parent, style, readOnly);
-  }  
   
-  protected Control createControl(Composite parent) {
-    text = new Text(parent, getStyle());
-    return text;
+  /**
+   * @param parent
+   * @param style
+   */
+  public CheckboxCellEditor(Composite parent, int style, boolean readOnly) {
+    super(parent, style, readOnly);
   }
-
-  protected Object doGetValue() {
-    String stringVal = text.getText();
-    Double d = new Double(stringVal);
-    return d; 
-  }
-
-  protected void doSetFocus() {
-    if (text != null) {
-      text.selectAll();
-      text.setFocus();
-    }     
-  }
-
-  protected void doSetValue(Object value) 
-  {
-  	super.doSetValue(value);
-    Assert.isTrue(text != null && (value instanceof Double));
-    Double val = (Double) value;
-    String stringVal = Double.toString(val.doubleValue());
-    text.setText(stringVal);        
-  }
-
+  
+	/**
+	 * The <code>CheckboxCellEditor</code> implementation of
+	 * this <code>CellEditor</code> framework method does
+	 * nothing and returns <code>null</code>.
+	 */
+	protected Control createControl(Composite parent) 
+	{
+	   checkbox = new Button(parent, SWT.CHECK);
+	   return checkbox;
+	}
+	
+	/**
+	 * The <code>CheckboxCellEditor</code> implementation of
+	 * this <code>CellEditor</code> framework method returns
+	 * the checkbox setting wrapped as a <code>Boolean</code>.
+	 *
+	 * @return the Boolean checkbox value
+	 */
+	protected Object doGetValue() {
+		return new Boolean(checkbox.getSelection());
+	}
+	
+	protected void doSetFocus() {
+	  checkbox.setFocus();
+	}
+	
+	/**
+	 * The <code>CheckboxCellEditor</code> implementation of
+	 * this <code>CellEditor</code> framework method accepts
+	 * a value wrapped as a <code>Boolean</code>.
+	 *
+	 * @param value a Boolean value
+	 */
+	protected void doSetValue(Object value) 
+	{
+		checkReadOnly();
+	  if (value instanceof Boolean)
+	    checkbox.setSelection(((Boolean) value).booleanValue());
+	}
+	
+	
 }

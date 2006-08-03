@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.base.property;
+package org.nightlabs.base.celleditor;
 
 import java.text.MessageFormat;
 

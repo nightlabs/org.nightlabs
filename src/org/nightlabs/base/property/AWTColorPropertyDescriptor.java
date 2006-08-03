@@ -29,6 +29,8 @@ package org.nightlabs.base.property;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.nightlabs.base.celleditor.AWTColorCellEditor;
+import org.nightlabs.base.labelprovider.AWTColorLabelProvider;
 
 public class AWTColorPropertyDescriptor 
 extends PropertyDescriptor 

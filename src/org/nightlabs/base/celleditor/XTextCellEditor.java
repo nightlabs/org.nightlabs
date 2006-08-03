@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.base.property;
+package org.nightlabs.base.celleditor;
 
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
@@ -37,10 +37,6 @@ public class XTextCellEditor
 extends TextCellEditor 
 implements IReadOnlyCellEditor
 {
-
-	/**
-	 * 
-	 */
 	public XTextCellEditor() {
 		super();
 	}

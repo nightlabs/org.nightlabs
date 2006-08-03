@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.base.property;
+package org.nightlabs.base.celleditor;
 
 import org.eclipse.jface.util.Assert;
 import org.eclipse.swt.widgets.Composite;
@@ -62,17 +62,11 @@ extends XCellEditor
     super(parent, style, readOnly);
   }
   
-  /* (non-Javadoc)
-   * @see org.eclipse.jface.viewers.CellEditor#createControl(org.eclipse.swt.widgets.Composite)
-   */
   protected Control createControl(Composite parent) {
   	text = new Text(parent, getStyle());
   	return text;
   }
 
-  /* (non-Javadoc)
-   * @see org.eclipse.jface.viewers.CellEditor#doGetValue()
-   */
   protected Object doGetValue() 
   {
     String stringVal = text.getText();
@@ -80,9 +74,6 @@ extends XCellEditor
     return i;     
   }
 
-  /* (non-Javadoc)
-   * @see org.eclipse.jface.viewers.CellEditor#doSetFocus()
-   */
   protected void doSetFocus() 
   {
   	if (text != null) {
@@ -91,12 +82,9 @@ extends XCellEditor
   	}    
   }
 
-  /* (non-Javadoc)
-   * @see org.eclipse.jface.viewers.CellEditor#doSetValue(java.lang.Object)
-   */
   protected void doSetValue(Object value) 
   {
-  	super.doSetValue(value);
+  	checkReadOnly();
   	Assert.isTrue(text != null && (value instanceof Integer));
   	Integer val = (Integer) value;
   	String stringVal = Integer.toString(val.intValue());

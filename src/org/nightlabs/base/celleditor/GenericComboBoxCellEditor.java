@@ -23,54 +23,71 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
+package org.nightlabs.base.celleditor;
 
-package org.nightlabs.base.property;
+import java.util.List;
 
-import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
-import org.nightlabs.base.celleditor.XTextCellEditor;
+import org.eclipse.swt.widgets.Control;
+import org.nightlabs.base.composite.ComboComposite;
 
 /**
- * @author Daniel.Mazurek <at> NightLabs <dot> de
+ * @author Daniel.Mazurek <at> Nightlabs <dot> de
  *
  */
-public class XTextPropertyDescriptor 
-//extends TextPropertyDescriptor 
-extends XPropertyDescriptor
+public class GenericComboBoxCellEditor<T>
+extends XCellEditor 
 {
+	private List<T> types = null;
+	private ILabelProvider labelProvider = null;	
+	private ComboComposite comboComposite = null;
 
-	/**
-	 * @param id
-	 * @param displayName
-	 */
-	public XTextPropertyDescriptor(Object id, String displayName) {
-		super(id, displayName);
-	}
-
-	/**
-	 * @param id
-	 * @param displayName
-	 * @param readOnly
-	 */
-	public XTextPropertyDescriptor(Object id, String displayName, boolean readOnly) {
-		super(id, displayName, readOnly);
+	public GenericComboBoxCellEditor(Composite parent, List<T> types, ILabelProvider labelProvider) 
+	{
+		if (types == null)
+			throw new IllegalArgumentException("param types must not be null!");
+		this.types = types;
+		this.labelProvider = labelProvider;
+		create(parent);
 	}
 	
-  /**
-   * The <code>TextPropertyDescriptor</code> implementation of this 
-   * <code>IPropertyDescriptor</code> method creates and returns a new
-   * <code>XTextCellEditor</code>.
-   * <p>
-   * The editor is configured with the current validator if there is one. 
-   * </p>
-   */
-  public CellEditor createPropertyEditor(Composite parent) 
-  {
-    CellEditor editor = new XTextCellEditor(parent, SWT.NONE, readOnly);
-    if (getValidator() != null)
-        editor.setValidator(getValidator());
-    return editor;
-  }	
+	public GenericComboBoxCellEditor(Composite parent, int style, boolean readOnly, 
+			List<T> types, ILabelProvider labelProvider, int comboStyle) 
+	{
+		if (types == null)
+			throw new IllegalArgumentException("param types must not be null!");
+		
+		this.types = types;
+		this.labelProvider = labelProvider;
+		setReadOnly(readOnly);
+		setStyle(style);
+		this.comboStyle = comboStyle;
+		create(parent);
+	}
+	
+	private int comboStyle;
+	
+	@Override
+	protected Control createControl(Composite parent) {
+		comboComposite = new ComboComposite(types, labelProvider, parent, SWT.NONE, comboStyle);
+		return comboComposite;
+	}
+
+	@Override
+	protected Object doGetValue() {
+		return comboComposite.getSelectedElement();
+	}
+
+	@Override
+	protected void doSetFocus() {
+		comboComposite.setFocus();
+	}
+
+	@Override
+	protected void doSetValue(Object value) {
+		comboComposite.selectElement(value);
+	}
+	
 }

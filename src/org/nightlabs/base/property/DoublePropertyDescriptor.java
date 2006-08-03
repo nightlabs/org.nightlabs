@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.nightlabs.base.celleditor.DoubleCellEditor;
 
 public class DoublePropertyDescriptor 
 extends XPropertyDescriptor 

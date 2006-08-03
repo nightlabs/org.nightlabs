@@ -23,69 +23,58 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-
 package org.nightlabs.base.property;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.celleditor.GenericComboBoxCellEditor;
 
 /**
- * @author Daniel.Mazurek <at> NightLabs <dot> de
+ * @author Daniel.Mazurek <at> Nightlabs <dot> de
  *
  */
-public abstract class XCellEditor 
-extends CellEditor 
-implements IReadOnlyCellEditor
+public class GenericComboBoxPropertyDescriptor<T> 
+extends XPropertyDescriptor 
 {
+	private ILabelProvider labelProvider = null;
+	private List<T> types = null;
 
 	/**
-	 * 
+	 * @param id
+	 * @param displayName
 	 */
-	public XCellEditor() {
-		super();
+	public GenericComboBoxPropertyDescriptor(Object id, String displayName, 
+			List<T> types, ILabelProvider labelProvider) 
+	{
+		super(id, displayName);
+		this.labelProvider = labelProvider;
+		if (types == null)
+			throw new IllegalArgumentException("param types must not be null!");
+		this.types = types;
 	}
 
 	/**
-	 * @param parent
+	 * @param id
+	 * @param displayName
+	 * @param readOnly
 	 */
-	public XCellEditor(Composite parent) {
-		super(parent);
-	}
-
-	/**
-	 * @param parent
-	 * @param style
-	 */
-	public XCellEditor(Composite parent, int style) {
-		super(parent, style);
-	}
-
-	/**
-	 * @param parent
-	 * @param style
-	 */
-	public XCellEditor(Composite parent, int style, boolean readOnly) {
-		super(parent, style);
-		setReadOnly(readOnly);
+	public GenericComboBoxPropertyDescriptor(Object id, String displayName,
+			boolean readOnly, List<T> types, ILabelProvider labelProvider) 
+	{
+		super(id, displayName, readOnly);
+		this.labelProvider = labelProvider;
+		if (types == null)
+			throw new IllegalArgumentException("param types must not be null!");
+		
+		this.types = types;		
 	}
 	
-	/* 
-	 * @see org.eclipse.jface.viewers.CellEditor#doSetValue(java.lang.Object)
-	 */
-	protected void doSetValue(Object value) 
-	{
-		if (isReadOnly())
-			return;
-	}
-
-	protected boolean readOnly = false;
-	public boolean isReadOnly() {
-		return readOnly;
-	}
-	public void setReadOnly(boolean readOnly) 
-	{
-		this.readOnly = readOnly;
-		getControl().setEnabled(!readOnly);
+	@Override
+	public CellEditor createPropertyEditor(Composite parent) {
+		return new GenericComboBoxCellEditor<T>(parent, types, labelProvider);
 	}
 	
 }

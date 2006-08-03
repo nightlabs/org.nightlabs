@@ -29,6 +29,7 @@ package org.nightlabs.base.property;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.celleditor.IntCellEditor;
 
 
 public class IntPropertyDescriptor 

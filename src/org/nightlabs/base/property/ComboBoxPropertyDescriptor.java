@@ -30,6 +30,8 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.nightlabs.base.celleditor.ComboBoxCellEditor;
+import org.nightlabs.base.labelprovider.ComboBoxLabelProvider;
 
 public class ComboBoxPropertyDescriptor 
 extends PropertyDescriptor

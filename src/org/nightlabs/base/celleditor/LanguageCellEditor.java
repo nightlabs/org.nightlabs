@@ -24,55 +24,63 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.base.property;
+package org.nightlabs.base.celleditor;
 
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
-import org.nightlabs.base.language.LanguageManager;
+import org.nightlabs.base.language.I18nTextEditor;
+import org.nightlabs.base.language.LanguageChooserImageCombo;
 import org.nightlabs.i18n.I18nText;
 
-public class LanguageLabelProvider 
-extends LabelProvider
-{
+public class LanguageCellEditor 
+extends CellEditor
+{	
 	protected I18nText text;
-	public LanguageLabelProvider(I18nText text) {
-		super();
-		this.text = text;
+	public LanguageCellEditor(I18nText text, Composite parent) 
+	{
+		super(parent, SWT.DEFAULT);	
+		this.text = text;		
+	}
+
+	protected LanguageChooserImageCombo comboBox;
+	public LanguageChooserImageCombo getLanguageChooser() {
+		return comboBox;
+	}	
+	
+	protected I18nTextEditor textEditor;
+		
+  /**
+   * Creates a ColorCombo and adds some listener to it
+   */
+  protected Control createControl(Composite parent) 
+  {	
+  	Composite panel = new Composite(parent, SWT.DEFAULT);  	
+	  comboBox = new LanguageChooserImageCombo(panel);
+	  textEditor = new I18nTextEditor(panel, getLanguageChooser());
+	  
+	  return panel;
 	}
 	
-  public String getText(Object element) 
-  {
-    if (element == null)
-        return ""; //$NON-NLS-1$
-
-    if (element instanceof I18nText) {
-    	I18nText i18nText = (I18nText) element;
-    	if (i18nText != null)
-    		return i18nText.getText(LanguageManager.sharedInstance().getCurrentLanguageID());
+  /**
+   * sets the focus to the ComboBox
+   */
+  protected void doSetFocus() {
+    if (textEditor != null) {
+    	textEditor.setFocus();    	
     }
-
-    return ""; //$NON-NLS-1$
   }
-  
-  public Image getImage(Object element) 
-  {
-    if (element == null)
-      return null; //$NON-NLS-1$
 
-    return LanguageManager.getImage(LanguageManager.sharedInstance().getCurrentLanguageID());    
- 	}
+	protected Object doGetValue() {
+		return textEditor.getEditText();
+	}
+
+	protected void doSetValue(Object value) {
+		if (value instanceof I18nText)
+			textEditor.setI18nText((I18nText)value);
+	}
+    
   
-//  protected String getLanguageID(String languageText) 
-//  {
-//  	for (Iterator it = text.getTexts().iterator(); it.hasNext(); ) {
-//  		Map.Entry entry = (Map.Entry) it.next();
-//  		String value = (String) entry.getValue();
-//  		if (value.equals(languageText)) {
-//  			String languageID = (String) entry.getKey();
-//  			return languageID;
-//  		}
-//  	}
-//  	return null;
-//  }
 }

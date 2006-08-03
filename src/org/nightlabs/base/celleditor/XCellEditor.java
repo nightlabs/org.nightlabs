@@ -24,53 +24,61 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.base.property;
+package org.nightlabs.base.celleditor;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
-import org.nightlabs.base.celleditor.XTextCellEditor;
 
 /**
  * @author Daniel.Mazurek <at> NightLabs <dot> de
  *
  */
-public class XTextPropertyDescriptor 
-//extends TextPropertyDescriptor 
-extends XPropertyDescriptor
+public abstract class XCellEditor 
+extends CellEditor 
+implements IReadOnlyCellEditor
 {
 
-	/**
-	 * @param id
-	 * @param displayName
-	 */
-	public XTextPropertyDescriptor(Object id, String displayName) {
-		super(id, displayName);
+	public XCellEditor() {
+		super();
 	}
 
 	/**
-	 * @param id
-	 * @param displayName
-	 * @param readOnly
+	 * @param parent
 	 */
-	public XTextPropertyDescriptor(Object id, String displayName, boolean readOnly) {
-		super(id, displayName, readOnly);
+	public XCellEditor(Composite parent) {
+		super(parent);
+	}
+
+	/**
+	 * @param parent
+	 * @param style
+	 */
+	public XCellEditor(Composite parent, int style) {
+		super(parent, style);
+	}
+
+	/**
+	 * @param parent
+	 * @param style
+	 */
+	public XCellEditor(Composite parent, int style, boolean readOnly) {
+		super(parent, style);
+		setReadOnly(readOnly);
 	}
 	
-  /**
-   * The <code>TextPropertyDescriptor</code> implementation of this 
-   * <code>IPropertyDescriptor</code> method creates and returns a new
-   * <code>XTextCellEditor</code>.
-   * <p>
-   * The editor is configured with the current validator if there is one. 
-   * </p>
-   */
-  public CellEditor createPropertyEditor(Composite parent) 
-  {
-    CellEditor editor = new XTextCellEditor(parent, SWT.NONE, readOnly);
-    if (getValidator() != null)
-        editor.setValidator(getValidator());
-    return editor;
-  }	
+	protected void checkReadOnly() 
+	{
+		if (isReadOnly())
+			return;
+	}
+
+	private boolean readOnly = false;
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
+		getControl().setEnabled(!readOnly);
+	}
+	
 }
