@@ -62,14 +62,14 @@ extends ByteArrayTransfer
 	protected void javaToNative(Object object, TransferData transferData) 
 	{
 		String objectKey = LocalTransferManager.sharedInstance().addObject(object);
-		super.javaToNative(objectKey.getBytes(), transferData);
+		super.javaToNative(objectKey.getBytes(), transferData); // TODO shouldn't we better use objectKey.getBytes(Utils.CHARSET_NAME_UTF_8) ?!!!!
 	}
 
 	protected Object nativeToJava(TransferData transferData) 
 	{
 		byte[] superResult = (byte[])super.nativeToJava(transferData);
-		String transferKey = new String(superResult);
-		return LocalTransferManager.sharedInstance().popObject(transferKey);		
+		String transferKey = new String(superResult); // TODO shouldn't we better use new String(superResult, Utils.CHARSET_NAME_UTF_8) ?!!!!
+		return LocalTransferManager.sharedInstance().popObject(transferKey);
 	}
 	
 	protected boolean validate(Object object) {
