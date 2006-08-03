@@ -37,7 +37,12 @@ import org.eclipse.draw2d.J2DGraphics;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.editparts.ZoomListener;
+import org.nightlabs.editor2d.ShapeDrawComponent;
+import org.nightlabs.editor2d.ShapeDrawComponent.LineStyle;
 import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
+import org.nightlabs.editor2d.page.resolution.Resolution;
+import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
 import org.nightlabs.editor2d.util.J2DUtil;
 import org.nightlabs.editor2d.util.RenderUtil;
 
@@ -85,12 +90,36 @@ implements ShapeFigure
       g2d = j2d.createGraphics2D();
       g2d.setClip(null);      
       g2d.setPaint(J2DUtil.toAWTColor(getForegroundColor()));
-      g2d.setStroke(RenderUtil.setStrokeStyle(lineWidth, lineStyle));
+//      g2d.setStroke(RenderUtil.getStroke(lineWidth, lineStyle));
+      g2d.setStroke(ShapeDrawComponent.StrokeUtil.getStroke(lineWidth, convertLineStyle(lineStyle), getResolution()));      
       g2d.draw(getGeneralShape());      
       g2d.dispose();
     }    
   }
     
+  private LineStyle convertLineStyle(int lineStyle) 
+  {
+  	if (lineStyle == 1)
+  		return LineStyle.SOLID;
+  	if (lineStyle == 2)
+  		return LineStyle.DASHED_1;
+  	if (lineStyle == 3)
+  		return LineStyle.DASHED_2;
+  	if (lineStyle == 4)
+  		return LineStyle.DASHED_3;
+  	if (lineStyle == 5)
+  		return LineStyle.DASHED_4;
+  	
+  	return LineStyle.SOLID;
+  }
+  private Resolution resolution = null;
+  protected Resolution getResolution() 
+  {
+  	if (resolution == null)
+  		resolution = new ResolutionImpl(IResolutionUnit.dpiUnit, 72);
+  	return resolution;
+  }
+  
   public GeneralShape getGeneralShape() {
   	return gp;
   }

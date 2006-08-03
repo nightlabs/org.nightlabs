@@ -28,7 +28,7 @@ package org.nightlabs.editor2d.model;
 import java.util.List;
 
 import org.eclipse.ui.views.properties.PropertyDescriptor;
-import org.nightlabs.base.property.CheckboxCellEditor;
+import org.nightlabs.base.celleditor.CheckboxCellEditor;
 import org.nightlabs.base.property.CheckboxPropertyDescriptor;
 import org.nightlabs.base.property.ComboBoxPropertyDescriptor;
 import org.nightlabs.base.property.DoublePropertyDescriptor;

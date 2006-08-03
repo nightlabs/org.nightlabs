@@ -33,6 +33,7 @@ import org.eclipse.swt.graphics.Path;
 import org.nightlabs.base.util.ColorUtil;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
+import org.nightlabs.editor2d.ShapeDrawComponent.LineStyle;
 import org.nightlabs.editor2d.viewer.util.AWTSWTUtil;
 
 /**
@@ -60,7 +61,8 @@ extends Draw2DBaseRenderer
       g.fillPath(path);
     }
     g.setForegroundColor(ColorUtil.toSWTColor(sdc.getLineColor()));
-    g.setLineWidth(sdc.getLineWidth());
+//    g.setLineWidth(sdc.getLineWidth());
+    g.setLineWidth((int)sdc.getLineWidth());    
     g.setLineStyle(convertLineStyle(sdc.getLineStyle()));
     g.drawPath(path);  
     
@@ -72,8 +74,26 @@ extends Draw2DBaseRenderer
 		return AWTSWTUtil.convertShape(s, null, null);
 	}
 	 
-	protected int convertLineStyle(int lineStyle) 
+//	protected int convertLineStyle(int lineStyle) 
+//	{
+//		return lineStyle;
+//	}
+	protected int convertLineStyle(LineStyle lineStyle) 
 	{
-		return lineStyle;
-	}
+		switch (lineStyle) 
+		{
+			case SOLID:
+				return 1;
+			case DASHED_1:
+				return 2;
+			case DASHED_2:
+				return 3;
+			case DASHED_3:
+				return 4;
+			case DASHED_4:
+				return 5;
+			default:
+				return 1;
+		}
+	}		
 }

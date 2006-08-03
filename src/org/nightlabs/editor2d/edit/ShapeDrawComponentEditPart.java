@@ -39,11 +39,11 @@ import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
 public class ShapeDrawComponentEditPart
 extends DrawComponentEditPart 
 {
-	/**
-	 * LOG4J logger used by this class
-	 */
-	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
-			.getLogger(ShapeDrawComponentEditPart.class);
+//	/**
+//	 * LOG4J logger used by this class
+//	 */
+//	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
+//			.getLogger(ShapeDrawComponentEditPart.class);
 	
   public ShapeDrawComponentEditPart(ShapeDrawComponent shapeDrawComponent) {
     super(shapeDrawComponent);
@@ -72,29 +72,40 @@ extends DrawComponentEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(ShapeDrawComponent.PROP_FILL_COLOR)) {
-			logger.debug(propertyName +" changed!");
+//			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
+			return;
 		}
 		else if (propertyName.equals(ShapeDrawComponent.PROP_LINE_COLOR)) {
-			logger.debug(propertyName +" changed!");
-			refreshVisuals();			
+//			logger.debug(propertyName +" changed!");
+			refreshVisuals();
+			return;
 		}
 		else if (propertyName.equals(ShapeDrawComponent.PROP_FILL)) {
-			logger.debug(propertyName +" changed!");
-			refreshVisuals();			
+//			logger.debug(propertyName +" changed!");
+			refreshVisuals();
+			return;
 		}
 		else if (propertyName.equals(ShapeDrawComponent.PROP_LINE_STYLE)) {
-			logger.debug(propertyName +" changed!");
-			refreshVisuals();			
+//			logger.debug(propertyName +" changed!");
+			refreshVisuals();
+			return;
 		}
 		else if (propertyName.equals(ShapeDrawComponent.PROP_LINE_WIDTH)) {
-			logger.debug(propertyName +" changed!");
-			refreshVisuals();			
+//			logger.debug(propertyName +" changed!");
+			refreshVisuals();
+			return;
 		}
 		else if (propertyName.equals(ShapeDrawComponent.PROP_GENERAL_SHAPE)) {
-			logger.debug(propertyName +" changed!");
-			refreshVisuals();			
-		}		
+//			logger.debug(propertyName +" changed!");
+			refreshVisuals();
+			return;
+		}
+		else if (propertyName.equals(ShapeDrawComponent.PROP_SHOW_STROKE)) {
+//		logger.debug(propertyName +" changed!");
+			refreshVisuals();
+			return;
+		}				
 	}
   
 //  /**

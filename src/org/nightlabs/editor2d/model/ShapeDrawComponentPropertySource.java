@@ -30,13 +30,17 @@ package org.nightlabs.editor2d.model;
 import java.awt.Color;
 import java.util.List;
 
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
-
 import org.nightlabs.base.property.AWTColorPropertyDescriptor;
 import org.nightlabs.base.property.CheckboxPropertyDescriptor;
-import org.nightlabs.base.property.IntPropertyDescriptor;
+import org.nightlabs.base.property.GenericComboBoxPropertyDescriptor;
+import org.nightlabs.base.property.SpinnerPropertyDescriptor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
+import org.nightlabs.editor2d.ShapeDrawComponent.LineStyle;
+import org.nightlabs.util.Utils;
 
 
 public class ShapeDrawComponentPropertySource 
@@ -67,10 +71,20 @@ extends DrawComponentPropertySource
 		descriptors.add(createLineStylePD());		
 		// Fill
 		descriptors.add(createFillPD());
+		// Stroke
+		descriptors.add(createStrokePD());
 		
 		return descriptors;
 	}
 			
+	protected PropertyDescriptor createStrokePD() 
+	{
+		PropertyDescriptor desc = new CheckboxPropertyDescriptor(ShapeDrawComponent.PROP_SHOW_STROKE,
+				EditorPlugin.getResourceString("property.showStroke.label"));
+		desc.setCategory(CATEGORY_LINE);
+		return desc;
+	}
+	
 	protected PropertyDescriptor createLineColorPD() 
 	{
 		PropertyDescriptor desc = new AWTColorPropertyDescriptor(ShapeDrawComponent.PROP_LINE_COLOR,
@@ -87,22 +101,66 @@ extends DrawComponentPropertySource
 		return desc;
 	}
 	
+//	protected PropertyDescriptor createLineWidthPD() 
+//	{
+//		PropertyDescriptor desc = new IntPropertyDescriptor(ShapeDrawComponent.PROP_LINE_WIDTH,
+//				EditorPlugin.getResourceString("property.linewidth.label"));
+//		desc.setCategory(CATEGORY_LINE);
+//		return desc;
+//	}
+
 	protected PropertyDescriptor createLineWidthPD() 
 	{
-		PropertyDescriptor desc = new IntPropertyDescriptor(ShapeDrawComponent.PROP_LINE_WIDTH,
+		PropertyDescriptor desc = new SpinnerPropertyDescriptor(ShapeDrawComponent.PROP_LINE_WIDTH,
 				EditorPlugin.getResourceString("property.linewidth.label"));
 		desc.setCategory(CATEGORY_LINE);
 		return desc;
 	}
+		
+//	protected PropertyDescriptor createLineStylePD() 
+//	{
+//		PropertyDescriptor desc = new IntPropertyDescriptor(ShapeDrawComponent.PROP_LINE_STYLE,
+//				EditorPlugin.getResourceString("property.linestyle.label"));
+//		desc.setCategory(CATEGORY_LINE);
+//		return desc;		
+//	}
+
+	private ILabelProvider lineStyleLabelProvider = new LabelProvider() 
+	{
+		@Override
+		public String getText(Object element) 
+		{
+			LineStyle lineStyle = (LineStyle) element; 
+			switch (lineStyle) 
+			{
+				case SOLID:
+					return EditorPlugin.getResourceString("property.lineStyle.solid");
+				case DASHED_1:
+					return EditorPlugin.getResourceString("property.lineStyle.dashed1");
+				case DASHED_2:
+					return EditorPlugin.getResourceString("property.lineStyle.dashed2");
+				case DASHED_3:
+					return EditorPlugin.getResourceString("property.lineStyle.dashed3");
+				case DASHED_4:
+					return EditorPlugin.getResourceString("property.lineStyle.dashed4");
+			}
+			return EditorPlugin.getResourceString("property.lineStyle.solid");			
+		}		
+	};
 	
 	protected PropertyDescriptor createLineStylePD() 
 	{
-		PropertyDescriptor desc = new IntPropertyDescriptor(ShapeDrawComponent.PROP_LINE_STYLE,
-				EditorPlugin.getResourceString("property.linestyle.label"));
+//		List<LineStyle> lineStyles = Utils.enum2List(Enum.valueOf(LineStyle.class, "SOLID")); 
+		List<LineStyle> lineStyles = Utils.enum2List(LineStyle.SOLID);		
+		PropertyDescriptor desc = new GenericComboBoxPropertyDescriptor<LineStyle>(
+				ShapeDrawComponent.PROP_LINE_STYLE,
+				EditorPlugin.getResourceString("property.linestyle.label"), 
+				lineStyles,
+				lineStyleLabelProvider);
 		desc.setCategory(CATEGORY_LINE);
 		return desc;		
 	}
-
+	
 	protected PropertyDescriptor createFillPD() 
 	{
 		PropertyDescriptor desc = new CheckboxPropertyDescriptor(ShapeDrawComponent.PROP_FILL,
@@ -127,13 +185,16 @@ extends DrawComponentPropertySource
 				return getShapeDrawComponent().getLineColor();
 			}
 			else if (id.equals(ShapeDrawComponent.PROP_LINE_WIDTH)) {
-				return new Integer(getShapeDrawComponent().getLineWidth());
+				return getShapeDrawComponent().getLineWidth();
 			}
 			else if (id.equals(ShapeDrawComponent.PROP_LINE_STYLE)) {
-				return new Integer(getShapeDrawComponent().getLineStyle());
+				return getShapeDrawComponent().getLineStyle();
 			}
 			else if (id.equals(ShapeDrawComponent.PROP_FILL)) {
-				return new Boolean(getShapeDrawComponent().isFill());
+				return getShapeDrawComponent().isFill();
+			}
+			else if (id.equals(ShapeDrawComponent.PROP_SHOW_STROKE)) {
+				return getShapeDrawComponent().isShowStroke();
 			}
 			
 			return null;			
@@ -154,14 +215,18 @@ extends DrawComponentPropertySource
 			getShapeDrawComponent().setLineColor((Color)value);
 		}
 		else if (id.equals(ShapeDrawComponent.PROP_LINE_WIDTH)) {
-			getShapeDrawComponent().setLineWidth(((Integer)value).intValue());
+			getShapeDrawComponent().setLineWidth((Integer)value);
 		}
 		else if (id.equals(ShapeDrawComponent.PROP_LINE_STYLE)) {
-			getShapeDrawComponent().setLineStyle(((Integer)value).intValue());
+//			getShapeDrawComponent().setLineStyle((Integer)value);
+			getShapeDrawComponent().setLineStyle((LineStyle)value);			
 		}
 		else if (id.equals(ShapeDrawComponent.PROP_FILL)) {
-			getShapeDrawComponent().setFill(((Boolean)value).booleanValue());
-		}		
+			getShapeDrawComponent().setFill((Boolean)value);
+		}
+		else if (id.equals(ShapeDrawComponent.PROP_SHOW_STROKE)) {
+			getShapeDrawComponent().setShowStroke((Boolean)value);
+		}				
 	}	
 	
 	protected ShapeDrawComponent getShapeDrawComponent() {

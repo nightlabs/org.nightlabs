@@ -28,7 +28,7 @@
 package org.nightlabs.editor2d.properties;
 
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.property.ComboBoxCellEditor;
+import org.nightlabs.base.celleditor.ComboBoxCellEditor;
 
 public class RotationCellEditor 
 extends ComboBoxCellEditor 

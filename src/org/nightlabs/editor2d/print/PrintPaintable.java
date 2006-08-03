@@ -32,6 +32,8 @@ import java.awt.print.PageFormat;
 
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.ShapeDrawComponent;
+import org.nightlabs.editor2d.ShapeDrawComponent.LineStyle;
 import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
 import org.nightlabs.editor2d.util.RenderUtil;
 
@@ -68,10 +70,11 @@ extends DrawComponentPaintable
 	 */
 	public void paint(Control control, Graphics2D g2d) 
 	{		
-		paintDrawComponent(dc, g2d);
+		paintDrawComponent(getDrawComponent(), g2d);
 		g2d.setPaint(Color.BLACK);
-		g2d.setStroke(RenderUtil.setStrokeStyle(5, 2));
-		
+//		g2d.setStroke(RenderUtil.getStroke(5, 2));		
+		g2d.setStroke(ShapeDrawComponent.StrokeUtil.getStroke(5, LineStyle.DASHED_1, 
+				getDrawComponent().getRoot().getResolution()));		
 		g2d.draw(pageRectangle);
 		
 //		double scaleX = g2d.getTransform().getScaleX();

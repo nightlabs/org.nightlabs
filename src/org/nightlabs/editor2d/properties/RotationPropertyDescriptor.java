@@ -36,7 +36,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
-import org.nightlabs.base.property.ComboBoxLabelProvider;
+import org.nightlabs.base.labelprovider.ComboBoxLabelProvider;
 import org.nightlabs.editor2d.DrawComponent;
 
 public class RotationPropertyDescriptor  
