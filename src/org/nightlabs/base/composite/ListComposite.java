@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Composite;
  * The labels of the objects are provided by a {@link ILabelProvider}.
  * 
  * @author Tobias Langner <tobias[DOT]langner[AT]nightlabs[DOT]de>
+ * 
  * @param <T> The type of the elements that should be displayed inside this list.
  */
 public class ListComposite<T> extends XComposite 
@@ -119,6 +120,14 @@ public class ListComposite<T> extends XComposite
 	}
 	
 	/**
+	 * Returns the encapsulated graphical representation, {@link org.eclipse.swt.widgets.List}.
+	 */
+	public org.eclipse.swt.widgets.List getList()
+	{
+		return list;
+	}
+	
+	/**
 	 * Populates the graphical list with the elements provided and labels them using the label provider.
 	 */
 	protected void populateList()
@@ -190,8 +199,9 @@ public class ListComposite<T> extends XComposite
 	{
 		int index = elements.indexOf(element);
 		if (index != -1)
-		{
-			list.select(index);
+		{			
+			list.setSelection(index);
+			list.showSelection();
 			return true;
 		}
 		else
@@ -209,12 +219,18 @@ public class ListComposite<T> extends XComposite
 	}
 
 	/**
-	 * Removes the currently selected element in the list.
+	 * Removes the currently selected element in the list and returns the removed element.
 	 */
-	public void removeSelected()
+	public T removeSelected()
 	{
-		elements.remove(list.getSelectionIndex());
-		list.remove(list.getSelectionIndex());
+		int index = list.getSelectionIndex();
+		T toReturn = getSelectedElement();
+		elements.remove(index);
+		list.remove(index);
+		list.select(Math.min(index, list.getItemCount()-1));
+		list.showSelection();
+		
+		return toReturn;
 	}
 
 	/**

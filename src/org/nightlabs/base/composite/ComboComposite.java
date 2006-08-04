@@ -49,7 +49,7 @@ extends XComposite
 	 */
 	public ComboComposite(List<T> types, Composite parent, int style)
 	{
-		this(types, null, parent, style);
+		this(types, new LabelProvider(), parent, style);
 	}
 
 	/**
