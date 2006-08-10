@@ -42,12 +42,12 @@ public class EditorPrintAction
 extends AbstractEditorPrintAction
 {
 	public static final String ID = ActionFactory.PRINT.getId();
-	
+
 	/**
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(EditorPrintAction.class);
-	
+
 	public EditorPrintAction(AbstractEditor editor, int style) {
 		super(editor, style);
 	}
@@ -55,7 +55,7 @@ extends AbstractEditorPrintAction
 	public EditorPrintAction(AbstractEditor editor) {
 		super(editor);
 	}
-					
+
 	/**
 	 * @see org.eclipse.gef.ui.actions.EditorPartAction#init()
 	 */
@@ -66,24 +66,24 @@ extends AbstractEditorPrintAction
 		setId(ID);
 		setActionDefinitionId(ID);
 	}
-			
+
 	public void run() 
 	{		
 		PrinterJob printJob = PrinterJob.getPrinterJob();
 		printJob.setJobName(getEditor().getTitle());
-		
+
 		PageFormat pf = printJob.defaultPage(getPageFormat());		
 		logger.debug("PageFormat in EditorPrintAction");
 		PrintUtil.logPageFormat(pf);
-		
-    printJob.setPrintable(getPrintable(PrintConstant.FIT_PAGE));
-    if (printJob.printDialog()) {
-      try {
-      	printJob.print();
-      } catch (Exception e) {
-      	throw new RuntimeException(e);
-      }
-    }									
+
+		printJob.setPrintable(getPrintable(PrintConstant.FIT_PAGE));
+		if (printJob.printDialog()) {
+			try {
+				printJob.print();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}									
 	}
-		
+
 }

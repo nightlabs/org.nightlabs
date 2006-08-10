@@ -31,6 +31,9 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.printing.PrinterData;
@@ -75,8 +78,13 @@ extends AbstractEditorAction
 	 */
 	protected boolean calculateEnabled() 
 	{
-		PrinterData[] printers = Printer.getPrinterList();
-		return printers != null && printers.length > 0;
+		// Changed to Swing way of getting a printer list, 
+		// as this system is acutally used for printing.
+		PrintService[] pServices = PrintServiceLookup.lookupPrintServices(null, null);
+		return pServices != null && pServices.length > 0;
+		
+//		PrinterData[] printers = Printer.getPrinterList();
+//		return printers != null && printers.length > 0;
 	}
 
 	protected PageFormat getPageFormat() {
