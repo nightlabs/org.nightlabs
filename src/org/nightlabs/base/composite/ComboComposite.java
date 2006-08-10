@@ -30,6 +30,8 @@ import java.util.List;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.custom.ColorCombo;
@@ -148,6 +150,38 @@ extends XComposite
 			return true;
 		}								
 		return false;
+	}
+
+	/**
+	 * @param listener
+	 * @see org.nightlabs.base.custom.ColorCombo#addModifyListener(org.eclipse.swt.events.ModifyListener)
+	 */
+	public void addModifyListener(ModifyListener listener) {
+		imageCombo.addModifyListener(listener);
+	}
+
+	/**
+	 * @param listener
+	 * @see org.nightlabs.base.custom.ColorCombo#addSelectionListener(org.eclipse.swt.events.SelectionListener)
+	 */
+	public void addSelectionListener(SelectionListener listener) {
+		imageCombo.addSelectionListener(listener);
+	}
+
+	/**
+	 * @param listener
+	 * @see org.nightlabs.base.custom.ColorCombo#removeModifyListener(org.eclipse.swt.events.ModifyListener)
+	 */
+	public void removeModifyListener(ModifyListener listener) {
+		imageCombo.removeModifyListener(listener);
+	}
+
+	/**
+	 * @param listener
+	 * @see org.nightlabs.base.custom.ColorCombo#removeSelectionListener(org.eclipse.swt.events.SelectionListener)
+	 */
+	public void removeSelectionListener(SelectionListener listener) {
+		imageCombo.removeSelectionListener(listener);
 	}
 		
 }

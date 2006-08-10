@@ -26,6 +26,8 @@
 
 package org.nightlabs.base.extensionpoint;
 
+import org.eclipse.core.runtime.IExtension;
+
 /**
  * @author Alexander Bieber
  */
@@ -60,4 +62,11 @@ public class EPProcessorException extends Exception {
 		super(message, cause);
 	}
 
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public EPProcessorException(String message, IExtension extension) {
+		super(message+" The extension is located in "+extension.getNamespaceIdentifier()+"."); // and has the id "+extension.getExtensionPointUniqueIdentifier());
+	}
 }
