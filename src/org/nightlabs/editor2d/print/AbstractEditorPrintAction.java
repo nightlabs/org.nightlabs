@@ -25,25 +25,17 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.print;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
-import java.awt.print.PrinterException;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 
 import org.apache.log4j.Logger;
-import org.eclipse.swt.printing.Printer;
-import org.eclipse.swt.printing.PrinterData;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.actions.AbstractEditorAction;
 import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
-import org.nightlabs.editor2d.render.Renderer;
-import org.nightlabs.editor2d.render.j2d.J2DRenderContext;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
