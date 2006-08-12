@@ -31,7 +31,7 @@ import org.eclipse.ui.IPersistableElement;
  * A generic base class for editor inputs using a
  * JDO Object ID.
  *
- * @version $Revision$
+ * @version $Revision$ - $Date$
  * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
 public class JDOObjectEditorInput<JDOObjectID> implements IEditorInput
