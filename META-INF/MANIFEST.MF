@@ -120,6 +120,7 @@ Export-Package: .,
  org.nightlabs.base.custom,
  org.nightlabs.base.dialog,
  org.nightlabs.base.dnd,
+ org.nightlabs.base.editor,
  org.nightlabs.base.entitylist,
  org.nightlabs.base.event,
  org.nightlabs.base.exceptionhandler,
@@ -169,6 +170,7 @@ Export-Package: .,
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.ui.forms,
- org.eclipse.ui.views
+ org.eclipse.ui.views,
+ org.eclipse.core.resources
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
