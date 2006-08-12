@@ -66,6 +66,17 @@
              style="push"/>
     </actionSet>
  </extension>
+ <extension
+       point="org.nightlabs.base.printerConfiguration">
+    <printerConfiguratorFactory
+          class="org.nightlabs.base.print.PrinterConfiguratorFactoryDefault"
+          id="org.nightlabs.base.print.PrinterConfiguratorFactoryDefault"/>
+    <printerUseCase
+          defaultConfigurator="org.nightlabs.base.print.PrinterConfiguratorFactoryDefault"
+          description="%printerUseCase.default.description"
+          id="PrinterUseCase-Default"
+          name="%printerUseCase.default.name"/>
+ </extension>
 <!--
  <extension
        point="org.nightlabs.base.simpleExceptionHandler">

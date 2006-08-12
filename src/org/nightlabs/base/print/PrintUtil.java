@@ -5,7 +5,6 @@ import java.awt.print.PrinterJob;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
-import javax.print.attribute.standard.Copies;
 
 /**
  * Utils for accessing printers.
@@ -15,6 +14,18 @@ import javax.print.attribute.standard.Copies;
  */
 public class PrintUtil {
 
+	public static PrinterInterface getAWTPrinterInterface(String printerUseCaseID) {
+		return PrinterInterfaceManager.sharedInstance().getConfiguredPrinterInterface(
+				PrinterInterfaceManager.INTERFACE_FACTORY_AWT, 
+				printerUseCaseID
+			);
+	}
+	
+	public static PrinterInterface getDocumentPrinterInterface(String printerUseCaseID) {
+		// TODO: Implement platform dependent PrinterInterface for document printing. 
+		return null;
+	}
+	
 	/**
 	 * Assigns the given printerJob to a PrintService. If the default printer is to be used
 	 * this method tries to lookup the default print service and assign it. If no default is 
@@ -52,7 +63,7 @@ public class PrintUtil {
 	 * @param name The name of the {@link PrintService} to lookpu
 	 * @return A {@link PrintService} or null.
 	 */
-	public PrintService lookupPrintService(String name) {
+	public static PrintService lookupPrintService(String name) {
 		PrintService[] services = PrintServiceLookup.lookupPrintServices(null, null);
 		for (int i = 0; i < services.length; i++) {
 			if (services[i].getName().equals(name))
@@ -60,4 +71,5 @@ public class PrintUtil {
 		}
 		return null;
 	}
+	
 }

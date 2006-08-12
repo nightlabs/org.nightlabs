@@ -45,7 +45,7 @@ public class PrinterConfigurationCfMod extends ConfigModule {
 	}
 
 	/**
-	 * @param printerConfigurations the printerConfigurations to set
+	 * @param printerConfigurationAWTs the printerConfigurations to set
 	 */
 	public void setPrinterConfigurations(
 			Map<String, PrinterConfiguration> printerConfigurations) {

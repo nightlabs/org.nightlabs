@@ -3,8 +3,6 @@
  */
 package org.nightlabs.base.print;
 
-import java.awt.print.PrinterJob;
-
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -21,5 +19,5 @@ public interface PrinterConfigurator {
 	
 	public void discardComposite();
 	
-	public void assignPrinterConfigurationToJob(PrinterConfiguration printerConfiguration, PrinterJob printerJob);
+//	public void assignPrinterConfigurationInterface(PrinterConfiguration printerConfiguration, PrinterInterface printerInterface);
 }

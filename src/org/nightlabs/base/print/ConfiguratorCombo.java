@@ -11,6 +11,10 @@ import org.nightlabs.base.print.PrinterConfigurationRegistry.ConfiguratorFactory
 import org.nightlabs.base.table.TableLabelProvider;
 
 /**
+ * Combo with a list of all Registered {@link PrinterConfiguratorFactory}.
+ * As registrations are held as {@link ConfiguratorFactoryEntry}s this is
+ * the actual type of entries in this combo.
+ * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */

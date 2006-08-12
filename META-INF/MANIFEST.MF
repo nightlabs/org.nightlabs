@@ -14,7 +14,8 @@ Bundle-ClassPath: org.nightlabs.base.jar,
  lib/commons-lang.jar,
  lib/mailapi.jar,
  lib/smtp.jar,
- lib/activation.jar
+ lib/activation.jar,
+ lib/PDFBox-0.7.2.jar
 Bundle-Activator: org.nightlabs.base.NLBasePlugin
 Bundle-Vendor: NightLabs.com
 Bundle-Localization: plugin
