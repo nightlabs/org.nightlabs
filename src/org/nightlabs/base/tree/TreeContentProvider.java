@@ -33,42 +33,63 @@ import org.eclipse.jface.viewers.Viewer;
  * Simple abstract ContentProvider for Trees.
  *  
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
+ * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
 public abstract class TreeContentProvider implements ITreeContentProvider {
 
+	/**
+	 * Default constructor.
+	 */
 	public TreeContentProvider() {
 		super();
 	}
 
-	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * This implementation does nothing. 
+	 * Subclassers may extend.
+	 */
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 	}
 
-
 	/**
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
+	 * {@inheritDoc}
+	 * 
+	 * This implementation does nothing and returns <code>null</code>.
+	 * Subclassers may extend.
 	 */
 	public Object[] getChildren(Object parentElement) {
 		return null;
 	}
 
-
 	/**
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
+	 * {@inheritDoc}
+	 * 
+	 * This implementation does nothing and returns <code>null</code>.
+	 * Subclassers may extend.
 	 */
 	public Object getParent(Object element) {
 		return null;
 	}
 
-
 	/**
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
+	 * {@inheritDoc}
+	 * 
+	 * This implementation does nothing and returns <code>false</code>.
+	 * Subclassers may extend.
 	 */
 	public boolean hasChildren(Object element) {
 		return false;
 	}
 
-	
-	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * This implementation does nothing.
+	 * Subclassers may extend.
+	 */
+	public void dispose()
+	{
+	}
 }
