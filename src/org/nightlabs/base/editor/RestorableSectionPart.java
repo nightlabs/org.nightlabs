@@ -30,7 +30,7 @@ import org.eclipse.ui.forms.widgets.Section;
 /**
  * A section part with the ability to set it undirty.
  * 
- * @version $Revision$
+ * @version $Revision$ - $Date$
  * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
 public class RestorableSectionPart extends SectionPart
