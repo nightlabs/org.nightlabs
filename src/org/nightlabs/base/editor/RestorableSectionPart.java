@@ -23,8 +23,10 @@
  ******************************************************************************/
 package org.nightlabs.base.editor;
 
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.SectionPart;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 /**
@@ -35,6 +37,18 @@ import org.eclipse.ui.forms.widgets.Section;
  */
 public class RestorableSectionPart extends SectionPart
 {
+	/**
+	 * Create an instance of this section part and add
+	 * it to a managed form.
+	 * @param parent The parent for this section part
+	 * @param toolkit The toolkit to create content
+	 * @param style The style for this section part
+	 */
+	public RestorableSectionPart(Composite parent, FormToolkit toolkit, int style)
+	{
+		super(parent, toolkit, style);
+	}
+
 	/**
 	 * Create an instance of this section part and add
 	 * it to a managed form.

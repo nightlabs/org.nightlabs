@@ -34,6 +34,7 @@ import org.eclipse.ui.forms.editor.IFormPage;
  * An abstract form editor that allows commiting
  * its form pages.
  * 
+ * @version $Revision$ - $Date$
  * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
 public abstract class CommitableFormEditor extends FormEditor

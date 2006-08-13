@@ -41,6 +41,10 @@ public class JDOObjectEditorInput<JDOObjectID> implements IEditorInput
 	 */
 	JDOObjectID jdoObjectID;
 	
+	String name;
+	
+	String toolTipText;
+	
 	/**
 	 * Create an instance of this editor input for a
 	 * JDO Object ID.
@@ -81,7 +85,16 @@ public class JDOObjectEditorInput<JDOObjectID> implements IEditorInput
 	 */
 	public String getName()
 	{
-		return null;
+		return name == null ? "" : name;
+	}
+	
+	/**
+	 * Set the name.
+	 * @param name the name to set
+	 */
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 
 	/* (non-Javadoc)
@@ -97,9 +110,18 @@ public class JDOObjectEditorInput<JDOObjectID> implements IEditorInput
 	 */
 	public String getToolTipText()
 	{
-		return null;
+		return toolTipText == null ? getName() : toolTipText;
 	}
 
+	/**
+	 * Set the tooltipText.
+	 * @param tooltipText the tooltipText to set
+	 */
+	public void setTooltipText(String tooltipText)
+	{
+		this.toolTipText = tooltipText;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
