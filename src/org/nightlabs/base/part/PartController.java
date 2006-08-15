@@ -94,7 +94,7 @@ public abstract class PartController {
 			this.part = part;
 		}
 
-		private Layout fadableLayout = new GridLayout();
+		private Layout fadableLayout = XComposite.getLayout(XComposite.LayoutMode.TIGHT_WRAPPER);
 		public ControlledPart(ControllablePart part, Layout layout) {
 			this.part = part;
 			this.fadableLayout = layout;
