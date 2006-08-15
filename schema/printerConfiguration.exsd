@@ -100,6 +100,13 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="useOnlyDefaultConfigurator" type="boolean">
+            <annotation>
+               <documentation>
+                  When a defaultConfigurator is set, this option can control whether it is the only one to use for this usecase.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

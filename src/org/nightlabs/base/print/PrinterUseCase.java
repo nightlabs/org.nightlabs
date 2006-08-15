@@ -40,6 +40,7 @@ public class PrinterUseCase {
 	private String description;
 	private String defaultConfiguratorID;
 	private PrinterConfiguratorFactory defaultConfiguratorFactory;
+	private boolean useOnlyDefaultConfigurator = false;
 	
 	/**
 	 * 
@@ -67,6 +68,10 @@ public class PrinterUseCase {
 	public void setDefaultConfiguratorID(
 			String defaultConfiguratorID) {
 		this.defaultConfiguratorID = defaultConfiguratorID;
+	}
+	
+	public String getDefaultConfiguratorID() {
+		return defaultConfiguratorID;
 	}
 	
 	/**
@@ -115,4 +120,17 @@ public class PrinterUseCase {
 		this.defaultConfiguratorFactory = PrinterConfigurationRegistry.sharedInstance().getPrinterConfiguratorFactory(defaultConfiguratorID);
 	}
 
+	/**
+	 * @return the useOnlyDefaultConfigurator
+	 */
+	public boolean isUseOnlyDefaultConfigurator() {
+		return useOnlyDefaultConfigurator;
+	}
+
+	/**
+	 * @param useOnlyDefaultConfigurator the useOnlyDefaultConfigurator to set
+	 */
+	public void setUseOnlyDefaultConfigurator(boolean useOnlyDefaultConfigurator) {
+		this.useOnlyDefaultConfigurator = useOnlyDefaultConfigurator;
+	}
 }

@@ -26,6 +26,7 @@
 
 package org.nightlabs.base.print;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.swt.SWT;
@@ -71,7 +72,15 @@ public class EditPrinterConfigurationComposite extends XComposite {
 			throw new RuntimeException("The PrinterUseCase to be edited is not registered: "+printerUseCaseID);
 		printerConfiguration = PrinterConfigurationCfMod.getPrinterConfiguration(printerUseCaseID);
 
-		Collection<ConfiguratorFactoryEntry> factoryEnties = PrinterConfigurationRegistry.sharedInstance().getPrinterConfiguratorEntries();
+		Collection<ConfiguratorFactoryEntry> factoryEnties = null;
+		if (printerUseCase.isUseOnlyDefaultConfigurator() && printerUseCase.getDefaultConfiguratorFactory() != null) {
+			ConfiguratorFactoryEntry factoryEntry = PrinterConfigurationRegistry.sharedInstance().getPrinterConfiguratorEntry(printerUseCase.getDefaultConfiguratorID());
+			factoryEnties = new ArrayList<ConfiguratorFactoryEntry>();
+			factoryEnties.add(factoryEntry);
+		}
+		else 
+			factoryEnties = PrinterConfigurationRegistry.sharedInstance().getPrinterConfiguratorEntries();
+		
 		if (factoryEnties.size() <= 0)
 			throw new IllegalStateException("No printerConfiguratorFactory was registered yet.");
 		

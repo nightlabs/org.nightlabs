@@ -37,7 +37,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -56,7 +55,9 @@ public class PrinterConfiguratorComposite extends XComposite {
 	private Button alwaysAsk;
 	
 	private Group printerGroup;
-	private Label printerName;
+//	private Label printerName;
+	private Button useSysDefaultPrinter;
+	private PrintServiceCombo printServiceCombo;
 	private Button selectPrinterButton;
 	
 	private Group pageFormatGroup;
@@ -132,8 +133,21 @@ public class PrinterConfiguratorComposite extends XComposite {
 		gl.numColumns = 2;
 		printerGroup.setLayout(gl);
 		printerGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		printerName = new Label(printerGroup, SWT.WRAP);
-		printerName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		useSysDefaultPrinter = new Button(printerGroup, SWT.CHECK);
+		useSysDefaultPrinter.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.useDefPrinter"));
+		useSysDefaultPrinter.addSelectionListener(new SelectionListener() {
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+			}
+			public void widgetSelected(SelectionEvent arg0) {
+				printServiceCombo.setEnabled(!useSysDefaultPrinter.getSelection());
+			}
+		});
+		
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		useSysDefaultPrinter.setLayoutData(gd);
+		printServiceCombo = new PrintServiceCombo(printerGroup, SWT.WRAP);
+		printServiceCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectPrinterButton = new Button(printerGroup, SWT.PUSH);
 		selectPrinterButton.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.choosePrinter"));
 		selectPrinterButton.addSelectionListener(new SelectionListener(){
@@ -141,7 +155,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 			}
 			public void widgetSelected(SelectionEvent arg0) {
 				PrinterJob printerJob = getPrinterJob();
-				PrintService printService = PrintUtil.lookupPrintService(printerName.getText());
+				PrintService printService = printServiceCombo.getSelectedElement();
 				if (printService != null)
 					try {
 						printerJob.setPrintService(printService);
@@ -149,7 +163,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 						throw new RuntimeException(e);
 					}
 				if (printerJob.printDialog()) {
-					printerName.setText(printerJob.getPrintService().getName());
+					printServiceCombo.selectElement(printerJob.getPrintService());
 				}
 			}
 		});
@@ -186,10 +200,18 @@ public class PrinterConfiguratorComposite extends XComposite {
 		else
 			alwaysAsk.setSelection(false);
 		
-		if (printerConfiguration != null && printerConfiguration.getPrintServiceName() != null)
-			printerName.setText(printerConfiguration.getPrintServiceName());
+		if (printerConfiguration != null && printerConfiguration.getPrintServiceName() != null) {
+			PrintService printService = PrintUtil.lookupPrintService(printerConfiguration.getPrintServiceName());
+			if (printService != null)
+				printServiceCombo.selectElement(printService);
+			useSysDefaultPrinter.setSelection(false);
+		}
 		else
-			printerName.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.noPrinterAssigned"));
+			useSysDefaultPrinter.setSelection(true);
+			
+		printServiceCombo.setEnabled(!useSysDefaultPrinter.getSelection());
+//		else
+//			printerName.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.noPrinterAssigned"));
 
 		if (printerConfiguration != null) {
 			this.pageFormat = printerConfiguration.getPageFormat();
@@ -203,7 +225,8 @@ public class PrinterConfiguratorComposite extends XComposite {
 	public PrinterConfiguration readPrinterConfiguration() {
 		PrinterConfiguration configuration = new PrinterConfiguration();
 		configuration.setAlwaysAsk(alwaysAsk.getSelection());
-		configuration.setPrintServiceName(printerName.getText());
+		if (!useSysDefaultPrinter.getSelection())
+			configuration.setPrintServiceName(printServiceCombo.getSelectedElement().getName());
 		configuration.setPageFormat(pageFormat);
 		return configuration;
 	}

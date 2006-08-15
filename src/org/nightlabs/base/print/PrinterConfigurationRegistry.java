@@ -132,12 +132,15 @@ public class PrinterConfigurationRegistry extends AbstractEPProcessor {
 			throw new EPProcessorException("The attribute id must be defined for element printerUseCase.", extension);
 		String description = element.getAttribute("description");
 		String defConfigurator = element.getAttribute("defaultConfigurator");
+		String useOnlyDef = element.getAttribute("useOnlyDefaultConfigurator");
 		PrinterUseCase useCase = new PrinterUseCase();
 		useCase.setId(id);
 		useCase.setName(name);
 		useCase.setDescription(description);
 		useCase.setDefaultConfiguratorID(defConfigurator);
 		printerUseCases.put(id, useCase);
+		if (useOnlyDef != null && !"".equals(useOnlyDef))
+			useCase.setUseOnlyDefaultConfigurator(Boolean.parseBoolean(useOnlyDef));
 	} 
 
 	private void processConfigurator(IExtension extension, IConfigurationElement element) 
@@ -185,6 +188,10 @@ public class PrinterConfigurationRegistry extends AbstractEPProcessor {
 	
 	public Collection<ConfiguratorFactoryEntry> getPrinterConfiguratorEntries() {
 		return printerConfiguratorFactories.values();
+	}
+	
+	public ConfiguratorFactoryEntry getPrinterConfiguratorEntry(String id) {
+		return printerConfiguratorFactories.get(id);
 	}
 	
 	/**
