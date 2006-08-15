@@ -31,7 +31,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.nightlabs.base.composite.ComboComposite;
+import org.nightlabs.base.composite.CComboComposite;
 
 /**
  * @author Daniel.Mazurek <at> Nightlabs <dot> de
@@ -42,7 +42,7 @@ extends XCellEditor
 {
 	private List<T> types = null;
 	private ILabelProvider labelProvider = null;	
-	private ComboComposite comboComposite = null;
+	private CComboComposite comboComposite = null;
 
 	public GenericComboBoxCellEditor(Composite parent, List<T> types, ILabelProvider labelProvider) 
 	{
@@ -71,7 +71,7 @@ extends XCellEditor
 	
 	@Override
 	protected Control createControl(Composite parent) {
-		comboComposite = new ComboComposite(types, labelProvider, parent, SWT.NONE, comboStyle);
+		comboComposite = new CComboComposite(types, labelProvider, parent, SWT.NONE, comboStyle);
 		return comboComposite;
 	}
 

@@ -40,7 +40,7 @@ import org.nightlabs.base.custom.ColorCombo;
  * @author Daniel.Mazurek at Nightlabs dot de
  *
  */
-public class ComboComposite<T> 
+public class CComboComposite<T> 
 extends XComposite 
 {
 	/**
@@ -49,7 +49,7 @@ extends XComposite
 	 * @param parent the parent Composite
 	 * @param style the SWT style flag
 	 */
-	public ComboComposite(List<T> types, Composite parent, int style)
+	public CComboComposite(List<T> types, Composite parent, int style)
 	{
 		this(types, new LabelProvider(), parent, style);
 	}
@@ -61,7 +61,7 @@ extends XComposite
 	 * @param parent the parent Composite
 	 * @param style the SWT style flag
 	 */
-	public ComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, int style)
+	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, int style)
 	{
 		this(types, labelProvider, parent, style, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 	}
@@ -74,7 +74,7 @@ extends XComposite
 	 * @param style the SWT style flag
 	 * @param comboStyle the SWT style flag of the combo 
 	 */
-	public ComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, int style, int comboStyle)
+	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, int style, int comboStyle)
 	{
 		this(types, labelProvider, parent, style, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, comboStyle);
 	}
@@ -88,7 +88,7 @@ extends XComposite
 	 * @param layoutMode the layoutMode to set
 	 * @param layoutDataMode the layoutDataMode to set
 	 */
-	public ComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, 
+	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, 
 			int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
 		this(types, labelProvider, parent, style, layoutMode, layoutDataMode, SWT.BORDER | SWT.READ_ONLY);
@@ -104,7 +104,7 @@ extends XComposite
 	 * @param layoutDataMode the layoutDataMode to set
 	 * @param comboStyle the SWT style flag for the combo
 	 */
-	public ComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, 
+	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, 
 			int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode, int comboStyle)
 	{
 		super(parent, style, layoutMode, layoutDataMode);
