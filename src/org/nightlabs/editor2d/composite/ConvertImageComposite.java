@@ -124,8 +124,8 @@ extends XComposite
 		init(bi, toolkitMode);		
 	}
 	
-	protected long start = 0;
-	protected int bitsPerPixel;
+	private long start = 0;
+	private int bitsPerPixel;
 	protected void init(BufferedImage bi, TOOLKIT_MODE toolkitMode) 
 	{ 
 		start = System.currentTimeMillis();
@@ -147,13 +147,13 @@ extends XComposite
 				RenderingHints.VALUE_DITHER_DEFAULT);
 	}
 	
-	protected XFormToolkit toolkit = null;
-	protected TOOLKIT_MODE toolkitMode = TOOLKIT_MODE.COMPOSITE;
-	protected BufferedImage originalImage = null;
+	private XFormToolkit toolkit = null;
+	private TOOLKIT_MODE toolkitMode = TOOLKIT_MODE.COMPOSITE;
+	private BufferedImage originalImage = null;
 	public BufferedImage getOriginalImage() {
 		return originalImage;
 	}
-	protected BufferedImage convertImage = null;	
+	private BufferedImage convertImage = null;	
 	public BufferedImage getConvertedImage() {
 		return convertImage;
 	}	
@@ -166,14 +166,14 @@ extends XComposite
 //		return convertImage;
 //	}	
 	
-	protected ScrolledComposite originalSC = null;
-	protected ScrolledComposite convertSC = null;
-	protected J2DCanvas originalCanvas = null;
-	protected J2DCanvas convertCanvas = null;
-	protected BufferedImagePaintable originalPaintable = null;
-	protected BufferedImagePaintable convertPaintable = null;
-	protected Button fitImageButton = null;
-	protected Button ditherButton = null;
+	private ScrolledComposite originalSC = null;
+	private ScrolledComposite convertSC = null;
+	private J2DCanvas originalCanvas = null;
+	private J2DCanvas convertCanvas = null;
+	private BufferedImagePaintable originalPaintable = null;
+	private BufferedImagePaintable convertPaintable = null;
+	private Button fitImageButton = null;
+	private Button ditherButton = null;
 	protected void createComposite(Composite parent) 
 	{
 		toolkit = new XFormToolkit(Display.getCurrent());
@@ -254,7 +254,7 @@ extends XComposite
 		logger.debug("init took "+end+" ms!");
 	}
 	
-	protected SelectionListener horizontalScrollListener = new SelectionListener()
+	private SelectionListener horizontalScrollListener = new SelectionListener()
 	{	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -264,7 +264,7 @@ extends XComposite
 		}	
 	};
 	
-	protected SelectionListener verticalScrollListener = new SelectionListener()
+	private SelectionListener verticalScrollListener = new SelectionListener()
 	{	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -280,8 +280,8 @@ extends XComposite
 		convertCanvas.repaint();		
 	}
 	
-	protected boolean dithering = true;
-	protected SelectionListener ditherButtonListener = new SelectionListener()
+	private boolean dithering = true;
+	private SelectionListener ditherButtonListener = new SelectionListener()
 	{	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -292,18 +292,18 @@ extends XComposite
 		}	
 	};
 	
-	protected Composite detailComp = null;
-	protected Composite detailParent = null;
+	private Composite detailComp = null;
+	private Composite detailParent = null;
 		
 	public static String DITHER_MODE_QUALITY = "errordiffusion"; 
 	public static String DITHER_MODE_SPEED = "ordereddither";
-	protected String ditherMode = DITHER_MODE_QUALITY;
+	private String ditherMode = DITHER_MODE_QUALITY;
 
-	protected KernelJAI ditherAlgorithm = KernelJAI.ERROR_FILTER_FLOYD_STEINBERG;	
-	protected Button buttonFilterFloydSteinberg = null;
-	protected Button buttonFilterJarvis = null;
-	protected Button buttonFilterStucki = null;
-	protected Button buttonDitherMask441 = null;
+	private KernelJAI ditherAlgorithm = KernelJAI.ERROR_FILTER_FLOYD_STEINBERG;	
+	private Button buttonFilterFloydSteinberg = null;
+	private Button buttonFilterJarvis = null;
+	private Button buttonFilterStucki = null;
+	private Button buttonDitherMask441 = null;
 	protected Composite createDitherDetail(Composite parent) 
 	{		
 		ExpandableComposite ec = toolkit.createExpandableComposite(parent, SWT.NONE);
@@ -340,7 +340,7 @@ extends XComposite
 		return detailComp;
 	}
 		
-	protected ExpansionAdapter expansionListener = new ExpansionAdapter() 
+	private ExpansionAdapter expansionListener = new ExpansionAdapter() 
 	{
 		public void expansionStateChanged(ExpansionEvent e) 
 		{
@@ -350,7 +350,7 @@ extends XComposite
 		}		
 	};
 	
-	protected SelectionListener ditherDetailButtonListener = new SelectionListener()
+	private SelectionListener ditherDetailButtonListener = new SelectionListener()
 	{	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -377,11 +377,11 @@ extends XComposite
 		}	
 	};
 	
-	protected ColorModel bw = null;
-	protected ColorModel grey = null;
-	protected ColorModel rgb = null;
-	protected Combo colorModelCombo = null;
-	protected Map<String, ColorModel> name2ColorModel = new HashMap<String, ColorModel>();
+	private ColorModel bw = null;
+	private ColorModel grey = null;
+	private ColorModel rgb = null;
+	private Combo colorModelCombo = null;
+	private Map<String, ColorModel> name2ColorModel = new HashMap<String, ColorModel>();
 	protected void initColorModels() 
 	{		
 		bw = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_GRAY),
@@ -404,9 +404,9 @@ extends XComposite
 		}
 	}
 	
-	protected RenderingHints renderHints = null;		
-	protected ColorModel colorModel = null;
-	protected SelectionListener colorModelListener = new SelectionListener()
+	private RenderingHints renderHints = null;		
+	private ColorModel colorModel = null;
+	private SelectionListener colorModelListener = new SelectionListener()
 	{	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -453,10 +453,10 @@ extends XComposite
 		refresh();
 	}
 	
-	protected int scaleInterpolationType = AffineTransformOp.TYPE_BILINEAR;
-	protected AffineTransformOp rescaleOp = null;	
-	protected float scale = 1.0f;
-	protected ControlListener resizeListener = new ControlAdapter()
+	private int scaleInterpolationType = AffineTransformOp.TYPE_BILINEAR;
+	private AffineTransformOp rescaleOp = null;	
+	private float scale = 1.0f;
+	private ControlListener resizeListener = new ControlAdapter()
 	{	
 		public void controlResized(ControlEvent e) 
 		{
@@ -492,8 +492,8 @@ extends XComposite
 		return new AffineTransformOp(at, scaleInterpolationType);		
 	}
 	
-	protected boolean fitImage = true;
-	protected SelectionListener fitImageListener = new SelectionListener()
+	private boolean fitImage = true;
+	private SelectionListener fitImageListener = new SelectionListener()
 	{	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -525,7 +525,7 @@ extends XComposite
 		convertCanvas.layout(true);		
 	}	
 		
-	protected List<RenderModeMetaData> renderModeMetaDatas = new LinkedList<RenderModeMetaData>();
+	private List<RenderModeMetaData> renderModeMetaDatas = new LinkedList<RenderModeMetaData>();
 	public List<RenderModeMetaData> getRenderModeMetaDatas() {
 		return renderModeMetaDatas;
 	}
@@ -636,8 +636,8 @@ extends XComposite
 		return null;		
 	}
 	
-	protected BufferedImage originalScale = null;
-	protected BufferedImage convertScale = null;
+	private BufferedImage originalScale = null;
+	private BufferedImage convertScale = null;
 	protected void rescaleImages() 
 	{
 		long start = System.currentTimeMillis();
@@ -740,9 +740,9 @@ extends XComposite
 		return ImageUtil.convertToBufferedImage(img);
 	}
 	
-	protected LookupTableJAI lookupTable = null;
-	protected ColorCube colorCube = null;
-	protected ImageLayout imagelayout = null;
+	private LookupTableJAI lookupTable = null;
+	private ColorCube colorCube = null;
+	private ImageLayout imagelayout = null;
 	protected void initDithering() 
 	{
 		lookupTable = ImageUtil.getLookupTable(bitsPerPixel);
@@ -750,7 +750,7 @@ extends XComposite
 		imagelayout = ImageUtil.get1BitDitherImageLayout(originalImage.getWidth(), originalImage.getHeight());
 	}
 		
-	protected DisposeListener disposeListener = new DisposeListener()
+	private DisposeListener disposeListener = new DisposeListener()
 	{	
 		public void widgetDisposed(DisposeEvent e) 
 		{
