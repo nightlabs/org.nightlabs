@@ -44,7 +44,7 @@ public class DeleteAction
 extends AbstractEditorSelectionAction 
 {
 	public static final String ID = ActionFactory.DELETE.getId();
-	
+
 	/**
 	 * @param editor
 	 * @param style
@@ -59,15 +59,15 @@ extends AbstractEditorSelectionAction
 	public DeleteAction(AbstractEditor editor) {
 		super(editor);
 	}
-		
+
 	@Override
 	protected boolean calculateEnabled() 
 	{
 		if (getSelectedObjects().isEmpty())
 			return false;
-	
+
 		Collection<DrawComponent> selection = getSelection(DrawComponent.class, true);
-		
+
 		if (onlyOnePage()) {
 			if (selection.contains(getOnlyPage()))
 				return false;
@@ -80,26 +80,26 @@ extends AbstractEditorSelectionAction
 
 		if (selection.contains(getMultiLayerDrawComponent()))
 			return false;
-		
+
 		return true;
 	}
 
 	protected boolean onlyOnePage() {
 		return !(getMultiLayerDrawComponent().getDrawComponents().size() > 1);
 	}
-		
+
 	protected DrawComponent getOnlyPage() {
 		return getMultiLayerDrawComponent().getDrawComponents().get(0);
 	}
-	
+
 	protected boolean onlyOneLayer() {
 		return !(getMultiLayerDrawComponent().getDrawComponents(LayerImpl.class).size() > 1);
 	}
-	
+
 	protected DrawComponent getOnlyLayer() {
 		return getMultiLayerDrawComponent().getDrawComponents(LayerImpl.class).get(0);
 	}
-	
+
 	@Override
 	protected void init() 
 	{
@@ -109,8 +109,8 @@ extends AbstractEditorSelectionAction
 		setActionDefinitionId("org.eclipse.ui.edit.delete");		
 //		ISharedImages sharedImages = getWorkbenchPart().getSite().getPage().getWorkbenchWindow().getWorkbench().getSharedImages();		
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();		
-  	setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
-  	setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
+		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
 
 	@Override
@@ -125,5 +125,5 @@ extends AbstractEditorSelectionAction
 		}
 		execute(compound);
 	}
-		
+
 }

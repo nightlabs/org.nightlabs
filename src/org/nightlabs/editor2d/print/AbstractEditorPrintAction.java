@@ -87,7 +87,7 @@ extends AbstractEditorAction
 
 	protected AWTPrinter getAWTPrinter() {
 		PrinterInterface printer = PrinterInterfaceManager.sharedInstance().getConfiguredPrinterInterface(
-				org.nightlabs.print.PrinterInterfaceManager.INTERFACE_FACTORY_AWT,
+				PrinterInterfaceManager.INTERFACE_FACTORY_AWT,
 				PrintUtil.PRINTER_USE_CASE_EDITOR_2D 
 			);
 		return (AWTPrinter)printer;
