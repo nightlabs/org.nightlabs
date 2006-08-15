@@ -29,6 +29,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
 
 import org.apache.log4j.Logger;
+import org.nightlabs.base.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
 
@@ -70,14 +71,15 @@ extends AbstractEditorPrintAction
 
 	public void run() 
 	{
-		PrinterJob printJob = PrinterJob.getPrinterJob();
-//		PageFormat defaultPageFormat = printJob.defaultPage();
-		logger.debug("Page Setup before Modification");
-		PrintUtil.logPageFormat(getPageFormat());		
-		PageFormat pageFormat = printJob.pageDialog(getPageFormat());
-		logger.debug("Page Setup after Modification");
-		PrintUtil.logPageFormat(pageFormat);
-		setPageFormat(pageFormat);
+		PrinterInterfaceManager.sharedInstance().editPrinterConfiguration(PrintUtil.PRINTER_USE_CASE_EDITOR_2D);
+//		PrinterJob printJob = PrinterJob.getPrinterJob();
+////		PageFormat defaultPageFormat = printJob.defaultPage();
+//		logger.debug("Page Setup before Modification");
+//		PrintUtil.logPageFormat(getPageFormat());		
+//		PageFormat pageFormat = printJob.pageDialog(getPageFormat());
+//		logger.debug("Page Setup after Modification");
+//		PrintUtil.logPageFormat(pageFormat);
+//		setPageFormat(pageFormat);
 	}
 	
 }

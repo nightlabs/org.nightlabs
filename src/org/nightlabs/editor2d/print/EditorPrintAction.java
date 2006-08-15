@@ -30,9 +30,12 @@ import java.awt.print.PrinterJob;
 
 import org.apache.log4j.Logger;
 import org.eclipse.ui.actions.ActionFactory;
+import org.nightlabs.base.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
+import org.nightlabs.print.AWTPrinter;
+import org.nightlabs.print.PrinterInterface;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -68,22 +71,32 @@ extends AbstractEditorPrintAction
 	}
 
 	public void run() 
-	{		
-		PrinterJob printJob = PrinterJob.getPrinterJob();
+	{
+		AWTPrinter awtPrinter = getAWTPrinter();
+		PrinterJob printJob = awtPrinter.getPrinterJob();
 		printJob.setJobName(getEditor().getTitle());
 
-		PageFormat pf = printJob.defaultPage(getPageFormat());		
-		logger.debug("PageFormat in EditorPrintAction");
-		PrintUtil.logPageFormat(pf);
 
-		printJob.setPrintable(getPrintable(PrintConstant.FIT_PAGE));
-		if (printJob.printDialog()) {
-			try {
-				printJob.print();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}									
+		PageFormat pf = null;
+		if (awtPrinter.getConfiguration() != null) {
+			if (awtPrinter.getConfiguration().getPageFormat() != null)
+				pf = printJob.defaultPage(awtPrinter.getConfiguration().getPageFormat());
+			else
+				pf = printJob.defaultPage();
+			
+			logger.debug("PageFormat in EditorPrintAction");
+			PrintUtil.logPageFormat(pf);
+		}
+
+		if (pf != null)
+			printJob.setPrintable(getPrintable(PrintConstant.FIT_PAGE), pf);
+		else
+			printJob.setPrintable(getPrintable(PrintConstant.FIT_PAGE));
+		try {
+			printJob.print();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

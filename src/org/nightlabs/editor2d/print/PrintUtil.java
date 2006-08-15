@@ -47,10 +47,17 @@ import org.nightlabs.i18n.IUnit;
  */
 public class PrintUtil 
 {
+	
 	/**
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(PrintUtil.class);
+	
+	/**
+	 * Use case string for prints of Editor 2D graphics
+	 * TODO: Daniel, you might want to move this somewhere else?
+	 */
+	public static final String PRINTER_USE_CASE_EDITOR_2D = "PrinterUseCase-Editor2D";	
 	
 	public PrintUtil() {
 		super();

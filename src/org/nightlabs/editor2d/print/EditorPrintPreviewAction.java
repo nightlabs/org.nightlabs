@@ -30,9 +30,13 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.nightlabs.base.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
+import org.nightlabs.print.AWTPrinter;
+import org.nightlabs.print.PrinterConfiguration;
+import org.nightlabs.print.PrinterInterface;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -67,22 +71,24 @@ extends AbstractEditorPrintAction
 			
 	public void run() 
 	{
-		PageFormat pf = getPageFormat();
+		AWTPrinter awtPrinter = getAWTPrinter();
+		PageFormat pf = null;
+		if (awtPrinter.getConfiguration() != null && awtPrinter.getConfiguration().getPageFormat() != null)
+			pf = awtPrinter.getConfiguration().getPageFormat();
+		if (pf == null)
+			pf = PrinterJob.getPrinterJob().defaultPage();
 		J2DPrintDialog printDialog = new J2DPrintDialog(getShell(), getDrawComponent(), pf);
-		int returnCode = printDialog.open();
-		if (returnCode != Dialog.CANCEL) 
-		{
-			PageFormat pageFormat = printDialog.getPageFormat();
-			PrinterJob printJob = PrinterJob.getPrinterJob();
-			printJob.setJobName(getEditor().getTitle());
-//			printJob.setPrintable(printable, pageFormat);	
-			printJob.setPrintable(getPrintable(PrintConstant.FIT_PAGE), pageFormat);			
-			try {
-				printJob.print();				
-			} catch (PrinterException pe) {
-				throw new RuntimeException(pe);
-			}			
-		}
+		if (printDialog.open() == Dialog.CANCEL)
+			return;
+		awtPrinter.getPrinterJob().setPrintable(
+				getPrintable(PrintConstant.FIT_PAGE), 
+				printDialog.getPageFormat()
+			);			
+		try {
+			awtPrinter.getPrinterJob().print();				
+		} catch (PrinterException pe) {
+			throw new RuntimeException(pe);
+		}			
 	}
 	
 }

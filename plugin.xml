@@ -294,6 +294,13 @@
             id="org.nightlabs.editor2d.resolution"
             name="%preferences.document.properties.title"/>
    </extension>
+   <extension
+         point="org.nightlabs.base.printerConfiguration">
+      <printerUseCase
+            description="Prints of Graphics produced by the editor 2D framework"
+            id="PrinterUseCase-Editor2D"
+            name="Editor2D Prints"/>
+   </extension>
        
 <!--
    <extension

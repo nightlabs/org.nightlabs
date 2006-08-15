@@ -27,15 +27,21 @@ package org.nightlabs.editor2d.print;
 
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
+import java.awt.print.PrinterJob;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 
 import org.apache.log4j.Logger;
+import org.nightlabs.base.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.actions.AbstractEditorAction;
 import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
+import org.nightlabs.print.AWTPrinter;
+import org.nightlabs.print.PrinterConfiguration;
+import org.nightlabs.print.PrinterConfigurationCfMod;
+import org.nightlabs.print.PrinterInterface;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -79,12 +85,20 @@ extends AbstractEditorAction
 //		return printers != null && printers.length > 0;
 	}
 
-	protected PageFormat getPageFormat() {
-		return getEditor().getPageFormat();
-	}	
-	protected void setPageFormat(PageFormat pageFormat) {		
-		getEditor().setPageFormat(pageFormat);
+	protected AWTPrinter getAWTPrinter() {
+		PrinterInterface printer = PrinterInterfaceManager.sharedInstance().getConfiguredPrinterInterface(
+				org.nightlabs.print.PrinterInterfaceManager.INTERFACE_FACTORY_AWT,
+				PrintUtil.PRINTER_USE_CASE_EDITOR_2D 
+			);
+		return (AWTPrinter)printer;
 	}
+	
+//	protected PageFormat getPageFormat() {
+//		return getEditor().getPageFormat();
+//	}	
+//	protected void setPageFormat(PageFormat pageFormat) {		
+//		getEditor().setPageFormat(pageFormat);
+//	}
 	
 	public Printable getPrintable(PrintConstant printConstant) 
 	{

@@ -1350,13 +1350,13 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		freeMemory();
 	}
 
-	private PageFormat pageFormat = PrinterJob.getPrinterJob().defaultPage();
-	public PageFormat getPageFormat() {
-		return pageFormat;
-	}
-	public void setPageFormat(PageFormat pageFormat) {
-		this.pageFormat = pageFormat;
-	}
+//	private PageFormat pageFormat = PrinterJob.getPrinterJob().defaultPage();
+//	public PageFormat getPageFormat() {
+//		return pageFormat;
+//	}
+//	public void setPageFormat(PageFormat pageFormat) {
+//		this.pageFormat = pageFormat;
+//	}
 
 	protected void freeMemory() 
 	{
