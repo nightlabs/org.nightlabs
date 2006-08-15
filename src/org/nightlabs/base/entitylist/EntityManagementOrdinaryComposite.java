@@ -87,15 +87,27 @@ implements EntityManager
   	if(dataChangedListeners.contains(listener))
   		dataChangedListeners.remove(listener);
   }
-	
+
+  /**
+   * @deprecated this feature is never used und thus don't works
+   * FIXME: remove this!
+   */
 	private boolean changed = false;
 	
+  /**
+   * @deprecated this feature is never used und thus don't works
+   * FIXME: remove this!
+   */
 	public void setChanged(boolean changed) {
 		this.changed = changed;
 		if (changed)
 			notifyDataChangedListeners();
 	}
 	
+  /**
+   * @deprecated this feature is never used und thus don't works
+   * FIXME: remove this!
+   */
 	public boolean isChanged() {
 		return changed;
 	}
