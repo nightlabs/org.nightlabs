@@ -1,6 +1,29 @@
-/**
- * 
- */
+/* *****************************************************************************
+ * org.nightlabs.base - NightLabs Eclipse utilities                            *
+ * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
+ *                                                                             *
+ * This library is free software; you can redistribute it and/or               *
+ * modify it under the terms of the GNU Lesser General Public                  *
+ * License as published by the Free Software Foundation; either                *
+ * version 2.1 of the License, or (at your option) any later version.          *
+ *                                                                             *
+ * This library is distributed in the hope that it will be useful,             *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of              *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU           *
+ * Lesser General Public License for more details.                             *
+ *                                                                             *
+ * You should have received a copy of the GNU Lesser General Public            *
+ * License along with this library; if not, write to the                       *
+ *     Free Software Foundation, Inc.,                                         *
+ *     51 Franklin St, Fifth Floor,                                            *
+ *     Boston, MA  02110-1301  USA                                             *
+ *                                                                             *
+ * Or get it online :                                                          *
+ *     http://www.gnu.org/copyleft/lesser.html                                 *
+ *                                                                             *
+ *                                                                             *
+ ******************************************************************************/
+
 package org.nightlabs.base.print;
 
 import java.awt.print.PageFormat;
@@ -21,6 +44,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.print.PrintUtil;
+import org.nightlabs.print.PrinterConfiguration;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -28,6 +53,8 @@ import org.nightlabs.base.composite.XComposite;
  */
 public class PrinterConfiguratorComposite extends XComposite {
 
+	private Button alwaysAsk;
+	
 	private Group printerGroup;
 	private Label printerName;
 	private Button selectPrinterButton;
@@ -97,6 +124,8 @@ public class PrinterConfiguratorComposite extends XComposite {
 	}
 
 	private void initGUI(Composite parent) {
+		alwaysAsk = new Button(this, SWT.CHECK);
+		alwaysAsk.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.alwaysAsk"));
 		printerGroup = new Group(this, SWT.NONE);
 		printerGroup.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.printerGroup"));
 		GridLayout gl = new GridLayout();
@@ -152,6 +181,11 @@ public class PrinterConfiguratorComposite extends XComposite {
 	}
 	
 	public void init(PrinterConfiguration printerConfiguration) {
+		if (printerConfiguration != null)
+			alwaysAsk.setSelection(printerConfiguration.isAlwaysAsk());
+		else
+			alwaysAsk.setSelection(false);
+		
 		if (printerConfiguration != null && printerConfiguration.getPrintServiceName() != null)
 			printerName.setText(printerConfiguration.getPrintServiceName());
 		else
@@ -168,6 +202,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 	
 	public PrinterConfiguration readPrinterConfiguration() {
 		PrinterConfiguration configuration = new PrinterConfiguration();
+		configuration.setAlwaysAsk(alwaysAsk.getSelection());
 		configuration.setPrintServiceName(printerName.getText());
 		configuration.setPageFormat(pageFormat);
 		return configuration;
