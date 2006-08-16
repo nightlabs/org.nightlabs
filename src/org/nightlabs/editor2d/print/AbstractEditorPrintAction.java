@@ -27,6 +27,7 @@ package org.nightlabs.editor2d.print;
 
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
+import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 
 import javax.print.PrintService;
@@ -85,12 +86,18 @@ extends AbstractEditorAction
 //		return printers != null && printers.length > 0;
 	}
 
-	protected AWTPrinter getAWTPrinter() {
-		PrinterInterface printer = PrinterInterfaceManager.sharedInstance().getConfiguredPrinterInterface(
-				PrinterInterfaceManager.INTERFACE_FACTORY_AWT,
-				PrintUtil.PRINTER_USE_CASE_EDITOR_2D 
-			);
-		return (AWTPrinter)printer;
+	protected AWTPrinter getAWTPrinter() 
+	{
+		PrinterInterface printer;
+		try {
+			printer = PrinterInterfaceManager.sharedInstance().getConfiguredPrinterInterface(
+					PrinterInterfaceManager.INTERFACE_FACTORY_AWT,
+					PrintUtil.PRINTER_USE_CASE_EDITOR_2D 
+				);
+		} catch (PrinterException e) {
+			throw new RuntimeException(e);
+		}
+		return (AWTPrinter) printer;
 	}
 	
 //	protected PageFormat getPageFormat() {
