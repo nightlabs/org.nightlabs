@@ -25,10 +25,8 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.print;
 
-import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
@@ -40,8 +38,6 @@ import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.actions.AbstractEditorAction;
 import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
 import org.nightlabs.print.AWTPrinter;
-import org.nightlabs.print.PrinterConfiguration;
-import org.nightlabs.print.PrinterConfigurationCfMod;
 import org.nightlabs.print.PrinterInterface;
 
 /**
@@ -80,10 +76,7 @@ extends AbstractEditorAction
 		// Changed to Swing way of getting a printer list, 
 		// as this system is acutally used for printing.
 		PrintService[] pServices = PrintServiceLookup.lookupPrintServices(null, null);
-		return pServices != null && pServices.length > 0;
-		
-//		PrinterData[] printers = Printer.getPrinterList();
-//		return printers != null && printers.length > 0;
+		return pServices != null && pServices.length > 0;		
 	}
 
 	protected AWTPrinter getAWTPrinter() 
@@ -99,14 +92,7 @@ extends AbstractEditorAction
 		}
 		return (AWTPrinter) printer;
 	}
-	
-//	protected PageFormat getPageFormat() {
-//		return getEditor().getPageFormat();
-//	}	
-//	protected void setPageFormat(PageFormat pageFormat) {		
-//		getEditor().setPageFormat(pageFormat);
-//	}
-	
+		
 	public Printable getPrintable(PrintConstant printConstant) 
 	{
 		switch (printConstant) {
@@ -121,76 +107,5 @@ extends AbstractEditorAction
 	public DrawComponent getDrawComponent() {
 		return getMultiLayerDrawComponent();
 	}
-	
-//	protected J2DRenderContext j2drc = null;
-//	private Printable dcPrintable = new Printable()
-//	{	
-//		public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) 
-//		throws PrinterException 
-//		{
-//			Graphics2D g2d = (Graphics2D) graphics;
-//			Renderer r = getDrawComponent().getRenderer();
-//			if (r.getRenderContext() instanceof J2DRenderContext)
-//				j2drc = (J2DRenderContext) r.getRenderContext();
-//			else
-//				j2drc = (J2DRenderContext) r.getRenderContext(J2DRenderContext.RENDER_CONTEXT_TYPE_JAVA2D);
-//						
-//			// Print only 1 Page
-//			if (pageIndex >= 1) {
-//        return Printable.NO_SUCH_PAGE;
-//			}
-//			if (j2drc != null) {
-//				prepareGraphics(g2d, getDrawComponent(), pageFormat);				
-//				j2drc.paint(getDrawComponent(), g2d);
-//				return Printable.PAGE_EXISTS;
-//			}
-//			return Printable.NO_SUCH_PAGE;
-//		}	
-//	};	
-//
-//	private Printable pagePrintable = new Printable()
-//	{	
-//		public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) 
-//		throws PrinterException 
-//		{
-//			Graphics2D g2d = (Graphics2D) graphics;
-//			Renderer r = getPageDrawComponent().getRenderer();
-//			if (r.getRenderContext() instanceof J2DRenderContext)
-//				j2drc = (J2DRenderContext) r.getRenderContext();
-//			else
-//				j2drc = (J2DRenderContext) r.getRenderContext(J2DRenderContext.RENDER_CONTEXT_TYPE_JAVA2D);
-//						
-//			// Print only 1 Page
-//			if (pageIndex >= 1) {
-//        return Printable.NO_SUCH_PAGE;
-//			}
-//			if (j2drc != null) {
-//				prepareGraphics(g2d, getPageDrawComponent(), pageFormat);				
-//				j2drc.paint(getPageDrawComponent(), g2d);
-//				return Printable.PAGE_EXISTS;
-//			}
-//			return Printable.NO_SUCH_PAGE;
-//		}	
-//	};	
-			
-//	public static void prepareGraphics(Graphics2D g2d, DrawComponent dc, PageFormat pageFormat) 
-//	{		
-//		long startTime = System.currentTimeMillis();
-//		PrintUtil.prepareGraphics(g2d, dc, pageFormat);
-//		long endTime = System.currentTimeMillis() - startTime;
-//		logger.debug("prepareGraphics took "+endTime+" ms!");
-//	}
-//	
-//	public static void prepareGraphics(Graphics2D g2d, PageDrawComponent page, PageFormat pageFormat) 
-//	{		
-//		long startTime = System.currentTimeMillis();
-//		PrintUtil.prepareGraphics(g2d, page, pageFormat);		
-//		long endTime = System.currentTimeMillis() - startTime;
-//		logger.debug("prepareGraphics took "+endTime+" ms!");
-//	}
-//		
-//	public PageDrawComponent getPageDrawComponent() {
-//		return getMultiLayerDrawComponent().getCurrentPage();
-//	}
-	
+		
 }

@@ -28,11 +28,10 @@ package org.nightlabs.editor2d.preferences;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.PageDrawComponent;
-import org.nightlabs.editor2d.page.predefined.A4Page;
 import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.Resolution;
 import org.nightlabs.editor2d.page.unit.DotUnit;
-import org.nightlabs.i18n.unit.MMUnit;
+import org.nightlabs.print.page.A4Page;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

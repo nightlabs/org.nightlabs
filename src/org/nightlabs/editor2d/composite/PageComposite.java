@@ -45,17 +45,17 @@ import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.form.XFormToolkit;
 import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.page.IPredefinedPage;
 import org.nightlabs.editor2d.page.PageRegistry;
 import org.nightlabs.editor2d.page.PageRegistryEP;
 import org.nightlabs.editor2d.page.PageSize;
-import org.nightlabs.editor2d.page.predefined.A4Page;
 import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
 import org.nightlabs.editor2d.page.resolution.Resolution;
 import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
 import org.nightlabs.i18n.IUnit;
 import org.nightlabs.i18n.unit.MMUnit;
+import org.nightlabs.print.page.A4Page;
+import org.nightlabs.print.page.IPredefinedPage;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

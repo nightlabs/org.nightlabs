@@ -34,6 +34,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.print.page.IPredefinedPage;
 
 /**
  * a Composite with a combo for selecting {@link IPredefinedPage}s

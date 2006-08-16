@@ -28,8 +28,6 @@
 package org.nightlabs.editor2d;
 
 import java.awt.Rectangle;
-import java.awt.print.PageFormat;
-import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -61,8 +59,6 @@ import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
-import org.eclipse.gef.commands.CommandStackEvent;
-import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.editparts.J2DScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
@@ -96,8 +92,6 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -148,7 +142,6 @@ import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 import org.nightlabs.editor2d.outline.filter.NameProvider;
-import org.nightlabs.editor2d.page.IPredefinedPage;
 import org.nightlabs.editor2d.page.PageRegistry;
 import org.nightlabs.editor2d.page.PageRegistryEP;
 import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
@@ -171,6 +164,7 @@ import org.nightlabs.io.IOFilter;
 import org.nightlabs.io.IOFilterMan;
 import org.nightlabs.io.IOFilterWithProgress;
 import org.nightlabs.io.WriteException;
+import org.nightlabs.print.page.IPredefinedPage;
 
 
 public abstract class AbstractEditor 

@@ -30,13 +30,10 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.nightlabs.base.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
 import org.nightlabs.print.AWTPrinter;
-import org.nightlabs.print.PrinterConfiguration;
-import org.nightlabs.print.PrinterInterface;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

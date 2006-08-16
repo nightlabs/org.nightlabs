@@ -40,6 +40,7 @@ import org.nightlabs.editor2d.page.resolution.ResolutionUnit;
 import org.nightlabs.editor2d.page.unit.PixelUnit;
 import org.nightlabs.i18n.IUnit;
 import org.nightlabs.i18n.Unit;
+import org.nightlabs.print.page.IPredefinedPage;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

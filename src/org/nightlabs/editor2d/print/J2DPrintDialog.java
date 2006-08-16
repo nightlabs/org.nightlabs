@@ -127,10 +127,6 @@ extends CenteredDialog
 		}	
 	};		
 		
-//	private Text marginTopWidget;
-//	private Text marginBottomWidget;
-//	private Text marginLeftWidget;
-//	private Text marginRightWidget;
 	private Spinner marginTopWidget;
 	private Spinner marginBottomWidget;
 	private Spinner marginLeftWidget;
@@ -141,29 +137,6 @@ extends CenteredDialog
 	private double marginLeft;
 	private double marginRight;
 	
-//	private SelectionListener marginListener = new SelectionAdapter()
-//	{	
-//		public void widgetSelected(SelectionEvent e) 
-//		{
-//			Text t = (Text) e.getSource(); 
-//			String text = t.getText();
-//			try {
-//				java.lang.Double d = java.lang.Double.parseDouble(text);
-//				double value = d.doubleValue();
-//				if (t.equals(marginTopWidget))
-//					setMarginValue(SWT.TOP, value);
-//				if (t.equals(marginBottomWidget))
-//					setMarginValue(SWT.BOTTOM, value);
-//				if (t.equals(marginLeft))
-//					setMarginValue(SWT.LEFT, value);
-//				if (t.equals(marginRight))
-//					setMarginValue(SWT.RIGHT, value);				
-//			} catch (NumberFormatException nfe) {
-//				
-//			}
-//			refresh();
-//		}	
-//	};
 	private SelectionListener marginListener = new SelectionAdapter()
 	{	
 		public void widgetSelected(SelectionEvent e) 
@@ -366,14 +339,7 @@ extends CenteredDialog
 		if (marginLeftWidget != null)
 			marginLeftWidget.setSelection((int)marginLeft);
 		if (marginRightWidget != null)
-			marginRightWidget.setSelection((int)marginRight);
-			
-//		LOGGER.debug("initPage");
-//		PrintUtil.logPageFormat(pf);
-//		LOGGER.debug("marginTop = " + marginTop);
-//		LOGGER.debug("marginBottom = " + marginBottom);
-//		LOGGER.debug("marginLeft = " + marginLeft);
-//		LOGGER.debug("marginRight = " + marginRight);		
+			marginRightWidget.setSelection((int)marginRight);			
 	}		
 	
 	private Rectangle dcBounds;
@@ -421,15 +387,17 @@ extends CenteredDialog
 		scale = Math.min(scales.getX(), scales.getY());
 		translateCanvas();
 		
-		logger.debug("dcBounds = " + dcBounds);
-		logger.debug("canvasBounds = " + canvasBounds);
-		logger.debug("shrinkedCanvasBounds = " + shrinkedCanvasBounds);
-		logger.debug("imageablePageRectangle = " + imageablePageRectangle);
-		logger.debug("scale = "+scale);
-		logger.debug("translateX = "+translateX);		
-		logger.debug("translateY = "+translateY);
-		logger.debug("");
-				
+		if (logger.isDebugEnabled()) {
+			logger.debug("dcBounds = " + dcBounds);
+			logger.debug("canvasBounds = " + canvasBounds);
+			logger.debug("shrinkedCanvasBounds = " + shrinkedCanvasBounds);
+			logger.debug("imageablePageRectangle = " + imageablePageRectangle);
+			logger.debug("scale = "+scale);
+			logger.debug("translateX = "+translateX);		
+			logger.debug("translateY = "+translateY);
+			logger.debug("");			
+		}				
+		
 		setCanvasZoom(scale);		
 		updateCanvas();
 	}			
