@@ -375,9 +375,9 @@ extends CenteredDialog
 		}
 		initPage(pageFormat);	
 		setCanvasSize();
-		
-		logger.debug("dcBounds(original) = " + drawComponent.getBounds());
-		dcBounds = GeomUtil.translateToOrigin(drawComponent.getBounds());				
+
+		Rectangle bounds = getBounds();
+		dcBounds = GeomUtil.translateToOrigin(bounds);				
 		canvasBounds = org.nightlabs.base.util.GeomUtil.toAWTRectangle(canvas.getClientArea());										
 		Rectangle shrinkedCanvasBounds = new Rectangle(0, 0, 
 				(int)(pageFormat.getImageableWidth() / canvasScaleFactor), 
@@ -388,8 +388,8 @@ extends CenteredDialog
 		translateCanvas();
 		
 		if (logger.isDebugEnabled()) {
+			logger.debug("canvasBounds = " + canvasBounds);			
 			logger.debug("dcBounds = " + dcBounds);
-			logger.debug("canvasBounds = " + canvasBounds);
 			logger.debug("shrinkedCanvasBounds = " + shrinkedCanvasBounds);
 			logger.debug("imageablePageRectangle = " + imageablePageRectangle);
 			logger.debug("scale = "+scale);
@@ -401,7 +401,15 @@ extends CenteredDialog
 		setCanvasZoom(scale);		
 		updateCanvas();
 	}			
-		
+	
+	protected Rectangle getBounds() 
+	{
+		logger.debug("dcBounds = " + drawComponent.getBounds());
+		drawComponent.clearBounds();
+		logger.debug("dcBounds after clean = " + drawComponent.getBounds());				
+		return drawComponent.getBounds();
+	}
+	
 	private double translateX = 0; 
 	private double translateY = 0;
 	protected void translateCanvas() 

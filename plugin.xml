@@ -266,15 +266,15 @@
             unit="org.nightlabs.i18n.unit.CMUnit"/>
       <PredefinedPage
             name="DIN A4"
-            page="org.nightlabs.editor2d.page.predefined.A4Page"
+            page="org.nightlabs.print.page.A4Page"
             pageID="A4"/>
       <PredefinedPage
             name="DIN A3"
-            page="org.nightlabs.editor2d.page.predefined.A3Page"
+            page="org.nightlabs.print.page.A3Page"
             pageID="A3"/>
       <PredefinedPage
             name="DIN A5"
-            page="org.nightlabs.editor2d.page.predefined.A5Page"
+            page="org.nightlabs.print.page.A5Page"
             pageID="A5"/>
       <Unit
             factor="2.8346278133681047678439820851522"

@@ -25,68 +25,50 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.print;
 
-import java.awt.print.PageFormat;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-
-import org.eclipse.jface.dialogs.Dialog;
-import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
-import org.nightlabs.print.AWTPrinter;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.print.PageSetupComposite;
+import org.nightlabs.base.print.PrinterConfiguratorComposite;
+import org.nightlabs.editor2d.DrawComponent;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditorPrintPreviewAction 
-//extends AbstractEditorAction 
-extends AbstractEditorPrintAction
+public class EditorPrinterConfiguratorComposite 
+extends PrinterConfiguratorComposite 
 {
-	public static final String ID = EditorPrintPreviewAction.class.getName();
-	
+
 	/**
-	 * @param editor
+	 * @param parent
 	 * @param style
 	 */
-	public EditorPrintPreviewAction(AbstractEditor editor, int style) {
-		super(editor, style);
+	public EditorPrinterConfiguratorComposite(DrawComponent dc, Composite parent, int style) {
+		super(parent, style);
+		this.dc = dc;
+		super.initGUI(this);
 	}
 
 	/**
-	 * @param editor
+	 * @param parent
+	 * @param style
+	 * @param layoutMode
+	 * @param layoutDataMode
 	 */
-	public EditorPrintPreviewAction(AbstractEditor editor) {
-		super(editor);
+	public EditorPrinterConfiguratorComposite(DrawComponent dc, Composite parent, int style,
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
+	{
+		super(parent, style, layoutMode, layoutDataMode);
+		this.dc = dc;
+		super.initGUI(this);
 	}
 
-	protected void init() 
-	{
-		setId(ID);
-		setText(EditorPlugin.getResourceString("action.printPreview.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.printPreview.tooltip"));
-	}
-			
-	public void run() 
-	{
-		AWTPrinter awtPrinter = getAWTPrinter();
-		PageFormat pf = null;
-		if (awtPrinter.getConfiguration() != null && awtPrinter.getConfiguration().getPageFormat() != null)
-			pf = awtPrinter.getConfiguration().getPageFormat();
-		if (pf == null)
-			pf = PrinterJob.getPrinterJob().defaultPage();
-//		J2DPrintDialog printDialog = new J2DPrintDialog(getShell(), getDrawComponent(), pf);
-		EditorPrintPreviewDialog printDialog = new EditorPrintPreviewDialog(getDrawComponent(), getShell());		
-		if (printDialog.open() == Dialog.CANCEL)
-			return;
-		awtPrinter.getPrinterJob().setPrintable(
-				getPrintable(PrintConstant.FIT_PAGE), 
-				printDialog.getPageFormat()
-			);			
-		try {
-			awtPrinter.getPrinterJob().print();				
-		} catch (PrinterException pe) {
-			throw new RuntimeException(pe);
-		}			
+	private DrawComponent dc = null;
+	@Override
+	protected PageSetupComposite initPageSetupComposite(Composite parent) {
+		return new EditorPageSetupComposite(dc, getPageFormat(), parent, SWT.NONE); 
 	}
 	
+	protected void initGUI(Composite parent) {
+		
+	}
 }

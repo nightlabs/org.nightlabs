@@ -26,67 +26,67 @@
 package org.nightlabs.editor2d.print;
 
 import java.awt.print.PageFormat;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 
-import org.eclipse.jface.dialogs.Dialog;
-import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
-import org.nightlabs.print.AWTPrinter;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+import org.holongate.j2d.J2DCanvas;
+import org.nightlabs.base.print.PrintPreviewComposite;
+import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditorPrintPreviewAction 
-//extends AbstractEditorAction 
-extends AbstractEditorPrintAction
+public class EditorPrintPreviewComposite 
+extends PrintPreviewComposite 
 {
-	public static final String ID = EditorPrintPreviewAction.class.getName();
-	
+
 	/**
-	 * @param editor
+	 * @param pageFormat
+	 * @param parent
 	 * @param style
 	 */
-	public EditorPrintPreviewAction(AbstractEditor editor, int style) {
-		super(editor, style);
+	public EditorPrintPreviewComposite(DrawComponent dc, PageFormat pageFormat, Composite parent,
+			int style) 
+	{
+		super(pageFormat, parent, style);
+		init(dc);
+		super.init(pageFormat);		
 	}
 
 	/**
-	 * @param editor
+	 * @param pageFormat
+	 * @param parent
+	 * @param style
+	 * @param layoutMode
+	 * @param layoutDataMode
 	 */
-	public EditorPrintPreviewAction(AbstractEditor editor) {
-		super(editor);
+	public EditorPrintPreviewComposite(DrawComponent dc, PageFormat pageFormat, Composite parent,
+			int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
+	{
+		super(pageFormat, parent, style, layoutMode, layoutDataMode);
+		init(dc);
+		super.init(pageFormat);
 	}
 
-	protected void init() 
+	private void init(DrawComponent dc) 
 	{
-		setId(ID);
-		setText(EditorPlugin.getResourceString("action.printPreview.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.printPreview.tooltip"));
-	}
-			
-	public void run() 
-	{
-		AWTPrinter awtPrinter = getAWTPrinter();
-		PageFormat pf = null;
-		if (awtPrinter.getConfiguration() != null && awtPrinter.getConfiguration().getPageFormat() != null)
-			pf = awtPrinter.getConfiguration().getPageFormat();
-		if (pf == null)
-			pf = PrinterJob.getPrinterJob().defaultPage();
-//		J2DPrintDialog printDialog = new J2DPrintDialog(getShell(), getDrawComponent(), pf);
-		EditorPrintPreviewDialog printDialog = new EditorPrintPreviewDialog(getDrawComponent(), getShell());		
-		if (printDialog.open() == Dialog.CANCEL)
-			return;
-		awtPrinter.getPrinterJob().setPrintable(
-				getPrintable(PrintConstant.FIT_PAGE), 
-				printDialog.getPageFormat()
-			);			
-		try {
-			awtPrinter.getPrinterJob().print();				
-		} catch (PrinterException pe) {
-			throw new RuntimeException(pe);
-		}			
+		if (dc == null)
+			throw new IllegalArgumentException("Param dc must NOT be null!");
+		
+		this.dc = dc;
+		paintable = new DrawComponentPaintable(dc);
 	}
 	
+	private DrawComponent dc = null;
+	private DrawComponentPaintable paintable = null;
+	
+	@Override
+	protected Canvas initCanvas(Composite parent) {
+		return new J2DCanvas(parent, paintable);
+	}
+	
+	protected void init(PageFormat pf)  {
+		
+	}
 }
