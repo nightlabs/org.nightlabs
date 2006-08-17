@@ -124,6 +124,9 @@ extends XComposite
 	private ILabelProvider labelProvider = null;
 	private List<T> types = null;
 	private ColorCombo imageCombo = null;	
+//	public ColorCombo getCombo() {
+//		return imageCombo;
+//	}
 	
 	protected void populateCombo() 
 	{

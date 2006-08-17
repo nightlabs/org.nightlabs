@@ -139,27 +139,27 @@ public class GeomUtil
 //		}
 //		return r;
 //	}		
-//	
-//	/**
-//	 * calculates the scaleFactor for width and height by r2 / r1 and returns it
-//	 * as Point2D(scaleX, scaleY)
-//	 * 
-//	 * @param r1 Rectangle r1
-//	 * @param r2 Rectangle r2 
-//	 * @return the scaleFactors scaleX and scaleY as Point2D 
-//	 */
-//	public static Point2D calcScale(java.awt.Rectangle r1, java.awt.Rectangle r2) 
-//	{
-//		double scaleX = 1.0;
-//		double scaleY = 1.0;
-//		if (r1.width != 0 && r2.width != 0)
-//			scaleX = (double)r2.width / (double)r1.width;
-//		if (r1.height != 0 && r2.height != 0)
-//			scaleY = (double)r2.height / (double)r1.height;
-//		
-//		return new Point2D.Double(scaleX, scaleY);
-//	}	
-//	
+	
+	/**
+	 * calculates the scaleFactor for width and height by r2 / r1 and returns it
+	 * as Point2D(scaleX, scaleY)
+	 * 
+	 * @param r1 Rectangle r1
+	 * @param r2 Rectangle r2 
+	 * @return the scaleFactors scaleX and scaleY as Point2D 
+	 */
+	public static Point2D calcScale(java.awt.Rectangle r1, java.awt.Rectangle r2) 
+	{
+		double scaleX = 1.0;
+		double scaleY = 1.0;
+		if (r1.width != 0 && r2.width != 0)
+			scaleX = (double)r2.width / (double)r1.width;
+		if (r1.height != 0 && r2.height != 0)
+			scaleY = (double)r2.height / (double)r1.height;
+		
+		return new Point2D.Double(scaleX, scaleY);
+	}	
+	
 //	/**
 //	 * 
 //	 * @param r the Rectangle to translate to Origin (0/0)

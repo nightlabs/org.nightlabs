@@ -33,6 +33,8 @@ import java.awt.print.PrinterJob;
 import javax.print.PrintService;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -64,8 +66,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 	private Label pageFormatDescription;
 	private Button editPageFormat;
 	
-	private PageFormat pageFormat;
-	
+	private PageFormat pageFormat;	
 	private PrinterJob printerJob;
 	
 	/**
@@ -124,7 +125,8 @@ public class PrinterConfiguratorComposite extends XComposite {
 		initGUI(parent);
 	}
 
-	private void initGUI(Composite parent) {
+	protected void initGUI(Composite parent) 
+	{
 		alwaysAsk = new Button(this, SWT.CHECK);
 		alwaysAsk.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.alwaysAsk"));
 		printerGroup = new Group(this, SWT.NONE);
@@ -135,13 +137,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 		printerGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		useSysDefaultPrinter = new Button(printerGroup, SWT.CHECK);
 		useSysDefaultPrinter.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.useDefPrinter"));
-		useSysDefaultPrinter.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-			}
-			public void widgetSelected(SelectionEvent arg0) {
-				printServiceCombo.setEnabled(!useSysDefaultPrinter.getSelection());
-			}
-		});
+		useSysDefaultPrinter.addSelectionListener(useSysDefaultListener);
 		
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -150,23 +146,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 		printServiceCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectPrinterButton = new Button(printerGroup, SWT.PUSH);
 		selectPrinterButton.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.choosePrinter"));
-		selectPrinterButton.addSelectionListener(new SelectionListener(){
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-			}
-			public void widgetSelected(SelectionEvent arg0) {
-				PrinterJob printerJob = getPrinterJob();
-				PrintService printService = printServiceCombo.getSelectedElement();
-				if (printService != null)
-					try {
-						printerJob.setPrintService(printService);
-					} catch (PrinterException e) {
-						throw new RuntimeException(e);
-					}
-				if (printerJob.printDialog()) {
-					printServiceCombo.selectElement(printerJob.getPrintService());
-				}
-			}
-		});
+		selectPrinterButton.addSelectionListener(selectPrinterListener);
 		
 		pageFormatGroup = new Group(this, SWT.NONE);
 		pageFormatGroup.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.pageFormatGroup"));
@@ -178,23 +158,66 @@ public class PrinterConfiguratorComposite extends XComposite {
 		pageFormatDescription.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		editPageFormat = new Button(pageFormatGroup, SWT.PUSH);		
 		editPageFormat.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.editPageFormat"));
-		editPageFormat.addSelectionListener(new SelectionListener(){
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-			}
-			public void widgetSelected(SelectionEvent arg0) {
-				PrinterJob printerJob = getPrinterJob();
-				PageFormat newPageFormat;
-				if (PrinterConfiguratorComposite.this.pageFormat != null)
-					newPageFormat = printerJob.pageDialog(PrinterConfiguratorComposite.this.pageFormat);
-				else
-					newPageFormat = printerJob.pageDialog(printerJob.defaultPage());
-				PrinterConfiguratorComposite.this.pageFormat = newPageFormat;
-				pageFormatDescription.setText(getPageFormatDescription(PrinterConfiguratorComposite.this.pageFormat));
-			}
-		});
+		editPageFormat.addSelectionListener(pageFormatListener);
+				
+		addDisposeListener(disposeListener);
 	}
 	
-	public void init(PrinterConfiguration printerConfiguration) {
+	private SelectionListener useSysDefaultListener = new SelectionListener() 
+	{
+		public void widgetDefaultSelected(SelectionEvent arg0) {
+		}
+		public void widgetSelected(SelectionEvent arg0) {
+			printServiceCombo.setEnabled(!useSysDefaultPrinter.getSelection());
+		}
+	};
+	
+	private SelectionListener selectPrinterListener = new SelectionListener()
+	{
+		public void widgetDefaultSelected(SelectionEvent arg0) {
+		}
+		public void widgetSelected(SelectionEvent arg0) {
+			PrinterJob printerJob = getPrinterJob();
+			PrintService printService = printServiceCombo.getSelectedElement();
+			if (printService != null)
+				try {
+					printerJob.setPrintService(printService);
+				} catch (PrinterException e) {
+					throw new RuntimeException(e);
+				}
+			if (printerJob.printDialog()) {
+				printServiceCombo.selectElement(printerJob.getPrintService());
+			}
+		}
+	};
+	
+	private SelectionListener pageFormatListener = new SelectionListener()
+	{
+		public void widgetDefaultSelected(SelectionEvent arg0) {
+		}
+		public void widgetSelected(SelectionEvent arg0) {
+			PrinterJob printerJob = getPrinterJob();
+			PageFormat newPageFormat;
+			if (PrinterConfiguratorComposite.this.pageFormat != null)
+				newPageFormat = printerJob.pageDialog(PrinterConfiguratorComposite.this.pageFormat);
+			else
+				newPageFormat = printerJob.pageDialog(printerJob.defaultPage());
+			PrinterConfiguratorComposite.this.pageFormat = newPageFormat;
+			pageFormatDescription.setText(getPageFormatDescription(PrinterConfiguratorComposite.this.pageFormat));
+		}
+	};
+	
+	private DisposeListener disposeListener = new DisposeListener()
+	{	
+		public void widgetDisposed(DisposeEvent e) {
+			editPageFormat.removeSelectionListener(pageFormatListener);
+			selectPrinterButton.removeSelectionListener(selectPrinterListener);
+			useSysDefaultPrinter.removeSelectionListener(useSysDefaultListener);
+		}	
+	};
+		
+	public void init(PrinterConfiguration printerConfiguration) 
+	{
 		if (printerConfiguration != null)
 			alwaysAsk.setSelection(printerConfiguration.isAlwaysAsk());
 		else
@@ -215,11 +238,18 @@ public class PrinterConfiguratorComposite extends XComposite {
 
 		if (printerConfiguration != null) {
 			this.pageFormat = printerConfiguration.getPageFormat();
-			pageFormatDescription.setText(getPageFormatDescription(printerConfiguration.getPageFormat()));
+			pageFormatDescription.setText(getPageFormatDescription(printerConfiguration.getPageFormat()));			
 		}
 		if (printerConfiguration == null || printerConfiguration.getPageFormat() == null)
 			pageFormatDescription.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.noPageFormatAssigned"));
-		
+			
+		if (pageFormat != null)
+			pageSetupComposite = initPageSetupComposite(this);
+	}
+	
+	private PageSetupComposite pageSetupComposite = null; 
+	protected PageSetupComposite initPageSetupComposite(Composite parent) {
+		return new PageSetupComposite(pageFormat, parent, SWT.NONE);
 	}
 	
 	public PrinterConfiguration readPrinterConfiguration() {
@@ -243,4 +273,9 @@ public class PrinterConfiguratorComposite extends XComposite {
 		else
 			return NLBasePlugin.getResourceString("dialog.printerConfiguration.default.customPageFormat");
 	}
+	
+	public PageFormat getPageFormat() {
+		return pageFormat;
+	}
+	
 }
