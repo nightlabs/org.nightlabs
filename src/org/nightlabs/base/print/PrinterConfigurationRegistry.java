@@ -26,10 +26,14 @@
 
 package org.nightlabs.base.print;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.collection.UnmodifiableCollection;
+import org.apache.commons.collections.set.UnmodifiableSet;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -202,6 +206,10 @@ public class PrinterConfigurationRegistry extends AbstractEPProcessor {
 	 */
 	public PrinterUseCase getPrinterUseCase(String id) {
 		return printerUseCases.get(id);
+	}
+	
+	public List<PrinterUseCase> getPrinterUseCases() {
+		return new ArrayList<PrinterUseCase>(printerUseCases.values());
 	}
 	
 	private static PrinterConfigurationRegistry sharedInstance;

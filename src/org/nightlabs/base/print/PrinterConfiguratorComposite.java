@@ -31,6 +31,13 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 
 import javax.print.PrintService;
+import javax.print.attribute.Attribute;
+import javax.print.attribute.AttributeSet;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttribute;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.event.PrintServiceAttributeEvent;
+import javax.print.event.PrintServiceAttributeListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -68,6 +75,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 	
 	private PageFormat pageFormat;	
 	private PrinterJob printerJob;
+	private PrintRequestAttributeSet printRequestAttributeSet;
 	
 	/**
 	 * @param parent
@@ -168,7 +176,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 		public void widgetDefaultSelected(SelectionEvent arg0) {
 		}
 		public void widgetSelected(SelectionEvent arg0) {
-			printServiceCombo.setEnabled(!useSysDefaultPrinter.getSelection());
+			updateEnabled();
 		}
 	};
 	
@@ -185,8 +193,15 @@ public class PrinterConfiguratorComposite extends XComposite {
 				} catch (PrinterException e) {
 					throw new RuntimeException(e);
 				}
+//			if (printerJob.printDialog(printRequestAttributeSet)) {
 			if (printerJob.printDialog()) {
 				printServiceCombo.selectElement(printerJob.getPrintService());
+				// TODO: This does not work at all. Somehow the job get the attributes assigned, but 
+				// I can't access them
+				printRequestAttributeSet = convertPrintRequestAttributeSet(
+						printerJob.getPrintService().createPrintJob().getAttributes()
+					);
+				updateForPrintRequestAttributes(printRequestAttributeSet);
 			}
 		}
 	};
@@ -196,14 +211,17 @@ public class PrinterConfiguratorComposite extends XComposite {
 		public void widgetDefaultSelected(SelectionEvent arg0) {
 		}
 		public void widgetSelected(SelectionEvent arg0) {
-			PrinterJob printerJob = getPrinterJob();
+			PrinterJob printerJob = getPrinterJob();			
 			PageFormat newPageFormat;
 			if (PrinterConfiguratorComposite.this.pageFormat != null)
 				newPageFormat = printerJob.pageDialog(PrinterConfiguratorComposite.this.pageFormat);
 			else
 				newPageFormat = printerJob.pageDialog(printerJob.defaultPage());
 			PrinterConfiguratorComposite.this.pageFormat = newPageFormat;
+//			printerJob.g
 			pageFormatDescription.setText(getPageFormatDescription(PrinterConfiguratorComposite.this.pageFormat));
+			if (pageSetupComposite != null)
+				pageSetupComposite.refresh(PrinterConfiguratorComposite.this.pageFormat);
 		}
 	};
 	
@@ -214,7 +232,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 			selectPrinterButton.removeSelectionListener(selectPrinterListener);
 			useSysDefaultPrinter.removeSelectionListener(useSysDefaultListener);
 		}	
-	};
+	};	
 		
 	public void init(PrinterConfiguration printerConfiguration) 
 	{
@@ -232,7 +250,6 @@ public class PrinterConfiguratorComposite extends XComposite {
 		else
 			useSysDefaultPrinter.setSelection(true);
 			
-		printServiceCombo.setEnabled(!useSysDefaultPrinter.getSelection());
 //		else
 //			printerName.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.noPrinterAssigned"));
 
@@ -245,6 +262,13 @@ public class PrinterConfiguratorComposite extends XComposite {
 			
 		if (pageFormat != null)
 			pageSetupComposite = initPageSetupComposite(this);
+		
+		if (printerConfiguration != null && printerConfiguration.getPrintRequestAttributeSet() != null)
+			printRequestAttributeSet = convertPrintRequestAttributeSet(printerConfiguration.getPrintRequestAttributeSet());
+		else
+			printRequestAttributeSet = new HashPrintRequestAttributeSet();
+		
+		updateEnabled();
 	}
 	
 	private PageSetupComposite pageSetupComposite = null; 
@@ -255,7 +279,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 	public PrinterConfiguration readPrinterConfiguration() {
 		PrinterConfiguration configuration = new PrinterConfiguration();
 		configuration.setAlwaysAsk(alwaysAsk.getSelection());
-		if (!useSysDefaultPrinter.getSelection())
+		if (!useSysDefaultPrinter.getSelection() && printServiceCombo.getSelectedElement() != null)
 			configuration.setPrintServiceName(printServiceCombo.getSelectedElement().getName());
 		configuration.setPageFormat(pageFormat);
 		return configuration;
@@ -276,6 +300,25 @@ public class PrinterConfiguratorComposite extends XComposite {
 	
 	public PageFormat getPageFormat() {
 		return pageFormat;
+	}
+	
+	protected void updateForPrintRequestAttributes(PrintRequestAttributeSet printRequestAttributeSet) {
+		// TODO: Here we could update UI for specific PrintRequestAttributes: e.g. Copies, NumberUp, OrientationRequested, PageRanges
+	}
+	
+	private PrintRequestAttributeSet convertPrintRequestAttributeSet(AttributeSet attributeSet) {
+		PrintRequestAttributeSet result = new HashPrintRequestAttributeSet();
+		Attribute[] attributes = attributeSet.toArray();
+		for (int i = 0; i < attributes.length; i++) {
+			if (attributes[i] instanceof PrintRequestAttribute)
+				result.add(attributes[i]);
+		}
+		return result;
+	}
+	
+	protected void updateEnabled() {
+		printServiceCombo.setEnabled(!useSysDefaultPrinter.getSelection());
+		selectPrinterButton.setEnabled(!useSysDefaultPrinter.getSelection());
 	}
 	
 }

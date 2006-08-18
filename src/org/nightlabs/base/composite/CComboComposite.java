@@ -34,6 +34,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.TableItem;
 import org.nightlabs.base.custom.ColorCombo;
 
 /**
@@ -186,5 +187,31 @@ extends XComposite
 	public void removeSelectionListener(SelectionListener listener) {
 		imageCombo.removeSelectionListener(listener);
 	}
+
+	/**
+	 * @param index
+	 * @return
+	 * @see org.nightlabs.base.custom.ColorCombo#getItem(int)
+	 */
+	public TableItem getItem(int index) {
+		return imageCombo.getItem(index);
+	}
+
+	/**
+	 * @return
+	 * @see org.nightlabs.base.custom.ColorCombo#getItemCount()
+	 */
+	public int getItemCount() {
+		return imageCombo.getItemCount();
+	}
+
+	/**
+	 * @param index
+	 * @see org.nightlabs.base.custom.ColorCombo#select(int)
+	 */
+	public void select(int index) {
+		imageCombo.select(index);
+	}
 		
+	
 }

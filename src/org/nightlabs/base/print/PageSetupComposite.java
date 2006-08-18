@@ -179,7 +179,8 @@ extends XComposite
 		if (pf.getOrientation() == PageFormat.PORTRAIT)
 			orientationVertical.setSelection(true);		
 		
-		// TODO: marginSpinner Values should be set here		
+		// TODO: marginSpinner Values should be set here	
+		// TODO: Is there a way to trace back to a PredefinedPage here?
 	}
 	
 	private CComboComposite<IPredefinedPage> initPageCombo(Composite parent) 
@@ -271,11 +272,17 @@ extends XComposite
 		}	
 	};
 	
+	// TODO: Maybe publish this?
 	protected void refresh() 
 	{
 		previewComp.setPageFormat(pageFormat);	
 //		redraw();
 //		update();			
+	}
+	
+	public void refresh(PageFormat pageFormat) {
+		this.pageFormat = pageFormat;
+		refresh();
 	}
 	
 }

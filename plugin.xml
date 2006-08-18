@@ -50,6 +50,21 @@
           class="org.eclipse.ui.internal.dialogs.ContentTypesPreferencePage"
           id="org.eclipse.ui.internal.dialogs.ContentTypesPreferencePage"
           name="%preferencePage.contentTypes.label"/>
+    <page
+          category="%category.general"
+          class="org.eclipse.ui.internal.dialogs.ContentTypesPreferencePage"
+          id="org.eclipse.ui.internal.dialogs.ContentTypesPreferencePage"
+          name="%preferencePage.contentTypes.label"/>
+    <page
+          category=""
+          class="org.nightlabs.base.print.pref.PrinterPreferencePage"
+          id="org.nightlabs.base.print.pref.PrinterPreferencePage"
+          name="%preferencePage.printer.label"/>
+    <page
+          category="org.nightlabs.base.print.pref.PrinterPreferencePage"
+          class="org.nightlabs.base.print.pref.PrinterConfigurationPreferencePage"
+          id="org.nightlabs.base.print.pref.PrinterConfigurationPreferencePage"
+          name="%preferencePage.printerConfiguration.label"/>
  </extension>
  <extension
        point="org.eclipse.ui.actionSets">

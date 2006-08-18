@@ -60,17 +60,26 @@ public class EditPrinterConfigurationComposite extends XComposite {
 	
 	private ConfiguratorFactoryEntry selectedConfiguratorFactoryEntry;
 	
+	public EditPrinterConfigurationComposite(Composite parent, int style, XComposite.LayoutMode layoutMode, String printerUseCaseID) {
+		this(parent, style, layoutMode, printerUseCaseID, null);
+	}
+	
 	/**
 	 * @param parent
 	 * @param style
 	 */
-	public EditPrinterConfigurationComposite(Composite parent, int style, XComposite.LayoutMode layoutMode, String printerUseCaseID) {
+	public EditPrinterConfigurationComposite(Composite parent, int style, XComposite.LayoutMode layoutMode, String printerUseCaseID, PrinterConfiguration _printerConfiguration) {
 		super(parent, style, layoutMode);
 		this.printerUseCaseID = printerUseCaseID;		
 		printerUseCase = PrinterConfigurationRegistry.sharedInstance().getPrinterUseCase(printerUseCaseID);
 		if (printerUseCase == null)
 			throw new RuntimeException("The PrinterUseCase to be edited is not registered: "+printerUseCaseID);
-		printerConfiguration = PrinterConfigurationCfMod.getPrinterConfiguration(printerUseCaseID);
+		if (_printerConfiguration != null)
+			printerConfiguration = _printerConfiguration;
+		else
+			printerConfiguration = PrinterConfigurationCfMod.getPrinterConfiguration(printerUseCaseID);
+		if (printerConfiguration != null)
+			printerConfiguration = (PrinterConfiguration)printerConfiguration.clone();
 
 		Collection<ConfiguratorFactoryEntry> factoryEnties = null;
 		if (printerUseCase.isUseOnlyDefaultConfigurator() && printerUseCase.getDefaultConfiguratorFactory() != null) {
@@ -140,5 +149,9 @@ public class EditPrinterConfigurationComposite extends XComposite {
 		if (configurator != null && configuratorComposite != null && !configuratorComposite.isDisposed())
 			return configurator.readPrinterConfiguration();
 		return null;
+	}
+	
+	public String getPrinterUseCaseID() {
+		return printerUseCaseID;
 	}
 }
