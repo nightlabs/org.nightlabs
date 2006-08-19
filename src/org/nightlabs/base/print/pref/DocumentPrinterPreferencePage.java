@@ -26,10 +26,10 @@
 
 package org.nightlabs.base.print.pref;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -37,89 +37,82 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
-import org.nightlabs.base.print.EditPrinterConfigurationComposite;
-import org.nightlabs.base.print.PrinterUseCase;
-import org.nightlabs.print.PrinterConfiguration;
-import org.nightlabs.print.PrinterConfigurationCfMod;
+import org.nightlabs.base.util.RCPUtil;
+import org.nightlabs.config.Config;
+import org.nightlabs.config.ConfigException;
+import org.nightlabs.print.DelegatingDocumentPrinterCfMod;
+import org.nightlabs.print.DocumentPrinterDelegateConfig;
 
 /**
- * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class PrinterConfigurationPreferencePage 
+public class DocumentPrinterPreferencePage
 extends PreferencePage
-implements IWorkbenchPreferencePage 
-{
+implements IWorkbenchPreferencePage {
 
-	private XComposite wrapper;
-	private PrinterUseCaseCombo useCaseCombo;
-	private EditPrinterConfigurationComposite editPrinterConfigurationComposite;
-	private Map<String, PrinterConfiguration> printerConfigurations = new HashMap<String, PrinterConfiguration>();
+	private XComposite wrapper; 
 	
+	private String editedFileExt = null;
+	private EditDocumentPrinterTypeRegsComposite typeRegsComposite;
+	private EditDocumentPrinterConfigComposite printerConfigComposite;
 	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 * @see org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
-	protected Control createContents(Composite parent) {		
+	protected Control createContents(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE);
-		useCaseCombo = new PrinterUseCaseCombo(wrapper, SWT.READ_ONLY);
-		useCaseCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		useCaseCombo.addSelectionListener(new SelectionListener() {
+		typeRegsComposite = new EditDocumentPrinterTypeRegsComposite(wrapper, SWT.NONE);
+		typeRegsComposite.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
 			public void widgetSelected(SelectionEvent arg0) {
-				updatePrinterConfigurationComposite();
+				if (editedFileExt != null) {
+					if (typeRegsComposite.hasRegistration(editedFileExt))
+						typeRegsComposite.setDelegateConfig(editedFileExt, printerConfigComposite.readDelegateConfig());
+				}
+				editedFileExt = typeRegsComposite.getSelectedFileExt();
+				printerConfigComposite.setDelegateConfig(typeRegsComposite.getDelegateConfig(editedFileExt));
 			}
 		});
-		Map<String, PrinterConfiguration> configs = PrinterConfigurationCfMod.getPrinterConfigurationCfMod().getPrinterConfigurations();
-		for (Entry<String, PrinterConfiguration> entry : configs.entrySet()) {
-			printerConfigurations.put(entry.getKey(), (PrinterConfiguration)entry.getValue().clone());
-		}
-		if (useCaseCombo.getItemCount() > 0) {
-			useCaseCombo.select(0);
-			updatePrinterConfigurationComposite();
-		}
+		printerConfigComposite = new EditDocumentPrinterConfigComposite(wrapper, SWT.NONE);
+		
+		typeRegsComposite.setDelegateConfigs(DelegatingDocumentPrinterCfMod.sharedInstance().getPrintConfigs());
 		return wrapper;
 	}
-	
-	protected void updatePrinterConfigurationComposite() {
-		applyConfigurationLocally();
-		if (editPrinterConfigurationComposite != null && !editPrinterConfigurationComposite.isDisposed()) {
-			editPrinterConfigurationComposite.dispose();
-		}
-		PrinterUseCase useCase = useCaseCombo.getSelectedElement();
-		PrinterConfiguration printerConfiguration = printerConfigurations.get(useCase.getId());
-		if (useCase != null)
-			editPrinterConfigurationComposite = new EditPrinterConfigurationComposite(wrapper, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, useCase.getId(), printerConfiguration);
-		else
-			editPrinterConfigurationComposite = null;
-		wrapper.layout(true, true);
-	}
 
-	/* (non-Javadoc)
+	@Override
+	public boolean performOk() {
+		if (editedFileExt != null)
+			typeRegsComposite.setDelegateConfig(editedFileExt, printerConfigComposite.readDelegateConfig());
+		Map<String, DocumentPrinterDelegateConfig> configs = typeRegsComposite.getDelegateConfigs();
+		DelegatingDocumentPrinterCfMod cfMod = DelegatingDocumentPrinterCfMod.sharedInstance();
+		cfMod.getPrintConfigs().clear();
+		for (Entry<String, DocumentPrinterDelegateConfig> entry : configs.entrySet()) {
+			cfMod.getPrintConfigs().put(entry.getKey(), entry.getValue());
+		}
+		cfMod.setPrintConfigs(cfMod.getPrintConfigs());
+		try {
+			Config.sharedInstance().save();
+		} catch (ConfigException e) {
+			MessageDialog dlg = new MessageDialog(RCPUtil.getActiveWorkbenchShell(), "Saving DocumentPrinter config failed", null, e.getMessage(), 0, new String[]{"OK"}, 0);
+			dlg.open();
+		}
+		return super.performOk();
+	}
+	
+	/*
+	 * (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
 	}
 
-	protected void applyConfigurationLocally() {
-		if (editPrinterConfigurationComposite != null && !editPrinterConfigurationComposite.isDisposed()) {
-			printerConfigurations.put(editPrinterConfigurationComposite.getPrinterUseCaseID(), editPrinterConfigurationComposite.getCurrentPrinterConfiguration());
-		}
-	}
-	
-	@Override
-	public boolean performOk() {
-		applyConfigurationLocally();
-		for (Entry<String, PrinterConfiguration> entry : printerConfigurations.entrySet()) {
-			PrinterConfigurationCfMod.setPrinterConfiguration(entry.getKey(), entry.getValue());
-		}
-		return super.performOk();
-	}
 }
