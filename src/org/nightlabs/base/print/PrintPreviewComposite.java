@@ -181,55 +181,77 @@ extends XComposite
 		updateCanvas();
 	}		
 		
-	private Canvas canvas = null;
+	protected Canvas canvas = null;
+//	protected Canvas initCanvas(Composite parent) 
+//	{
+//		Canvas c = new Canvas(parent, SWT.NONE);
+//		c.setLayoutData(new GridData(GridData.FILL_BOTH));
+//		return c;
+//	}
 	protected Canvas initCanvas(Composite parent) 
 	{
-		Canvas c = new Canvas(parent, SWT.NONE);
-		c.setLayoutData(new GridData(GridData.FILL_BOTH));
-		return c;
+		return new Canvas(parent, SWT.NONE);
 	}
 	
 	protected void createComposite(Composite parent) 
 	{
 		canvas = initCanvas(parent);
+		canvas.setLayoutData(new GridData(GridData.FILL_BOTH));
 //		canvas.setBackground(new Color(parent.getDisplay(), 255, 255, 255));		
-		canvas.addControlListener(canvasResizeListener);		
+		canvas.addControlListener(canvasResizeListener);
+		pagePaintListener = initPagePaintListener();
 		canvas.addPaintListener(pagePaintListener);
 		updateCanvas();
 	}
 	
 	private Rectangle pageRectangle = null;
-	private Rectangle imageablePageRectangle = null;	
+	protected Rectangle getPageRectangle() {
+		return pageRectangle;
+	}
+	
+	private Rectangle imageablePageRectangle = null;
+	protected Rectangle getImageablePageRectangle() {
+		return imageablePageRectangle;
+	}
+	
 	private Color colorWhite = new Color(Display.getDefault(), 255, 255, 255);
-	private PaintListener pagePaintListener = new PaintListener()
-	{	
-		public void paintControl(PaintEvent e) 
-		{
-			GC gc = e.gc; 
-			Transform transform = new Transform(gc.getDevice());			
-			Rectangle canvasBounds = org.nightlabs.base.util.GeomUtil.toAWTRectangle(canvas.getClientArea());			
-			Point2D scales = GeomUtil.calcScale(pageRectangle, canvasBounds);			
-			double gcScale = Math.min(scales.getX(), scales.getY());											
-			transform.scale((float)gcScale, (float)gcScale);
-			
-			gc.setTransform(transform);			
-			
-			gc.setBackground(colorWhite);
-			gc.fillRectangle(pageRectangle.x, pageRectangle.y, 
-					pageRectangle.width, pageRectangle.height);			
-			
-			gc.setLineWidth(3);
-			gc.setLineStyle(SWT.LINE_SOLID);			
-			gc.drawRectangle(imageablePageRectangle.x, imageablePageRectangle.y, 
-					imageablePageRectangle.width, imageablePageRectangle.height);						
-		}	
-	};
-
+	protected Color getBackgroundColor() {
+		return colorWhite;
+	}
+	
+	private PaintListener pagePaintListener = null;
+	protected PaintListener initPagePaintListener() 
+	{
+		return new PaintListener()
+		{	
+			public void paintControl(PaintEvent e) 
+			{
+				GC gc = e.gc; 
+				Transform transform = new Transform(gc.getDevice());			
+				Rectangle canvasBounds = org.nightlabs.base.util.GeomUtil.toAWTRectangle(canvas.getClientArea());			
+				Point2D scales = GeomUtil.calcScale(pageRectangle, canvasBounds);			
+				double gcScale = Math.min(scales.getX(), scales.getY());											
+				transform.scale((float)gcScale, (float)gcScale);
+				
+				gc.setTransform(transform);			
+				
+				gc.setBackground(getBackgroundColor());
+				gc.fillRectangle(pageRectangle.x, pageRectangle.y, 
+						pageRectangle.width, pageRectangle.height);			
+				
+				gc.setLineWidth(3);
+				gc.setLineStyle(SWT.LINE_SOLID);			
+				gc.drawRectangle(imageablePageRectangle.x, imageablePageRectangle.y, 
+						imageablePageRectangle.width, imageablePageRectangle.height);						
+			}	
+		}; 
+	}
+	
 	private ControlListener canvasResizeListener = new ControlAdapter() 
 	{	
 		public void controlResized(ControlEvent e) 
 		{
-
+			updateCanvas();
 		}	
 	};
 	
@@ -241,12 +263,24 @@ extends XComposite
 		}	
 	};
 		
+	protected double canvasScaleFactor = 4;
+	protected void setCanvasSize() 
+	{
+		GridData canvasData = new GridData();
+		int newWidth = (int) Math.rint((double)pageRectangle.width / canvasScaleFactor);
+		int newHeight = (int) Math.rint((double)pageRectangle.height / canvasScaleFactor);		
+		canvasData.widthHint = newWidth;
+		canvasData.heightHint = newHeight; 
+		canvasData.minimumWidth = newWidth;
+		canvasData.minimumHeight = newHeight;		
+		canvas.setLayoutData(canvasData);
+		canvas.setSize(newWidth, newHeight);	
+	}
+	
 	protected void updateCanvas() 
 	{
+//		setCanvasSize();
 		canvas.redraw();
-//		redraw();		
-//		if (logger.isDebugEnabled())
-//			logger.debug("updateCanvas()");
 	}
 	
 }
