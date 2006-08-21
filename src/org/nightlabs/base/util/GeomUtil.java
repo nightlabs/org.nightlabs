@@ -160,6 +160,19 @@ public class GeomUtil
 		return new Point2D.Double(scaleX, scaleY);
 	}	
 	
+	public static java.awt.Rectangle scaleRect(java.awt.Rectangle rect, double scaleX, double scaleY, boolean onlyDimension) 
+	{
+		int x = rect.x;
+		int y = rect.y;		
+		int width = (int) Math.rint(rect.width * scaleX);
+		int height = (int) Math.rint(rect.height * scaleY);		
+		if (!onlyDimension) {
+			x = (int) Math.rint(rect.x * scaleX);
+			y = (int) Math.rint(rect.y * scaleY);			
+		} 
+		return new java.awt.Rectangle(x, y, width, height);		
+	}
+	
 //	/**
 //	 * 
 //	 * @param r the Rectangle to translate to Origin (0/0)

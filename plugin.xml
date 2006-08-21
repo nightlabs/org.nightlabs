@@ -16,6 +16,8 @@
  <extension-point id="ioFilterRegistry" name="ioFilterRegistry" schema="schema/ioFilterRegistry.exsd"/>
  <extension-point id="simpleExceptionHandler" name="simpleExceptionHandler" schema="schema/simpleExceptionHandler.exsd"/>
  <extension-point id="printerConfiguration" name="PrinterConfiguration Extension Point" schema="schema/printerConfiguration.exsd"/>
+ <extension-point id="predefinedPage" name="predefinedPage" schema="schema/predefinedPage.exsd"/>
+ <extension-point id="unit" name="unit" schema="schema/unit.exsd"/>
  <extension
        point="org.nightlabs.base.exceptionhandler">
     <exceptionHandler
