@@ -23,66 +23,68 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.print;
+package org.nightlabs.editor2d.j2dswt;
 
-import java.awt.print.PageFormat;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.print.PageSetupComposite;
-import org.nightlabs.base.print.PrintPreviewComposite;
+import org.eclipse.swt.widgets.Control;
 import org.nightlabs.editor2d.DrawComponent;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditorPageSetupComposite 
-extends PageSetupComposite 
+public class PrintPreviewPaintable 
+extends DrawComponentPaintable 
 {
 
 	/**
-	 * @param pageFormat
-	 * @param parent
-	 * @param style
+	 * @param dc
 	 */
-	public EditorPageSetupComposite(DrawComponent dc, PageFormat pageFormat, Composite parent,
-			int style) 
+	public PrintPreviewPaintable(DrawComponent dc, Color bgColor, 
+			Rectangle pageBounds, Rectangle marginBounds) 
 	{
-		super(pageFormat, parent, style);
-		if (dc == null)
-			throw new IllegalArgumentException("Param dc must not be null!");
-		this.dc = dc;
-		super.init(pageFormat);
+		super(dc);
+//		if (bgColor == null || pageBounds == null || marginBounds == null)
+//			throw new IllegalArgumentException("none of the params must be null!");
+		
+		this.bgColor = bgColor;
+		this.pageBounds = pageBounds;
+		this.marginBounds = marginBounds;		
 	}
 
-	/**
-	 * @param pageFormat
-	 * @param parent
-	 * @param style
-	 * @param layoutMode
-	 * @param layoutDataMode
-	 */
-	public EditorPageSetupComposite(DrawComponent dc, PageFormat pageFormat, Composite parent,
-			int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
-	{
-		super(pageFormat, parent, style, layoutMode, layoutDataMode);
-		if (dc == null)
-			throw new IllegalArgumentException("Param dc must not be null!");
-		
-		this.dc = dc;
-		super.init(pageFormat);
-	}
-	
-	private DrawComponent dc = null;
+	private Color bgColor = null;
+	private Rectangle pageBounds; 
+	private Rectangle marginBounds;	
+
+//	@Override
+//	public void paint(Control control, Graphics2D g2d) 
+//	{
+//		g2d.setPaint(bgColor);
+//		if (pageBounds != null)
+//			g2d.fillRect(pageBounds.x, pageBounds.y, pageBounds.width, pageBounds.height);
+//				
+//		g2d.setPaint(Color.BLACK);
+//		if (marginBounds != null)
+//			g2d.drawRect(marginBounds.x, marginBounds.y, marginBounds.width, marginBounds.height);		
+//		super.paint(control, g2d);
+//	}
 
 	@Override
-	protected PrintPreviewComposite initPreviewComposite(Composite parent) {
-		return new EditorPrintPreviewComposite(dc, getPageFormat(), parent, SWT.NONE);
-	}
+	public void paint(Control control, Graphics2D g2d) 
+	{
+		g2d.setPaint(bgColor);
+		if (pageBounds != null)
+			g2d.fillRect(pageBounds.x, pageBounds.y, pageBounds.width, pageBounds.height);
 
-	@Override
-	protected void init(PageFormat pageFormat) {
+		g2d.translate(marginBounds.x, marginBounds.y);
+		g2d.setPaint(Color.BLACK);
+		if (marginBounds != null)
+			g2d.drawRect(0, 0, marginBounds.width, marginBounds.height);		
+		super.paint(control, g2d);
 		
-	}	
+		g2d.translate(-marginBounds.x, -marginBounds.y);		
+	}
 	
 }

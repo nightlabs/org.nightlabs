@@ -32,7 +32,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.dialog.CenteredDialog;
+import org.nightlabs.base.print.PrinterConfigurationRegistry;
+import org.nightlabs.base.print.PrinterUseCase;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.print.PrinterConfiguration;
+import org.nightlabs.print.PrinterConfigurationCfMod;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -40,12 +44,26 @@ import org.nightlabs.editor2d.DrawComponent;
 public class EditorPrintPreviewDialog 
 extends CenteredDialog 
 {
+	private PrinterUseCase printerUseCase;
+	private PrinterConfiguration printerConfiguration;
+	
+	public static final String PRINTER_USECASE_EDITOR2D = "PrinterUseCase-Editor2D";
+			
 	/**
 	 * @param parentShell
 	 */
-	public EditorPrintPreviewDialog(DrawComponent dc, Shell parentShell) {
+	public EditorPrintPreviewDialog(DrawComponent dc, Shell parentShell) 
+	{
 		super(parentShell);
-		this.dc = dc;
+		if (dc == null)
+			throw new IllegalArgumentException("Param dc must not be null!");
+		
+		setShellStyle(getShellStyle() | SWT.RESIZE);
+		this.dc = dc;		
+		printerUseCase = PrinterConfigurationRegistry.sharedInstance().getPrinterUseCase(PRINTER_USECASE_EDITOR2D);
+		if (printerUseCase == null)
+			throw new RuntimeException("The PrinterUseCase to be edited is not registered: "+PRINTER_USECASE_EDITOR2D);
+		printerConfiguration = PrinterConfigurationCfMod.getPrinterConfiguration(PRINTER_USECASE_EDITOR2D);		
 	}
 
 	private DrawComponent dc = null;
@@ -54,6 +72,7 @@ extends CenteredDialog
 	protected Control createDialogArea(Composite parent) 
 	{
 		printConfiguratorComp = new EditorPrinterConfiguratorComposite(dc, parent, SWT.NONE);
+		printConfiguratorComp.init(printerConfiguration);
 		return printConfiguratorComp;
 	}
 	

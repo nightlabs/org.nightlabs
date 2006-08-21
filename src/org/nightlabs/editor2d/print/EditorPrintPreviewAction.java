@@ -68,25 +68,26 @@ extends AbstractEditorPrintAction
 			
 	public void run() 
 	{
-		AWTPrinter awtPrinter = getAWTPrinter();
-		PageFormat pf = null;
-		if (awtPrinter.getConfiguration() != null && awtPrinter.getConfiguration().getPageFormat() != null)
-			pf = awtPrinter.getConfiguration().getPageFormat();
-		if (pf == null)
-			pf = PrinterJob.getPrinterJob().defaultPage();
+//		AWTPrinter awtPrinter = getAWTPrinter();
+//		PageFormat pf = null;
+//		if (awtPrinter.getConfiguration() != null && awtPrinter.getConfiguration().getPageFormat() != null)
+//			pf = awtPrinter.getConfiguration().getPageFormat();
+//		if (pf == null)
+//			pf = PrinterJob.getPrinterJob().defaultPage();
 //		J2DPrintDialog printDialog = new J2DPrintDialog(getShell(), getDrawComponent(), pf);
+		
 		EditorPrintPreviewDialog printDialog = new EditorPrintPreviewDialog(getDrawComponent(), getShell());		
 		if (printDialog.open() == Dialog.CANCEL)
 			return;
-		awtPrinter.getPrinterJob().setPrintable(
-				getPrintable(PrintConstant.FIT_PAGE), 
-				printDialog.getPageFormat()
-			);			
-		try {
-			awtPrinter.getPrinterJob().print();				
-		} catch (PrinterException pe) {
-			throw new RuntimeException(pe);
-		}			
+//		awtPrinter.getPrinterJob().setPrintable(
+//				getPrintable(PrintConstant.FIT_PAGE), 
+//				printDialog.getPageFormat()
+//			);			
+//		try {
+//			awtPrinter.getPrinterJob().print();				
+//		} catch (PrinterException pe) {
+//			throw new RuntimeException(pe);
+//		}			
 	}
 	
 }

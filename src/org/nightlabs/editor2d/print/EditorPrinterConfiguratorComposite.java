@@ -25,6 +25,7 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.print;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.print.PageSetupComposite;
@@ -36,8 +37,7 @@ import org.nightlabs.editor2d.DrawComponent;
  */
 public class EditorPrinterConfiguratorComposite 
 extends PrinterConfiguratorComposite 
-{
-
+{	
 	/**
 	 * @param parent
 	 * @param style
@@ -64,7 +64,8 @@ extends PrinterConfiguratorComposite
 
 	private DrawComponent dc = null;
 	@Override
-	protected PageSetupComposite initPageSetupComposite(Composite parent) {
+	protected PageSetupComposite initPageSetupComposite(Composite parent) 
+	{
 		return new EditorPageSetupComposite(dc, getPageFormat(), parent, SWT.NONE); 
 	}
 	

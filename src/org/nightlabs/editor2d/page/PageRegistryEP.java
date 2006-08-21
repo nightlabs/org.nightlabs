@@ -105,13 +105,15 @@ extends AbstractEPProcessor
 				throw new EPProcessorException("unitID must not be null nor empty! for element "+element);
 
 			String symbol = element.getAttribute(ATTRIBUTE_UNIT_SYMBOL);
-			
-			IUnit unit = new Unit();
-			unit.setName(Locale.getDefault().getLanguage(), name);
-			unit.setFactor(factor);
-			unit.setUnitID(unitID);
 			if (checkString(symbol))
-				unit.setUnitSymbol(symbol);
+				throw new EPProcessorException("symbol must not be null nor empty! for element "+element);				
+			
+			IUnit unit = new Unit(unitID, name, symbol, factor);
+//			unit.setName(Locale.getDefault().getLanguage(), name);
+//			unit.setFactor(factor);
+//			unit.setUnitID(unitID);
+//			if (checkString(symbol))
+//				unit.setUnitSymbol(symbol);
 			
 //			registry.addUnit(unit);
 			getPageRegistry().addUnit(unit);
@@ -150,9 +152,6 @@ extends AbstractEPProcessor
 				
 			try {
 				IPredefinedPage page = (IPredefinedPage) element.createExecutableExtension("page");
-				page.setName(Locale.getDefault().getLanguage(), name);
-				page.setPageID(pageID);
-//				registry.addPredefinedPage(page);
 				getPageRegistry().addPredefinedPage(page);				
 			} catch (CoreException ce) {
 				throw new EPProcessorException(ce); 
