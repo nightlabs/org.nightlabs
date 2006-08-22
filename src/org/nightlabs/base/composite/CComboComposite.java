@@ -156,6 +156,10 @@ extends XComposite
 		return false;
 	}
 
+	public List<T> getTypes() {
+		return types;
+	}
+	
 	/**
 	 * @param listener
 	 * @see org.nightlabs.base.custom.ColorCombo#addModifyListener(org.eclipse.swt.events.ModifyListener)
