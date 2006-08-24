@@ -31,6 +31,8 @@ import java.awt.Toolkit;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -552,4 +554,20 @@ public class RCPUtil
 			logControlParents(parent, logger, logLevel);
 		}
 	}  
+	
+	
+	private static IProgressMonitor nullMonitor = new NullProgressMonitor();
+
+	/**
+	 * Checks the given monitor and returns it if not <code>null</code>. If
+	 * the given monitor is null an instance of {@link NullProgressMonitor}
+	 * will be returned.
+	 * 
+	 * @param monitor The monitor to check
+	 */
+	public static IProgressMonitor getSaveProgressMonitor(IProgressMonitor monitor) {
+		if (monitor != null)
+			return monitor;
+		return nullMonitor;		
+	}
 }

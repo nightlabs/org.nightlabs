@@ -1,6 +1,6 @@
 /* *****************************************************************************
  * org.nightlabs.base - NightLabs Eclipse utilities                            *
- * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
+ * Copyright (C) 2004-2006 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
  * modify it under the terms of the GNU Lesser General Public                  *
@@ -20,51 +20,19 @@
  *                                                                             *
  * Or get it online :                                                          *
  *     http://www.gnu.org/copyleft/lesser.html                                 *
- *                                                                             *
- *                                                                             *
  ******************************************************************************/
-
-package org.nightlabs.base.print;
-
-import org.eclipse.swt.widgets.Display;
-import org.nightlabs.print.PrinterConfiguration;
-import org.nightlabs.print.PrinterConfigurationCfMod;
+package org.nightlabs.base.entity.tree;
 
 /**
- * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
+ * A listener that is notified when an entity tree
+ * category changes.
+ * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
-public class PrinterInterfaceManager extends
-		org.nightlabs.print.PrinterInterfaceManager {
-
-	private static class ConfigHolder {
-		public PrinterConfiguration printerConfiguration;
-	}
-	
+public interface IEntityTreeCategoryChangeListener
+{
 	/**
-	 * 
+	 * An entity tree category has changed.
+	 * @param category The category that changed.
 	 */
-	public PrinterInterfaceManager() {
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public PrinterConfiguration editPrinterConfiguration(final String printerUseCaseID, final boolean preSelectionDoStore) {
-		final ConfigHolder holder = new ConfigHolder();
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				holder.printerConfiguration = EditPrinterConfigurationDialog.openDialog(printerUseCaseID, preSelectionDoStore);
-			}
-		});
-		return holder.printerConfiguration;
-	}
-
-	private static PrinterInterfaceManager sharedInstance;
-	
-	public static PrinterInterfaceManager sharedInstance() {
-		if (sharedInstance == null)
-			sharedInstance = new PrinterInterfaceManager();
-		return sharedInstance;
-	}
-	
+	public void categoryChanged(EntityTreeCategory category);
 }

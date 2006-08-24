@@ -69,4 +69,12 @@ public class EPProcessorException extends Exception {
 	public EPProcessorException(String message, IExtension extension) {
 		super(message+" The extension is located in "+extension.getNamespaceIdentifier()+"."); // and has the id "+extension.getExtensionPointUniqueIdentifier());
 	}
+	
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public EPProcessorException(String message, IExtension extension, Throwable cause) {
+		super(message+" The extension is located in "+extension.getNamespaceIdentifier()+".", cause); // and has the id "+extension.getExtensionPointUniqueIdentifier());
+	}
 }

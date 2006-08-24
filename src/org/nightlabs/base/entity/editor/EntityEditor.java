@@ -1,6 +1,6 @@
 /* *****************************************************************************
- * org.nightlabs.base - NightLabs Eclipse utilities                            *
- * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
+ * JFire - it's hot - Free ERP System - http://jfire.org                       *
+ * Copyright (C) 2004-2006 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
  * modify it under the terms of the GNU Lesser General Public                  *
@@ -20,51 +20,70 @@
  *                                                                             *
  * Or get it online :                                                          *
  *     http://www.gnu.org/copyleft/lesser.html                                 *
- *                                                                             *
- *                                                                             *
  ******************************************************************************/
+package org.nightlabs.base.entity.editor;
 
-package org.nightlabs.base.print;
+import java.util.List;
 
-import org.eclipse.swt.widgets.Display;
-import org.nightlabs.print.PrinterConfiguration;
-import org.nightlabs.print.PrinterConfigurationCfMod;
+import org.eclipse.ui.PartInitException;
+import org.nightlabs.base.editor.CommitableFormEditor;
+import org.nightlabs.base.entity.EntityEditorRegistry;
 
 /**
- * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
+ * An abstract base class for entity editors. It provides
+ * the method {@link #addPages()} using the EntityEditorRegistry
+ * to add pages registered via extension point.
+ * 
+ * @version $Revision: 4430 $ - $Date: 2006-08-20 17:18:07 +0000 (Sun, 20 Aug 2006) $
+ * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
-public class PrinterInterfaceManager extends
-		org.nightlabs.print.PrinterInterfaceManager {
-
-	private static class ConfigHolder {
-		public PrinterConfiguration printerConfiguration;
+public abstract class EntityEditor extends CommitableFormEditor
+{
+	private String editorID;
+	
+	public EntityEditor(String editorID)
+	{
+		this.editorID = editorID;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.forms.editor.FormEditor#addPages()
+	 */
+	@Override
+	protected void addPages()
+	{
+		try {
+			List<EntityEditorPageSettings> pageSettings = EntityEditorRegistry.sharedInstance().getPageSettingsOrdered(getEditorID());
+			for (EntityEditorPageSettings pageSetting : pageSettings)
+				addPage(pageSetting.getPageFactory().createPage(this));
+		} catch (PartInitException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
-	 * 
+	 * Get the editor id.
+	 * @return The editor id
 	 */
-	public PrinterInterfaceManager() {
-		// TODO Auto-generated constructor stub
+	public String getEditorID()
+	{
+		return editorID;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.EditorPart#doSaveAs()
+	 */
 	@Override
-	public PrinterConfiguration editPrinterConfiguration(final String printerUseCaseID, final boolean preSelectionDoStore) {
-		final ConfigHolder holder = new ConfigHolder();
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				holder.printerConfiguration = EditPrinterConfigurationDialog.openDialog(printerUseCaseID, preSelectionDoStore);
-			}
-		});
-		return holder.printerConfiguration;
+	public void doSaveAs()
+	{
 	}
 
-	private static PrinterInterfaceManager sharedInstance;
-	
-	public static PrinterInterfaceManager sharedInstance() {
-		if (sharedInstance == null)
-			sharedInstance = new PrinterInterfaceManager();
-		return sharedInstance;
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.EditorPart#isSaveAsAllowed()
+	 */
+	@Override
+	public boolean isSaveAsAllowed()
+	{
+		return false;
 	}
-	
 }

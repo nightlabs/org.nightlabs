@@ -18,6 +18,7 @@
  <extension-point id="printerConfiguration" name="PrinterConfiguration Extension Point" schema="schema/printerConfiguration.exsd"/>
  <extension-point id="predefinedPage" name="predefinedPage" schema="schema/predefinedPage.exsd"/>
  <extension-point id="unit" name="unit" schema="schema/unit.exsd"/>
+ <extension-point id="entityEditor" name="EntityEditor Extension-Point" schema="schema/entityEditor.exsd"/>
  <extension
        point="org.nightlabs.base.exceptionhandler">
     <exceptionHandler
@@ -53,11 +54,6 @@
           id="org.eclipse.ui.internal.dialogs.ContentTypesPreferencePage"
           name="%preferencePage.contentTypes.label"/>
     <page
-          category="%category.general"
-          class="org.eclipse.ui.internal.dialogs.ContentTypesPreferencePage"
-          id="org.eclipse.ui.internal.dialogs.ContentTypesPreferencePage"
-          name="%preferencePage.contentTypes.label"/>
-    <page
           category=""
           class="org.nightlabs.base.print.pref.PrinterPreferencePage"
           id="org.nightlabs.base.print.pref.PrinterPreferencePage"
@@ -85,6 +81,12 @@
              id="org.eclipse.ui.actions.showKeyAssistHandler"
              label="%menu.help.showKeyAssistant.label"
              menubarPath="help/group.assist"
+             style="push"/>
+       <action
+             class="org.nightlabs.base.print.action.PrintDocumentAction"
+             id="org.nightlabs.base.print.action.PrintDocumentAction"
+             label="Print Document"
+             toolbarPath="additions"
              style="push"/>
     </actionSet>
  </extension>

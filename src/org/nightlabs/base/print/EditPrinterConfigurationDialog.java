@@ -26,8 +26,10 @@
 
 package org.nightlabs.base.print;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -49,13 +51,18 @@ public class EditPrinterConfigurationDialog extends CenteredDialog {
 
 	private EditPrinterConfigurationComposite configurationComposite;
 	private String printerUseCaseID;
+	private boolean preSelectionDoStore;
+	private Button useConfigOnlyForNextRun;
+	private PrinterConfiguration printerConfiguration;
+	
 	
 	/**
 	 * @param parentShell
 	 */
-	public EditPrinterConfigurationDialog(Shell parentShell, String printerUseCaseID) {
+	public EditPrinterConfigurationDialog(Shell parentShell, String printerUseCaseID, boolean preSelectionDoStore) {
 		super(parentShell);
 		this.printerUseCaseID = printerUseCaseID;
+		this.preSelectionDoStore = preSelectionDoStore;
 		setShellStyle(getShellStyle() | SWT.RESIZE);				
 	}
 	
@@ -70,30 +77,40 @@ public class EditPrinterConfigurationDialog extends CenteredDialog {
 	protected Control createDialogArea(Composite parent) {
 		configurationComposite = new EditPrinterConfigurationComposite(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER, printerUseCaseID);
 		configurationComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		useConfigOnlyForNextRun = new Button(parent, SWT.CHECK);
+		useConfigOnlyForNextRun.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		useConfigOnlyForNextRun.setSelection(!preSelectionDoStore);
+		useConfigOnlyForNextRun.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.useOnlyForNextRun"));
 		return configurationComposite;
 	}
 	
 	@Override
 	protected void okPressed() {
-		PrinterConfiguration configuration = configurationComposite.getCurrentPrinterConfiguration();
-		if (configuration != null)
-			PrinterConfigurationCfMod.setPrinterConfiguration(printerUseCaseID, configuration);
+		printerConfiguration = configurationComposite.getCurrentPrinterConfiguration();
+		if (printerConfiguration != null && !useConfigOnlyForNextRun.getSelection())
+			PrinterConfigurationCfMod.setPrinterConfiguration(printerUseCaseID, printerConfiguration);
 		super.okPressed();
 	}
 	
 	/**
 	 * Opens a new {@link EditPrinterConfigurationDialog} for the given
-	 * printerUseCaseID.
+	 * printerUseCaseID. It will return the edited printerConfiguration
+	 * or null if the dialog was canceled.
 	 * 
 	 * @param printerUseCaseID The use case the configuration should be edited for.
-	 * @return The dialogs result.
+	 * @param preSelectionDoStore A pre-selection for the option whether to store the edited configuration or use it only for the next run.
+	 * @return The edited printerConfiguration
+	 * or null if the dialog was canceled.
 	 */
-	public static int openDialog(String printerUseCaseID) {
+	public static PrinterConfiguration openDialog(String printerUseCaseID, boolean preSelectionDoStore) {
 		EditPrinterConfigurationDialog dlg = new EditPrinterConfigurationDialog(
 				RCPUtil.getActiveWorkbenchShell(),
-				printerUseCaseID
+				printerUseCaseID,
+				preSelectionDoStore
 			);
-		return dlg.open();
+		if (dlg.open() == Dialog.OK)
+			return dlg.printerConfiguration;
+		return null;
 	}
 	
 }

@@ -1,6 +1,6 @@
 /* *****************************************************************************
- * org.nightlabs.base - NightLabs Eclipse utilities                            *
- * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
+ * JFire - it's hot - Free ERP System - http://jfire.org                       *
+ * Copyright (C) 2004-2006 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
  * modify it under the terms of the GNU Lesser General Public                  *
@@ -20,51 +20,39 @@
  *                                                                             *
  * Or get it online :                                                          *
  *     http://www.gnu.org/copyleft/lesser.html                                 *
- *                                                                             *
- *                                                                             *
  ******************************************************************************/
+package org.nightlabs.base.entity.editor;
 
-package org.nightlabs.base.print;
-
-import org.eclipse.swt.widgets.Display;
-import org.nightlabs.print.PrinterConfiguration;
-import org.nightlabs.print.PrinterConfigurationCfMod;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 
 /**
- * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
+ * @version $Revision: 4430 $ - $Date: 2006-08-20 17:18:07 +0000 (Sun, 20 Aug 2006) $
+ * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
-public class PrinterInterfaceManager extends
-		org.nightlabs.print.PrinterInterfaceManager {
-
-	private static class ConfigHolder {
-		public PrinterConfiguration printerConfiguration;
-	}
-	
+public class EntityEditorUtil
+{
 	/**
-	 * 
+	 * Create a composite client for a section.
+	 * @param toolkit The toolkit to use
+	 * @param section The section for which to create the client
+	 * @param numColumns How many columns the layout should have.
+	 * @return The client Composite
 	 */
-	public PrinterInterfaceManager() {
-		// TODO Auto-generated constructor stub
+	/*package*/ public static Composite createCompositeClient(FormToolkit toolkit, Section section, int numColumns)
+	{
+		Composite client = toolkit.createComposite(section);
+		GridLayout layout = new GridLayout();
+		layout.marginRight = layout.marginLeft = toolkit.getBorderStyle() != SWT.NULL ? 0 : 2;
+		layout.numColumns = numColumns;
+		client.setLayout(layout);
+		client.setLayoutData(new GridData(GridData.FILL_BOTH));
+		section.setClient(client);
+		return client;
 	}
 
-	@Override
-	public PrinterConfiguration editPrinterConfiguration(final String printerUseCaseID, final boolean preSelectionDoStore) {
-		final ConfigHolder holder = new ConfigHolder();
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				holder.printerConfiguration = EditPrinterConfigurationDialog.openDialog(printerUseCaseID, preSelectionDoStore);
-			}
-		});
-		return holder.printerConfiguration;
-	}
-
-	private static PrinterInterfaceManager sharedInstance;
-	
-	public static PrinterInterfaceManager sharedInstance() {
-		if (sharedInstance == null)
-			sharedInstance = new PrinterInterfaceManager();
-		return sharedInstance;
-	}
-	
 }
