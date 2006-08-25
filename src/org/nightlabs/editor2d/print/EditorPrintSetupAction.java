@@ -71,7 +71,7 @@ extends AbstractEditorPrintAction
 
 	public void run() 
 	{
-		PrinterInterfaceManager.sharedInstance().editPrinterConfiguration(PrintUtil.PRINTER_USE_CASE_EDITOR_2D);
+		PrinterInterfaceManager.sharedInstance().editPrinterConfiguration(PrintUtil.PRINTER_USE_CASE_EDITOR_2D, true);
 //		PrinterJob printJob = PrinterJob.getPrinterJob();
 ////		PageFormat defaultPageFormat = printJob.defaultPage();
 //		logger.debug("Page Setup before Modification");
