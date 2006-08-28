@@ -23,29 +23,10 @@
  ******************************************************************************/
 package org.nightlabs.base.entity.tree;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.jface.viewers.IOpenListener;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.OpenEvent;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-import org.nightlabs.base.entity.EntityEditorRegistry;
 import org.nightlabs.base.part.ControllablePart;
 import org.nightlabs.base.part.PartController;
-import org.nightlabs.base.tree.TreeContentProvider;
 
 /**
  * The tree view for entity tree categories and their
@@ -67,21 +48,11 @@ import org.nightlabs.base.tree.TreeContentProvider;
  */
 public class EntityTreeView 
 extends ViewPart 
-implements IEntityTreeCategoryChangeListener, IOpenListener, ControllablePart
+implements ControllablePart
 {
 
-	/**
-	 * The tree viewer in this view
-	 */
-	private TreeViewer treeViewer;
-
-	/**
-	 * This map is used to find out wich tree object belongs 
-	 * to wich category for asking the category for labels
-	 * and icons.
-	 */
-	private Map<Object, IEntityTreeCategory> childCategories;
-
+	private EntityTree entityTree;
+	
 	/**
 	 * Default constructor registers this view to 
 	 * the controller returned by {@link #getPartController()}
@@ -132,22 +103,7 @@ implements IEntityTreeCategoryChangeListener, IOpenListener, ControllablePart
 	 */
 	public void createPartContents(Composite parent)
 	{
-		treeViewer = new TreeViewer(parent, SWT.NONE);
-		EntityTreeContentProvider entityTreeContentProvider = new EntityTreeContentProvider();
-		treeViewer.setContentProvider(entityTreeContentProvider);
-		EntityTreeLabelProvider entityTreeLabelProvider = new EntityTreeLabelProvider();
-		treeViewer.setLabelProvider(entityTreeLabelProvider);
-		IEntityTreeCategory[] categories = EntityEditorRegistry.sharedInstance().getCategories(getViewSite().getId());
-		treeViewer.setInput(categories);
-		for (IEntityTreeCategory category : categories) {
-			//System.err.println("category: "+category.getName());
-			category.addEntityTreeCategoryChangeListener(this);
-		}
-		treeViewer.addOpenListener(this);
-
-		// needed with LSDView to fill - not needed stand alone
-		treeViewer.getTree().setLayout(new GridLayout());
-		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+		entityTree = new EntityTree(parent, getViewSite().getId());
 	}
 
 	/**
@@ -171,178 +127,13 @@ implements IEntityTreeCategoryChangeListener, IOpenListener, ControllablePart
 	}
 
 	/**
-	 * The content provider for the entity tree. This provider
-	 * will use data obtained by calling methods defined in
-	 * {@link IEntityTreeCategory}.
-	 */
-	class EntityTreeContentProvider extends TreeContentProvider 
-	{
-		/* (non-Javadoc)
-		 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
-		 */
-		public Object[] getElements(Object inputElement)
-		{
-			return (IEntityTreeCategory[])inputElement;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.nightlabs.base.tree.TreeContentProvider#getChildren(java.lang.Object)
-		 */
-		@Override
-		public Object[] getChildren(Object parentElement)
-		{
-			//System.err.println("GET CHILDREN FOR "+parentElement);
-			IEntityTreeCategory category = (IEntityTreeCategory)parentElement;
-			Object[] children = category.getChildren();
-			for (Object object : children)
-				addChildCategory(object, category);
-			return children;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.nightlabs.base.tree.TreeContentProvider#hasChildren(java.lang.Object)
-		 */
-		@Override
-		public boolean hasChildren(Object element)
-		{
-			return element instanceof IEntityTreeCategory;
-		}
-	}
-
-	/**
-	 * The label provider for the entity tree. This provider
-	 * will use data obtained by calling methods defined in
-	 * {@link IEntityTreeCategory}.
-	 */
-	class EntityTreeLabelProvider extends LabelProvider 
-	{
-		/* (non-Javadoc)
-		 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
-		 */
-		@Override
-		public Image getImage(Object element)
-		{
-			if(element instanceof IEntityTreeCategory)
-				return ((IEntityTreeCategory)element).getImage();
-			else {
-				IEntityTreeCategory category = getChildCategory(element);
-				if(category != null)
-					return category.getImage(element);
-				else
-					return super.getImage(element);
-			}
-		}
-
-		/* (non-Javadoc)
-		 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
-		 */
-		@Override
-		public String getText(Object element)
-		{
-			if(element instanceof IEntityTreeCategory)
-				return ((IEntityTreeCategory)element).getName();
-			else {
-				IEntityTreeCategory category = getChildCategory(element);
-				if(category != null)
-					return category.getText(element);
-				else
-					return super.getText(element);
-			}
-		}
-	}
-
-	/**
-	 * Add a child for a category. This is used internally
-	 * to find out wich tree object belongs to wich category
-	 * for asking the category for labels and icons.
-	 * @param child The child element to add
-	 * @param category The category the child belongs to
-	 */
-	protected void addChildCategory(Object child, IEntityTreeCategory category)
-	{
-		if(childCategories == null)
-			childCategories = new HashMap<Object, IEntityTreeCategory>();
-		childCategories.put(child, category);
-	}
-
-	/**
-	 * Add a child for a category. This is used internally
-	 * to find out wich tree object belongs to wich category
-	 * for asking the category for labels and icons.
-	 * @param child The child element to get the category for
-	 * @return The category of the child element or <code>null</code>
-	 * 		if the child is unknown.
-	 */
-	protected IEntityTreeCategory getChildCategory(Object child)
-	{
-		return childCategories==null ? null : childCategories.get(child);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.admin.entityeditor.IEntityTreeCategoryChangeListener#categoryChanged(org.nightlabs.jfire.base.admin.entityeditor.EntityTreeCategory)
-	 */
-	public void categoryChanged(final EntityTreeCategory category)
-	{
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				treeViewer.refresh(category);
-			}
-		});
-	}
-
-	/**
-	 * {@inheritDoc}
+	 * Returns the entity tree Composite ceated
+	 * for this view.
 	 * 
-	 * Expand/collapse all categories in the selection
-	 * and open the registered editors for all selected
-	 * category elements.
+	 * @return The entity tree Composite ceated
+	 * for this view.
 	 */
-	public void open(OpenEvent event)
-	{
-		final ISelection _selection = event.getSelection();
-		if(_selection.isEmpty())
-			return;
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				Object[] selectedElements = ((IStructuredSelection)_selection).toArray();
-				for (Object element : selectedElements) {
-					if(element instanceof IEntityTreeCategory) {
-						if(treeViewer.getExpandedState(element))
-							treeViewer.collapseToLevel(element, 1);
-						else
-							treeViewer.expandToLevel(element, 1);
-					} else {
-						IEntityTreeCategory category = getChildCategory(element);
-						if(category != null) {
-							IEditorDescriptor editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry().findEditor(category.getEditorID());
-							try {
-								getSite().getPage().openEditor(category.getEditorInput(element), editorDescriptor.getId());
-							} catch (PartInitException e) {
-								throw new RuntimeException("Opening editor failed", e);
-							}
-						} else {
-							System.err.println("Unknown entity category for element "+element);
-						}
-					}
-				}
-			}
-		});
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.part.WorkbenchPart#dispose()
-	 */
-	@Override
-	public void dispose()
-	{
-		// remove listeners
-		IEntityTreeCategory[] categories = EntityEditorRegistry.sharedInstance().getCategories(getViewSite().getId());
-		for (IEntityTreeCategory category : categories)
-			category.removeEntityTreeCategoryChangeListener(this);
-		treeViewer.removeOpenListener(this);
-		// clean childCategories
-		childCategories = null;
-		// call super
-		super.dispose();
+	public EntityTree getEntityTree() {
+		return entityTree;
 	}
 }
