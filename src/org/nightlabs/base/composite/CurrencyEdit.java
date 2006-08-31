@@ -34,7 +34,12 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -45,24 +50,70 @@ import org.nightlabs.l10n.NumberFormatter;
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class CurrencyEditComposite extends XComposite
+public class CurrencyEdit extends XComposite
 {
 	private Currency currency;
 	private Text numberText;
+	private Label currencySymbol;
 	private long value;
+	private long flags;
+	private Button active;
+
+	public static final long FLAGS_NONE = 0;
+	public static final long FLAGS_SHOW_ACTIVE_CHECK_BOX = 0x100000000L;
 
 	/**
 	 * @param parent
 	 */
-	public CurrencyEditComposite(Composite parent, Currency _currency)
+	public CurrencyEdit(Composite parent, Currency _currency)
+	{
+		this(parent, _currency, 0, null);
+	}
+
+	public CurrencyEdit(Composite parent, Currency _currency, long _flags, String caption)
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		this.currency = _currency;
+		this.flags = _flags;
 
 		getGridLayout().numColumns = 2;
+
+		if (caption != null) {
+			Control control;
+			if ((FLAGS_SHOW_ACTIVE_CHECK_BOX & flags) == FLAGS_SHOW_ACTIVE_CHECK_BOX) {
+				active = new Button(this, SWT.CHECK);
+				active.setText(caption);
+				control = active;
+			}
+			else {
+				Label l = new Label(this, SWT.WRAP);
+				l.setText(caption);
+				control = l;
+			}
+			GridData gd = new GridData();
+			gd.horizontalSpan = getGridLayout().numColumns;
+			control.setLayoutData(gd);
+		}
+
+		if ((FLAGS_SHOW_ACTIVE_CHECK_BOX & flags) == FLAGS_SHOW_ACTIVE_CHECK_BOX) {
+			if (active == null) {
+				++getGridLayout().numColumns;
+				active = new Button(this, SWT.CHECK);
+			}
+
+			active.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e)
+				{
+					activeSelected();
+				}
+			});
+		}
+
 		numberText = new Text(this, SWT.BORDER);
-		setValue(0);
-		new Label(this, SWT.NONE).setText(currency.getCurrencySymbol());
+		numberText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		currencySymbol = new Label(this, SWT.NONE);
+		setCurrency(currency);
 
 		numberText.addModifyListener(new ModifyListener(){
 			/**
@@ -85,7 +136,7 @@ public class CurrencyEditComposite extends XComposite
 					return;
 
 				Event event = new Event();
-				event.widget = CurrencyEditComposite.this;
+				event.widget = CurrencyEdit.this;
 				event.display = e.display;
 				event.time = e.time;
 				event.data = e.data;
@@ -96,6 +147,14 @@ public class CurrencyEditComposite extends XComposite
 				}
 			}
 		});
+
+		activeSelected();
+	}
+
+	private void activeSelected()
+	{
+		numberText.setEnabled(isActive());
+		currencySymbol.setEnabled(isActive());
 	}
 
 	private boolean errorDialogEnabled = true;
@@ -152,6 +211,13 @@ public class CurrencyEditComposite extends XComposite
 		return modifyListeners.remove(modifyListener);
 	}
 
+	public void setCurrency(Currency currency)
+	{
+		this.currency = currency;
+		currencySymbol.setText(currency.getCurrencySymbol());
+		setValue(0);
+	}
+
 	public void setValue(long currencyValue)
 	{
 		this.value = currencyValue;
@@ -170,5 +236,19 @@ public class CurrencyEditComposite extends XComposite
 	public Currency getCurrency()
 	{
 		return currency;
+	}
+
+	public boolean isActive()
+	{
+		return active == null ? true : active.getSelection();
+	}
+
+	public void setActive(boolean active)
+	{
+		if (this.active == null)
+			return;
+
+		this.active.setSelection(active);
+		activeSelected();
 	}
 }

@@ -35,13 +35,15 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-
 import org.nightlabs.l10n.DateFormatProvider;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.l10n.DateParseException;
@@ -49,13 +51,14 @@ import org.nightlabs.l10n.DateParseException;
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class DateTimeEditComposite extends XComposite
+public class DateTimeEdit extends XComposite
 {
 	private Text text;
 	private Button lookupButton;
 
 	private Date date;
 	private long flags;
+	private Button active;
 
 	protected static boolean autoCalendarButton(long flags)
 	{
@@ -63,53 +66,81 @@ public class DateTimeEditComposite extends XComposite
 	}
 
 	/**
-	 * This constructor calls {@link #DateTimeEditComposite(Composite, long, Date)}
+	 * This constructor calls {@link #DateTimeEdit(Composite, long, Date)}
 	 * with <tt>new Date()</tt>.
 	 */
-	public DateTimeEditComposite(Composite parent, long flags)
+	public DateTimeEdit(Composite parent, long flags)
 	{
 		this(parent, flags, new Date());
 	}
 
 	/**
-	 * This constructor calls {@link #DateTimeEditComposite(Composite, long, Date, String)}
+	 * This constructor calls {@link #DateTimeEdit(Composite, long, Date, String)}
 	 * with <tt>new Date()</tt>.
 	 */
-	public DateTimeEditComposite(Composite parent, long flags, String caption)
+	public DateTimeEdit(Composite parent, long flags, String caption)
 	{
 		this(parent, flags, new Date(), caption);
 	}
 
 	/**
-	 * This constructor calls {@link #DateTimeEditComposite(Composite, long, Date, String)}
+	 * This constructor calls {@link #DateTimeEdit(Composite, long, Date, String)}
 	 * with <tt>caption = null</tt>.
 	 */
-	public DateTimeEditComposite(Composite parent, long flags, Date date)
+	public DateTimeEdit(Composite parent, long flags, Date date)
 	{
 		this(parent, flags, date, null);
 	}
 
+	public static final long FLAGS_SHOW_ACTIVE_CHECK_BOX = 0x100000000L;
+
 	/**
 	 * @param parent The SWT parent.
-	 * @param flags One of the "FLAGS_"-constants in {@link DateFormatter}.
+	 * @param flags One of the "FLAGS_"-constants in {@link DateFormatter} - if needed, combined with {@link #FLAGS_SHOW_ACTIVE_CHECK_BOX}.
 	 * @param date The current date to display. Must not be <tt>null</tt>.
 	 * @param caption Either <tt>null</tt> or a text that should be displayed above the date-input.
 	 */
-	public DateTimeEditComposite(Composite parent, long flags, Date date, String caption)
+	public DateTimeEdit(Composite parent, long flags, Date date, String caption)
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		this.flags = flags;
 		this.getGridData().grabExcessHorizontalSpace = false;
 		this.getGridData().grabExcessVerticalSpace = false;
+		this.getGridData().horizontalAlignment = SWT.BEGINNING;
+		this.getGridData().verticalAlignment = SWT.BEGINNING;
 
-		getGridLayout().numColumns = 2;
+		getGridLayout().numColumns = 3;
 
 		if (caption != null) {
-			Label l = new Label(this, SWT.WRAP);
-			l.setText(caption);
+			Control control;
+			if ((FLAGS_SHOW_ACTIVE_CHECK_BOX & flags) == FLAGS_SHOW_ACTIVE_CHECK_BOX) {
+				active = new Button(this, SWT.CHECK);
+				active.setText(caption);
+				control = active;
+			}
+			else {
+				Label l = new Label(this, SWT.WRAP);
+				l.setText(caption);
+				control = l;
+			}
 			GridData gd = new GridData();
 			gd.horizontalSpan = getGridLayout().numColumns;
-			l.setLayoutData(gd);
+			control.setLayoutData(gd);
+		}
+
+		if ((FLAGS_SHOW_ACTIVE_CHECK_BOX & flags) == FLAGS_SHOW_ACTIVE_CHECK_BOX) {
+			if (active == null) {
+				++getGridLayout().numColumns;
+				active = new Button(this, SWT.CHECK);
+			}
+
+			active.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e)
+				{
+					activeSelected();
+				}
+			});
 		}
 
 		text = new Text(this, SWT.BORDER);
@@ -117,7 +148,7 @@ public class DateTimeEditComposite extends XComposite
 		text.addModifyListener(textModifyListener);
 		text.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent e) {
-				setTimestamp(DateTimeEditComposite.this.date.getTime());
+				setTimestamp(DateTimeEdit.this.date.getTime());
 			}
 		});
 
@@ -126,6 +157,29 @@ public class DateTimeEditComposite extends XComposite
 		if ((DateFormatProvider.DATE & flags) != 0) {
 			lookupButton = new Button(this, SWT.NONE);
 			lookupButton.setText("...");
+			lookupButton.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e)
+				{
+					lookupButtonClicked();
+				}
+			});
+		}
+
+		activeSelected();
+	}
+
+	private void activeSelected()
+	{
+		text.setEnabled(isActive());
+		lookupButton.setEnabled(isActive());
+	}
+
+	private void lookupButtonClicked()
+	{
+		DateTimeEditLookupDialog dialog = new DateTimeEditLookupDialog(getShell(), this);
+		if (dialog.open() == DateTimeEditLookupDialog.OK) {
+			setDate(dialog.getDate());
 		}
 	}
 
@@ -174,7 +228,7 @@ public class DateTimeEditComposite extends XComposite
 				return;
 
 			Event event = new Event();
-			event.widget = DateTimeEditComposite.this;
+			event.widget = DateTimeEdit.this;
 			event.display = e.display;
 			event.time = e.time;
 			event.data = e.data;
@@ -250,5 +304,19 @@ public class DateTimeEditComposite extends XComposite
 	public long getFlags()
 	{
 		return flags;
+	}
+
+	public boolean isActive()
+	{
+		return active == null ? true : active.getSelection();
+	}
+
+	public void setActive(boolean active)
+	{
+		if (this.active == null)
+			return;
+
+		this.active.setSelection(active);
+		activeSelected();
 	}
 }
