@@ -39,6 +39,8 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+import org.nightlabs.base.composite.Fadeable;
+import org.nightlabs.base.composite.FadeableComposite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.progress.CompoundProgressMonitor;
 import org.nightlabs.base.progress.SaveProgressMonitorPart;
@@ -79,13 +81,13 @@ import org.nightlabs.base.progress.SaveProgressMonitorPart;
  *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public abstract class EntityEditorPageWithProgress extends FormPage
+public abstract class EntityEditorPageWithProgress extends FormPage implements Fadeable
 {
 
 	/**
 	 * Wrapper that holds the stack layout.
 	 */
-	private XComposite wrapper;
+	private FadeableComposite wrapper;
 //	private Composite pageWrapper;
 	/**
 	 * Wrapper for the page's real content
@@ -296,7 +298,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage
 		Composite body = managedForm.getForm().getBody();
 		configureBody(body);
 		
-		wrapper = new XComposite(body, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
+		wrapper = new FadeableComposite(body, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
 		stackLayout = new StackLayout();
 		stackLayout.marginHeight = 0;
 		stackLayout.marginWidth = 0;
@@ -344,5 +346,15 @@ public abstract class EntityEditorPageWithProgress extends FormPage
 //				pageWrapper.refresh();
 			}
 		});
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * Will delegate to the fadable wrapper.
+	 * 
+	 * @see org.nightlabs.base.composite.Fadeable#setFaded(boolean)
+	 */
+	public void setFaded(boolean faded) {
+		wrapper.setFaded(faded);
 	}
 }

@@ -23,15 +23,23 @@
  ******************************************************************************/
 package org.nightlabs.base.entity.editor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.nightlabs.base.composite.Fadeable;
 import org.nightlabs.base.editor.CommitableFormEditor;
 import org.nightlabs.base.entity.EntityEditorRegistry;
+import org.nightlabs.base.job.FadeableCompositeJob;
 
 /**
  * An abstract base class for entity editors. It provides
@@ -122,17 +130,64 @@ public class EntityEditor extends CommitableFormEditor
 		controller = new EntityEditorController(this);
 	}
 
+	private IRunnableWithProgress saveRunnable = new IRunnableWithProgress() {
+		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+			controller.doSave(monitor);
+			Thread.sleep(1000);
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					editorDirtyStateChanged();
+				}
+			});
+		}
+		
+	};
+	
 	/**
 	 * {@inheritDoc}
-	 * This implementation lets all pages commit and 
-	 * calls its controllers doSave() method. This will
+	 * 
+	 * This implementation will start a job to save the
+	 * editor. It will first let all pages commit and then 
+	 * call its controllers doSave() method. This will
 	 * cause all page controllers to save their model.
+	 * If the active page appears to be {@link Fadeable} it will
+	 * be faded until the save operation is finished.
 	 */
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		super.doSave(monitor);
-		controller.doSave(monitor);
-		editorDirtyStateChanged();
+		int active = getActivePage();
+		Job saveJob = null;
+		if (active >= 0) {
+			IFormPage page = getFormPages()[active];
+			if (page instanceof Fadeable)
+				saveJob = new FadeableCompositeJob("Async save", ((Fadeable)page), this) {
+					@Override
+					public IStatus run(IProgressMonitor monitor, Object source) {
+						try {
+							saveRunnable.run(monitor);
+						} catch (Exception e) {
+							throw new RuntimeException(e);
+						}
+						return Status.OK_STATUS;
+					}
+			};
+		}
+		if (saveJob == null) {
+			saveJob = new Job("Async save") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					try {
+						saveRunnable.run(monitor);
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+					return Status.OK_STATUS;
+				}
+			};
+		}
+		
+		saveJob.schedule();
 	}
 	
 	/**
