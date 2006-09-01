@@ -9,7 +9,7 @@ package org.nightlabs.classloader;
  */
 public class LogUtil {
 
-	public static boolean debugEnabled = true;
+	public static boolean debugEnabled = false;
 
 	public static void log_debug(Class clazz, String method, String message)
 	{
