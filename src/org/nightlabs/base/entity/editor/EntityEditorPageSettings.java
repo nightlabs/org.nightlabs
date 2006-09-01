@@ -31,15 +31,13 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
  * Extension point settings for an entity page extension.
  * @version $Revision: 4430 $ - $Date: 2006-08-20 17:18:07 +0000 (Sun, 20 Aug 2006) $
  * @author Marc Klinger - marc[at]nightlabs[dot]de
- * @author Alexander Bieber - <!-- alex [AT] nightlabs [DOT] de -->
  */
 public class EntityEditorPageSettings
 {
-//	/**
-//	 * The page class for this entity editor page.
-//	 */
-//	private String pageClass;
-	
+
+	/**
+	 * Page factory implementation
+	 */
 	private IEntityEditorPageFactory pageFactory;
 	
 	/**
@@ -67,6 +65,7 @@ public class EntityEditorPageSettings
 		} catch (Exception e) {
 			throw new EPProcessorException("The class attribute was not valid ", extension);
 		}
+		
 //		this.pageClass = cfg.getAttribute("class");		
 		this.editorID = cfg.getAttribute("editorID");
 		if (editorID == null || "".equals(editorID))
@@ -138,19 +137,22 @@ public class EntityEditorPageSettings
 	}
 
 	/**
-	 * @return the pageFactory
+	 * Returns the implementation of {@link IEntityEditorPageFactory}
+	 * registered with this extension.
+	 * 
+	 * @return the pageFactory The implementation of {@link IEntityEditorPageFactory}
+	 * registered with this extension.
 	 */
 	public IEntityEditorPageFactory getPageFactory() {
 		return pageFactory;
 	}
 
 	/**
+	 * Sets the implementation of {@link IEntityEditorPageFactory}
+	 * for this extension.
 	 * @param pageFactory the pageFactory to set
 	 */
 	public void setPageFactory(IEntityEditorPageFactory pageFactory) {
 		this.pageFactory = pageFactory;
 	}
-
-	
-	
 }

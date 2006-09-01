@@ -50,7 +50,6 @@
 There are two required attributes for this element: viewID and class. The others are optional as they are also defined by IEntityTreeCategory and the implementations are responsible of returning correct values. 
 Note however, that if you pass a subclass of the abstract EntityTreeCategory 
 the values defined in the extension will automatically set for this category.
-
          </documentation>
       </annotation>
       <complexType>

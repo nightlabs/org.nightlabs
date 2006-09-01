@@ -25,7 +25,11 @@ package org.nightlabs.base.entity.editor;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.editor.CommitableFormEditor;
 import org.nightlabs.base.entity.EntityEditorRegistry;
 
@@ -34,17 +38,33 @@ import org.nightlabs.base.entity.EntityEditorRegistry;
  * the method {@link #addPages()} using the EntityEditorRegistry
  * to add pages registered via extension point.
  * 
+ * Each {@link EntityEditor} will have a {@link EntityEditorController} that
+ * holds one {@link IEntityEditorPageController} for each page it displays.
+ * 
+ * This means that combined with {@link IEntityEditorPageFactory}s that return
+ * controllers this class can be used as is and registered as editor (of course with an unique id).
+ * All work will be delegated to the pages (visible representation) and the
+ * page controller (model loading and saving) that were created by the pageFactory. 
+ * 
+ * However {@link EntityEditor} can be subclassed to configure its appearance (title, tooltip). 
+ * 
  * @version $Revision: 4430 $ - $Date: 2006-08-20 17:18:07 +0000 (Sun, 20 Aug 2006) $
+ * 
  * @author Marc Klinger - marc[at]nightlabs[dot]de
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public abstract class EntityEditor extends CommitableFormEditor
+public class EntityEditor extends CommitableFormEditor
 {
-	private String editorID;
+	/**
+	 * This editor's controller, that will delegate
+	 * loading and saving of the enity to the 
+	 * page controllers of the registered pages.
+	 * 
+	 */
+	private EntityEditorController controller;
 	
-	public EntityEditor(String editorID)
-	{
-		this.editorID = editorID;
-	}
+	public EntityEditor()
+	{	}
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.forms.editor.FormEditor#addPages()
@@ -54,8 +74,12 @@ public abstract class EntityEditor extends CommitableFormEditor
 	{
 		try {
 			List<EntityEditorPageSettings> pageSettings = EntityEditorRegistry.sharedInstance().getPageSettingsOrdered(getEditorID());
-			for (EntityEditorPageSettings pageSetting : pageSettings)
-				addPage(pageSetting.getPageFactory().createPage(this));
+			for (EntityEditorPageSettings pageSetting : pageSettings) {
+				IEntityEditorPageFactory factory = pageSetting.getPageFactory();
+				IFormPage page = factory.createPage(this);
+				controller.addPageController(page, factory);
+				addPage(page);
+			}
 		} catch (PartInitException e) {
 			e.printStackTrace();
 		}
@@ -67,7 +91,7 @@ public abstract class EntityEditor extends CommitableFormEditor
 	 */
 	public String getEditorID()
 	{
-		return editorID;
+		return getEditorSite().getId();
 	}
 
 	/* (non-Javadoc)
@@ -76,6 +100,7 @@ public abstract class EntityEditor extends CommitableFormEditor
 	@Override
 	public void doSaveAs()
 	{
+		// Save as not supported by entity editor 
 	}
 
 	/* (non-Javadoc)
@@ -85,5 +110,54 @@ public abstract class EntityEditor extends CommitableFormEditor
 	public boolean isSaveAsAllowed()
 	{
 		return false;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * This implementation additionally creates this editor's controller.
+	 */
+	@Override
+	public void init(IEditorSite arg0, IEditorInput arg1) throws PartInitException {
+		super.init(arg0, arg1);
+		controller = new EntityEditorController(this);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * This implementation lets all pages commit and 
+	 * calls its controllers doSave() method. This will
+	 * cause all page controllers to save their model.
+	 */
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+		super.doSave(monitor);
+		controller.doSave(monitor);
+		editorDirtyStateChanged();
+	}
+	
+	/**
+	 * Return the controller assoctiated with this editor.
+	 * The controller is created in {@link #init(IEditorSite, IEditorInput)}.
+	 * 
+	 * See {@link #getPageController(IFormPage)} on how to access a single page's controller.
+	 * 
+	 * @return The controller assoctiated with this editor.
+	 */
+	public EntityEditorController getController() {
+		return controller;
+	}
+	
+	/**
+	 * Convenience method to obtain the page controller for the given page.
+	 * 
+	 * Note that page controllers should not be accessed from their associated
+	 * pages in their constructor, as the controller registration
+	 * will be initialized immediately after the page was created. 
+	 * 
+	 * @param page The page to search the page controller for.
+	 * @return The page controller for the given page, or <code>null</code> if none found
+	 */
+	public IEntityEditorPageController getPageController(IFormPage page) {
+		return getController().getPageController(page);
 	}
 }

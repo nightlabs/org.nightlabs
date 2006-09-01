@@ -570,4 +570,8 @@ public class RCPUtil
 			return monitor;
 		return nullMonitor;		
 	}
+	
+	public static boolean isDisplayThread() {
+		return Display.getDefault().getThread().equals(Thread.currentThread());
+	}
 }
