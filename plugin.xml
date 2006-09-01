@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
-   <extension-point id="pageRegistry" name="pageRegistry" schema="schema/pageRegistry.exsd"/>   
+   <extension-point id="resolutionUnit" name="resolutionUnit" schema="schema/resolutionUnit.exsd"/>
    <extension
          point="org.eclipse.ui.views">
       <view
@@ -239,49 +239,6 @@
                renderContextType="Draw2D"/>
       </registry>   
 	</extension>
-   <extension
-         point="org.nightlabs.editor2d.pageRegistry">
-      <Unit
-            factor="1"
-            name="mm"
-            symbol="mm"
-            unitID="millimetre"/>
-      <Unit
-            factor="0.1"
-            name="cm"
-            symbol="cm"
-            unitID="centimetre"/>
-      <Unit
-            factor="0.03937007874015748031496062992126"
-            name="inch"
-            symbol="in"
-            unitID="inch"/>
-      <ResolutionUnit
-            name="DPI"
-            resolutionID="DPI"
-            unit="org.nightlabs.i18n.unit.InchUnit"/>
-      <ResolutionUnit
-            name="DPCM"
-            resolutionID="DPCM"
-            unit="org.nightlabs.i18n.unit.CMUnit"/>
-      <PredefinedPage
-            name="DIN A4"
-            page="org.nightlabs.print.page.A4Page"
-            pageID="A4"/>
-      <PredefinedPage
-            name="DIN A3"
-            page="org.nightlabs.print.page.A3Page"
-            pageID="A3"/>
-      <PredefinedPage
-            name="DIN A5"
-            page="org.nightlabs.print.page.A5Page"
-            pageID="A5"/>
-      <Unit
-            factor="2.8346278133681047678439820851522"
-            name="point"
-            symbol="pt"
-            unitID="point"/>
-   </extension>  
    <extension
          point="org.eclipse.ui.preferencePages">
       <page

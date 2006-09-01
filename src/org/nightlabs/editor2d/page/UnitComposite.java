@@ -34,7 +34,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.i18n.IUnit;
+import org.nightlabs.base.i18n.UnitRegistryEP;
+import org.nightlabs.editor2d.unit.UnitConstants;
+import org.nightlabs.i18n.unit.IUnit;
+import org.nightlabs.i18n.unit.UnitRegistry;
 
 /**
  * a Composite which has a Combo for selecting {@link IUnit}s
@@ -46,7 +49,7 @@ extends XComposite
 {
 	public UnitComposite(Composite parent, int style) {
 		super(parent, style);
-		this.units = new ArrayList<IUnit>(getPageRegistry().getUnits());
+		this.units = new ArrayList<IUnit>(getUnitRegistry().getUnits(UnitConstants.UNIT_CONTEXT_EDITOR2D, true));
 		createComposite(this);
 	}
 	
@@ -68,7 +71,7 @@ extends XComposite
 			LayoutDataMode layoutDataMode) 
 	{
 		super(parent, style, layoutMode, layoutDataMode);
-		this.units = new ArrayList<IUnit>(getPageRegistry().getUnits());
+		this.units = new ArrayList<IUnit>(getUnitRegistry().getUnits(UnitConstants.UNIT_CONTEXT_EDITOR2D, true));
 		createComposite(this);
 	}	
 	
@@ -98,8 +101,13 @@ extends XComposite
 			combo.select(index);
 	}
 	
-	protected PageRegistry getPageRegistry() 
+//	protected PageRegistry getPageRegistry() 
+//	{
+//		return PageRegistryEP.sharedInstance().getPageRegistry();
+//	}	
+	
+	protected UnitRegistry getUnitRegistry() 
 	{
-		return PageRegistryEP.sharedInstance().getPageRegistry();
+		return UnitRegistryEP.sharedInstance().getUnitRegistry();
 	}	
 }

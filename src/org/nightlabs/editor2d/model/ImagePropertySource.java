@@ -36,9 +36,9 @@ import org.nightlabs.base.property.XTextPropertyDescriptor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.image.RenderModeMetaData;
-import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
-import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
 import org.nightlabs.editor2d.properties.ImageColorConversionPropertyDescriptor;
+import org.nightlabs.editor2d.resolution.DPIResolutionUnit;
+import org.nightlabs.editor2d.resolution.IResolutionUnit;
 
 public class ImagePropertySource 
 extends DrawComponentPropertySource

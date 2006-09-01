@@ -34,7 +34,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
+import org.nightlabs.editor2d.resolution.IResolutionUnit;
+import org.nightlabs.editor2d.resolution.ResolutionUnitEP;
+import org.nightlabs.editor2d.resolution.ResolutionUnitRegistry;
 
 /**
  * a Composite which contains a Combo for selecting {@link IResolutionUnit}s
@@ -46,7 +48,7 @@ extends XComposite
 
 	public ResolutionUnitComposite(Composite parent, int style) {
 		super(parent, style);
-		this.units = new ArrayList<IResolutionUnit>(getPageRegistry().getResolutionUnits());
+		this.units = new ArrayList<IResolutionUnit>(getResolutionUnitRegistry().getResolutionUnits());
 		createComposite(this);
 	}
 
@@ -68,7 +70,7 @@ extends XComposite
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
 	{
 		super(parent, style, layoutMode, layoutDataMode);
-		this.units = new ArrayList<IResolutionUnit>(getPageRegistry().getResolutionUnits());
+		this.units = new ArrayList<IResolutionUnit>(getResolutionUnitRegistry().getResolutionUnits());
 		createComposite(this);		
 	}
 	
@@ -98,8 +100,13 @@ extends XComposite
 			combo.select(index);
 	}
 	
-	protected PageRegistry getPageRegistry() 
+//	protected PageRegistry getPageRegistry() 
+//	{
+//		return PageRegistryEP.sharedInstance().getPageRegistry();
+//	}
+	
+	protected ResolutionUnitRegistry getResolutionUnitRegistry() 
 	{
-		return PageRegistryEP.sharedInstance().getPageRegistry();
-	}	
+		return ResolutionUnitEP.sharedInstance().getResolutionUnitRegistry();
+	}
 }

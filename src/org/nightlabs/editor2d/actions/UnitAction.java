@@ -27,7 +27,7 @@ package org.nightlabs.editor2d.actions;
 
 import org.eclipse.jface.action.Action;
 import org.nightlabs.editor2d.properties.UnitManager;
-import org.nightlabs.i18n.IUnit;
+import org.nightlabs.i18n.unit.IUnit;
 
 /**
  * An Action which sets the corresponding {@link IUnit} as the the current Unit

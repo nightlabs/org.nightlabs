@@ -34,7 +34,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.print.page.PredefinedPageEP;
 import org.nightlabs.print.page.IPredefinedPage;
+import org.nightlabs.print.page.PredefinedPageRegistry;
 
 /**
  * a Composite with a combo for selecting {@link IPredefinedPage}s
@@ -44,14 +46,17 @@ import org.nightlabs.print.page.IPredefinedPage;
 public class PredefinedPageComposite 
 extends XComposite 
 {
-	protected PageRegistry getPageRegistry() 
-	{
-		return PageRegistryEP.sharedInstance().getPageRegistry();
+//	protected PageRegistry getPageRegistry() {
+//		return PageRegistryEP.sharedInstance().getPageRegistry();
+//	}
+
+	protected PredefinedPageRegistry getPageRegistry() {
+		return PredefinedPageEP.sharedInstance().getPageRegistry();
 	}
-	
+
 	public PredefinedPageComposite(Composite parent, int style) {
 		super(parent, style);
-		this.pages = new ArrayList<IPredefinedPage>(getPageRegistry().getPredefinedPages());
+		this.pages = new ArrayList<IPredefinedPage>(getPageRegistry().getPages());
 		createComposite(this);
 	}	
 	
@@ -73,7 +78,7 @@ extends XComposite
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
 	{
 		super(parent, style, layoutMode, layoutDataMode);
-		this.pages = new ArrayList<IPredefinedPage>(getPageRegistry().getPredefinedPages());
+		this.pages = new ArrayList<IPredefinedPage>(getPageRegistry().getPages());
 		createComposite(this);				
 	}	
 	

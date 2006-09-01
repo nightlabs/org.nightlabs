@@ -35,18 +35,17 @@ import java.util.List;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.nightlabs.base.i18n.UnitRegistryEP;
 import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.property.DoublePropertyDescriptor;
 import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.page.PageRegistry;
-import org.nightlabs.editor2d.page.PageRegistryEP;
-import org.nightlabs.editor2d.page.unit.DotUnit;
 import org.nightlabs.editor2d.properties.NamePropertyDescriptor;
 import org.nightlabs.editor2d.properties.RotationPropertyDescriptor;
+import org.nightlabs.editor2d.unit.DotUnit;
 import org.nightlabs.editor2d.util.UnitUtil;
-import org.nightlabs.i18n.IUnit;
+import org.nightlabs.i18n.unit.IUnit;
 import org.nightlabs.language.LanguageCf;
 
 public class DrawComponentPropertySource 
@@ -87,7 +86,7 @@ implements IPropertySource
 	public IUnit getUnit() 
 	{
 		if (unit == null)
-			unit = getPageRegistry().getUnit(DotUnit.UNIT_ID);
+			unit = UnitRegistryEP.sharedInstance().getUnitRegistry().getUnit(DotUnit.UNIT_ID);
 		return unit;
 	}
 	public void setUnit(IUnit unit) {
@@ -97,16 +96,10 @@ implements IPropertySource
 	private DotUnit dotUnit = null;
 	protected DotUnit getDotUnit() {
 		if (dotUnit == null)
-//			dotUnit = (DotUnit) getPageRegistry().getUnit(DotUnit.UNIT_ID);
-			dotUnit = getDrawComponent().getRoot().getModelUnit();			
-		
+			dotUnit = getDrawComponent().getRoot().getModelUnit();
 		return dotUnit;
 	}
-	
-	protected PageRegistry getPageRegistry() {
-		return PageRegistryEP.sharedInstance().getPageRegistry();
-	}
-		
+			
 	// TODO: format value so that only 3 digits after the comma are visible
 	public double getValue(int modelValue, IUnit unit) 
 	{

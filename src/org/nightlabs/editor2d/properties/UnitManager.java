@@ -27,11 +27,10 @@ package org.nightlabs.editor2d.properties;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.nightlabs.i18n.IUnit;
+import org.nightlabs.i18n.unit.IUnit;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

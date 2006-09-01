@@ -104,9 +104,11 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
+import org.nightlabs.base.i18n.UnitRegistryEP;
 import org.nightlabs.base.io.FileEditorInput;
 import org.nightlabs.base.io.IOFilterRegistry;
 import org.nightlabs.base.language.LanguageManager;
+import org.nightlabs.base.print.page.PredefinedPageEP;
 import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.editor2d.actions.DeleteAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
@@ -142,12 +144,6 @@ import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 import org.nightlabs.editor2d.outline.filter.NameProvider;
-import org.nightlabs.editor2d.page.PageRegistry;
-import org.nightlabs.editor2d.page.PageRegistryEP;
-import org.nightlabs.editor2d.page.resolution.IResolutionUnit;
-import org.nightlabs.editor2d.page.resolution.Resolution;
-import org.nightlabs.editor2d.page.resolution.ResolutionImpl;
-import org.nightlabs.editor2d.page.unit.DotUnit;
 import org.nightlabs.editor2d.preferences.Preferences;
 import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintPreviewAction;
@@ -155,16 +151,25 @@ import org.nightlabs.editor2d.print.EditorPrintSetupAction;
 import org.nightlabs.editor2d.properties.EditorPropertyPage;
 import org.nightlabs.editor2d.properties.UnitManager;
 import org.nightlabs.editor2d.render.RenderModeManager;
+import org.nightlabs.editor2d.resolution.IResolutionUnit;
+import org.nightlabs.editor2d.resolution.Resolution;
+import org.nightlabs.editor2d.resolution.ResolutionImpl;
+import org.nightlabs.editor2d.resolution.ResolutionUnitEP;
+import org.nightlabs.editor2d.resolution.ResolutionUnitRegistry;
 import org.nightlabs.editor2d.rulers.EditorRulerProvider;
+import org.nightlabs.editor2d.unit.DotUnit;
+import org.nightlabs.editor2d.unit.UnitConstants;
 import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 import org.nightlabs.editor2d.viewer.render.RendererRegistry;
-import org.nightlabs.i18n.IUnit;
+import org.nightlabs.i18n.unit.IUnit;
+import org.nightlabs.i18n.unit.UnitRegistry;
 import org.nightlabs.io.AbstractIOFilterWithProgress;
 import org.nightlabs.io.IOFilter;
 import org.nightlabs.io.IOFilterMan;
 import org.nightlabs.io.IOFilterWithProgress;
 import org.nightlabs.io.WriteException;
 import org.nightlabs.print.page.IPredefinedPage;
+import org.nightlabs.print.page.PredefinedPageRegistry;
 
 
 public abstract class AbstractEditor 
@@ -198,8 +203,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	{
 		if (unitManager == null) 
 		{
-			// TODO: update dotunit if resolution changes);    		
-			Collection<IUnit> units = PageRegistryEP.sharedInstance().getPageRegistry().getUnits();
+			// TODO: update dotunit if resolution changes
+			Collection<IUnit> units = UnitRegistryEP.sharedInstance().getUnitRegistry().getUnits(
+					UnitConstants.UNIT_CONTEXT_EDITOR2D, true);
 			unitManager = new UnitManager(new HashSet<IUnit>(units), 
 					getMultiLayerDrawComponent().getModelUnit());
 		}
@@ -1214,11 +1220,11 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 		String pageID = Preferences.getPreferenceStore().getString(
 				Preferences.PREF_PREDEFINED_PAGE_ID);
-		IPredefinedPage defaultPage = getPageRegistry().getPredefinedPage(pageID);
+		IPredefinedPage defaultPage = getPredefinedPageRegistry().getPage(pageID);
 		IUnit pageUnit = defaultPage.getUnit();    	
 		String resolutionUnitID = Preferences.getPreferenceStore().getString(
 				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID);
-		IResolutionUnit resUnit = getPageRegistry().getResolutionUnit(resolutionUnitID);
+		IResolutionUnit resUnit = getResolutionUnitRegistry().getResolutionUnit(resolutionUnitID);
 		Resolution resolution = new ResolutionImpl(resUnit, 
 				Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION)); 
 //		String unitID = Preferences.getPreferenceStore().getString(
@@ -1226,9 +1232,13 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //		setCurrentUnit(getPageRegistry().getUnit(unitID));
 
 		double pageHeight = defaultPage.getPageHeight() * pageUnit.getFactor();
-		double pageWidth = defaultPage.getPageWidth() * pageUnit.getFactor();    	
-		DotUnit dotUnit = (DotUnit) getPageRegistry().getUnit(DotUnit.UNIT_ID);
-		dotUnit.setResolution(resolution);    	
+		double pageWidth = defaultPage.getPageWidth() * pageUnit.getFactor();  
+		
+		DotUnit dotUnit = (DotUnit) getUnitRegistry().getUnit(DotUnit.UNIT_ID);
+		if (dotUnit == null)
+			dotUnit = new DotUnit(resolution);
+		else 
+			dotUnit.setResolution(resolution);
 		double factor = dotUnit.getFactor();    	
 
 		logger.debug("factor = "+factor);
@@ -1251,10 +1261,22 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 	  	
 	}
 
-	protected PageRegistry getPageRegistry() {
-		return PageRegistryEP.sharedInstance().getPageRegistry();
-	}
+//	protected PageRegistry getPageRegistry() {
+//		return PageRegistryEP.sharedInstance().getPageRegistry();
+//	}
 
+	protected ResolutionUnitRegistry getResolutionUnitRegistry() {
+		return ResolutionUnitEP.sharedInstance().getResolutionUnitRegistry();
+	}
+	
+	protected UnitRegistry getUnitRegistry() {
+		return UnitRegistryEP.sharedInstance().getUnitRegistry();
+	}
+	
+	protected PredefinedPageRegistry getPredefinedPageRegistry() {
+		return PredefinedPageEP.sharedInstance().getPageRegistry();
+	}
+	
 	protected void loadAdditional() {
 		if (!editorSaving) {
 			if (getGraphicalViewer() != null) {

@@ -41,7 +41,7 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
 import org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart;
 import org.nightlabs.editor2d.model.DrawComponentPropertySource;
-import org.nightlabs.i18n.IUnit;
+import org.nightlabs.i18n.unit.IUnit;
 
 public class EditorPropertyPage 
 extends PropertySheetPage

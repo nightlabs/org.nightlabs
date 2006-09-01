@@ -24,8 +24,8 @@ import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorActionBarContributor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
-import org.nightlabs.editor2d.page.resolution.DPIResolutionUnit;
 import org.nightlabs.editor2d.render.RenderModeManager;
+import org.nightlabs.editor2d.resolution.DPIResolutionUnit;
 import org.nightlabs.editor2d.viewer.action.RenderModeContributionItem;
 
 public class PreviewComposite 

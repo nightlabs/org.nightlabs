@@ -38,13 +38,12 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
+import org.nightlabs.base.print.page.PredefinedPageEP;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.page.PageOrientationComposite;
-import org.nightlabs.editor2d.page.PageRegistry;
-import org.nightlabs.editor2d.page.PageRegistryEP;
 import org.nightlabs.editor2d.page.PredefinedPageComposite;
 import org.nightlabs.editor2d.page.ResolutionUnitComposite;
-import org.nightlabs.editor2d.page.UnitComposite;
+import org.nightlabs.editor2d.resolution.ResolutionUnitEP;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -84,7 +83,7 @@ implements IWorkbenchPreferencePage
 		Label pageSelectLabel = new Label(content, SWT.NONE);
 		pageSelectLabel.setText(EditorPlugin.getResourceString("preferences.document.properties.pageSelect.label"));
 		pageComp = new PredefinedPageComposite(content, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
-		pageComp.selectPage(getPageRegistry().getPredefinedPage(
+		pageComp.selectPage(PredefinedPageEP.sharedInstance().getPageRegistry().getPage(
 				Preferences.getPreferenceStore().getString(Preferences.PREF_PREDEFINED_PAGE_ID)));
 		pageComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	
@@ -100,7 +99,7 @@ implements IWorkbenchPreferencePage
 		Label resolutionUnitSelectLabel = new Label(content, SWT.NONE);
 		resolutionUnitSelectLabel.setText(EditorPlugin.getResourceString("preferences.document.properties.resolutionUnit.label"));
 		resUnitComp = new ResolutionUnitComposite(content, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
-		resUnitComp.selectResolutionUnit(getPageRegistry().getResolutionUnit(
+		resUnitComp.selectResolutionUnit(ResolutionUnitEP.sharedInstance().getResolutionUnitRegistry().getResolutionUnit(
 				Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID)));
 		resUnitComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 
@@ -170,9 +169,9 @@ implements IWorkbenchPreferencePage
 	@Override
 	protected void performDefaults() 
 	{
-		pageComp.selectPage(getPageRegistry().getPredefinedPage(
+		pageComp.selectPage(PredefinedPageEP.sharedInstance().getPageRegistry().getPage(
 				Preferences.PREF_PREDEFINED_PAGE_ID_DEFAULT));
-		resUnitComp.selectResolutionUnit(getPageRegistry().getResolutionUnit(
+		resUnitComp.selectResolutionUnit(ResolutionUnitEP.sharedInstance().getResolutionUnitRegistry().getResolutionUnit(
 				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID_DEFAULT));
 //		unitComp.selectUnit(getPageRegistry().getUnit(
 //				Preferences.PREF_STANDARD_UNIT_ID_DEFAULT));
@@ -184,9 +183,8 @@ implements IWorkbenchPreferencePage
 		super.performDefaults();
 	}
 		
-	private PageRegistry getPageRegistry() 
-	{
-//		PageRegistry pr = PageRegistryEP.sharedInstance().getPageRegistry();
-		return PageRegistryEP.sharedInstance().getPageRegistry();
-	}
+//	private PageRegistry getPageRegistry() 
+//	{
+//		return PageRegistryEP.sharedInstance().getPageRegistry();
+//	}
 }

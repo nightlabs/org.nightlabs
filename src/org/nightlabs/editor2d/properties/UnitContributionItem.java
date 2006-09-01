@@ -46,7 +46,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.nightlabs.base.action.XContributionItem;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
-import org.nightlabs.i18n.IUnit;
+import org.nightlabs.i18n.unit.IUnit;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

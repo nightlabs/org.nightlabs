@@ -26,20 +26,9 @@
 
 package org.nightlabs.editor2d.print;
 
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.awt.print.PageFormat;
 
 import org.apache.log4j.Logger;
-import org.nightlabs.base.util.GeomUtil;
-import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.PageDrawComponent;
-import org.nightlabs.editor2d.j2d.GeneralShape;
-import org.nightlabs.editor2d.page.unit.ResolutionUnit;
-import org.nightlabs.editor2d.util.UnitUtil;
-import org.nightlabs.i18n.IUnit;
 
 /**
  * @author Daniel.Mazurek <at> NightLabs <dot> de
