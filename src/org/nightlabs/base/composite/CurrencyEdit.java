@@ -54,7 +54,7 @@ public class CurrencyEdit extends XComposite
 {
 	private Currency currency;
 	private Text numberText;
-	private Label currencySymbol;
+//	private Label currencySymbol;
 	private long value;
 	private long flags;
 	private Button active;
@@ -112,15 +112,15 @@ public class CurrencyEdit extends XComposite
 
 		numberText = new Text(this, SWT.BORDER);
 		numberText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		currencySymbol = new Label(this, SWT.NONE);
+//		currencySymbol = new Label(this, SWT.NONE);
 		setCurrency(currency);
 
 		numberText.addModifyListener(new ModifyListener(){
-			/**
-			 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
-			 */
 			public void modifyText(ModifyEvent e)
 			{
+				if (!modifyListenerEnabled)
+					return;
+
 				String s = numberText.getText();
 				try {
 					value = NumberFormatter.parseCurrency(s, currency, false);
@@ -151,10 +151,12 @@ public class CurrencyEdit extends XComposite
 		activeSelected();
 	}
 
+	private boolean modifyListenerEnabled = true;
+
 	private void activeSelected()
 	{
 		numberText.setEnabled(isActive());
-		currencySymbol.setEnabled(isActive());
+//		currencySymbol.setEnabled(isActive());
 	}
 
 	private boolean errorDialogEnabled = true;
@@ -213,16 +215,27 @@ public class CurrencyEdit extends XComposite
 
 	public void setCurrency(Currency currency)
 	{
+		int oldDecimalDigitCount = this.currency.getDecimalDigitCount();
+		int newDecimalDigitCount = currency.getDecimalDigitCount();
+
 		this.currency = currency;
-		currencySymbol.setText(currency.getCurrencySymbol());
-		setValue(0);
+//		currencySymbol.setText(currency.getCurrencySymbol());
+		if (oldDecimalDigitCount == newDecimalDigitCount)
+			setValue(getValue());
+		else
+			setValue(getValue() / NumberFormatter.power(10, oldDecimalDigitCount) * NumberFormatter.power(10, newDecimalDigitCount));
 	}
 
 	public void setValue(long currencyValue)
 	{
-		this.value = currencyValue;
-		numberText.setText(
-				NumberFormatter.formatCurrency(currencyValue, currency, false));
+		modifyListenerEnabled = false;
+		try {
+			this.value = currencyValue;
+			numberText.setText(
+					NumberFormatter.formatCurrency(currencyValue, currency, true));
+		} finally {
+			modifyListenerEnabled = true;
+		}
 	}
 
 	public long getValue()
