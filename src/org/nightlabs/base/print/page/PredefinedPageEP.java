@@ -31,8 +31,8 @@ import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 import org.nightlabs.base.i18n.UnitRegistryEP;
-import org.nightlabs.i18n.IUnit;
-import org.nightlabs.i18n.UnitRegistry;
+import org.nightlabs.i18n.unit.IUnit;
+import org.nightlabs.i18n.unit.UnitRegistry;
 import org.nightlabs.print.page.IPredefinedPage;
 import org.nightlabs.print.page.PredefinedPage;
 import org.nightlabs.print.page.PredefinedPageRegistry;
@@ -44,7 +44,7 @@ import org.nightlabs.print.page.PredefinedPageRegistry;
 public class PredefinedPageEP 
 extends AbstractEPProcessor 
 {
-	public static final String EXTENSION_POINT_ID = "predefinedPage";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.predefinedPage";
 	
 	public static final String ELEMENT_PAGE_CLASS = "pageClass";
 	public static final String ATTRIBUTE_PAGE = "page";
@@ -115,7 +115,7 @@ extends AbstractEPProcessor
 	}
 
 	private PredefinedPageRegistry pageRegistry = null;
-	private PredefinedPageRegistry getPageRegistry() 
+	public PredefinedPageRegistry getPageRegistry() 
 	{
 		if (pageRegistry == null) {
 			pageRegistry = PredefinedPageRegistry .sharedInstance();			
@@ -123,13 +123,9 @@ extends AbstractEPProcessor
 		return pageRegistry;
 	}	
 	
-	private UnitRegistry unitRegistry = null;
 	private UnitRegistry getUnitRegistry() 
 	{
-		if (unitRegistry == null)
-//			unitRegistry = UnitRegistry.sharedInstance();
-			unitRegistry = UnitRegistryEP.sharedInstance().getUnitRegistry();			
-		return unitRegistry;
+		return UnitRegistryEP.sharedInstance().getUnitRegistry();			
 	}
 	
 	private static PredefinedPageEP registry = null;

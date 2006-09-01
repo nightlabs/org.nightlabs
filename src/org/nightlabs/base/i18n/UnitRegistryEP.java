@@ -30,9 +30,9 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
-import org.nightlabs.i18n.IUnit;
-import org.nightlabs.i18n.Unit;
-import org.nightlabs.i18n.UnitRegistry;
+import org.nightlabs.i18n.unit.IUnit;
+import org.nightlabs.i18n.unit.Unit;
+import org.nightlabs.i18n.unit.UnitRegistry;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -41,7 +41,7 @@ import org.nightlabs.i18n.UnitRegistry;
 public class UnitRegistryEP 
 extends AbstractEPProcessor 
 {
-	public static final String EXTENSION_POINT_ID = "unit";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.unit";
 	
 	public static final String ELEMENT_UNIT_CLASS = "unitClass";
 	public static final String ATTRIBUTE_UNIT = "unit";

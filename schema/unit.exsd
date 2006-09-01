@@ -6,7 +6,7 @@
          <meta.schema plugin="org.nightlabs.base" id="unit" name="unit"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         adds custom units (e.g. inch, cm)
       </documentation>
    </annotation>
 
@@ -17,6 +17,10 @@
          </documentation>
       </annotation>
       <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="unitClass" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="unit" minOccurs="0" maxOccurs="unbounded"/>
+         </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
@@ -45,6 +49,11 @@
    </element>
 
    <element name="unitClass">
+      <annotation>
+         <appInfo>
+            <meta.element labelAttribute="unit"/>
+         </appInfo>
+      </annotation>
       <complexType>
          <attribute name="unit" type="string" use="required">
             <annotation>
@@ -67,8 +76,13 @@
    </element>
 
    <element name="unit">
+      <annotation>
+         <appInfo>
+            <meta.element labelAttribute="name"/>
+         </appInfo>
+      </annotation>
       <complexType>
-         <attribute name="unitID" type="string">
+         <attribute name="unitID" type="string" use="required">
             <annotation>
                <documentation>
                   
@@ -150,7 +164,7 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         NightLabs GmbH
       </documentation>
    </annotation>
 

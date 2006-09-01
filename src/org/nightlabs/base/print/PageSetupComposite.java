@@ -27,10 +27,12 @@ package org.nightlabs.base.print;
 
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -47,6 +49,12 @@ import org.eclipse.swt.widgets.Spinner;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.CComboComposite;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.print.page.PredefinedPageEP;
+import org.nightlabs.i18n.unit.IUnit;
+import org.nightlabs.i18n.unit.InchUnit;
+import org.nightlabs.i18n.unit.UnitRegistry;
+import org.nightlabs.i18n.unit.UnitUtil;
+import org.nightlabs.print.PrintUtil;
 import org.nightlabs.print.page.A3Page;
 import org.nightlabs.print.page.A4Page;
 import org.nightlabs.print.page.A5Page;
@@ -59,6 +67,8 @@ import org.nightlabs.print.page.IPredefinedPage;
 public class PageSetupComposite 
 extends XComposite 
 {
+	public static final Logger logger = Logger.getLogger(PageSetupComposite.class);
+	
 	public PageSetupComposite(PageFormat pageFormat, Composite parent, int style) {
 		super(parent, style);
 		init(pageFormat);
@@ -116,6 +126,7 @@ extends XComposite
 		pageGroup.setLayout(new GridLayout());
 		pageGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		predefinedPageCombo = initPageCombo(pageGroup);
+		predefinedPageCombo.addSelectionListener(pageListener);
 		
 		// orientation		
 		Group orientationGroup = new Group(detailComp, SWT.NONE);
@@ -185,20 +196,35 @@ extends XComposite
 	
 	private CComboComposite<IPredefinedPage> initPageCombo(Composite parent) 
 	{
-		List<IPredefinedPage> pages = new LinkedList<IPredefinedPage>();
-		pages.add(new A4Page());
-		pages.add(new A5Page());		
-		pages.add(new A3Page());	
+//		List<IPredefinedPage> pages = new LinkedList<IPredefinedPage>();
+//		pages.add(new A4Page());
+//		pages.add(new A5Page());		
+//		pages.add(new A3Page());
+		List<IPredefinedPage> pages = new ArrayList<IPredefinedPage>(PredefinedPageEP.sharedInstance().getPageRegistry().getPages());
 		return new CComboComposite<IPredefinedPage>(pages, predefinedPageLabelProvider, 
 				parent, SWT.READ_ONLY);
 	}
-	
+		
 	private PageFormat getPageFormat(IPredefinedPage page) 
 	{
-		// TODO implement this method
 		return pageFormat;
+//		IUnit inchUnit = UnitRegistry.sharedInstance().getUnit(InchUnit.UNIT_ID);
+//		IUnit pageUnit = page.getUnit();
+//		double heightInInch = UnitUtil.getUnitValue(page.getPageHeight(), pageUnit, inchUnit);
+//		double widthInInch = UnitUtil.getUnitValue(page.getPageWidth(), pageUnit, inchUnit);
+//		double factor = 72f;
+//		double height = heightInInch * factor;
+//		double width = widthInInch * factor;
+//		
+//		Paper paper = pageFormat.getPaper();
+//		paper.setImageableArea(paper.getImageableX(), paper.getImageableY(), width, height);
+//		paper.setSize(width + paper.getImageableX(), height + paper.getImageableY());
+//		PageFormat newPageFormat = (PageFormat) pageFormat.clone();
+//		newPageFormat.setPaper(paper);
+//		
+//		return newPageFormat;
 	}
-	
+		
 	private LabelProvider predefinedPageLabelProvider = new LabelProvider() 
 	{
 		@Override

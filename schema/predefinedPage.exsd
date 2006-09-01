@@ -6,7 +6,7 @@
          <meta.schema plugin="org.nightlabs.base" id="predefinedPage" name="predefinedPage"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         adds PredefinedPages (e.g. DIN A4 or Letter A5)
       </documentation>
    </annotation>
 
@@ -17,6 +17,10 @@
          </documentation>
       </annotation>
       <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="pageClass" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="page" minOccurs="0" maxOccurs="unbounded"/>
+         </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
@@ -45,18 +49,31 @@
    </element>
 
    <element name="pageClass">
+      <annotation>
+         <appInfo>
+            <meta.element labelAttribute="page"/>
+         </appInfo>
+      </annotation>
       <complexType>
-         <attribute name="page" type="string">
+         <attribute name="page" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.print.page.IPredefinedPage"/>
+               </appInfo>
             </annotation>
          </attribute>
       </complexType>
    </element>
 
    <element name="page">
+      <annotation>
+         <appInfo>
+            <meta.element labelAttribute="name"/>
+         </appInfo>
+      </annotation>
       <complexType>
          <attribute name="pageID" type="string" use="required">
             <annotation>
@@ -140,7 +157,7 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         NightLabs GmbH
       </documentation>
    </annotation>
 

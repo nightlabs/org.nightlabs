@@ -101,6 +101,15 @@
           id="PrinterUseCase-Default"
           name="%printerUseCase.default.name"/>
  </extension>
+ <extension
+       point="org.nightlabs.base.unit">
+    <unit
+          context="Editor2D"
+          factor="2.8346278133681047678439820851522"
+          name="%unit.point.name"
+          symbol="pt"
+          unitID="point"/>
+ </extension>
 <!--
  <extension
        point="org.nightlabs.base.simpleExceptionHandler">
