@@ -55,8 +55,8 @@ public class GroupedContentComposite extends XComposite {
 	private Composite contentWrapper;
 	private StackLayout contentStackLayout;
 	
-	private List groupedContentProvider = new ArrayList();
-	private Map providerComposites = new HashMap(); 
+	private List<GroupedContentProvider> groupedContentProvider = new ArrayList<GroupedContentProvider>();
+	private Map<GroupedContentProvider, Composite> providerComposites = new HashMap<GroupedContentProvider, Composite>(); 
 	
 	
 	private ISelectionChangedListener switcherListener = new ISelectionChangedListener() {
@@ -101,16 +101,14 @@ public class GroupedContentComposite extends XComposite {
 	public void addGroupedContentProvider(GroupedContentProvider groupedContentProvider) {
 		this.groupedContentProvider.add(groupedContentProvider);
 		switcherTable.setInput(this.groupedContentProvider);
-		layout(true, true);
+		preSelect();
+		layout(true, true);		
 	}
 	
 	public void addGroupedContentProvider(GroupedContentProvider groupedContentProvider, int index) {
 		this.groupedContentProvider.add(index, groupedContentProvider);
 		switcherTable.setInput(this.groupedContentProvider);
-		if (switcherTable.getTable().getItemCount() == 1) {
-			switcherTable.getTable().select(0);
-			selectContentProvider(groupedContentProvider);
-		}
+		preSelect();
 		layout(true, true);
 	}
 
@@ -126,5 +124,12 @@ public class GroupedContentComposite extends XComposite {
 	
 	public void setGroupTitle(String title) { 
 		switcherTable.setGroupTitle(title);
+	}
+	
+	private void preSelect() {
+		if (switcherTable.getTable().getItemCount() > 0 && switcherTable.getTable().getSelectionCount() == 0) {
+			switcherTable.getTable().select(0);
+			selectContentProvider(groupedContentProvider.get(0));
+		}
 	}
 }
