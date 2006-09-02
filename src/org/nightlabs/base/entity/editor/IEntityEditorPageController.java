@@ -1,13 +1,39 @@
-/**
- * 
- */
+/* *****************************************************************************
+ * org.nightlabs.base - NightLabs Eclipse utilities                            *
+ * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
+ *                                                                             *
+ * This library is free software; you can redistribute it and/or               *
+ * modify it under the terms of the GNU Lesser General Public                  *
+ * License as published by the Free Software Foundation; either                *
+ * version 2.1 of the License, or (at your option) any later version.          *
+ *                                                                             *
+ * This library is distributed in the hope that it will be useful,             *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of              *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU           *
+ * Lesser General Public License for more details.                             *
+ *                                                                             *
+ * You should have received a copy of the GNU Lesser General Public            *
+ * License along with this library; if not, write to the                       *
+ *     Free Software Foundation, Inc.,                                         *
+ *     51 Franklin St, Fifth Floor,                                            *
+ *     Boston, MA  02110-1301  USA                                             *
+ *                                                                             *
+ * Or get it online :                                                          *
+ *     http://www.gnu.org/copyleft/lesser.html                                 *
+ *                                                                             *
+ *                                                                             *
+ ******************************************************************************/
+
 package org.nightlabs.base.entity.editor;
+
+import java.beans.PropertyChangeSupport;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.nightlabs.util.bean.IPropertyChangeSupport;
 
 /**
- * <p>A controller that will be associated to a page that is displayed
+ * <p>A controller that can be associated to a page that is displayed
  * by an {@link EntityEditor}. Page controllers are created by
  * {@link IEntityEditorPageFactory}s registered by the "pageFactory" extension point.</p>
  * 
@@ -19,10 +45,14 @@ import org.eclipse.ui.forms.editor.IFormPage;
  * functionality use {@link IEntityEditorPageController}s to have a standardized access to
  * the data a page needs</p>
  * 
+ * <p>The controller extends {@link IPropertyChangeSupport} hence it accepts listners to
+ * property changes. Pages should use this listeners to reflect the changes in their UI.
+ * Implementors should try to subclass {@link PropertyChangeSupport} wherever possible.</p>
+ * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public interface IEntityEditorPageController {
+public interface IEntityEditorPageController extends IPropertyChangeSupport {
 	
 	/**
 	 * Set the page this controller is associated with.

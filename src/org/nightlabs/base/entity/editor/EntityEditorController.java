@@ -1,6 +1,6 @@
 /* *****************************************************************************
- * JFire - it's hot - Free ERP System - http://jfire.org                       *
- * Copyright (C) 2004-2006 NightLabs - http://NightLabs.org                    *
+ * org.nightlabs.base - NightLabs Eclipse utilities                            *
+ * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
  * modify it under the terms of the GNU Lesser General Public                  *
@@ -19,8 +19,11 @@
  *     Boston, MA  02110-1301  USA                                             *
  *                                                                             *
  * Or get it online :                                                          *
- *     http://opensource.org/licenses/lgpl-license.php                         *
+ *     http://www.gnu.org/copyleft/lesser.html                                 *
+ *                                                                             *
+ *                                                                             *
  ******************************************************************************/
+
 package org.nightlabs.base.entity.editor;
 
 import java.util.Comparator;
@@ -192,8 +195,8 @@ public class EntityEditorController
 			Job loadJob = loadJobPool.get(pageController);
 			if (loadJob != null) {
 				loadJobPool.remove(pageController);
-				loadJob.removeJobChangeListener(loadJobChangeListener);
-				if (loadJob.getThread().isAlive()) {
+				loadJob.removeJobChangeListener(loadJobChangeListener);				
+				if (loadJob.getThread() != null && loadJob.getThread().isAlive()) {
 					runningJobs--;
 					runPossibleJobs();
 				}

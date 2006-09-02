@@ -1,6 +1,6 @@
 /* *****************************************************************************
- * JFire - it's hot - Free ERP System - http://jfire.org                       *
- * Copyright (C) 2004-2006 NightLabs - http://NightLabs.org                    *
+ * org.nightlabs.base - NightLabs Eclipse utilities                            *
+ * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
  * modify it under the terms of the GNU Lesser General Public                  *
@@ -19,8 +19,11 @@
  *     Boston, MA  02110-1301  USA                                             *
  *                                                                             *
  * Or get it online :                                                          *
- *     http://opensource.org/licenses/lgpl-license.php                         *
+ *     http://www.gnu.org/copyleft/lesser.html                                 *
+ *                                                                             *
+ *                                                                             *
  ******************************************************************************/
+
 package org.nightlabs.base.entity.editor;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -184,7 +187,8 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		super.createFormContent(managedForm);
 		ScrolledForm form = managedForm.getForm();
 		FormToolkit toolkit = managedForm.getToolkit();
-		form.setText(getFormPageTitle()); 
+		String formText = getPageFormTitle();		
+		form.setText(formText == null ? "" : formText); 
 		fillBody(managedForm, toolkit);
 	}
 
@@ -199,10 +203,10 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	protected abstract void addSections(Composite parent);
 
 	/**
-	 * Return the title of the form page
-	 * @return the title of the form page
+	 * Return the title of this page's main form
+	 * @return the title of this page's main form
 	 */
-	protected abstract String getFormPageTitle();
+	protected abstract String getPageFormTitle();
 
 	/**
 	 * Returns the progress monitor of this page.

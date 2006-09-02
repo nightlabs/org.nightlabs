@@ -1,8 +1,32 @@
-/**
- * 
- */
+/* *****************************************************************************
+ * org.nightlabs.base - NightLabs Eclipse utilities                            *
+ * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
+ *                                                                             *
+ * This library is free software; you can redistribute it and/or               *
+ * modify it under the terms of the GNU Lesser General Public                  *
+ * License as published by the Free Software Foundation; either                *
+ * version 2.1 of the License, or (at your option) any later version.          *
+ *                                                                             *
+ * This library is distributed in the hope that it will be useful,             *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of              *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU           *
+ * Lesser General Public License for more details.                             *
+ *                                                                             *
+ * You should have received a copy of the GNU Lesser General Public            *
+ * License along with this library; if not, write to the                       *
+ *     Free Software Foundation, Inc.,                                         *
+ *     51 Franklin St, Fifth Floor,                                            *
+ *     Boston, MA  02110-1301  USA                                             *
+ *                                                                             *
+ * Or get it online :                                                          *
+ *     http://www.gnu.org/copyleft/lesser.html                                 *
+ *                                                                             *
+ *                                                                             *
+ ******************************************************************************/
+
 package org.nightlabs.base.entity.editor;
 
+import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.log4j.Logger;
@@ -32,11 +56,17 @@ import org.nightlabs.base.util.RCPUtil;
  * use the {@link #load(IProgressMonitor)} method instead of invoking 
  * {@link IEntityEditorPageController#doLoad(IProgressMonitor)} directly.</p> 
  * 
+ * <p>{@link EntityEditorPageController} extends {@link PropertyChangeSupport} and will
+ * pass the {@link EntityEditor} this controller was created with as source to
+ * all property change listeners.</p>
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public abstract class EntityEditorPageController implements IEntityEditorPageController {
+public abstract class EntityEditorPageController
+extends PropertyChangeSupport
+implements IEntityEditorPageController 
+{
 
 	/**
 	 * LOG4J logger used by this class
@@ -127,8 +157,8 @@ public abstract class EntityEditorPageController implements IEntityEditorPageCon
 	 * Create a new page controller that
 	 * will not do background loading. 
 	 */
-	public EntityEditorPageController() {
-		this(false);
+	public EntityEditorPageController(EntityEditor editor) {
+		this(editor, false);
 	}
 	
 	/**
@@ -137,7 +167,8 @@ public abstract class EntityEditorPageController implements IEntityEditorPageCon
 	 * 
 	 * @param startBackgroundLoading Whether to start the load job instantly.
 	 */
-	public EntityEditorPageController(boolean startBackgroundLoading) {
+	public EntityEditorPageController(EntityEditor editor, boolean startBackgroundLoading) {
+		super(editor);
 		if (startBackgroundLoading)
 			startLoadJob();
 	}
