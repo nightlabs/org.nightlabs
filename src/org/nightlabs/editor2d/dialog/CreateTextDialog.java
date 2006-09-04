@@ -136,10 +136,14 @@ extends Dialog
     }    
   }
   
+  public String[] getFontSizes() {
+    return FontUtil.getFontSizes();
+  }
+  
   protected void createSizeCombo(Composite parent) 
   {
     sizeCombo = new Combo(parent, style | SWT.READ_ONLY);
-    String[] sizes = FontUtil.getFontSizes();
+    String[] sizes = getFontSizes();
     sizeCombo.setItems(sizes);
     
     for (int i=0; i<sizes.length; i++) {
