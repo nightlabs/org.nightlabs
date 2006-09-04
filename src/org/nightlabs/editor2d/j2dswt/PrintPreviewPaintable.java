@@ -58,19 +58,6 @@ extends DrawComponentPaintable
 	private Rectangle pageBounds; 
 	private Rectangle marginBounds;	
 
-//	@Override
-//	public void paint(Control control, Graphics2D g2d) 
-//	{
-//		g2d.setPaint(bgColor);
-//		if (pageBounds != null)
-//			g2d.fillRect(pageBounds.x, pageBounds.y, pageBounds.width, pageBounds.height);
-//				
-//		g2d.setPaint(Color.BLACK);
-//		if (marginBounds != null)
-//			g2d.drawRect(marginBounds.x, marginBounds.y, marginBounds.width, marginBounds.height);		
-//		super.paint(control, g2d);
-//	}
-
 	@Override
 	public void paint(Control control, Graphics2D g2d) 
 	{
@@ -78,13 +65,13 @@ extends DrawComponentPaintable
 		if (pageBounds != null)
 			g2d.fillRect(pageBounds.x, pageBounds.y, pageBounds.width, pageBounds.height);
 
-		g2d.translate(marginBounds.x, marginBounds.y);
+//		g2d.translate(marginBounds.x, marginBounds.y);
 		g2d.setPaint(Color.BLACK);
 		if (marginBounds != null)
 			g2d.drawRect(0, 0, marginBounds.width, marginBounds.height);		
 		super.paint(control, g2d);
 		
-		g2d.translate(-marginBounds.x, -marginBounds.y);		
+//		g2d.translate(-marginBounds.x, -marginBounds.y);		
 	}
 	
 }
