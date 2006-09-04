@@ -127,6 +127,7 @@ extends XComposite
 		pageGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		predefinedPageCombo = initPageCombo(pageGroup);
 		predefinedPageCombo.addSelectionListener(pageListener);
+		predefinedPageCombo.selectElement(new A4Page());
 		
 		// orientation		
 		Group orientationGroup = new Group(detailComp, SWT.NONE);
@@ -196,33 +197,33 @@ extends XComposite
 	
 	private CComboComposite<IPredefinedPage> initPageCombo(Composite parent) 
 	{
-//		List<IPredefinedPage> pages = new LinkedList<IPredefinedPage>();
-//		pages.add(new A4Page());
-//		pages.add(new A5Page());		
-//		pages.add(new A3Page());
 		List<IPredefinedPage> pages = new ArrayList<IPredefinedPage>(PredefinedPageEP.sharedInstance().getPageRegistry().getPages());
 		return new CComboComposite<IPredefinedPage>(pages, predefinedPageLabelProvider, 
 				parent, SWT.READ_ONLY);
 	}
 		
 	private PageFormat getPageFormat(IPredefinedPage page) 
-	{
-		return pageFormat;
-//		IUnit inchUnit = UnitRegistry.sharedInstance().getUnit(InchUnit.UNIT_ID);
-//		IUnit pageUnit = page.getUnit();
-//		double heightInInch = UnitUtil.getUnitValue(page.getPageHeight(), pageUnit, inchUnit);
-//		double widthInInch = UnitUtil.getUnitValue(page.getPageWidth(), pageUnit, inchUnit);
-//		double factor = 72f;
-//		double height = heightInInch * factor;
-//		double width = widthInInch * factor;
-//		
-//		Paper paper = pageFormat.getPaper();
-//		paper.setImageableArea(paper.getImageableX(), paper.getImageableY(), width, height);
-//		paper.setSize(width + paper.getImageableX(), height + paper.getImageableY());
-//		PageFormat newPageFormat = (PageFormat) pageFormat.clone();
-//		newPageFormat.setPaper(paper);
-//		
-//		return newPageFormat;
+	{		
+		IUnit inchUnit = UnitRegistry.sharedInstance().getUnit(InchUnit.UNIT_ID);
+		IUnit pageUnit = page.getUnit();
+		double heightInInch = UnitUtil.getUnitValue(page.getPageHeight(), pageUnit, inchUnit);
+		double widthInInch = UnitUtil.getUnitValue(page.getPageWidth(), pageUnit, inchUnit);
+		double factor = 72f;
+		double height = heightInInch * factor;
+		double width = widthInInch * factor;
+		
+		double marginTop = previewComp.getMarginTop();
+		double marginLeft = previewComp.getMarginLeft();
+		double marginRight = previewComp.getMarginRight();
+		double marginBottom = previewComp.getMarginBottom();
+		
+		Paper paper = pageFormat.getPaper();
+		paper.setImageableArea(marginTop, marginLeft, width, height);
+		paper.setSize(marginLeft + width + marginRight, marginTop + height + marginBottom);
+		PageFormat newPageFormat = (PageFormat) pageFormat.clone();
+		newPageFormat.setPaper(paper);
+		
+		return newPageFormat;
 	}
 		
 	private LabelProvider predefinedPageLabelProvider = new LabelProvider() 
@@ -298,12 +299,9 @@ extends XComposite
 		}	
 	};
 	
-	// TODO: Maybe publish this?
 	protected void refresh() 
 	{
-		previewComp.setPageFormat(pageFormat);	
-//		redraw();
-//		update();			
+		previewComp.setPageFormat(pageFormat);		
 	}
 	
 	public void refresh(PageFormat pageFormat) {

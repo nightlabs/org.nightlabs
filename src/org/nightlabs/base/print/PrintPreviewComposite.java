@@ -46,8 +46,16 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.util.GeomUtil;
+import org.nightlabs.i18n.unit.IUnit;
+import org.nightlabs.i18n.unit.InchUnit;
+import org.nightlabs.i18n.unit.MMUnit;
+import org.nightlabs.i18n.unit.Unit;
+import org.nightlabs.i18n.unit.UnitUtil;
+import org.nightlabs.util.Utils;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -182,27 +190,28 @@ extends XComposite
 	}		
 		
 	protected Canvas canvas = null;
-//	protected Canvas initCanvas(Composite parent) 
-//	{
-//		Canvas c = new Canvas(parent, SWT.NONE);
-//		c.setLayoutData(new GridData(GridData.FILL_BOTH));
-//		return c;
-//	}
 	protected Canvas initCanvas(Composite parent) 
 	{
+//		return new Canvas(parent, SWT.BORDER);
 		return new Canvas(parent, SWT.NONE);
 	}
 	
 	protected void createComposite(Composite parent) 
 	{
 		canvas = initCanvas(parent);
-		canvas.setLayoutData(new GridData(GridData.FILL_BOTH));
-//		canvas.setBackground(new Color(parent.getDisplay(), 255, 255, 255));		
+		canvas.setLayoutData(new GridData(GridData.FILL_BOTH));		
 		canvas.addControlListener(canvasResizeListener);
 		pagePaintListener = initPagePaintListener();
 		canvas.addPaintListener(pagePaintListener);
+		
+		label = new Label(parent, SWT.NONE);
+		GridData labelData = new GridData(GridData.CENTER, GridData.END, true, false);
+		label.setLayoutData(labelData);
+		
 		updateCanvas();
 	}
+	
+	private Label label = null;
 	
 	private Rectangle pageRectangle = null;
 	protected Rectangle getPageRectangle() {
@@ -219,7 +228,7 @@ extends XComposite
 		return colorWhite;
 	}
 	
-	private PaintListener pagePaintListener = null;
+	private PaintListener pagePaintListener = null;	 
 	protected PaintListener initPagePaintListener() 
 	{
 		return new PaintListener()
@@ -232,6 +241,21 @@ extends XComposite
 				Point2D scales = GeomUtil.calcScale(pageRectangle, canvasBounds);			
 				double gcScale = Math.min(scales.getX(), scales.getY());											
 				transform.scale((float)gcScale, (float)gcScale);
+								
+//				double canvasWidth = canvasBounds.getWidth() / gcScale;
+//				double canvasHeight = canvasBounds.getHeight() / gcScale;
+//				double translateX = Math.abs((pageRectangle.getWidth() - canvasWidth) / 2);  
+//				double translateY = Math.abs((pageRectangle.getHeight() - canvasHeight) / 2);
+//				transform.translate((float)translateX, (float)translateY);
+//				if (logger.isDebugEnabled()) {
+//					logger.debug("canvasBounds = "+canvasBounds);
+//					logger.debug("pageBounds = "+pageRectangle);
+//					logger.debug("gcScale = "+gcScale);
+//					logger.debug("canvasWidth = "+canvasWidth);
+//					logger.debug("canvasHeight = "+canvasHeight);
+//					logger.debug("translateX = "+translateX);
+//					logger.debug("translateY = "+translateY);					
+//				}				
 				
 				gc.setTransform(transform);			
 				
@@ -263,24 +287,85 @@ extends XComposite
 		}	
 	};
 		
-	protected double canvasScaleFactor = 4;
+	protected double canvasScaleFactor = 6;
 	protected void setCanvasSize() 
 	{
-		GridData canvasData = new GridData();
+		GridData canvasData = new GridData(SWT.CENTER, SWT.CENTER, false, false);
 		int newWidth = (int) Math.rint((double)pageRectangle.width / canvasScaleFactor);
 		int newHeight = (int) Math.rint((double)pageRectangle.height / canvasScaleFactor);		
 		canvasData.widthHint = newWidth;
 		canvasData.heightHint = newHeight; 
 		canvasData.minimumWidth = newWidth;
 		canvasData.minimumHeight = newHeight;		
-		canvas.setLayoutData(canvasData);
-		canvas.setSize(newWidth, newHeight);	
+		canvas.setLayoutData(canvasData);	
+		canvas.setSize(newWidth, newHeight);
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("newWidth = "+newWidth);
+			logger.debug("newHeight = "+newHeight);
+			logger.debug("canvasScaleFactor = "+canvasScaleFactor);
+		}
 	}
-	
+
 	protected void updateCanvas() 
 	{
-//		setCanvasSize();
+		setCanvasSize();
+		setLabelText();
 		canvas.redraw();
+		layout(true);
+	}
+	
+//	private void setLabelText() 
+//	{
+//		int numberOfAfterCommaDigits = 2;
+//		label.setText(
+//				NLBasePlugin.getResourceString("printPreviewComposite.width.label") + " = " + 
+//				Utils.shortenDouble(getPageWidth(getCurrentUnit()), numberOfAfterCommaDigits) + 
+//				getCurrentUnit().getUnitSymbol() + ", " +
+//				NLBasePlugin.getResourceString("printPreviewComposite.height.label") + " = " +
+//				Utils.shortenDouble(getPageHeight(getCurrentUnit()), numberOfAfterCommaDigits) + 
+//				getCurrentUnit().getUnitSymbol());
+//	}
+
+	private void setLabelText() 
+	{
+		int numberOfAfterCommaDigits = 2;
+		label.setText(
+				NLBasePlugin.getResourceString("composite.printPreview.width.label") + " = " + 
+				Utils.shortenDouble(getPageWidth(getCurrentUnit()), numberOfAfterCommaDigits) + " " +
+				getCurrentUnit().getUnitSymbol() + ", " +
+				NLBasePlugin.getResourceString("composite.printPreview.height.label") + " = " +
+				Utils.shortenDouble(getPageHeight(getCurrentUnit()), numberOfAfterCommaDigits) + " " + 
+				getCurrentUnit().getUnitSymbol());
+	}
+	
+	private IUnit defaultUnit = null; 
+	public IUnit getDefaultUnit() 
+	{
+		if (defaultUnit == null) {
+			double inchFactor = 1 / 25.4;
+			double factor = inchFactor * 72;
+			defaultUnit = new Unit("1\72Inch", "1\72Inch", "in", factor);
+			if (logger.isDebugEnabled())
+				logger.debug("default factor = "+factor);
+		}
+		return defaultUnit;
+	}
+	
+	private IUnit currentUnit = new MMUnit();		
+	public IUnit getCurrentUnit() {
+		return currentUnit;
+	}
+	public void setCurrentUnit(IUnit currentUnit) {
+		this.currentUnit = currentUnit;
+	}
+
+	public double getPageWidth(IUnit unit) {
+		return UnitUtil.getUnitValue(getPageFormat().getWidth(), getDefaultUnit(), unit);
+	}
+	
+	public double getPageHeight(IUnit unit) {
+		return UnitUtil.getUnitValue(getPageFormat().getHeight(), getDefaultUnit(), unit);
 	}
 	
 }
