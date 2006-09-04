@@ -26,6 +26,13 @@
 
 package org.nightlabs.base.table;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -42,7 +49,7 @@ import org.nightlabs.base.composite.XComposite.LayoutMode;
  *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */
-public abstract class AbstractTableComposite extends XComposite {
+public abstract class AbstractTableComposite<ElementType> extends XComposite {
 
 	public static int DEFAULT_STYLE_SINGLE = SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE;
 	public static int DEFAULT_STYLE_MULTI = SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI;
@@ -105,6 +112,43 @@ public abstract class AbstractTableComposite extends XComposite {
 	 * Default implementation does nothing.
 	 */
 	public void init() {}
+	
+	
+	/**
+	 * Return the table viewer's selection in a Collection
+	 * of the element types of this table.  
+	 * @return the table viewer's selection
+	 */
+	public Collection<ElementType> getSelectedElements() {
+		ISelection sel = getTableViewer().getSelection();
+		if (sel == null || sel.isEmpty())
+			return Collections.EMPTY_LIST;
+		else if (sel instanceof IStructuredSelection) {
+			Collection<ElementType> result = new ArrayList<ElementType>();
+			IStructuredSelection selection = (IStructuredSelection) sel;
+			for (Iterator iter = selection.iterator(); iter.hasNext();) {
+				Object obj = (Object) iter.next();
+				result.add((ElementType)obj);
+			}
+			return result;
+		}
+		else
+			return Collections.EMPTY_LIST;
+	}
+	
+	/**
+	 * The first selected element. Or <code>null</code> if none selected.
+	 * @return The first selected element.
+	 */
+	public ElementType getFirstSelectedElement() {
+		ISelection sel = getTableViewer().getSelection();
+		if (sel == null || sel.isEmpty())
+			return null;
+		else if (sel instanceof IStructuredSelection)
+			return (ElementType) ((IStructuredSelection)sel).getFirstElement();
+		else
+			return null;
+	}
 	
 	/**
 	 * Add your columns here to the Table.

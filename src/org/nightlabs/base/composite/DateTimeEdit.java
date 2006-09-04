@@ -154,7 +154,7 @@ public class DateTimeEdit extends XComposite
 
 		this.setDate(date); // text needs to exist
 
-		if ((DateFormatProvider.DATE & flags) != 0) {
+//		if ((DateFormatProvider.DATE & flags) != 0) {
 			lookupButton = new Button(this, SWT.NONE);
 			lookupButton.setText("...");
 			lookupButton.addSelectionListener(new SelectionAdapter() {
@@ -164,7 +164,7 @@ public class DateTimeEdit extends XComposite
 					lookupButtonClicked();
 				}
 			});
-		}
+//		}
 
 		activeSelected();
 	}
