@@ -4,14 +4,18 @@
 package org.nightlabs.base.timepattern.builder;
 
 import org.nightlabs.base.NLBasePlugin;
-import org.nightlabs.base.wizard.IWizardHopPage;
 import org.nightlabs.base.wizard.WizardHop;
+import org.nightlabs.timepattern.TimePatternFormatException;
+import org.nightlabs.timepattern.TimePatternSet;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class DailyTimePatternBuilderHop extends WizardHop implements TimePatternSetBuilderWizardHop {
+public class DailyTimePatternBuilderHop 
+extends WizardHop 
+implements TimePatternSetBuilderWizardHop 
+{
 
 	/**
 	 * @param entryPage
@@ -22,6 +26,13 @@ public class DailyTimePatternBuilderHop extends WizardHop implements TimePattern
 
 	public String getHopDescription() {
 		return NLBasePlugin.getResourceString("timepattern.builderWizard.daily.hopDescription");
+	}
+
+	public void configureTimePatternSet(TimePatternSet timePatternSet) 
+	throws TimePatternFormatException 
+	{
+		DailyTimePatternBuilderHopPage page = (DailyTimePatternBuilderHopPage) getEntryPage();
+		page.configureTimePatternSet(timePatternSet.createTimePattern());		
 	}
 
 }

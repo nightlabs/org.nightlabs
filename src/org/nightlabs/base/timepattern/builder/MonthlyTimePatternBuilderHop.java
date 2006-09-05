@@ -12,7 +12,7 @@ import org.nightlabs.timepattern.TimePatternSet;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class SingleExecTimePatternBuilderHop 
+public class MonthlyTimePatternBuilderHop 
 extends WizardHop 
 implements TimePatternSetBuilderWizardHop 
 {
@@ -20,22 +20,22 @@ implements TimePatternSetBuilderWizardHop
 	/**
 	 * 
 	 */
-	public SingleExecTimePatternBuilderHop() {
-		super(new SingleExecTimePatternBuilderHopPage());
+	public MonthlyTimePatternBuilderHop() {
+		super(new MonthlyTimePatternBuilderHopPage());
 	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.timepattern.builder.TimePatternSetBuilderWizardHop#getHopDescription()
 	 */
 	public String getHopDescription() {
-		return NLBasePlugin.getResourceString("timepattern.builderWizard.singleExec.hopDescription");
+		return NLBasePlugin.getResourceString("timepattern.builderWizard.monthly.hopDescription");
 	}
 
 	public void configureTimePatternSet(TimePatternSet timePatternSet)
 	throws TimePatternFormatException
 	{
-		SingleExecTimePatternBuilderHopPage page = (SingleExecTimePatternBuilderHopPage) getEntryPage();
-		page.configureTimePattern(timePatternSet.createTimePattern());
+		MonthlyTimePatternBuilderHopPage page = (MonthlyTimePatternBuilderHopPage) getEntryPage();
+		page.configurePattern(timePatternSet.createTimePattern());
 	}
 
 }

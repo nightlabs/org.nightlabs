@@ -18,6 +18,8 @@ import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.wizard.DynamicPathWizard;
 import org.nightlabs.base.wizard.WizardHopPage;
+import org.nightlabs.timepattern.TimePatternFormatException;
+import org.nightlabs.timepattern.TimePatternSet;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -107,5 +109,8 @@ public class TimePatternSetBuilderEntryWizardPage extends WizardHopPage {
 		}
 		
 	};
-	
+
+	public void configureTimePatternSet(TimePatternSet timePatternSet) throws TimePatternFormatException {
+		currentBuilderHop.configureTimePatternSet(timePatternSet);
+	}
 }

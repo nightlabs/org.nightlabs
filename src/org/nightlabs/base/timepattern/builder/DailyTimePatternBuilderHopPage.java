@@ -152,14 +152,16 @@ public class DailyTimePatternBuilderHopPage extends WizardHopPage {
 		eachXDayWrapper.setEnabled(typeEachXDay.getSelection());
 	}
 
-	public void configureTimePatternSet(TimePatternSet timePatternSet) 
+	public void configureTimePatternSet(TimePattern pattern) 
 	throws TimePatternFormatException 
 	{
-		TimePattern pattern = timePatternSet.createTimePattern();
+//		TimePattern pattern = timePatternSet.createTimePattern();
 		pattern.setYear("*");
 		pattern.setMonth("*");
-		if (typeDaily.getSelection())
+		if (typeDaily.getSelection()) {
 			pattern.setDay("*");
+			pattern.setDayOfWeek("*");
+		}
 		else if (typeChooseDays.getSelection()) {
 			String dayStr = "";
 			if (chooseSun.getSelection()) {
@@ -197,10 +199,14 @@ public class DailyTimePatternBuilderHopPage extends WizardHopPage {
 					dayStr = dayStr + ",";
 				dayStr = dayStr + "6";
 			}
+			pattern.setDay("*");
+			pattern.setDayOfWeek(dayStr);
 		}
 		else if (typeEachXDay.getSelection()) {
 			pattern.setDay("*/"+eachXDaySpinner.getSelection());
+			pattern.setDayOfWeek("*");
 		}
+		
 		startTimeEdit.configurePattern(pattern);
 	}
 }

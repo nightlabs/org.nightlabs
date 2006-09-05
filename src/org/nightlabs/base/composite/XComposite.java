@@ -30,6 +30,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class XComposite extends Composite
 {
@@ -264,5 +268,57 @@ public class XComposite extends Composite
 	public GridData getGridData()
 	{
 		return (GridData)getLayoutData();
+	}
+	
+	private FormToolkit toolkit;
+	/**
+	 * Assigns this composite a toolkit.
+	 */
+	public void setToolkit(FormToolkit toolkit) {
+		this.toolkit = toolkit;
+	}
+	
+	@Override
+	public void layout(boolean arg0, boolean arg1) {
+		if (toolkit != null) {
+			adaptToToolkit();
+		}
+		super.layout(arg0, arg1);
+		super.redraw();
+	}
+	
+	public void adaptToToolkit() {
+		if (toolkit != null)
+			adaptComposite(this, toolkit);
+	}
+	
+	private void adaptComposite(Composite comp, FormToolkit toolkit) {
+		toolkit.adapt(comp);
+		if (comp instanceof XComposite) {
+			((XComposite)comp).setToolkit(toolkit);
+		}
+		Control[] children = comp.getChildren();
+		for (int i = 0; i < children.length; i++) {
+			checkBorders(children[i], toolkit);
+			if (children[i] instanceof Composite) {
+				adaptComposite((Composite)children[i], toolkit);
+			}
+			else
+				toolkit.adapt(children[i], false, false);
+		}
+	}
+	
+	private void checkBorders(Control control, FormToolkit toolkit) {
+		if (control instanceof Text) {
+			control.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+			toolkit.paintBordersFor(control.getParent());
+		}
+		else if (control instanceof Table || control instanceof Tree) {
+			control.getParent().setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+//			System.err.println("Added paint listener for "+control.getParent());
+			toolkit.paintBordersFor(control.getParent());
+//			control.getParent().addPaintListener(test);
+			toolkit.adapt(control.getParent());			
+		}
 	}
 }

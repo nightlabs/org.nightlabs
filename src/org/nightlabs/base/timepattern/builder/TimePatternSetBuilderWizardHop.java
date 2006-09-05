@@ -4,6 +4,8 @@
 package org.nightlabs.base.timepattern.builder;
 
 import org.nightlabs.base.wizard.IWizardHop;
+import org.nightlabs.timepattern.TimePatternFormatException;
+import org.nightlabs.timepattern.TimePatternSet;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -12,4 +14,6 @@ import org.nightlabs.base.wizard.IWizardHop;
 public interface TimePatternSetBuilderWizardHop extends IWizardHop {
 
 	public String getHopDescription();
+	
+	public void configureTimePatternSet(TimePatternSet timePatternSet) throws TimePatternFormatException;
 }

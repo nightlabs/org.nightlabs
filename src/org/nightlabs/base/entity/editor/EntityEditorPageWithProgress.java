@@ -23,7 +23,6 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-
 package org.nightlabs.base.entity.editor;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -319,6 +318,8 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		
 		addSections(pageWrapper.getBody());
 		configureInitialStack();
+		wrapper.setToolkit(managedForm.getToolkit());
+		wrapper.adaptToToolkit();
 	}
 	
 	
