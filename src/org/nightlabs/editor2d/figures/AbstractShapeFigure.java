@@ -40,10 +40,10 @@ import org.eclipse.gef.editparts.ZoomListener;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent.LineStyle;
 import org.nightlabs.editor2d.j2d.GeneralShape;
-import org.nightlabs.editor2d.resolution.IResolutionUnit;
-import org.nightlabs.editor2d.resolution.Resolution;
-import org.nightlabs.editor2d.resolution.ResolutionImpl;
 import org.nightlabs.editor2d.util.J2DUtil;
+import org.nightlabs.i18n.unit.resolution.IResolutionUnit;
+import org.nightlabs.i18n.unit.resolution.Resolution;
+import org.nightlabs.i18n.unit.resolution.ResolutionImpl;
 
 public class AbstractShapeFigure 
 extends Shape 

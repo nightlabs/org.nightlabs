@@ -50,10 +50,10 @@ import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.nightlabs.base.action.XContributionItem;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
-import org.nightlabs.editor2d.resolution.DPIResolutionUnit;
-import org.nightlabs.editor2d.resolution.IResolutionUnit;
-import org.nightlabs.editor2d.resolution.Resolution;
-import org.nightlabs.editor2d.resolution.ResolutionImpl;
+import org.nightlabs.i18n.unit.resolution.DPIResolutionUnit;
+import org.nightlabs.i18n.unit.resolution.IResolutionUnit;
+import org.nightlabs.i18n.unit.resolution.Resolution;
+import org.nightlabs.i18n.unit.resolution.ResolutionImpl;
 
 
 public class EditorZoomComboContributionItem 

@@ -38,12 +38,12 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
+import org.nightlabs.base.i18n.ResolutionUnitEP;
 import org.nightlabs.base.print.page.PredefinedPageEP;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.page.PageOrientationComposite;
 import org.nightlabs.editor2d.page.PredefinedPageComposite;
 import org.nightlabs.editor2d.page.ResolutionUnitComposite;
-import org.nightlabs.editor2d.resolution.ResolutionUnitEP;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

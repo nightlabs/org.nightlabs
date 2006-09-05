@@ -34,9 +34,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.editor2d.resolution.IResolutionUnit;
-import org.nightlabs.editor2d.resolution.ResolutionUnitEP;
-import org.nightlabs.editor2d.resolution.ResolutionUnitRegistry;
+import org.nightlabs.base.i18n.ResolutionUnitEP;
+import org.nightlabs.i18n.unit.resolution.IResolutionUnit;
+import org.nightlabs.i18n.unit.resolution.ResolutionUnitRegistry;
 
 /**
  * a Composite which contains a Combo for selecting {@link IResolutionUnit}s
