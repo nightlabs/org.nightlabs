@@ -49,7 +49,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.i18n.UnitRegistryEP;
 import org.nightlabs.base.util.GeomUtil;
+import org.nightlabs.i18n.unit.DefaultScreenUnit;
 import org.nightlabs.i18n.unit.IUnit;
 import org.nightlabs.i18n.unit.InchUnit;
 import org.nightlabs.i18n.unit.MMUnit;
@@ -343,11 +345,13 @@ extends XComposite
 	public IUnit getDefaultUnit() 
 	{
 		if (defaultUnit == null) {
-			double inchFactor = 1 / 25.4;
-			double factor = inchFactor * 72;
-			defaultUnit = new Unit("1\72Inch", "1\72Inch", "in", factor);
-			if (logger.isDebugEnabled())
-				logger.debug("default factor = "+factor);
+//			double inchFactor = 1 / 25.4;
+//			double factor = inchFactor * 72;
+//			defaultUnit = new Unit("1\72Inch", "1\72Inch", "in", factor);
+//			if (logger.isDebugEnabled())
+//				logger.debug("default factor = "+factor);
+			return UnitRegistryEP.sharedInstance().getUnitRegistry().getUnit(
+					DefaultScreenUnit.UNIT_ID);
 		}
 		return defaultUnit;
 	}
