@@ -14,7 +14,7 @@ import org.nightlabs.timepattern.TimePatternSet;
  */
 public class SingleExecTimePatternBuilderHop 
 extends WizardHop 
-implements TimePatternSetBuilderWizardHop 
+implements ITimePatternSetBuilderWizardHop 
 {
 
 	/**
@@ -25,7 +25,7 @@ implements TimePatternSetBuilderWizardHop
 	}
 
 	/* (non-Javadoc)
-	 * @see org.nightlabs.base.timepattern.builder.TimePatternSetBuilderWizardHop#getHopDescription()
+	 * @see org.nightlabs.base.timepattern.builder.ITimePatternSetBuilderWizardHop#getHopDescription()
 	 */
 	public String getHopDescription() {
 		return NLBasePlugin.getResourceString("timepattern.builderWizard.singleExec.hopDescription");

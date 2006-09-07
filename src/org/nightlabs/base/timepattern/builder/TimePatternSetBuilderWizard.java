@@ -3,10 +3,12 @@
  */
 package org.nightlabs.base.timepattern.builder;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.nightlabs.base.wizard.DynamicPathWizard;
 import org.nightlabs.base.wizard.DynamicPathWizardDialog;
 import org.nightlabs.timepattern.TimePattern;
@@ -21,16 +23,24 @@ import org.nightlabs.timepattern.TimePatternSetImpl;
 public class TimePatternSetBuilderWizard extends DynamicPathWizard {
 
 	private TimePatternSetBuilderEntryWizardPage entryPage;
+	private TimePatternSet timePatternSet;
+	private boolean clearBeforeBuild;
+	
+	public TimePatternSetBuilderWizard(TimePatternSet timePatternSet) {
+		this(timePatternSet, true);
+	}
 	
 	/**
 	 * 
 	 */
-	public TimePatternSetBuilderWizard() {
+	public TimePatternSetBuilderWizard(TimePatternSet timePatternSet, boolean clearBeforeBuild) {
+		this.clearBeforeBuild = clearBeforeBuild;
+		this.timePatternSet = timePatternSet;
 		entryPage = new TimePatternSetBuilderEntryWizardPage();
 		addPage(entryPage);
 	}
 
-	public void addBuilderHop(TimePatternSetBuilderWizardHop builderHop) {
+	public void addBuilderHop(ITimePatternSetBuilderWizardHop builderHop) {
 		entryPage.addBuilderHop(builderHop);
 	}
 	
@@ -39,26 +49,27 @@ public class TimePatternSetBuilderWizard extends DynamicPathWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		TimePatternSet patternSet = new TimePatternSetImpl();
+		if (clearBeforeBuild)
+			timePatternSet.getTimePatterns().clear();
 		try {
-			entryPage.configureTimePatternSet(patternSet);
+			entryPage.configureTimePatternSet(timePatternSet);
 		} catch (TimePatternFormatException e) {
 			e.printStackTrace();
 		}
-		for (Iterator iter = patternSet.getTimePatterns().iterator(); iter.hasNext();) {
+		for (Iterator iter = timePatternSet.getTimePatterns().iterator(); iter.hasNext();) {
 			TimePattern pattern = (TimePattern) iter.next();
 			System.out.println(pattern);
 		}
-		return false;
+		return true;
 	}
 	
-	public static int open() {
-		TimePatternSetBuilderWizard wiz = new TimePatternSetBuilderWizard();
+	public static boolean open(TimePatternSet timePatternSet) {
+		TimePatternSetBuilderWizard wiz = new TimePatternSetBuilderWizard(timePatternSet);
 		wiz.addBuilderHop(new DailyTimePatternBuilderHop());
 		wiz.addBuilderHop(new MonthlyTimePatternBuilderHop());
 		wiz.addBuilderHop(new SingleExecTimePatternBuilderHop());
 		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wiz);
-		return dlg.open();
+		return dlg.open() == Dialog.OK;
 	}
 
 }

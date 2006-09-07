@@ -27,8 +27,8 @@ import org.nightlabs.timepattern.TimePatternSet;
  */
 public class TimePatternSetBuilderEntryWizardPage extends WizardHopPage {
 
-	private List<TimePatternSetBuilderWizardHop> builderHops = new ArrayList<TimePatternSetBuilderWizardHop>();
-	private TimePatternSetBuilderWizardHop currentBuilderHop;
+	private List<ITimePatternSetBuilderWizardHop> builderHops = new ArrayList<ITimePatternSetBuilderWizardHop>();
+	private ITimePatternSetBuilderWizardHop currentBuilderHop;
 	
 	public TimePatternSetBuilderEntryWizardPage() {		
 		super(
@@ -63,7 +63,7 @@ public class TimePatternSetBuilderEntryWizardPage extends WizardHopPage {
 		super(pageName, title, titleImage);
 	}
 
-	public void addBuilderHop(TimePatternSetBuilderWizardHop builderHop) {
+	public void addBuilderHop(ITimePatternSetBuilderWizardHop builderHop) {
 		builderHops.add(builderHop);
 	}
 	
@@ -73,7 +73,7 @@ public class TimePatternSetBuilderEntryWizardPage extends WizardHopPage {
 	@Override
 	public Control createPageContents(Composite parent) {
 		XComposite wrapper = new XComposite(parent, SWT.NONE);
-		for (TimePatternSetBuilderWizardHop builderHop : builderHops) {
+		for (ITimePatternSetBuilderWizardHop builderHop : builderHops) {
 			Button button = new Button(wrapper, SWT.RADIO);
 			button.setData(builderHop);
 			button.setText(builderHop.getHopDescription());
@@ -89,14 +89,14 @@ public class TimePatternSetBuilderEntryWizardPage extends WizardHopPage {
 		public void widgetSelected(SelectionEvent e) {
 			if (e.getSource() instanceof Button) {
 				Object bo = ((Button)e.getSource()).getData();
-				if (bo instanceof TimePatternSetBuilderWizardHop) {
+				if (bo instanceof ITimePatternSetBuilderWizardHop) {
 					if (currentBuilderHop != null) {
 						if (getWizard() instanceof DynamicPathWizard) {
 							DynamicPathWizard wiz = (DynamicPathWizard)getWizard();
 							wiz.removeDynamicWizardPage(currentBuilderHop.getEntryPage());
 						}
 					}
-					currentBuilderHop = (TimePatternSetBuilderWizardHop)bo;
+					currentBuilderHop = (ITimePatternSetBuilderWizardHop)bo;
 					if (currentBuilderHop != null) {
 						if (getWizard() instanceof DynamicPathWizard) {
 							DynamicPathWizard wiz = (DynamicPathWizard)getWizard();

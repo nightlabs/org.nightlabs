@@ -14,7 +14,7 @@ import org.nightlabs.timepattern.TimePatternSet;
  */
 public class DailyTimePatternBuilderHop 
 extends WizardHop 
-implements TimePatternSetBuilderWizardHop 
+implements ITimePatternSetBuilderWizardHop 
 {
 
 	/**

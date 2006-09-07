@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
+import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
@@ -94,7 +95,8 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	/**
 	 * Wrapper for the page's real content
 	 */
-	protected ScrolledForm pageWrapper;
+//	protected ScrolledForm pageWrapper;
+	protected Form pageWrapper;
 	/**
 	 * Wrapper for the progress monitor
 	 */	
@@ -185,9 +187,12 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	{
 		super.createFormContent(managedForm);
 		ScrolledForm form = managedForm.getForm();
+		form.setExpandHorizontal(true);
+		form.setExpandVertical(true);
 		FormToolkit toolkit = managedForm.getToolkit();
 		String formText = getPageFormTitle();		
 		form.setText(formText == null ? "" : formText); 
+		form.setLayoutData(new GridData(GridData.FILL_BOTH));
 		fillBody(managedForm, toolkit);
 	}
 
@@ -311,7 +316,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		configureProgressWrapper(progressWrapper);		
 		progressMonitorPart = createProgressMonitorPart(progressWrapper);
 		
-		pageWrapper = managedForm.getToolkit().createScrolledForm(wrapper);
+		pageWrapper = managedForm.getToolkit().createForm(wrapper);
 		configurePageWrapper(pageWrapper.getBody());
 		
 		asyncLoadJob.schedule();		
@@ -345,7 +350,8 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 			public void run() {
 				stackLayout.topControl = pageWrapper;
 				wrapper.layout(true, true);
-				pageWrapper.reflow(true);
+//				pageWrapper.reflow(true);
+				pageWrapper.layout(true, true);
 				getManagedForm().getForm().redraw();
 				getManagedForm().getForm().getBody().layout(true, true);
 //				pageWrapper.refresh();

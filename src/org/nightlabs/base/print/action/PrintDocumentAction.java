@@ -47,22 +47,21 @@ public class PrintDocumentAction implements IWorkbenchWindowActionDelegate {
 	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
 	 */
 	public void run(IAction arg0) {
-		TimePatternSetBuilderWizard.open();
-//		FileDialog fileDialog = new FileDialog(RCPUtil.getActiveWorkbenchShell());
-//		String fileName = fileDialog.open();
-//		if (fileName != null) {
-//			try {
-//				PrinterInterface printer = PrinterInterfaceManager.sharedInstance().getConfiguredPrinterInterface(
-//						PrinterInterfaceManager.INTERFACE_FACTORY_DOCUMENT,
-//						PrinterUseCase.DEFAULT_USE_CASE_ID
-//					);
-//				if (printer instanceof DocumentPrinter) {
-//					((DocumentPrinter)printer).printDocument(new File(fileName));
-//				}
-//			} catch (PrinterException e) {
-//				throw new RuntimeException(e);
-//			}
-//		}
+		FileDialog fileDialog = new FileDialog(RCPUtil.getActiveWorkbenchShell());
+		String fileName = fileDialog.open();
+		if (fileName != null) {
+			try {
+				PrinterInterface printer = PrinterInterfaceManager.sharedInstance().getConfiguredPrinterInterface(
+						PrinterInterfaceManager.INTERFACE_FACTORY_DOCUMENT,
+						PrinterUseCase.DEFAULT_USE_CASE_ID
+					);
+				if (printer instanceof DocumentPrinter) {
+					((DocumentPrinter)printer).printDocument(new File(fileName));
+				}
+			} catch (PrinterException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	/* (non-Javadoc)
