@@ -30,7 +30,6 @@ import java.awt.geom.Point2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -53,9 +52,7 @@ import org.nightlabs.base.i18n.UnitRegistryEP;
 import org.nightlabs.base.util.GeomUtil;
 import org.nightlabs.i18n.unit.DefaultScreenUnit;
 import org.nightlabs.i18n.unit.IUnit;
-import org.nightlabs.i18n.unit.InchUnit;
 import org.nightlabs.i18n.unit.MMUnit;
-import org.nightlabs.i18n.unit.Unit;
 import org.nightlabs.i18n.unit.UnitUtil;
 import org.nightlabs.util.Utils;
 
@@ -66,7 +63,7 @@ import org.nightlabs.util.Utils;
 public class PrintPreviewComposite 
 extends XComposite 
 {
-	private static final Logger logger = Logger.getLogger(PrintPreviewComposite.class);
+//	private static final Logger logger = Logger.getLogger(PrintPreviewComposite.class);
 	
 	/**
 	 * @param parent
@@ -108,47 +105,47 @@ extends XComposite
 				(int)pf.getImageableX(), (int)pf.getImageableY(), 
 				(int)pf.getImageableWidth(), (int)pf.getImageableHeight());
 
-		marginTop = Math.rint(pf.getImageableY());
-		marginBottom = Math.rint((pf.getHeight() - (pf.getImageableY() + pf.getImageableHeight())));
-		marginLeft = Math.rint(pf.getImageableX());
-		marginRight = Math.rint((pf.getWidth() - (pf.getImageableX() + pf.getImageableWidth())));												
+//		marginTop = Math.rint(pf.getImageableY());
+//		marginBottom = Math.rint((pf.getHeight() - (pf.getImageableY() + pf.getImageableHeight())));
+//		marginLeft = Math.rint(pf.getImageableX());
+//		marginRight = Math.rint((pf.getWidth() - (pf.getImageableX() + pf.getImageableWidth())));												
 	}	
 	
-	private double marginTop = 0;
-	public void setMarginTop(double marginTop) {
-		this.marginTop = marginTop;
-		setMarginValue(SWT.TOP, marginTop);		
-	}
-	public double getMarginTop() {
-		return marginTop;
-	}
-	
-	private double marginBottom = 0;
-	public double getMarginBottom() {
-		return marginBottom;
-	}
-	public void setMarginBottom(double marginBottom) {
-		this.marginBottom = marginBottom;
-		setMarginValue(SWT.BOTTOM, marginBottom);		
-	}	
-	
-	private double marginLeft = 0;
-	public double getMarginLeft() {
-		return marginLeft;
-	}
-	public void setMarginLeft(double marginLeft) {
-		this.marginLeft = marginLeft;
-		setMarginValue(SWT.LEFT, marginLeft);		
-	}
-	
-	private double marginRight = 0; 
-	public double getMarginRight() {
-		return marginRight;
-	}
-	public void setMarginRight(double marginRight) {
-		this.marginRight = marginRight;
-		setMarginValue(SWT.RIGHT, marginRight);		
-	}	
+//	private double marginTop = 0;
+//	public void setMarginTop(double marginTop) {
+//		this.marginTop = marginTop;
+//		setMarginValue(SWT.TOP, marginTop);		
+//	}
+//	public double getMarginTop() {
+//		return marginTop;
+//	}
+//	
+//	private double marginBottom = 0;
+//	public double getMarginBottom() {
+//		return marginBottom;
+//	}
+//	public void setMarginBottom(double marginBottom) {
+//		this.marginBottom = marginBottom;
+//		setMarginValue(SWT.BOTTOM, marginBottom);		
+//	}	
+//	
+//	private double marginLeft = 0;
+//	public double getMarginLeft() {
+//		return marginLeft;
+//	}
+//	public void setMarginLeft(double marginLeft) {
+//		this.marginLeft = marginLeft;
+//		setMarginValue(SWT.LEFT, marginLeft);		
+//	}
+//	
+//	private double marginRight = 0; 
+//	public double getMarginRight() {
+//		return marginRight;
+//	}
+//	public void setMarginRight(double marginRight) {
+//		this.marginRight = marginRight;
+//		setMarginValue(SWT.RIGHT, marginRight);		
+//	}	
 	
 	private PageFormat pageFormat = null;
 	public PageFormat getPageFormat() {
@@ -156,40 +153,40 @@ extends XComposite
 	}
 	public void setPageFormat(PageFormat pageFormat) {
 		this.pageFormat = pageFormat;
-		initPage(pageFormat);
+		initPage(this.pageFormat);
 		updateCanvas();
 	}
 	
-	protected void setMarginValue(int position, double value) 
-	{
-		Paper paper = pageFormat.getPaper();		
-		switch (position) 
-		{		
-			case(SWT.TOP):
-				marginTop = value;
-				break;
-			case(SWT.LEFT):
-				marginLeft = value;
-				break;
-			case(SWT.RIGHT):
-				marginRight = value;
-				break;
-			case(SWT.BOTTOM):
-				marginBottom = value;
-				break;				
-		}
-		if (pageFormat.getOrientation() == PageFormat.PORTRAIT) {
-			paper.setImageableArea(marginLeft, marginTop, (paper.getWidth() - (marginLeft + marginRight)), 
-					(paper.getHeight() - (marginTop + marginBottom)) );					
-		} 
-		else if (pageFormat.getOrientation() == PageFormat.LANDSCAPE) {
-			paper.setImageableArea(marginTop, marginRight, (paper.getWidth() - (marginBottom + marginTop)), 
-					(paper.getHeight() - (marginLeft + marginRight)) );						
-		}
-		pageFormat.setPaper(paper);
-		initPage(pageFormat);	
-		updateCanvas();
-	}		
+//	protected void setMarginValue(int position, double value) 
+//	{
+//		Paper paper = pageFormat.getPaper();		
+//		switch (position) 
+//		{		
+//			case(SWT.TOP):
+//				marginTop = value;
+//				break;
+//			case(SWT.LEFT):
+//				marginLeft = value;
+//				break;
+//			case(SWT.RIGHT):
+//				marginRight = value;
+//				break;
+//			case(SWT.BOTTOM):
+//				marginBottom = value;
+//				break;				
+//		}
+//		if (pageFormat.getOrientation() == PageFormat.PORTRAIT) {
+//			paper.setImageableArea(marginLeft, marginTop, (paper.getWidth() - (marginLeft + marginRight)), 
+//					(paper.getHeight() - (marginTop + marginBottom)) );					
+//		} 
+//		else if (pageFormat.getOrientation() == PageFormat.LANDSCAPE) {
+//			paper.setImageableArea(marginTop, marginRight, (paper.getWidth() - (marginBottom + marginTop)), 
+//					(paper.getHeight() - (marginLeft + marginRight)) );						
+//		}
+//		pageFormat.setPaper(paper);
+//		initPage(pageFormat);	
+//		updateCanvas();
+//	}		
 		
 	protected Canvas canvas = null;
 	protected Canvas initCanvas(Composite parent) 
@@ -249,15 +246,6 @@ extends XComposite
 //				double translateX = Math.abs((pageRectangle.getWidth() - canvasWidth) / 2);  
 //				double translateY = Math.abs((pageRectangle.getHeight() - canvasHeight) / 2);
 //				transform.translate((float)translateX, (float)translateY);
-//				if (logger.isDebugEnabled()) {
-//					logger.debug("canvasBounds = "+canvasBounds);
-//					logger.debug("pageBounds = "+pageRectangle);
-//					logger.debug("gcScale = "+gcScale);
-//					logger.debug("canvasWidth = "+canvasWidth);
-//					logger.debug("canvasHeight = "+canvasHeight);
-//					logger.debug("translateX = "+translateX);
-//					logger.debug("translateY = "+translateY);					
-//				}				
 				
 				gc.setTransform(transform);			
 				
@@ -302,11 +290,11 @@ extends XComposite
 		canvas.setLayoutData(canvasData);	
 		canvas.setSize(newWidth, newHeight);
 		
-		if (logger.isDebugEnabled()) {
-			logger.debug("newWidth = "+newWidth);
-			logger.debug("newHeight = "+newHeight);
-			logger.debug("canvasScaleFactor = "+canvasScaleFactor);
-		}
+//		if (logger.isDebugEnabled()) {
+//			logger.debug("newWidth = "+newWidth);
+//			logger.debug("newHeight = "+newHeight);
+//			logger.debug("canvasScaleFactor = "+canvasScaleFactor);
+//		}
 	}
 
 	protected void updateCanvas() 
@@ -317,18 +305,6 @@ extends XComposite
 		layout(true);
 	}
 	
-//	private void setLabelText() 
-//	{
-//		int numberOfAfterCommaDigits = 2;
-//		label.setText(
-//				NLBasePlugin.getResourceString("printPreviewComposite.width.label") + " = " + 
-//				Utils.shortenDouble(getPageWidth(getCurrentUnit()), numberOfAfterCommaDigits) + 
-//				getCurrentUnit().getUnitSymbol() + ", " +
-//				NLBasePlugin.getResourceString("printPreviewComposite.height.label") + " = " +
-//				Utils.shortenDouble(getPageHeight(getCurrentUnit()), numberOfAfterCommaDigits) + 
-//				getCurrentUnit().getUnitSymbol());
-//	}
-
 	private void setLabelText() 
 	{
 		int numberOfAfterCommaDigits = 2;
@@ -362,6 +338,7 @@ extends XComposite
 	}
 	public void setCurrentUnit(IUnit currentUnit) {
 		this.currentUnit = currentUnit;
+		updateCanvas();
 	}
 
 	public double getPageWidth(IUnit unit) {

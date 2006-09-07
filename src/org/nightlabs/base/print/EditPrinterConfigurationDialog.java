@@ -70,7 +70,7 @@ public class EditPrinterConfigurationDialog extends CenteredDialog {
 	{
 		super.configureShell(newShell);		
 		newShell.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.title"));
-		newShell.setSize(500, 500);
+		newShell.setSize(400, 525);
 	}
 	
 	@Override

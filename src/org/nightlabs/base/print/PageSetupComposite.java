@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.CComboComposite;
+import org.nightlabs.base.composite.DoubleSpinnerComposite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.i18n.UnitRegistryEP;
 import org.nightlabs.base.labelprovider.UnitLabelProvider;
@@ -88,10 +89,7 @@ extends XComposite
 	public PageFormat getPageFormat() {
 		return pageFormat;
 	}
-	private Spinner marginTopSpinner = null;
-	private Spinner marginBottomSpinner = null;	
-	private Spinner marginLeftSpinner = null;	
-	private Spinner marginRightSpinner = null;	
+	
 	private Button orientationHorizontal = null;
 	private Button orientationVertical = null;	
 	private CComboComposite<IPredefinedPage> predefinedPageCombo = null;
@@ -103,7 +101,10 @@ extends XComposite
 			throw new IllegalArgumentException("Param pageFormat must not be null!");
 		
 		this.pageFormat = pageFormat;
+		initMargins(pageFormat);
 		createComposite(this);
+		initOrientation(pageFormat);
+		setSpinnerValues();
 		addDisposeListener(disposeListener);
 	}
 	
@@ -114,7 +115,7 @@ extends XComposite
 	
 	private void createComposite(Composite parent) 
 	{
-		setLayout(new GridLayout(2, true));
+		setLayout(new GridLayout(2, false));
 		
 		// preview
 		Group previewGroup = new Group(parent, SWT.NONE);
@@ -124,6 +125,8 @@ extends XComposite
 		previewComp = initPreviewComposite(previewGroup);
 		
 		Composite detailComp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		GridData detailData = new GridData(125, SWT.DEFAULT);
+		detailComp.setLayoutData(detailData);
 		
 		// predefined pages		
 		Group pageGroup = new Group(detailComp, SWT.NONE);
@@ -146,65 +149,197 @@ extends XComposite
 		orientationVertical.setText(NLBasePlugin.getResourceString("composite.pageSetup.vertical.label"));
 		orientationVertical.addSelectionListener(verticalListener);
 
-		// margins
-		Group marginGroup = new Group(detailComp, SWT.NONE);
+		createMargins(detailComp);
+	}	
+	
+	private double getSpinnerMaximum() {
+		return Integer.MAX_VALUE;
+	}
+	
+	private DoubleSpinnerComposite marginTopSpinner = null;
+	private DoubleSpinnerComposite marginBottomSpinner = null;	
+	private DoubleSpinnerComposite marginLeftSpinner = null;	
+	private DoubleSpinnerComposite marginRightSpinner = null;		
+	private void createMargins(Composite parent) 
+	{
+		Group marginGroup = new Group(parent, SWT.NONE);
 		marginGroup.setText(NLBasePlugin.getResourceString("composite.pageSetup.group.margins.label"));
-//		marginGroup.setLayout(new GridLayout(2, false));		
-//		marginGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
-		marginGroup.setLayout(new GridLayout());		
-		marginGroup.setLayoutData(new GridData(GridData.FILL_BOTH));		
+		marginGroup.setLayout(new GridLayout(2, false));				
+		marginGroup.setLayoutData(new GridData(GridData.FILL_BOTH));						
 		
+		Label unitLabel = new Label(marginGroup, SWT.NONE);
+		unitLabel.setText(NLBasePlugin.getResourceString("composite.printPreview.unit.label"));
+		unitCombo = initUnitCombo(marginGroup);
+		unitCombo.addSelectionListener(unitListener);
+		unitCombo.selectElement(new MMUnit());
+	
+		Label marginTopLabel = new Label(marginGroup, SWT.NONE);
+		marginTopLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginTop.label"));		
+		marginTopSpinner = new DoubleSpinnerComposite(marginGroup, SWT.NONE, SWT.BORDER, 
+				getSpinnerDigits(), 0, getSpinnerMaximum(), getSpinnerIncrement(), 
+				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		marginTopSpinner.setValue(marginTop);
+		marginTopSpinner.addSelectionListener(marginListener);		
+		marginTopSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
+		
+		Label marginLeftLabel = new Label(marginGroup, SWT.NONE);
+		marginLeftLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginLeft.label"));		
+		marginLeftSpinner = new DoubleSpinnerComposite(marginGroup, SWT.NONE, SWT.BORDER, 
+				getSpinnerDigits(), 0, getSpinnerMaximum(), getSpinnerIncrement(), 
+				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		marginLeftSpinner.setValue(marginLeft);
+		marginLeftSpinner.addSelectionListener(marginListener);
+		marginLeftSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		Label marginRightLabel = new Label(marginGroup, SWT.NONE);			
+		marginRightLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginRight.label"));		
+		marginRightSpinner = new DoubleSpinnerComposite(marginGroup, SWT.NONE, SWT.BORDER, 
+				getSpinnerDigits(), 0, getSpinnerMaximum(), getSpinnerIncrement(), 
+				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		marginRightSpinner.setValue(marginRight);
+		marginRightSpinner.addSelectionListener(marginListener);
+		marginRightSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
+
+		Label marginBottomLabel = new Label(marginGroup, SWT.NONE);
+		marginBottomLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginBottom.label"));		
+		marginBottomSpinner = new DoubleSpinnerComposite(marginGroup, SWT.NONE, SWT.BORDER, 
+				getSpinnerDigits(), 0, getSpinnerMaximum(), getSpinnerIncrement(), 
+				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		marginBottomSpinner.setValue(marginBottom);
+		marginBottomSpinner.addSelectionListener(marginListener);		
+		marginBottomSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));				
+	}
+	
+//	private Spinner marginTopSpinner = null;
+//	private Spinner marginBottomSpinner = null;	
+//	private Spinner marginLeftSpinner = null;	
+//	private Spinner marginRightSpinner = null;		
+//	private void createMargins(Composite parent) 
+//	{
+//		// margins
+//		Group marginGroup = new Group(parent, SWT.NONE);
+//		marginGroup.setText(NLBasePlugin.getResourceString("composite.pageSetup.group.margins.label"));
+//		marginGroup.setLayout(new GridLayout(2, false));		
+////	marginGroup.setLayout(new GridLayout());		
+//		marginGroup.setLayoutData(new GridData(GridData.FILL_BOTH));						
+//		
 //		Label unitLabel = new Label(marginGroup, SWT.NONE);
 //		unitLabel.setText(NLBasePlugin.getResourceString("composite.printPreview.unit.label"));
 //		unitCombo = initUnitCombo(marginGroup);
 //		unitCombo.addSelectionListener(unitListener);
 //		unitCombo.selectElement(new MMUnit());
-		
-		marginTopSpinner = new Spinner(marginGroup, SWT.BORDER);
-		configureMarginSpinner(marginTopSpinner);
-		marginTopSpinner.setSelection((int)previewComp.getMarginTop());
-		marginTopSpinner.addSelectionListener(marginListener);
+//	
 //		Label marginTopLabel = new Label(marginGroup, SWT.NONE);
-//		marginTopLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginTop.label"));
-		marginTopSpinner.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));		
-		
-		Composite middleSpinner = new XComposite(marginGroup, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		middleSpinner.setLayout(new GridLayout(2, true));
-			
-		marginLeftSpinner = new Spinner(middleSpinner, SWT.BORDER);
-		configureMarginSpinner(marginLeftSpinner);
-		marginLeftSpinner.setSelection((int)previewComp.getMarginLeft());
-		marginLeftSpinner.addSelectionListener(marginListener);
+//		marginTopLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginTop.label"));		
+//		marginTopSpinner = new Spinner(marginGroup, SWT.BORDER);
+//		configureMarginSpinner(marginTopSpinner);
+//		marginTopSpinner.setSelection((int)previewComp.getMarginTop());
+//		marginTopSpinner.addSelectionListener(marginListener);
+////		marginTopSpinner.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));		
+//		marginTopSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
+//		
+////		Composite middleSpinner = new XComposite(marginGroup, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+////		middleSpinner.setLayout(new GridLayout(2, true));
+//
 //		Label marginLeftLabel = new Label(marginGroup, SWT.NONE);
-//		marginLeftLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginLeft.label"));
-		marginLeftSpinner.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
-		
-		marginRightSpinner = new Spinner(middleSpinner, SWT.BORDER);
-		configureMarginSpinner(marginRightSpinner);
-		marginRightSpinner.setSelection((int)previewComp.getMarginRight());
-		marginRightSpinner.addSelectionListener(marginListener);
-//		Label marginRightLabel = new Label(marginGroup, SWT.NONE);
-//		marginRightLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginRight.label"));
-		marginRightSpinner.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, true));
-		
-		marginBottomSpinner = new Spinner(marginGroup, SWT.BORDER);
-		configureMarginSpinner(marginBottomSpinner);
-		marginBottomSpinner.setSelection((int)previewComp.getMarginBottom());
-		marginBottomSpinner.addSelectionListener(marginListener);
+//		marginLeftLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginLeft.label"));		
+//		marginLeftSpinner = new Spinner(marginGroup, SWT.BORDER);
+//		configureMarginSpinner(marginLeftSpinner);
+//		marginLeftSpinner.setSelection((int)previewComp.getMarginLeft());
+//		marginLeftSpinner.addSelectionListener(marginListener);
+////		marginLeftSpinner.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
+//		marginLeftSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		
+//		Label marginRightLabel = new Label(marginGroup, SWT.NONE);			
+//		marginRightLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginRight.label"));		
+//		marginRightSpinner = new Spinner(marginGroup, SWT.BORDER);
+//		configureMarginSpinner(marginRightSpinner);
+//		marginRightSpinner.setSelection((int)previewComp.getMarginRight());
+//		marginRightSpinner.addSelectionListener(marginListener);
+////		marginRightSpinner.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, true));
+//		marginRightSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
+//
 //		Label marginBottomLabel = new Label(marginGroup, SWT.NONE);
-//		marginBottomLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginBottom.label"));
-		marginBottomSpinner.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));		
+//		marginBottomLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginBottom.label"));		
+//		marginBottomSpinner = new Spinner(marginGroup, SWT.BORDER);
+//		configureMarginSpinner(marginBottomSpinner);
+//		marginBottomSpinner.setSelection((int)previewComp.getMarginBottom());
+//		marginBottomSpinner.addSelectionListener(marginListener);
+////		marginBottomSpinner.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));		
+//		marginBottomSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));				
+//	}
+
+	// change 1/72 inch value into currentUnit and display it in spinner	
+	private void setSpinnerValue(DoubleSpinnerComposite s, double value) 
+	{
+		double spinnerValue = UnitUtil.getUnitValue(value, getScreenUnit(), getCurrentUnit());
+		s.setValue(spinnerValue);
 		
-		setValues(pageFormat);
+//		if (logger.isDebugEnabled()) {
+//			logger.debug("spinnerValue = "+spinnerValue);
+//			logger.debug("pageFormatValue = "+value);			
+//		}		
+	}
+
+	// change currentUnit value into 1/72 dpi	
+	private double getSpinnerValue(DoubleSpinnerComposite s)  
+	{
+		double spinnerValue = s.getValue();
+		double pageFormatValue = UnitUtil.getUnitValue(spinnerValue, getCurrentUnit(), getScreenUnit());
+		
+//		if (logger.isDebugEnabled()) {
+//			logger.debug("spinnerValue = "+spinnerValue);
+//			logger.debug("pageFormatValue = "+pageFormatValue);			
+//		}
+		
+		return pageFormatValue;
+	}
+	
+//	private void assignMarginValues() 
+//	{
+//		marginTop = marginTopSpinner.getValue();
+//		marginBottom = marginBottomSpinner.getValue();
+//		marginLeft = marginLeftSpinner.getValue();
+//		marginRight = marginRightSpinner.getValue();				
+//	}
+	
+	private void assignMarginValues() 
+	{
+		marginTop = getSpinnerValue(marginTopSpinner);
+		marginBottom = getSpinnerValue(marginBottomSpinner);
+		marginLeft = getSpinnerValue(marginLeftSpinner);
+		marginRight = getSpinnerValue(marginRightSpinner);				
 	}	
+	
+	private void setSpinnerValues() 
+	{
+		setSpinnerValue(marginTopSpinner, marginTop);
+		setSpinnerValue(marginBottomSpinner, marginBottom);		
+		setSpinnerValue(marginLeftSpinner, marginLeft);		
+		setSpinnerValue(marginRightSpinner, marginRight);		
+	}
+	
+	private SelectionListener marginListener = new SelectionListener()
+	{	
+		public void widgetSelected(SelectionEvent e) 
+		{			
+			assignMarginValues();	
+			changePageFormat();
+			refresh(pageFormat);
+			logger.debug("margin changed");
+		}	
+		public void widgetDefaultSelected(SelectionEvent e) {
+			widgetSelected(e);			
+		}	
+	};	
+	
 	
 	private IUnit getScreenUnit() {
 		return UnitRegistry.sharedInstance().getUnit(DefaultScreenUnit.UNIT_ID);
 	}
 	
-	private IUnit currentUnit = null;
 	public IUnit getCurrentUnit() {
-		return currentUnit;
+		return unitCombo.getSelectedElement();
 	}
 	private CComboComposite<IUnit> unitCombo = null;
 	private CComboComposite<IUnit> initUnitCombo(Composite parent) {
@@ -215,60 +350,57 @@ extends XComposite
 	private SelectionListener unitListener = new SelectionListener()
 	{	
 		public void widgetSelected(SelectionEvent e) {
-			currentUnit = unitCombo.getSelectedElement();
-			setMarginValues(pageFormat);
-			
+			setSpinnerValues();
 		}	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			
 		}	
 	};
 	
-	private int spinnerDigits = 2;
-	private void configureMarginSpinner(Spinner s) 
-	{
-		s.setMinimum(0);
-		s.setMaximum(200);
-//		s.setDigits(spinnerDigits);
+	private int spinnerDigits = 3;
+	private int getSpinnerDigits() {
+		return spinnerDigits;
 	}
-
-	public void setValues(PageFormat pf) 
+	
+	private double spinnerIncrement = 100.0;
+	private double getSpinnerIncrement() {
+		return spinnerIncrement;
+	}
+	
+	private void initOrientation(PageFormat pf) 
 	{
 		if (pf.getOrientation() == PageFormat.LANDSCAPE)
 			orientationHorizontal.setSelection(true);
 		if (pf.getOrientation() == PageFormat.PORTRAIT)
 			orientationVertical.setSelection(true);		
-	
-//		setMarginValues(pf);
 	}
 	
-	protected void setMarginValues(PageFormat pf) 
+	private double marginTop;
+	private double marginBottom;	
+	private double marginLeft;	
+	private double marginRight;		
+	private void initMargins(PageFormat pf) 
 	{
-		double marginTop = pf.getImageableY();
-		double marginBottom = ((pf.getHeight() - (pf.getImageableY() + pf.getImageableHeight())));
-		double marginLeft = pf.getImageableX();
-		double marginRight = (pf.getWidth() - (pf.getImageableX() + pf.getImageableWidth()));												
-		
-		setMarginValue(marginTopSpinner, marginTop, getScreenUnit());
-		setMarginValue(marginBottomSpinner, marginBottom, getScreenUnit());		
-		setMarginValue(marginLeftSpinner, marginLeft, getScreenUnit());
-		setMarginValue(marginRightSpinner, marginRight, getScreenUnit());						
+		marginTop = pf.getImageableY();
+		marginBottom = ((pf.getHeight() - (pf.getImageableY() + pf.getImageableHeight())));
+		marginLeft = pf.getImageableX();
+		marginRight = (pf.getWidth() - (pf.getImageableX() + pf.getImageableWidth()));														
 	}
-	
-	protected void setMarginValue(Spinner s, double value, IUnit unit) 
+					
+	private void changePageFormat() 
 	{
-		double val = UnitUtil.getUnitValue(value, unit, getScreenUnit());
-		s.setSelection((int)val);
-		if (s.equals(marginTopSpinner))
-			previewComp.setMarginTop(val);							
-		if (s.equals(marginBottomSpinner))		
-			previewComp.setMarginBottom(val);								
-		if (s.equals(marginLeftSpinner))				
-			previewComp.setMarginLeft(val);												
-		if (s.equals(marginRightSpinner))				
-			previewComp.setMarginRight(val);																			
+		Paper paper = pageFormat.getPaper();		
+		if (pageFormat.getOrientation() == PageFormat.PORTRAIT) {
+			paper.setImageableArea(marginLeft, marginTop, (paper.getWidth() - (marginLeft + marginRight)), 
+					(paper.getHeight() - (marginTop + marginBottom)) );					
+		} 
+		else if (pageFormat.getOrientation() == PageFormat.LANDSCAPE) {
+			paper.setImageableArea(marginTop, marginRight, (paper.getWidth() - (marginBottom + marginTop)), 
+					(paper.getHeight() - (marginLeft + marginRight)) );						
+		}
+		pageFormat.setPaper(paper);		
 	}
-	
+			
 	private CComboComposite<IPredefinedPage> initPageCombo(Composite parent) 
 	{
 		List<IPredefinedPage> pages = new ArrayList<IPredefinedPage>(PredefinedPageEP.sharedInstance().getPageRegistry().getPages());
@@ -276,51 +408,28 @@ extends XComposite
 				parent, SWT.READ_ONLY);
 	}
 		
-//	private PageFormat getPageFormat(IPredefinedPage page) 
-//	{		
-//		IUnit inchUnit = UnitRegistry.sharedInstance().getUnit(InchUnit.UNIT_ID);
-//		IUnit pageUnit = page.getUnit();
+	private PageFormat getPageFormat(IPredefinedPage page) 
+	{		
+		IUnit pageUnit = page.getUnit();
+//		IUnit inchUnit = UnitRegistry.sharedInstance().getUnit(InchUnit.UNIT_ID);		
 //		double heightInInch = UnitUtil.getUnitValue(page.getPageHeight(), pageUnit, inchUnit);
 //		double widthInInch = UnitUtil.getUnitValue(page.getPageWidth(), pageUnit, inchUnit);
 //		double factor = 72f;
 //		double height = heightInInch * factor;
 //		double width = widthInInch * factor;
-//		
-//		double marginTop = previewComp.getMarginTop();
-//		double marginLeft = previewComp.getMarginLeft();
-//		double marginRight = previewComp.getMarginRight();
-//		double marginBottom = previewComp.getMarginBottom();
-//		
-//		Paper paper = pageFormat.getPaper();
-//		paper.setImageableArea(marginTop, marginLeft, width, height);
-//		paper.setSize(marginLeft + width + marginRight, marginTop + height + marginBottom);
-//		PageFormat newPageFormat = (PageFormat) pageFormat.clone();
-//		newPageFormat.setPaper(paper);
-//		
-//		return newPageFormat;
-//	}
 		
-	private PageFormat getPageFormat(IPredefinedPage page) 
-	{		
-		IUnit screenUnit = getScreenUnit();
-		IUnit pageUnit = page.getUnit();
-		double height = UnitUtil.getUnitValue(page.getPageHeight(), pageUnit, screenUnit);
-		double width = UnitUtil.getUnitValue(page.getPageWidth(), pageUnit, screenUnit);
-		
-		double marginTop = previewComp.getMarginTop();
-		double marginLeft = previewComp.getMarginLeft();
-		double marginRight = previewComp.getMarginRight();
-		double marginBottom = previewComp.getMarginBottom();
-		
+		double height = UnitUtil.getUnitValue(page.getPageHeight(), pageUnit, getScreenUnit());
+		double width = UnitUtil.getUnitValue(page.getPageWidth(), pageUnit, getScreenUnit());		
+				
 		Paper paper = pageFormat.getPaper();
 		paper.setImageableArea(marginTop, marginLeft, width, height);
 		paper.setSize(marginLeft + width + marginRight, marginTop + height + marginBottom);
 		PageFormat newPageFormat = (PageFormat) pageFormat.clone();
 		newPageFormat.setPaper(paper);
-		
+				
 		return newPageFormat;
-	}	
-	
+	}
+			
 	private LabelProvider predefinedPageLabelProvider = new LabelProvider() 
 	{
 		@Override
@@ -335,7 +444,7 @@ extends XComposite
 	{	
 		public void widgetSelected(SelectionEvent e) {
 			pageFormat = getPageFormat(predefinedPageCombo.getSelectedElement());
-			refresh();
+			refresh(pageFormat);
 		}	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);			
@@ -346,7 +455,7 @@ extends XComposite
 	{	
 		public void widgetSelected(SelectionEvent e) {
 			pageFormat.setOrientation(PageFormat.LANDSCAPE);
-			refresh();
+			refresh(pageFormat);
 		}	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -357,53 +466,13 @@ extends XComposite
 	{	
 		public void widgetSelected(SelectionEvent e) {
 			pageFormat.setOrientation(PageFormat.PORTRAIT);
-			refresh();
+			refresh(pageFormat);
 		}	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
 		}	
 	};
-	
-	private SelectionListener marginListener = new SelectionListener()
-	{	
-		public void widgetSelected(SelectionEvent e) 
-		{
-			if (e.getSource().equals(marginTopSpinner))
-				previewComp.setMarginTop(marginTopSpinner.getSelection());
-			if (e.getSource().equals(marginBottomSpinner))
-				previewComp.setMarginBottom(marginBottomSpinner.getSelection());
-			if (e.getSource().equals(marginLeftSpinner))
-				previewComp.setMarginLeft(marginLeftSpinner.getSelection());
-			if (e.getSource().equals(marginRightSpinner))
-				previewComp.setMarginRight(marginRightSpinner.getSelection());			
-		}	
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);			
-		}	
-	};
-
-//	protected double getSpinnerValue(Spinner s) {
-//		return Utils.getDouble(s.getSelection(), spinnerDigits);
-//	}
-//	
-//	private SelectionListener marginListener = new SelectionListener()
-//	{	
-//		public void widgetSelected(SelectionEvent e) 
-//		{
-//			if (e.getSource().equals(marginTopSpinner))
-//				setMarginValue(marginTopSpinner, getSpinnerValue(marginTopSpinner), getCurrentUnit());			
-//			if (e.getSource().equals(marginBottomSpinner))
-//				setMarginValue(marginTopSpinner, getSpinnerValue(marginBottomSpinner), getCurrentUnit());
-//			if (e.getSource().equals(marginLeftSpinner))
-//				setMarginValue(marginLeftSpinner, getSpinnerValue(marginLeftSpinner), getCurrentUnit());			
-//			if (e.getSource().equals(marginRightSpinner))
-//				setMarginValue(marginRightSpinner, getSpinnerValue(marginRightSpinner), getCurrentUnit());
-//		}	
-//		public void widgetDefaultSelected(SelectionEvent e) {
-//			widgetSelected(e);			
-//		}	
-//	};
-	
+		
 	private DisposeListener disposeListener = new DisposeListener()
 	{	
 		public void widgetDisposed(DisposeEvent e) {
