@@ -161,6 +161,10 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	 * Assumes the editor of this page is an instance of
 	 * {@link EntityEditor}.
 	 * 
+	 * Note that page controllers should not be accessed from their associated
+	 * pages in their constructor, as the controller registration
+	 * will be initialized immediately after the page was created.  
+	 * 
 	 * @return The page controller for this page.
 	 */
 	public IEntityEditorPageController getPageController() {

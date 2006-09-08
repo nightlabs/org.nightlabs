@@ -119,7 +119,8 @@ public class DateTimeEdit extends XComposite
 				control = active;
 			}
 			else {
-				Label l = new Label(this, SWT.WRAP);
+//				Label l = new Label(this, SWT.WRAP);
+				Label l = new Label(this, SWT.NONE);
 				l.setText(caption);
 				control = l;
 			}

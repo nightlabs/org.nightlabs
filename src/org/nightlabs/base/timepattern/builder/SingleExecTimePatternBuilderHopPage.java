@@ -56,7 +56,7 @@ public class SingleExecTimePatternBuilderHopPage extends WizardHopPage {
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(dayEdit.getDate());
 		timePattern.setYear(""+calendar.get(Calendar.YEAR));
-		timePattern.setMonth(""+calendar.get(Calendar.MONTH));
+		timePattern.setMonth(""+(calendar.get(Calendar.MONTH)+1));
 		timePattern.setDay(""+calendar.get(Calendar.DAY_OF_MONTH));
 		timePattern.setDayOfWeek(""+(calendar.get(Calendar.DAY_OF_WEEK)-1));
 		startTimeComposite.configurePattern(timePattern);
