@@ -114,43 +114,5 @@ extends AbstractComboBoxCellEditor
   {
 		return items[getComboBox().getSelectionIndex()];
   }
-  
-//  /**
-//   * Sets the list of choices for the combo box
-//   *
-//   * @param items the list of choices for the combo box
-//   */
-//  public void setItems(String[] items) 
-//  {
-//    Assert.isNotNull(items);
-//    this.items = items;
-//    populateComboBoxItems();
-//  }  
-//      
-//  /**
-//   * Sets the list of images for the combo box
-//   *
-//   * @param images the list of images for the combo box
-//   */
-//  public void setImages(Image[] images) 
-//  {
-//    this.images = images;
-//    populateComboBoxItems();
-//  }  
     
-//  /**
-//   * Updates the list of choices for the combo box for the current control.
-//   */
-//  protected void populateComboBoxItems() 
-//  {
-//    if (getComboBox() != null && items != null) {
-//    	getComboBox().removeAll();
-//      for (int i = 0; i < items.length; i++)
-//      	getComboBox().add(null, items[i], i);
-//
-//      setValueValid(true);
-//      selection = 0;
-//    }
-//  }
-  
 }
