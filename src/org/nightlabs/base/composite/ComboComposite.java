@@ -25,96 +25,76 @@
  ******************************************************************************/
 package org.nightlabs.base.composite;
 
-
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.List;
 
-/**
- * This class provides a composite able to display a list of objects of the same type as graphical representation.
- * The labels of the objects are provided by a {@link ILabelProvider}.
- * 
- * @author Tobias Langner <tobias[DOT]langner[AT]nightlabs[DOT]de>
- * 
- * @param <T> The type of the elements that should be displayed inside this list.
- */
-public class ListComposite<T> extends AbstractListComposite<T> 
+public class ComboComposite<T> extends AbstractListComposite<T>
 {
-	private List list;
+	private Combo combo;
 	
-	public ListComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+	public ComboComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
 		super(parent, style, layoutMode, layoutDataMode);
 	}
 
-	public ListComposite(Composite parent, int style)
+	public ComboComposite(Composite parent, int style)
 	{
 		super(parent, style);
 	}
 
-	public ListComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+	public ComboComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
 		super(labelProvider, parent, style, layoutMode, layoutDataMode);
 	}
 
-	public ListComposite(ILabelProvider labelProvider, Composite parent, int style)
+	public ComboComposite(ILabelProvider labelProvider, Composite parent, int style)
 	{
 		super(labelProvider, parent, style);
 	}
-
+	
 	@Override
 	protected void addElementToGui(T element)
 	{
-		list.add(labelProvider.getText(element));
+		combo.add(labelProvider.getText(element));
 	}
 
 	@Override
 	protected Control createGuiControl(Composite parent, int style)
 	{
-		list = new List(parent, style | SWT.V_SCROLL | SWT.H_SCROLL);		
-		return list;
+		combo = new Combo(parent, style | SWT.DROP_DOWN);		
+		return combo;
 	}
 
 	@Override
 	protected int getSelectedIndex()
 	{
-		return list.getSelectionIndex();
+		return combo.getSelectionIndex();
 	}
 
 	@Override
 	protected void removeAllElementsFromGui()
 	{
-		list.removeAll();
+		combo.removeAll();
 	}
 
 	@Override
 	protected void removeElementFromGui(int index)
 	{
-		list.remove(index);
+		combo.remove(index);
 	}
 
 	@Override
 	protected void setSelection(int index)
 	{
-		list.select(index);
-		list.showSelection();
+		combo.select(index);
 	}
 	
-	public List getList()
+	public Combo getCombo()
 	{
-		return list;
+		return combo;
 	}
 	
-	/**
-	 * /**
-	 * Refreshes the label of the given element. 
-	 * @param element The element to be refreshed.
-	 */
-	public void refreshElement(T element)
-	{
-		int index = getElementIndex(element);
-		list.setItem(index, labelProvider.getText(element));
-	}	
 }
