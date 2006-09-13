@@ -55,7 +55,7 @@ extends WorkbenchWindowAdvisor
 		this.applicationName = applicationTitle;
 	}
 	protected String applicationName = "Application";
-	
+
 	public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) {
 		Collection<ActionBarItem> menuBarItems = new HashSet<ActionBarItem>();
 		menuBarItems.add(ActionBarItem.New);
@@ -75,14 +75,14 @@ extends WorkbenchWindowAdvisor
 		super.preWindowOpen();
 		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 		configurer.setTitle(applicationName);
-    configurer.setInitialSize(getScreenSize());
-    configurer.setShowMenuBar(true);
-    configurer.setShowStatusLine(true);
-    configurer.setShowCoolBar(true);
-    configurer.setShowPerspectiveBar(false);
-    configurer.setShowProgressIndicator(true);
+		configurer.setInitialSize(getScreenSize());
+		configurer.setShowMenuBar(true);
+		configurer.setShowStatusLine(true);
+		configurer.setShowCoolBar(true);
+		configurer.setShowPerspectiveBar(false);
+		configurer.setShowProgressIndicator(true);
 	}			
-	
+
 	protected Point getScreenSize() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		return new Point(screenSize.width, screenSize.height);

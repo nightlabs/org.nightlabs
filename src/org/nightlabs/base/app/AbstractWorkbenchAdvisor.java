@@ -47,49 +47,49 @@ extends WorkbenchAdvisor
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(AbstractWorkbenchAdvisor.class);
-	
+
 	public AbstractWorkbenchAdvisor() 
 	{
 		super();
-  	try {
-  		application = initApplication();
-	    try {
-	    	getApplication().initializeLogging();
-	    } catch (Throwable t) {
-	    	System.out.println("Could not initialize logging !!!");
-	    }  		
+		try {
+			application = initApplication();
+			try {
+				getApplication().initializeLogging();
+			} catch (Throwable t) {
+				System.out.println("Could not initialize logging !!!");
+			}  		
 
 			if (classSharing)
 			{
 //				if (isSystemClassLoaderDelegating()) {
-//					LOGGER.debug("Initializing classsharing ...");
-//					ClasssharingPlugin.initializeClassSharing();
-//					LOGGER.debug("Initializing classsharing ... DONE");
+//				LOGGER.debug("Initializing classsharing ...");
+//				ClasssharingPlugin.initializeClassSharing();
+//				LOGGER.debug("Initializing classsharing ... DONE");
 //				}
 //				else
-//					LOGGER.error("classsharing is enabled, but system classloader is NOT an instance of DelegatingClassLoader! Cannot initialize classsharing!");
+//				LOGGER.error("classsharing is enabled, but system classloader is NOT an instance of DelegatingClassLoader! Cannot initialize classsharing!");
 			}
 			else
 				logger.debug("classsharing is disabled - NOT initialized.");
-				
+
 
 			initConfig();
-			
-  	} catch (Exception e) {
-  		throw new RuntimeException(e);
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}		
 	}
-	
+
 	protected boolean classSharing = true;
 	public void setClassSharing(boolean classSharing) {
 		this.classSharing = classSharing;
 	}	
-	
+
 //	public static boolean isSystemClassLoaderDelegating() {
-//		return ClassLoader.getSystemClassLoader() instanceof DelegatingClassLoader;
+//	return ClassLoader.getSystemClassLoader() instanceof DelegatingClassLoader;
 //	}	
-	
-	
+
+
 	/**
 	 * Checks the {@link ExceptionHandlerRegistry} for registered handlers by invoking
 	 * {@link ExceptionHandlerRegistry#searchHandler(Throwable)}. For the found item the 
@@ -99,8 +99,8 @@ extends WorkbenchAdvisor
 	public void eventLoopException(Throwable exception) {
 		if (!ExceptionHandlerRegistry.syncHandleException(exception))
 			super.eventLoopException(exception);
-  }  	
-	
+	}  	
+
 	/**
 	 * initialzies the Config in the ConfigDir of the Application
 	 * @throws ConfigException
@@ -108,10 +108,10 @@ extends WorkbenchAdvisor
 	protected void initConfig() 
 	throws ConfigException
 	{
-//	 initialize the Config
+//		initialize the Config
 		Config.createSharedInstance("config.xml", true, getApplication().getConfigDir());		
 	}	
-	
+
 	/**
 	 * Intializes the workbench 
 	 */
@@ -119,7 +119,7 @@ extends WorkbenchAdvisor
 		super.initialize(configurer);
 		configurer.setSaveAndRestore(true);
 	}	
-	
+
 	/**
 	 * saves the Config before the Application is shutDown
 	 */
@@ -133,18 +133,18 @@ extends WorkbenchAdvisor
 		}
 		return superResult;
 	}
-	
+
 	protected AbstractApplication application = null;
 	public AbstractApplication getApplication() 
 	{
 		if (application == null)
 			application = initApplication();
-		
+
 		return application;
 	}
-	
+
 	protected abstract AbstractApplication initApplication();	
-	
+
 	/**
 	 * creates the DefaultWorkbenchWindowAdvisor by default.
 	 * iy you want to specify your own WorkbenchWindowAdvisor, you have to override
