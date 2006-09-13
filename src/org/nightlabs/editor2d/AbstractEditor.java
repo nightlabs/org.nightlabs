@@ -524,11 +524,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			outlinePage = new EditorOutlinePage(this, treeViewer);        
 			return outlinePage;
 		}
-//		if (type == ZoomManager.class)
-//			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
+		
 		if (type == ZoomManager.class) {
-			if (getGraphicalViewer() != null)
-				return getGraphicalViewer().getProperty(ZoomManager.class.toString());
+			return getZoomManager();
 		}			
 		
 		if (type == org.eclipse.ui.views.properties.IPropertySheetPage.class) {
@@ -550,6 +548,19 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		return rulerComp;
 	}
 
+	private ZoomManager zoomManager = null;
+	protected ZoomManager getZoomManager() 
+	{
+		if (zoomManager == null && getGraphicalViewer() != null) 
+		{
+			Object zoomAdapter = getGraphicalViewer().getProperty(ZoomManager.class.toString());
+		  if (zoomAdapter != null && zoomAdapter instanceof ZoomManager) {
+  			zoomManager = ((ZoomManager)zoomAdapter);  
+		  }			
+		}
+		return zoomManager;		
+	}
+	
 //	/**
 //* Create a transfer drop target listener. When using a CombinedTemplateCreationEntry
 //	* tool in the palette, this will enable model element creation by dragging from the palette.
@@ -728,6 +739,16 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 	}
 
+	protected EditorActionBarContributor getEditorActionBarContributor() 
+	{
+		if (getEditorSite().getActionBarContributor() != null && 
+				getEditorSite().getActionBarContributor() instanceof EditorActionBarContributor) 
+		{
+			return (EditorActionBarContributor) getEditorSite().getActionBarContributor();			
+		}
+		return null;
+	}
+	
 	protected void createActions() 
 	{
 		super.createActions();
@@ -948,8 +969,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	protected void createGraphicalViewer(Composite parent) 
 	{
 		rulerComp = new RulerComposite(parent, SWT.NONE);		
-//		rulerComp.setLayout(new GridLayout());
-//		rulerComp.setLayoutData(new GridData(GridData.FILL_BOTH));		
 		super.createGraphicalViewer(rulerComp);
 		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());      
 	}  

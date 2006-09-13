@@ -262,6 +262,10 @@ extends XContributionItem
   {
 		public void partActivated(IWorkbenchPart part) 
 		{
+			if (logger.isDebugEnabled()) {
+				logger.debug("part activated");
+			}
+				
 			Object mldcAdapter = part.getAdapter(MultiLayerDrawComponent.class);
 			if (mldcAdapter != null && mldcAdapter instanceof MultiLayerDrawComponent) {
 				mldc = (MultiLayerDrawComponent) mldcAdapter;

@@ -344,6 +344,11 @@ extends ActionBarContributor
   	cm.add(getAction(ShapeExclusiveOrAction.ID));  	
   }
   
+  private EditorZoomComboContributionItem zoomContributionItem = null;
+  public EditorZoomComboContributionItem getEditorZoomComboContributionItem() {
+  	return zoomContributionItem;
+  }
+  
   /**
    * Add actions to the given toolbar.
    * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToToolBar(org.eclipse.jface.action.IToolBarManager)
@@ -363,8 +368,9 @@ extends ActionBarContributor
   	// Zoom
   	String[] zoomStrings = new String[] {	ZoomManager.FIT_ALL, 
   											ZoomManager.FIT_HEIGHT, 
-  											ZoomManager.FIT_WIDTH	};  	  	
-  	tbm.add(new EditorZoomComboContributionItem(getPage(), zoomStrings));
+  											ZoomManager.FIT_WIDTH	};
+  	zoomContributionItem = new EditorZoomComboContributionItem(getPage(), zoomStrings); 
+  	tbm.add(zoomContributionItem);
   	addZoomActions(tbm);  	
   	tbm.add(new Separator());
   	
