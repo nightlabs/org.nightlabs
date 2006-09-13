@@ -63,14 +63,14 @@ implements IPlatformRunnable
 		super();
 		init();
 	}
-	
+
 	private static String applicationName = "AbstractApplication";
 	public static String getApplicationName() {
 		return applicationName;
 	}
-	
+
 	private static String rootDir = "";
-	
+
 	/** 
 	 * @return the root directory, which is the applicationName in the users home directory.
 	 */
@@ -83,9 +83,9 @@ implements IPlatformRunnable
 		}
 		return rootDir;
 	}
-	
+
 	private static String configDir = "";
-	
+
 	/**
 	 * @return the config directory, which is getRootDir()+"/config".
 	 */
@@ -98,10 +98,10 @@ implements IPlatformRunnable
 		}
 		return configDir;
 	}
-	
-	
+
+
 	private static String logDir = "";
-	
+
 	/**
 	 * 
 	 * @return the log directory, which is getRootDir()+"/log"
@@ -117,15 +117,15 @@ implements IPlatformRunnable
 		}
 		return logDir;
 	}
-	
+
 	private static Object mutex = new Object();
 	public static Object getMutex() {
 		return mutex;
 	}	
-	
+
 //	protected static final String LOG4J_CONFIG_FILE = "log4j.xml"; 
 	protected static final String LOG4J_CONFIG_FILE = "log4j.properties";
-	
+
 	/**
 	 * Configures log4j with the file located in {@link #getConfigDir()}+"/log4j.properties"
 	 * @throws IOException
@@ -145,7 +145,7 @@ implements IPlatformRunnable
 		PropertyConfigurator.configure(logConfFileName);
 		logger.info(getApplicationName()+" started.");
 	}	
-	
+
 	/**
 	 * sets the System Property for the ApplicationName so that the
 	 * log4j.properties can access this systemProperty
@@ -225,7 +225,7 @@ implements IPlatformRunnable
 	 * @return the name of the Application
 	 */
 	public abstract String initApplicationName();
-	
+
 	/**
 	 * 
 	 * @param group the threadGroup
