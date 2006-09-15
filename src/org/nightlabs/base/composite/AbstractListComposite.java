@@ -218,6 +218,25 @@ public abstract class AbstractListComposite<T> extends XComposite
 	{
 		return elements.indexOf(element);
 	}
+
+	/**
+	 * Returns the current list of elements.
+	 * 
+	 * @return The current list of elements.
+	 */
+	public List<T> getElements() {
+		return elements;
+	}
+	
+	/**
+	 * Checks whether the given element is within the current element list
+	 * 
+	 * @param element The element to check
+	 * @return Whether or not the given element is within the current element list
+	 */
+	public boolean contains(T element) {
+		return elements.contains(element);
+	}
 	
 	/**
 	 * Selects the given element in the list.
@@ -246,7 +265,7 @@ public abstract class AbstractListComposite<T> extends XComposite
 		removeAllElementsFromGui();
 		populateList();
 	}
-
+	
 	/**
 	 * Removes the currently selected element in the list and returns the removed element.
 	 */
