@@ -28,6 +28,8 @@ package org.nightlabs.base.composite;
 
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
@@ -73,7 +75,9 @@ public class ListComposite<T> extends AbstractListComposite<T>
 	@Override
 	protected Control createGuiControl(Composite parent, int style)
 	{
-		list = new List(parent, style | SWT.V_SCROLL | SWT.H_SCROLL);		
+		list = new List(parent, style | SWT.V_SCROLL | SWT.H_SCROLL);
+		if (parent.getLayout() instanceof GridLayout)
+			list.setLayoutData(new GridData(GridData.FILL_BOTH));
 		return list;
 	}
 

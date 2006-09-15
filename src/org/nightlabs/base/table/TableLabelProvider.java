@@ -40,6 +40,11 @@ extends LabelProvider
 implements ITableLabelProvider
 {
 
+	@Override
+	public String getText(Object element) {
+		return getColumnText(element, 0);
+	}
+	
 	public Image getColumnImage(Object element, int columnIndex) {
 		return null;
 	}

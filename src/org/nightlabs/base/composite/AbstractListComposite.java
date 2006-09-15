@@ -62,7 +62,7 @@ public abstract class AbstractListComposite<T> extends XComposite
 	 */
 	public AbstractListComposite(Composite parent, int style)
 	{
-		this(new LabelProvider(), parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.NONE);		
+		this(new LabelProvider(), parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA);		
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public abstract class AbstractListComposite<T> extends XComposite
 	 */
 	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style)
 	{
-		this(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.NONE);
+		this(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA);
 	}
 	
 	/**
@@ -184,6 +184,16 @@ public abstract class AbstractListComposite<T> extends XComposite
 	{
 		for (T elem : elements)
 			addElement(elem);
+	}
+	
+	/**
+	 * Resets the list to the specified elements.
+	 * @param elements The elements to be set.
+	 */
+	public void setInput(List<T> elements)
+	{
+		removeAll();
+		addElements(elements);
 	}
 	
 	/**

@@ -25,8 +25,12 @@
  ******************************************************************************/
 package org.nightlabs.base.composite;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -55,6 +59,15 @@ public class ComboComposite<T> extends AbstractListComposite<T>
 		super(labelProvider, parent, style);
 	}
 	
+	private int comboStyle = SWT.DROP_DOWN;
+	
+	public ComboComposite(Composite parent, List<T> elements, ILabelProvider labelProvider, int comboStyle) 
+	{
+		super(labelProvider, parent, SWT.NONE);
+		this.comboStyle |= comboStyle;
+		addElements(elements);
+	}
+	
 	@Override
 	protected void addElementToGui(T element)
 	{
@@ -64,7 +77,7 @@ public class ComboComposite<T> extends AbstractListComposite<T>
 	@Override
 	protected Control createGuiControl(Composite parent, int style)
 	{
-		combo = new Combo(parent, style | SWT.DROP_DOWN);		
+		combo = new Combo(parent, style | comboStyle);		
 		return combo;
 	}
 
@@ -96,5 +109,38 @@ public class ComboComposite<T> extends AbstractListComposite<T>
 	{
 		return combo;
 	}
+
+	/**
+	 * @param listener
+	 * @see org.eclipse.swt.widgets.Combo#addModifyListener(org.eclipse.swt.events.ModifyListener)
+	 */
+	public void addModifyListener(ModifyListener listener) {
+		combo.addModifyListener(listener);
+	}
+
+	/**
+	 * @param listener
+	 * @see org.eclipse.swt.widgets.Combo#addSelectionListener(org.eclipse.swt.events.SelectionListener)
+	 */
+	public void addSelectionListener(SelectionListener listener) {
+		combo.addSelectionListener(listener);
+	}
+
+	/**
+	 * @param listener
+	 * @see org.eclipse.swt.widgets.Combo#removeModifyListener(org.eclipse.swt.events.ModifyListener)
+	 */
+	public void removeModifyListener(ModifyListener listener) {
+		combo.removeModifyListener(listener);
+	}
+
+	/**
+	 * @param listener
+	 * @see org.eclipse.swt.widgets.Combo#removeSelectionListener(org.eclipse.swt.events.SelectionListener)
+	 */
+	public void removeSelectionListener(SelectionListener listener) {
+		combo.removeSelectionListener(listener);
+	}
+	
 	
 }
