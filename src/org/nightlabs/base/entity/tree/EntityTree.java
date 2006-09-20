@@ -222,7 +222,8 @@ implements IEntityTreeCategoryChangeListener, IOpenListener, DisposeListener
 			// else delegate
 			else {
 				IEntityTreeCategory category = getChildCategory(element);
-				return (category != null) ? category.getContentProvider().hasChildren(element) : false;
+				ITreeContentProvider contentProvider = category != null ? getContentProvider(category) : null;
+				return (contentProvider != null) ? contentProvider.hasChildren(element) : false;
 			}
 		}
 		
@@ -335,6 +336,20 @@ implements IEntityTreeCategoryChangeListener, IOpenListener, DisposeListener
 	protected IEntityTreeCategory getChildCategory(Object child)
 	{
 		return childCategories==null ? null : childCategories.get(child);
+	}
+	
+	/**
+	 * Returns the {@link IEntityTreeCategory} of the given element
+	 * regardless whether the element is itself a categroy or
+	 * a child provided by a category.
+	 * 
+	 * @param element The element to search the category for.
+	 * @return The {@link IEntityTreeCategory} of the given element
+	 */
+	public IEntityTreeCategory getElementCategory(Object element) {
+		if (element instanceof IEntityTreeCategory)
+			return (IEntityTreeCategory) element;
+		return getChildCategory(element);
 	}
 
 	/* (non-Javadoc)
