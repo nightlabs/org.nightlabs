@@ -85,8 +85,8 @@ import org.eclipse.jface.wizard.Wizard;
  * @author Marco Schulze
  */
 public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWizard {
-	
-	private List dynamicWizardPages = new ArrayList();
+
+	private List<IWizardPage> dynamicWizardPages = new ArrayList<IWizardPage>();
 	private DynamicPathWizardDialog dynamicWizardDialog;
 
 	/**
@@ -128,15 +128,15 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 	public void addPages()
 	{
 		super.addPages(); // empty super method.
-    IWizardPage entryPage = getWizardEntryPage();
-    if(entryPage != null)
-      addPage(entryPage);
+		IWizardPage entryPage = getWizardEntryPage();
+		if(entryPage != null)
+			addPage(entryPage);
 	}
 
 	/**
-   * <strong>More Important API change:</strong> The entry page system is deprecated.
-   * From now on, handle entry pages manually!
-   * <p>
+	 * <strong>More Important API change:</strong> The entry page system is deprecated.
+	 * From now on, handle entry pages manually!
+	 * <p>
 	 * <strong>Important API change:</strong> Since this method exists, you
 	 * MUST NOT overwrite {@link #getWizardEntryPage()} anymore!!!
 	 * <p>
@@ -151,44 +151,44 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 	 *
 	 * @see DynamicPathWizardPage
 	 * @see IDynamicPathWizardPage
-   * 
-   * @deprecated
+	 * 
+	 * @deprecated
 	 */
 	public IDynamicPathWizardPage createWizardEntryPage() 
-  {
-    return null;
-  }
-
-  /**
-   * @deprecated
-   */
-  private IDynamicPathWizardPage wizardEntryPage = null;
+	{
+		return null;
+	}
 
 	/**
-   * <strong>More Important API change:</strong> The entry page system is deprecated.
-   * From now on, handle entry pages manually!
-   * <p>
+	 * @deprecated
+	 */
+	private IDynamicPathWizardPage wizardEntryPage = null;
+
+	/**
+	 * <strong>More Important API change:</strong> The entry page system is deprecated.
+	 * From now on, handle entry pages manually!
+	 * <p>
 	 * <strong>Important API change: Do not overwrite this method anymore!!!</strong>
 	 * Overwrite {@link #createWizardEntryPage()} instead!
 	 * 
 	 * @return Returns the first page of the wizard. If this page does not yet exist
 	 * (means it's the first call to this method), {@link #createWizardEntryPage()} is
 	 * called.
-   * 
-   * @deprecated
+	 * 
+	 * @deprecated
 	 */
 	public IDynamicPathWizardPage getWizardEntryPage()
 	{
 		if (wizardEntryPage == null)
 			wizardEntryPage = createWizardEntryPage();
-		
+
 //		if (wizardEntryPage == null)
-//			throw new NullPointerException("createWizardEntryPage() must not return null!");
+//		throw new NullPointerException("createWizardEntryPage() must not return null!");
 
 		return wizardEntryPage;
 	}
 
-	public List getDynamicWizardPages()
+	public List<IWizardPage> getDynamicWizardPages()
 	{
 		return Collections.unmodifiableList(dynamicWizardPages);
 	}
@@ -202,59 +202,59 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 	}
 
 
-  /**
-   * @return The first dynamic wizard page or null if no dynamic pages exist 
-   */
-  protected IDynamicPathWizardPage getFirstDynamicPage() {
-      if (dynamicWizardPages.size() > 0)
-        return (IDynamicPathWizardPage)dynamicWizardPages.get(0);
-      return null;
-  }
+	/**
+	 * @return The first dynamic wizard page or null if no dynamic pages exist 
+	 */
+	protected IDynamicPathWizardPage getFirstDynamicPage() {
+		if (dynamicWizardPages.size() > 0)
+			return (IDynamicPathWizardPage)dynamicWizardPages.get(0);
+		return null;
+	}
 
 
-  /**
-   * @return The first static wizard page or null if no static pages exist 
-   */
-  protected IWizardPage getFirstStaticPage() {
-    if(getPageCount() > 0)
-      return getPages()[0];
-    return null;
-  }
-  
-  /**
-   * Get the first page in this wizard existing right now.
-   * This can either be a dynamic or static page or <code>null</code>
-   * if the wizard is empty.
-   * @return The first wizard page
-   */
-  protected IWizardPage getFirstPage()
-  {
-    IWizardPage page = getFirstStaticPage();
-    if(page == null)
-      page = getFirstDynamicPage();
-    return page;
-  }
- 
-  /**
-   * Test whether a page can be added at the given index.
-   * @param index The index to test
-   * @throws IllegalStateException if the value of index is illegal
-   */
-  protected void assertCanInsertDynamicWizardPage(int index)
+	/**
+	 * @return The first static wizard page or null if no static pages exist 
+	 */
+	protected IWizardPage getFirstStaticPage() {
+		if(getPageCount() > 0)
+			return getPages()[0];
+		return null;
+	}
+
+	/**
+	 * Get the first page in this wizard existing right now.
+	 * This can either be a dynamic or static page or <code>null</code>
+	 * if the wizard is empty.
+	 * @return The first wizard page
+	 */
+	protected IWizardPage getFirstPage()
+	{
+		IWizardPage page = getFirstStaticPage();
+		if(page == null)
+			page = getFirstDynamicPage();
+		return page;
+	}
+
+	/**
+	 * Test whether a page can be added at the given index.
+	 * @param index The index to test
+	 * @throws IllegalStateException if the value of index is illegal
+	 */
+	protected void assertCanInsertDynamicWizardPage(int index)
 	{
 		int lastReadOnlyIndex = -1;
 		IWizardPage currentPage = dynamicWizardDialog.getCurrentPage();
 		if (currentPage == null)
 			return;
 
-    if(getPageCount() == 0 && getDynamicWizardPageCount() == 0) {
-      if(index == 0)
-        return;
-      else
-        throw new IllegalStateException("Cannot add a wizard page at index " + index + ", it is the first page for this wizard!");
-    }
-      
-    IWizardPage page = getFirstPage();
+		if(getPageCount() == 0 && getDynamicWizardPageCount() == 0) {
+			if(index == 0)
+				return;
+			else
+				throw new IllegalStateException("Cannot add a wizard page at index " + index + ", it is the first page for this wizard!");
+		}
+
+		IWizardPage page = getFirstPage();
 		while (page != null && page != currentPage) {
 			if (page instanceof IDynamicPathWizardPage) {
 				int i = getDynamicWizardPageIndex((IDynamicPathWizardPage)page);
@@ -268,38 +268,38 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 			throw new IllegalStateException("Cannot add a wizard page at index " + index + ", because the current page forces all indices <=" + lastReadOnlyIndex + " to be unchangeable!");
 	}
 
-  /**
-   * Add a dynamic wizard page to this wizard.
-   * Overridden method.
-   * @param index At which index to put the page.
-   * @param page The page to add
-   * @throws IllegalStateException if the value of index is illegal
-   * @see org.nightlabs.base.wizard.IDynamicPathWizard#addDynamicWizardPage(int, org.nightlabs.base.wizard.IDynamicPathWizardPage)
-   */
-	public void addDynamicWizardPage(int index, IDynamicPathWizardPage page) {
+	/**
+	 * Add a dynamic wizard page to this wizard.
+	 * Overridden method.
+	 * @param index At which index to put the page.
+	 * @param page The page to add
+	 * @throws IllegalStateException if the value of index is illegal
+	 * @see org.nightlabs.base.wizard.IDynamicPathWizard#addDynamicWizardPage(int, org.nightlabs.base.wizard.IDynamicPathWizardPage)
+	 */
+	public void addDynamicWizardPage(int index, IWizardPage page) {
 		assertCanInsertDynamicWizardPage(index);
 		dynamicWizardPages.add(index, page);
 		page.setWizard(this);
 	}
 
-  /**
-   * Add a dynamic wizard page at the end of the wizard.
-   * Overridden method.
-   * @param page The page to add
-   * @see org.nightlabs.base.wizard.IDynamicPathWizard#addDynamicWizardPage(org.nightlabs.base.wizard.IDynamicPathWizardPage)
-   */
-	public void addDynamicWizardPage(IDynamicPathWizardPage page) {
+	/**
+	 * Add a dynamic wizard page at the end of the wizard.
+	 * 
+	 * @param page The page to add
+	 * @see org.nightlabs.base.wizard.IDynamicPathWizard#addDynamicWizardPage(org.nightlabs.base.wizard.IDynamicPathWizardPage)
+	 */
+	public void addDynamicWizardPage(IWizardPage page) {
 		dynamicWizardPages.add(page);
 		page.setWizard(this);
 	}
 
-  /**
-   * Get the index of a dynamic wizard page.
-   * Overridden method.
-   * @return the index of the page or -1 if the page was not found.
-   * @see org.nightlabs.base.wizard.IDynamicPathWizard#getDynamicWizardPageIndex(org.nightlabs.base.wizard.IDynamicPathWizardPage)
-   */
-	public int getDynamicWizardPageIndex(IDynamicPathWizardPage page) {
+	/**
+	 * Get the index of a dynamic wizard page.
+	 * Overridden method.
+	 * @return the index of the page or -1 if the page was not found.
+	 * @see org.nightlabs.base.wizard.IDynamicPathWizard#getDynamicWizardPageIndex(org.nightlabs.base.wizard.IDynamicPathWizardPage)
+	 */
+	public int getDynamicWizardPageIndex(IWizardPage page) {
 		return dynamicWizardPages.indexOf(page);
 	}
 
@@ -311,7 +311,7 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 		return (IDynamicPathWizardPage) dynamicWizardPages.get(index);
 	}
 
-	protected void assertCanRemoveDynamicWizardPage(IDynamicPathWizardPage page)
+	protected void assertCanRemoveDynamicWizardPage(IWizardPage page)
 	{
 		if (dynamicWizardDialog == null)
 			return;
@@ -320,11 +320,11 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 		if (currentPage == null)
 			return;
 
-    if(getPageCount() == 0 && getDynamicWizardPageCount() == 0) {
-      throw new IllegalStateException("Cannot remove wizard page! Nothing to remove!");
-    }
+		if(getPageCount() == 0 && getDynamicWizardPageCount() == 0) {
+			throw new IllegalStateException("Cannot remove wizard page! Nothing to remove!");
+		}
 
-    IWizardPage pageToCheck = getFirstPage();
+		IWizardPage pageToCheck = getFirstPage();
 		while (pageToCheck != null && pageToCheck != currentPage) {
 			if (pageToCheck == page)
 				throw new IllegalStateException("Cannot remove page \"" + page.getName() + "\", because it is part of the path BEFORE the current page! Can only remove pages that are following the current page!");
@@ -350,18 +350,18 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 	/**
 	 * @see org.nightlabs.base.wizard.IDynamicPathWizard#removeDynamicWizardPage(org.nightlabs.base.wizard.IDynamicPathWizardPage)
 	 */
-	public void removeDynamicWizardPage(IDynamicPathWizardPage page) {
+	public void removeDynamicWizardPage(IWizardPage page) {
 		assertCanRemoveDynamicWizardPage(page);
 		dynamicWizardPages.remove(page);
 	}
-	
+
 	public void removeAllDynamicWizardPages() {
 		dynamicWizardPages.clear();
 	}
-	
+
 	public boolean canFinish() {
 		IWizardPage page = getFirstPage();
-    IWizardPage lastPage = null;
+		IWizardPage lastPage = null;
 		while (page != null) {
 			if (!page.isPageComplete())
 				return false;
@@ -374,20 +374,20 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 			return false;
 
 //		if (!getWizardEntryPage().isPageComplete())
-//			return false;
-//
+//		return false;
+
 //		if (dynamicWizardPages.size() > 0) {
-//			for (int i = 0; i < dynamicWizardPages.size(); i++) {
-//				if (!((IWizardPage) dynamicWizardPages.get(i)).isPageComplete())
-//					return false;
-//			}
-//			return true; // no page is incomplete
+//		for (int i = 0; i < dynamicWizardPages.size(); i++) {
+//		if (!((IWizardPage) dynamicWizardPages.get(i)).isPageComplete())
+//		return false;
+//		}
+//		return true; // no page is incomplete
 //		}
 //		else {
-//			return true; // only wizardEntryPage matters
+//		return true; // only wizardEntryPage matters
 //		}
 	}	
-	
+
 	public DynamicPathWizardDialog getDynamicWizardDialog() {
 		return dynamicWizardDialog;
 	}
@@ -413,7 +413,7 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 				break;
 			}
 		}
-		
+
 		if (isStaticPage && page != pages[pages.length - 1])
 			return super.getNextPage(page);
 
@@ -428,7 +428,7 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 		if (index == dynamicWizardPages.size() - 1) {
 			return null;
 //			if (page == getFirstDynamicPage() && dynamicWizardPages.size() > 0)
-//				return (IWizardPage)dynamicWizardPages.get(0);
+//			return (IWizardPage)dynamicWizardPages.get(0);
 			// last page or page not found
 //			return null;
 		}

@@ -27,6 +27,7 @@
 package org.nightlabs.base.wizard;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 
 
@@ -101,4 +102,14 @@ implements IWizardHopPage
 //	{
 //		return wizardHop.getPreviousPage(this);
 //	}
+	
+	@Override
+	public void setWizard(IWizard newWizard) {
+		super.setWizard(newWizard);
+		if (wizardHop == null)
+			return;
+		for (IWizardHopPage hopPage : wizardHop.getHopPages()) {
+			hopPage.setWizard(newWizard);
+		}
+	}
 }

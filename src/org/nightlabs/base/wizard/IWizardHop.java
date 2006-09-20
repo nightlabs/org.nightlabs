@@ -87,6 +87,8 @@ public interface IWizardHop
 	 * @param exitPage The exitPage to which shall be forked.
 	 *
 	 * @see #getExitPage()
+	 * @deprecated Don't use the exit page any more, you can add the entry page 
+	 * 		of an other WizardHop directly to the hop pages of this wizard ({@link #addHopPage(IWizardHopPage)}).
 	 */
 	void setExitPage(IWizardHopPage exitPage);
 
@@ -96,6 +98,8 @@ public interface IWizardHop
 	 *		following child hop.
 	 *
 	 * @see #setExitPage(IWizardHopPage)
+	 * @deprecated Don't use the exit page any more, you can add the entry page 
+	 * 		of an other WizardHop directly to the hop pages of this wizard ({@link #addHopPage(IWizardHopPage)}).
 	 */
 	IWizardHopPage getExitPage();
 
@@ -115,12 +119,25 @@ public interface IWizardHop
 	 * This method adds a {@link IWizardHopPage} to the <tt>List</tt>. Neither the
 	 * entry page, nor the exit page are registered as hop page!!!
 	 * 
+	 * You can pass the entry page of an other {@link IWizardHop}
+	 * to make it a sub-hop of this one. This hop will then be registered
+	 * as parent hop for the hop of the added page then.
+	 * 
 	 * @param page The new page to be added.
 	 */
 	void addHopPage(IWizardHopPage page);
 
+	/**
+	 * Removes the given page from the list of hop pages.
+	 * 
+	 * @param page The page to remove.
+	 * @return <tt>true</tt> if the page was contained in the list and removed, false otherwise.
+	 */
 	boolean removeHopPage(IWizardHopPage page);
 
+	/**
+	 * Removes all hop pages.
+	 */
 	void removeAllHopPages();
 
 	/**
@@ -135,7 +152,7 @@ public interface IWizardHop
 	 * @return Returns a read-only list of all hop pages (both, entry and exit
 	 *		page, are both not contained).
 	 */
-	List getHopPages();
+	List<IWizardHopPage> getHopPages();
 
 	IWizardPage getNextPage(IWizardPage currentPage);
 	
@@ -145,6 +162,8 @@ public interface IWizardHop
 	 * and all its child WizardHops.
 	 * 
 	 * @param wizard The wizard this WizardHop should be linked to
+	 * @deprecated WizardHops should now be added to a wizard simply by adding 
+	 * 		its entry page to the wizard 
 	 */
 	void hookWizard(IDynamicPathWizard wizard);
 
@@ -154,6 +173,8 @@ public interface IWizardHop
 	 * hop and its child hops to null.
 	 * 
 	 * @param wizard The wizard this WizardHop should be unregistered from
+	 * @deprecated WizardHops should now be added to a wizard simply by adding 
+	 * 		its entry page to the wizard
 	 */
 	void unhookWizard(IDynamicPathWizard wizard);
 	

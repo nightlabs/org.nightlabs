@@ -28,9 +28,9 @@ package org.nightlabs.base.wizard;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 
@@ -57,9 +57,14 @@ import org.eclipse.jface.wizard.IWizardPage;
  */
 public class WizardHop implements IWizardHop
 {
+	/**
+	 * Logger used by this class.
+	 */
+	private static final Logger logger = Logger.getLogger(WizardHop.class);
+	
 	private IWizardHop parentHop;
 
-	private List hopPages = new ArrayList();
+	private List<IWizardHopPage> hopPages = new ArrayList<IWizardHopPage>();
 
 	private IWizardHopPage entryPage = null;
 	private IWizardHopPage exitPage = null;
@@ -156,7 +161,16 @@ public class WizardHop implements IWizardHop
 	public void addHopPage(IWizardHopPage page)
 	{
 		page.setWizard(getWizard());
-		page.setWizardHop(this);
+		if (page.getWizardHop() == null)
+			page.setWizardHop(this);
+		else {
+			if (!page.getWizardHop().equals(this)) {
+				// have an other wizard hop for the added page
+				if (page.getWizardHop().getParentHop() != null && !page.getWizardHop().getParentHop().equals(this))
+					logger.warn("Adding a WizardHopPage with an other WizardHop that already has a parent hop that is not the actual hop. Will overwrite the childs parent hop.");
+				page.getWizardHop().setParentHop(this);
+			}
+		}
 		hopPages.add(page);
 	}
 
@@ -290,36 +304,38 @@ public class WizardHop implements IWizardHop
 	/**
 	 * @see org.nightlabs.base.wizard.IWizardHop#getHopPages()
 	 */
-	public List getHopPages()
+	public List<IWizardHopPage> getHopPages()
 	{
 		return Collections.unmodifiableList(hopPages);
 	}
 
-	protected void setHopPagesWizard(IWizard wizard, IWizardHop wizardHop) {
-		wizardHop.getEntryPage().setWizard(wizard);
-		for (Iterator iter = wizardHop.getHopPages().iterator(); iter.hasNext();) {
-			IWizardHopPage page = (IWizardHopPage) iter.next();
-			page.setWizard(wizard);
-		}
-		if (wizardHop.getExitPage() != null) {
-			wizardHop.getExitPage().setWizard(wizard);
-			setHopPagesWizard(wizard, wizardHop.getExitPage().getWizardHop());
-		}
-	}
+//	protected void setHopPagesWizard(IWizard wizard, IWizardHop wizardHop) {
+//		wizardHop.getEntryPage().setWizard(wizard);
+//		for (Iterator iter = wizardHop.getHopPages().iterator(); iter.hasNext();) {
+//			IWizardHopPage page = (IWizardHopPage) iter.next();
+//			page.setWizard(wizard);
+//		}
+//		if (wizardHop.getExitPage() != null) {
+//			wizardHop.getExitPage().setWizard(wizard);
+//			setHopPagesWizard(wizard, wizardHop.getExitPage().getWizardHop());
+//		}
+//	}
 	
 	/**
 	 * @see IWizardHop#hookWizard(IDynamicPathWizard)
+	 * @deprecated Hook a WizardHop simply by adding its entry page to the wizard
 	 */
 	public void hookWizard(IDynamicPathWizard wizard) {
 		wizard.addDynamicWizardPage(getEntryPage());
-		setHopPagesWizard(wizard, this);
+//		setHopPagesWizard(wizard, this);
 	}
 	/**
 	 * @see IWizardHop#unhookWizard(IDynamicPathWizard)
+	 * @deprecated Hook a WizardHop into a wizard 
 	 */
 	public void unhookWizard(IDynamicPathWizard wizard) {
 		wizard.removeDynamicWizardPage(getEntryPage());
-		setHopPagesWizard(null, this);
+//		setHopPagesWizard(null, this);
 	}
 
 }

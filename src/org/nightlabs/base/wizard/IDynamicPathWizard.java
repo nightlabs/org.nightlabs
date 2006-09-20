@@ -69,21 +69,21 @@ public interface IDynamicPathWizard extends IWizard
 	 * @param index The 0-based position of the page.
 	 * @param page The page to be added.
 	 */
-	void addDynamicWizardPage(int index, IDynamicPathWizardPage page);
+	void addDynamicWizardPage(int index, IWizardPage page);
 
 	/**
 	 * This method adds a page to the end of the dynamic path.
 	 *
 	 * @param page The page to be added. 
 	 */
-	void addDynamicWizardPage(IDynamicPathWizardPage page);
+	void addDynamicWizardPage(IWizardPage page);
 
 	/**
 	 * @param page The page for which to find out the index.
 	 * @return Either -1, if the page is not in the <tt>List</tt>, or the 0-based
 	 *		index within the <tt>List</tt>.
 	 */
-	int getDynamicWizardPageIndex(IDynamicPathWizardPage page);
+	int getDynamicWizardPageIndex(IWizardPage page);
 
 	/**
 	 * @param index The 0-based index of the desired page.
@@ -114,7 +114,7 @@ public interface IDynamicPathWizard extends IWizard
 	 *
 	 * @param page The page to be removed from this wizard.
 	 */
-	void removeDynamicWizardPage(IDynamicPathWizardPage page);
+	void removeDynamicWizardPage(IWizardPage page);
 
 	void removeAllDynamicWizardPages();
 
