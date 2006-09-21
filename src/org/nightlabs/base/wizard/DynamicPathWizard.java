@@ -68,7 +68,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 /**
  * Used for Wizards with dynamic WizardPages.
- * Inteded to be used as follows.<br/>
+ * Intended to be used as follows.<br/>
  * Subclass DynamicPathWizardPage and implement
  * <ul>
  *   <li>{@link org.eclipse.jface.wizard.Wizard#performFinish()}, where you perform your

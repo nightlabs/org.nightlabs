@@ -48,13 +48,19 @@ public class ComboComposite<T> extends AbstractListComposite<T>
 	{
 		super(parent, style);
 	}
+	
+	public ComboComposite(Composite parent, int style, List<T> elements)
+	{
+		super(parent, style);
+		addElements(elements);
+	}
 
-	public ComboComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+	public ComboComposite(Composite parent, int style, ILabelProvider labelProvider, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
 		super(labelProvider, parent, style, layoutMode, layoutDataMode);
 	}
 
-	public ComboComposite(ILabelProvider labelProvider, Composite parent, int style)
+	public ComboComposite(Composite parent, int style, ILabelProvider labelProvider)
 	{
 		super(labelProvider, parent, style);
 	}
