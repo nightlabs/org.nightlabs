@@ -107,6 +107,7 @@ public class GroupedContentSwitcherTable extends AbstractTableComposite {
 	
 	public GroupedContentSwitcherTable(Composite parent, int style) {
 		super(parent, style, true, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
+//		super(parent, style, true, SWT.FULL_SELECTION | SWT.V_SCROLL);
 		getTable().setLinesVisible(false);
 		getTable().setHeaderVisible(false);
 //		getTable().setBackground(COLOR_BACKGROUND);

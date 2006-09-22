@@ -19,7 +19,8 @@
  <extension-point id="predefinedPage" name="predefinedPage" schema="schema/predefinedPage.exsd"/>
  <extension-point id="unit" name="unit" schema="schema/unit.exsd"/>
  <extension-point id="entityEditor" name="EntityEditor Extension-Point" schema="schema/entityEditor.exsd"/>
- <extension-point id="resolutionUnit" name="ResolutionUnit" schema="schema/resolutionUnit.exsd"/> 
+ <extension-point id="resolutionUnit" name="ResolutionUnit" schema="schema/resolutionUnit.exsd"/>
+ <extension-point id="cache" name="General Cache Extension Point" schema="schema/cache.exsd"/> 
  <extension
        point="org.nightlabs.base.exceptionhandler">
     <exceptionHandler
