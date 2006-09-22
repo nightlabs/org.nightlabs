@@ -27,12 +27,11 @@
 package org.nightlabs.base.composite;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.nightlabs.base.composite.XComposite.LayoutDataMode;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * A Label above a Text wrapped in a Composite. 
@@ -135,4 +134,39 @@ public class LabeledText extends XComposite {
 		return labelCaption;
 	}
 
+	/**
+	 * Returns the text of this LabeledText's 
+	 * {@link #getTextControl()}.
+	 * 
+	 * @return The text currently shown in the text control.
+	 */
+	public String getText() {
+		return getTextControl().getText();
+	}
+	
+	/**
+	 * Set the text that is displayed in the {@link #getTextControl()}.
+	 * 
+	 * @param text The text to set.
+	 */
+	public void setText(String text) {		
+		getTextControl().setText(text);
+	}
+
+	/**
+	 * @param listener
+	 * @see org.eclipse.swt.widgets.Text#addModifyListener(org.eclipse.swt.events.ModifyListener)
+	 */
+	public void addModifyListener(ModifyListener listener) {
+		textControl.addModifyListener(listener);
+	}
+
+	/**
+	 * @param listener
+	 * @see org.eclipse.swt.widgets.Text#removeModifyListener(org.eclipse.swt.events.ModifyListener)
+	 */
+	public void removeModifyListener(ModifyListener listener) {
+		textControl.removeModifyListener(listener);
+	}
+	
 }
