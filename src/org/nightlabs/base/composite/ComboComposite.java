@@ -153,6 +153,11 @@ public class ComboComposite<T> extends AbstractListComposite<T>
 	public void removeSelectionListener(SelectionListener listener) {
 		combo.removeSelectionListener(listener);
 	}
-	
-	
+
+	@Override
+	protected void refreshElement(T element)
+	{
+		int index = getElementIndex(element);
+		combo.setItem(index, labelProvider.getText(element));
+	}	
 }

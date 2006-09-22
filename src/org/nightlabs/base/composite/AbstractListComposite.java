@@ -147,6 +147,12 @@ public abstract class AbstractListComposite<T> extends XComposite
 	protected abstract void setSelection(int index);
 	
 	/**
+	 * Refreshes the specified element and updates its label.
+	 * @param The element to be refreshed.
+	 */
+	protected abstract void refreshElement(T elem);	
+	
+	/**
 	 * Adds the specified element to the end of the list.
 	 * @param element The element to be added.
 	 */
@@ -278,5 +284,11 @@ public abstract class AbstractListComposite<T> extends XComposite
 		setSelection(Math.min(index, elements.size()-1));
 		
 		return toReturn;
-	}	
+	}
+	
+	public void refresh()
+	{
+		for (T elem : elements)
+			refreshElement(elem);
+	}
 }

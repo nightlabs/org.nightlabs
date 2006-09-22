@@ -26,7 +26,12 @@
 
 package org.nightlabs.base.tree;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -144,8 +149,62 @@ public abstract class AbstractTreeComposite extends XComposite {
 		return treeViewer.getSelection();
 	}
 	
+	/**
+	 * Selects the given elements in the list if they exist.
+	 * @param elements the elements to be selected.
+	 * 
+	 * TODO Fix this method since it currently does nothing 
+	 */
+	public void setSelection(final List elements)
+	{
+		if (elements == null || elements.size() == 0)
+			return;
+		
+		ISelection selection = new IStructuredSelection() 
+			{
+				public Object getFirstElement()
+				{		
+					return elements.get(0);
+				}
+				public Iterator iterator()
+				{
+					return elements.iterator();
+				}
+				public int size()
+				{
+					return elements.size();
+				}
+				public Object[] toArray()
+				{
+					return elements.toArray(new Object[0]);
+				}
+				public List toList()
+				{
+					return elements;
+				}
+				public boolean isEmpty()
+				{
+					return false;
+				}			
+			};
+		
+		treeViewer.setSelection(selection, true);
+	}
+	
+	/**
+	 * Selects the given element in the tree. (Shortcut to #setSelection(List)).
+	 * @param element the element to be selected
+	 */
+	public void setSelection(Object element)
+	{
+		List list = new LinkedList();
+		list.add(element);
+		setSelection(list);
+	}
+	
 	public void setInput(Object input) {
 		treeViewer.setInput(input);
 	}
 	
+
 }

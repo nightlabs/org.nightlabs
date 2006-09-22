@@ -112,13 +112,12 @@ public class ListComposite<T> extends AbstractListComposite<T>
 	}
 	
 	/**
-	 * /**
-	 * Refreshes the label of the given element. 
-	 * @param element The element to be refreshed.
+	 * @see AbstractListComposite#refreshElement(T)
 	 */
-	public void refreshElement(T element)
+	public void refreshElement(T elem)
 	{
-		int index = getElementIndex(element);
-		list.setItem(index, labelProvider.getText(element));
+		int index = getElementIndex(elem);
+		list.remove(index);
+		list.add(labelProvider.getText(elem), index);
 	}	
 }
