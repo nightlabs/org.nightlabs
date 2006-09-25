@@ -167,8 +167,8 @@ extends ActionBarContributor
   	// Print
   	addRetargetAction(new RetargetAction(EditorPrintAction.ID, 
   			EditorPlugin.getResourceString("action.print.text")));  	
-  	addRetargetAction(new RetargetAction(EditorPrintPreviewAction.ID, 
-  			EditorPlugin.getResourceString("action.printPreview.text")));  	  	
+//  	addRetargetAction(new RetargetAction(EditorPrintPreviewAction.ID, 
+//  			EditorPlugin.getResourceString("action.printPreview.text")));  	  	
   	addRetargetAction(new RetargetAction(EditorPrintSetupAction.ID, 
   			EditorPlugin.getResourceString("action.printPageSetup.text")));  	
   	
@@ -208,9 +208,11 @@ extends ActionBarContributor
   		if (printMenu == null)
   			fileMenu.insertBefore(ActionFactory.QUIT.getId(), getAction(EditorPrintAction.ID));
   		
-			fileMenu.insertAfter(EditorPrintAction.ID, getAction(EditorPrintPreviewAction.ID));
-  		fileMenu.insertAfter(EditorPrintPreviewAction.ID, getAction(EditorPrintSetupAction.ID));
-    	fileMenu.insertAfter(EditorPrintSetupAction.ID, new Separator());  				  		
+//			fileMenu.insertAfter(EditorPrintAction.ID, getAction(EditorPrintPreviewAction.ID));
+//  		fileMenu.insertAfter(EditorPrintPreviewAction.ID, getAction(EditorPrintSetupAction.ID));
+//    	fileMenu.insertAfter(EditorPrintSetupAction.ID, new Separator());
+			fileMenu.insertAfter(EditorPrintAction.ID, getAction(EditorPrintSetupAction.ID));
+    	fileMenu.insertAfter(EditorPrintSetupAction.ID, new Separator());  				  		  		
   	}
 
   	// Edit
@@ -421,7 +423,7 @@ extends ActionBarContributor
 		if (fm instanceof IMenuManager) {
 			IMenuManager fileMenu = (IMenuManager) fm;
 			removeActionMenu(EditorPrintAction.ID, fileMenu);			
-			removeActionMenu(EditorPrintPreviewAction.ID, fileMenu);
+//			removeActionMenu(EditorPrintPreviewAction.ID, fileMenu);
 			removeActionMenu(EditorPrintSetupAction.ID, fileMenu);
 		}		
 	}

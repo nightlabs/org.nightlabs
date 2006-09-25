@@ -32,6 +32,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.media.jai.operator.LogDescriptor;
+
 import org.apache.log4j.Logger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartListener;
@@ -75,6 +77,7 @@ import org.nightlabs.editor2d.command.DeleteLayerCommand;
 import org.nightlabs.editor2d.command.DrawComponentReorderCommand;
 import org.nightlabs.editor2d.edit.LayerEditPart;
 import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
+import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.util.OrderUtil;
 
 public class LayerView 
@@ -421,9 +424,11 @@ implements ISelectionListener
 		public void widgetSelected(SelectionEvent e) 
 		{    
 		  logger.debug("NEW widgetSelected()");
-//		  CreateLayerCommand addLayer = new CreateLayerCommand(mldc);
 		  CreateLayerCommand addLayer = new CreateLayerCommand(mldc, editor.getModelFactory());		  
 		  executeCommand(addLayer);
+		  
+		  List<DrawComponent> layers = mldc.getDrawComponents(LayerImpl.class);
+		  logger.debug(layers.size() + " Layers registered");		  
 		}
 	};
 
@@ -450,14 +455,14 @@ implements ISelectionListener
 		{    
 		  logger.debug("UP widgetSelected()");
 		  int oldIndex = OrderUtil.indexOf(getCurrentLayer());
-		  int lastIndex = OrderUtil.getLastIndex(mldc);
+		  int lastIndex = OrderUtil.getLastIndex(getCurrentLayer().getParent());
 		  int newIndex = oldIndex + 1;
-		  if (!(lastIndex > newIndex)) {
-		  	newIndex = lastIndex;
+		  if (lastIndex >= newIndex) 
+		  {
+			  DrawComponentReorderCommand cmd = new DrawComponentReorderCommand(
+			  		getCurrentLayer(), getCurrentLayer().getParent(), newIndex);
+			  executeCommand(cmd);
 		  }
-		  DrawComponentReorderCommand cmd = new DrawComponentReorderCommand(
-		  		getCurrentLayer(), mldc, newIndex);
-		  executeCommand(cmd);
 		}
 	};
 	
@@ -469,15 +474,15 @@ implements ISelectionListener
 		  int oldIndex = OrderUtil.indexOf(getCurrentLayer());
 		  int firstIndex = 0;
 		  int newIndex = oldIndex - 1;
-		  if (!(firstIndex < newIndex)) {
-		  	newIndex = firstIndex;
+		  if (firstIndex <= newIndex) 
+		  {
+			  DrawComponentReorderCommand cmd = new DrawComponentReorderCommand(
+			  		getCurrentLayer(), getCurrentLayer().getParent(), newIndex);
+			  executeCommand(cmd);		  
 		  }
-		  DrawComponentReorderCommand cmd = new DrawComponentReorderCommand(
-		  		getCurrentLayer(), mldc, newIndex);
-		  executeCommand(cmd);		  
 		}
 	};
-		
+	
 	protected void executeCommand(Command cmd) 
 	{
 		editor.getOutlineEditDomain().getCommandStack().execute(cmd);

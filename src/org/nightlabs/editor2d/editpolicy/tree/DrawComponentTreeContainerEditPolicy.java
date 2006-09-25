@@ -29,6 +29,7 @@ package org.nightlabs.editor2d.editpolicy.tree;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -43,6 +44,8 @@ import org.eclipse.gef.requests.GroupRequest;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.Layer;
+import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
 import org.nightlabs.editor2d.command.DrawComponentReorderCommand;
 import org.nightlabs.editor2d.command.OrphanChildCommand;
@@ -51,64 +54,76 @@ import org.nightlabs.editor2d.command.OrphanChildCommand;
 public class DrawComponentTreeContainerEditPolicy 
 extends TreeContainerEditPolicy 
 {
-  protected Command createCreateCommand(DrawComponent child, Rectangle r, int index, String label)
-  {
-    CreateDrawComponentCommand cmd = new CreateDrawComponentCommand();
-		Rectangle rect;
-		if(r == null) {
-//			rect = new Rectangle();
-//			rect.setSize(new Dimension(-1, -1));
-			rect = new Rectangle(0, 0, 10, 10);			
-		} 
-		else {
-		  rect = r;
-		}
-		cmd.setBounds(rect);
-		cmd.setParent((DrawComponentContainer)getHost().getModel());
-		cmd.setChild(child);
-		cmd.setLabel(label);
-		if(index >= 0)
-		  cmd.setIndex(index);
-		return cmd;
-  }
+	private static final Logger logger = Logger.getLogger(DrawComponentTreeContainerEditPolicy.class);
+	
+//  protected Command createCreateCommand(DrawComponent child, Rectangle r, int index, String label)
+//  {
+//    CreateDrawComponentCommand cmd = new CreateDrawComponentCommand();
+//		Rectangle rect;
+//		if(r == null) {
+//			rect = new Rectangle(0, 0, 10, 10);			
+//		} 
+//		else {
+//		  rect = r;
+//		}
+//		cmd.setBounds(rect);
+//		cmd.setParent((DrawComponentContainer)getHost().getModel());
+//		cmd.setChild(child);
+//		cmd.setLabel(label);
+//		if(index >= 0)
+//		  cmd.setIndex(index);
+//		return cmd;
+//  }
 
 	protected Command getAddCommand(ChangeBoundsRequest request)
 	{
+		if (logger.isDebugEnabled())
+			logger.debug("getAddCommand()");
+		
 		CompoundCommand command = new CompoundCommand();
-		command.setDebugLabel("Add in DrawComponentTreeContainerEditPolicy");//$NON-NLS-1$
+		command.setLabel("Add Children in Tree");//$NON-NLS-1$
 		List editparts = request.getEditParts();
 		int index = findIndexOfTreeItemAt(request.getLocation());
 				
 		for(int i = 0; i < editparts.size(); i++) 
 		{
 		  EditPart child = (EditPart)editparts.get(i);
-			if(isAncestor(child,getHost()))
+		  boolean mayAdd = mayAdd(child, getHost());
+		  logger.debug("mayAdd = "+mayAdd);
+			if(!mayAdd)
 			  command.add(UnexecutableCommand.INSTANCE);
-			else {
-			  DrawComponent childModel = (DrawComponent)child.getModel();
-				command.add(createCreateCommand(
-							childModel,
-							new Rectangle(
-								new org.eclipse.draw2d.geometry.Point(childModel.getX(), childModel.getY()),
-								new Dimension(childModel.getWidth(), childModel.getHeight())
-							),
-							index, "Reparent DrawComponent"));//$NON-NLS-1$
+			else 
+			{
+				logger.debug("index = "+index);
+				command.add(new DrawComponentReorderCommand(
+						(DrawComponent)child.getModel(), 
+						(DrawComponentContainer)getHost().getModel(), 
+						index));
 			}
 		}
 		return command;
 	}
-  
+
+//	protected Command getAddCommand(ChangeBoundsRequest request)
+//	{
+//		if (logger.isDebugEnabled())
+//			logger.debug("getAddCommand()");
+//		
+//		return null;
+//	}
+	
 	protected Command getCreateCommand(CreateRequest request)
 	{
-//		DrawComponent child = (DrawComponent)request.getNewObject();
-//		int index = findIndexOfTreeItemAt(request.getLocation());
-//		Rectangle bounds = J2DUtil.toDraw2D(child.getBounds());
-//		return createCreateCommand(child, bounds, index, EditorPlugin.getResourceString("command.create.drawcomponent"));//$NON-NLS-1$
+		if (logger.isDebugEnabled())
+			logger.debug("getCreateCommand()");		
 		return null;
 	}
 
 	protected Command getMoveChildrenCommand(ChangeBoundsRequest request)
 	{
+		if (logger.isDebugEnabled())
+			logger.debug("getMoveChildrenCommand()");
+		
 		CompoundCommand command = new CompoundCommand();
 		List editparts = request.getEditParts();
 		List children = getHost().getChildren();
@@ -125,26 +140,60 @@ extends TreeContainerEditPolicy
 			} else if(oldIndex <= tempIndex) {
 			  tempIndex--;
 			}
-			command.add(new DrawComponentReorderCommand(
-					(DrawComponent)child.getModel(), 
-					(DrawComponentContainer)getHost().getModel(), 
-					tempIndex));
+			logger.debug("index = "+tempIndex);
+			if (tempIndex != -1) 
+			{
+				command.add(new DrawComponentReorderCommand(
+						(DrawComponent)child.getModel(), 
+						(DrawComponentContainer)getHost().getModel(), 
+						tempIndex));				
+			} 
+			else {
+			  command.add(UnexecutableCommand.INSTANCE);
+			  return command;				
+			}				
 		}
+		command.setLabel(EditorPlugin.getResourceString("command.moveChildren.text"));
 		return command;
 	}
 
-	protected boolean isAncestor(EditPart source, EditPart target)
+	protected boolean mayAdd(EditPart source, EditPart target) 
 	{
-		if(source == target)
-		  return true;
-		if(target.getParent() != null)
-		  return isAncestor(source, target.getParent());
-		return false;
+		if (source.getModel() instanceof Layer) 
+		{
+			if (target.getModel() instanceof PageDrawComponent)
+				return true;			
+			return false;				
+		}
+		else if (source.getModel() instanceof PageDrawComponent) 
+		{
+			return false;				
+		}
+		else if ( (!(source.getModel() instanceof DrawComponentContainer)) && 
+				target.getModel() instanceof DrawComponentContainer) 
+		{
+			DrawComponentContainer container = (DrawComponentContainer) target.getModel();			
+			if (container instanceof PageDrawComponent)
+				return false;
+			
+			return true;
+		}
+		return true;
 	}
+//	protected boolean isAncestor(EditPart source, EditPart target)
+//	{
+//		if(source == target)
+//		  return true;
+//		if(target.getParent() != null)
+//		  return isAncestor(source, target.getParent());
+//		return false;
+//	}
 
-// ************************* Orphan Tree Childs when added from other container ************
 	protected Command getOrphanChildrenCommand(GroupRequest request) 
 	{
+		if (logger.isDebugEnabled())
+			logger.debug("getOrphanChildrenCommand()");
+		
 		List<EditPart> parts = request.getEditParts();
 		CompoundCommand result = 
 			new CompoundCommand(EditorPlugin.getResourceString("command.orphanChildren.text"));
@@ -152,16 +201,16 @@ extends TreeContainerEditPolicy
 			DrawComponent child = (DrawComponent)((EditPart)parts.get(i)).getModel();
 			OrphanChildCommand orphan = new OrphanChildCommand(child);  		
 			result.add(orphan);
-		}
+		}		
 		return result.unwrap();
 	}
 
-	@Override
-	public Command getCommand(Request req) 
-	{
-		if (req.getType().equals(REQ_ORPHAN_CHILDREN))
-			return getOrphanChildrenCommand((GroupRequest)req);		
-		return super.getCommand(req);
-	}
+//	@Override
+//	public Command getCommand(Request req) 
+//	{
+//		if (req.getType().equals(REQ_ORPHAN_CHILDREN))
+//			return getOrphanChildrenCommand((GroupRequest)req);		
+//		return super.getCommand(req);
+//	}
 		
 }

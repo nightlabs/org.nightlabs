@@ -270,8 +270,8 @@ implements RendererFigure
   {
     public void zoomChanged(double zoom) {
       hitTolerance = DEFAULT_HIT_TOLERANCE / zoom;
-      if (logger.isDebugEnabled())
-      	logger.debug("hitTolerance = "+hitTolerance);
+//      if (logger.isDebugEnabled())
+//      	logger.debug("hitTolerance = "+hitTolerance);
     }    
   };
   public ZoomListener getZoomListener() {

@@ -364,6 +364,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		}
 	}
 
+	// TODO: When errors occurs during reading show Message to user and dont create part
 	protected void load(FileEditorInput fileInput) 
 	{    	
 		final FileEditorInput input = fileInput;
@@ -913,9 +914,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		getPropertyActions().add(action.getId());
 
 		// Print Preview Action
-		action = new EditorPrintPreviewAction(this);
-		registry.registerAction(action);
-		getPropertyActions().add(action.getId());
+//		action = new EditorPrintPreviewAction(this);
+//		registry.registerAction(action);
+//		getPropertyActions().add(action.getId());
 
 		// Print Page Setup Action
 		action = new EditorPrintSetupAction(this);
