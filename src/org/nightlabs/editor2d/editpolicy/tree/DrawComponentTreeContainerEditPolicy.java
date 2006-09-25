@@ -30,10 +30,7 @@ package org.nightlabs.editor2d.editpolicy.tree;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.UnexecutableCommand;
@@ -46,7 +43,6 @@ import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.PageDrawComponent;
-import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
 import org.nightlabs.editor2d.command.DrawComponentReorderCommand;
 import org.nightlabs.editor2d.command.OrphanChildCommand;
 
@@ -56,25 +52,6 @@ extends TreeContainerEditPolicy
 {
 	private static final Logger logger = Logger.getLogger(DrawComponentTreeContainerEditPolicy.class);
 	
-//  protected Command createCreateCommand(DrawComponent child, Rectangle r, int index, String label)
-//  {
-//    CreateDrawComponentCommand cmd = new CreateDrawComponentCommand();
-//		Rectangle rect;
-//		if(r == null) {
-//			rect = new Rectangle(0, 0, 10, 10);			
-//		} 
-//		else {
-//		  rect = r;
-//		}
-//		cmd.setBounds(rect);
-//		cmd.setParent((DrawComponentContainer)getHost().getModel());
-//		cmd.setChild(child);
-//		cmd.setLabel(label);
-//		if(index >= 0)
-//		  cmd.setIndex(index);
-//		return cmd;
-//  }
-
 	protected Command getAddCommand(ChangeBoundsRequest request)
 	{
 		if (logger.isDebugEnabled())
@@ -94,6 +71,9 @@ extends TreeContainerEditPolicy
 			  command.add(UnexecutableCommand.INSTANCE);
 			else 
 			{
+				if (index == -1)
+					index = 0;
+				
 				logger.debug("index = "+index);
 				command.add(new DrawComponentReorderCommand(
 						(DrawComponent)child.getModel(), 
@@ -104,14 +84,6 @@ extends TreeContainerEditPolicy
 		return command;
 	}
 
-//	protected Command getAddCommand(ChangeBoundsRequest request)
-//	{
-//		if (logger.isDebugEnabled())
-//			logger.debug("getAddCommand()");
-//		
-//		return null;
-//	}
-	
 	protected Command getCreateCommand(CreateRequest request)
 	{
 		if (logger.isDebugEnabled())
@@ -180,14 +152,6 @@ extends TreeContainerEditPolicy
 		}
 		return true;
 	}
-//	protected boolean isAncestor(EditPart source, EditPart target)
-//	{
-//		if(source == target)
-//		  return true;
-//		if(target.getParent() != null)
-//		  return isAncestor(source, target.getParent());
-//		return false;
-//	}
 
 	protected Command getOrphanChildrenCommand(GroupRequest request) 
 	{
