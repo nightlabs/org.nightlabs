@@ -26,9 +26,7 @@
 
 package org.nightlabs.base.language;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -46,8 +44,11 @@ import org.nightlabs.language.LanguageCf;
 /**
  * Editor Composite for {@link I18nText}s. This will provide (or use)
  * a language chooser and make an i18n text editable. The editor
- * will operate on an own buffer, so editing will not have an affect
- * on the original {@link I18nText} passed to display.
+ * will either operate directly on the {@link I18nText} passed in
+ * the {@link #setI18nText(I18nText)} or work with an own buffer,
+ * so editing will not affect the original {@link I18nText}. This
+ * behaviour can be controlled by
+ * {@link #setEditMode(org.nightlabs.base.language.I18nTextEditor.EditMode)}.
  * 
  * Use {@link I18nText#copyFrom(I18nText)} with {@link #getI18nText()}
  * as paramteer to reflect the changes in your {@link I18nText}.
@@ -58,8 +59,10 @@ import org.nightlabs.language.LanguageCf;
  */
 public class I18nTextEditor extends XComposite
 {
-	private I18nText i18nText;
-	private I18nTextBuffer buffer = new I18nTextBuffer();
+	private I18nText original;
+	private I18nText work;
+	private I18nTextBuffer buffer = null;
+
 	private LanguageChooser languageChooser;
 	private LanguageCf textLanguage;
 	private Text text;
@@ -115,6 +118,8 @@ public class I18nTextEditor extends XComposite
 		if (languageChooser == null)
 			getGridLayout().numColumns = 2;
 
+		setEditMode(EditMode.DIRECT);
+
 		if (caption != null) {
 			Label l = new Label(this, SWT.NONE);
 			l.setText(caption);
@@ -151,9 +156,6 @@ public class I18nTextEditor extends XComposite
 		});
 
 		text.addModifyListener(new ModifyListener() {
-			/**
-			 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
-			 */
 			public void modifyText(ModifyEvent e)
 			{
 				storeText();
@@ -163,8 +165,9 @@ public class I18nTextEditor extends XComposite
 				if (modifyListeners == null)
 					return;
 
-				for (Iterator it = modifyListeners.iterator(); it.hasNext(); ) {
-					((ModifyListener)it.next()).modifyText(e);
+				Object[] listeners = modifyListeners.getListeners();
+				for (int i = 0; i < listeners.length; ++i) {
+					((ModifyListener)listeners[i]).modifyText(e);
 				}
 			}
 		});
@@ -175,7 +178,7 @@ public class I18nTextEditor extends XComposite
 	 * if the text is actually modified by the user, not
 	 * when the edit changes its text.
 	 */
-	private LinkedList modifyListeners = null;
+	private ListenerList modifyListeners = null;
 
 	/**
 	 * Add a {@link ModifyListener} to this editor. The listener
@@ -186,7 +189,7 @@ public class I18nTextEditor extends XComposite
 	 */
 	public void addModifyListener(ModifyListener l) {
 		if (modifyListeners == null)
-			modifyListeners = new LinkedList();
+			modifyListeners = new ListenerList();
 
 		modifyListeners.add(l);
 	}
@@ -211,15 +214,32 @@ public class I18nTextEditor extends XComposite
 	}
 
 	/**
-	 * Returns the {@link I18nText} buffer used by the editor
-	 * reflecting all changes made since the last call to {@link #setI18nText(I18nText)}.
+	 * In contrast to {@link #getI18nText()}, this method always returns the same instance
+	 * as passed by {@link #setI18nText(I18nText)} before. In the {@link EditMode#DIRECT},
+	 * this method is exactly identical to {@link #getI18nText()} 
+	 *
+	 * @return the original object as passed to {@link #setI18nText(I18nText)}
+	 */
+	public I18nText getOriginal()
+	{
+		storeText(); // if we work in buffered mode, this method doesn't make much sense, but we can call it without harm.
+		return original;
+	}
+
+	/**
+	 * This method first applies all modifications to the work-<code>I18nText</code> instance
+	 * (which is either the original or a buffer, depending on the {@link EditMode}) and
+	 * then returns it.
 	 *  
-	 * @return the {@link I18nText} buffer used by the editor.
+	 * @return the {@link I18nText} buffer used by the editor, if {@link EditMode#BUFFERED}
+	 *		is used, or the original object, if {@link EditMode#DIRECT} is used.
+	 *
+	 * @see #getOriginal()
 	 */
 	public I18nText getI18nText()
 	{
 		storeText();
-		return buffer;
+		return work;
 	}
 
 	/**
@@ -228,23 +248,103 @@ public class I18nTextEditor extends XComposite
 	 * on the last call to {@link #setI18nText(I18nText)}.
 	 */
 	public void copyToOriginal() {
-		if (i18nText != null)
-			buffer.copyTo(i18nText);
+		if (original != null && work != original)
+			work.copyTo(original);
 	}
 
 	/**
-	 * Initialize the editor with the given {@link I18nText}.
+	 * Set the instance of {@link I18nText} that shall be edited by this editor.
+	 * This method will call
+	 * {@link #setEditMode(org.nightlabs.base.language.I18nTextEditor.EditMode)}
+	 * and set {@link EditMode#DIRECT}, if the <code>i18nText</code> is an instance
+	 * of {@link I18nTextBuffer}. For all other implementations of {@link I18nText},
+	 * it will set {@link EditMode#BUFFERED}. If you don't like this "auto-sensing",
+	 * you can call {@link #setI18nText(I18nText, org.nightlabs.base.language.I18nTextEditor.EditMode)}
+	 * with a non-<code>null</code> <code>editMode</code>.
 	 * 
-	 * @param newI18nText The {@link I18nText} that should be displayed and made editable 
+	 * @param i18nText The {@link I18nText} that should be displayed and made editable.
+	 *		Can be <code>null</code> (wich will render this editor read-only).
 	 */
-	public void setI18nText(I18nText newI18nText)
+	public void setI18nText(I18nText i18nText)
+	{
+		setI18nText(i18nText, null);
+	}
+
+	/**
+	 * @param i18nText The {@link I18nText} to be edited. Can be <code>null</code> (wich will render this editor read-only).
+	 * @param editMode The mode - i.e. how to edit. If <code>editMode == null</code>
+	 *		this method behaves like {@link #setI18nText(I18nText)}.
+	 */
+	public void setI18nText(I18nText i18nText, EditMode editMode)
 	{
 		storeText();
-		i18nText = newI18nText;
-		buffer.clear();
-		if (i18nText != null)
-			buffer.copyFrom(i18nText);
+		original = i18nText;
+
+		if (editMode != null)
+			setEditMode(editMode);
+		else {
+			if (original instanceof I18nTextBuffer)
+				setEditMode(EditMode.DIRECT);
+			else
+				setEditMode(EditMode.BUFFERED);
+		}
+
 		loadText();
+	}
+
+	/**
+	 * @see I18nTextEditor#setEditMode(org.nightlabs.base.language.I18nTextEditor.EditMode)
+	 */
+	public static enum EditMode {
+		DIRECT,
+		BUFFERED
+	}
+
+	private EditMode editMode;
+
+	/**
+	 * If the {@link EditMode} is {@link EditMode#DIRECT}, this editor will
+	 * work directly with the {@link I18nText} that has been passed to
+	 * {@link #setI18nText(I18nText)}. That means, every modification is
+	 * directly forwarded to the original {@link I18nText} object (on
+	 * focus lost or when calling {@link #getI18nText()}). This behaviour is
+	 * useful when you create a new object (e.g. in a wizard page). In this case,
+	 * it's not necessary to call {@link #copyToOriginal()}.
+	 * <p>
+	 * If you edit an existing object, it is (in most cases) not desired to modify it
+	 * directly, but instead to transfer all data only from the UI to the object, if
+	 * the user explicitely applies his changes (in order to transfer them to the server
+	 * as well). Therefore, you can use the {@link EditMode#BUFFERED}, which will
+	 * cause an internal {@link I18nTextBuffer} to be created. 
+	 * </p>
+	 *
+	 * @param editMode The new {@link EditMode}.
+	 */
+	public void setEditMode(EditMode editMode) {
+		this.editMode = editMode;
+
+		switch (editMode) {
+			case DIRECT:
+				work = original;
+			break;
+			case BUFFERED:
+				if (buffer == null)
+					buffer = new I18nTextBuffer();
+
+				buffer.clear();
+				work = buffer;
+			break;
+			default:
+				throw new IllegalArgumentException("Unknown editMode: " + editMode);
+		}
+
+		if (work != original && work != null && original != null)
+			work.copyFrom(original);
+	}
+
+	public EditMode getEditMode()
+	{
+		return editMode;
 	}
 
 	/**
@@ -269,9 +369,9 @@ public class I18nTextEditor extends XComposite
 		try {
 			String txt = null;
 
-			if (buffer != null) {
+			if (work != null) {
 				textLanguage = languageChooser.getLanguage();
-				txt = buffer.getText(textLanguage.getLanguageID());
+				txt = work.getText(textLanguage.getLanguageID());
 			}
 			if (txt == null) txt = "";
 			text.setText(txt);
@@ -293,7 +393,7 @@ public class I18nTextEditor extends XComposite
 	{
 		String newText = text.getText();
 		if (!newText.equals(orgText)) {
-			buffer.setText(textLanguage.getLanguageID(), newText);
+			work.setText(textLanguage.getLanguageID(), newText);
 			orgText = newText;
 		}
 	}
