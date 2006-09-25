@@ -20,7 +20,7 @@ import org.nightlabs.print.PrinterInterface;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
+ * @deprecated should be deleted by alex 
  */
 public class PrintDocumentAction implements IWorkbenchWindowActionDelegate {
 
