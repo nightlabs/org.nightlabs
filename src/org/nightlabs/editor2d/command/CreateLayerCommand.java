@@ -36,21 +36,12 @@ import org.nightlabs.editor2d.MultiLayerDrawComponent;
 public class CreateLayerCommand  
 extends CreateDrawComponentCommand
 {		 
-//	public CreateLayerCommand(MultiLayerDrawComponent parent)
-//	{
-//		if (parent == null) {
-//			throw new IllegalArgumentException("Param parent (MultiLayerDrawComponent) must not be null!");
-//		}	  
-//	  this.parent = parent;
-//	  setLabel(EditorPlugin.getResourceString("command.create.layer"));	  
-//	}
-
 	public CreateLayerCommand(MultiLayerDrawComponent parent, Editor2DFactory factory)
 	{
 		if (parent == null) {
 			throw new IllegalArgumentException("Param parent (MultiLayerDrawComponent) must not be null!");
 		}	  
-	  this.parent = parent;
+		this.parent = parent.getCurrentPage();
 	  this.factory = factory;
 	  setLabel(EditorPlugin.getResourceString("command.create.layer"));	  
 	}
@@ -77,7 +68,7 @@ extends CreateDrawComponentCommand
 	}	
 			
 	protected MultiLayerDrawComponent getMultiLayerDrawComponent() {
-	  return (MultiLayerDrawComponent) parent;
+	  return (MultiLayerDrawComponent) parent.getRoot();
 	}
   
   protected Layer getLayer() {
