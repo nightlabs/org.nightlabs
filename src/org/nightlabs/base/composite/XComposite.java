@@ -60,21 +60,18 @@ public class XComposite extends Composite
 	{
 		return getLayout(layoutMode, layout, 1);
 	}
+	
 	/**
-	 * modifies a GridLayout to the appropriate {@link LayoutMode}
+	 * Configures the given GridLayout to the appropriate layout mode.
 	 * 
-	 * @param layoutMode the layoutMode to set
-	 * @param layout the GridLayout to modify
-	 * @return the modified GridLayout
+	 * @param layoutMode The layout mode to apply
+	 * @param layout The layout to configure
 	 */
-	public static GridLayout getLayout(LayoutMode layoutMode, GridLayout layout, int cols)
-	{
-		if (layout == null)
-			layout = new GridLayout(cols, false);
+	public static void configureLayout(LayoutMode layoutMode, GridLayout layout) {
 		switch (layoutMode) 
 		{
 			case ORDINARY_WRAPPER:
-				return layout;
+				return;
 			case TIGHT_WRAPPER:
 				layout.horizontalSpacing = 0;
 				layout.verticalSpacing = 0;
@@ -84,22 +81,40 @@ public class XComposite extends Composite
 				layout.marginRight = 0;
 				layout.marginTop = 0;
 				layout.marginBottom = 0;
-				return layout;
+				return;
 			case TOP_BOTTOM_WRAPPER:
 				layout.verticalSpacing = 0;
 				layout.marginHeight = 0;
 				layout.marginTop = 0;
 				layout.marginBottom = 0;
-				return layout;
+				return;
 			case LEFT_RIGHT_WRAPPER:
 				layout.horizontalSpacing = 0;
 				layout.marginWidth = 0;
 				layout.marginLeft = 0;
 				layout.marginRight = 0;
-				return layout;				
+				return;				
 			default:
 				throw new IllegalArgumentException("layoutMode = " + layoutMode + " is unknown!");
 		}		
+	}
+	
+	/**
+	 * Modifies a GridLayout to the appropriate {@link LayoutMode}.
+	 * If the given layout is <code>null</code> a new one will
+	 * be created.
+	 * 
+	 * @param layoutMode the layoutMode to set
+	 * @param layout the GridLayout to modify
+	 * @return the modified GridLayout
+	 * @see #configureLayout(org.nightlabs.base.composite.XComposite.LayoutMode, GridLayout)
+	 */
+	public static GridLayout getLayout(LayoutMode layoutMode, GridLayout layout, int cols)
+	{
+		if (layout == null)
+			layout = new GridLayout(cols, false);
+		configureLayout(layoutMode, layout);
+		return layout;
 	}	
 	
 	public static void setLayoutDataMode(LayoutDataMode layoutDataMode, Control c) 

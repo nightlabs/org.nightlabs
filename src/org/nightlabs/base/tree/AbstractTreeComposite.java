@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -152,43 +153,23 @@ public abstract class AbstractTreeComposite extends XComposite {
 	/**
 	 * Selects the given elements in the list if they exist.
 	 * @param elements the elements to be selected.
-	 * 
-	 * TODO Fix this method since it currently does nothing 
+	 * TODO Fix this method since it currently does nothing; Havent tested by now. 
 	 */
-	public void setSelection(final List elements)
+	public void setSelection(List elements, boolean reveal)
 	{
 		if (elements == null || elements.size() == 0)
 			return;
-		
-		ISelection selection = new IStructuredSelection() 
-			{
-				public Object getFirstElement()
-				{		
-					return elements.get(0);
-				}
-				public Iterator iterator()
-				{
-					return elements.iterator();
-				}
-				public int size()
-				{
-					return elements.size();
-				}
-				public Object[] toArray()
-				{
-					return elements.toArray(new Object[0]);
-				}
-				public List toList()
-				{
-					return elements;
-				}
-				public boolean isEmpty()
-				{
-					return false;
-				}			
-			};
-		
-		treeViewer.setSelection(selection, true);
+		treeViewer.setSelection(new StructuredSelection(elements), true);
+	}
+	
+	/**
+	 * Sets and reveals the selection to the given elements.
+	 * 
+	 * @param elements The elements to select.
+	 * @see #setSelection(List, boolean)
+	 */
+	public void setSelection(List elements) {
+		setSelection(elements, true);
 	}
 	
 	/**
@@ -197,9 +178,7 @@ public abstract class AbstractTreeComposite extends XComposite {
 	 */
 	public void setSelection(Object element)
 	{
-		List list = new LinkedList();
-		list.add(element);
-		setSelection(list);
+		setSelection(new StructuredSelection(element));
 	}
 	
 	public void setInput(Object input) {

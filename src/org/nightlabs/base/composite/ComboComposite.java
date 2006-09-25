@@ -69,15 +69,17 @@ public class ComboComposite<T> extends AbstractListComposite<T>
 	
 	public ComboComposite(Composite parent, List<T> elements, ILabelProvider labelProvider, int comboStyle) 
 	{
-		super(labelProvider, parent, SWT.NONE);
-		this.comboStyle |= comboStyle;
+		super(labelProvider, parent, SWT.NONE, false);
+		this.comboStyle |= comboStyle ;
+		createGuiControl(this, SWT.BORDER);
 		addElements(elements);
 	}
 	
 	public ComboComposite(Composite parent, ILabelProvider labelProvider, int comboStyle) 
 	{
-		super(labelProvider, parent, SWT.NONE);
+		super(labelProvider, parent, SWT.NONE, false);
 		this.comboStyle |= comboStyle;
+		createGuiControl(this, SWT.BORDER);
 	}
 	
 	@Override

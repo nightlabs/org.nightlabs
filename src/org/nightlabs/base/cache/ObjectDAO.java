@@ -92,7 +92,7 @@ public abstract class ObjectDAO<KeyType, ObjectType> {
 	 * @throws Exception in case of an error
 	 */
 	@SuppressWarnings("unchecked")
-	protected synchronized ObjectType getObject(String scope, KeyType key, IProgressMonitor monitor)
+	public synchronized ObjectType getObject(String scope, KeyType key, IProgressMonitor monitor)
 	{
 		try {
 			ObjectType res = (ObjectType) cache.get(scope, key);
@@ -119,7 +119,7 @@ public abstract class ObjectDAO<KeyType, ObjectType> {
 	 * @throws Exception in case of an error
 	 */
 	@SuppressWarnings("unchecked")
-	protected synchronized List<ObjectType> getObjects(String scope, List<KeyType> keys, IProgressMonitor monitor)
+	public synchronized List<ObjectType> getObjects(String scope, List<KeyType> keys, IProgressMonitor monitor)
 	{
 		try	{
 			ArrayList<ObjectType> objects = new ArrayList<ObjectType>();
@@ -168,19 +168,34 @@ public abstract class ObjectDAO<KeyType, ObjectType> {
 	 * Objects not found in the cache will be retrieved by calling 
 	 * {@link #retrieveObjects(List, IProgressMonitor).
 	 * <p>
+	 * This is a convenience method that calls
+	 * {@link #getObjects(String, List, IProgressMonitor)}
+	 * with a <code>null</code> scope.
+	 * 
+	 * @param keys Wich objects to get
+	 * @return All requested and existing objects.
+	 */
+	public synchronized List<ObjectType> getObjects(List<KeyType> keys, IProgressMonitor monitor)
+	{
+		return getObjects(null, keys, monitor);
+	}
+
+	/**
+	 * Get objects from the cache.
+	 * Objects not found in the cache will be retrieved by calling 
+	 * {@link #retrieveObjects(List, IProgressMonitor).
+	 * <p>
 	 * This is a convenience method that calls 
 	 * {@link #getObjects(String, List, IProgressMonitor)
 	 * 
 	 * @param scope The cache scope to use
-	 * @param objectIDs Wich objects to get
-	 * @param fetchGroups Wich fetch groups to use
-	 * @param maxFetchDepth Fetch depth or {@link NLJDOHelper#MAX_FETCH_DEPTH_NO_LIMIT} 
+	 * @param keys Wich objects to get
 	 * @param monitor The progress monitor for this action. For every cached
 	 * 					object, <code>monitor.worked(1)</code> will be called.
-	 * @return All requested and existing JDO objects.
+	 * @return All requested and existing objects.
 	 * @throws Exception in case of an error
 	 */
-	protected synchronized List<ObjectType> getJDOObjects(String scope, KeyType[] keys, IProgressMonitor monitor)
+	public synchronized List<ObjectType> getObjects(String scope, KeyType[] keys, IProgressMonitor monitor)
 	{
 		return getObjects(
 				scope,

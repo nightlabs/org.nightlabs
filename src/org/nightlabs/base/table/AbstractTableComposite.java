@@ -30,18 +30,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
-
+import org.eclipse.swt.widgets.TableItem;
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 
 /**
@@ -176,6 +177,64 @@ public abstract class AbstractTableComposite<ElementType> extends XComposite {
 		if (tableViewer != null)
 			tableViewer.setInput(input);
 	}
-	
 
+	/**
+	 * Sets the selection to the given list of elements.
+	 * TODO: No need for this method?
+	 *  
+	 * @param elements The elements to select.
+	 */
+	public void setSelectedEelements(List<ElementType> elements) {
+		TableItem[] items = tableViewer.getTable().getItems();
+		List<Integer> selIndexes = new ArrayList<Integer>();
+		for (int i = 0; i < items.length; i++) {
+			if (elements.contains(items[i].getData()))
+				selIndexes.add(i);
+		}
+		int[] selection = new int[selIndexes.size()];
+		for (int i = 0; i < selection.length; i++) {
+			selection[i] = selIndexes.get(i);
+		}
+		tableViewer.getTable().select(selection);
+	}
+
+	/**
+	 * If the this table-composite's table was created with
+	 * the {@link SWT#CHECK} flag this method will
+	 * exlusively check the rows for the given element list.
+	 * 
+	 * @param elements The element to check.
+	 */
+	public void setCheckedEelements(List<ElementType> elements) {
+		if ((table.getStyle() & SWT.CHECK) == 0)
+			return;
+		TableItem[] items = tableViewer.getTable().getItems();
+		for (int i = 0; i < items.length; i++) {
+			items[i].setChecked(false);
+			if (elements.contains(items[i].getData()))
+				items[i].setChecked(true);
+		}
+	}
+	
+	/**
+	 * Set the viewers selection.
+	 * 
+	 * @param elements The selection to set
+	 * @see TableViewer#setSelection(ISelection)
+	 */
+	public void setSelection(List<ElementType> elements) {
+		getTableViewer().setSelection(new StructuredSelection(elements));
+	}
+	
+	/**
+	 * Set the viewers selection.
+	 * 
+	 * @param selection The selection to set.
+	 * @param reveal If true the selection will be made visible 
+	 * @see TableViewer#setSelection(ISelection, boolean)
+	 */
+	public void setSelection(List<ElementType> elements, boolean reveal) {
+		getTableViewer().setSelection(new StructuredSelection(elements), reveal);
+	}
+	
 }

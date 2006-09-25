@@ -76,6 +76,11 @@ public abstract class AbstractListComposite<T> extends XComposite
 		this(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA);
 	}
 	
+	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, boolean doCreateGuiComposite)
+	{
+		this(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, doCreateGuiComposite);
+	}
+	
 	/**
 	 * Creates a new instance and uses a default LabelProvider.
 	 * @param parent The parent composite.
@@ -100,12 +105,19 @@ public abstract class AbstractListComposite<T> extends XComposite
 	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode,
 			LayoutDataMode layoutDataMode)
 	{
+		this(labelProvider, parent, style, layoutMode, layoutDataMode, true);
+	}
+	
+	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode,
+			LayoutDataMode layoutDataMode, boolean doCreateGuiControl)
+	{
 		super(parent, style, layoutMode, layoutDataMode);
 		this.labelProvider = labelProvider;
 		
 		elements = new LinkedList<T>();
 		
-		createGuiControl(this, SWT.BORDER);
+		if (doCreateGuiControl)
+			createGuiControl(this, SWT.BORDER);
 	}
 	
 	protected abstract Control createGuiControl(Composite parent, int style);
