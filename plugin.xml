@@ -84,12 +84,6 @@
              label="%menu.help.showKeyAssistant.label"
              menubarPath="help/group.assist"
              style="push"/>
-       <action
-             class="org.nightlabs.base.print.action.PrintDocumentAction"
-             id="org.nightlabs.base.print.action.PrintDocumentAction"
-             label="Print Document"
-             toolbarPath="additions"
-             style="push"/>
     </actionSet>
  </extension>
  <extension
