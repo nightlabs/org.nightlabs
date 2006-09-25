@@ -26,14 +26,12 @@
 
 package org.nightlabs.base.exceptionhandler.dialog;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.nightlabs.util.Utils;
 
 /**
  * @author Alexander Bieber
@@ -62,10 +60,7 @@ public class ThrowableHandlerDetailArea extends Composite {
 	public void setThrowable(Throwable err) {
 		this.error = err;
 		if (error != null) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			error.printStackTrace(pw);
-			textAreaStackTrace.setText(sw.toString());
+			textAreaStackTrace.setText(Utils.getStacktraceAsString(err));
 //			
 //			StringBuffer stackTraceBuf = new StringBuffer();
 //			err.printStackTrace();
