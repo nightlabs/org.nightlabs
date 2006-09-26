@@ -39,11 +39,13 @@ import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.base.i18n.ResolutionUnitEP;
+import org.nightlabs.base.i18n.UnitRegistryEP;
 import org.nightlabs.base.print.page.PredefinedPageEP;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.page.PageOrientationComposite;
 import org.nightlabs.editor2d.page.PredefinedPageComposite;
 import org.nightlabs.editor2d.page.ResolutionUnitComposite;
+import org.nightlabs.editor2d.page.UnitComposite;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -65,7 +67,7 @@ implements IWorkbenchPreferencePage
 	
 	private PredefinedPageComposite pageComp = null;
 	private ResolutionUnitComposite resUnitComp = null;
-//	private UnitComposite unitComp = null;
+	private UnitComposite unitComp = null;
 	private Text resolutionText = null;
 	private PageOrientationComposite orientationComp = null;
 			
@@ -110,13 +112,13 @@ implements IWorkbenchPreferencePage
 		resolutionText.setText(Preferences.getPreferenceStore().getString(Preferences.PREF_DOCUMENT_RESOLUTION));
 		resolutionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-//		// Standard Unit
-//		Label unitSelectLabel = new Label(content, SWT.NONE);
-//		unitSelectLabel.setText(EditorPlugin.getResourceString("preferences.document.properties.standardUnit.label"));
-//		unitComp = new UnitComposite(content, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
-//		unitComp.selectUnit(getPageRegistry().getUnit(
-//				Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_UNIT_ID)));
-//		unitComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
+		// Standard Unit
+		Label unitSelectLabel = new Label(content, SWT.NONE);
+		unitSelectLabel.setText(EditorPlugin.getResourceString("preferences.document.properties.standardUnit.label"));
+		unitComp = new UnitComposite(content, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
+		unitComp.selectUnit(UnitRegistryEP.sharedInstance().getUnitRegistry().getUnit(
+				Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_UNIT_ID)));
+		unitComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 		
 		return content;
 	}
@@ -133,7 +135,7 @@ implements IWorkbenchPreferencePage
 	{
 		pageComp.dispose();
 		resUnitComp.dispose();
-//		unitComp.dispose();
+		unitComp.dispose();
 		super.dispose();
 	}
 
@@ -156,8 +158,8 @@ implements IWorkbenchPreferencePage
 				pageComp.getSelectedPage().getPageID());
 		Preferences.getPreferenceStore().setValue(Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID, 
 				resUnitComp.getSelectedResolutionUnit().getResolutionID());
-//		Preferences.getPreferenceStore().setValue(Preferences.PREF_STANDARD_UNIT_ID, 
-//				unitComp.getSelectedUnit().getUnitID());		
+		Preferences.getPreferenceStore().setValue(Preferences.PREF_STANDARD_UNIT_ID, 
+				unitComp.getSelectedUnit().getUnitID());		
 		Preferences.getPreferenceStore().setValue(Preferences.PREF_DOCUMENT_RESOLUTION,
 				getResolution());
 		Preferences.getPreferenceStore().setValue(Preferences.PREF_PAGE_ORIENTATION_ID,
@@ -173,8 +175,8 @@ implements IWorkbenchPreferencePage
 				Preferences.PREF_PREDEFINED_PAGE_ID_DEFAULT));
 		resUnitComp.selectResolutionUnit(ResolutionUnitEP.sharedInstance().getResolutionUnitRegistry().getResolutionUnit(
 				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID_DEFAULT));
-//		unitComp.selectUnit(getPageRegistry().getUnit(
-//				Preferences.PREF_STANDARD_UNIT_ID_DEFAULT));
+		unitComp.selectUnit(UnitRegistryEP.sharedInstance().getUnitRegistry().getUnit(
+				Preferences.PREF_STANDARD_UNIT_ID_DEFAULT));
 		resolutionText.setText(""+Preferences.getPreferenceStore().getDefaultDouble(
 				Preferences.PREF_DOCUMENT_RESOLUTION));
 		orientationComp.selectOrientation(Preferences.getPreferenceStore().getDefaultInt(
@@ -183,8 +185,4 @@ implements IWorkbenchPreferencePage
 		super.performDefaults();
 	}
 		
-//	private PageRegistry getPageRegistry() 
-//	{
-//		return PageRegistryEP.sharedInstance().getPageRegistry();
-//	}
 }

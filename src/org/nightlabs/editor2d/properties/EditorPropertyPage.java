@@ -51,12 +51,6 @@ extends PropertySheetPage
 	 */
 	private static final Logger logger = Logger.getLogger(EditorPropertyPage.class);
 	
-//	public EditorPropertyPage() 
-//	{
-//		super();		
-//		unitManager = new UnitManager();		
-//	}
-
 	public EditorPropertyPage(UnitManager unitManager) 
 	{
 		super();		

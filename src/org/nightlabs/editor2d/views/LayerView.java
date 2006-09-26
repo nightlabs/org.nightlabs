@@ -27,23 +27,15 @@
 
 package org.nightlabs.editor2d.views;
 
-import java.util.EventObject;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.media.jai.operator.LogDescriptor;
-
 import org.apache.log4j.Logger;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPartListener;
-import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -69,20 +61,18 @@ import org.nightlabs.base.form.XFormToolkit;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.command.CreateLayerCommand;
 import org.nightlabs.editor2d.command.DeleteLayerCommand;
 import org.nightlabs.editor2d.command.DrawComponentReorderCommand;
-import org.nightlabs.editor2d.edit.LayerEditPart;
-import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
-import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.util.OrderUtil;
 
 public class LayerView 
 extends ViewPart 
-implements ISelectionListener
 {
 	/**
 	 * LOG4J logger used by this class
@@ -124,30 +114,43 @@ implements ISelectionListener
   	return toolButtonColor;
   }
     
-  public LayerView() 
+  private ISelectionListener selectionListener = new ISelectionListener()
   {
-    super();
-  }  
-  
+    public void selectionChanged(IWorkbenchPart part, ISelection selection) 
+    {
+    	if (logger.isDebugEnabled())
+    		logger.debug("selectionChanged()");
+    	
+      if (part instanceof AbstractEditor) 
+      {
+      	if (!part.equals(editor)) {
+        	removePropertyChangeListener(mldc);
+          editor = (AbstractEditor) part;
+          mldc = editor.getMultiLayerDrawComponent();
+          addPropertyChangeListener(mldc);          
+          refresh();              		
+      	}
+      }    
+      else if (!(getSite().getPage().getActiveEditor() instanceof AbstractEditor))
+      {
+      	removePropertyChangeListener(mldc);
+        editor = null;
+        mldc = null;
+        deactivateTools(false);
+        refresh();
+      }
+//      refresh();    
+    }
+	};  
+    
   protected void initMultiLayerDrawComponent() 
   {
     if (getSite().getPage().getActiveEditor() instanceof AbstractEditor) 
     {
-      logger.debug("getSite().getPage().getActiveEditor() instanceof Editor!");
+      logger.debug("getSite().getPage().getActiveEditor() instanceof AbstractEditor!");
       editor = (AbstractEditor) getSite().getPage().getActiveEditor();
-      if (editor.getOutlineGraphicalViewer() != null) 
-      {
-        RootEditPart rootEditPart = editor.getOutlineGraphicalViewer().getRootEditPart();
-        List children = rootEditPart.getChildren();
-        if (!children.isEmpty()) {
-          EditPart editPart = (EditPart) children.get(0);
-          if (editPart instanceof MultiLayerDrawComponentEditPart) {
-            MultiLayerDrawComponentEditPart mldcEditPart = (MultiLayerDrawComponentEditPart) editPart;
-            mldcEditPart.addEditPartListener(mldcListener);
-          }
-        }      	
-      }
       mldc = editor.getMultiLayerDrawComponent();
+      addPropertyChangeListener(mldc);
     }  	
   }
     
@@ -156,7 +159,7 @@ implements ISelectionListener
 		// init the MultiLayerDrawComponent
   	initMultiLayerDrawComponent();  	
     // add SelectionChangeListener
-    getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);		
+    getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
 	}
 	
 	private XFormToolkit toolkit = null;
@@ -164,42 +167,48 @@ implements ISelectionListener
 		return toolkit;
 	}
 	
+	private Composite parent;
+	protected Composite getParent() {
+		return parent;
+	}
+	
 	private ScrolledForm form = null;	
-	protected ScrolledForm getForm() {
+	protected ScrolledForm getForm() 
+	{
+		if (form == null || form.isDisposed()) {
+			form = getToolkit().createScrolledForm(getParent());
+			form.setLayout(new GridLayout());
+			form.setLayoutData(new GridData(GridData.FILL_BOTH));		
+			form.getBody().setLayout(new GridLayout());
+			form.getBody().setLayoutData(new GridData(GridData.FILL_BOTH));
+			toolkit.paintBordersFor(form.getBody());					
+		}
 		return form;
 	}
-		
+	
 	private Composite layerComposite;
-		
+		  
   /**
    * @see org.eclipse.ui.IWorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
    */
   public void createPartControl(Composite parent) 
   {   	
     init();
-                
+        
+  	this.parent = parent;    
     parent.setLayout(XComposite.getLayout(LayoutMode.ORDINARY_WRAPPER));    
     parent.setLayoutData(new GridData(GridData.FILL_BOTH));    
     
 		toolkit = new XFormToolkit(parent.getDisplay());
 //		toolkit.setCurrentMode(TOOLKIT_MODE.COMPOSITE);				
 		parent.setBackground(getToolkit().getBackground());
-		
-		form = getToolkit().createScrolledForm(parent);
-		form.setLayout(new GridLayout());
-		form.setLayoutData(new GridData(GridData.FILL_BOTH));		
-		form.getBody().setLayout(new GridLayout());
-		form.getBody().setLayoutData(new GridData(GridData.FILL_BOTH));
-				    				
-		layerComposite = getToolkit().createComposite(form.getBody(), SWT.NONE);
-		layerComposite.setLayout(new GridLayout());
-		layerComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		toolkit.paintBordersFor(layerComposite);
-		toolkit.paintBordersFor(form.getBody());
+				
+		form = getForm();
+		createComposites();
 						
 		createTools(parent);				
     refresh();    
-    deactivateTools(false);
+    deactivateTools(true);
   }
   
   protected void createLayerEntry(Composite parent, Layer l) 
@@ -264,8 +273,7 @@ implements ISelectionListener
 			button2Layer.put(text, l);
 
 			// set bgColor of currentLayer
-			if (l.equals(mldc.getCurrentLayer())) {
-//			  parentComposite.setBackground(getCurrentLayerColor());		
+			if (l.equals(mldc.getCurrentLayer())) {		
 				text.setBackground(getCurrentLayerColor());				
 			}
 		}
@@ -286,12 +294,12 @@ implements ISelectionListener
 				
 		// create Buttons		
 		buttonUp = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonUp.text"), 
-				buttonStyle);
+				buttonStyle);		
 //		buttonUp.setImage(UP_ICON);
 		buttonUp.setToolTipText(EditorPlugin.getResourceString("layerView.buttonUp.tooltip"));
 		buttonUp.addSelectionListener(upListener);
 //		buttonUp.addDisposeListener(upDisposeListener);
-		buttonUp.setBackground(getToolButtonColor());
+//		buttonUp.setBackground(getToolButtonColor());
 		
 		buttonDown = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonDown.text"), 
 				buttonStyle);
@@ -299,7 +307,7 @@ implements ISelectionListener
 		buttonDown.setToolTipText(EditorPlugin.getResourceString("layerView.buttonDown.tooltip"));
 		buttonDown.addSelectionListener(downListener);
 //		buttonDown.addDisposeListener(downDisposeListener);
-		buttonDown.setBackground(getToolButtonColor());	
+//		buttonDown.setBackground(getToolButtonColor());	
 		
 		buttonNew = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonNew.text"), 
 				buttonStyle);
@@ -307,7 +315,7 @@ implements ISelectionListener
 		buttonNew.setToolTipText(EditorPlugin.getResourceString("layerView.buttonNew.tooltip"));		
 		buttonNew.addSelectionListener(newListener);
 //		buttonNew.addDisposeListener(newDisposeListener);
-		buttonNew.setBackground(getToolButtonColor());		
+//		buttonNew.setBackground(getToolButtonColor());		
 		
 		buttonDelete = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonDelete.text"), 
 				buttonStyle);
@@ -315,7 +323,7 @@ implements ISelectionListener
 		buttonDelete.setToolTipText(EditorPlugin.getResourceString("layerView.buttonDelete.tooltip"));				
 		buttonDelete.addSelectionListener(deleteListener);				
 //		buttonDelete.addDisposeListener(deleteDisposeListener);
-		buttonDelete.setBackground(getToolButtonColor());		
+//		buttonDelete.setBackground(getToolButtonColor());		
 	}
 	
   /* (non-Javadoc)
@@ -323,7 +331,7 @@ implements ISelectionListener
    */
   public void setFocus() 
   {
-  	form.setFocus();
+  	getForm().setFocus();
   }
 
   private FocusAdapter focusListener = new FocusAdapter() 
@@ -424,11 +432,9 @@ implements ISelectionListener
 		public void widgetSelected(SelectionEvent e) 
 		{    
 		  logger.debug("NEW widgetSelected()");
-		  CreateLayerCommand addLayer = new CreateLayerCommand(mldc, editor.getModelFactory());		  
-		  executeCommand(addLayer);
-		  
-		  List<DrawComponent> layers = mldc.getDrawComponents(LayerImpl.class);
-		  logger.debug(layers.size() + " Layers registered");		  
+		  CreateLayerCommand addLayer = new CreateLayerCommand(mldc.getCurrentPage(), editor.getModelFactory());		  
+		  executeCommand(addLayer);	
+		  refresh();
 		}
 	};
 
@@ -439,8 +445,9 @@ implements ISelectionListener
 		  logger.debug("DELETE widgetSelected()");
 			
 		  Layer currentLayer = mldc.getCurrentLayer();
-		  DeleteLayerCommand layerCommand = new DeleteLayerCommand(mldc, currentLayer);
-		  executeCommand(layerCommand);		  
+		  DeleteLayerCommand layerCommand = new DeleteLayerCommand(mldc.getCurrentPage(), currentLayer);
+		  executeCommand(layerCommand);		
+		  refresh();
 		}
 	};
 
@@ -462,6 +469,7 @@ implements ISelectionListener
 			  DrawComponentReorderCommand cmd = new DrawComponentReorderCommand(
 			  		getCurrentLayer(), getCurrentLayer().getParent(), newIndex);
 			  executeCommand(cmd);
+			  refresh();
 		  }
 		}
 	};
@@ -478,7 +486,8 @@ implements ISelectionListener
 		  {
 			  DrawComponentReorderCommand cmd = new DrawComponentReorderCommand(
 			  		getCurrentLayer(), getCurrentLayer().getParent(), newIndex);
-			  executeCommand(cmd);		  
+			  executeCommand(cmd);	
+			  refresh();
 		  }
 		}
 	};
@@ -487,46 +496,7 @@ implements ISelectionListener
 	{
 		editor.getOutlineEditDomain().getCommandStack().execute(cmd);
 	}
-	
-	private CommandStackListener commandStackListener = new CommandStackListener() 
-	{
-    /* (non-Javadoc)
-     * @see org.eclipse.gef.commands.CommandStackListener#commandStackChanged(java.util.EventObject)
-     */
-    public void commandStackChanged(EventObject event) 
-    {      
-			editor.getEditPartViewer().getRootEditPart().refresh();
-			refresh();
-    }
-  };
-
-  private EditPartListener mldcListener = new EditPartListener.Stub() 
-  {
-    /**
-     * @see org.eclipse.gef.EditPartListener#childAdded(org.eclipse.gef.EditPart, int)
-     */
-    public void childAdded(EditPart child, int index) 
-    {
-      if (child instanceof LayerEditPart) {
-        MultiLayerDrawComponentEditPart parent = (MultiLayerDrawComponentEditPart) child.getParent();
-        mldc = (MultiLayerDrawComponent) parent.getModel();
-        refresh();
-      }
-    }
-
-    /**
-     * @see org.eclipse.gef.EditPartListener#removingChild(org.eclipse.gef.EditPart, int)
-     */
-    public void removingChild(EditPart child, int index) 
-    {
-      if (child instanceof LayerEditPart) {
-        MultiLayerDrawComponentEditPart parent = (MultiLayerDrawComponentEditPart) child.getParent();
-        mldc = (MultiLayerDrawComponent) parent.getModel();
-        refresh();        
-      }
-    }
-  };
-  	
+	  	  
   protected void deactivateTools(boolean newButton) 
 	{
 	  if (!buttonUp.isDisposed())
@@ -550,37 +520,16 @@ implements ISelectionListener
 	  if (!buttonNew.isDisposed())
 	    buttonNew.setEnabled(true);
 	}
-	
-  /* (non-Javadoc)
-   * @see org.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui.IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
-   */
-  public void selectionChanged(IWorkbenchPart part, ISelection selection) 
-  {
-    if (part instanceof AbstractEditor) 
-    {
-      this.editor = (AbstractEditor) part;
-      this.mldc = editor.getMultiLayerDrawComponent();
-      editor.getOutlineEditDomain().getCommandStack().removeCommandStackListener(commandStackListener);      
-      editor.getOutlineEditDomain().getCommandStack().addCommandStackListener(commandStackListener);
-    }    
-    else if (!(getSite().getPage().getActiveEditor() instanceof AbstractEditor))
-    {
-      editor = null;
-      mldc = null;
-      deactivateTools(false);
-    }
-    refresh();    
-  }
   
   protected void createComposites() 
   {
 		if (layerComposite != null)
 			layerComposite.dispose();		
-		layerComposite = getToolkit().createComposite(form.getBody(), SWT.NONE);		
+		layerComposite = getToolkit().createComposite(getForm().getBody(), SWT.NONE);		
 		layerComposite.setLayout(new GridLayout());
 		layerComposite.setLayoutData(new GridData(GridData.FILL_BOTH));		
 		layerComposite.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-		getToolkit().paintBordersFor(form.getBody());		
+		getToolkit().paintBordersFor(getForm().getBody());		
   }
     				
 	public void refresh()
@@ -604,16 +553,100 @@ implements ISelectionListener
 				else 
 				  activateTools();
 				
-				form.reflow(true);
+				getForm().reflow(true);
 			}				  
-		}		
+		}
+		else
+			logger.debug("layerComposite == null or isDisposed()");
 	}  
-  
+    
+  private PropertyChangeListener currentPageListener = new PropertyChangeListener()
+  {	
+		public void propertyChange(PropertyChangeEvent evt) 
+		{
+			if (evt.getPropertyName().equals(MultiLayerDrawComponent.PROP_CURRENT_PAGE)) 
+			{
+				PageDrawComponent oldPage = (PageDrawComponent) evt.getOldValue();
+				oldPage.removePropertyChangeListener(layerListener);
+				PageDrawComponent newPage = (PageDrawComponent) evt.getNewValue();
+				newPage.addPropertyChangeListener(layerListener);
+				refresh();
+			}
+		}	
+	};
+
+  private PropertyChangeListener layerListener = new PropertyChangeListener()
+  {	
+		public void propertyChange(PropertyChangeEvent evt) 
+		{
+			if (evt.getSource() instanceof PageDrawComponent && 
+					(evt.getPropertyName().equals(DrawComponentContainer.CHILD_ADDED) ||
+					evt.getPropertyName().equals(DrawComponentContainer.CHILD_REMOVED)) ) 
+			{
+				logger.debug("layer listener");
+				refresh();
+			}
+		}	
+	};
+		
+	private void removePropertyChangeListener(MultiLayerDrawComponent mldc) 
+	{
+    mldc.removePropertyChangeListener(currentPageListener);
+    mldc.getCurrentPage().removePropertyChangeListener(layerListener);   
+	}
+	
+	private void addPropertyChangeListener(MultiLayerDrawComponent mldc) 
+	{
+    mldc.addPropertyChangeListener(currentPageListener);
+    mldc.getCurrentPage().addPropertyChangeListener(layerListener);   
+	}
+	
+	@Override
   public void dispose() 
   {
-    getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);    
+    getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(selectionListener);
+    removePropertyChangeListener(mldc);    
     super.dispose();
   }
+  
+//private CommandStackListener commandStackListener = new CommandStackListener() 
+//{
+//  /* (non-Javadoc)
+//   * @see org.eclipse.gef.commands.CommandStackListener#commandStackChanged(java.util.EventObject)
+//   */
+//  public void commandStackChanged(EventObject event) 
+//  {      
+//		editor.getEditPartViewer().getRootEditPart().refresh();
+//		refresh();
+//  }
+//};
+
+//private EditPartListener layerListener = new EditPartListener.Stub() 
+//{
+//  /**
+//   * @see org.eclipse.gef.EditPartListener#childAdded(org.eclipse.gef.EditPart, int)
+//   */
+//  public void childAdded(EditPart child, int index) 
+//  {
+//    if (child instanceof LayerEditPart) {
+//      MultiLayerDrawComponentEditPart parent = (MultiLayerDrawComponentEditPart) child.getParent();
+//      mldc = (MultiLayerDrawComponent) parent.getModel();
+//      refresh();
+//    }
+//  }
+//
+//  /**
+//   * @see org.eclipse.gef.EditPartListener#removingChild(org.eclipse.gef.EditPart, int)
+//   */
+//  public void removingChild(EditPart child, int index) 
+//  {
+//    if (child instanceof LayerEditPart) {
+//      MultiLayerDrawComponentEditPart parent = (MultiLayerDrawComponentEditPart) child.getParent();
+//      mldc = (MultiLayerDrawComponent) parent.getModel();
+//      refresh();        
+//    }
+//  }
+//};
   
 //  private DisposeListener visibleDisposeListener = new DisposeListener() {	
 //		public void widgetDisposed(DisposeEvent e) {

@@ -25,8 +25,8 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.actions.copy;
 
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -80,7 +80,7 @@ extends AbstractEditorAction
 	protected boolean copy = false;
 	protected boolean cut = false;
 	
-	protected List clipBoardContent = null;	
+	protected Collection clipBoardContent = null;	
 	public void run() 
 	{
 		CompoundCommand cmd = new CompoundCommand();
@@ -112,9 +112,9 @@ extends AbstractEditorAction
 				if (!content.equals(EditorActionConstants.EMPTY_CLIPBOARD_CONTENT)) 
 				{
 					enabled = true;
-					if (content instanceof List) 
+					if (content instanceof Collection) 
 					{
-						clipBoardContent = (List) content;
+						clipBoardContent = (Collection) content;
 					}
 				}
 			}			
@@ -133,9 +133,9 @@ extends AbstractEditorAction
 				if (!content.equals(EditorActionConstants.EMPTY_CLIPBOARD_CONTENT)) 
 				{
 					enabled = true;
-					if (content instanceof List) 
+					if (content instanceof Collection) 
 					{
-						clipBoardContent = (List) content;
+						clipBoardContent = (Collection) content;
 					}
 				}
 			}			

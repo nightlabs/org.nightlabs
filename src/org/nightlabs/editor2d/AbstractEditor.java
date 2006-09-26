@@ -102,6 +102,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.nightlabs.base.i18n.ResolutionUnitEP;
@@ -191,7 +192,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	protected void closeEditor(boolean save) 
 	{
 		getSite().getPage().closeEditor(AbstractEditor.this, save);      
-		System.gc();
+		System.gc();			
 	}
 
 	public Object getModel() {
@@ -1247,16 +1248,17 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		IResolutionUnit resUnit = getResolutionUnitRegistry().getResolutionUnit(resolutionUnitID);
 		Resolution resolution = new ResolutionImpl(resUnit, 
 				Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION)); 
-//		String unitID = Preferences.getPreferenceStore().getString(
-//		Preferences.PREF_STANDARD_UNIT_ID);
-//		setCurrentUnit(getPageRegistry().getUnit(unitID));
+		String unitID = Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_UNIT_ID);
+		getUnitManager().setCurrentUnit(getUnitRegistry().getUnit(unitID));
 
 		double pageHeight = defaultPage.getPageHeight() * pageUnit.getFactor();
 		double pageWidth = defaultPage.getPageWidth() * pageUnit.getFactor();  
 		
 		DotUnit dotUnit = (DotUnit) getUnitRegistry().getUnit(DotUnit.UNIT_ID);
-		if (dotUnit == null)
+		if (dotUnit == null) {
 			dotUnit = new DotUnit(resolution);
+			getUnitRegistry().addUnit(dotUnit, UnitConstants.UNIT_CONTEXT_EDITOR2D);			
+		}
 		else 
 			dotUnit.setResolution(resolution);
 		double factor = dotUnit.getFactor();    	
@@ -1280,10 +1282,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		getMultiLayerDrawComponent().setResolution(resolution);  	  	
 		getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 	  	
 	}
-
-//	protected PageRegistry getPageRegistry() {
-//		return PageRegistryEP.sharedInstance().getPageRegistry();
-//	}
 
 	protected ResolutionUnitRegistry getResolutionUnitRegistry() {
 		return ResolutionUnitEP.sharedInstance().getResolutionUnitRegistry();
@@ -1385,14 +1383,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 		freeMemory();
 	}
-
-//	private PageFormat pageFormat = PrinterJob.getPrinterJob().defaultPage();
-//	public PageFormat getPageFormat() {
-//		return pageFormat;
-//	}
-//	public void setPageFormat(PageFormat pageFormat) {
-//		this.pageFormat = pageFormat;
-//	}
 
 	protected void freeMemory() 
 	{

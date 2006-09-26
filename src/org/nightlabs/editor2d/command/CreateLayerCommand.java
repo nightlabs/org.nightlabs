@@ -31,17 +31,18 @@ import org.nightlabs.editor2d.Editor2DFactory;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.PageDrawComponent;
 
 
 public class CreateLayerCommand  
 extends CreateDrawComponentCommand
 {		 
-	public CreateLayerCommand(MultiLayerDrawComponent parent, Editor2DFactory factory)
+	public CreateLayerCommand(PageDrawComponent parent, Editor2DFactory factory)
 	{
 		if (parent == null) {
 			throw new IllegalArgumentException("Param parent (MultiLayerDrawComponent) must not be null!");
 		}	  
-		this.parent = parent.getCurrentPage();
+		this.parent = parent;
 	  this.factory = factory;
 	  setLabel(EditorPlugin.getResourceString("command.create.layer"));	  
 	}

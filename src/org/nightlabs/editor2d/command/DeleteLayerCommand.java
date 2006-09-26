@@ -30,32 +30,34 @@ package org.nightlabs.editor2d.command;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.PageDrawComponent;
 
 
 public class DeleteLayerCommand  
 extends DeleteDrawComponentCommand
 {
 
-	public DeleteLayerCommand(MultiLayerDrawComponent mldc, Layer layer)	
+	public DeleteLayerCommand(PageDrawComponent page, Layer layer)	
 	{
-		super(mldc, layer);
+		super(page, layer);
 		setLabel(EditorPlugin.getResourceString("command.delete.layer"));
-		this.mldc = mldc;
-		this.parent = mldc.getCurrentPage();
 	}	
 		
+	@Override
 	public void execute() 
 	{
 		super.execute();
 		setCurrentLayer();
 	}	
 	
+	@Override
 	public void redo() 
 	{
 		super.redo();
 	  setCurrentLayer();	  
 	}
 	
+	@Override
 	public void undo() 
 	{
 		super.undo();
@@ -64,16 +66,17 @@ extends DeleteDrawComponentCommand
 	
 	protected void setCurrentLayer() 
 	{
-    if (index != 0) {
+    if (index != 0)
     	getMultiLayerDrawComponent().setCurrentLayer((Layer) parent.getDrawComponents().get(index-1));
-    } else if ( index==0 && parent.getDrawComponents().size() > 2) {
+    else if (parent.getDrawComponents().size() == 1)
+    	getMultiLayerDrawComponent().setCurrentLayer((Layer) parent.getDrawComponents().get(0));
+    else if (index == 0) {
     	getMultiLayerDrawComponent().setCurrentLayer((Layer) parent.getDrawComponents().get(index+1));
     }			  	  
 	}
 	
-	protected MultiLayerDrawComponent mldc;
 	public MultiLayerDrawComponent getMultiLayerDrawComponent() {
-	  return mldc;
+	  return parent.getRoot();
 	}
 	
 	public Layer getLayer() {
