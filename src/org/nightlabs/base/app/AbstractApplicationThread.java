@@ -71,13 +71,15 @@ extends Thread
 	{
 		super(arg0, arg1, arg2, arg3);
 	}
-	
+
 	private int platformResultCode = -1;
-	
+
 	public int getPlatformResultCode() {
 		return platformResultCode;
 	}
-	
+
+	private Display display;
+
 	/**
 	 * First initializes the {@link org.nightlabs.config.Config} in the users home 
 	 * directory under ".applicationName/config". Sets static members of this class for 
@@ -90,14 +92,10 @@ extends Thread
 	{
 		try {
 			// create the display
-	  	WorkbenchAdvisor workbenchAdvisor = getWorkbenchAdvisor();
-	    Display display = PlatformUI.createDisplay();
-//	    try {
-//	    	AbstractApplication.initializeLogging();
-//	    } catch (Throwable t) {
-//	    	System.out.println("Could not initialize logging !!!");
-//	    }
-      platformResultCode = PlatformUI.createAndRunWorkbench(display, workbenchAdvisor);
+			display = PlatformUI.createDisplay();
+			WorkbenchAdvisor workbenchAdvisor = getWorkbenchAdvisor();
+			
+			platformResultCode = PlatformUI.createAndRunWorkbench(display, workbenchAdvisor);
 		}
 		catch(Throwable e) {
 			e.printStackTrace();
@@ -109,16 +107,17 @@ extends Thread
 			}
 		}
 	}
-	 
+
 	protected AbstractWorkbenchAdvisor workbenchAdvisor = null;
+
 	public AbstractWorkbenchAdvisor getWorkbenchAdvisor() 
 	{
 		if (workbenchAdvisor == null)
-			workbenchAdvisor = initWorkbenchAdvisor();
-		
+			workbenchAdvisor = initWorkbenchAdvisor(display);
+
 		return workbenchAdvisor;
 	}
-	
+
 	protected AbstractApplication application = null;
 	/**
 	 * 
@@ -130,7 +129,7 @@ extends Thread
 	{
 		if (application == null)
 			application = getWorkbenchAdvisor().getApplication();
-		
+
 		return application;
 	}
 
@@ -140,6 +139,6 @@ extends Thread
 	 * ApplicationThread
 	 * @see AbstractWorkbenchAdvisor
 	 */
-	public abstract AbstractWorkbenchAdvisor initWorkbenchAdvisor();	
+	public abstract AbstractWorkbenchAdvisor initWorkbenchAdvisor(Display display);	
 
 }

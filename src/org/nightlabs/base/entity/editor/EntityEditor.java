@@ -27,6 +27,7 @@
 package org.nightlabs.base.entity.editor;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -217,5 +218,15 @@ public class EntityEditor extends CommitableFormEditor
 	 */
 	public IEntityEditorPageController getPageController(IFormPage page) {
 		return getController().getPageController(page);
+	}
+
+	/**
+	 * Returns a collection of all pageControllers associated with this'
+	 * editor {@link EntityEditorController}.
+	 * 
+	 * @return All page controllers.
+	 */
+	public Collection<IEntityEditorPageController> getPageControllers() {
+		return getController().getPageControllers().values();
 	}
 }

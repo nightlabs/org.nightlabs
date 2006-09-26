@@ -45,6 +45,9 @@
 
    <element name="category">
       <annotation>
+         <appInfo>
+            <meta.element labelAttribute="name" icon="icon"/>
+         </appInfo>
          <documentation>
             By this element categories can be defined that will display in the EntityTreeView referenced with the viewID attribute. 
 There are two required attributes for this element: viewID and class. The others are optional as they are also defined by IEntityTreeCategory and the implementations are responsible of returning correct values. 

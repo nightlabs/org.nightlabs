@@ -161,6 +161,15 @@ public class EntityEditorController
 	protected IFormPage getPage(IEntityEditorPageController pageController) {
 		return controllerPages.get(pageController);
 	}
+
+	/**
+	 * Returns the current pageControllers for this editorControllers.
+	 * 
+	 * @return The current pageControllers for this editorControllers.
+	 */
+	protected Map<String, IEntityEditorPageController> getPageControllers() {
+		return pageControllers;
+	}
 	
 
 	/**

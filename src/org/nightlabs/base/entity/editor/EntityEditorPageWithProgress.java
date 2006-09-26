@@ -96,7 +96,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	 * Wrapper for the page's real content
 	 */
 //	protected ScrolledForm pageWrapper;
-	protected Form pageWrapper;
+	protected Composite pageWrapper;
 	/**
 	 * Wrapper for the progress monitor
 	 */	
@@ -289,6 +289,16 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		body.setLayout(layout);
 		body.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
+	
+	/**
+	 * Configure the (root) form of this page.
+	 * The default implementation does nothing.
+	 * 
+	 * @param form The form to configure
+	 */
+	protected void configureForm(ScrolledForm form) {
+		
+	}
 
 	/**
 	 * Configure what view should be visible initally, progress or content.
@@ -308,6 +318,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	private void fillBody(IManagedForm managedForm, FormToolkit toolkit) 
 	{
 		Composite body = managedForm.getForm().getBody();
+		configureForm(managedForm.getForm());
 		configureBody(body);
 		
 		wrapper = new FadeableComposite(body, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
@@ -320,12 +331,14 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		configureProgressWrapper(progressWrapper);		
 		progressMonitorPart = createProgressMonitorPart(progressWrapper);
 		
-		pageWrapper = managedForm.getToolkit().createForm(wrapper);
-		configurePageWrapper(pageWrapper.getBody());
+//		pageWrapper = managedForm.getToolkit().createForm(wrapper);
+//		configurePageWrapper(pageWrapper.getBody());
+		pageWrapper = managedForm.getToolkit().createComposite(wrapper);
+		configurePageWrapper(pageWrapper);
 		
 		asyncLoadJob.schedule();		
 		
-		addSections(pageWrapper.getBody());
+		addSections(pageWrapper);
 		configureInitialStack();
 		wrapper.setToolkit(managedForm.getToolkit());
 		wrapper.adaptToToolkit();
