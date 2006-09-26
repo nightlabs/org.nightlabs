@@ -416,5 +416,13 @@ public class I18nTextEditor extends XComposite
 		text.setEditable(editable);
 	}
 	
-	
+	/**
+	 * Sets the selection in the text box of the editor.
+	 * @param start the beginning index of the selection
+	 * @param end the end index of the selection (exclusive)
+	 */
+	public void setSelection(int start, int end)
+	{
+		text.setSelection(start, end);
+	}	
 }

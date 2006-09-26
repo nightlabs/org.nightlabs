@@ -26,13 +26,12 @@
 
 package org.nightlabs.base.tree;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -152,14 +151,13 @@ public abstract class AbstractTreeComposite extends XComposite {
 	
 	/**
 	 * Selects the given elements in the list if they exist.
-	 * @param elements the elements to be selected.
-	 * TODO Fix this method since it currently does nothing; Havent tested by now. 
+	 * @param elements the elements to be selected. 
 	 */
 	public void setSelection(List elements, boolean reveal)
 	{
 		if (elements == null || elements.size() == 0)
 			return;
-		treeViewer.setSelection(new StructuredSelection(elements), true);
+		getTreeViewer().setSelection(new StructuredSelection(elements), true);
 	}
 	
 	/**
@@ -178,12 +176,10 @@ public abstract class AbstractTreeComposite extends XComposite {
 	 */
 	public void setSelection(Object element)
 	{
-		setSelection(new StructuredSelection(element));
+		getTreeViewer().setSelection(new StructuredSelection(element));
 	}
 	
 	public void setInput(Object input) {
 		treeViewer.setInput(input);
 	}
-	
-
 }
