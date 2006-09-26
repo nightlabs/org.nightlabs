@@ -25,6 +25,7 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.app;
 
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.app.AbstractApplicationThread;
 import org.nightlabs.base.app.AbstractWorkbenchAdvisor;
 
@@ -100,10 +101,8 @@ extends AbstractApplicationThread
 		super(arg0, arg1, arg2, arg3);
 	}
 
-	/**
-	 * @see org.nightlabs.base.app.AbstractApplicationThread#initWorkbenchAdvisor()
-	 */
-	public AbstractWorkbenchAdvisor initWorkbenchAdvisor() {
+	public AbstractWorkbenchAdvisor initWorkbenchAdvisor(Display display)
+	{
 		return new Editor2DWorkbenchAdvisor();
 	}
 
