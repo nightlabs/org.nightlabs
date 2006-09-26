@@ -67,9 +67,9 @@ public class ListComposite<T> extends AbstractListComposite<T>
 	}
 
 	@Override
-	protected void addElementToGui(T element)
+	protected void addElementToGui(int index, T element)
 	{
-		list.add(labelProvider.getText(element));
+		list.add(labelProvider.getText(element), index);
 	}
 
 	@Override
@@ -82,9 +82,15 @@ public class ListComposite<T> extends AbstractListComposite<T>
 	}
 
 	@Override
-	protected int getSelectedIndex()
+	protected int getSelectionIndex()
 	{
 		return list.getSelectionIndex();
+	}
+
+	@Override
+	protected int[] getSelectionIndices()
+	{
+		return list.getSelectionIndices();
 	}
 
 	@Override
@@ -105,7 +111,20 @@ public class ListComposite<T> extends AbstractListComposite<T>
 		list.select(index);
 		list.showSelection();
 	}
-	
+
+	@Override
+	protected int getSelectionCount()
+	{
+		return list.getSelectionCount();
+	}
+
+	@Override
+	protected void setSelection(int[] indices)
+	{
+		list.select(indices);
+		list.showSelection();
+	}
+
 	public List getList()
 	{
 		return list;

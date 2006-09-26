@@ -83,9 +83,9 @@ public class ComboComposite<T> extends AbstractListComposite<T>
 	}
 	
 	@Override
-	protected void addElementToGui(T element)
+	protected void addElementToGui(int index, T element)
 	{
-		combo.add(labelProvider.getText(element));
+		combo.add(labelProvider.getText(element), index);
 	}
 
 	@Override
@@ -96,9 +96,15 @@ public class ComboComposite<T> extends AbstractListComposite<T>
 	}
 
 	@Override
-	protected int getSelectedIndex()
+	protected int getSelectionIndex()
 	{
 		return combo.getSelectionIndex();
+	}
+
+	@Override
+	protected int[] getSelectionIndices()
+	{
+		return new int[] { combo.getSelectionIndex() };
 	}
 
 	@Override
@@ -118,7 +124,25 @@ public class ComboComposite<T> extends AbstractListComposite<T>
 	{
 		combo.select(index);
 	}
-	
+
+	@Override
+	protected void setSelection(int[] indices)
+	{
+		if (indices.length < 1)
+			combo.select(-1); // seems to be ignored - a combo seems to have always one item selected
+		else
+			combo.select(indices[0]);
+	}
+
+	@Override
+	protected int getSelectionCount()
+	{
+		if (combo.getSelectionIndex() < 0 || combo.getItemCount() < 1)
+			return 0;
+		else
+			return 1;
+	}
+
 	public Combo getCombo()
 	{
 		return combo;

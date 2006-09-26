@@ -24,11 +24,19 @@
  ******************************************************************************/
 package org.nightlabs.base.composite;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -43,7 +51,8 @@ import org.eclipse.swt.widgets.Control;
  * 
  * @param <T> The type of the elements that should be displayed inside this combo.
  */
-public abstract class AbstractListComposite<T> extends XComposite 
+public abstract class AbstractListComposite<T> extends XComposite
+implements ISelectionProvider
 {	
 	/**
 	 * List of the objects that should be managed.
@@ -117,9 +126,9 @@ public abstract class AbstractListComposite<T> extends XComposite
 		elements = new LinkedList<T>();
 		
 		if (doCreateGuiControl)
-			createGuiControl(this, SWT.BORDER);
+			createGuiControl(this, style | SWT.BORDER);
 	}
-	
+
 	protected abstract Control createGuiControl(Composite parent, int style);
 	
 	/**
@@ -127,15 +136,17 @@ public abstract class AbstractListComposite<T> extends XComposite
 	 */
 	protected void populateList()
 	{
+		int index = 0;
 		for (T elem : elements)
-			addElementToGui(elem);
+			addElementToGui(index++, elem);
 	}
-	
+
 	/**
 	 * The given element is added to the graphical representation of this list.
+	 * @param index TODO
 	 * @param element The element to be added.
 	 */
-	protected abstract void addElementToGui(T element);
+	protected abstract void addElementToGui(int index, T element);
 	
 	/**
 	 * The given element is removed from the graphical representation of this list.
@@ -151,13 +162,19 @@ public abstract class AbstractListComposite<T> extends XComposite
 	/**
 	 * Returns the index of the element currently selected in the graphical representation of this list.
 	 */
-	protected abstract int getSelectedIndex();
-	
+	protected abstract int getSelectionIndex();
+
+	protected abstract int[] getSelectionIndices();
+
 	/**
 	 * Selects the element with the given index in the graphical representation of this list.
 	 */
 	protected abstract void setSelection(int index);
-	
+
+	protected abstract void setSelection(int[] indices);
+
+	protected abstract int getSelectionCount();
+
 	/**
 	 * Refreshes the specified element and updates its label.
 	 * @param The element to be refreshed.
@@ -171,20 +188,27 @@ public abstract class AbstractListComposite<T> extends XComposite
 	public void addElement(T element)
 	{
 		elements.add(element);
-		addElementToGui(element);
+		addElementToGui(elements.size() - 1, element);
+	}
+
+	public void addElement(int index, T element)
+	{
+		elements.add(index, element);
+		addElementToGui(index, element);
 	}
 	
 	/**
 	 * Removes the specified element from the list.
 	 * @param element The element to be removed.
 	 */
-	public void removeElement(T element)
+	public int removeElement(T element)
 	{
 		int index = elements.indexOf(element);
 		removeElementFromGui(index);
 		elements.remove(index);
+		return index;
 	}
-	
+
 	/**
 	 * Removes all elements from the list.
 	 */
@@ -220,13 +244,23 @@ public abstract class AbstractListComposite<T> extends XComposite
 	 */
 	public T getSelectedElement()
 	{		
-		int selIndex = getSelectedIndex();
+		int selIndex = getSelectionIndex();
 		if (selIndex != -1)
 			return elements.get(selIndex);
 		else
 			return null;
 	}
-	
+
+	public List<T> getSelectedElements()
+	{
+		ArrayList<T> selectedElements = new ArrayList<T>(getSelectionCount());
+		int[] selIndices = getSelectionIndices();
+		for (int i = 0; i < selIndices.length; ++i) {
+			selectedElements.add(elements.get(selIndices[i]));
+		}
+		return selectedElements;
+	}
+
 	/**
 	 * Returns the index of the given element.
 	 * @param element The element whose index is to be returned.
@@ -289,7 +323,7 @@ public abstract class AbstractListComposite<T> extends XComposite
 	 */
 	public T removeSelected()
 	{
-		int index = getSelectedIndex();
+		int index = getSelectionIndex();
 		T toReturn = getSelectedElement();
 		elements.remove(index);
 		removeElementFromGui(index);
@@ -302,5 +336,55 @@ public abstract class AbstractListComposite<T> extends XComposite
 	{
 		for (T elem : elements)
 			refreshElement(elem);
+	}
+
+	private ListenerList selectionChangedListeners = new ListenerList();
+
+	public void addSelectionChangedListener(ISelectionChangedListener listener)
+	{
+		selectionChangedListeners.add(listener);
+	}
+
+	public void removeSelectionChangedListener(ISelectionChangedListener listener)
+	{
+		selectionChangedListeners.remove(listener);
+	}
+
+	/**
+	 * @return an instance of {@link IStructuredSelection} containing all selected elements.
+	 *
+	 * @see ISelectionProvider#getSelection()
+	 */
+	public ISelection getSelection()
+	{
+		return new StructuredSelection(getSelectedElements());
+	}
+
+	/**
+	 * @param selection This must be an instance of {@link IStructuredSelection} containing the elements
+	 *		you want to select (all others will be deselected. If the concrete implementation of {@link AbstractListComposite}
+	 *		does not support multi-selections, the first element of <code>selection</code> will be selected.
+	 *
+	 * @see ISelectionProvider#setSelection(ISelection)
+	 */
+	public void setSelection(ISelection selection)
+	{
+		IStructuredSelection sel = (IStructuredSelection) selection;
+		LinkedList<Integer> selectionIndices = new LinkedList<Integer>();
+		for (Iterator it = sel.iterator(); it.hasNext(); ) {
+			Object element = it.next();
+			int index = elements.indexOf(element);
+			if (index < 0)
+				throw new IllegalArgumentException("The object in the selection is not known in this list: " + element);
+
+			selectionIndices.add(index);
+		}
+
+		int[] si = new int[selectionIndices.size()]; int i = 0;
+		for (Integer selIdx : selectionIndices) {
+			si[i++] = selIdx.intValue();
+		}
+
+		setSelection(si);
 	}
 }
