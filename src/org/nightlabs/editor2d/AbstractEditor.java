@@ -1248,8 +1248,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		IResolutionUnit resUnit = getResolutionUnitRegistry().getResolutionUnit(resolutionUnitID);
 		Resolution resolution = new ResolutionImpl(resUnit, 
 				Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION)); 
-		String unitID = Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_UNIT_ID);
-		getUnitManager().setCurrentUnit(getUnitRegistry().getUnit(unitID));
 
 		double pageHeight = defaultPage.getPageHeight() * pageUnit.getFactor();
 		double pageWidth = defaultPage.getPageWidth() * pageUnit.getFactor();  
@@ -1263,6 +1261,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			dotUnit.setResolution(resolution);
 		double factor = dotUnit.getFactor();    	
 
+		String unitID = Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_UNIT_ID);
+		getUnitManager().setCurrentUnit(getUnitRegistry().getUnit(unitID));
+		
 		logger.debug("factor = "+factor);
 		logger.debug("pageHeight = "+pageHeight+" mm");
 		logger.debug("pageWidth = "+pageWidth+" mm");    		  	

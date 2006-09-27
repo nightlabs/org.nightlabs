@@ -34,6 +34,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
@@ -50,6 +51,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -121,28 +123,38 @@ extends ViewPart
     	if (logger.isDebugEnabled())
     		logger.debug("selectionChanged()");
     	
-      if (part instanceof AbstractEditor) 
-      {
-      	if (!part.equals(editor)) {
-        	removePropertyChangeListener(mldc);
-          editor = (AbstractEditor) part;
-          mldc = editor.getMultiLayerDrawComponent();
-          addPropertyChangeListener(mldc);          
-          refresh();              		
-      	}
+      if (part instanceof AbstractEditor) {
+      	start(part);
       }    
-      else if (!(getSite().getPage().getActiveEditor() instanceof AbstractEditor))
-      {
-      	removePropertyChangeListener(mldc);
-        editor = null;
-        mldc = null;
-        deactivateTools(false);
-        refresh();
-      }
-//      refresh();    
+      else if (!(getSite().getPage().getActiveEditor() instanceof AbstractEditor)) {
+      	clear();
+      }    
     }
 	};  
-    
+
+	private void start(IWorkbenchPart part)
+	{
+    if (part instanceof AbstractEditor) 
+    {
+    	if (!part.equals(editor)) {
+      	removePropertyChangeListener(mldc);
+        editor = (AbstractEditor) part;
+        mldc = editor.getMultiLayerDrawComponent();
+        addPropertyChangeListener(mldc);          
+        refresh();              		
+    	}
+    } 
+	}
+	
+	private void clear() 
+	{
+  	removePropertyChangeListener(mldc);
+    editor = null;
+    mldc = null;
+    deactivateTools(false);
+    refresh();		
+	}
+	
   protected void initMultiLayerDrawComponent() 
   {
     if (getSite().getPage().getActiveEditor() instanceof AbstractEditor) 
@@ -160,6 +172,7 @@ extends ViewPart
   	initMultiLayerDrawComponent();  	
     // add SelectionChangeListener
     getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
+    getSite().getWorkbenchWindow().getActivePage().addPartListener(partListener);
 	}
 	
 	private XFormToolkit toolkit = null;
@@ -192,8 +205,8 @@ extends ViewPart
    * @see org.eclipse.ui.IWorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
    */
   public void createPartControl(Composite parent) 
-  {   	
-    init();
+  {   	  	
+  	init();
         
   	this.parent = parent;    
     parent.setLayout(XComposite.getLayout(LayoutMode.ORDINARY_WRAPPER));    
@@ -208,7 +221,7 @@ extends ViewPart
 						
 		createTools(parent);				
     refresh();    
-    deactivateTools(true);
+    deactivateTools(false);
   }
   
   protected void createLayerEntry(Composite parent, Layer l) 
@@ -591,24 +604,41 @@ extends ViewPart
 		
 	private void removePropertyChangeListener(MultiLayerDrawComponent mldc) 
 	{
-    mldc.removePropertyChangeListener(currentPageListener);
-    mldc.getCurrentPage().removePropertyChangeListener(layerListener);   
+		if (mldc != null) {
+	    mldc.removePropertyChangeListener(currentPageListener);
+	    mldc.getCurrentPage().removePropertyChangeListener(layerListener);   			
+		}
 	}
 	
 	private void addPropertyChangeListener(MultiLayerDrawComponent mldc) 
 	{
-    mldc.addPropertyChangeListener(currentPageListener);
-    mldc.getCurrentPage().addPropertyChangeListener(layerListener);   
+		if (mldc != null) {
+	    mldc.addPropertyChangeListener(currentPageListener);
+	    mldc.getCurrentPage().addPropertyChangeListener(layerListener);   			
+		}
 	}
 	
 	@Override
   public void dispose() 
   {
     getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(selectionListener);
+    getSite().getWorkbenchWindow().getActivePage().removePartListener(partListener);    
     removePropertyChangeListener(mldc);    
     super.dispose();
   }
   
+  private IPartListener partListener = new IPartListener() 
+  {
+		public void partActivated(IWorkbenchPart part) {
+			start(part);
+		}
+		public void partBroughtToTop(IWorkbenchPart p) { }
+		public void partClosed(IWorkbenchPart p) {
+			clear();
+		}
+		public void partDeactivated(IWorkbenchPart p) { }
+		public void partOpened(IWorkbenchPart p) { }
+	};
 //private CommandStackListener commandStackListener = new CommandStackListener() 
 //{
 //  /* (non-Javadoc)
