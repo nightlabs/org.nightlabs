@@ -111,6 +111,14 @@ public abstract class EntityTreeCategory extends EventManager implements IEntity
 	{
 		removeListenerObject(listener);
 	}
+
+	/**
+	 * Returns the count of listeners attached to this category
+	 * @return The count of listeners attached to this category
+	 */
+	protected int getListenerCount() {
+		return getListeners().length;
+	}
 	
 	/**
 	 * Fire a category change event. This will notify listeners

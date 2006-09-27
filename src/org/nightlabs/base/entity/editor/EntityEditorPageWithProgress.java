@@ -96,7 +96,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	 * Wrapper for the page's real content
 	 */
 //	protected ScrolledForm pageWrapper;
-	protected Composite pageWrapper;
+	protected Form pageWrapper;
 	/**
 	 * Wrapper for the progress monitor
 	 */	
@@ -193,6 +193,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		ScrolledForm form = managedForm.getForm();
 		form.setExpandHorizontal(true);
 		form.setExpandVertical(true);
+//		form.
 		FormToolkit toolkit = managedForm.getToolkit();
 		String formText = getPageFormTitle();		
 		form.setText(formText == null ? "" : formText); 
@@ -331,14 +332,14 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		configureProgressWrapper(progressWrapper);		
 		progressMonitorPart = createProgressMonitorPart(progressWrapper);
 		
+		pageWrapper = managedForm.getToolkit().createForm(wrapper);
+		configurePageWrapper(pageWrapper.getBody());
 //		pageWrapper = managedForm.getToolkit().createForm(wrapper);
-//		configurePageWrapper(pageWrapper.getBody());
-		pageWrapper = managedForm.getToolkit().createComposite(wrapper);
-		configurePageWrapper(pageWrapper);
+//		configurePageWrapper(pageWrapper);
 		
 		asyncLoadJob.schedule();		
 		
-		addSections(pageWrapper);
+		addSections(pageWrapper.getBody());
 		configureInitialStack();
 		wrapper.setToolkit(managedForm.getToolkit());
 		wrapper.adaptToToolkit();
