@@ -34,7 +34,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
