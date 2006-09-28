@@ -13,7 +13,6 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.nightlabs.base.print.PrinterInterfaceManager;
 import org.nightlabs.base.print.PrinterUseCase;
-import org.nightlabs.base.timepattern.builder.TimePatternSetBuilderWizard;
 import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.print.DocumentPrinter;
 import org.nightlabs.print.PrinterInterface;

@@ -71,7 +71,7 @@ implements IXContributionItem
   /**
    * Computes the width required by control
    * 
-   * @param control The control to compute width
+   * @param control The control to compute width for
    * @return int The width required
    */
   protected int computeWidth(Control control) 
@@ -79,4 +79,16 @@ implements IXContributionItem
   	int width = control.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x;
   	return width;
   }  	
+
+  /**
+   * Computes the height required by control
+   * 
+   * @param control The control to compute height for
+   * @return int The height required
+   */  
+  protected int computeHeight(Control control) 
+  {
+  	int height = control.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).y;
+  	return height;
+  }   
 }

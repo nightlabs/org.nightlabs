@@ -85,19 +85,7 @@ extends XContributionItem
 		if (fillComposite && compositeFilled)
 			getControl().setSize(computeWidth(getControl()), computeHeight(getControl()));
 	}
-	
-  protected int computeWidth(Control control) 
-  {
-  	int width = control.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x;
-  	return width;
-  }  	
-	
-  protected int computeHeight(Control control) 
-  {
-  	int height = control.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).y;
-  	return height;
-  }    
-  
+	  
 	public void fill(Composite parent) 
 	{
 		if (fillComposite) {

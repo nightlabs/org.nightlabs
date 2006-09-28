@@ -27,11 +27,9 @@
 package org.nightlabs.base.action;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PartInitException;
-
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.io.IOUtil;
 
@@ -83,7 +81,7 @@ implements INewFileAction
 		try {			
 			IOUtil.openFile(file, false);
 		} catch (PartInitException e) {			
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} 
 	}
 		 	

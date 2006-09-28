@@ -31,10 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
-
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.composite.XComposite.LayoutDataMode;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.language.LanguageCf;
 
 /**

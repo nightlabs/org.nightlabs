@@ -3,10 +3,7 @@
  */
 package org.nightlabs.base.timepattern.builder;
 
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.nightlabs.base.wizard.DynamicPathWizard;
@@ -14,7 +11,6 @@ import org.nightlabs.base.wizard.DynamicPathWizardDialog;
 import org.nightlabs.timepattern.TimePattern;
 import org.nightlabs.timepattern.TimePatternFormatException;
 import org.nightlabs.timepattern.TimePatternSet;
-import org.nightlabs.timepattern.TimePatternSetImpl;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->

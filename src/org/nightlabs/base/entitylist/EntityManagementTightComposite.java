@@ -31,10 +31,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
-
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.composite.XComposite.LayoutDataMode;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 
 /**

@@ -28,7 +28,6 @@ package org.nightlabs.base.print;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,7 +44,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.CComboComposite;
 import org.nightlabs.base.composite.DoubleSpinnerComposite;
@@ -55,16 +53,11 @@ import org.nightlabs.base.labelprovider.UnitLabelProvider;
 import org.nightlabs.base.print.page.PredefinedPageEP;
 import org.nightlabs.i18n.unit.DefaultScreenUnit;
 import org.nightlabs.i18n.unit.IUnit;
-import org.nightlabs.i18n.unit.InchUnit;
 import org.nightlabs.i18n.unit.MMUnit;
 import org.nightlabs.i18n.unit.UnitRegistry;
 import org.nightlabs.i18n.unit.UnitUtil;
-import org.nightlabs.print.PrintUtil;
-import org.nightlabs.print.page.A3Page;
 import org.nightlabs.print.page.A4Page;
-import org.nightlabs.print.page.A5Page;
 import org.nightlabs.print.page.IPredefinedPage;
-import org.nightlabs.util.Utils;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de

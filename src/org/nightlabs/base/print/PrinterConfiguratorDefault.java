@@ -26,8 +26,6 @@
 
 package org.nightlabs.base.print;
 
-import java.awt.print.PrinterJob;
-
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;

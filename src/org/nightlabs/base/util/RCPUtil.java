@@ -61,7 +61,6 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.internal.Workbench;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
 

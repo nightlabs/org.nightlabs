@@ -27,13 +27,11 @@
 package org.nightlabs.base.celleditor;
 
 import org.eclipse.jface.util.Assert;
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-public class DoubleCellEditor 
-//extends CellEditor 
+public class DoubleCellEditor  
 extends XCellEditor
 {
   protected Text text;

@@ -55,8 +55,6 @@ import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
 
-import sun.rmi.runtime.GetThreadPoolAction;
-
 /**
  * This is a subclass of the {@link FormToolkit} which allows also to 
  * use "ordinary" Composites as well.

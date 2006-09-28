@@ -42,7 +42,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Text;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 public class TimerText extends XComposite
 {

@@ -26,27 +26,18 @@
 
 package org.nightlabs.base.print.pref;
 
-import java.awt.SystemColor;
-
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.LabeledText;
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.dialog.CenteredDialog;
-import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.print.DocumentPrinterDelegateConfig;
 import org.nightlabs.print.DelegatingDocumentPrinterCfMod.ExternalEngineDelegateConfig;
 import org.nightlabs.print.DelegatingDocumentPrinterCfMod.SystemCallDelegateConfig;

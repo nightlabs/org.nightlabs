@@ -20,7 +20,6 @@ import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.wizard.WizardHopPage;
 import org.nightlabs.timepattern.TimePattern;
 import org.nightlabs.timepattern.TimePatternFormatException;
-import org.nightlabs.timepattern.TimePatternSet;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->

@@ -3,8 +3,6 @@
  */
 package org.nightlabs.base.exceptionhandler;
 
-import java.net.SocketException;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;

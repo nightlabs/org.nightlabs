@@ -386,10 +386,10 @@ public class PartVisibilityTracker {
 	public void initialize() {
 		if (initialized)
 			return;
-		if (RCPUtil.getWorkbenchPage() == null)
+		if (RCPUtil.getActiveWorkbenchPage() == null)
 			return;
 		Listener listener = new Listener(this);
-		RCPUtil.getWorkbenchPage().addPartListener(listener);
+		RCPUtil.getActiveWorkbenchPage().addPartListener(listener);
 		initialized = true;
 	}
 	

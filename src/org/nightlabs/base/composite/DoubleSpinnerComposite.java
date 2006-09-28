@@ -116,35 +116,25 @@ extends XComposite
 		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 	
-	private double value;
+//	private double value;
 	private double rest;
 	public void setValue(double value) 
 	{
-		this.value = value;
+//		this.value = value;
 		double val = changeValue(value);
 		double shortedDouble = (int) Utils.shortenDouble(val, numDigits);		
 		rest = val - shortedDouble;		
-		spinner.setSelection((int)shortedDouble);
-		
-//		System.out.println("value = "+value);
-//		System.out.println("val = "+val);		
-//		System.out.println("shortedDouble = "+shortedDouble);		
-//		System.out.println("rest = "+rest);		
+		spinner.setSelection((int)shortedDouble);		
 	}
 		
 	public double getValue() 
 	{
-//		System.out.println("rest = "+rest);
-//		System.out.println("getValue() = "+ (getShortedValue() + rest));
 		return getShortedValue() + rest;
 	}
 	
 	public double getShortedValue() 
 	{
 		double shortedValue = Utils.getDouble(spinner.getSelection(), numDigits);
-		System.out.println("spinner.getSelection() = "+spinner.getSelection());
-		System.out.println("shortedValue = "+shortedValue);
-		System.out.println("numDigits = "+numDigits);
 		return shortedValue;				
 	}
 	

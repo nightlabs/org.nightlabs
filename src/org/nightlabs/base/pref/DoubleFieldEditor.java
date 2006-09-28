@@ -27,10 +27,8 @@
 package org.nightlabs.base.pref;
 
 import org.eclipse.jface.preference.StringFieldEditor;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-
 import org.nightlabs.base.NLBasePlugin;
 
 public class DoubleFieldEditor 

@@ -4,7 +4,6 @@
 package org.nightlabs.base.timepattern.builder;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 

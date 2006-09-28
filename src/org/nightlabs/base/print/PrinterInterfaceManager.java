@@ -28,7 +28,6 @@ package org.nightlabs.base.print;
 
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.print.PrinterConfiguration;
-import org.nightlabs.print.PrinterConfigurationCfMod;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->

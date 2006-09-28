@@ -28,7 +28,6 @@ package org.nightlabs.base.print;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.print.PageFormat;
-import java.awt.print.Paper;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
