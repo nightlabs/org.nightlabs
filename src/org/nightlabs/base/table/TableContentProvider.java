@@ -48,8 +48,13 @@ public class TableContentProvider implements IStructuredContentProvider {
 
 	/**
 	 * This basic implementation of IStructuredContentProvider accepts
-	 * a {@link Collection} as <code>inputElement</code> and calls
-	 * {@link Collection#toArray()}. If your inputElement has another type,
+	 * a {@link Collection} or Object[] as <code>inputElement</code> and calls
+	 * and will return an array of its items. 
+	 * <p>
+	 * If the inputElement is neither a Collection or array, this method will
+	 * simply return the inputElement within a new array.
+	 * <p>
+	 * If your inputElement has another type,
 	 * you must override this method. 
 	 *
 	 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
@@ -59,8 +64,10 @@ public class TableContentProvider implements IStructuredContentProvider {
 			return ((Collection)inputElement).toArray();
 		else if (inputElement instanceof Object[])
 			return (Object[]) inputElement;
-		else
-			throw new IllegalArgumentException("This basic implementation of getElements(...) (from " + TableContentProvider.class + ") does not support the inputElement type " + (inputElement == null ? null : inputElement.getClass().getName()));
+		else {			
+			return new Object[] {inputElement};
+//			throw new IllegalArgumentException("This basic implementation of getElements(...) (from " + TableContentProvider.class + ") does not support the inputElement type " + (inputElement == null ? null : inputElement.getClass().getName()));
+		}
 	}
 
 	/**
