@@ -13,7 +13,7 @@
  <extension-point id="newfileaction" name="newfileaction" schema="schema/newfileaction.exsd"/>
  <extension-point id="editor2perspective" name="editor2perspective" schema="schema/editor2perspective.exsd"/>
  <extension-point id="selectionAction" name="selectionAction" schema="schema/selectionAction.exsd"/>
- <extension-point id="ioFilterRegistry" name="ioFilterRegistry" schema="schema/ioFilterRegistry.exsd"/>
+ <extension-point id="iofilter" name="iofilter" schema="schema/iofilter.exsd"/>
  <extension-point id="simpleExceptionHandler" name="simpleExceptionHandler" schema="schema/simpleExceptionHandler.exsd"/>
  <extension-point id="printerConfiguration" name="PrinterConfiguration Extension Point" schema="schema/printerConfiguration.exsd"/>
  <extension-point id="predefinedPage" name="predefinedPage" schema="schema/predefinedPage.exsd"/>

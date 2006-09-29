@@ -28,6 +28,7 @@ package org.nightlabs.base.io;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Locale;
 
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -39,20 +40,18 @@ import org.nightlabs.io.IOFilterWithProgress;
 public class IOFilterProgressDialog 
 extends ProgressMonitorDialog
 {
-
 	protected IOFilter ioFilter;
-	protected IOFilterWithProgress progressFilter;
 	public IOFilterProgressDialog(Shell parent, IOFilter ioFilter) 
 	{
 		super(parent);
 		this.ioFilter = ioFilter;
 		if (ioFilter instanceof IOFilterWithProgress) {
-			progressFilter = (IOFilterWithProgress) ioFilter;		
+			IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;		
 			progressFilter.addPropertyChangeListener(subProgressListener);
-			getProgressMonitor().beginTask(ioFilter.getDescription(), progressFilter.getTotalWork());			
+			getProgressMonitor().beginTask(ioFilter.getDescription().getText(Locale.getDefault().getLanguage()), progressFilter.getTotalWork());			
 		}
 		else {
-			getProgressMonitor().beginTask(ioFilter.getDescription(), 2);			
+			getProgressMonitor().beginTask(ioFilter.getDescription().getText(Locale.getDefault().getLanguage()), 2);			
 		}
 	}
 	

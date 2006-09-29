@@ -3,7 +3,7 @@
 <schema targetNamespace="org.nightlabs.base">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.base" id="ioFilterRegistry" name="ioFilterRegistry"/>
+         <meta.schema plugin="org.nightlabs.base" id="IOFilter" name="IOFilter"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -13,7 +13,7 @@
    <element name="extension">
       <complexType>
          <sequence>
-            <element ref="ioFilter"/>
+            <element ref="ioFilter" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -44,20 +44,13 @@
 
    <element name="ioFilter">
       <complexType>
+         <sequence>
+            <element ref="fileExtension" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
                   the name of the IOFilter
-               </documentation>
-               <appInfo>
-                  <meta.attribute translatable="true"/>
-               </appInfo>
-            </annotation>
-         </attribute>
-         <attribute name="description" type="string">
-            <annotation>
-               <documentation>
-                  an optional description of the IOFilter
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -70,14 +63,46 @@
                   the IOFilter class (must implement IOFIlter)
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.io.IOFilter"/>
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="informationProvider" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.io.IOFilterInformationProvider"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="fileExtension">
+      <complexType>
          <attribute name="fileExtension" type="string" use="required">
             <annotation>
                <documentation>
-                  the fileExtension of the File to be opened with the given ioFilter-Class
+                  the name of the FileExtension (e.g. jpg)
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  the optional description of a fileExtension
                </documentation>
             </annotation>
          </attribute>
@@ -116,7 +141,8 @@
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         [Enter information about supplied implementation of this
+extension point.]
       </documentation>
    </annotation>
 

@@ -26,17 +26,26 @@
 
 package org.nightlabs.base.io;
 
+import java.util.Locale;
+
+import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
+import org.nightlabs.i18n.I18nText;
+import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.io.IOFilter;
+import org.nightlabs.io.IOFilterInformationProvider;
 import org.nightlabs.io.IOFilterMan;
 
 public class IOFilterRegistry 
 extends AbstractEPProcessor 
 {
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.ioFilterRegistry";
+	public static final Logger logger = Logger.getLogger(IOFilterRegistry.class);
+	
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.iofilter";
 	
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;
@@ -57,9 +66,11 @@ extends AbstractEPProcessor
 	}	
 	
 	public static final String ELEMENT_IOFILTER = "ioFilter";
+	public static final String ELEMENT_FILE_EXTENSION = "fileExtension";
 	public static final String ATTRIBUTE_NAME = "name";
 	public static final String ATTRIBUTE_DESCRIPTION = "description";
 	public static final String ATTRIBUTE_CLASS = "class";
+	public static final String ATTRIBUTE_INFORMATION_PROVIDER = "informationProvider";
 	public static final String ATTRIBUTE_FILE_EXTENSION = "fileExtension";
 	
 	
@@ -71,25 +82,69 @@ extends AbstractEPProcessor
 		
 		if (element.getName().equalsIgnoreCase(ELEMENT_IOFILTER)) 
 		{
+			String name = element.getAttribute(ATTRIBUTE_NAME);
+			String filterDesciption = element.getAttribute(ATTRIBUTE_DESCRIPTION);	
+				
+			IOFilterInformationProvider informationProvider = null;			
 			try {
-				String name = element.getAttribute(ATTRIBUTE_NAME);
-				String description = element.getAttribute(ATTRIBUTE_DESCRIPTION);
-				String fileExtension = element.getAttribute(ATTRIBUTE_FILE_EXTENSION);
-				
-				Object ioFilter = (Object) element.createExecutableExtension(ATTRIBUTE_CLASS);
-				if (!(ioFilter instanceof IOFilter))
-					throw new IllegalArgumentException("Attribute class must implement "+IOFilter.class.getName()+" "+ioFilter.getClass().getName()+" does not!");
-				IOFilter filter = (IOFilter) ioFilter; 
-				
-				if (checkString(description))
-					filter.setDescription(description);
-				if (checkString(fileExtension))
-					filter.setFileExtension(fileExtension);
-				
-				ioFilterMan.addIOFilter(filter);
-			}
-			catch (Exception e) {
-				throw new EPProcessorException(e);
+				if (element.getAttribute(ATTRIBUTE_INFORMATION_PROVIDER) != null) {
+					Object object = element.createExecutableExtension(ATTRIBUTE_INFORMATION_PROVIDER);
+					if (object instanceof IOFilterInformationProvider)
+						informationProvider = (IOFilterInformationProvider) object;
+				}
+			} catch (CoreException e) {
+				logger.warn("InformationProvider Class for ioFilter "+name+" could not be instanciated!", e);
+			}					
+			
+			IOFilter filter = null;
+			try 
+			{
+				Object object = element.createExecutableExtension(ATTRIBUTE_CLASS);
+				if (object instanceof IOFilter) 
+				{
+					filter = (IOFilter) object;
+					if (checkString(name)) 
+					{
+						I18nText filterName = new I18nTextBuffer();
+						filterName.setText(Locale.getDefault().getLanguage(), name);
+						filter.setName(filterName);
+					}
+					if (checkString(filterDesciption)) 
+					{
+						I18nText filterDesc = new I18nTextBuffer();
+						filterDesc.setText(Locale.getDefault().getLanguage(), filterDesciption);
+						filter.setDescription(filterDesc);
+					}
+					
+					IConfigurationElement[] children = element.getChildren(ELEMENT_FILE_EXTENSION);
+					if (children.length == 0) {
+						logger.warn("There is no fileExtension registered for ioFilter "+name+"!");
+						return;					
+					}
+						
+					String[] fileExtensions = new String[children.length];
+					for (int i=0; i<children.length; i++) 
+					{
+						IConfigurationElement child = children[i];					
+						String description = child.getAttribute(ATTRIBUTE_DESCRIPTION);
+						String fileExtension = child.getAttribute(ATTRIBUTE_FILE_EXTENSION);					
+						if (checkString(fileExtension)) 
+						{
+							fileExtensions[i] = fileExtension;
+							if (checkString(description)) {
+								I18nText desc = new I18nTextBuffer();
+								desc.setText(Locale.getDefault().getLanguage(), description);
+								filter.setFileExtensionDescription(fileExtension, desc);							
+							}
+						}
+					}
+					filter.setFileExtensions(fileExtensions);
+					if (informationProvider != null)
+						filter.setInformationProvider(informationProvider);
+					ioFilterMan.addIOFilter(filter);									
+				}					 
+			} catch (CoreException e) {
+				logger.warn("ioFilter Class for ioFilter "+name+" could not be instanciated!", e);
 			}
 		}
 	}
