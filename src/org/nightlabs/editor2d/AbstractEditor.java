@@ -34,14 +34,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventObject;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -102,16 +106,19 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.nightlabs.base.i18n.ResolutionUnitEP;
 import org.nightlabs.base.i18n.UnitRegistryEP;
 import org.nightlabs.base.io.FileEditorInput;
 import org.nightlabs.base.io.IOFilterRegistry;
+import org.nightlabs.base.io.IOFilterUIInformationProvider;
+import org.nightlabs.base.io.InformationProviderWizard;
 import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.print.page.PredefinedPageEP;
 import org.nightlabs.base.util.RCPUtil;
+import org.nightlabs.base.wizard.DynamicPathWizardDialog;
+import org.nightlabs.base.wizard.IWizardHop;
 import org.nightlabs.editor2d.actions.DeleteAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
@@ -148,7 +155,6 @@ import org.nightlabs.editor2d.outline.filter.FilterManager;
 import org.nightlabs.editor2d.outline.filter.NameProvider;
 import org.nightlabs.editor2d.preferences.Preferences;
 import org.nightlabs.editor2d.print.EditorPrintAction;
-import org.nightlabs.editor2d.print.EditorPrintPreviewAction;
 import org.nightlabs.editor2d.print.EditorPrintSetupAction;
 import org.nightlabs.editor2d.properties.EditorPropertyPage;
 import org.nightlabs.editor2d.properties.UnitManager;
@@ -166,6 +172,7 @@ import org.nightlabs.i18n.unit.resolution.ResolutionImpl;
 import org.nightlabs.i18n.unit.resolution.ResolutionUnitRegistry;
 import org.nightlabs.io.AbstractIOFilterWithProgress;
 import org.nightlabs.io.IOFilter;
+import org.nightlabs.io.IOFilterInformationProvider;
 import org.nightlabs.io.IOFilterMan;
 import org.nightlabs.io.IOFilterWithProgress;
 import org.nightlabs.io.WriteException;
@@ -326,24 +333,80 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	{      
 		if (ioFilter != null) 
 		{
-			try {
+			try 
+			{
 				MultiLayerDrawComponent mldc = (MultiLayerDrawComponent) ioFilter.read(input);
 				mldc.setRenderModeManager(getRenderModeManager());
 				return mldc;        	
 			} 
-			catch (Exception e) {
+			catch (IOException e) {
 				throw new RuntimeException("There occured an Error while reading with IOFilter "+ioFilter+" from InpuStream "+input, e);
 			}          
 		}
 		return null;
 	}
+	
+//	protected void load(FileEditorInput fileInput, IProgressMonitor monitor) 
+//	{
+//		IOFilter ioFilter = getIOFilterMan().getIOFilter(fileInput.getFile());
+//		if (ioFilter != null) 
+//		{
+//			try 
+//			{    		
+//				if (ioFilter instanceof IOFilterWithProgress) 
+//				{	    			
+//					IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
+//					progressFilter.addPropertyChangeListener(progressListener);	    			
+//					monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), progressFilter.getTotalWork());
+//					mldc = load(ioFilter, new FileInputStream(fileInput.getFile()));
+//					progressFilter.removePropertyChangeListener(progressListener);
+//					return;
+//				}
+//				else
+//					monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), 2);	    			
+//				mldc = load(ioFilter, new FileInputStream(fileInput.getFile()));
+//				return;
+//			} catch (FileNotFoundException e) {
+//				throw new RuntimeException(e);
+//			} finally {
+//				monitor.done();
+//			}
+//		}
+//	}
+//
+//	protected void load(FileEditorInput fileInput) 
+//	{    	
+//		final FileEditorInput input = fileInput;
+//		IRunnableWithProgress runnable = new IRunnableWithProgress()
+//		{			
+//			public void run(IProgressMonitor monitor) 
+//			throws InvocationTargetException, InterruptedException 
+//			{
+//				try {
+//					load(input, monitor);      
+//				} 
+//				catch (Exception e) {
+//					throw new RuntimeException(e);
+//				}					
+//			}			
+//		};
+//
+//		try {
+//			getProgressMonitor().run(false, false, runnable);
+//			setPartName(input.getName());
+//		}
+//		catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}    	    	
+//	}
 
 	protected void load(FileEditorInput fileInput, IProgressMonitor monitor) 
 	{
 		IOFilter ioFilter = getIOFilterMan().getIOFilter(fileInput.getFile());
 		if (ioFilter != null) 
 		{
-			try {    		
+			try 
+			{    		
 				if (ioFilter instanceof IOFilterWithProgress) 
 				{	    			
 					IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
@@ -365,10 +428,11 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		}
 	}
 
-	// TODO: When errors occurs during reading show Message to user and dont create part
 	protected void load(FileEditorInput fileInput) 
 	{    	
 		final FileEditorInput input = fileInput;
+		IOFilter ioFilter = getIOFilterMan().getIOFilter(fileInput.getFile());
+		prepareInformationProvider(fileInput.getFile(), ioFilter, false);
 		IRunnableWithProgress runnable = new IRunnableWithProgress()
 		{			
 			public void run(IProgressMonitor monitor) 
@@ -391,7 +455,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			throw new RuntimeException(e);
 		}    	    	
 	}
-
+		
 	private ScalableFreeformRootEditPart rootEditPart;
 	public ScalableFreeformRootEditPart getRootEditPart() 
 	{
@@ -472,16 +536,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //			}
 		}		
 	};
-
-//	// should solve redraw problems when undoing things
-//	private CommandStackEventListener commandStackListener = new CommandStackEventListener()
-//	{		
-//		public void stackChanged(CommandStackEvent event) 
-//		{
-//			updateViewer();
-//		}		
-//	};				
-
+			
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util.EventObject)
 	 */    
@@ -1134,9 +1189,52 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		return progressMonitor;
 	}
 
+	protected void prepareInformationProvider(File f, IOFilter ioFilter, boolean write) 
+	{
+		if (ioFilter != null) 
+		{
+			IOFilterInformationProvider ip = ioFilter.getInformationProvider();
+			if (ip != null) 
+			{
+				URL url;
+				try {
+					url = f.toURL();
+					ip.setURL(url);	
+					if (logger.isDebugEnabled())
+						logger.debug("url = "+url);
+						
+					if (ip instanceof IOFilterUIInformationProvider) 
+					{
+						IOFilterUIInformationProvider uiip = (IOFilterUIInformationProvider) ip;
+						IWizardHop hop = null;
+						if (write)
+							hop = uiip.getWizardHopForWrite();
+						else
+							hop = uiip.getWizardHopForRead();
+						if (hop != null) 
+						{
+							InformationProviderWizard wizard = new InformationProviderWizard(url);
+							wizard.addDynamicWizardPage(hop.getEntryPage());
+							DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
+							int returnCode = dialog.open(); 
+							if (returnCode == DynamicPathWizardDialog.OK) {
+								
+							}
+						}
+					}										
+				} catch (MalformedURLException e) {
+					logger.warn("fileInput.getFile() "+f+" could not be transformed into ULR", e);
+					logger.warn("prepartion of IOFilterInformationProvider for IOFilter "+ioFilter.getName().getText(Locale.getDefault().getLanguage()) +"failed!");
+				}
+			}
+		}		
+	}
+	
 	protected void save(File f) 
 	{
-		final File file = f;    	
+		final File file = f;   
+		IOFilter ioFilter = getIOFilterMan().getIOFilter(file); 
+		prepareInformationProvider(file, ioFilter, true);
 		IRunnableWithProgress runnable = new IRunnableWithProgress()
 		{			
 			public void run(IProgressMonitor monitor) 
@@ -1221,8 +1319,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 				initialzePage();
 			} else {        	
 				load(fileInput);        	
-			}        
-//			System.gc();      	      	
+			}            	      	
 		} 
 		else
 			initialzePage();

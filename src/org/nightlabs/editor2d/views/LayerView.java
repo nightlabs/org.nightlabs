@@ -50,8 +50,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IPageListener;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
@@ -153,25 +155,14 @@ extends ViewPart
     deactivateTools(false);
     refresh();		
 	}
-	
-  protected void initMultiLayerDrawComponent() 
-  {
-    if (getSite().getPage().getActiveEditor() instanceof AbstractEditor) 
-    {
-      logger.debug("getSite().getPage().getActiveEditor() instanceof AbstractEditor!");
-      editor = (AbstractEditor) getSite().getPage().getActiveEditor();
-      mldc = editor.getMultiLayerDrawComponent();
-      addPropertyChangeListener(mldc);
-    }  	
-  }
-    
+	    
 	protected void init() 
 	{
-		// init the MultiLayerDrawComponent
-  	initMultiLayerDrawComponent();  	
-    // add SelectionChangeListener
     getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
-    getSite().getWorkbenchWindow().getActivePage().addPartListener(partListener);
+    if (getSite().getWorkbenchWindow().getActivePage() != null)
+    	getSite().getWorkbenchWindow().getActivePage().addPartListener(partListener);
+    else
+    	getSite().getWorkbenchWindow().addPageListener(pageListener);
 	}
 	
 	private XFormToolkit toolkit = null;
@@ -187,13 +178,18 @@ extends ViewPart
 	private ScrolledForm form = null;	
 	protected ScrolledForm getForm() 
 	{
-		if (form == null || form.isDisposed()) {
-			form = getToolkit().createScrolledForm(getParent());
-			form.setLayout(new GridLayout());
-			form.setLayoutData(new GridData(GridData.FILL_BOTH));		
-			form.getBody().setLayout(new GridLayout());
-			form.getBody().setLayoutData(new GridData(GridData.FILL_BOTH));
-			toolkit.paintBordersFor(form.getBody());					
+		if (form == null || form.isDisposed()) 
+		{
+			if (!getParent().isDisposed()) {
+				form = getToolkit().createScrolledForm(getParent());
+				form.setLayout(new GridLayout());
+				form.setLayoutData(new GridData(GridData.FILL_BOTH));		
+				form.getBody().setLayout(new GridLayout());
+				form.getBody().setLayoutData(new GridData(GridData.FILL_BOTH));
+				toolkit.paintBordersFor(form.getBody());									
+			}
+			else
+				return null;
 		}
 		return form;
 	}
@@ -537,11 +533,13 @@ extends ViewPart
   {
 		if (layerComposite != null)
 			layerComposite.dispose();		
-		layerComposite = getToolkit().createComposite(getForm().getBody(), SWT.NONE);		
-		layerComposite.setLayout(new GridLayout());
-		layerComposite.setLayoutData(new GridData(GridData.FILL_BOTH));		
-		layerComposite.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-		getToolkit().paintBordersFor(getForm().getBody());		
+		if (getForm() != null) {
+			layerComposite = getToolkit().createComposite(getForm().getBody(), SWT.NONE);		
+			layerComposite.setLayout(new GridLayout());
+			layerComposite.setLayoutData(new GridData(GridData.FILL_BOTH));		
+			layerComposite.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+			getToolkit().paintBordersFor(getForm().getBody());					
+		}
   }
     				
 	public void refresh()
@@ -621,7 +619,9 @@ extends ViewPart
   public void dispose() 
   {
     getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(selectionListener);
-    getSite().getWorkbenchWindow().getActivePage().removePartListener(partListener);    
+    if (getSite().getWorkbenchWindow().getActivePage() != null)
+    	getSite().getWorkbenchWindow().getActivePage().removePartListener(partListener);
+    getSite().getWorkbenchWindow().removePageListener(pageListener);
     removePropertyChangeListener(mldc);    
     super.dispose();
   }
@@ -638,6 +638,20 @@ extends ViewPart
 		public void partDeactivated(IWorkbenchPart p) { }
 		public void partOpened(IWorkbenchPart p) { }
 	};
+	
+  private IPageListener pageListener = new IPageListener()
+  {	
+		public void pageOpened(IWorkbenchPage page) {
+			
+		}	
+		public void pageClosed(IWorkbenchPage page) {
+			page.removePartListener(partListener);
+		}	
+		public void pageActivated(IWorkbenchPage page) {
+			page.addPartListener(partListener);
+		}	
+	};
+	
 //private CommandStackListener commandStackListener = new CommandStackListener() 
 //{
 //  /* (non-Javadoc)
