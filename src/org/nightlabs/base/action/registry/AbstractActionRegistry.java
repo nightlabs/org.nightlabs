@@ -369,7 +369,9 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 			lastMenuRawSize = menuRaw.size();
 			menuSorted = new LinkedList();
 		}
-
+		
+		contributionManager.removeAll();
+		
 		while ((firstRun && !menuRaw.isEmpty()) || !firstRun) {
 			for (Iterator itTopLevel = (firstRun ? menuRaw : menuSorted).iterator(); itTopLevel.hasNext(); ) {
 				ItemDescriptor item = (ItemDescriptor) itTopLevel.next();
@@ -544,7 +546,7 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 					contributionManager.add(item);
 			}
 		}
-
+		contributionManager.update(true);
 		return visibleContributionItemCount;
 	}
 
