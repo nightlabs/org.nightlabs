@@ -139,14 +139,31 @@ public abstract class AbstractTableComposite<ElementType> extends XComposite {
 	
 	/**
 	 * The first selected element. Or <code>null</code> if none selected.
+	 * <p>
+	 * Note that this method will cast the selection found
+	 * to the ElementType this table composite was typed with.
+	 * If the selected element is not of this type a
+	 * {@link ClassCastException} will be thrown.
+	 * 
 	 * @return The first selected element.
 	 */
 	public ElementType getFirstSelectedElement() {
+		return (ElementType) getFirstSelectedElementUnchecked();
+	}
+
+	/**
+	 * Returns the first selected element without casting
+	 * it to the ElementType this table composite was
+	 * typed with.
+	 * 
+	 * @return The first selected element (of any type).
+	 */
+	public Object getFirstSelectedElementUnchecked() {
 		ISelection sel = getTableViewer().getSelection();
 		if (sel == null || sel.isEmpty())
 			return null;
 		else if (sel instanceof IStructuredSelection)
-			return (ElementType) ((IStructuredSelection)sel).getFirstElement();
+			return ((IStructuredSelection)sel).getFirstElement();
 		else
 			return null;
 	}
