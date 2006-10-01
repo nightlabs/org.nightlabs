@@ -50,21 +50,21 @@ import org.nightlabs.base.util.RCPUtil;
  * can be hidden by the Controller. When hidden the real contents can 
  * either be sent to background or disposed 
  * (see {@link #updateParts()}, {@link #disposePartContents()}).
- * 
+ * <p>
  * The visibility of a part id determined by their 
  * {@link org.nightlabs.base.part.ControllablePart#canDisplayPart()} method.
- * 
+ * <p>
  * Implementors have to provide a Composite that will be displayed when
  * the real contents are hidden.
- * 
+ * <p>
  * Parts are managed when they register themselves by {@link #registerPart(ControllablePart)}.
  * The registratin of a Part should be done in its constructor. See {@link org.nightlabs.base.part.ControllablePart}
  * for more information on how to use them with a PartController. 
- * 
+ * <p>
  * A PartController is responsible for somehow creating or listening to event 
  * that might cause the visibility of its registered parts to change and 
  * use the PartController API like {@link #updateParts()} to update the registered views.
- * 
+ * <p>
  * Note that PartController is also linked to the {@link PartVisibilityTracker}. Whenever the registered
  * View's real content was created it will call {@link PartVisibilityListener#partVisible(org.eclipse.ui.IWorkbenchPartReference)}
  * on all registrations that implement {@link PartVisibilityListener}. {@link PartVisibilityListener#partHidden(org.eclipse.ui.IWorkbenchPartReference)}
