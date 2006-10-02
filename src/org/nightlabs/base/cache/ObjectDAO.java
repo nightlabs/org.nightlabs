@@ -98,7 +98,7 @@ public abstract class ObjectDAO<KeyType, ObjectType> {
 			ObjectType res = (ObjectType) cache.get(scope, key);
 			if (res == null) {
 				res = retrieveObject(key, monitor);
-				cache.put(scope, res);
+				cache.put(scope, key, res);
 			}
 			return res;
 		} catch (Exception x) {
