@@ -33,6 +33,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
@@ -50,7 +52,10 @@ import org.nightlabs.base.composite.XComposite;
  *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */
-public abstract class AbstractTableComposite<ElementType> extends XComposite {
+public abstract class AbstractTableComposite<ElementType>
+extends XComposite
+implements ISelectionProvider
+{
 
 	public static int DEFAULT_STYLE_SINGLE = SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE;
 	public static int DEFAULT_STYLE_MULTI = SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI;
@@ -242,7 +247,7 @@ public abstract class AbstractTableComposite<ElementType> extends XComposite {
 	public void setSelection(List<ElementType> elements) {
 		getTableViewer().setSelection(new StructuredSelection(elements));
 	}
-	
+
 	/**
 	 * Set the viewers selection.
 	 * 
@@ -253,5 +258,24 @@ public abstract class AbstractTableComposite<ElementType> extends XComposite {
 	public void setSelection(List<ElementType> elements, boolean reveal) {
 		getTableViewer().setSelection(new StructuredSelection(elements), reveal);
 	}
-	
+
+	public void addSelectionChangedListener(ISelectionChangedListener listener)
+	{
+		tableViewer.addSelectionChangedListener(listener);
+	}
+
+	public ISelection getSelection()
+	{
+		return tableViewer.getSelection();
+	}
+
+	public void removeSelectionChangedListener(ISelectionChangedListener listener)
+	{
+		tableViewer.removeSelectionChangedListener(listener);
+	}
+
+	public void setSelection(ISelection selection)
+	{
+		tableViewer.setSelection(selection);
+	}
 }
