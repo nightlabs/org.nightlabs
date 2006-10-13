@@ -166,4 +166,10 @@
     </category>
  </extension>
 -->
+
+   <extension
+         point="org.nightlabs.base.cache">
+      <cacheFactory class="org.nightlabs.base.cache.DummyCacheFactory"/>
+   </extension>
+
 </plugin>

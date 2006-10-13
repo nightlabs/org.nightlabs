@@ -61,6 +61,14 @@ public interface ICache {
 	public void remove(Object key);
 
 	/**
+	 * Remove all objects from the cache that are
+	 * associated to a key of the given class.
+	 * 
+	 * @param keyClass The class of keys all objects should be removed from cache.
+	 */
+	public void removeByKeyClass(Class keyClass);
+	
+	/**
 	 * Remove all objects from the cache.
 	 */
 	public void removeAll();
