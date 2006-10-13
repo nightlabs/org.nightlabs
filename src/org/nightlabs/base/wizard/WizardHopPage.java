@@ -109,7 +109,15 @@ implements IWizardHopPage
 		if (wizardHop == null)
 			return;
 		for (IWizardHopPage hopPage : wizardHop.getHopPages()) {
-			hopPage.setWizard(newWizard);
+			if (hopPage instanceof WizardHopPage)
+				((WizardHopPage)hopPage).internalSetWizard(newWizard);
+			// TODO: Maybe we should add an internal setWizard method to the interface
+//			else
+//				hopPage.setWizard(newWizard);
 		}
+	}
+	
+	private void internalSetWizard(IWizard newWizard) {
+		super.setWizard(newWizard);
 	}
 }
