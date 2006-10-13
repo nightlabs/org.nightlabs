@@ -278,6 +278,12 @@ public class I18nTextEditor extends XComposite
 	public void setI18nText(I18nText i18nText, EditMode editMode)
 	{
 		storeText();
+		_setI18nText(i18nText, editMode);
+		loadText();
+	}
+
+	protected void _setI18nText(I18nText i18nText, EditMode editMode)
+	{
 		original = i18nText;
 
 		if (editMode != null)
@@ -288,8 +294,6 @@ public class I18nTextEditor extends XComposite
 			else
 				setEditMode(EditMode.BUFFERED);
 		}
-
-		loadText();
 	}
 
 	/**
@@ -393,6 +397,17 @@ public class I18nTextEditor extends XComposite
 	{
 		String newText = text.getText();
 		if (!newText.equals(orgText)) {
+			if (work == null) {
+				if (original == null) {
+					_setI18nText(new I18nTextBuffer(), null);
+				}
+				else
+					throw new IllegalStateException("work == null, but original != null - how's that possible?!");
+			}
+
+			if (textLanguage == null)
+				textLanguage = languageChooser.getLanguage();
+
 			work.setText(textLanguage.getLanguageID(), newText);
 			orgText = newText;
 		}
