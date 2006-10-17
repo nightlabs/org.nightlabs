@@ -31,6 +31,8 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -91,7 +93,10 @@ public class ComboComposite<T> extends AbstractListComposite<T>
 	@Override
 	protected Control createGuiControl(Composite parent, int style)
 	{
-		combo = new Combo(parent, style | comboStyle);		
+		combo = new Combo(parent, style | comboStyle);
+		if (parent.getLayout() instanceof GridLayout) {
+			combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		}
 		return combo;
 	}
 
