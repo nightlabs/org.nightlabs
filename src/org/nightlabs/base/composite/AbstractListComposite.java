@@ -87,7 +87,7 @@ implements ISelectionProvider
 	
 	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, boolean doCreateGuiComposite)
 	{
-		this(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, doCreateGuiComposite);
+		this(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, doCreateGuiComposite, false);
 	}
 	
 	/**
@@ -114,11 +114,11 @@ implements ISelectionProvider
 	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode,
 			LayoutDataMode layoutDataMode)
 	{
-		this(labelProvider, parent, style, layoutMode, layoutDataMode, true);
+		this(labelProvider, parent, style, layoutMode, layoutDataMode, true, false);
 	}
 	
 	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode,
-			LayoutDataMode layoutDataMode, boolean doCreateGuiControl)
+			LayoutDataMode layoutDataMode, boolean doCreateGuiControl, boolean createLabel)
 	{
 		super(parent, style, layoutMode, layoutDataMode);
 		this.labelProvider = labelProvider;
@@ -126,10 +126,10 @@ implements ISelectionProvider
 		elements = new LinkedList<T>();
 		
 		if (doCreateGuiControl)
-			createGuiControl(this, style | SWT.BORDER);
+			createGuiControl(this, style | SWT.BORDER, createLabel);
 	}
 
-	protected abstract Control createGuiControl(Composite parent, int style);
+	protected abstract Control createGuiControl(Composite parent, int style, boolean createLabel);
 	
 	/**
 	 * Populates the graphical list with the elements provided and labels them using the label provider.

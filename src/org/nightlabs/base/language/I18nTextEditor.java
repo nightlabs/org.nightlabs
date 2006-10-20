@@ -146,7 +146,7 @@ public class I18nTextEditor extends XComposite
 				storeText();
 			}
 		});
-		
+
 		languageChooser.addLanguageChangeListener(new LanguageChangeListener() {
 			public void languageChanged(LanguageChangeEvent event)
 			{
@@ -193,7 +193,7 @@ public class I18nTextEditor extends XComposite
 
 		modifyListeners.add(l);
 	}
-	
+
 	/**
 	 * Remove the given modify listener.
 	 * @param l The listener to remove.
@@ -328,18 +328,18 @@ public class I18nTextEditor extends XComposite
 		this.editMode = editMode;
 
 		switch (editMode) {
-			case DIRECT:
-				work = original;
+		case DIRECT:
+			work = original;
 			break;
-			case BUFFERED:
-				if (buffer == null)
-					buffer = new I18nTextBuffer();
+		case BUFFERED:
+			if (buffer == null)
+				buffer = new I18nTextBuffer();
 
-				buffer.clear();
-				work = buffer;
+			buffer.clear();
+			work = buffer;
 			break;
-			default:
-				throw new IllegalArgumentException("Unknown editMode: " + editMode);
+		default:
+			throw new IllegalArgumentException("Unknown editMode: " + editMode);
 		}
 
 		if (work != original && work != null && original != null)
@@ -430,14 +430,21 @@ public class I18nTextEditor extends XComposite
 	public void setEditable(boolean editable) {
 		text.setEditable(editable);
 	}
-	
+
 	/**
 	 * Sets the selection in the text box of the editor.
 	 * @param start the beginning index of the selection
 	 * @param end the end index of the selection (exclusive)
 	 */
-	public void setSelection(int start, int end)
-	{
+	public void setSelection(int start, int end) {
 		text.setSelection(start, end);
-	}	
+	}
+	
+	/**
+	 * Resets the I18nTextEditor in a way that the connection to the associated I18nText is removed
+	 * and nothing is displayed in the text field.
+	 */
+	public void reset() {
+		setI18nText(null);
+	}
 }

@@ -32,7 +32,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.nightlabs.base.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * This class provides a composite able to display a list of objects of the same type as graphical representation.
@@ -45,6 +48,8 @@ import org.eclipse.swt.widgets.List;
 public class ListComposite<T> extends AbstractListComposite<T> 
 {
 	private List list;
+	
+	private Label label;
 	
 	public ListComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
@@ -73,12 +78,26 @@ public class ListComposite<T> extends AbstractListComposite<T>
 	}
 
 	@Override
-	protected Control createGuiControl(Composite parent, int style)
+	protected Control createGuiControl(Composite parent, int style, boolean createLabel)
 	{
-		list = new List(parent, style | SWT.V_SCROLL | SWT.H_SCROLL);
-		if (parent.getLayout() instanceof GridLayout)
-			list.setLayoutData(new GridData(GridData.FILL_BOTH));
+		if (createLabel) {
+			XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, 2);
+			label = new Label(comp, SWT.NONE);
+			list = new List(comp, style | SWT.V_SCROLL | SWT.H_SCROLL);
+		}
+		else {
+			list = new List(parent, style | SWT.V_SCROLL | SWT.H_SCROLL);
+			if (parent.getLayout() instanceof GridLayout)
+				list.setLayoutData(new GridData(GridData.FILL_BOTH));
+		}
 		return list;
+	}
+	
+	public Label getLabel() {
+		if (label != null)
+			return label;
+		else
+			throw new IllegalStateException("Cannot access the label if its creation hasn't been requested earlier.");
 	}
 
 	@Override

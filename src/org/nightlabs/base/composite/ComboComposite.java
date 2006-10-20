@@ -36,120 +36,128 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 
-public class ComboComposite<T> extends AbstractListComposite<T>
-{
+public class ComboComposite<T> extends AbstractListComposite<T> {
+	private Label label;
+
 	private Combo combo;
-	
-	public ComboComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
-	{
+
+	public ComboComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
 		super(parent, style, layoutMode, layoutDataMode);
 	}
 
-	public ComboComposite(Composite parent, int style)
-	{
+	public ComboComposite(Composite parent, int style) {
 		super(parent, style);
 	}
-	
-	public ComboComposite(Composite parent, int style, List<T> elements)
-	{
+
+	public ComboComposite(Composite parent, int style, List<T> elements) {
 		super(parent, style);
 		addElements(elements);
 	}
 
-	public ComboComposite(Composite parent, int style, ILabelProvider labelProvider, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
-	{
+	public ComboComposite(Composite parent, int style, ILabelProvider labelProvider, LayoutMode layoutMode,
+			LayoutDataMode layoutDataMode) {
 		super(labelProvider, parent, style, layoutMode, layoutDataMode);
 	}
 
-	public ComboComposite(Composite parent, int style, ILabelProvider labelProvider)
-	{
+	public ComboComposite(Composite parent, int style, ILabelProvider labelProvider) {
 		super(labelProvider, parent, style);
 	}
-	
-	private int comboStyle = SWT.DROP_DOWN;
-	
-	public ComboComposite(Composite parent, List<T> elements, ILabelProvider labelProvider, int comboStyle) 
-	{
-		super(labelProvider, parent, SWT.NONE, false);
-		this.comboStyle |= comboStyle ;
-		createGuiControl(this, SWT.BORDER);
-		addElements(elements);
+
+	public ComboComposite(Composite parent, int style, ILabelProvider labelProvider, boolean createLabel) {
+		super(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, false, createLabel);
+		this.comboStyle = SWT.READ_ONLY;
+		createGuiControl(this, SWT.BORDER, createLabel);
+		getLabel().setText("Current struct:");
+		getLabel().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
-	
-	public ComboComposite(Composite parent, ILabelProvider labelProvider, int comboStyle) 
-	{
+
+	private int comboStyle = SWT.DROP_DOWN;
+
+	public ComboComposite(Composite parent, List<T> elements, ILabelProvider labelProvider, int comboStyle) {
 		super(labelProvider, parent, SWT.NONE, false);
 		this.comboStyle |= comboStyle;
-		createGuiControl(this, SWT.BORDER);
+		createGuiControl(this, SWT.BORDER, false);
+		addElements(elements);
 	}
-	
+
+	public ComboComposite(Composite parent, ILabelProvider labelProvider, int comboStyle) {
+		super(labelProvider, parent, SWT.NONE, false);
+		this.comboStyle |= comboStyle;
+		createGuiControl(this, SWT.BORDER, false);
+	}
+
 	@Override
-	protected void addElementToGui(int index, T element)
-	{
+	protected void addElementToGui(int index, T element) {
 		combo.add(labelProvider.getText(element), index);
 	}
 
 	@Override
-	protected Control createGuiControl(Composite parent, int style)
-	{
-		combo = new Combo(parent, style | comboStyle);
-		if (parent.getLayout() instanceof GridLayout) {
-			combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	protected Control createGuiControl(Composite parent, int style, boolean createLabel) {
+		if (createLabel) {
+			XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, 2);
+			label = new Label(comp, SWT.NONE);
+			combo = new Combo(comp, style | comboStyle);
+		} else {
+			combo = new Combo(parent, style | comboStyle);
+			if (parent.getLayout() instanceof GridLayout) {
+				combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			}
 		}
 		return combo;
 	}
 
+	public Label getLabel() {
+		if (label != null)
+			return label;
+		else
+			throw new IllegalStateException("Cannot access the label if its creation hasn't been requested earlier.");
+	}
+
 	@Override
-	protected int getSelectionIndex()
-	{
+	protected int getSelectionIndex() {
 		return combo.getSelectionIndex();
 	}
 
 	@Override
-	protected int[] getSelectionIndices()
-	{
+	protected int[] getSelectionIndices() {
 		return new int[] { combo.getSelectionIndex() };
 	}
 
 	@Override
-	protected void removeAllElementsFromGui()
-	{
+	protected void removeAllElementsFromGui() {
 		combo.removeAll();
 	}
 
 	@Override
-	protected void removeElementFromGui(int index)
-	{
+	protected void removeElementFromGui(int index) {
 		combo.remove(index);
 	}
 
 	@Override
-	protected void setSelection(int index)
-	{
+	protected void setSelection(int index) {
 		combo.select(index);
 	}
 
 	@Override
-	protected void setSelection(int[] indices)
-	{
+	protected void setSelection(int[] indices) {
 		if (indices.length < 1)
-			combo.select(-1); // seems to be ignored - a combo seems to have always one item selected
+			combo.select(-1); // seems to be ignored - a combo seems to have always
+		// one item selected
 		else
 			combo.select(indices[0]);
 	}
 
 	@Override
-	protected int getSelectionCount()
-	{
+	protected int getSelectionCount() {
 		if (combo.getSelectionIndex() < 0 || combo.getItemCount() < 1)
 			return 0;
 		else
 			return 1;
 	}
 
-	public Combo getCombo()
-	{
+	public Combo getCombo() {
 		return combo;
 	}
 
@@ -186,9 +194,8 @@ public class ComboComposite<T> extends AbstractListComposite<T>
 	}
 
 	@Override
-	protected void refreshElement(T element)
-	{
+	protected void refreshElement(T element) {
 		int index = getElementIndex(element);
 		combo.setItem(index, labelProvider.getText(element));
-	}	
+	}
 }
