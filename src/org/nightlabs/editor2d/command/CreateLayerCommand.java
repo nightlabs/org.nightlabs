@@ -40,7 +40,7 @@ extends CreateDrawComponentCommand
 	public CreateLayerCommand(PageDrawComponent parent, Editor2DFactory factory)
 	{
 		if (parent == null) {
-			throw new IllegalArgumentException("Param parent (MultiLayerDrawComponent) must not be null!");
+			throw new IllegalArgumentException("Param parent (PageDrawComponent) must not be null!");
 		}	  
 		this.parent = parent;
 	  this.factory = factory;
