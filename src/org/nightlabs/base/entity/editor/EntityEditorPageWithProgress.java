@@ -361,7 +361,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	
 	/**
 	 * Switch to view the page's content.
-	 * Note that this will always be called asynchronously on the {@link Display} thread.
+	 * Note that this will always be called synchronously on the {@link Display} thread.
 	 */
 	public void switchToContent() {
 		Display.getDefault().syncExec(new Runnable() {
