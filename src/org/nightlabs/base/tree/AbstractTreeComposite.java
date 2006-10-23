@@ -29,6 +29,8 @@ package org.nightlabs.base.tree;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -46,7 +48,10 @@ import org.nightlabs.base.composite.XComposite;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public abstract class AbstractTreeComposite extends XComposite {
+public abstract class AbstractTreeComposite
+extends XComposite
+implements ISelectionProvider
+{
 
 	private TreeViewer treeViewer;
 	
@@ -179,5 +184,20 @@ public abstract class AbstractTreeComposite extends XComposite {
 	
 	public void setInput(Object input) {
 		treeViewer.setInput(input);
+	}
+
+	public void addSelectionChangedListener(ISelectionChangedListener listener)
+	{
+		treeViewer.addSelectionChangedListener(listener);
+	}
+
+	public void removeSelectionChangedListener(ISelectionChangedListener listener)
+	{
+		treeViewer.removeSelectionChangedListener(listener);
+	}
+
+	public void setSelection(ISelection selection)
+	{
+		treeViewer.setSelection(selection);
 	}
 }

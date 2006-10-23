@@ -27,101 +27,166 @@
 package org.nightlabs.base.selection;
 
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 
+/**
+ * @author Daniel Mazurek - daniel dot mazurek at nightlabs dot de
+ * @author Marco Schulze - marco at nightlabs dot de
+ * TODO should we drop this class and instead implement {@link ISelectionSupport} directly in {@link SelectionProvider}??? Marco.
+ */
 public class SelectionSupport
 extends SelectionProviderImpl
 implements ISelectionSupport
 {
 
-	public SelectionSupport() {
-		super();
+	public StructuredSelection getSelectedObjects()
+	{
+		return (StructuredSelection) getStructuredSelection();
 	}
 
-	/**
-	 * 
-	 * @see org.nightlabs.base.selection.ISelectionSupport#clearSelection()
-	 */
-	public void clearSelection() {
-		setSelection(StructuredSelection.EMPTY);
+	@Override
+	public void addSelectedObject(Object o)
+	{
+		super.addSelectedObject(o);
 	}
 
-	/**
-	 * 
-	 * @see org.nightlabs.base.selection.ISelectionSupport#setSelection(java.util.List)
-	 */
-	public void setSelection(List selectedObjects) 
+	@Override
+	public void addSelectedObjects(Collection objects)
 	{
-		StructuredSelection selection = new StructuredSelection(selectedObjects);
-		setSelection(selection);
-	}	
-	
-	/**
-	 * 
-	 * @see org.nightlabs.base.selection.ISelectionSupport#addSelectedObject(java.lang.Object)
-	 */
-	public void addSelectedObject(Object o) 
-	{
-		getSelectedObjectsList().add(o);
-		selection = new StructuredSelection(getSelectedObjectsList());		
-		fireSelectionChanged();
+		super.addSelectedObjects(objects);
 	}
-	
-	
-	/**
-	 * 
-	 * @see org.nightlabs.base.selection.ISelectionSupport#addSelectedObjects(java.util.Collection)
-	 */
-	public void addSelectedObjects(Collection objects) 
+
+	@Override
+	public void clearSelection()
 	{
-		if (!objects.isEmpty()) 
-		{
-			List l = getSelectedObjectsList(); 
-			for (Iterator it = objects.iterator(); it.hasNext(); ) {
-				l.add(it.next());
-			}
-			selection = new StructuredSelection(l);
-			fireSelectionChanged();			
-		}
-	}	
-	
-	/**
-	 * 
-	 * @see org.nightlabs.base.selection.ISelectionSupport#removeSelectedObject(java.lang.Object)
-	 */
-	public void removeSelectedObject(Object o) 
-	{
-		List l = getSelectedObjectsList();
-		l.remove(o);
-		selection = new StructuredSelection(l);
-		fireSelectionChanged();
-	}	
-	
-	/**
-	 * 
-	 * @see org.nightlabs.base.selection.ISelectionSupport#removeSelectedObjects(java.util.Collection)
-	 */
-	public void removeSelectedObjects(Collection objects) 
-	{
-		if (!objects.isEmpty()) 
-		{
-			List l = getSelectedObjectsList();
-			for (Iterator it = objects.iterator(); it.hasNext(); ) {
-				l.remove(it.next());
-			}
-			selection = new StructuredSelection(l);
-			fireSelectionChanged();
-		}
+		super.clearSelection();
 	}
-	
-	/**
-	 * @see ISelectionSupport#contains(Object)
-	 */
-	public boolean contains(Object o) 
+
+	@Override
+	public boolean contains(Object o)
 	{
-		return getSelectedObjectsList().contains(o);
+		return super.contains(o);
+	}
+
+	@Override
+	public IStructuredSelection getStructuredSelection()
+	{
+		return super.getStructuredSelection();
+	}
+
+	@Override
+	public void removeSelectedObject(Object o)
+	{
+		super.removeSelectedObject(o);
+	}
+
+	@Override
+	public void removeSelectedObjects(Collection objects)
+	{
+		super.removeSelectedObjects(objects);
+	}
+
+	@Override
+	public void setSelection(Collection selectedObjects)
+	{
+		super.setSelection(selectedObjects);
 	}
 }
+//extends SelectionProviderImpl
+//implements ISelectionSupport
+//{
+//
+//	public SelectionSupport() {
+//		super();
+//	}
+//
+//	/**
+//	 * 
+//	 * @see org.nightlabs.base.selection.ISelectionSupport#clearSelection()
+//	 */
+//	public void clearSelection() {
+//		setSelection(StructuredSelection.EMPTY);
+//	}
+//
+//	/**
+//	 * 
+//	 * @see org.nightlabs.base.selection.ISelectionSupport#setSelection(java.util.List)
+//	 */
+//	public void setSelection(List selectedObjects) 
+//	{
+//		StructuredSelection selection = new StructuredSelection(selectedObjects);
+//		setSelection(selection);
+//	}	
+//	
+//	/**
+//	 * 
+//	 * @see org.nightlabs.base.selection.ISelectionSupport#addSelectedObject(java.lang.Object)
+//	 */
+//	public void addSelectedObject(Object o) 
+//	{
+//		getSelectedObjectsList().add(o);
+//		selection = new StructuredSelection(getSelectedObjectsList());		
+//		fireSelectionChanged();
+//	}
+//
+//	/**
+//	 * 
+//	 * @see org.nightlabs.base.selection.ISelectionSupport#addSelectedObjects(java.util.Collection)
+//	 */
+//	public void addSelectedObjects(Collection objects) 
+//	{
+//		if (!objects.isEmpty()) 
+//		{
+//			List l = getSelectedObjectsList(); 
+//			for (Iterator it = objects.iterator(); it.hasNext(); ) {
+//				l.add(it.next());
+//			}
+//			selection = new StructuredSelection(l);
+//			fireSelectionChanged();			
+//		}
+//	}	
+//	
+//	/**
+//	 * 
+//	 * @see org.nightlabs.base.selection.ISelectionSupport#removeSelectedObject(java.lang.Object)
+//	 */
+//	public void removeSelectedObject(Object o) 
+//	{
+//		List l = getSelectedObjectsList();
+//		l.remove(o);
+//		selection = new StructuredSelection(l);
+//		fireSelectionChanged();
+//	}	
+//	
+//	/**
+//	 * 
+//	 * @see org.nightlabs.base.selection.ISelectionSupport#removeSelectedObjects(java.util.Collection)
+//	 */
+//	public void removeSelectedObjects(Collection objects) 
+//	{
+//		if (!objects.isEmpty()) 
+//		{
+//			List l = getSelectedObjectsList();
+//			for (Iterator it = objects.iterator(); it.hasNext(); ) {
+//				l.remove(it.next());
+//			}
+//			selection = new StructuredSelection(l);
+//			fireSelectionChanged();
+//		}
+//	}
+//	
+//	/**
+//	 * @see ISelectionSupport#contains(Object)
+//	 */
+//	public boolean contains(Object o) 
+//	{
+//		return getSelectedObjectsList().contains(o);
+//	}
+//
+//	public IStructuredSelection getStructuredSelection()
+//	{
+//		return getSelectedObjects();
+//	}
+//}

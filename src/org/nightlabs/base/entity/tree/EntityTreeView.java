@@ -23,10 +23,14 @@
  ******************************************************************************/
 package org.nightlabs.base.entity.tree;
 
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 import org.nightlabs.base.part.ControllablePart;
 import org.nightlabs.base.part.PartController;
+import org.nightlabs.base.selection.SelectionProviderProxy;
 
 /**
  * The tree view for entity tree categories and their
@@ -48,7 +52,7 @@ import org.nightlabs.base.part.PartController;
  */
 public class EntityTreeView 
 extends ViewPart 
-implements ControllablePart
+implements ControllablePart, ISelectionProvider
 {
 
 	private EntityTree entityTree;
@@ -76,6 +80,7 @@ implements ControllablePart
 	@Override
 	public void createPartControl(Composite parent)
 	{
+		getSite().setSelectionProvider(this);
 		PartController controller = getPartController();
 		if (controller != null)
 			// Delegate this to the view-controller, to let him decide what to display
@@ -104,6 +109,7 @@ implements ControllablePart
 	public void createPartContents(Composite parent)
 	{
 		entityTree = new EntityTree(parent, getViewSite().getId());
+		selectionProviderProxy.addRealSelectionProvider(entityTree);
 	}
 
 	/**
@@ -135,5 +141,60 @@ implements ControllablePart
 	 */
 	public EntityTree getEntityTree() {
 		return entityTree;
+	}
+
+	private SelectionProviderProxy selectionProviderProxy = new SelectionProviderProxy();
+
+	/**
+	 * The {@link EntityTree} (as returned by {@link #getEntityTree()}) does not exist
+	 * before the method {@link #createPartContents(Composite)} has been called. Therefore,
+	 * this real {@link ISelectionProvider} cannot be used in {@link #createPartControl(Composite)}.
+	 * Unfortunately, the framework (i.e. Eclipse's selection service registration) requires a
+	 * selection provider to be available already in {@link #createPartControl(Composite)}.
+	 * <p>
+	 * To solve this problem, the method {@link #createPartControl(Composite)}
+	 * calls
+	 * <br/>
+	 * <code>getSite().setSelectionProvider(this)</code>
+	 * <br/>
+	 * which is equivalent to <br/>
+	 * <code>getSite().setSelectionProvider(getSelectionProviderProxy())</code>
+	 * <br/>
+	 * because the <code>EntityTreeView</code> implements {@link ISelectionProvider} and
+	 * simply delegates to the proxy. The proxy is created already in the constructor of
+	 * this view and therefore available.
+	 * </p>
+	 * <p>
+	 * In {@link #createPartContents(Composite)}, the newly created <code>EntityTree</code>
+	 * is added to the proxy by
+	 * {@link SelectionProviderProxy#addRealSelectionProvider(ISelectionProvider)}.
+	 * </p>
+	 *
+	 * @return Returns a proxy for selections. You normally don't need to do sth. with
+	 *		it - this getter exists merely for the usual NightLabs-extreme-flexibility ;-)
+	 */
+	protected SelectionProviderProxy getSelectionProviderProxy()
+	{
+		return selectionProviderProxy;
+	}
+
+	public void addSelectionChangedListener(ISelectionChangedListener listener)
+	{
+		selectionProviderProxy.addSelectionChangedListener(listener);
+	}
+
+	public ISelection getSelection()
+	{
+		return selectionProviderProxy.getSelection();
+	}
+
+	public void removeSelectionChangedListener(ISelectionChangedListener listener)
+	{
+		selectionProviderProxy.removeSelectionChangedListener(listener);
+	}
+
+	public void setSelection(ISelection selection)
+	{
+		selectionProviderProxy.setSelection(selection);
 	}
 }

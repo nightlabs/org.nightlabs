@@ -344,27 +344,32 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		wrapper.setToolkit(managedForm.getToolkit());
 		wrapper.adaptToToolkit();
 	}
-	
-	
+
 	/**
 	 * Switch to view the progress monitor.
 	 * Note that this will always be called asynchronously on the {@link Display} thread.
 	 */
 	public void switchToProgress() {
-		Display.getDefault().syncExec(new Runnable() {
+		Runnable runnable = new Runnable() {
 			public void run() {
 				stackLayout.topControl = progressWrapper;
 				wrapper.layout(true, true);
 			}
-		});
+		};
+
+		if (Display.getCurrent() != null)
+			runnable.run();
+		else
+			Display.getDefault().syncExec(runnable);
 	}
-	
+
 	/**
 	 * Switch to view the page's content.
-	 * Note that this will always be called synchronously on the {@link Display} thread.
+	 * Note, that this will always on the {@link Display} thread, but synchronously (blocking).
+	 * Hence, you can call it from any thread you want.
 	 */
 	public void switchToContent() {
-		Display.getDefault().syncExec(new Runnable() {
+		Runnable runnable = new Runnable() {
 			public void run() {
 				stackLayout.topControl = pageWrapper;
 				wrapper.layout(true, true);
@@ -374,9 +379,14 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 				getManagedForm().getForm().getBody().layout(true, true);
 //				pageWrapper.refresh();
 			}
-		});
+		};
+
+		if (Display.getCurrent() != null)
+			runnable.run();
+		else
+			Display.getDefault().syncExec(runnable);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * Will delegate to the fadable wrapper.
