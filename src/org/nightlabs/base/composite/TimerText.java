@@ -29,7 +29,7 @@ package org.nightlabs.base.composite;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.eclipse.jface.util.ListenerList;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
