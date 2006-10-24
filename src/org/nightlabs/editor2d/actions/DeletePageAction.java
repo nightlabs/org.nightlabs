@@ -23,56 +23,53 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.command;
+package org.nightlabs.editor2d.actions;
 
-import org.nightlabs.editor2d.Editor2DFactory;
+import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
-import org.nightlabs.editor2d.PageDrawComponent;
+import org.nightlabs.editor2d.command.DeletePageCommand;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class CreatePageCommand 
-extends CreateDrawComponentCommand 
+public class DeletePageAction 
+extends AbstractEditorAction 
 {
+	public static final String ID = DeletePageAction.class.getName();
+	
+	public DeletePageAction(AbstractEditor editor, int style) {
+		super(editor, style);
+	}
 
-	public CreatePageCommand(MultiLayerDrawComponent mldc, Editor2DFactory factory)
+	public DeletePageAction(AbstractEditor editor) {
+		super(editor);
+	}
+
+	@Override
+	protected boolean calculateEnabled() 
 	{
-		super();
-		if (mldc == null)
-			throw new IllegalArgumentException("Param mldc must not be null!");
-		if (factory == null)
-			throw new IllegalArgumentException("Param factory must not be null!");	  
+		if (getMultiLayerDrawComponent().getDrawComponents().size() > 1)
+			return true;
+		else
+			return false;
+	}
+
+	@Override
+	protected void init() 
+	{
+		super.init();
+		setId(ID);
+		setText(EditorPlugin.getResourceString("action.deletePage.text"));
+		setToolTipText(EditorPlugin.getResourceString("action.deletePage.tooltip"));
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), DeletePageAction.class));
+	}
+
+	@Override
+	public void run() 
+	{
+		DeletePageCommand cmd = new DeletePageCommand(getMultiLayerDrawComponent(), getMultiLayerDrawComponent().getCurrentPage());
+		execute(cmd);
+	}
 		
-		this.parent = mldc;
-	  this.factory = factory;
-	  setLabel(EditorPlugin.getResourceString("command.create.layer"));	  
-	}
-	
-	private Editor2DFactory factory = null;
-
-	public void execute() 
-	{
-	  drawComponent = factory.createPageDrawComponent();	  
-    getPage().setParent(getMultiLayerDrawComponent());
-		drawOrderIndex = getMultiLayerDrawComponent().getDrawComponents().indexOf(
-        getMultiLayerDrawComponent().getCurrentPage()) + 1;    
-    getMultiLayerDrawComponent().addDrawComponent(getPage(), drawOrderIndex);
-    getMultiLayerDrawComponent().setCurrentPage(getPage());
-	}	
-	
-	public void redo() 
-	{
-    super.redo();
-		getMultiLayerDrawComponent().setCurrentPage(getPage());			  		
-	}	
-			
-	protected MultiLayerDrawComponent getMultiLayerDrawComponent() {
-	  return (MultiLayerDrawComponent) parent;
-	}
-  
-  protected PageDrawComponent getPage() {
-    return (PageDrawComponent) drawComponent;
-  }	
 }

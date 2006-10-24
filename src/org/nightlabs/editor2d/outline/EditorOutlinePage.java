@@ -64,6 +64,8 @@ import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorContextMenuProvider;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.actions.DeletePageAction;
+import org.nightlabs.editor2d.actions.NewPageAction;
 import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 
@@ -76,19 +78,19 @@ implements IAdaptable
   static final int ID_OVERVIEW = 1;
   static final int ID_FILTER 	 = 3;
   
-  protected AbstractEditor editor;
-  protected FilterManager filterMan;  
-  protected IAction showFilterAction;
+  private AbstractEditor editor;
+  private FilterManager filterMan;  
+  private IAction showFilterAction;
   
-  protected PageBook pageBook;
-  protected Control outline;
-  protected IAction showOutlineAction; 
-  protected IAction showOverviewAction;
-  protected IAction filterOutlineAction;
-  protected Thumbnail thumbnail;
-  protected DisposeListener disposeListener;
+  private PageBook pageBook;
+  private Control outline;
+  private IAction showOutlineAction; 
+  private IAction showOverviewAction;
+  private IAction filterOutlineAction;
+  private Thumbnail thumbnail;
+  private DisposeListener disposeListener;
   
-  protected Canvas overview;  
+  private Canvas overview;  
     
   public EditorOutlinePage(AbstractEditor editor, EditPartViewer viewer){
     super(viewer);
@@ -97,7 +99,8 @@ implements IAdaptable
     filterMan.addPropertyChangeListener(filterListener);
   }
     
-  public void init(IPageSite pageSite) {
+  public void init(IPageSite pageSite)
+  {
     super.init(pageSite);
     ActionRegistry registry = editor.getOutlineActionRegistry();
     IActionBars bars = pageSite.getActionBars();
@@ -123,8 +126,17 @@ implements IAdaptable
     getViewer().setKeyHandler(editor.getCommonKeyHandler());
 //    getViewer().addDropTargetListener(
 //      new EditorTemplateTransferDropTargetListener(getViewer()));
+
+    createActions();
+    
+    showPage(ID_OUTLINE);        
+  }
+    
+  protected void createActions() 
+  {
     IToolBarManager tbm = getSite().getActionBars().getToolBarManager();
     
+    // create Filter entries
     IMenuManager menuMan = getSite().getActionBars().getMenuManager();
     createFilterEntries(menuMan);    
     
@@ -135,8 +147,7 @@ implements IAdaptable
       }
     };
     showOutlineAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
-    		EditorPlugin.getDefault(), EditorOutlinePage.class, "Outline"));
-    
+    		EditorPlugin.getDefault(), EditorOutlinePage.class, "Outline"));    
     tbm.add(showOutlineAction);
     
     // Show Overview
@@ -147,12 +158,21 @@ implements IAdaptable
     };
     showOverviewAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
     		EditorPlugin.getDefault(), EditorOutlinePage.class, "Overview"));
-    tbm.add(showOverviewAction);
-        
-    showPage(ID_OUTLINE);        
-  }
+    tbm.add(showOverviewAction);  	
     
-  protected IAction createFilterAction(final Class c) 
+    // Add Page
+    newPageAction = new NewPageAction(editor);
+    tbm.add(newPageAction);
+    
+    // Delete Page
+    deletePageAction = new DeletePageAction(editor);
+    tbm.add(deletePageAction);
+  }
+  
+  private IAction newPageAction;
+  private IAction deletePageAction;  
+  
+  private IAction createFilterAction(final Class c) 
   {
 		IAction filterAction = new Action() {
       public void run() {
@@ -163,7 +183,7 @@ implements IAdaptable
 		return filterAction;
   }
   
-  protected void createFilterEntries(IMenuManager menuMan) 
+  private void createFilterEntries(IMenuManager menuMan) 
   {
 		IAction filterNoneAction = new Action() {
       public void run() {
@@ -301,7 +321,7 @@ implements IAdaptable
       editor.getEditor().removeDisposeListener(disposeListener);
   }
  
-  protected PropertyChangeListener filterListener = new PropertyChangeListener() 
+  private PropertyChangeListener filterListener = new PropertyChangeListener() 
   {	
 		public void propertyChange(PropertyChangeEvent pce)
 		{

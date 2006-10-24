@@ -25,20 +25,35 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.actions;
 
+import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.PageDrawComponent;
+import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.command.CreatePageCommand;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class NewPageAction extends AbstractEditorAction {
-
+public class NewPageAction 
+extends AbstractEditorAction 
+{
+	public static final String ID = NewPageAction.class.getName();
+	
 	public NewPageAction(AbstractEditor editor, int style) {
 		super(editor, style);
 	}
 
 	public NewPageAction(AbstractEditor editor) {
 		super(editor);
+	}
+	
+	@Override
+	protected void init() 
+	{
+		super.init();
+		setId(ID);
+		setText(EditorPlugin.getResourceString("action.newPage.text"));
+		setToolTipText(EditorPlugin.getResourceString("action.newPage.tooltip"));
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), NewPageAction.class));
 	}
 
 	@Override
@@ -48,9 +63,8 @@ public class NewPageAction extends AbstractEditorAction {
 
 	@Override
 	public void run() {
-		PageDrawComponent page = getEditor().getModelFactory().createPageDrawComponent();
-		getMultiLayerDrawComponent().addDrawComponent(page);
-		getMultiLayerDrawComponent().setCurrentPage(page);
+		CreatePageCommand cmd = new CreatePageCommand(getMultiLayerDrawComponent(), getEditor().getModelFactory());
+		execute(cmd);
 	}
 	
 }

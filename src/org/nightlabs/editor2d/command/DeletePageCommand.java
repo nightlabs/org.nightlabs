@@ -25,54 +25,52 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.command;
 
-import org.nightlabs.editor2d.Editor2DFactory;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class CreatePageCommand 
-extends CreateDrawComponentCommand 
+public class DeletePageCommand 
+extends DeleteDrawComponentCommand 
 {
-
-	public CreatePageCommand(MultiLayerDrawComponent mldc, Editor2DFactory factory)
-	{
-		super();
-		if (mldc == null)
-			throw new IllegalArgumentException("Param mldc must not be null!");
-		if (factory == null)
-			throw new IllegalArgumentException("Param factory must not be null!");	  
-		
-		this.parent = mldc;
-	  this.factory = factory;
-	  setLabel(EditorPlugin.getResourceString("command.create.layer"));	  
+	public DeletePageCommand(MultiLayerDrawComponent mldc, PageDrawComponent page) {
+		super(mldc, page);
 	}
 	
-	private Editor2DFactory factory = null;
-
+	@Override
 	public void execute() 
 	{
-	  drawComponent = factory.createPageDrawComponent();	  
-    getPage().setParent(getMultiLayerDrawComponent());
-		drawOrderIndex = getMultiLayerDrawComponent().getDrawComponents().indexOf(
-        getMultiLayerDrawComponent().getCurrentPage()) + 1;    
-    getMultiLayerDrawComponent().addDrawComponent(getPage(), drawOrderIndex);
-    getMultiLayerDrawComponent().setCurrentPage(getPage());
+		super.execute();
+		setCurrentPage();
 	}	
 	
+	@Override
 	public void redo() 
 	{
-    super.redo();
-		getMultiLayerDrawComponent().setCurrentPage(getPage());			  		
-	}	
-			
-	protected MultiLayerDrawComponent getMultiLayerDrawComponent() {
-	  return (MultiLayerDrawComponent) parent;
+		super.redo();
+		setCurrentPage();	  
 	}
-  
-  protected PageDrawComponent getPage() {
-    return (PageDrawComponent) drawComponent;
-  }	
+	
+	@Override
+	public void undo() 
+	{
+		super.undo();
+	  getMultiLayerDrawComponent().setCurrentPage((PageDrawComponent)child);	  
+	}	
+	
+	protected void setCurrentPage() 
+	{
+    if (index != 0)
+    	getMultiLayerDrawComponent().setCurrentPage((PageDrawComponent) parent.getDrawComponents().get(index-1));
+    else if (parent.getDrawComponents().size() == 1)
+    	getMultiLayerDrawComponent().setCurrentPage((PageDrawComponent) parent.getDrawComponents().get(0));
+    else if (index == 0) {
+    	getMultiLayerDrawComponent().setCurrentPage((PageDrawComponent) parent.getDrawComponents().get(index+1));
+    }			  	  
+	}	
+	
+	private MultiLayerDrawComponent getMultiLayerDrawComponent() {
+		return (MultiLayerDrawComponent) parent;
+	}
 }
