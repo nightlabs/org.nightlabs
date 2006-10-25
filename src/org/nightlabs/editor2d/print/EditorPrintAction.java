@@ -30,12 +30,10 @@ import java.awt.print.PrinterJob;
 
 import org.apache.log4j.Logger;
 import org.eclipse.ui.actions.ActionFactory;
-import org.nightlabs.base.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
 import org.nightlabs.print.AWTPrinter;
-import org.nightlabs.print.PrinterInterface;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
