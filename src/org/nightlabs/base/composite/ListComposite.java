@@ -28,6 +28,9 @@ package org.nightlabs.base.composite;
 
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -90,6 +93,13 @@ public class ListComposite<T> extends AbstractListComposite<T>
 			if (parent.getLayout() instanceof GridLayout)
 				list.setLayoutData(new GridData(GridData.FILL_BOTH));
 		}
+		list.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				fireSelectionChangedEvent();
+			}
+		});
 		return list;
 	}
 	

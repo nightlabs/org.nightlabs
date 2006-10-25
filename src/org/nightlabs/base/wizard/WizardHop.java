@@ -199,8 +199,13 @@ public class WizardHop implements IWizardHop
 			return null;
 
 		if (currentPage == entryPage) {
-			if (hopPages.isEmpty())
+			if (hopPages.isEmpty()) {
+				if (getParentHop() != null) {
+					return getParentHop().getNextPage(currentPage);
+				}
+				
 				return wizard.getNextPage(entryPage);
+			}
 
 			return (IWizardPage) hopPages.get(0);
 		}
@@ -217,6 +222,9 @@ public class WizardHop implements IWizardHop
 
 			if (exitPage != null)
 				return exitPage;
+
+			if (getParentHop() != null)
+				return getParentHop().getNextPage(entryPage);
 		}
 
 		// find out the first entry page of the current branch of hops, which is

@@ -30,6 +30,8 @@ import java.util.List;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -105,6 +107,13 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 				combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			}
 		}
+		combo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				fireSelectionChangedEvent();
+			}
+		});
 		return combo;
 	}
 

@@ -25,6 +25,7 @@
 package org.nightlabs.base.composite;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +37,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -127,6 +129,11 @@ implements ISelectionProvider
 		
 		if (doCreateGuiControl)
 			createGuiControl(this, style | SWT.BORDER, createLabel);
+	}
+
+	public void setLabelProvider(ILabelProvider labelProvider)
+	{
+		this.labelProvider = labelProvider;
 	}
 
 	protected abstract Control createGuiControl(Composite parent, int style, boolean createLabel);
@@ -222,7 +229,7 @@ implements ISelectionProvider
 	 * Adds all specified elements to the list.
 	 * @param elements The elements to be added.
 	 */
-	public void addElements(List<T> elements)
+	public void addElements(Collection<T> elements)
 	{
 		for (T elem : elements)
 			addElement(elem);
@@ -232,7 +239,7 @@ implements ISelectionProvider
 	 * Resets the list to the specified elements.
 	 * @param elements The elements to be set.
 	 */
-	public void setInput(List<T> elements)
+	public void setInput(Collection<T> elements)
 	{
 		removeAll();
 		addElements(elements);
@@ -336,6 +343,17 @@ implements ISelectionProvider
 	{
 		for (T elem : elements)
 			refreshElement(elem);
+	}
+
+	protected void fireSelectionChangedEvent()
+	{
+		if (selectionChangedListeners.isEmpty())
+			return;
+
+		SelectionChangedEvent event = new SelectionChangedEvent(this, getSelection());
+		Object[] listeners = selectionChangedListeners.getListeners();
+		for (Object listener : listeners)
+			((ISelectionChangedListener)listener).selectionChanged(event);
 	}
 
 	private ListenerList selectionChangedListeners = new ListenerList();
