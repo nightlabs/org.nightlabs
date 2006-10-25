@@ -40,12 +40,12 @@ public class ErrorReportEMailCfMod extends ConfigModule
 	private String mailFrom = null;
 	private List mailTo = null;
 	private String smtpHost = null;
-	
-	
+
+
 	public ErrorReportEMailCfMod()
 	{
 	}
-	
+
 	/**
 	 * @see org.nightlabs.config.ConfigModule#init()
 	 */
@@ -57,7 +57,7 @@ public class ErrorReportEMailCfMod extends ConfigModule
 		if (mailTo == null)
 		{
 			mailTo = new CfModList(this);
-      mailTo.add("dev@nightlabs.de");
+			mailTo.add("dev@nightlabs.de");
 //			mailTo.add("simon@nightlabs.de");
 //			mailTo.add("garbage@nightlabs.de");
 //			mailTo.add("alex@nightlabs.de");
@@ -68,7 +68,7 @@ public class ErrorReportEMailCfMod extends ConfigModule
 		if (smtpHost == null)
 			smtpHost = "mail.nightlabs.de";
 	}
-	
+
 	public String getMailFrom()
 	{
 		return mailFrom;
@@ -87,7 +87,7 @@ public class ErrorReportEMailCfMod extends ConfigModule
 		this.mailTo = mailTo;
 		setChanged();
 	}
-	
+
 	public String getSmtpHost()
 	{
 		return smtpHost;

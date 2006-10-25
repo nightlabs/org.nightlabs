@@ -49,26 +49,26 @@ implements Serializable
 	private Throwable triggerException;
 	private String userComment;
 	private Properties systemProperties;
-  private Date time;
+	private Date time;
 
 	/**
-   * Initialize an empty error report. 
+	 * Initialize an empty error report. 
 	 */
-  protected ErrorReport()
+	protected ErrorReport()
 	{
 	}
 
-  /**
-   * Initialize this error report with a thrown and a trigger exception.
-   * @param thrownException The exception thrown
-   * @param triggerException The exception that triggered the error handler
-   */
+	/**
+	 * Initialize this error report with a thrown and a trigger exception.
+	 * @param thrownException The exception thrown
+	 * @param triggerException The exception that triggered the error handler
+	 */
 	public ErrorReport(Throwable thrownException, Throwable triggerException)
 	{
 		setThrownException(thrownException);
 		setTriggerException(triggerException);
 		this.systemProperties = System.getProperties();
-    this.time = new Date();
+		this.time = new Date();
 	}
 
 	/**
@@ -79,7 +79,7 @@ implements Serializable
 		return thrownException;
 	}
 
-  /**
+	/**
 	 * @param error The thrownException to set.
 	 */
 	public void setThrownException(Throwable error)
@@ -89,32 +89,32 @@ implements Serializable
 		this.thrownException = error;
 	}
 
-  /**
-   * @return The triggerException.
-   */
-  public Throwable getTriggerException()
-  {
-    return triggerException;
-  }
-  
-  /**
-   * @param triggerException The triggerException to set.
-   */
-  public void setTriggerException(Throwable triggerException)
-  {
-    if (triggerException == null)
-      throw new NullPointerException("Parameter triggerException must not be null!");
-    this.triggerException = triggerException;
-  }
-  
-  /**
+	/**
+	 * @return The triggerException.
+	 */
+	public Throwable getTriggerException()
+	{
+		return triggerException;
+	}
+
+	/**
+	 * @param triggerException The triggerException to set.
+	 */
+	public void setTriggerException(Throwable triggerException)
+	{
+		if (triggerException == null)
+			throw new NullPointerException("Parameter triggerException must not be null!");
+		this.triggerException = triggerException;
+	}
+
+	/**
 	 * @return Returns the userComment.
 	 */
 	public String getUserComment()
 	{
 		return userComment;
 	}
-  
+
 	/**
   public String getErrorStackTraceAsString(Throwable error)
   {
@@ -124,8 +124,8 @@ implements Serializable
     pw.close();
     return sw.getBuffer().toString();
   }
-  
-  
+
+
   public String getCurrentTimeAsString()
   {
     SimpleDateFormat bartDateFormat =
@@ -143,39 +143,39 @@ implements Serializable
 		this.userComment = userComment;
 	}
 
-  /**
-   * @return The system properties associated with this error report
-   */
+	/**
+	 * @return The system properties associated with this error report
+	 */
 	public Properties getSystemProperties()
 	{
 		return systemProperties;
 	}
 
-  /**
-   * @param systemProperties The system properties to associate with this error report
-   */
+	/**
+	 * @param systemProperties The system properties to associate with this error report
+	 */
 	public void setSystemProperties(Properties systemProperties)
 	{
 		this.systemProperties = systemProperties;
 	}
 
-  public Date getTime()
-  {
-    return time;
-  }
+	public Date getTime()
+	{
+		return time;
+	}
 
-  public void setTime(Date time)
-  {
-    if (time == null)
-      throw new NullPointerException("Parameter time must not be null!");
-    this.time = time;
-  }
-  
-  protected String getTimeAsString()
-  {
-    return getTimeAsString(time);
-  }
-  
+	public void setTime(Date time)
+	{
+		if (time == null)
+			throw new NullPointerException("Parameter time must not be null!");
+		this.time = time;
+	}
+
+	protected String getTimeAsString()
+	{
+		return getTimeAsString(time);
+	}
+
 	/**
 	 * Formats the thrownException report into sth. like this:
 	 * 
@@ -209,27 +209,27 @@ implements Serializable
 
 //		StringBuffer props = new StringBuffer();
 //		for (Iterator it = systemProperties.entrySet().iterator(); it.hasNext(); ) {
-//			Map.Entry me = (Map.Entry)it.next();
-//			props.append(me.getKey());
-//			props.append('=');
-//			props.append(me.getValue());
-//			props.append('\n');
+//		Map.Entry me = (Map.Entry)it.next();
+//		props.append(me.getKey());
+//		props.append('=');
+//		props.append(me.getValue());
+//		props.append('\n');
 //		}
 
 		return
-				"Time:\n"+ getTimeAsString() +"\n\nUser Comment:\n" + userComment + 
-				"\n\nThrown exception stack trace:\n" + getExceptionStackTraceAsString(thrownException) +
-				"\nSystem Properties:\n" + props.toString();
+		"Time:\n"+ getTimeAsString() +"\n\nUser Comment:\n" + userComment + 
+		"\n\nThrown exception stack trace:\n" + getExceptionStackTraceAsString(thrownException) +
+		"\nSystem Properties:\n" + props.toString();
 	}
-	
-  public static String getExceptionStackTraceAsString(Throwable exception)
-  {
-    StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
-    exception.printStackTrace(pw);
-    pw.close();
-    return sw.getBuffer().toString();
-  }
+
+	public static String getExceptionStackTraceAsString(Throwable exception)
+	{
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		exception.printStackTrace(pw);
+		pw.close();
+		return sw.getBuffer().toString();
+	}
 
 	public static String getTimeAsString(Date time)
 	{

@@ -43,12 +43,12 @@ public class ErrorReportWizard extends DynamicPathWizard
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(ErrorReportWizard.class) ;
-	
+
 	private ErrorReport errorReport;
-  private ErrorReportWizardEntryPage entryPage;
+	private ErrorReportWizardEntryPage entryPage;
 	private ErrorReportWizardCommentPage sendExceptionPage;
 	private ErrorReportWizardSummaryPage exceptionSummaryPage;
-	
+
 	/**
 	 * @param errorReport A raw <tt>ErrorReport</tt>. It will be populated with user comment
 	 * and other data by this wizard.
@@ -56,12 +56,12 @@ public class ErrorReportWizard extends DynamicPathWizard
 	public ErrorReportWizard(ErrorReport errorReport)
 	{
 		this.errorReport = errorReport;
-    entryPage = new ErrorReportWizardEntryPage();
-    sendExceptionPage = new ErrorReportWizardCommentPage();
-    exceptionSummaryPage = new ErrorReportWizardSummaryPage();
-    addPage(entryPage);
-    addPage(sendExceptionPage);
-    addPage(exceptionSummaryPage);
+		entryPage = new ErrorReportWizardEntryPage();
+		sendExceptionPage = new ErrorReportWizardCommentPage();
+		exceptionSummaryPage = new ErrorReportWizardSummaryPage();
+		addPage(entryPage);
+		addPage(sendExceptionPage);
+		addPage(exceptionSummaryPage);
 	}
 
 	/**
@@ -70,12 +70,12 @@ public class ErrorReportWizard extends DynamicPathWizard
 	public boolean performFinish()
 	{
 		try {
-// obtain configuration
+//			obtain configuration
 			Config configuration = Config.sharedInstance(); 
 
-// create new ConfigModule or obtain the one read from xml files
+//			create new ConfigModule or obtain the one read from xml files
 			ErrorReportSenderCfMod cfMod  = (ErrorReportSenderCfMod) configuration.createConfigModule(ErrorReportSenderCfMod.class);  			
-			
+
 			Class clazz;
 			try {
 				clazz = Class.forName(cfMod.getErrorReportSenderClass());

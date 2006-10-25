@@ -159,6 +159,8 @@ public class EntityEditor extends CommitableFormEditor
 	 */
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		if (controller != null)
+			controller.checkDirtyPageControllers();
 		super.doSave(monitor);
 		int active = getActivePage();
 		Job saveJob = null;

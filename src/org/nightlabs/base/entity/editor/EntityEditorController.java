@@ -26,12 +26,16 @@
 
 package org.nightlabs.base.entity.editor;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -73,11 +77,13 @@ public class EntityEditorController
 	 * to the page controllers. The key of the controllers is the pageID of
 	 * the pageFactory registered by extension-point. 
 	 */
-	private Map<String, IEntityEditorPageController> pageControllers = new HashMap<String, IEntityEditorPageController>();
+	private Map<String, IEntityEditorPageController> pageControllers = new HashMap<String, IEntityEditorPageController>();	
 	/**
 	 * Reverse lookup map for {@link #pageControllers}.
 	 */
-	private Map<IEntityEditorPageController, IFormPage> controllerPages = new HashMap<IEntityEditorPageController, IFormPage>();
+	private Map<IEntityEditorPageController, Collection<IFormPage>> controllerPages = new HashMap<IEntityEditorPageController, Collection<IFormPage>>();
+	
+	private List<IEntityEditorPageController> dirtyPageControllers = new LinkedList<IEntityEditorPageController>();
 	
 	/**
 	 * Currently the maximum number of simultan jobs is configured with this constant.
@@ -94,8 +100,10 @@ public class EntityEditorController
 	private Map<IEntityEditorPageController, Job> loadJobPool = new TreeMap<IEntityEditorPageController, Job>(
 			new Comparator<IEntityEditorPageController>() {
 				public int compare(IEntityEditorPageController o1, IEntityEditorPageController o2) {
-					IFormPage page1 = getPage(o1);
-					IFormPage page2 = getPage(o2);
+					Collection<IFormPage> pages1 = getPages(o1);
+					Collection<IFormPage> pages2 = getPages(o2);
+					IFormPage page1 = pages1 == null ? null : pages1.iterator().next();
+					IFormPage page2 = pages2 == null ? null : pages2.iterator().next();
 					if (page1 == null || page2 == null)
 						return 0;
 					return new Integer(page1.getIndex()).compareTo(page2.getIndex());
@@ -137,7 +145,12 @@ public class EntityEditorController
 		pageController.setPage(page);
 		pageController.setEntityEditorController(this);
 		pageControllers.put(page.getId(), pageController);
-		controllerPages.put(pageController, page);
+		Collection<IFormPage> controllerPageCollection = controllerPages.get(pageController);
+		if (controllerPageCollection == null) {
+			controllerPageCollection = new HashSet<IFormPage>();
+			controllerPages.put(pageController, controllerPageCollection);
+		}
+		controllerPageCollection.add(page);
 	}
 	
 	/**
@@ -153,12 +166,12 @@ public class EntityEditorController
 	}
 	
 	/**
-	 * Return the page the given controller is linked to.
+	 * Return the pages the given controller is linked to.
 	 * 
 	 * @param pageController The page controller to search a page for.
-	 * @return The page the given controller is linked to.
+	 * @return The pages the given controller is linked to.
 	 */
-	protected IFormPage getPage(IEntityEditorPageController pageController) {
+	protected Collection<IFormPage> getPages(IEntityEditorPageController pageController) {
 		return controllerPages.get(pageController);
 	}
 
@@ -260,6 +273,21 @@ public class EntityEditorController
 	{
 	}
 
+	public void checkDirtyPageControllers() {
+		this.dirtyPageControllers.clear();
+		for (Entry<IEntityEditorPageController, Collection<IFormPage>> entry : controllerPages.entrySet()) {
+			boolean dirty = false;
+			for (IFormPage page : entry.getValue()) {
+				if (page.isDirty()) {
+					dirty = true;
+					break;
+				}
+			}
+			if (dirty)
+				dirtyPageControllers.add(entry.getKey());
+		}
+	}
+	
 	/**
 	 * Delegates to the {@link IEntityEditorPageController#doLoad(IProgressMonitor)}
 	 * method of all known {@link IEntityEditorPageController}s.
@@ -269,8 +297,19 @@ public class EntityEditorController
 	public void doSave(IProgressMonitor monitor)
 	{
 		logger.debug("Calling all page controllers doSave() method."); 
-		for (IEntityEditorPageController controller : pageControllers.values()) {
-			controller.doSave(monitor);
+//		for (Entry<IEntityEditorPageController, Collection<IFormPage>> entry : controllerPages.entrySet()) {
+//			boolean dirty = false;
+//			for (IFormPage page : entry.getValue()) {
+//				if (page.isDirty()) {
+//					dirty = true;
+//					break;
+//				}
+//			}
+//			if (dirty)
+//				entry.getKey().doSave(monitor);
+//		}
+		for (IEntityEditorPageController dirtyController : dirtyPageControllers) {
+			dirtyController.doSave(monitor);
 		}
 	}
 
