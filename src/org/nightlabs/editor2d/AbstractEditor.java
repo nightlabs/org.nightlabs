@@ -178,6 +178,7 @@ import org.nightlabs.io.IOFilterWithProgress;
 import org.nightlabs.io.WriteException;
 import org.nightlabs.print.page.IPredefinedPage;
 import org.nightlabs.print.page.PredefinedPageRegistry;
+import org.nightlabs.print.page.PredefinedPageUtil;
 
 
 public abstract class AbstractEditor 
@@ -1330,6 +1331,57 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		getUnitManager().setCurrentUnit(getMultiLayerDrawComponent().getModelUnit());      
 	}
 
+//	protected void initialzePage() 
+//	{
+//		logger.debug("initialize Page!");
+//		mldc = getMultiLayerDrawComponent();
+//		loadAdditional();
+//
+//		String pageID = Preferences.getPreferenceStore().getString(
+//				Preferences.PREF_PREDEFINED_PAGE_ID);
+//		IPredefinedPage defaultPage = getPredefinedPageRegistry().getPage(pageID);
+//		IUnit pageUnit = defaultPage.getUnit();    	
+//		String resolutionUnitID = Preferences.getPreferenceStore().getString(
+//				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID);
+//		IResolutionUnit resUnit = getResolutionUnitRegistry().getResolutionUnit(resolutionUnitID);
+//		Resolution resolution = new ResolutionImpl(resUnit, 
+//				Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION)); 
+//
+//		double pageHeight = defaultPage.getPageHeight() * pageUnit.getFactor();
+//		double pageWidth = defaultPage.getPageWidth() * pageUnit.getFactor();  
+//		
+//		DotUnit dotUnit = (DotUnit) getUnitRegistry().getUnit(DotUnit.UNIT_ID);
+//		if (dotUnit == null) {
+//			dotUnit = new DotUnit(resolution);
+//			getUnitRegistry().addUnit(dotUnit, UnitConstants.UNIT_CONTEXT_EDITOR2D);			
+//		}
+//		else 
+//			dotUnit.setResolution(resolution);
+//		double factor = dotUnit.getFactor();    	
+//
+//		String unitID = Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_UNIT_ID);
+//		getUnitManager().setCurrentUnit(getUnitRegistry().getUnit(unitID));
+//		
+//		logger.debug("factor = "+factor);
+//		logger.debug("pageHeight = "+pageHeight+" mm");
+//		logger.debug("pageWidth = "+pageWidth+" mm");    		  	
+//
+//		pageWidth = pageWidth * factor;
+//		pageHeight = pageHeight * factor;
+//
+//		logger.debug("new PageHeight = "+pageHeight);
+//		logger.debug("new PageWidth = "+pageWidth);
+//
+//		double defaultX = 0;
+//		double defaultY = 0;
+//
+//		Rectangle pageBounds = new Rectangle((int)defaultX, (int)defaultY, (int)pageWidth, (int)pageHeight);
+//		logger.debug("pageBounds = "+pageBounds);	  	
+//
+//		getMultiLayerDrawComponent().setResolution(resolution);  	  	
+//		getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 	  	
+//	}
+
 	protected void initialzePage() 
 	{
 		logger.debug("initialize Page!");
@@ -1345,9 +1397,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		IResolutionUnit resUnit = getResolutionUnitRegistry().getResolutionUnit(resolutionUnitID);
 		Resolution resolution = new ResolutionImpl(resUnit, 
 				Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION)); 
-
-		double pageHeight = defaultPage.getPageHeight() * pageUnit.getFactor();
-		double pageWidth = defaultPage.getPageWidth() * pageUnit.getFactor();  
 		
 		DotUnit dotUnit = (DotUnit) getUnitRegistry().getUnit(DotUnit.UNIT_ID);
 		if (dotUnit == null) {
@@ -1355,32 +1404,16 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			getUnitRegistry().addUnit(dotUnit, UnitConstants.UNIT_CONTEXT_EDITOR2D);			
 		}
 		else 
-			dotUnit.setResolution(resolution);
-		double factor = dotUnit.getFactor();    	
+			dotUnit.setResolution(resolution);    	
 
 		String unitID = Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_UNIT_ID);
 		getUnitManager().setCurrentUnit(getUnitRegistry().getUnit(unitID));
 		
-		logger.debug("factor = "+factor);
-		logger.debug("pageHeight = "+pageHeight+" mm");
-		logger.debug("pageWidth = "+pageWidth+" mm");    		  	
-
-		pageWidth = pageWidth * factor;
-		pageHeight = pageHeight * factor;
-
-		logger.debug("new PageHeight = "+pageHeight);
-		logger.debug("new PageWidth = "+pageWidth);
-
-		double defaultX = 0;
-		double defaultY = 0;
-
-		Rectangle pageBounds = new Rectangle((int)defaultX, (int)defaultY, (int)pageWidth, (int)pageHeight);
-		logger.debug("pageBounds = "+pageBounds);	  	
-
+		Rectangle pageBounds = PredefinedPageUtil.getPageBounds(dotUnit, defaultPage);
 		getMultiLayerDrawComponent().setResolution(resolution);  	  	
 		getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 	  	
-	}
-
+	}	
+	
 	protected ResolutionUnitRegistry getResolutionUnitRegistry() {
 		return ResolutionUnitEP.sharedInstance().getResolutionUnitRegistry();
 	}

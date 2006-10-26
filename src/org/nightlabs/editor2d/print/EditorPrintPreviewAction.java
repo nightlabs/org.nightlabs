@@ -25,21 +25,14 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.print;
 
-import java.awt.print.PageFormat;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
-import org.nightlabs.print.AWTPrinter;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class EditorPrintPreviewAction 
-//extends AbstractEditorAction 
+public class EditorPrintPreviewAction  
 extends AbstractEditorPrintAction
 {
 	public static final String ID = EditorPrintPreviewAction.class.getName();

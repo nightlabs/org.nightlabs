@@ -31,12 +31,11 @@ import java.awt.print.PrinterException;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 
-import org.apache.log4j.Logger;
 import org.nightlabs.base.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.actions.AbstractEditorAction;
-import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
+import org.nightlabs.editor2d.print.DrawComponentPrintable.PrintConstant;
 import org.nightlabs.print.AWTPrinter;
 import org.nightlabs.print.PrinterInterface;
 
@@ -45,12 +44,7 @@ import org.nightlabs.print.PrinterInterface;
  */
 public abstract class AbstractEditorPrintAction 
 extends AbstractEditorAction 
-{
-	/**
-	 * LOG4J logger used by this class
-	 */
-	private static final Logger logger = Logger.getLogger(AbstractEditorPrintAction.class);
-	
+{	
 	/**
 	 * @param editor
 	 * @param style
@@ -93,15 +87,8 @@ extends AbstractEditorAction
 		return (AWTPrinter) printer;
 	}
 		
-	public Printable getPrintable(PrintConstant printConstant) 
-	{
-		switch (printConstant) {
-			case FIT_ALL:
-				return new EditorPrintable(getDrawComponent(), printConstant, 1);
-			case FIT_PAGE:
-				return new EditorPrintable(getDrawComponent(), printConstant, 1);				
-		}
-		return new EditorPrintable(getDrawComponent(), printConstant, 1);		
+	public Printable getPrintable(PrintConstant printConstant) {
+		return new EditorPrintable(getDrawComponent(), printConstant);		
 	}
 	
 	public DrawComponent getDrawComponent() {

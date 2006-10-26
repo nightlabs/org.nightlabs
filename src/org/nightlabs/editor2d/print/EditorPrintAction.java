@@ -32,14 +32,13 @@ import org.apache.log4j.Logger;
 import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.print.EditorPrintable.PrintConstant;
+import org.nightlabs.editor2d.print.DrawComponentPrintable.PrintConstant;
 import org.nightlabs.print.AWTPrinter;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
 public class EditorPrintAction
-//extends AbstractEditorAction
 extends AbstractEditorPrintAction
 {
 	public static final String ID = ActionFactory.PRINT.getId();
