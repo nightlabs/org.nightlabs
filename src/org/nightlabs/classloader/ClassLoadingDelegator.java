@@ -333,13 +333,60 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.classloader.IDelegatingClassLoader#findDelegateClass(java.lang.String)
 	 */
-	public Class findDelegateClass(String name) throws ClassNotFoundException {
-		LogUtil.log_debug(this.getClass(), "findClass", "Entered findClass for name \"" + name + "\".");
+	public Class findDelegateClass(String name)
+	throws ClassNotFoundException
+	{
+		LogUtil.log_debug(this.getClass(), "findDelegateClass", "Entered findClass for name \"" + name + "\".");
 
+// TODO As a WORKAROUND, this method delegates to internalFindDelegateClass multiple times, if a LinkageError
+//		occurs in order to prevent the problem described by the stacktrace below.
+//		On the long run, we should prevent this problem with clean synchronization on the class to be loaded
+//		(not the whole method!!!). The clean solution is a bit complicated however, because we must - at the
+//		same time - ensure that no dead-locks occur.
+//
+//		java.lang.LinkageError: duplicate class definition: org/nightlabs/ipanema1/usergroup/UserGroupID
+//		at java.lang.ClassLoader.defineClass1(Native Method)
+//		at java.lang.ClassLoader.defineClass(Unknown Source)
+//		at org.nightlabs.classloader.osgi.DelegatingClassLoaderOSGI.delegateDefineClass(DelegatingClassLoaderOSGI.java:156)
+//		at org.nightlabs.classloader.ClassLoadingDelegator.defineClassFromInputStream(ClassLoadingDelegator.java:590)
+//		at org.nightlabs.classloader.ClassLoadingDelegator.findDelegateClass(ClassLoadingDelegator.java:428)
+//		at org.nightlabs.classloader.osgi.DelegatingClassLoaderOSGI.findDelegateClass(DelegatingClassLoaderOSGI.java:144)
+//		at org.nightlabs.classloader.osgi.DelegatingClassLoaderOSGI.findLocalClass(DelegatingClassLoaderOSGI.java:79)
+//		at org.eclipse.osgi.framework.internal.core.BundleLoader.findLocalClass(BundleLoader.java:339)
+//		at org.eclipse.osgi.framework.internal.core.SingleSourcePackage.loadClass(SingleSourcePackage.java:37)
+//		at org.eclipse.osgi.framework.internal.core.BundleLoader.findClass(BundleLoader.java:388)
+//		at org.eclipse.osgi.framework.internal.core.BundleLoader.findClass(BundleLoader.java:352)
+//		at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:83)
+
+		int maxTryCount = 5;
+		long sleepOnErrorMSec = 500;
+		int tryCounter = 0;
+		while (true) {
+			try {
+				return internalFindDelegateClass(name);
+			} catch (LinkageError error) {
+				if (++tryCounter > maxTryCount) {
+					LogUtil.log_error(this.getClass(), "findDelegateClass", "internalFindDelegateClass failed with " + error.getClass().getName() + " (will escalate): " + error.getMessage());
+					throw error;
+				}
+
+				LogUtil.log_warn(this.getClass(), "findDelegateClass", "internalFindDelegateClass failed with " + error.getClass().getName() + " (will sleep " + sleepOnErrorMSec + " msec and try again): " + error.getMessage());
+				try {
+					Thread.sleep(sleepOnErrorMSec);
+				} catch (InterruptedException e) {
+					// ignore
+				}
+			}
+		}
+	}
+
+	protected Class internalFindDelegateClass(String name)
+	throws ClassNotFoundException
+	{
 		synchronized(foundClasses) {
 			ClassSearchResult csr = (ClassSearchResult)foundClasses.get(name);
 			if (csr != null) {
-				LogUtil.log_debug(this.getClass(), "findClass", "Already searched the class \""+name+"\" before. Returning "+csr.getFoundClass());
+				LogUtil.log_debug(this.getClass(), "internalFindDelegateClass", "Already searched the class \""+name+"\" before. Returning "+csr.getFoundClass());
 				if (csr.getFoundClass() != null)
 					return csr.getFoundClass();
 				else
@@ -350,7 +397,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 		String threadClassKey = Thread.currentThread().toString() + '/' + name;
 		synchronized(ignoredThreadsClassesOrResources) {
 			if (ignoredThreadsClassesOrResources.contains(threadClassKey)) {
-				LogUtil.log_debug(this.getClass(), "findClass", "Entered findClass recursively for name \"" + name + "\"! Will throw a ClassNotFoundException to prevent endless recursion!");
+				LogUtil.log_debug(this.getClass(), "internalFindDelegateClass", "Entered findClass recursively for name \"" + name + "\"! Will throw a ClassNotFoundException to prevent endless recursion!");
 
 				throw new ClassNotFoundException("Recursive call of DelegatingClassLoader!");
 			}
@@ -407,7 +454,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 					}
 				}
 				else {
-					LogUtil.log_warn(this.getClass(), "findClass", "Path entry \""+pe.getPath()+"\" defined in 'java.ext.dirs' or 'java.class.path' is neither a directory nor a readable jar file!");
+					LogUtil.log_warn(this.getClass(), "internalFindDelegateClass", "Path entry \""+pe.getPath()+"\" defined in 'java.ext.dirs' or 'java.class.path' is neither a directory nor a readable jar file!");
 				}
 			}
 
@@ -437,10 +484,10 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			}
 
 			if (foundClass != null) {
-				LogUtil.log_debug(this.getClass(), "findClass", "DelegatingClassLoader.findClass(\""+name+"\"): responsible ClassLoader: " + foundClass.getClassLoader());
+				LogUtil.log_debug(this.getClass(), "internalFindDelegateClass", "DelegatingClassLoader.findClass(\""+name+"\"): responsible ClassLoader: " + foundClass.getClassLoader());
 			  return foundClass;
 			}
-			LogUtil.log_debug(this.getClass(), "findClass", "DelegatingClassLoader.findClass(\""+name+"\"): Did not find class!");
+			LogUtil.log_debug(this.getClass(), "internalFindDelegateClass", "DelegatingClassLoader.findClass(\""+name+"\"): Did not find class!");
 
 		} finally {
 			synchronized (ignoredThreadsClassesOrResources) {
