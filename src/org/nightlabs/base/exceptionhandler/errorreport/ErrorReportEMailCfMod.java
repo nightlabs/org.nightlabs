@@ -37,8 +37,10 @@ import org.nightlabs.config.InitException;
  */
 public class ErrorReportEMailCfMod extends ConfigModule
 {
+	private static final long serialVersionUID = 1L;
+
 	private String mailFrom = null;
-	private List mailTo = null;
+	private List<String> mailTo = null;
 	private String smtpHost = null;
 
 
@@ -53,17 +55,11 @@ public class ErrorReportEMailCfMod extends ConfigModule
 	{
 		super.init();
 		if (mailFrom == null)
-			mailFrom = "ipanema@nightlabs.de";
+			mailFrom = "jfire@nightlabs.org";
 		if (mailTo == null)
 		{
-			mailTo = new CfModList(this);
-			mailTo.add("dev@nightlabs.de");
-//			mailTo.add("simon@nightlabs.de");
-//			mailTo.add("garbage@nightlabs.de");
-//			mailTo.add("alex@nightlabs.de");
-//			mailTo.add("nick@nightlabs.de");
-//			mailTo.add("marco@nightlabs.de");
-
+			mailTo = new CfModList<String>(this);
+			mailTo.add("bugsadmin@nightlabs.org");
 		}
 		if (smtpHost == null)
 			smtpHost = "mail.nightlabs.de";
@@ -82,7 +78,7 @@ public class ErrorReportEMailCfMod extends ConfigModule
 	{
 		return mailTo;
 	}
-	public void setMailTo(List mailTo)
+	public void setMailTo(List<String> mailTo)
 	{
 		this.mailTo = mailTo;
 		setChanged();
