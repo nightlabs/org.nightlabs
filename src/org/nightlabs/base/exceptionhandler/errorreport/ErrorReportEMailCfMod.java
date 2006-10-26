@@ -59,7 +59,7 @@ public class ErrorReportEMailCfMod extends ConfigModule
 		if (mailTo == null)
 		{
 			mailTo = new CfModList<String>(this);
-			mailTo.add("bugsadmin@nightlabs.org");
+			mailTo.add("bugreport@nightlabs.org");
 		}
 		if (smtpHost == null)
 			smtpHost = "mail.nightlabs.de";
