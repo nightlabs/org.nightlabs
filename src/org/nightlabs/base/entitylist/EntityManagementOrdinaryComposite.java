@@ -43,7 +43,7 @@ extends XComposite
 implements EntityManager
 {
 	protected Set dataChangedListeners;
-	
+
 	public EntityManagementOrdinaryComposite(Composite parent, int style)
 	{
 		this(parent, style, false);
@@ -58,64 +58,64 @@ implements EntityManager
 	}
 
 	/**
-   * Call this when you modified the entity object.
-   *
-   */
-  public void notifyDataChangedListeners()
-  {
-  	Iterator i = dataChangedListeners.iterator();
-  	while(i.hasNext())
-  		((EntityDataChangedListener)i.next()).entityDataChanged(this);
-  }
+	 * Call this when you modified the entity object.
+	 *
+	 */
+	public void notifyDataChangedListeners()
+	{
+		Iterator i = dataChangedListeners.iterator();
+		while(i.hasNext())
+			((EntityDataChangedListener)i.next()).entityDataChanged(this);
+	}
 
-  /**
-   * Listen for modifications of the entity object
-   * @param listener your listener
-   */
-  public void addDataChangedListener(EntityDataChangedListener listener)
-  {
-  	if(!dataChangedListeners.contains(listener))
-  		dataChangedListeners.add(listener);
-  }
+	/**
+	 * Listen for modifications of the entity object
+	 * @param listener your listener
+	 */
+	public void addDataChangedListener(EntityDataChangedListener listener)
+	{
+		if(!dataChangedListeners.contains(listener))
+			dataChangedListeners.add(listener);
+	}
 
-  /**
-   * Remove a listener
-   * @param listener the listener
-   */
-  public void removeDataChangedListener(EntityDataChangedListener listener)
-  {
-  	if(dataChangedListeners.contains(listener))
-  		dataChangedListeners.remove(listener);
-  }
+	/**
+	 * Remove a listener
+	 * @param listener the listener
+	 */
+	public void removeDataChangedListener(EntityDataChangedListener listener)
+	{
+		if(dataChangedListeners.contains(listener))
+			dataChangedListeners.remove(listener);
+	}
 
-  /**
-   * @deprecated this feature is never used und thus don't works
-   * FIXME: remove this!
-   */
+	/**
+	 * @deprecated this feature is never used und thus don't works
+	 * FIXME: remove this!
+	 */
 	private boolean changed = false;
-	
-  /**
-   * @deprecated this feature is never used und thus don't works
-   * FIXME: remove this!
-   */
+
+	/**
+	 * @deprecated this feature is never used und thus don't works
+	 * FIXME: remove this!
+	 */
 	public void setChanged(boolean changed) {
 		this.changed = changed;
 		if (changed)
 			notifyDataChangedListeners();
 	}
-	
-  /**
-   * @deprecated this feature is never used und thus don't works
-   * FIXME: remove this!
-   */
+
+	/**
+	 * @deprecated this feature is never used und thus don't works
+	 * FIXME: remove this!
+	 */
 	public boolean isChanged() {
 		return changed;
 	}
-	
-  public void dispose()
-  {
-  	super.dispose();
-  	dataChangedListeners.clear();
-  	dataChangedListeners = null;
-  }
+
+	public void dispose()
+	{
+		super.dispose();
+		dataChangedListeners.clear();
+		dataChangedListeners = null;
+	}
 }
