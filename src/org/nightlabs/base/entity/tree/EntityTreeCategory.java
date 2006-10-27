@@ -23,9 +23,15 @@
  ******************************************************************************/
 package org.nightlabs.base.entity.tree;
 
-import org.eclipse.core.commands.common.EventManager;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -36,8 +42,9 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
  * 
  * @version $Revision: 4430 $ - $Date: 2006-08-20 17:18:07 +0000 (Sun, 20 Aug 2006) $
  * @author Marc Klinger - marc[at]nightlabs[dot]de
+ * @author marco schulze - marco at nightlabs dot de
  */
-public abstract class EntityTreeCategory extends EventManager implements IEntityTreeCategory
+public abstract class EntityTreeCategory implements IEntityTreeCategory
 {
 	/**
 	 * The id of this category.
@@ -96,41 +103,49 @@ public abstract class EntityTreeCategory extends EventManager implements IEntity
 			indexHint = Integer.MAX_VALUE / 2;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.admin.entityeditor.IEntityTreeCategory#addEntityTreeCategoryChangeListener(org.nightlabs.jfire.base.admin.entityeditor.IEntityTreeCategoryChangeListener)
-	 */
-	public void addEntityTreeCategoryChangeListener(IEntityTreeCategoryChangeListener listener)
+	private Set<IEntityTreeCategoryContentConsumer> contentConsumers = new HashSet<IEntityTreeCategoryContentConsumer>(); 
+
+	public ITreeContentProvider createContentProvider(final IEntityTreeCategoryContentConsumer contentConsumer)
 	{
-		addListenerObject(listener);
+		contentConsumers.add(contentConsumer);
+		contentConsumer.addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent e)
+			{
+				contentConsumers.remove(contentConsumer);
+				onContentConsumerDisposed(e, contentConsumer, contentConsumers);
+			}
+		});
+		return _createContentProvider(contentConsumer);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.admin.entityeditor.IEntityTreeCategory#removeEntityTreeCategoryChangeListener(org.nightlabs.jfire.base.admin.entityeditor.IEntityTreeCategoryChangeListener)
-	 */
-	public void removeEntityTreeCategoryChangeListener(IEntityTreeCategoryChangeListener listener)
-	{
-		removeListenerObject(listener);
-	}
+	protected abstract ITreeContentProvider _createContentProvider(IEntityTreeCategoryContentConsumer contentConsumer);
 
 	/**
-	 * Returns the count of listeners attached to this category
-	 * @return The count of listeners attached to this category
+	 * This method is triggered whenever an {@link IEntityTreeCategoryContentConsumer} is disposed.
+	 *
+	 * @param e the event
+	 * @param contentConsumer The currently disposed consumer - it is not contained in <code>contentConsumers</code> anymore.
+	 * @param contentConsumers The consumers that are still left (<code>contentConsumer</code> is already removed). If
+	 *		this set is empty, you should release all data and listeners you kept.
 	 */
-	protected int getListenerCount() {
-		return getListeners().length;
+	protected void onContentConsumerDisposed(DisposeEvent e, IEntityTreeCategoryContentConsumer contentConsumer, Set<IEntityTreeCategoryContentConsumer> contentConsumers)
+	{
+		// this implementation is empty
 	}
-	
+
 	/**
 	 * Fire a category change event. This will notify listeners
 	 * about content and structure changes within this category.
 	 */
 	protected void fireEntityTreeCategoryChange() 
 	{
-	  Object[] array = getListeners();
-	  for (int nX = 0; nX < array.length; nX++) {
-	    final IEntityTreeCategoryChangeListener l = (IEntityTreeCategoryChangeListener) array[nX];
-	    l.categoryChanged(EntityTreeCategory.this);
-	  }
+		ContentChangedEvent event = null;
+		for (IEntityTreeCategoryContentConsumer consumer : new ArrayList<IEntityTreeCategoryContentConsumer>(contentConsumers)) {
+			if (event == null)
+				event = new ContentChangedEvent(this);
+
+			consumer.contentChanged(event);
+		}
 	}
 	
 	/* (non-Javadoc)

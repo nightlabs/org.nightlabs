@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -49,6 +50,8 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
  */
 public class EntityEditorRegistry extends AbstractEPProcessor
 {
+	private static final Logger logger = Logger.getLogger(EntityEditorRegistry.class);
+
 	/**
 	 * The extension point id this registry is for.
 	 */
@@ -132,20 +135,36 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 	throws EPProcessorException
 	{
 		try {
-			if(element.getName().equals("category")) {
+			if("category".equals(element.getName())) {
 				if(categoriesByViewID == null)
 					categoriesByViewID = new HashMap<String, List<IEntityTreeCategory>>();
-				String viewID = element.getAttribute("viewID");
-				if (!checkString(viewID))
-					throw new EPProcessorException("The viewID attribute has to be defined.", extension);
-				List<IEntityTreeCategory> categories = categoriesByViewID.get(viewID);
-				if (categories == null) {
-					categories = new ArrayList<IEntityTreeCategory>();
-					categoriesByViewID.put(viewID, categories);
+
+				IEntityTreeCategory category = (IEntityTreeCategory)element.createExecutableExtension("class");
+
+				Set<String> viewIDs = new HashSet<String>();
+				IConfigurationElement[] children = element.getChildren();System.out.println(extension.getNamespaceIdentifier());
+				for (IConfigurationElement child : children) {
+					if ("viewBinding".equals(child.getName())) {
+						String viewID = child.getAttribute("viewID");
+						if (!checkString(viewID))
+							throw new EPProcessorException("The viewID attribute has to be defined.", extension);
+						if (viewIDs.contains(viewID))
+							logger.warn("The viewID \""+viewID+"\" is defined twice within the EntityTreeCategory \""+category.getId()+"\"! Plugin: " + extension.getNamespaceIdentifier());
+						else
+							viewIDs.add(viewID);
+					}
 				}
-				categories.add((IEntityTreeCategory)element.createExecutableExtension("class"));
+
+				for (String viewID : viewIDs) {
+					List<IEntityTreeCategory> categories = categoriesByViewID.get(viewID);
+					if (categories == null) {
+						categories = new ArrayList<IEntityTreeCategory>();
+						categoriesByViewID.put(viewID, categories);
+					}
+					categories.add(category);
+				}
 			}
-			else if(element.getName().equals("pageFactory")) {
+			else if("pageFactory".equals(element.getName())) {
 				String editorID = element.getAttribute("editorID");
 				addPage(editorID, new EntityEditorPageSettings(extension, element));
 			}

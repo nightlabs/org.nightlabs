@@ -63,7 +63,7 @@ import org.nightlabs.base.util.RCPUtil;
  */
 public class EntityTree 
 extends AbstractTreeComposite 
-implements IEntityTreeCategoryChangeListener, IOpenListener, DisposeListener 
+implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 {
 	/**
 	 * Logger used by this class.
@@ -97,10 +97,10 @@ implements IEntityTreeCategoryChangeListener, IOpenListener, DisposeListener
 		init();
 		categories = EntityEditorRegistry.sharedInstance().getCategories(viewID);
 		getTreeViewer().setInput(categories);
-		for (IEntityTreeCategory category : categories) {
-			//System.err.println("category: "+category.getName());
-			category.addEntityTreeCategoryChangeListener(this);
-		}
+//		for (IEntityTreeCategory category : categories) {
+//			//System.err.println("category: "+category.getName());
+//			category.addEntityTreeCategoryChangeListener(this);
+//		}
 		getTreeViewer().addOpenListener(this);
 		getTree().setHeaderVisible(false);
 		addDisposeListener(this);
@@ -137,13 +137,12 @@ implements IEntityTreeCategoryChangeListener, IOpenListener, DisposeListener
 		treeViewer.setLabelProvider(new EntityTreeLabelProvider());
 	}
 
-	
 	/**
 	 * The content provider for the entity tree. This provider
 	 * will use data obtained by calling methods defined in
 	 * {@link IEntityTreeCategory}.
 	 */
-	class EntityTreeContentProvider extends TreeContentProvider 
+	protected class EntityTreeContentProvider extends TreeContentProvider 
 	{
 		private Map<IEntityTreeCategory, ITreeContentProvider> contentProviders = new HashMap<IEntityTreeCategory, ITreeContentProvider>();
 
@@ -152,11 +151,11 @@ implements IEntityTreeCategoryChangeListener, IOpenListener, DisposeListener
 				return null;
 			if (contentProviders.containsKey(category))
 				return contentProviders.get(category);
-			ITreeContentProvider result = category.getContentProvider();
+			ITreeContentProvider result = category.createContentProvider(EntityTree.this);
 			contentProviders.put(category, result);
 			return result;
 		}
-		
+
 		/* (non-Javadoc)
 		 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
 		 */
@@ -237,6 +236,15 @@ implements IEntityTreeCategoryChangeListener, IOpenListener, DisposeListener
 				return contentProvider.getParent(element);
 			return super.getParent(element);
 		}
+
+		@Override
+		public void dispose()
+		{
+			for (ITreeContentProvider cp : contentProviders.values())
+				cp.dispose();
+
+			super.dispose();
+		}
 	}
 
 	/**
@@ -244,7 +252,7 @@ implements IEntityTreeCategoryChangeListener, IOpenListener, DisposeListener
 	 * will use data obtained by calling methods defined in
 	 * {@link IEntityTreeCategory}.
 	 */
-	class EntityTreeLabelProvider extends LabelProvider implements ITableLabelProvider 
+	protected class EntityTreeLabelProvider extends LabelProvider implements ITableLabelProvider 
 	{
 		private Map<IEntityTreeCategory, ITableLabelProvider> labelProviders = new HashMap<IEntityTreeCategory, ITableLabelProvider>();
 		
@@ -253,7 +261,7 @@ implements IEntityTreeCategoryChangeListener, IOpenListener, DisposeListener
 				return null;			
 			if (labelProviders.containsKey(category))
 				return labelProviders.get(category);
-			ITableLabelProvider labelProvider = category.getLabelProvider();
+			ITableLabelProvider labelProvider = category.createLabelProvider();
 			labelProviders.put(category, labelProvider);
 			return labelProvider;			
 		}
@@ -352,18 +360,6 @@ implements IEntityTreeCategoryChangeListener, IOpenListener, DisposeListener
 		return getChildCategory(element);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.admin.entityeditor.IEntityTreeCategoryChangeListener#categoryChanged(org.nightlabs.jfire.base.admin.entityeditor.EntityTreeCategory)
-	 */
-	public void categoryChanged(final EntityTreeCategory category)
-	{
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				getTreeViewer().refresh(category);
-			}
-		});
-	}
-
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -413,9 +409,18 @@ implements IEntityTreeCategoryChangeListener, IOpenListener, DisposeListener
 
 	public void widgetDisposed(DisposeEvent arg0) {
 		getTreeViewer().removeOpenListener(this);
-		for (IEntityTreeCategory category : categories) {
-			category.removeEntityTreeCategoryChangeListener(this);
-		}
+//		for (IEntityTreeCategory category : categories) {
+//			category.removeEntityTreeCategoryChangeListener(this);
+//		}
 	}
-	
+
+	public void contentChanged(final ContentChangedEvent event)
+	{
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				getTreeViewer().refresh(event.getEntityTreeCategory());
+			}
+		});
+	}
+
 }

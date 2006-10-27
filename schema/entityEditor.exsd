@@ -56,17 +56,13 @@ the values defined in the extension will automatically set for this category.
          </documentation>
       </annotation>
       <complexType>
+         <sequence>
+            <element ref="viewBinding" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
          <attribute name="id" type="string">
             <annotation>
                <documentation>
                   The unique id of this category.
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="viewID" type="string" use="required">
-            <annotation>
-               <documentation>
-                  The id of the view this category should be displayed in.
                </documentation>
             </annotation>
          </attribute>
@@ -142,6 +138,18 @@ the values defined in the extension will automatically set for this category.
             <annotation>
                <documentation>
                   A hint for positioning this page in the editor&apos;s tab-order.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="viewBinding">
+      <complexType>
+         <attribute name="viewID" type="string">
+            <annotation>
+               <documentation>
+                  
                </documentation>
             </annotation>
          </attribute>

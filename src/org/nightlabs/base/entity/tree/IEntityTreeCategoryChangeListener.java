@@ -34,5 +34,5 @@ public interface IEntityTreeCategoryChangeListener
 	 * An entity tree category has changed.
 	 * @param category The category that changed.
 	 */
-	public void categoryChanged(EntityTreeCategory category);
+	public void categoryChanged(IEntityTreeCategory category);
 }
