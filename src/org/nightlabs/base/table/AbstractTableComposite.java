@@ -217,6 +217,7 @@ implements ISelectionProvider
 		for (int i = 0; i < selection.length; i++) {
 			selection[i] = selIndexes.get(i);
 		}
+		tableViewer.getTable().setSelection(new int[] {});
 		tableViewer.getTable().select(selection);
 	}
 
