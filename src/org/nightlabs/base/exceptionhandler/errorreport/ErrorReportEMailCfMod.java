@@ -55,11 +55,11 @@ public class ErrorReportEMailCfMod extends ConfigModule
 	{
 		super.init();
 		if (mailFrom == null)
-			mailFrom = "jfire@nightlabs.org";
+			mailFrom = "jfire"+'@'+"nightlabs.org";
 		if (mailTo == null)
 		{
 			mailTo = new CfModList<String>(this);
-			mailTo.add("bugreport@nightlabs.org");
+			mailTo.add("bugreport"+'@'+"nightlabs.org");
 		}
 		if (smtpHost == null)
 			smtpHost = "mail.nightlabs.de";
