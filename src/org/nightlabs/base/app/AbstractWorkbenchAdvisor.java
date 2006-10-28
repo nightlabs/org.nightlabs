@@ -127,7 +127,7 @@ extends WorkbenchAdvisor
 	{
 		boolean superResult = super.preShutdown();
 		try {
-			org.nightlabs.config.Config.sharedInstance().saveConfFile();
+			org.nightlabs.config.Config.sharedInstance().save();
 		} catch (ConfigException e) {
 			logger.error("Saving config failed!", e);
 		}
@@ -143,7 +143,20 @@ extends WorkbenchAdvisor
 		return application;
 	}
 
-	protected abstract AbstractApplication initApplication();	
+	/**
+	 * Init the application.
+	 * <p>
+	 * The default implementation returns 
+	 * {@link AbstractApplication#sharedInstance()}
+	 * which should be the application that is
+	 * currently running.
+	 * <p>
+	 * Extendors might call <code>super.initApplication()</code>
+	 * and then modify the result.
+	 */
+	protected AbstractApplication initApplication() {
+		return AbstractApplication.sharedInstance();
+	}
 
 	/**
 	 * creates the DefaultWorkbenchWindowAdvisor by default.

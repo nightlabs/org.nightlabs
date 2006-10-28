@@ -95,7 +95,7 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 		super(parent, false);
 //		this.viewID = viewID;
 		init();
-		categories = EntityEditorRegistry.sharedInstance().getCategories(viewID);
+		categories = EntityEditorRegistry.sharedInstance().getViewBindingCategories(viewID);
 		getTreeViewer().setInput(categories);
 //		for (IEntityTreeCategory category : categories) {
 //			//System.err.println("category: "+category.getName());

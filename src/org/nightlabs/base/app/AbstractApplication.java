@@ -58,10 +58,17 @@ implements IPlatformRunnable
 	 */
 	public static final String APPLICATION_SYSTEM_PROPERTY_NAME = "nightlabs.base.application.name";
 
+	protected static AbstractApplication sharedInstance;
+	
+	protected static AbstractApplication sharedInstance() {
+		return sharedInstance;
+	}
+	
 	public AbstractApplication() 
 	{
 		super();
 		init();
+		sharedInstance = this;
 	}
 
 	private static String applicationName = "AbstractApplication";

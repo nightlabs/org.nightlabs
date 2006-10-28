@@ -74,9 +74,56 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 	}
 
 	/**
+	 * CategoryBindings used to store and sort references/uses
+	 * of {@link IEntityTreeCategory}s. 
+	 */
+	private class CategoryBinding implements Comparable<CategoryBinding> {
+		private String categoryID;
+		private IEntityTreeCategory category;
+		private int indexHint;
+		
+		public CategoryBinding(IEntityTreeCategory category, int indexHint) { 
+			this.category = category;
+			this.indexHint = indexHint;
+		}
+		
+		public CategoryBinding(String categoryID, int indexHint) { 
+			this.categoryID = categoryID;
+			this.indexHint = indexHint;
+		}
+		
+		public int compareTo(CategoryBinding o) {
+			return indexHint - o.indexHint;
+		}
+
+		public IEntityTreeCategory getCategory() {
+			return category;
+		}
+
+		public int getIndexHint() {
+			return indexHint;
+		}
+
+		public void resolve() {
+			if (category == null) {
+				if (categoryID == null)
+					throw new IllegalStateException("Have CategoryBinding with no categoryID");
+				category = categories.get(categoryID);
+				if (category == null)
+					logger.error("A category binding could not be resolved. Bound to "+categoryID);
+			}
+		}
+	}
+
+	/**
+	 * All registered categories by their id.
+	 */
+	private Map<String, IEntityTreeCategory> categories = new HashMap<String, IEntityTreeCategory>();
+	
+	/**
 	 * Category extensions.
 	 */
-	private Map<String, List<IEntityTreeCategory>> categoriesByViewID;
+	private Map<String, List<CategoryBinding>> categoriesByViewID = new HashMap<String, List<CategoryBinding>>();
 
 	/**
 	 * Editor page extensions.
@@ -135,46 +182,69 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 	throws EPProcessorException
 	{
 		try {
-			if("category".equals(element.getName())) {
+			if("category".equalsIgnoreCase(element.getName())) {
 				if(categoriesByViewID == null)
-					categoriesByViewID = new HashMap<String, List<IEntityTreeCategory>>();
+					categoriesByViewID = new HashMap<String, List<CategoryBinding>>();
 
 				IEntityTreeCategory category = (IEntityTreeCategory)element.createExecutableExtension("class");
+				
+				categories.put(category.getId(), category);
 
-				Set<String> viewIDs = new HashSet<String>();
 				IConfigurationElement[] children = element.getChildren();System.out.println(extension.getNamespaceIdentifier());
 				for (IConfigurationElement child : children) {
-					if ("viewBinding".equals(child.getName())) {
-						String viewID = child.getAttribute("viewID");
-						if (!checkString(viewID))
-							throw new EPProcessorException("The viewID attribute has to be defined.", extension);
-						if (viewIDs.contains(viewID))
-							logger.warn("The viewID \""+viewID+"\" is defined twice within the EntityTreeCategory \""+category.getId()+"\"! Plugin: " + extension.getNamespaceIdentifier());
-						else
-							viewIDs.add(viewID);
+					if ("viewBinding".equalsIgnoreCase(child.getName())) {
+						processViewBinding(extension, child, category.getId(), category);
 					}
-				}
-
-				for (String viewID : viewIDs) {
-					List<IEntityTreeCategory> categories = categoriesByViewID.get(viewID);
-					if (categories == null) {
-						categories = new ArrayList<IEntityTreeCategory>();
-						categoriesByViewID.put(viewID, categories);
-					}
-					categories.add(category);
 				}
 			}
-			else if("pageFactory".equals(element.getName())) {
+			else if("pageFactory".equalsIgnoreCase(element.getName())) {
 				String editorID = element.getAttribute("editorID");
 				addPage(editorID, new EntityEditorPageSettings(extension, element));
+			}
+			else if ("viewBinding".equalsIgnoreCase(element.getName())) {
+				String categoryID = element.getAttribute("category");
+				if (!checkString(categoryID))
+					throw new EPProcessorException("Category attribute must be defined for viewBinding when not wrapped in category-element", extension);
+				processViewBinding(extension, element, categoryID, null);
 			}
 		} catch (CoreException e) {
 			throw new EPProcessorException("processElement failed", extension, e);
 		}
 	}
+	
+	protected void processViewBinding(
+			IExtension extension, IConfigurationElement element,
+			String categoryID, IEntityTreeCategory category
+		) 
+	throws EPProcessorException 
+	{
+		String viewID = element.getAttribute("viewID");
+		if (!checkString(viewID))
+			throw new EPProcessorException("The viewID attribute has to be defined.", extension);
+		
+		String indexHintStr = element.getAttribute("indexHint");
+		int indexHint = Integer.MAX_VALUE / 2;
+		if(indexHintStr != null) {
+			try {
+				indexHint = Integer.parseInt(indexHintStr);
+			} catch (Exception e) {
+				indexHint = Integer.MAX_VALUE / 2;
+			}
+		}
+		
+		List<CategoryBinding> categories = categoriesByViewID.get(viewID);
+		if (categories == null) {
+			categories = new ArrayList<CategoryBinding>();
+			categoriesByViewID.put(viewID, categories);
+		}
+		if (category != null)
+			categories.add(new CategoryBinding(category, indexHint));
+		else
+			categories.add(new CategoryBinding(categoryID, indexHint));
+	}
 
 	/**
-	 * Overrides to sort the categories 
+	 * Overrides to resolve and sort the category bindings 
 	 * after processing is done.
 	 */
 	@Override
@@ -182,24 +252,32 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 	throws EPProcessorException 
 	{
 		super.process();
-		for (List<IEntityTreeCategory> categories : categoriesByViewID.values()) {
-			Collections.sort(categories);
+		for (List<CategoryBinding> bindings : categoriesByViewID.values()) {
+			for (CategoryBinding binding : bindings) {
+				binding.resolve();
+			}
+			Collections.sort(bindings);
 		}
 	}
 
 	/**
-	 * Get the category extensions for the given viewID.
+	 * Get the category extensions bound to the given viewID.
 	 * 
 	 * @param viewID The id of the view registered categories should be searched for. 
 	 * @return The category extensions for the given viewID.
 	 */
-	public IEntityTreeCategory[] getCategories(String viewID)
+	public IEntityTreeCategory[] getViewBindingCategories(String viewID)
 	{
 		checkProcessing();
-		List<IEntityTreeCategory> list = categoriesByViewID.get(viewID);
+		List<CategoryBinding> list = categoriesByViewID.get(viewID);
 		IEntityTreeCategory[] emptyArray = new IEntityTreeCategory[0];
-		if (list != null)
-			return list.toArray(emptyArray);
+		if (list != null) {
+			IEntityTreeCategory[] cats = new IEntityTreeCategory[list.size()];
+			for (int i = 0; i < cats.length; i++) {
+				cats[i] = list.get(i).getCategory();
+			}
+			return cats;
+		}
 		else
 			return emptyArray;
 	}

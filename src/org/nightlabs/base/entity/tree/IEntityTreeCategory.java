@@ -43,7 +43,7 @@ import org.eclipse.ui.part.DrillDownAdapter;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  * @author marco schulze - marco at nightlabs dot de
  */
-public interface IEntityTreeCategory extends IExecutableExtension, Comparable<IEntityTreeCategory>
+public interface IEntityTreeCategory extends IExecutableExtension
 {
 	/**
 	 * Get the ID of this category.
@@ -73,15 +73,6 @@ public interface IEntityTreeCategory extends IExecutableExtension, Comparable<IE
 	 * 		in this category
 	 */
 	String getEditorID();
-	
-	/**
-	 * Get the index hint for this category telling 
-	 * the system where to position this category
-	 * in the entity tree.
-	 * This is only a hint.
-	 * @return An index for display order of this category
-	 */
-	int getIndexHint();
 	
 	/**
 	 * Return a <em>new</em> {@link ITreeContentProvider} to use with this category.

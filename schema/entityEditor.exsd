@@ -15,6 +15,7 @@
          <sequence>
             <element ref="category" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="pageFactory" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="viewBinding" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -49,8 +50,8 @@
             <meta.element labelAttribute="name" icon="icon"/>
          </appInfo>
          <documentation>
-            By this element categories can be defined that will display in the EntityTreeView referenced with the viewID attribute. 
-There are two required attributes for this element: viewID and class. The others are optional as they are also defined by IEntityTreeCategory and the implementations are responsible of returning correct values. 
+            By this element categories can be defined that can be bound to Views.
+There is one required attributes for this element: class. The others are optional as they are also defined by IEntityTreeCategory and the implementations are responsible of returning correct values. 
 Note however, that if you pass a subclass of the abstract EntityTreeCategory 
 the values defined in the extension will automatically set for this category.
          </documentation>
@@ -100,13 +101,6 @@ the values defined in the extension will automatically set for this category.
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="indexHint" type="string">
-            <annotation>
-               <documentation>
-                  A hint for positioning this category in the views tree.
-               </documentation>
-            </annotation>
-         </attribute>
       </complexType>
    </element>
 
@@ -145,11 +139,30 @@ the values defined in the extension will automatically set for this category.
    </element>
 
    <element name="viewBinding">
+      <annotation>
+         <documentation>
+            By this element categories can be bound to views. A category bound to a view will be typically displayed in a tree viewer along with other categories.
+         </documentation>
+      </annotation>
       <complexType>
-         <attribute name="viewID" type="string">
+         <attribute name="category" type="string">
             <annotation>
                <documentation>
-                  
+                  Optional id of the category that should be bound. This has to be defined if you want to reference a category that is defined somewhere else. Leave this blank, if you are defining the binding wrapped into an category-element, the binding will then be on the surrounding category.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="viewID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The id of the view the category should be binded to.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="indexHint" type="string">
+            <annotation>
+               <documentation>
+                  A hint for positioning the category in the view its binded to.
                </documentation>
             </annotation>
          </attribute>

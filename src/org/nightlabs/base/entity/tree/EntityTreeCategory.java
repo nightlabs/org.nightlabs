@@ -68,13 +68,6 @@ public abstract class EntityTreeCategory implements IEntityTreeCategory
 	Image icon;
 	
 	/**
-	 * The index hint for this category telling 
-	 * the system where to position this category
-	 * in the entity tree.
-	 */
-	int indexHint;
-
-	/**
 	 * Default constructor.
 	 */
 	public EntityTreeCategory()
@@ -96,11 +89,6 @@ public abstract class EntityTreeCategory implements IEntityTreeCategory
 //			icon = ImageDescriptor.createFromURL(BaseAdminPlugin.getDefault().getBundle().getEntry(iconStr)).createImage();
 		else
 			icon = null;
-		String indexHintStr = element.getAttribute("indexHint");
-		if(indexHintStr != null)
-			indexHint = Integer.parseInt(indexHintStr);
-		else
-			indexHint = Integer.MAX_VALUE / 2;
 	}
 
 	private Set<IEntityTreeCategoryContentConsumer> contentConsumers = new HashSet<IEntityTreeCategoryContentConsumer>(); 
@@ -149,14 +137,6 @@ public abstract class EntityTreeCategory implements IEntityTreeCategory
 	}
 	
 	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	public int compareTo(IEntityTreeCategory o)
-	{
-		return getIndexHint() - o.getIndexHint();
-	}
-	
-	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.admin.IEntityTreeCategory#getId()
 	 */
 	public String getId()
@@ -178,14 +158,6 @@ public abstract class EntityTreeCategory implements IEntityTreeCategory
 	public Image getImage()
 	{
 		return icon;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.admin.IEntityTreeCategory#getIndexHint()
-	 */
-	public int getIndexHint()
-	{
-		return indexHint;
 	}
 
 	/* (non-Javadoc)
