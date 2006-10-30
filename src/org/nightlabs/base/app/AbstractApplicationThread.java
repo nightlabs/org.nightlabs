@@ -80,6 +80,10 @@ extends Thread
 
 	private int platformResultCode = -1;
 
+	protected void setPlatformResultCode(int platformResultCode) {
+		this.platformResultCode = platformResultCode;
+	}
+	
 	public int getPlatformResultCode() {
 		return platformResultCode;
 	}
