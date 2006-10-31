@@ -24,6 +24,7 @@
 package org.nightlabs.base.entity;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -37,7 +38,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.entity.editor.EntityEditorPageSettings;
+import org.nightlabs.base.entity.tree.EntityTreeCategoryViewBinding;
 import org.nightlabs.base.entity.tree.IEntityTreeCategory;
+import org.nightlabs.base.entity.tree.IEntityTreeCategoryBinding;
+import org.nightlabs.base.entity.tree.IEntityTreeCategoryViewBinding;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 
@@ -74,46 +78,34 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 	}
 
 	/**
-	 * CategoryBindings used to store and sort references/uses
+	 * BindingCarrier used to store and sort references/uses
 	 * of {@link IEntityTreeCategory}s. 
 	 */
-	private class CategoryBinding implements Comparable<CategoryBinding> {
+	private class BindingCarrier implements Comparable<BindingCarrier> {
 		private String categoryID;
-		private IEntityTreeCategory category;
-		private int indexHint;
-		
-		public CategoryBinding(IEntityTreeCategory category, int indexHint) { 
-			this.category = category;
-			this.indexHint = indexHint;
-		}
-		
-		public CategoryBinding(String categoryID, int indexHint) { 
+		private IEntityTreeCategoryBinding binding;
+
+		public BindingCarrier(String categoryID, IEntityTreeCategoryBinding binding) {
 			this.categoryID = categoryID;
-			this.indexHint = indexHint;
-		}
-		
-		public int compareTo(CategoryBinding o) {
-			return indexHint - o.indexHint;
+			this.binding = binding;
 		}
 
-		public IEntityTreeCategory getCategory() {
-			return category;
+		public int compareTo(BindingCarrier o) {
+			return this.getBinding().compareTo(o.getBinding());
 		}
 
-		public int getIndexHint() {
-			return indexHint;
+		public IEntityTreeCategoryBinding getBinding() {
+			return binding;
 		}
 
 		public void resolve() {
-			if (category == null) {
-				if (categoryID == null)
-					throw new IllegalStateException("Have CategoryBinding with no categoryID");
-				category = categories.get(categoryID);
-				if (category == null)
-					logger.error("A category binding could not be resolved. Bound to "+categoryID);
-			}
+			IEntityTreeCategory category = categories.get(categoryID);
+			if (category == null)
+				logger.error("A category binding could not be resolved. Bound to "+categoryID);
+			binding.setEntityTreeCategory(category);
 		}
 	}
+	
 
 	/**
 	 * All registered categories by their id.
@@ -123,7 +115,9 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 	/**
 	 * Category extensions.
 	 */
-	private Map<String, List<CategoryBinding>> categoriesByViewID = new HashMap<String, List<CategoryBinding>>();
+	private Map<String, List<BindingCarrier>> categoriesByViewID = new HashMap<String, List<BindingCarrier>>();
+	
+	private Map<IEntityTreeCategory, Collection<IEntityTreeCategoryBinding>> category2Bindings;
 
 	/**
 	 * Editor page extensions.
@@ -184,7 +178,7 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 		try {
 			if("category".equalsIgnoreCase(element.getName())) {
 				if(categoriesByViewID == null)
-					categoriesByViewID = new HashMap<String, List<CategoryBinding>>();
+					categoriesByViewID = new HashMap<String, List<BindingCarrier>>();
 
 				IEntityTreeCategory category = (IEntityTreeCategory)element.createExecutableExtension("class");
 				
@@ -216,31 +210,30 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 			IExtension extension, IConfigurationElement element,
 			String categoryID, IEntityTreeCategory category
 		) 
-	throws EPProcessorException 
+	throws EPProcessorException, CoreException 
 	{
-		String viewID = element.getAttribute("viewID");
-		if (!checkString(viewID))
-			throw new EPProcessorException("The viewID attribute has to be defined.", extension);
-		
-		String indexHintStr = element.getAttribute("indexHint");
-		int indexHint = Integer.MAX_VALUE / 2;
-		if(indexHintStr != null) {
-			try {
-				indexHint = Integer.parseInt(indexHintStr);
-			} catch (Exception e) {
-				indexHint = Integer.MAX_VALUE / 2;
-			}
+		String clazz = element.getAttribute("class");
+		IEntityTreeCategoryViewBinding viewBinding = null;
+		if (checkString(clazz)) {
+			// if class defined creat the executable extension
+			viewBinding = (IEntityTreeCategoryViewBinding) element.createExecutableExtension("class");
 		}
-		
-		List<CategoryBinding> categories = categoriesByViewID.get(viewID);
+		else {
+			// if not, instantiate default
+			viewBinding = new EntityTreeCategoryViewBinding();
+			// and let it initialize
+			viewBinding.setInitializationData(element, "class", null);
+		}
+				
+		List<BindingCarrier> categories = categoriesByViewID.get(viewBinding.getViewID());
 		if (categories == null) {
-			categories = new ArrayList<CategoryBinding>();
-			categoriesByViewID.put(viewID, categories);
+			categories = new ArrayList<BindingCarrier>();
+			categoriesByViewID.put(viewBinding.getViewID(), categories);
 		}
 		if (category != null)
-			categories.add(new CategoryBinding(category, indexHint));
+			categories.add(new BindingCarrier(category.getId(), viewBinding));
 		else
-			categories.add(new CategoryBinding(categoryID, indexHint));
+			categories.add(new BindingCarrier(categoryID, viewBinding));
 	}
 
 	/**
@@ -252,33 +245,53 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 	throws EPProcessorException 
 	{
 		super.process();
-		for (List<CategoryBinding> bindings : categoriesByViewID.values()) {
-			for (CategoryBinding binding : bindings) {
+		category2Bindings = new HashMap<IEntityTreeCategory, Collection<IEntityTreeCategoryBinding>>();
+		for (List<BindingCarrier> bindings : categoriesByViewID.values()) {
+			for (BindingCarrier binding : bindings) {
 				binding.resolve();
+				
+				Collection<IEntityTreeCategoryBinding> catBindings = category2Bindings.get(binding.getBinding().getEntityTreeCategory());
+				if (catBindings == null) {
+					catBindings = new HashSet<IEntityTreeCategoryBinding>(); 
+					category2Bindings.put(binding.getBinding().getEntityTreeCategory(), catBindings);
+				}
+				catBindings.add(binding.getBinding());
 			}
 			Collections.sort(bindings);
 		}
 	}
 
 	/**
-	 * Get the category extensions bound to the given viewID.
+	 * Get the category bindings to the given viewID.
 	 * 
 	 * @param viewID The id of the view registered categories should be searched for. 
-	 * @return The category extensions for the given viewID.
+	 * @return The view bindings for the given viewID.
 	 */
-	public IEntityTreeCategory[] getViewBindingCategories(String viewID)
+	public IEntityTreeCategoryBinding[] getViewBindings(String viewID)
 	{
 		checkProcessing();
-		List<CategoryBinding> list = categoriesByViewID.get(viewID);
-		IEntityTreeCategory[] emptyArray = new IEntityTreeCategory[0];
+		List<BindingCarrier> list = categoriesByViewID.get(viewID);
+		IEntityTreeCategoryBinding[] emptyArray = new IEntityTreeCategoryBinding[0];
 		if (list != null) {
-			IEntityTreeCategory[] cats = new IEntityTreeCategory[list.size()];
+			IEntityTreeCategoryBinding[] cats = new IEntityTreeCategoryBinding[list.size()];
 			for (int i = 0; i < cats.length; i++) {
-				cats[i] = list.get(i).getCategory();
+				cats[i] = list.get(i).getBinding();
 			}
 			return cats;
 		}
 		else
 			return emptyArray;
 	}
+
+	/**
+	 * Returns all bindings of the given category in a new Set 
+	 * (which can be modified, without changing the registration)
+	 * 
+	 * @param category The category all bindings should be searched for. 
+	 * @return All bindings of the given category.
+	 */
+	public Set<IEntityTreeCategoryBinding> getCategoryBindings(IEntityTreeCategory category) {
+		return new HashSet<IEntityTreeCategoryBinding>(category2Bindings.get(category));
+	}
+	
 }

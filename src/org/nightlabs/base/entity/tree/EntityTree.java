@@ -77,30 +77,25 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 //	private String viewID;
 	
 	/**
-	 * Member to hold the categories displayed by this tree Composite
+	 * Member to hold the categories bindings for this tree
 	 */
-	private IEntityTreeCategory[] categories;
+	private IEntityTreeCategoryBinding[] categoryBindings;
 	
 	/**
 	 * This map is used to find out wich tree object belongs 
 	 * to wich category for asking the category for labels
 	 * and icons.
 	 */
-	private Map<Object, IEntityTreeCategory> childCategories;
+	private Map<Object, IEntityTreeCategoryBinding> childBindings;
 
 	/**
 	 * @param parent
 	 */
 	public EntityTree(Composite parent, String viewID) {
 		super(parent, false);
-//		this.viewID = viewID;
 		init();
-		categories = EntityEditorRegistry.sharedInstance().getViewBindingCategories(viewID);
-		getTreeViewer().setInput(categories);
-//		for (IEntityTreeCategory category : categories) {
-//			//System.err.println("category: "+category.getName());
-//			category.addEntityTreeCategoryChangeListener(this);
-//		}
+		categoryBindings = EntityEditorRegistry.sharedInstance().getViewBindings(viewID);
+		getTreeViewer().setInput(categoryBindings);
 		getTreeViewer().addOpenListener(this);
 		getTree().setHeaderVisible(false);
 		addDisposeListener(this);
@@ -144,15 +139,15 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 	 */
 	protected class EntityTreeContentProvider extends TreeContentProvider 
 	{
-		private Map<IEntityTreeCategory, ITreeContentProvider> contentProviders = new HashMap<IEntityTreeCategory, ITreeContentProvider>();
+		private Map<IEntityTreeCategoryBinding, ITreeContentProvider> contentProviders = new HashMap<IEntityTreeCategoryBinding, ITreeContentProvider>();
 
-		private ITreeContentProvider getContentProvider(IEntityTreeCategory category) {
-			if (category == null)
+		private ITreeContentProvider getContentProvider(IEntityTreeCategoryBinding categoryBinding) {
+			if (categoryBinding == null)
 				return null;
-			if (contentProviders.containsKey(category))
-				return contentProviders.get(category);
-			ITreeContentProvider result = category.createContentProvider(EntityTree.this);
-			contentProviders.put(category, result);
+			if (contentProviders.containsKey(categoryBinding))
+				return contentProviders.get(categoryBinding);
+			ITreeContentProvider result = categoryBinding.createContentProvider(EntityTree.this);
+			contentProviders.put(categoryBinding, result);
 			return result;
 		}
 
@@ -162,11 +157,11 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 		public Object[] getElements(Object inputElement)
 		{
 			// either the input is set to a IEntityTreeCategory[]
-			if (inputElement instanceof IEntityTreeCategory[])
-				return (IEntityTreeCategory[])inputElement;
+			if (inputElement instanceof IEntityTreeCategoryBinding[])
+				return (IEntityTreeCategoryBinding[])inputElement;
 			// or it is something the delegate content provider has to deal with (using node-objects one still could have go-into)
 			else {
-				ITreeContentProvider contentProvider = getContentProvider(getChildCategory(inputElement));
+				ITreeContentProvider contentProvider = getContentProvider(getChildBinding(inputElement));
 				if (contentProvider != null)
 					return contentProvider.getElements(inputElement);
 			}
@@ -179,34 +174,28 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 		@Override
 		public Object[] getChildren(Object parentElement)
 		{
-			IEntityTreeCategory parentCategory = null;
+			IEntityTreeCategoryBinding parentBinding = null;
 			// check the parent category. Its either the element itself (as published so in getElements)
-			if (parentElement instanceof IEntityTreeCategory)
-				parentCategory = (IEntityTreeCategory)parentElement;
+			if (parentElement instanceof IEntityTreeCategoryBinding)
+				parentBinding = (IEntityTreeCategoryBinding)parentElement;
 			// or it is somewhere up the tree
 			else 
-				parentCategory = getChildCategory(parentElement);
+				parentBinding = getChildBinding(parentElement);
 			Object[] children = null;
-			ITreeContentProvider contentProvider = getContentProvider(parentCategory);
+			ITreeContentProvider contentProvider = getContentProvider(parentBinding);
 			if (contentProvider != null)
 				// if the direct parent is a category call getElements on its ContentProvider
-				if (parentElement instanceof IEntityTreeCategory)
+				if (parentElement instanceof IEntityTreeCategoryBinding)
 					children = contentProvider.getElements(parentElement);
 				// if we're deeper check the getChildren method
-				else if (contentProvider != null)
+				else 
 					children = contentProvider.getChildren(parentElement);
 			
 			if (children != null)
 				for (Object object : children)
-					addChildCategory(object, parentCategory);
+					addChildBinding(object, parentBinding);
 			return children;
 			
-			//System.err.println("GET CHILDREN FOR "+parentElement);
-//			IEntityTreeCategory category = (IEntityTreeCategory)parentElement;
-//			Object[] children = category.getChildren();
-//			for (Object object : children)
-//				addChildCategory(object, category);
-//			return children;
 		}
 
 		/* (non-Javadoc)
@@ -215,13 +204,13 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 		@Override
 		public boolean hasChildren(Object element)
 		{
-			// if direct category, baby, say yeah
-			if (element instanceof IEntityTreeCategory)				
+			// if direct categoryBinding, baby, say yeah
+			if (element instanceof IEntityTreeCategoryBinding)				
 				return true;
 			// else delegate
 			else {
-				IEntityTreeCategory category = getChildCategory(element);
-				ITreeContentProvider contentProvider = category != null ? getContentProvider(category) : null;
+				IEntityTreeCategoryBinding binding = getChildBinding(element);
+				ITreeContentProvider contentProvider = binding != null ? getContentProvider(binding) : null;
 				return (contentProvider != null) ? contentProvider.hasChildren(element) : false;
 			}
 		}
@@ -229,9 +218,9 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 		@Override
 		public Object getParent(Object element) {
 			// here as well delegate when not at top level 
-			if (element instanceof IEntityTreeCategory)
+			if (element instanceof IEntityTreeCategoryBinding)
 				return null;
-			ITreeContentProvider contentProvider = getContentProvider(getChildCategory(element));
+			ITreeContentProvider contentProvider = getContentProvider(getChildBinding(element));
 			if (contentProvider != null)
 				return contentProvider.getParent(element);
 			return super.getParent(element);
@@ -254,15 +243,15 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 	 */
 	protected class EntityTreeLabelProvider extends LabelProvider implements ITableLabelProvider 
 	{
-		private Map<IEntityTreeCategory, ITableLabelProvider> labelProviders = new HashMap<IEntityTreeCategory, ITableLabelProvider>();
+		private Map<IEntityTreeCategoryBinding, ITableLabelProvider> labelProviders = new HashMap<IEntityTreeCategoryBinding, ITableLabelProvider>();
 		
-		private ITableLabelProvider getLabelProvider(IEntityTreeCategory category) {
-			if (category == null)
+		private ITableLabelProvider getLabelProvider(IEntityTreeCategoryBinding binding) {
+			if (binding == null)
 				return null;			
-			if (labelProviders.containsKey(category))
-				return labelProviders.get(category);
-			ITableLabelProvider labelProvider = category.createLabelProvider();
-			labelProviders.put(category, labelProvider);
+			if (labelProviders.containsKey(binding))
+				return labelProviders.get(binding);
+			ITableLabelProvider labelProvider = binding.createLabelProvider();
+			labelProviders.put(binding, labelProvider);
 			return labelProvider;			
 		}
 		
@@ -289,17 +278,17 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 		 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object, int)
 		 */
 		public Image getColumnImage(Object element, int columnIdx) {
-			if(element instanceof IEntityTreeCategory)
-				return ((IEntityTreeCategory)element).getImage();
+			if(element instanceof IEntityTreeCategoryBinding)
+				return ((IEntityTreeCategoryBinding)element).getImage();
 			else {
-				IEntityTreeCategory category = getChildCategory(element);
-				ITableLabelProvider labelProvider = getLabelProvider(category);
+				IEntityTreeCategoryBinding binding = getChildBinding(element);
+				ITableLabelProvider labelProvider = getLabelProvider(binding);
 				Image image = null;
 				if(labelProvider != null)
 					image = labelProvider.getColumnImage(element, columnIdx);
 				if (image != null)
 					return image;
-				return category.getImage();
+				return binding.getImage();
 			}
 		}
 
@@ -308,10 +297,10 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 		 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
 		 */
 		public String getColumnText(Object element, int columnIdx) {
-			if(element instanceof IEntityTreeCategory)
-				return ((IEntityTreeCategory)element).getName();
+			if(element instanceof IEntityTreeCategoryBinding)
+				return ((IEntityTreeCategoryBinding)element).getName();
 			else {
-				ITableLabelProvider labelProvider = getLabelProvider(getChildCategory(element));
+				ITableLabelProvider labelProvider = getLabelProvider(getChildBinding(element));
 				if(labelProvider != null)
 					return labelProvider.getColumnText(element, columnIdx);				
 				return super.getText(element);
@@ -326,24 +315,33 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 	 * @param child The child element to add
 	 * @param category The category the child belongs to
 	 */
-	protected void addChildCategory(Object child, IEntityTreeCategory category)
+	protected void addChildBinding(Object child, IEntityTreeCategoryBinding categoryBinding)
 	{
-		if(childCategories == null)
-			childCategories = new HashMap<Object, IEntityTreeCategory>();
-		childCategories.put(child, category);
+		if(childBindings == null)
+			childBindings = new HashMap<Object, IEntityTreeCategoryBinding>();
+		childBindings.put(child, categoryBinding);
 	}
 
 	/**
-	 * Add a child for a category. This is used internally
-	 * to find out wich tree object belongs to wich category
-	 * for asking the category for labels and icons.
+	 * Returns the category for the given entity element.
 	 * @param child The child element to get the category for
-	 * @return The category of the child element or <code>null</code>
+	 * @return The category for the child element or <code>null</code>
 	 * 		if the child is unknown.
 	 */
 	protected IEntityTreeCategory getChildCategory(Object child)
 	{
-		return childCategories==null ? null : childCategories.get(child);
+		IEntityTreeCategoryBinding binding = childBindings == null ? null : childBindings.get(child);
+		return binding == null ? null : binding.getEntityTreeCategory();
+	}
+	
+	/**
+	 * Returns the category binding for the given entity element.
+	 * @param child The child element to get the binding for
+	 * @return The category binding for the child element or <code>null</code>
+	 * 		if the child is unknown.
+	 */
+	protected IEntityTreeCategoryBinding getChildBinding(Object child) {
+		return childBindings == null ? null : childBindings.get(child);
 	}
 	
 	/**
@@ -382,17 +380,17 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 						else
 							getTreeViewer().expandToLevel(element, 1);
 					} else {
-						IEntityTreeCategory category = getChildCategory(element);
-						if(category != null) {
-							IEditorDescriptor editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry().findEditor(category.getEditorID());
+						IEntityTreeCategoryBinding binding = getChildBinding(element);
+						if(binding != null) {
+							IEditorDescriptor editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry().findEditor(binding.getEditorID());
 							if (editorDescriptor == null) {
-								logger.warn("Could not obtain editorDescriptor to open editor for category "+category.getName()+" and editorID "+category.getEditorID());
+								logger.warn("Could not obtain editorDescriptor to open editor for category "+binding.getName()+" and editorID "+binding.getEditorID());
 								return;
 							}
 							try {
 								IWorkbenchPage page = RCPUtil.getActiveWorkbenchPage();
 								if (page != null)
-									page.openEditor(category.getEditorInput(element), editorDescriptor.getId());
+									page.openEditor(binding.createEditorInput(element), editorDescriptor.getId());
 								else
 									logger.warn("Could not get active workbench page, no editor was opened.");
 							} catch (PartInitException e) {
@@ -418,7 +416,7 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 	{
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				getTreeViewer().refresh(event.getEntityTreeCategory());
+				getTreeViewer().refresh(event.getEntityTreeCategoryBinding());
 			}
 		});
 	}

@@ -67,14 +67,6 @@ public interface IEntityTreeCategory extends IExecutableExtension
 	Image getImage();
 	
 	/**
-	 * Get the ID of an editor to be opened for entries
-	 * in this category.
-	 * @return The ID of an editor to be opened for entries
-	 * 		in this category
-	 */
-	String getEditorID();
-	
-	/**
 	 * Return a <em>new</em> {@link ITreeContentProvider} to use with this category.
 	 * <p>
 	 * The top level entries of an entity tree will always be the categories themselves.
@@ -145,9 +137,12 @@ public interface IEntityTreeCategory extends IExecutableExtension
 	 *		must release all resources (including listeners in the server) until a new consumer requires the
 	 *		data to be reloaded.
 	 *
+	 * @param categoryBinding The binding the consumer uses to access this category. This will be
+	 * 		used to notify the consumer of changes in the category.
+	 *
 	 * @return A <em>new</em> {@link ITreeContentProvider} to use with this category.
 	 */
-	ITreeContentProvider createContentProvider(IEntityTreeCategoryContentConsumer contentConsumer);
+	ITreeContentProvider createContentProvider(IEntityTreeCategoryContentConsumer contentConsumer, IEntityTreeCategoryBinding categoryBinding);
 
 	/**
 	 * Return a <em>new</em> {@link ITableLabelProvider} to use with this category.
@@ -163,9 +158,9 @@ public interface IEntityTreeCategory extends IExecutableExtension
 
 	/**
 	 * Get an editor input object for an entry in this category.
-	 * @see #getChildren()
+	 * 
 	 * @param o An entry in this category.
 	 * @return An editor input object for an entry in this category
 	 */
-	IEditorInput getEditorInput(Object o);
+	IEditorInput createEditorInput(Object o);
 }

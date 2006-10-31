@@ -145,6 +145,16 @@ the values defined in the extension will automatically set for this category.
          </documentation>
       </annotation>
       <complexType>
+         <attribute name="class" type="string">
+            <annotation>
+               <documentation>
+                  Optional implementation of IEntityTreeCategoryViewBinding. If omitted, a default implementation will be instantiated that delegates its work to the category it is bound to.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.base.entity.tree.IEntityTreeCategoryViewBinding"/>
+               </appInfo>
+            </annotation>
+         </attribute>
          <attribute name="category" type="string">
             <annotation>
                <documentation>
@@ -155,15 +165,39 @@ the values defined in the extension will automatically set for this category.
          <attribute name="viewID" type="string" use="required">
             <annotation>
                <documentation>
-                  The id of the view the category should be binded to.
+                  The id of the view the category should be bound to.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="editorID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The id of the Editor to open for an entity of the category bound in this binding.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  Optional name. Can be used to overwrite the name of the category for this binding.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="indexHint" type="string">
             <annotation>
                <documentation>
-                  A hint for positioning the category in the view its binded to.
+                  A hint for positioning the category in the view it is bound to.
                </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="icon" type="string">
+            <annotation>
+               <documentation>
+                  Optional icon. Can be used to overwrite the icon of the category for this binding.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="resource"/>
+               </appInfo>
             </annotation>
          </attribute>
       </complexType>

@@ -7,19 +7,19 @@ public class ContentChangedEvent
 {
 	private static final long serialVersionUID = 1L;
 
-	public ContentChangedEvent(IEntityTreeCategory entityTreeCategory)
+	public ContentChangedEvent(IEntityTreeCategoryBinding categoryBinding)
 	{
-		super(entityTreeCategory);
+		super(categoryBinding);
 	}
 
 	/**
 	 * This method is a convenience method preventing unnecessary casts.
 	 * It simply calls {@link EventObject#getSource()}.
 	 * @return Returns the same as {@link EventObject#getSource()} which is the
-	 *		category whose content changed.
+	 *		category binding whose content changed.
 	 */
-	public IEntityTreeCategory getEntityTreeCategory()
+	public IEntityTreeCategoryBinding getEntityTreeCategoryBinding()
 	{
-		return (IEntityTreeCategory) getSource();
+		return (IEntityTreeCategoryBinding) getSource();
 	}
 }

@@ -23,9 +23,11 @@
  ******************************************************************************/
 package org.nightlabs.base.entity.tree;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -57,11 +59,6 @@ public abstract class EntityTreeCategory implements IEntityTreeCategory
 	String name;
 	
 	/**
-	 * The editor id for this category.
-	 */
-	String editorID;
-	
-	/**
 	 * The icon for this category and the default
 	 * icon for entries in this category.
 	 */
@@ -82,7 +79,6 @@ public abstract class EntityTreeCategory implements IEntityTreeCategory
 	{
 		id = element.getAttribute("id");
 		name = element.getAttribute("name");
-		editorID = element.getAttribute("editorID");
 		String iconStr = element.getAttribute("icon");
 		if(iconStr != null)
 			icon = AbstractUIPlugin.imageDescriptorFromPlugin(element.getDeclaringExtension().getNamespaceIdentifier(), iconStr).createImage();
@@ -91,16 +87,20 @@ public abstract class EntityTreeCategory implements IEntityTreeCategory
 			icon = null;
 	}
 
-	private Set<IEntityTreeCategoryContentConsumer> contentConsumers = new HashSet<IEntityTreeCategoryContentConsumer>(); 
+	/**
+	 * Map for storing the consumers of the category along with the binding they use.
+	 * The binding is used to notify the consumer of changes with the right binding.
+	 */
+	private Map<IEntityTreeCategoryContentConsumer, IEntityTreeCategoryBinding> contentConsumers = new HashMap<IEntityTreeCategoryContentConsumer, IEntityTreeCategoryBinding>(); 
 
-	public ITreeContentProvider createContentProvider(final IEntityTreeCategoryContentConsumer contentConsumer)
+	public ITreeContentProvider createContentProvider(final IEntityTreeCategoryContentConsumer contentConsumer, IEntityTreeCategoryBinding categoryBinding)
 	{
-		contentConsumers.add(contentConsumer);
+		contentConsumers.put(contentConsumer, categoryBinding);
 		contentConsumer.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e)
 			{
 				contentConsumers.remove(contentConsumer);
-				onContentConsumerDisposed(e, contentConsumer, contentConsumers);
+				onContentConsumerDisposed(e, contentConsumer, contentConsumers.keySet());
 			}
 		});
 		return _createContentProvider(contentConsumer);
@@ -122,17 +122,13 @@ public abstract class EntityTreeCategory implements IEntityTreeCategory
 	}
 
 	/**
-	 * Fire a category change event. This will notify listeners
-	 * about content and structure changes within this category.
+	 * Fire a category change event. This will notify all consumers 
+	 * of changes of the category binding the use.
 	 */
 	protected void fireEntityTreeCategoryChange() 
 	{
-		ContentChangedEvent event = null;
-		for (IEntityTreeCategoryContentConsumer consumer : new ArrayList<IEntityTreeCategoryContentConsumer>(contentConsumers)) {
-			if (event == null)
-				event = new ContentChangedEvent(this);
-
-			consumer.contentChanged(event);
+		for (Entry<IEntityTreeCategoryContentConsumer, IEntityTreeCategoryBinding> consumerEntry : new HashSet<Entry<IEntityTreeCategoryContentConsumer, IEntityTreeCategoryBinding>>(contentConsumers.entrySet())) {
+			consumerEntry.getKey().contentChanged(new ContentChangedEvent(consumerEntry.getValue()));
 		}
 	}
 	
@@ -142,14 +138,6 @@ public abstract class EntityTreeCategory implements IEntityTreeCategory
 	public String getId()
 	{
 		return id;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.admin.IEntityTreeCategory#getEditorID()
-	 */
-	public String getEditorID()
-	{
-		return editorID;
 	}
 
 	/* (non-Javadoc)
