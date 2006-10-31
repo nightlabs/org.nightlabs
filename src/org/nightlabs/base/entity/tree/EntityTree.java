@@ -353,8 +353,8 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 	 * @return The {@link IEntityTreeCategory} of the given element
 	 */
 	public IEntityTreeCategory getElementCategory(Object element) {
-		if (element instanceof IEntityTreeCategory)
-			return (IEntityTreeCategory) element;
+		if (element instanceof IEntityTreeCategoryBinding)
+			return ((IEntityTreeCategoryBinding)element).getEntityTreeCategory();
 		return getChildCategory(element);
 	}
 
