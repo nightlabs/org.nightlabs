@@ -30,15 +30,12 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
-import org.nightlabs.base.composite.XComposite.LayoutDataMode;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * This class provides a composite able to display a list of objects of the same type as graphical representation.
@@ -51,27 +48,36 @@ import org.nightlabs.base.composite.XComposite.LayoutMode;
 public class ListComposite<T> extends AbstractListComposite<T> 
 {
 	private List list;
-	
 	private Label label;
-	
-	public ListComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
-	{
-		super(parent, style, layoutMode, layoutDataMode);
-	}
+
+//	public ListComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+//	{
+//		super(parent, style, layoutMode, layoutDataMode);
+//	}
 
 	public ListComposite(Composite parent, int style)
 	{
 		super(parent, style);
 	}
 
-	public ListComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+//	public ListComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+//	{
+//		super(labelProvider, parent, style, layoutMode, layoutDataMode);
+//	}
+
+	public ListComposite(ILabelProvider labelProvider, Composite parent) //, int style)
 	{
-		super(labelProvider, parent, style, layoutMode, layoutDataMode);
+		super(parent, labelProvider, true, null);
 	}
 
-	public ListComposite(ILabelProvider labelProvider, Composite parent, int style)
+	public ListComposite(ILabelProvider labelProvider, Composite parent, boolean doCreateGuiComposite)
 	{
-		super(labelProvider, parent, style);
+		super(parent, labelProvider, doCreateGuiComposite, null);
+	}
+
+	public ListComposite(ILabelProvider labelProvider, int style, Composite parent, boolean doCreateGuiControl, String caption)
+	{
+		super(parent, style, labelProvider, doCreateGuiControl, caption);
 	}
 
 	@Override
@@ -81,11 +87,13 @@ public class ListComposite<T> extends AbstractListComposite<T>
 	}
 
 	@Override
-	protected Control createGuiControl(Composite parent, int style, boolean createLabel)
+	protected Control createGuiControl(Composite parent, int style, String caption)
 	{
-		if (createLabel) {
+		style |= SWT.BORDER;
+		if (caption != null) {
 			XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, 2);
 			label = new Label(comp, SWT.NONE);
+			label.setText(caption);
 			list = new List(comp, style | SWT.V_SCROLL | SWT.H_SCROLL);
 		}
 		else {

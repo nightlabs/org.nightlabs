@@ -73,62 +73,65 @@ implements ISelectionProvider
 	 */
 	public AbstractListComposite(Composite parent, int style)
 	{
-		this(new LabelProvider(), parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA);		
+		this(parent, style, new LabelProvider(), true, (String)null);		
 	}
 	
-	/**
-	 * Creates a new instance using default layout definitions.
-	 * @param labelProvider The {@link ILabelProvider} that provides the label of the list elements.
-	 * @param parent The parent composite.
-	 * @param style the SWT style flag.	 
-	 */
-	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style)
-	{
-		this(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA);
-	}
+//	/**
+//	 * Creates a new instance using default layout definitions.
+//	 * @param labelProvider The {@link ILabelProvider} that provides the label of the list elements.
+//	 * @param parent The parent composite.
+//	 * @param style the SWT style flag.	 
+//	 */
+//	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style)
+//	{
+//		this(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA);
+//	}
+//
+//	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, boolean doCreateGuiComposite)
+//	{
+//		this(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, doCreateGuiComposite, null);
+//	}
+
+//	/**
+//	 * Creates a new instance and uses a default LabelProvider.
+//	 * @param parent The parent composite.
+//	 * @param style the SWT style flag.	 
+//	 * @param layoutMode The {@link LayoutMode} to set.
+//	 * @param layoutDataMode The {@link LayoutDataMode} to set.
+//	 */
+//	public AbstractListComposite(Composite parent, int style, LayoutMode layoutMode,
+//			LayoutDataMode layoutDataMode)
+//	{
+//		this(new LabelProvider(), parent, style, layoutMode, layoutDataMode);
+//	}
 	
-	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, boolean doCreateGuiComposite)
+//	/**
+//	 * Creates a new instance.
+//	 * @param labelProvider The {@link ILabelProvider} that provides the label of the managed elements..
+//	 * @param parent The parent composite.
+//	 * @param style the SWT style flag.	 
+//	 * @param layoutMode The {@link LayoutMode} to set.
+//	 * @param layoutDataMode The {@link LayoutDataMode} to set.
+//	 */
+//	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode,
+//			LayoutDataMode layoutDataMode)
+//	{
+//		this(labelProvider, parent, style, layoutMode, layoutDataMode, true, null);
+//	}
+	public AbstractListComposite(Composite parent, ILabelProvider labelProvider, boolean doCreateGuiControl, String caption)
 	{
-		this(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, doCreateGuiComposite, false);
+		this(parent, SWT.NONE, labelProvider, doCreateGuiControl, caption);
 	}
-	
-	/**
-	 * Creates a new instance and uses a default LabelProvider.
-	 * @param parent The parent composite.
-	 * @param style the SWT style flag.	 
-	 * @param layoutMode The {@link LayoutMode} to set.
-	 * @param layoutDataMode The {@link LayoutDataMode} to set.
-	 */
-	public AbstractListComposite(Composite parent, int style, LayoutMode layoutMode,
-			LayoutDataMode layoutDataMode)
+
+	public AbstractListComposite(Composite parent, int style, ILabelProvider labelProvider, boolean doCreateGuiControl, String caption)
 	{
-		this(new LabelProvider(), parent, style, layoutMode, layoutDataMode);
-	}
-	
-	/**
-	 * Creates a new instance.
-	 * @param labelProvider The {@link ILabelProvider} that provides the label of the managed elements..
-	 * @param parent The parent composite.
-	 * @param style the SWT style flag.	 
-	 * @param layoutMode The {@link LayoutMode} to set.
-	 * @param layoutDataMode The {@link LayoutDataMode} to set.
-	 */
-	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode,
-			LayoutDataMode layoutDataMode)
-	{
-		this(labelProvider, parent, style, layoutMode, layoutDataMode, true, false);
-	}
-	
-	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode,
-			LayoutDataMode layoutDataMode, boolean doCreateGuiControl, boolean createLabel)
-	{
-		super(parent, style, layoutMode, layoutDataMode);
+		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		this.labelProvider = labelProvider;
-		
+
 		elements = new LinkedList<T>();
-		
+
 		if (doCreateGuiControl)
-			createGuiControl(this, style | SWT.BORDER, createLabel);
+			createGuiControl(this, style, caption);
 	}
 
 	public void setLabelProvider(ILabelProvider labelProvider)
@@ -136,7 +139,7 @@ implements ISelectionProvider
 		this.labelProvider = labelProvider;
 	}
 
-	protected abstract Control createGuiControl(Composite parent, int style, boolean createLabel);
+	protected abstract Control createGuiControl(Composite parent, int style, String caption);
 	
 	/**
 	 * Populates the graphical list with the elements provided and labels them using the label provider.
