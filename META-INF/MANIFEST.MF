@@ -49,12 +49,10 @@ Export-Package: org.nightlabs.editor2d,
  org.nightlabs.editor2d.views
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
- org.eclipse.ui.views,
  org.nightlabs.base,
- org.holongate.j2d,
- org.nightlabs.editor2d.viewer,
- org.eclipse.ui.forms,
+ org.holongate.j2d;visibility:=reexport,
+ org.nightlabs.editor2d.viewer;visibility:=reexport,
  org.eclipse.draw2d,
- org.eclipse.gef
+ org.eclipse.gef;visibility:=reexport
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
