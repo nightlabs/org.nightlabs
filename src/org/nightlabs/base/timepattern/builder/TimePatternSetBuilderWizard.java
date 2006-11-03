@@ -46,7 +46,7 @@ public class TimePatternSetBuilderWizard extends DynamicPathWizard {
 	@Override
 	public boolean performFinish() {
 		if (clearBeforeBuild)
-			timePatternSet.getTimePatterns().clear();
+			timePatternSet.clearTimePatterns();
 		try {
 			entryPage.configureTimePatternSet(timePatternSet);
 		} catch (TimePatternFormatException e) {

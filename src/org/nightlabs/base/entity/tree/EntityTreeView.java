@@ -31,6 +31,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.nightlabs.base.part.ControllablePart;
 import org.nightlabs.base.part.PartController;
 import org.nightlabs.base.selection.SelectionProviderProxy;
+import org.nightlabs.base.tree.AbstractTreeComposite;
 
 /**
  * The tree view for entity tree categories and their
@@ -102,13 +103,25 @@ implements ControllablePart, ISelectionProvider
 	protected PartController getPartController() {
 		return null;
 	}
+
+	/**
+	 * Returns the style the entity tree will be created with.
+	 * This implementation returns {@link AbstractTreeComposite#DEFAULT_STYLE_SINGLE}.
+	 * <p>
+	 * Override this method in order to change the style of the entity tree.
+	 * 
+	 * @return The style the entity tree will be created with.
+	 */
+	protected int getEntityTreeStyle() {
+		return AbstractTreeComposite.DEFAULT_STYLE_SINGLE;
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.part.ControllablePart#createPartContents(org.eclipse.swt.widgets.Composite)
 	 */
 	public void createPartContents(Composite parent)
 	{
-		entityTree = new EntityTree(parent, getViewSite().getId());
+		entityTree = new EntityTree(parent, getViewSite().getId(), getEntityTreeStyle());
 		selectionProviderProxy.addRealSelectionProvider(entityTree);
 	}
 

@@ -88,18 +88,21 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 	 */
 	private Map<Object, IEntityTreeCategoryBinding> childBindings;
 
-	/**
-	 * @param parent
-	 */
-	public EntityTree(Composite parent, String viewID) {
-		super(parent, false);
+	public EntityTree(Composite parent, String viewID, int treeStyle) {
+		super(parent, treeStyle, true, false, false);
 		init();
 		categoryBindings = EntityEditorRegistry.sharedInstance().getViewBindings(viewID);
 		getTreeViewer().setInput(categoryBindings);
 		getTreeViewer().addOpenListener(this);
 		getTree().setHeaderVisible(false);
 		addDisposeListener(this);
+	}
 		
+	/**
+	 * @param parent
+	 */
+	public EntityTree(Composite parent, String viewID) {
+		this(parent, viewID, AbstractTreeComposite.DEFAULT_STYLE_SINGLE);
 	}
 
 	/**
