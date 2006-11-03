@@ -52,18 +52,18 @@ public abstract class EntityTreeCategory implements IEntityTreeCategory
 	 * The id of this category.
 	 */
 	String id;
-	
+
 	/**
 	 * The name of this category.
 	 */
 	String name;
-	
+
 	/**
 	 * The icon for this category and the default
 	 * icon for entries in this category.
 	 */
 	Image icon;
-	
+
 	/**
 	 * Default constructor.
 	 */
@@ -71,7 +71,7 @@ public abstract class EntityTreeCategory implements IEntityTreeCategory
 	{
 		super();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.runtime.IExecutableExtension#setInitializationData(org.eclipse.core.runtime.IConfigurationElement, java.lang.String, java.lang.Object)
 	 */
