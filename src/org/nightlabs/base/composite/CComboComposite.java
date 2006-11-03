@@ -216,6 +216,13 @@ extends XComposite
 	public void select(int index) {
 		imageCombo.select(index);
 	}
-		
+			
+	public void setItems(List<T> types) {
+		imageCombo.removeAll();
+		this.types = types;
+		for (T type : types) {
+			imageCombo.add(labelProvider.getImage(type), labelProvider.getText(type));
+		}
+	}
 	
 }
