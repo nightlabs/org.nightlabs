@@ -106,11 +106,14 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 
 	@Override
 	protected Control createGuiControl(Composite parent, int style, String caption) {
+//		this.getGridData().grabExcessVerticalSpace = false;
+		this.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		style |= SWT.BORDER;
 		if ((style & SWT.SIMPLE) == 0 && (style & SWT.DROP_DOWN) == 0)
 			style |= SWT.DROP_DOWN;
 		if (caption != null) {
 			XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, 2);
+			comp.getGridData().grabExcessVerticalSpace = false;
 			label = new Label(comp, SWT.NONE);
 			label.setText(caption);
 			combo = new Combo(comp, style);
@@ -194,6 +197,7 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 	/**
 	 * @param listener
 	 * @see org.eclipse.swt.widgets.Combo#addSelectionListener(org.eclipse.swt.events.SelectionListener)
+	 * @deprecated The methods from combo should be completely hidden - there is already an ISelectionProvider implemented in this class
 	 */
 	public void addSelectionListener(SelectionListener listener) {
 		combo.addSelectionListener(listener);
@@ -210,6 +214,7 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 	/**
 	 * @param listener
 	 * @see org.eclipse.swt.widgets.Combo#removeSelectionListener(org.eclipse.swt.events.SelectionListener)
+	 * @deprecated The methods from combo should be completely hidden - there is already an ISelectionProvider implemented in this class
 	 */
 	public void removeSelectionListener(SelectionListener listener) {
 		combo.removeSelectionListener(listener);

@@ -65,17 +65,17 @@ public class ListComposite<T> extends AbstractListComposite<T>
 //		super(labelProvider, parent, style, layoutMode, layoutDataMode);
 //	}
 
-	public ListComposite(ILabelProvider labelProvider, Composite parent) //, int style)
+	public ListComposite(Composite parent, int style, ILabelProvider labelProvider)
 	{
-		super(parent, labelProvider, true, null);
+		super(parent, style, labelProvider, true, null);
 	}
 
-	public ListComposite(ILabelProvider labelProvider, Composite parent, boolean doCreateGuiComposite)
+	public ListComposite(Composite parent, ILabelProvider labelProvider, boolean doCreateGuiComposite)
 	{
 		super(parent, labelProvider, doCreateGuiComposite, null);
 	}
 
-	public ListComposite(ILabelProvider labelProvider, int style, Composite parent, boolean doCreateGuiControl, String caption)
+	public ListComposite(Composite parent, int style, ILabelProvider labelProvider, boolean doCreateGuiControl, String caption)
 	{
 		super(parent, style, labelProvider, doCreateGuiControl, caption);
 	}
