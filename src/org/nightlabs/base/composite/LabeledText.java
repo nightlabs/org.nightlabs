@@ -63,13 +63,15 @@ public class LabeledText extends XComposite {
 //		this.setLayout(new GridLayout());
 		getGridLayout().verticalSpacing = 5;
 		this.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		labelCaption = new Label(this, labelStyle);
-		labelCaption.setText(caption);
-		GridData labelCaptionLData = new GridData();
-		labelCaptionLData.grabExcessHorizontalSpace = true;
-		labelCaptionLData.horizontalAlignment = GridData.FILL;
-		labelCaption.setLayoutData(labelCaptionLData);
+		
+		if (caption != null) {
+			labelCaption = new Label(this, labelStyle);
+			labelCaption.setText(caption);
+			GridData labelCaptionLData = new GridData();
+			labelCaptionLData.grabExcessHorizontalSpace = true;
+			labelCaptionLData.horizontalAlignment = GridData.FILL;
+			labelCaption.setLayoutData(labelCaptionLData);
+		}
 
 		textControl = new Text(this, textStyle);
 		GridData textControlLData = new GridData();
@@ -130,8 +132,25 @@ public class LabeledText extends XComposite {
 		return textControl;
 	}
 	
+	/**
+	 * Returns the caption control. 
+	 * Note that this will be <code>null</code> if the LabeledText was
+	 * created with a caption of <code>null</code>.
+	 */
 	public Label getCaptionControl() {
 		return labelCaption;
+	}
+	
+	/**
+	 * Set the caption. 
+	 * Will have no affect, if the caption was not created, is already disposed
+	 * or if the given caption is null.
+	 * 
+	 * @param caption The caption to set.
+	 */
+	public void setCaption(String caption) {
+		if (labelCaption != null && !labelCaption.isDisposed() && caption != null)
+			labelCaption.setText(caption);
 	}
 
 	/**
