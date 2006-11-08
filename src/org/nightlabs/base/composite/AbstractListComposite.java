@@ -25,6 +25,7 @@
 package org.nightlabs.base.composite;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -329,17 +330,47 @@ implements ISelectionProvider
 	}
 	
 	/**
+	 * <p>
 	 * Removes the currently selected element in the list and returns the removed element.
+	 * If there is no element selected, this method does nothing and returns null. If
+	 * there are multiple elements selected, this method removes and returns the first
+	 * element.
+	 * </p>
+	 * <p>
+	 * If there is, after the element has been removed, no selection existing, the element
+	 * which is now at the selection-index will be selected. If the selection-index became
+	 * out-of-range, the last element will be selected.
+	 * </p>
 	 */
 	public T removeSelected()
 	{
 		int index = getSelectionIndex();
+		if (index < 0)
+			return null;
+
 		T toReturn = getSelectedElement();
 		elements.remove(index);
 		removeElementFromGui(index);
-		setSelection(Math.min(index, elements.size()-1));
-		
+		if (getSelectionIndex() < 0)
+			setSelection(Math.min(index, elements.size()-1));
+
 		return toReturn;
+	}
+
+	/**
+	 * In contrast to {@link #removeSelected()}, this method does not select any other element,
+	 * after all previously selected elements have been removed.
+	 */
+	public List<T> removeAllSelected()
+	{
+		int[] selectionIndices = getSelectionIndices();
+		Arrays.sort(selectionIndices);
+		ArrayList<T> res = new ArrayList<T>(selectionIndices.length);
+		for (int i = selectionIndices.length -1; i >= 0; --i) {
+			res.add(elements.remove(selectionIndices[i]));
+			removeElementFromGui(selectionIndices[i]);
+		}
+		return res;
 	}
 	
 	public void refresh()
