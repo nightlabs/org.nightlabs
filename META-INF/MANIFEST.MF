@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.base.j2ee;resolution:=optional
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.keyreader
-Bundle-ClassPath: lib/KeyReader.jar
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: org.nightlabs.base,
  org.nightlabs.jfire.base.j2ee
+Bundle-ClassPath: lib/KeyReader.jar
