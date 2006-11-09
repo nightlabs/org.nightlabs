@@ -6,5 +6,12 @@
          point="org.nightlabs.jfire.base.j2ee.remoteResourceFilter">
       <exclusion pattern="org\/nightlabs\/keyreader\/.*"/>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.nightlabs.keyreader.preference.KeyReaderPreferencePage"
+            id="org.nightlabs.keyreader.preference.KeyReaderPreferencePage"
+            name="KeyReader Preferences"/>
+   </extension>
 
 </plugin>
