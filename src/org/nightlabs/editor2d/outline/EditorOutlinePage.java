@@ -160,17 +160,17 @@ implements IAdaptable
     		EditorPlugin.getDefault(), EditorOutlinePage.class, "Overview"));
     tbm.add(showOverviewAction);  	
     
-    // Add Page
-    newPageAction = new NewPageAction(editor);
-    tbm.add(newPageAction);
-    
-    // Delete Page
-    deletePageAction = new DeletePageAction(editor);
-    tbm.add(deletePageAction);
+//    // Add Page
+//    newPageAction = new NewPageAction(editor);
+//    tbm.add(newPageAction);
+//    
+//    // Delete Page
+//    deletePageAction = new DeletePageAction(editor);
+//    tbm.add(deletePageAction);
   }
   
-  private IAction newPageAction;
-  private IAction deletePageAction;  
+//  private IAction newPageAction;
+//  private IAction deletePageAction;  
   
   private IAction createFilterAction(final Class c) 
   {

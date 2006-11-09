@@ -121,8 +121,8 @@ extends ViewPart
   {
     public void selectionChanged(IWorkbenchPart part, ISelection selection) 
     {
-    	if (logger.isDebugEnabled())
-    		logger.debug("selectionChanged()");
+//    	if (logger.isDebugEnabled())
+//    		logger.debug("selectionChanged()");
     	
       if (part instanceof AbstractEditor) {
       	start(part);

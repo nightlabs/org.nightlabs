@@ -92,11 +92,11 @@ extends DrawComponentTreeEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(DrawComponentContainer.CHILD_ADDED)) {
-			logger.debug(propertyName);
+//			logger.debug(propertyName);
 			refreshChildren();			
 		}
 		else if (propertyName.equals(DrawComponentContainer.CHILD_REMOVED)) {
-			logger.debug(propertyName);
+//			logger.debug(propertyName);
 			refreshChildren();			
 		}		
 	}  

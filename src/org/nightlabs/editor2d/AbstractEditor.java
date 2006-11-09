@@ -277,9 +277,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	public RenderModeManager getRenderModeManager() {
 		return renderMan;
 	}     
-//	public RenderModeManager getRenderModeManager() {
-//	return getMultiLayerDrawComponent().getRenderModeManager();
-//	} 
 
 	private FilterManager filterMan = null;
 	public FilterManager getFilterManager() {
@@ -347,60 +344,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		return null;
 	}
 	
-//	protected void load(FileEditorInput fileInput, IProgressMonitor monitor) 
-//	{
-//		IOFilter ioFilter = getIOFilterMan().getIOFilter(fileInput.getFile());
-//		if (ioFilter != null) 
-//		{
-//			try 
-//			{    		
-//				if (ioFilter instanceof IOFilterWithProgress) 
-//				{	    			
-//					IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
-//					progressFilter.addPropertyChangeListener(progressListener);	    			
-//					monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), progressFilter.getTotalWork());
-//					mldc = load(ioFilter, new FileInputStream(fileInput.getFile()));
-//					progressFilter.removePropertyChangeListener(progressListener);
-//					return;
-//				}
-//				else
-//					monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), 2);	    			
-//				mldc = load(ioFilter, new FileInputStream(fileInput.getFile()));
-//				return;
-//			} catch (FileNotFoundException e) {
-//				throw new RuntimeException(e);
-//			} finally {
-//				monitor.done();
-//			}
-//		}
-//	}
-//
-//	protected void load(FileEditorInput fileInput) 
-//	{    	
-//		final FileEditorInput input = fileInput;
-//		IRunnableWithProgress runnable = new IRunnableWithProgress()
-//		{			
-//			public void run(IProgressMonitor monitor) 
-//			throws InvocationTargetException, InterruptedException 
-//			{
-//				try {
-//					load(input, monitor);      
-//				} 
-//				catch (Exception e) {
-//					throw new RuntimeException(e);
-//				}					
-//			}			
-//		};
-//
-//		try {
-//			getProgressMonitor().run(false, false, runnable);
-//			setPartName(input.getName());
-//		}
-//		catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}    	    	
-//	}
-
 	protected void load(FileEditorInput fileInput, IProgressMonitor monitor) 
 	{
 		IOFilter ioFilter = getIOFilterMan().getIOFilter(fileInput.getFile());
@@ -517,8 +460,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		getGraphicalControl().addListener(SWT.Activate, listener);
 		getGraphicalControl().addListener(SWT.Deactivate, listener);  
 
-		// TODO Workaround to fix grey bg in editor
-		getGraphicalControl().setBackground(new Color(null, 255, 255, 255));
+//		// TODO Workaround to fix grey bg in editor
+//		getGraphicalControl().setBackground(new Color(null, 255, 255, 255));
 
 		// ViewerManager
 		viewerManager = new ViewerManager(viewer, getEditorSite().getActionBars().getStatusLineManager());
@@ -531,10 +474,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	// should solve redraw problems when resizing the viewer
 	private ControlListener resizeListener = new ControlAdapter(){		
 		public void controlResized(ControlEvent e) {
-//			if (e.getSource().equals(getGraphicalViewer().getControl())) {
 			updateViewer();
 			logger.debug("Control resized!");
-//			}
 		}		
 	};
 			
@@ -565,12 +506,12 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		return new PaletteViewerProvider(getEditDomain()) {
 			protected void configurePaletteViewer(PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
-				// create a drag source listener for this palette viewer
-				// together with an appropriate transfer drop target listener, this will enable
-				// model element creation by dragging a CombinatedTemplateCreationEntries 
-				// from the palette into the editor
-				// @see ShapesEditor#createTransferDropTargetListener()
-				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
+//				// create a drag source listener for this palette viewer
+//				// together with an appropriate transfer drop target listener, this will enable
+//				// model element creation by dragging a CombinatedTemplateCreationEntries 
+//				// from the palette into the editor
+//				// @see ShapesEditor#createTransferDropTargetListener()
+//				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
 			}
 		};
 	}
@@ -619,19 +560,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		return zoomManager;		
 	}
 	
-//	/**
-//* Create a transfer drop target listener. When using a CombinedTemplateCreationEntry
-//	* tool in the palette, this will enable model element creation by dragging from the palette.
-//	* @see #createPaletteViewerProvider()
-//	*/
-//	protected TransferDropTargetListener createTransferDropTargetListener() {
-//	return new TemplateTransferDropTargetListener(getGraphicalViewer()) {
-//	protected CreationFactory getFactory(Object template) {
-//	return new SimpleFactory((Class) template);
-//	}
-//	};
-//	}
-
 	public void doSave(IProgressMonitor monitor) 
 	{
 		try {      	
@@ -725,6 +653,15 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		}
 	}  
 
+	private Color bgColor = new Color(null, 255, 255, 255);
+	public Color getBackgroundColor() {
+		return bgColor;
+	}
+	public void setBackgroundColor(Color bgColor) {
+		this.bgColor = bgColor;
+		getGraphicalViewer().getControl().setBackground(bgColor);
+	}
+	
 	/**
 	 * Set up the editor's inital content (after creation).
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#initializeGraphicalViewer()
@@ -734,11 +671,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		graphicalViewer.setContents(getModel()); // set the contents of this editor
 
-		graphicalViewer.getControl().setBackground(new Color(null, 255, 255, 255));
-		graphicalViewer.getControl().setForeground(new Color(null, 255, 255, 255));      
-//		// listen for dropped parts
-//		graphicalViewer.addDropTargetListener(createTransferDropTargetListener());   
-
+		setBackgroundColor(bgColor);
+		
 		// DescriptorManager
 		descriptorManager = new DescriptorManager();
 		configureDescriptorManager();      
@@ -747,8 +681,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		} else {
 			logger.debug("DescriptorManager for MultiLayerDrawComponentEditPart not set, because it is null!");
 		}
-		viewerManager.setDescriptorManager(getDescriptorManager());      
-
+		viewerManager.setDescriptorManager(getDescriptorManager());
+		
+		// FilterManager
 		configureFilterManager();      
 	}
 
@@ -1026,9 +961,14 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	 */
 	protected void createGraphicalViewer(Composite parent) 
 	{
+		long start = System.currentTimeMillis();
 		rulerComp = new RulerComposite(parent, SWT.NONE);		
 		super.createGraphicalViewer(rulerComp);
-		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());      
+		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
+		if (logger.isDebugEnabled()) {
+			long duration = System.currentTimeMillis() - start;
+			logger.debug("createGraphicalViewer took "+duration+" ms!");
+		}
 	}  
 
 	public FigureCanvas getEditor(){
@@ -1107,26 +1047,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	protected void setSavePreviouslyNeeded(boolean value) {
 		savePreviouslyNeeded = value;
 	}  
-
-//	protected void superSetInput(IEditorInput input) 
-//{
-//	// The workspace never changes for an editor.  So, removing and re-adding the 
-//	// resourceListener is not necessary.  But it is being done here for the sake
-//	// of proper implementation.  Plus, the resourceListener needs to be added 
-//	// to the workspace the first time around.
-//	if(getEditorInput() != null) {
-//	IFile file = ((FileEditorInput)getEditorInput()).getFile();
-//	file.getWorkspace().removeResourceChangeListener(resourceListener);
-//	}
-
-//	super.setInput(input);
-
-//	if(getEditorInput() != null && getEditorInput() instanceof FileEditorInput) {
-//	IFile file = ((FileEditorInput)getEditorInput()).getFile();
-//	file.getWorkspace().addResourceChangeListener(resourceListener);
-//	setTitle(file.getName());
-//	}
-//	}
 
 	protected boolean performSaveAs() 
 	{
@@ -1309,7 +1229,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	}
 
 	protected void setInput(IEditorInput input)
-	{
+	{ 
+		long start = System.currentTimeMillis();
 		super.setInput(input);
 		renderMan = RendererRegistry.sharedInstance().getRenderModeManager();
 
@@ -1327,60 +1248,12 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 		mldc.setRenderModeManager(getRenderModeManager());      
 		getMultiLayerDrawComponent().setLanguageId(getLanguageManager().getCurrentLanguageID());
-
-		getUnitManager().setCurrentUnit(getMultiLayerDrawComponent().getModelUnit());      
+		getUnitManager().setCurrentUnit(getMultiLayerDrawComponent().getModelUnit());
+		if (logger.isDebugEnabled()) {
+			long duration = System.currentTimeMillis() - start;
+			logger.debug("setInput() took "+duration+" ms!");
+		}
 	}
-
-//	protected void initialzePage() 
-//	{
-//		logger.debug("initialize Page!");
-//		mldc = getMultiLayerDrawComponent();
-//		loadAdditional();
-//
-//		String pageID = Preferences.getPreferenceStore().getString(
-//				Preferences.PREF_PREDEFINED_PAGE_ID);
-//		IPredefinedPage defaultPage = getPredefinedPageRegistry().getPage(pageID);
-//		IUnit pageUnit = defaultPage.getUnit();    	
-//		String resolutionUnitID = Preferences.getPreferenceStore().getString(
-//				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID);
-//		IResolutionUnit resUnit = getResolutionUnitRegistry().getResolutionUnit(resolutionUnitID);
-//		Resolution resolution = new ResolutionImpl(resUnit, 
-//				Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION)); 
-//
-//		double pageHeight = defaultPage.getPageHeight() * pageUnit.getFactor();
-//		double pageWidth = defaultPage.getPageWidth() * pageUnit.getFactor();  
-//		
-//		DotUnit dotUnit = (DotUnit) getUnitRegistry().getUnit(DotUnit.UNIT_ID);
-//		if (dotUnit == null) {
-//			dotUnit = new DotUnit(resolution);
-//			getUnitRegistry().addUnit(dotUnit, UnitConstants.UNIT_CONTEXT_EDITOR2D);			
-//		}
-//		else 
-//			dotUnit.setResolution(resolution);
-//		double factor = dotUnit.getFactor();    	
-//
-//		String unitID = Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_UNIT_ID);
-//		getUnitManager().setCurrentUnit(getUnitRegistry().getUnit(unitID));
-//		
-//		logger.debug("factor = "+factor);
-//		logger.debug("pageHeight = "+pageHeight+" mm");
-//		logger.debug("pageWidth = "+pageWidth+" mm");    		  	
-//
-//		pageWidth = pageWidth * factor;
-//		pageHeight = pageHeight * factor;
-//
-//		logger.debug("new PageHeight = "+pageHeight);
-//		logger.debug("new PageWidth = "+pageWidth);
-//
-//		double defaultX = 0;
-//		double defaultY = 0;
-//
-//		Rectangle pageBounds = new Rectangle((int)defaultX, (int)defaultY, (int)pageWidth, (int)pageHeight);
-//		logger.debug("pageBounds = "+pageBounds);	  	
-//
-//		getMultiLayerDrawComponent().setResolution(resolution);  	  	
-//		getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 	  	
-//	}
 
 	protected void initialzePage() 
 	{
@@ -1520,20 +1393,27 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		Runtime runTime = Runtime.getRuntime();
 		long maxMemory = runTime.maxMemory();
 		long freeMemory = runTime.freeMemory();
-		long totalMemory = runTime.totalMemory();    
+		long totalMemory = runTime.totalMemory();
+		long usedMemory = totalMemory - freeMemory;
 		long startTime = System.currentTimeMillis();
 
-		logger.debug("Total Memory BEFORE GC = "+totalMemory);
 		logger.debug("Max Memory BEFORE GC   = "+maxMemory);
+		logger.debug("Total Memory BEFORE GC = "+totalMemory);
+		logger.debug("Used Memory BEFORE GC  = "+usedMemory);
 		logger.debug("Free Memory BEFORE GC  = "+freeMemory);    
 		logger.debug("GC Begin!");
 
 		runTime.gc();
 		long newTime = System.currentTimeMillis() - startTime;
-
-		logger.debug("GC took "+newTime+" ms");        
+		
+		logger.debug("GC took "+newTime+" ms");
+		
+		freeMemory = runTime.freeMemory();
+		totalMemory = runTime.totalMemory();
+		usedMemory = totalMemory - freeMemory;
+		
 		logger.debug("Total Memory AFTER GC = "+totalMemory);
-		logger.debug("Max Memory AFTER GC   = "+maxMemory);
+		logger.debug("Used Memory BEFORE GC  = "+usedMemory);
 		logger.debug("Free Memory AFTER GC  = "+freeMemory);
 		logger.debug("");  	
 	}	
@@ -1548,4 +1428,16 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	}
 
 	protected abstract Editor2DFactory createModelFactory();
+
+	@Override
+	public void createPartControl(Composite arg0) 
+	{
+		long start = System.currentTimeMillis();
+		super.createPartControl(arg0);
+		if (logger.isDebugEnabled()) {
+			long duration = System.currentTimeMillis() - start;
+			logger.debug("createPartControl took "+duration+" ms");
+		}
+	}
+		
 }

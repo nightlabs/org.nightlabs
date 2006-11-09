@@ -31,9 +31,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.ui.actions.SelectionAction;
-import org.eclipse.ui.IWorkbenchPart;
-
+import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
@@ -42,16 +40,13 @@ import org.nightlabs.editor2d.request.EditorRotateCenterRequest;
 
 
 public class ResetRotationCenterAction 
-extends SelectionAction
+//extends SelectionAction
+extends AbstractEditorSelectionAction
 implements EditorRequestConstants
 {
   public static final String ID = ResetRotationCenterAction.class.getName();
   
-  /**
-   * @param part
-   */
-  public ResetRotationCenterAction(IWorkbenchPart part) 
-  {
+  public ResetRotationCenterAction(AbstractEditor part) {
     super(part);
   }
 
@@ -92,6 +87,8 @@ implements EditorRequestConstants
         {
           dc.setRotationX(DrawComponent.ROTATION_X_DEFAULT);
           dc.setRotationY(DrawComponent.ROTATION_Y_DEFAULT);
+          clearSelection();
+          selectEditPart(dc);          
         }
       }
     }        
@@ -99,7 +96,6 @@ implements EditorRequestConstants
   
   protected void init() 
   {
-  	super.init();
   	setText(EditorPlugin.getResourceString("action.resetrotationcenter.label"));
   	setToolTipText(EditorPlugin.getResourceString("action.resetrotationcenter.tooltip"));
   	setId(ID);

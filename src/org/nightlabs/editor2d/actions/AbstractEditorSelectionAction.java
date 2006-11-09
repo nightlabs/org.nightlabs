@@ -453,4 +453,7 @@ extends SelectionAction
 		return getEditor().getSite().getShell();
 	}
 		
+	public void clearSelection() {
+		getGraphicalViewer().setSelection(new StructuredSelection());
+	}
 }
