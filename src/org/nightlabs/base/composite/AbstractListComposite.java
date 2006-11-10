@@ -306,9 +306,15 @@ implements ISelectionProvider
 	 * 
 	 * @param element The element to be selected.
 	 * @return <code>True</code> if the element to be selected was in the list and <code>false</code> if not.
+	 *		If <code>element</code> is <code>null</code>, this method always returns <code>true</code> and deselects.
 	 */
 	public boolean selectElement(T element)
 	{
+		if (element == null) {
+			setSelection(-1);
+			return true;
+		}
+		
 		int index = elements.indexOf(element);
 		if (index != -1)
 		{
