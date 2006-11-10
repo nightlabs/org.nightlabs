@@ -8,16 +8,16 @@ import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 import org.nightlabs.config.Config;
 
-public class KeyReaderRegistry
+public class KeyReaderImplementationRegistry
 extends AbstractEPProcessor
 {
-	private static KeyReaderRegistry sharedInstance = null;
-	public synchronized static KeyReaderRegistry sharedInstance()
+	private static KeyReaderImplementationRegistry sharedInstance = null;
+	public synchronized static KeyReaderImplementationRegistry sharedInstance()
 	{
 		if (sharedInstance == null) {
 			try {
 				KeyReaderMan.createSharedInstance(Config.sharedInstance());
-				sharedInstance = new KeyReaderRegistry();
+				sharedInstance = new KeyReaderImplementationRegistry();
 				sharedInstance.process();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -28,7 +28,7 @@ extends AbstractEPProcessor
 
 	public String getExtensionPointID()
 	{
-		return "org.nightlabs.keyreader.keyReader";
+		return "org.nightlabs.keyreader.keyReaderImplementation";
 	}
 
 	public void processElement(IExtension extension, IConfigurationElement element)

@@ -3,17 +3,17 @@
 <schema targetNamespace="org.nightlabs.keyreader">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.keyreader" id="keyReader" name="Key Reader"/>
+         <meta.schema plugin="org.nightlabs.keyreader" id="keyReaderUseCase" name="Key Reader Use Case"/>
       </appInfo>
       <documentation>
-         This extension point serves for populating the list returned by KeyReader.getKeyReaderImplementations().
+         A KeyReaderUserCase extension is used to tell the configuration-UI that a certain keyReaderID is in use. For the KeyReaderLibrary itself it&apos;s not necessary, because it will provide a dummy configuration for unknown keyReaderIDs. But in order to manipulate the configurations in the user interface, it&apos;s necessary that you register all keyReaderIDs that you use.
       </documentation>
    </annotation>
 
    <element name="extension">
       <complexType>
          <sequence>
-            <element ref="keyReader"/>
+            <element ref="keyReaderUseCase"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -42,16 +42,27 @@
       </complexType>
    </element>
 
-   <element name="keyReader">
+   <element name="keyReaderUseCase">
       <complexType>
-         <attribute name="class" type="string" use="required">
+         <attribute name="keyReaderID" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
-               <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.keyreader.KeyReader"/>
-               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

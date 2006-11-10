@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="keyReader" name="Key Reader" schema="schema/keyReader.exsd"/>
+   <extension-point id="keyReaderImplementation" name="Key Reader Implementation" schema="schema/keyReaderImplementation.exsd"/>
+   <extension-point id="keyReaderUseCase" name="Key Reader Use Case" schema="schema/keyReaderUseCase.exsd"/>
    <extension
          point="org.nightlabs.jfire.base.j2ee.remoteResourceFilter">
       <exclusion pattern="org\/nightlabs\/keyreader\/.*"/>
