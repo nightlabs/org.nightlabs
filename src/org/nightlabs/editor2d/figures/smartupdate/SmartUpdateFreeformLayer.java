@@ -182,5 +182,8 @@ public class SmartUpdateFreeformLayer
 			}
 		}
 	}
-	
+
+	public void dispose() {
+		
+	}	
 }

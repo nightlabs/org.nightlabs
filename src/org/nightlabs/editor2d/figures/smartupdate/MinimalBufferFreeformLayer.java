@@ -249,5 +249,12 @@ public class MinimalBufferFreeformLayer
 			}
 		}
 	}
-	
+
+	public void dispose() {
+		bufferedGraphics.dispose();
+		bufferedImage.flush();
+		bufferedImage = null;
+		bufferedGraphics = null;			
+	}
+		
 }

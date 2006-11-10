@@ -183,6 +183,15 @@ extends AbstractDrawComponentContainerEditPart
 			return;			
 		}
 		super.propertyChanged(evt);
+	}
+	
+	@Override
+	public void deactivate() 
+	{
+		super.deactivate();
+		if (getBufferedFreeformLayer() != null)
+			getBufferedFreeformLayer().dispose();		
 	}   
     
+	
 }

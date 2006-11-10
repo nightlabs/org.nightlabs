@@ -238,7 +238,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		if (editPartFactory == null)
 			editPartFactory = createEditPartFactory();;
 
-			return editPartFactory;
+		return editPartFactory;
 	}      
 
 	protected abstract EditPartFactory createOutlineEditPartFactory();
@@ -1308,8 +1308,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		}    	
 	}
 
-	public EditPartViewer getEditPartViewer() 
-	{
+	public EditPartViewer getEditPartViewer() {
 		return (EditPartViewer) getGraphicalViewer();
 	}
 
@@ -1367,21 +1366,34 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	public void dispose() 
 	{
 		super.dispose();
+		
+		getGraphicalControl().removeControlListener(resizeListener);
+		
+		mldc.dispose();
 		mldc = null;
+		
 		if (outlinePage != null)
 			outlinePage.dispose();
-		outlinePage = null; 
+		outlinePage = null;
+		
+		if (rootEditPart != null)
+			rootEditPart.deactivate();
 		rootEditPart = null;
+		
+		if (mldcEditPart != null)
+			mldcEditPart.deactivate();
+		mldcEditPart = null;
+				
 		if (rulerComp != null)
-			rulerComp.dispose();
+			rulerComp.dispose();		
 		rulerComp = null;
-		treeViewer = null;
-		viewerManager = null;
-
+		
 		if (contextMenuProvider != null)
 			contextMenuProvider.dispose();
-
 		contextMenuProvider = null;
+		
+		treeViewer = null;
+		viewerManager = null;
 		editPartFactory = null;
 		paletteRoot = null;    
 
@@ -1397,10 +1409,11 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		long usedMemory = totalMemory - freeMemory;
 		long startTime = System.currentTimeMillis();
 
-		logger.debug("Max Memory BEFORE GC   = "+maxMemory);
-		logger.debug("Total Memory BEFORE GC = "+totalMemory);
-		logger.debug("Used Memory BEFORE GC  = "+usedMemory);
-		logger.debug("Free Memory BEFORE GC  = "+freeMemory);    
+		double mb = 1024 * 1024;
+		logger.debug("Max Memory BEFORE GC   = "+(maxMemory / mb)+" MB");
+		logger.debug("Total Memory BEFORE GC = "+(totalMemory / mb)+" MB");
+		logger.debug("Used Memory BEFORE GC  = "+(usedMemory / mb)+" MB");
+		logger.debug("Free Memory BEFORE GC  = "+(freeMemory / mb)+" MB");    
 		logger.debug("GC Begin!");
 
 		runTime.gc();
@@ -1412,9 +1425,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		totalMemory = runTime.totalMemory();
 		usedMemory = totalMemory - freeMemory;
 		
-		logger.debug("Total Memory AFTER GC = "+totalMemory);
-		logger.debug("Used Memory BEFORE GC  = "+usedMemory);
-		logger.debug("Free Memory AFTER GC  = "+freeMemory);
+		logger.debug("Total Memory AFTER GC = "+(totalMemory / mb)+" MB");
+		logger.debug("Used Memory AFTER GC  = "+(usedMemory / mb)+" MB");
+		logger.debug("Free Memory AFTER GC  = "+(freeMemory / mb)+" MB");    
 		logger.debug("");  	
 	}	
 
@@ -1427,17 +1440,5 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		return factory;
 	}
 
-	protected abstract Editor2DFactory createModelFactory();
-
-	@Override
-	public void createPartControl(Composite arg0) 
-	{
-		long start = System.currentTimeMillis();
-		super.createPartControl(arg0);
-		if (logger.isDebugEnabled()) {
-			long duration = System.currentTimeMillis() - start;
-			logger.debug("createPartControl took "+duration+" ms");
-		}
-	}
-		
+	protected abstract Editor2DFactory createModelFactory();		
 }

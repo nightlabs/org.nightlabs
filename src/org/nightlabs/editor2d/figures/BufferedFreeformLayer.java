@@ -57,5 +57,11 @@ public interface BufferedFreeformLayer {
 	 */
 	public void init(EditPart editPart);
 	
+	/**
+	 * disposes and frees any kind of ressources which are allocated
+	 * for the buffering
+	 *
+	 */
+	public void dispose();
 //	public void repaint();
 }

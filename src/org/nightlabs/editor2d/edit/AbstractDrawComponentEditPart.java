@@ -31,6 +31,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -51,8 +52,9 @@ public abstract class AbstractDrawComponentEditPart
 extends AbstractGraphicalEditPart
 implements EditorRequestConstants
 {
-  public AbstractDrawComponentEditPart(DrawComponent drawComponent) 
-  {
+	private static final Logger logger = Logger.getLogger(AbstractDrawComponentEditPart.class);
+	
+  public AbstractDrawComponentEditPart(DrawComponent drawComponent) {
     setModel(drawComponent);
   }
   
@@ -85,9 +87,7 @@ implements EditorRequestConstants
 //  	figure.setDescriptorManager(getModelRoot().getDescriptorManager());
     figure.setDrawComponent(getDrawComponent());    
     addRenderer(figure);
-    if (figure instanceof DrawComponentFigure) {
-      addZoomListener((DrawComponentFigure)figure);
-    }
+    addZoomListener((DrawComponentFigure)figure);
     figure.setToolTip(getTooltip());
     return figure;
   }
@@ -136,9 +136,16 @@ implements EditorRequestConstants
       zoomManager.addZoomListener(figure.getZoomListener());
     }  	
   }
-  
-  protected RendererFigure getRendererFigure() 
+
+  protected void removeZoomListener(DrawComponentFigure figure) 
   {
+    ZoomManager zoomManager = EditorUtil.getZoomManager(this);
+    if (zoomManager != null) {
+      zoomManager.removeZoomListener(figure.getZoomListener());
+    }  	
+  }
+
+  protected RendererFigure getRendererFigure() {
     return (RendererFigure) getFigure();
   }
   
@@ -173,6 +180,15 @@ implements EditorRequestConstants
     
     // stop listening for changes in the model
     unhookFromDrawComponent(getDrawComponent());
+    
+    if (getFigure() instanceof DrawComponentFigure) {
+    	DrawComponentFigure dcf = (DrawComponentFigure) figure; 
+    	removeZoomListener(dcf);
+    	dcf.dispose();
+    }
+    
+//    if (logger.isDebugEnabled())
+//    	logger.debug("deactivate called");
     
     super.deactivate();
   }

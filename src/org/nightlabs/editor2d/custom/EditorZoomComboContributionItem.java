@@ -262,9 +262,9 @@ extends XContributionItem
   {
 		public void partActivated(IWorkbenchPart part) 
 		{
-			if (logger.isDebugEnabled()) {
-				logger.debug("part activated");
-			}
+//			if (logger.isDebugEnabled()) {
+//				logger.debug("part activated");
+//			}
 				
 			Object mldcAdapter = part.getAdapter(MultiLayerDrawComponent.class);
 			if (mldcAdapter != null && mldcAdapter instanceof MultiLayerDrawComponent) {
@@ -309,7 +309,7 @@ extends XContributionItem
   	zoomManager = zm;
 
   	double factor = getResolutionFactor();  	
-  	logger.debug("factor = "+factor);
+//  	logger.debug("factor = "+factor);
   	
 		zoomManager.setZoomLevels(getZoomLevels(factor));
 		zoomManager.setUIMultiplier(1/factor);		
@@ -328,7 +328,7 @@ extends XContributionItem
 //			int dpi = Toolkit.getDefaultToolkit().getScreenResolution();
 			int dpi = 72;
 			deviceResolution = new ResolutionImpl(new DPIResolutionUnit(), dpi, dpi);
-			logger.debug("ScreenResolution (DPI) = "+dpi);			
+//			logger.debug("ScreenResolution (DPI) = "+dpi);			
 		}
 		return deviceResolution;		
 	}
@@ -358,7 +358,7 @@ extends XContributionItem
   public Resolution getDocumentResolution() 
   {
   	if (mldc != null) {
-  		logger.debug("DocumentResolution = "+mldc.getResolution().getResolutionX()+" "+mldc.getResolution().getResolutionUnit().getResolutionID());  	  		  		
+//  		logger.debug("DocumentResolution = "+mldc.getResolution().getResolutionX()+" "+mldc.getResolution().getResolutionUnit().getResolutionID());  	  		  		
   		return mldc.getResolution();
   	}
   	return new ResolutionImpl();

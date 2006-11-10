@@ -286,4 +286,11 @@ implements RendererFigure
 		return super.getBounds();
 	}  
  	
+	public void dispose() 
+	{
+		outlineArea = null;
+		if (j2d != null)
+			j2d.dispose();
+		j2d = null;
+	}
 }

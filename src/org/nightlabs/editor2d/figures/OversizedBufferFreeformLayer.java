@@ -47,6 +47,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Control;
 import org.holongate.j2d.J2DRegistry;
 
@@ -351,6 +353,7 @@ implements FreeformFigure, BufferedFreeformLayer
 			ScrollingGraphicalViewer graphicalViewer = (ScrollingGraphicalViewer) viewer;
 			Control control = graphicalViewer.getControl();
 			this.viewerControl = control;
+			viewerControl.addDisposeListener(viewerControlDisposeListener);
 		}		
 	}
 	
@@ -433,5 +436,17 @@ implements FreeformFigure, BufferedFreeformLayer
 //    LOGGER.debug("setBounds("+rect+")");
 //    super.setBounds(rect);
 	}
+
+	public void dispose() 
+	{
+		clearBuffer();		
+		if (logger.isDebugEnabled())
+			logger.debug("dispose");
+	}
 		
+	private DisposeListener viewerControlDisposeListener = new DisposeListener(){	
+		public void widgetDisposed(DisposeEvent e) {
+			dispose();
+		}	
+	};
 }

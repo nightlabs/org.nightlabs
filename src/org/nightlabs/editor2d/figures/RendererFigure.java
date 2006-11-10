@@ -57,5 +57,5 @@ extends IFigure
    * 
    * @param graphics the Graphics2D to paint on
    */
-  public void paint(Graphics2D graphics);
+  public void paint(Graphics2D graphics);  
 }
