@@ -472,6 +472,9 @@ public class PartVisibilityTracker {
 	 * Calls {@link #getPartVisibilityStatus(IWorkbenchPart)} for the sharedInstance.
 	 */
 	public static boolean isPartVisible(IWorkbenchPart part) {
+		if (RCPUtil.getActiveWorkbenchPage().isPartVisible(part))
+			return true;
+		
 		return sharedInstance().getPartVisibilityStatus(part) == PART_STATUS_VISIBLE;
 	}
 	
