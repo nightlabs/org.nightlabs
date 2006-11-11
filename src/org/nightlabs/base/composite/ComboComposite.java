@@ -86,6 +86,10 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 		this(parent, style, elements, labelProvider, (String)null);
 	}
 
+	public ComboComposite(Composite parent, int style, String caption) {
+		super(parent, style,  new LabelProvider(), true, caption);
+	}
+
 	public ComboComposite(Composite parent, int style, List<T> elements, ILabelProvider labelProvider, String caption) {
 //		super(labelProvider, parent, SWT.NONE, false);
 		super(parent, labelProvider, false, null);
