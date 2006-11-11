@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Connection Plug-in
+Bundle-SymbolicName: org.nightlabs.connection;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.nightlabs.connection.NightLabsConnectionPlugin
+Bundle-Vendor: NightLabs.com
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.nightlabs.base;visibility:=reexport,
+ org.nightlabs.jfire.base.j2ee;resolution:=optional
+Eclipse-LazyStart: true
+Bundle-ClassPath: lib/RXTXcomm.jar,
+ lib/NightLabsConnection.jar
+Export-Package: gnu.io,
+ org.nightlabs.connection,
+ org.nightlabs.connection.config,
+ org.nightlabs.connection.resource,
+ org.nightlabs.connection.rxtx,
+ org.nightlabs.connection.rxtx.config,
+ org.nightlabs.connection.ui,
+ org.nightlabs.connection.ui.parallel,
+ org.nightlabs.connection.ui.serial
+Eclipse-RegisterBuddy: org.nightlabs.base,
+ org.nightlabs.jfire.base.j2ee
