@@ -9,9 +9,13 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.base;visibility:=reexport,
- org.nightlabs.jfire.base.j2ee;resolution:=optional
+ org.nightlabs.jfire.base.j2ee;resolution:=optional,
+ org.nightlabs.connection;visibility:=reexport
 Eclipse-LazyStart: true
-Export-Package: org.nightlabs.keyreader
+Export-Package: org.nightlabs.keyreader,
+ org.nightlabs.keyreader.config,
+ org.nightlabs.keyreader.preference,
+ org.nightlabs.keyreader.vendor.generic
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: org.nightlabs.base,
  org.nightlabs.jfire.base.j2ee

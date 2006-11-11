@@ -11,19 +11,19 @@ import org.nightlabs.config.Config;
 public class KeyReaderImplementationRegistry
 extends AbstractEPProcessor
 {
-	private static KeyReaderImplementationRegistry sharedInstance = null;
+	private static KeyReaderImplementationRegistry _sharedInstance = null;
 	public synchronized static KeyReaderImplementationRegistry sharedInstance()
 	{
-		if (sharedInstance == null) {
+		if (_sharedInstance == null) {
 			try {
 				KeyReaderMan.createSharedInstance(Config.sharedInstance());
-				sharedInstance = new KeyReaderImplementationRegistry();
-				sharedInstance.process();
+				_sharedInstance = new KeyReaderImplementationRegistry();
+				_sharedInstance.process();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
-		return sharedInstance;
+		return _sharedInstance;
 	}
 
 	public String getExtensionPointID()
