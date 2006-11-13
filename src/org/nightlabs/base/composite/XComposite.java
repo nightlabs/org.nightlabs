@@ -73,8 +73,8 @@ public class XComposite extends Composite
 			case ORDINARY_WRAPPER:
 				return;
 			case TIGHT_WRAPPER:
-				layout.horizontalSpacing = 0;
-				layout.verticalSpacing = 0;
+//				layout.horizontalSpacing = 0;
+//				layout.verticalSpacing = 0;
 				layout.marginHeight = 0;
 				layout.marginWidth = 0;
 				layout.marginLeft = 0;
@@ -83,13 +83,13 @@ public class XComposite extends Composite
 				layout.marginBottom = 0;
 				return;
 			case TOP_BOTTOM_WRAPPER:
-				layout.verticalSpacing = 0;
+//				layout.verticalSpacing = 0;
 				layout.marginHeight = 0;
 				layout.marginTop = 0;
 				layout.marginBottom = 0;
 				return;
 			case LEFT_RIGHT_WRAPPER:
-				layout.horizontalSpacing = 0;
+//				layout.horizontalSpacing = 0;
 				layout.marginWidth = 0;
 				layout.marginLeft = 0;
 				layout.marginRight = 0;
