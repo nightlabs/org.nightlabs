@@ -36,9 +36,11 @@ import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 
 /**
- *
- * <p> Author: alex[AT]NightLabs[DOT]de </p>
- * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
+ * Baisc {@link WorkbenchAdvisor} that can be used as basis when developing custom applications.
+ * This Advisor initializes Log4J and the NightLabs {@link Config} for you.
+ * 
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
+ * @author Daniel Mazurek Daniel.Mazurek[AT]NightLabs[DOT]de
  */
 public abstract class AbstractWorkbenchAdvisor 
 extends WorkbenchAdvisor 

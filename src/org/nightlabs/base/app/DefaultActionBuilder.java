@@ -64,8 +64,8 @@ import org.nightlabs.config.ConfigException;
 
 /**
  * 
- * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de, <p>
- * <p>		 		 Alex[AT]NightLabs[DOT]de</p>
+ * @author Daniel Mazurek Daniel.Mazurek[AT]NightLabs[DOT]de
+ * @author Alexander Bieber Alex[AT]NightLabs[DOT]de
  */
 public class DefaultActionBuilder 
 extends ActionBarAdvisor 

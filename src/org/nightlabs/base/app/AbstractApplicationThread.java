@@ -32,8 +32,14 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 
 /**
- * @author Daniel.Mazurek[AT]NightLabs[DOT]de
- * @author Alex[AT]NightLabs[DOT]de</p>
+ * In the nightlabs base application framework {@link AbstractApplicationThread}
+ * is used as entry point for the application. It provides a {@link WorkbenchAdvisor}
+ * and actually rund the application (see {@link #run()}).
+ * <p>
+ * Please see the documentation of {@link AbstractApplication} for more details.
+ * 
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
+ * @author Daniel Mazurek Daniel.Mazurek[AT]NightLabs[DOT]de
  */
 public abstract class AbstractApplicationThread 
 extends Thread 
@@ -91,11 +97,12 @@ extends Thread
 	private Display display;
 
 	/**
-	 * First initializes the {@link org.nightlabs.config.Config} in the users home 
-	 * directory under ".applicationName/config". Sets static members of this class for 
-	 * other plugins to access the root of the applicationName folder and log.
 	 * Creates a display in {@link org.eclipse.ui.PlatformUI} and a new WorkbenchAdvisor 
-	 * {@link #getWorkbenchAdvisor()} and runs the Application.
+	 * {@link #getWorkbenchAdvisor()} and runs the Application/Workbench
+	 * by PlatformUI.createAndRunWorkbench(...).
+	 * <p>
+	 * This method is not intended to be overridden!
+	 * 
 	 * @see org.eclipse.core.runtime.IPlatformRunnable#run(java.lang.Object)
 	 */	
 	public void run() 
