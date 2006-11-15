@@ -396,4 +396,9 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	public void setFaded(boolean faded) {
 		wrapper.setFaded(faded);
 	}
+
+	public boolean isDisposed()
+	{
+		return wrapper.isDisposed();
+	}
 }

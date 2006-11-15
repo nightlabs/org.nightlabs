@@ -58,6 +58,7 @@ public interface IEntityEditorPageController extends IPropertyChangeSupport {
 	 * Set the page this controller is associated with.
 	 * This will be called immediately after the controller is created.
 	 * @param page the page this controller is associated with.
+	 * @deprecated see {@link EntityEditorPageController#getPage()}
 	 */
 	public void setPage(IFormPage page);
 	

@@ -194,6 +194,9 @@ implements IEntityEditorPageController
 	 * Returns the page associated with this controller.
 	 * 
 	 * @return The page associated with this controller.
+	 * @deprecated There is a 1-n relation from one controller to many pages. That's why, this method makes no sense and will
+	 *		be removed. Instead, there should be a method getPages() which returns all pages that are associated with this
+	 *		controller. Furthermore, this method should be part of the interface! Marco.
 	 */
 	public IFormPage getPage() {
 		return page;

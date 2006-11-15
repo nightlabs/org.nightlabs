@@ -362,6 +362,11 @@ public class I18nTextEditor extends XComposite
 	 */
 	private boolean loadingText = false;
 
+	public void refresh()
+	{
+		loadText();
+	}
+
 	/**
 	 * Loads the text out of the buffer and displays it 
 	 * in the text field. ModifyListeners registered will

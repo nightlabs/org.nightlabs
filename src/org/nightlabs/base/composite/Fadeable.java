@@ -32,5 +32,6 @@ package org.nightlabs.base.composite;
  */
 public interface Fadeable
 {
-	public void setFaded(boolean faded);
+	boolean isDisposed();
+	void setFaded(boolean faded);
 }

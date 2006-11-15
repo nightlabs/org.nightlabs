@@ -1,10 +1,12 @@
 package org.nightlabs.base.timepattern;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -22,10 +24,11 @@ import org.nightlabs.base.table.TableLabelProvider;
 import org.nightlabs.timepattern.TimePattern;
 import org.nightlabs.timepattern.TimePatternFormatException;
 import org.nightlabs.timepattern.TimePatternSet;
-import org.nightlabs.util.Utils;
+import org.nightlabs.util.CollectionUtil;
 
 public class TimePatternSetComposite
-		extends AbstractTableComposite
+extends AbstractTableComposite<TimePattern>
+implements TimePatternSetEdit
 {
 	protected static class TimePatternSetContentProvider implements IStructuredContentProvider
 	{
@@ -50,7 +53,7 @@ public class TimePatternSetComposite
 			if (c != null)
 				Collections.sort(timePatterns, c);
 
-			return Utils.collection2TypedArray(timePatterns, TimePattern.class, false);
+			return CollectionUtil.collection2TypedArray(timePatterns, TimePattern.class, false);
 		}
 
 		public void dispose()
@@ -166,6 +169,21 @@ public class TimePatternSetComposite
 			// TODO do we need to refresh the table?!
 			// update(element... or update(tp ????
 			timePatternSetComposite.getTableViewer().update(tp, new String[] { property });
+			timePatternSetComposite.fireTimePatternSetModifyEvent();
+		}
+	}
+
+	protected void fireTimePatternSetModifyEvent()
+	{
+		Object[] listeners = timePatternSetModifyListeners.getListeners();
+		if (listeners.length < 1)
+			return;
+
+		TimePatternSetModifyEvent event = new TimePatternSetModifyEvent(this);
+
+		for (Object listener : listeners) {
+			TimePatternSetModifyListener l = (TimePatternSetModifyListener) listener;
+			l.timePatternSetModified(event);
 		}
 	}
 
@@ -261,5 +279,52 @@ public class TimePatternSetComposite
 	public TimePatternSet getTimePatternSet()
 	{
 		return timePatternSet;
+	}
+
+	private ListenerList timePatternSetModifyListeners = new ListenerList();
+
+	public void addTimePatternSetModifyListener(TimePatternSetModifyListener listener)
+	{
+		timePatternSetModifyListeners.add(listener);
+	}
+
+	public void removeTimePatternSetModifyListener(TimePatternSetModifyListener listener)
+	{
+		timePatternSetModifyListeners.remove(listener);
+	}
+
+	public void createTimePattern()
+	{
+		timePatternSet.createTimePattern();
+		refresh();
+		fireTimePatternSetModifyEvent();
+	}
+
+	public void removeSelectedTimePatterns()
+	{
+		ArrayList<TimePattern> timePatterns = new ArrayList<TimePattern>(getSelectedElements());
+		removeTimePatterns(timePatterns);
+	}
+
+	public void removeTimePatterns(Collection<TimePattern> timePatterns)
+	{
+		boolean fireEvent = false;
+		for (TimePattern timePattern : timePatterns) {
+			if (timePatternSet.removeTimePattern(timePattern))
+				fireEvent = true;
+		}
+
+		if (fireEvent) {
+			refresh();
+			fireTimePatternSetModifyEvent();
+		}
+	}
+
+	public void removeTimePattern(TimePattern timePattern)
+	{
+		if (timePatternSet.removeTimePattern(timePattern)) {
+			refresh();
+			fireTimePatternSetModifyEvent();
+		}
 	}
 }

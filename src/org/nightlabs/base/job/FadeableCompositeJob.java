@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
-
 import org.nightlabs.base.composite.Fadeable;
 
 /**
@@ -60,7 +59,8 @@ public abstract class FadeableCompositeJob extends Job
   				{
   					public void run() 
   					{
-  						composite.setFaded(true);
+  						if (!composite.isDisposed())
+  							composite.setFaded(true);
   					}
   				}
   		);
@@ -73,7 +73,8 @@ public abstract class FadeableCompositeJob extends Job
   				{
   					public void run() 
   					{
-  						composite.setFaded(false);
+  						if (!composite.isDisposed())
+  							composite.setFaded(false);
   					}
   				}
   		);
