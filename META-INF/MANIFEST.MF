@@ -19,4 +19,5 @@ Export-Package: org.nightlabs.keyreader,
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: org.nightlabs.base,
  org.nightlabs.jfire.base.j2ee
-Bundle-ClassPath: lib/KeyReader.jar
+Bundle-ClassPath: org.nightlabs.keyreader.jar,
+ lib/KeyReader.jar
