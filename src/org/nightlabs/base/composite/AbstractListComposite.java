@@ -158,33 +158,57 @@ implements ISelectionProvider
 	 * @param element The element to be added.
 	 */
 	protected abstract void addElementToGui(int index, T element);
-	
+
 	/**
 	 * The given element is removed from the graphical representation of this list.
 	 * @param index The element to be removed.
 	 */
 	protected abstract void removeElementFromGui(int index);
-	
+
 	/**
 	 * All elements are removed from the graphical representation of this list.
 	 */
 	protected abstract void removeAllElementsFromGui();
-	
+
 	/**
 	 * Returns the index of the element currently selected in the graphical representation of this list.
 	 */
-	protected abstract int getSelectionIndex();
+	protected abstract int internal_getSelectionIndex();
 
-	protected abstract int[] getSelectionIndices();
+	protected abstract int[] internal_getSelectionIndices();
 
 	/**
 	 * Selects the element with the given index in the graphical representation of this list.
 	 */
-	protected abstract void setSelection(int index);
+	protected abstract void internal_setSelection(int index);
 
-	protected abstract void setSelection(int[] indices);
+	protected abstract void internal_setSelection(int[] indices);
 
-	protected abstract int getSelectionCount();
+	protected abstract int internal_getSelectionCount();
+
+	public int getSelectionIndex()
+	{
+		return internal_getSelectionIndex();
+	}
+
+	public int[] getSelectionIndices()
+	{
+		return internal_getSelectionIndices();
+	}
+
+	public int getSelectionCount()
+	{
+		return internal_getSelectionCount();
+	}
+
+	public void setSelection(int index)
+	{
+		internal_setSelection(index);
+	}
+	public void setSelection(int[] indices)
+	{
+		internal_setSelection(indices);
+	}
 
 	/**
 	 * Refreshes the specified element and updates its label.
@@ -255,7 +279,7 @@ implements ISelectionProvider
 	 */
 	public T getSelectedElement()
 	{		
-		int selIndex = getSelectionIndex();
+		int selIndex = internal_getSelectionIndex();
 		if (selIndex != -1)
 			return elements.get(selIndex);
 		else
@@ -264,8 +288,8 @@ implements ISelectionProvider
 
 	public List<T> getSelectedElements()
 	{
-		ArrayList<T> selectedElements = new ArrayList<T>(getSelectionCount());
-		int[] selIndices = getSelectionIndices();
+		ArrayList<T> selectedElements = new ArrayList<T>(internal_getSelectionCount());
+		int[] selIndices = internal_getSelectionIndices();
 		for (int i = 0; i < selIndices.length; ++i) {
 			selectedElements.add(elements.get(selIndices[i]));
 		}
@@ -311,14 +335,14 @@ implements ISelectionProvider
 	public boolean selectElement(T element)
 	{
 		if (element == null) {
-			setSelection(-1);
+			internal_setSelection(-1);
 			return true;
 		}
 		
 		int index = elements.indexOf(element);
 		if (index != -1)
 		{
-			setSelection(index);
+			internal_setSelection(index);
 			return true;
 		}
 		else
@@ -350,15 +374,15 @@ implements ISelectionProvider
 	 */
 	public T removeSelected()
 	{
-		int index = getSelectionIndex();
+		int index = internal_getSelectionIndex();
 		if (index < 0)
 			return null;
 
 		T toReturn = getSelectedElement();
 		elements.remove(index);
 		removeElementFromGui(index);
-		if (getSelectionIndex() < 0)
-			setSelection(Math.min(index, elements.size()-1));
+		if (internal_getSelectionIndex() < 0)
+			internal_setSelection(Math.min(index, elements.size()-1));
 
 		return toReturn;
 	}
@@ -369,7 +393,7 @@ implements ISelectionProvider
 	 */
 	public List<T> removeAllSelected()
 	{
-		int[] selectionIndices = getSelectionIndices();
+		int[] selectionIndices = internal_getSelectionIndices();
 		Arrays.sort(selectionIndices);
 		ArrayList<T> res = new ArrayList<T>(selectionIndices.length);
 		for (int i = selectionIndices.length -1; i >= 0; --i) {
@@ -443,6 +467,6 @@ implements ISelectionProvider
 			si[i++] = selIdx.intValue();
 		}
 
-		setSelection(si);
+		internal_setSelection(si);
 	}
 }

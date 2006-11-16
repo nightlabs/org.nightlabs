@@ -103,12 +103,10 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 		createGuiControl(this, style, null);
 	}
 
-	@Override
 	protected void addElementToGui(int index, T element) {
 		combo.add(labelProvider.getText(element), index);
 	}
 
-	@Override
 	protected Control createGuiControl(Composite parent, int style, String caption) {
 //		this.getGridData().grabExcessVerticalSpace = false;
 		this.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -144,33 +142,27 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 			throw new IllegalStateException("Cannot access the label if its creation hasn't been requested earlier.");
 	}
 
-	@Override
-	protected int getSelectionIndex() {
+	protected int internal_getSelectionIndex() {
 		return combo.getSelectionIndex();
 	}
 
-	@Override
-	protected int[] getSelectionIndices() {
+	protected int[] internal_getSelectionIndices() {
 		return new int[] { combo.getSelectionIndex() };
 	}
 
-	@Override
 	protected void removeAllElementsFromGui() {
 		combo.removeAll();
 	}
 
-	@Override
 	protected void removeElementFromGui(int index) {
 		combo.remove(index);
 	}
 
-	@Override
-	protected void setSelection(int index) {
+	protected void internal_setSelection(int index) {
 		combo.select(index);
 	}
 
-	@Override
-	protected void setSelection(int[] indices) {
+	protected void internal_setSelection(int[] indices) {
 		if (indices.length < 1)
 			combo.select(-1); // seems to be ignored - a combo seems to have always
 		// one item selected
@@ -178,8 +170,7 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 			combo.select(indices[0]);
 	}
 
-	@Override
-	protected int getSelectionCount() {
+	protected int internal_getSelectionCount() {
 		if (combo.getSelectionIndex() < 0 || combo.getItemCount() < 1)
 			return 0;
 		else
@@ -224,9 +215,24 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 		combo.removeSelectionListener(listener);
 	}
 
-	@Override
 	protected void refreshElement(T element) {
 		int index = getElementIndex(element);
 		combo.setItem(index, labelProvider.getText(element));
+	}
+
+	/**
+	 * @return the result from the delegated {@link Combo#getText()}.
+	 */
+	public String getText()
+	{
+		return combo.getText();
+	}
+	/**
+	 * This method delegates to {@link Combo#setText(String)}
+	 * @param text The text.
+	 */
+	public void setText(String text)
+	{
+		combo.setText(text);
 	}
 }

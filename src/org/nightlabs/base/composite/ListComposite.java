@@ -119,13 +119,13 @@ public class ListComposite<T> extends AbstractListComposite<T>
 	}
 
 	@Override
-	protected int getSelectionIndex()
+	protected int internal_getSelectionIndex()
 	{
 		return list.getSelectionIndex();
 	}
 
 	@Override
-	protected int[] getSelectionIndices()
+	protected int[] internal_getSelectionIndices()
 	{
 		return list.getSelectionIndices();
 	}
@@ -143,20 +143,20 @@ public class ListComposite<T> extends AbstractListComposite<T>
 	}
 
 	@Override
-	protected void setSelection(int index)
+	protected void internal_setSelection(int index)
 	{
 		list.select(index);
 		list.showSelection();
 	}
 
 	@Override
-	protected int getSelectionCount()
+	protected int internal_getSelectionCount()
 	{
 		return list.getSelectionCount();
 	}
 
 	@Override
-	protected void setSelection(int[] indices)
+	protected void internal_setSelection(int[] indices)
 	{
 		list.select(indices);
 		list.showSelection();
