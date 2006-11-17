@@ -37,6 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
@@ -70,6 +71,8 @@ import org.nightlabs.config.ConfigException;
 public class DefaultActionBuilder 
 extends ActionBarAdvisor 
 {
+	private static final Logger logger = Logger.getLogger(DefaultActionBuilder.class);
+
 	public static enum ActionBarItem 
 	{
 		About,
@@ -237,13 +240,18 @@ extends ActionBarAdvisor
 			actions.put(ActionBarItem.Help, helpAction);
 		}
 		if (menuBarItems.contains(ActionBarItem.Intro)) {
-			introAction = ActionFactory.INTRO.create(window);
-			actions.put(ActionBarItem.Intro, introAction);
+			try {
+				introAction = ActionFactory.INTRO.create(window);
+				actions.put(ActionBarItem.Intro, introAction);
+			} catch (Exception x) {
+				introAction = null;
+				logger.error("Could not create intro action!", x);
+			}
 		}
 		if (menuBarItems.contains(ActionBarItem.Update)) {
 			// TODO: find out how to hook updateAction
 		}
-		
+
 		aboutAction = ActionFactory.ABOUT.create(window);
 		actions.put(ActionBarItem.About, aboutAction);
 		
@@ -416,7 +424,9 @@ extends ActionBarAdvisor
 			helpMenu.add(new Separator());
 		}
 		if (menuBarItems.contains(ActionBarItem.Intro)) {
-			helpMenu.add(introAction);		
+			if (introAction != null)
+				helpMenu.add(introAction);
+
 			helpMenu.add(new Separator());			
 		}
 		

@@ -149,9 +149,13 @@ implements IPlatformRunnable
 				}
 				rootFile = new File(resolvedFolderName, "."+getApplicationName());
 			}
-			if (!rootFile.mkdirs()) {
-				System.err.println("[PANIC] Could not create the applications root directory: "+rootFile);
-				System.err.println("[PANIC] The application might not run correctly!!");
+			if (rootFile.exists() && !rootFile.isDirectory()) {
+				System.err.println("[PANIC] The application's root directory exists, but is NOT a directory: "+rootFile);
+				System.err.println("[PANIC] The application will probably not run correctly!!");
+			}
+			if (!rootFile.exists() && !rootFile.mkdirs()) {
+				System.err.println("[PANIC] Could not create the application's root directory: "+rootFile);
+				System.err.println("[PANIC] The application will probably not run correctly!!");
 			}
 			rootDir = rootFile.getAbsolutePath();
 			setAppFolderSystemProperty(rootDir);
