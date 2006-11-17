@@ -107,6 +107,7 @@ extends AbstractUIPlugin
 	 * Returns a string from the resource bundle, knowing its key. Note: the generated
 	 * code is not strong enough because a NullPointerException is raised if there is no
 	 * resource bundle, instead of 'key' to be returned for consistency.
+	 * TODO: Why do you write this note? your try-catch-block will make sure that the NPE is caught and key returned. Marco :-)
 	 * 
 	 * @return The string from the plugin's resource bundle, or 'key' if not found.
 	 */

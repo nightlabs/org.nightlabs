@@ -44,7 +44,7 @@ extends AbstractWorkbenchAdvisor
 	 * @see org.nightlabs.base.app.AbstractWorkbenchAdvisor#initApplication()
 	 */
 	protected AbstractApplication initApplication() {
-		return new Editor2DApplication();
+		return new Editor2DApplication(); // TODO Why do you return a NEW application here? There should already be an instance of your application. shouldn't it? Marco.
 	}
 
 	/**
