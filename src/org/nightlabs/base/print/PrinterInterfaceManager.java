@@ -26,6 +26,7 @@
 
 package org.nightlabs.base.print;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.print.PrinterConfiguration;
 
@@ -33,8 +34,9 @@ import org.nightlabs.print.PrinterConfiguration;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class PrinterInterfaceManager extends
-		org.nightlabs.print.PrinterInterfaceManager {
+public class PrinterInterfaceManager extends org.nightlabs.print.PrinterInterfaceManager {
+	
+	private static final Logger logger = Logger.getLogger(PrinterInterfaceManager.class);
 
 	private static class ConfigHolder {
 		public PrinterConfiguration printerConfiguration;
@@ -44,7 +46,6 @@ public class PrinterInterfaceManager extends
 	 * 
 	 */
 	public PrinterInterfaceManager() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
