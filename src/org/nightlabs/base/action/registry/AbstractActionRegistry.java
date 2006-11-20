@@ -170,6 +170,86 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 		return contribute(toolBarManager, KIND_TOOLBAR);
 	}
 
+	private static boolean useRemoveInsteadOfUnvisibleWorkaround = true;
+	
+	/**
+	 * Removes all contributions of this registry from the CoolBar of the
+	 * given coolBarManager. Ideally this is done by making the contributions
+	 * invisible, so Eclipse can remember their positions. However
+	 * this is currently not possible and thats why this method 
+	 * removes the affected contributions from the CoolBar.
+	 * This behaviour can is configured via {@link #useRemoveInsteadOfUnvisibleWorkaround}.
+	 * 
+	 * @param coolBarManager The {@link ICoolBarManager} where the contributions of this registry should be removed from.
+	 */
+	public void removeAllFromCoolBar(ICoolBarManager coolBarManager) {
+		IContributionManager coolBarContributionManager = ((SubCoolBarManager)coolBarManager).getParent();
+		if (!useRemoveInsteadOfUnvisibleWorkaround)
+			((SubCoolBarManager)coolBarManager).setVisible(false);
+		
+		String baseID = this.getClass().getName();
+		String orphanageToolbarID = baseID + '.' + ORPHANAGE_TOOLBAR_ID;
+		// We use a temporary MenuManager which will be translated into the real
+		// coolbar afterwards.
+		MenuManager tmpMenu = new MenuManager();
+		contribute(tmpMenu, KIND_COOLBAR);
+
+		// convert the existing items of the real coolbar-manager into a Map - the new items might
+		// already exist because of Eclipse's workspace memory (and then the old ones need to be
+		// manipulated - new ones would be ignored because of a bug/feature in the EclipseRCP)
+		IContributionItem[] coolBarItems = ((SubCoolBarManager)coolBarManager).getParent().getItems();
+	
+		// key: String itemId
+		// value: IXContributionItem
+		Map coolBarItemMap = new HashMap(coolBarItems.length);
+		for (int i = 0; i < coolBarItems.length; ++i) {
+			IContributionItem coolBarItem = coolBarItems[i];
+			coolBarItemMap.put(coolBarItem.getId(), coolBarItem);
+			System.out.println("Having "+coolBarItem.getId()+" in CoolBar");
+		}
+		
+		ToolBarContributionItem orphanageToolBarContributionItem = getToolBarContributionItem(coolBarItemMap.get(orphanageToolbarID));
+		if (orphanageToolBarContributionItem != null) {
+			IContributionItem item = coolBarContributionManager.find(orphanageToolBarContributionItem.getId());
+			if (item != null) {
+				if (useRemoveInsteadOfUnvisibleWorkaround) {
+					coolBarContributionManager.remove(orphanageToolBarContributionItem.getId());
+				}
+				else {
+					orphanageToolBarContributionItem.setVisible(false);
+					item.setVisible(false);
+				}
+			}
+		}
+		
+		// Now, we iterate all the "precompiled" items and contribute them to the coolbar
+		IContributionItem[] tmpItems = tmpMenu.getItems();
+		for (int i = 0; i < tmpItems.length; ++i) {
+			IContributionItem tmpItem = tmpItems[i];
+
+			// Test for items that are already in the parent
+			if (tmpItem instanceof IMenuManager) {
+				IMenuManager tmpSubMenu = (IMenuManager) tmpItem;
+				String tmpSubMenuID = baseID + '.' + tmpSubMenu.getId();
+
+				ToolBarContributionItem toolBarContributionItem = getToolBarContributionItem(coolBarItemMap.get(tmpSubMenuID));
+				if (toolBarContributionItem != null) {
+					IContributionItem item = coolBarContributionManager.find(toolBarContributionItem.getId());
+					if (item != null) {
+						if (useRemoveInsteadOfUnvisibleWorkaround) {
+							coolBarContributionManager.remove(tmpSubMenuID);					
+						}
+						else {
+							toolBarContributionItem.setVisible(false);
+							item.setVisible(false);
+						}
+					}
+				}
+			}
+		} 
+		coolBarContributionManager.update(true);
+	}
+	
 	/**
 	 * @param coolBarManager
 	 * @return Returns the number of visible items (i.e. actions) that have been added (because some
