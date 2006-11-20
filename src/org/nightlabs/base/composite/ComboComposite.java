@@ -165,7 +165,8 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 	protected void internal_setSelection(int[] indices) {
 		if (indices.length < 1)
 			combo.select(-1); // seems to be ignored - a combo seems to have always
-		// one item selected
+		// one item selected - This is an SWT issue, because with Delphi + Windows, it was possible to deselect
+		// and with SWT + Linux it works, too. Marco.
 		else
 			combo.select(indices[0]);
 	}
