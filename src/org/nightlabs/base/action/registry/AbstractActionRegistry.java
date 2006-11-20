@@ -124,6 +124,10 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 	 * or another action-bar-contributor in order to contribute to the main menu or better a
 	 * sub-menu (which needs then to be created by the contributor before).
 	 * </p>
+	 * <p>
+	 * This method contributes WITHOUT removing items before. If you want to remove items, you must
+	 * do it manually before calling this method.
+	 * </p>
 	 *
 	 * @param menuManager The menu-manager which is responsible for the menu (or more likely sub-menu).
 	 * @return Returns the number of visible items (i.e. actions) that have been added (because some
@@ -142,6 +146,10 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 	 * or another action-bar-contributor (or wherever you prefer to handle the context menu) in
 	 * order to contribute to the context-menu.
 	 * </p>
+	 * <p>
+	 * This method contributes WITHOUT removing items before. If you want to remove items, you must
+	 * do it manually before calling this method.
+	 * </p>
 	 *
 	 * @param menuManager The menu-manager which is responsible for the context-menu (or one of its sub-menus).
 	 * @return Returns the number of visible items (i.e. actions) that have been added (because some
@@ -159,6 +167,10 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 	 * This method is meant to be used in an {@link org.eclipse.ui.IEditorActionBarContributor}
 	 * or another action-bar-contributor in order to contribute to the toolbar. Note, that
 	 * sub-menu-structures are flattened automatically because a toolbar doesn't support sub-menus.
+	 * </p>
+	 * <p>
+	 * This method contributes WITHOUT removing items before. If you want to remove items, you must
+	 * do it manually before calling this method.
 	 * </p>
 	 *
 	 * @param toolBarManager The tool-bar-manager which is responsible for your tool-bar.
@@ -421,6 +433,8 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 	}
 
 	/**
+	 * This method contributes WITHOUT removing items before.
+	 * 
 	 * @param contributionManager
 	 * @param kind
 	 * @return Returns the number of visible contribution items (i.e. actions) that have been added.
@@ -450,7 +464,7 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 			menuSorted = new LinkedList();
 		}
 		
-		contributionManager.removeAll();
+//		contributionManager.removeAll();
 		
 		while ((firstRun && !menuRaw.isEmpty()) || !firstRun) {
 			for (Iterator itTopLevel = (firstRun ? menuRaw : menuSorted).iterator(); itTopLevel.hasNext(); ) {
