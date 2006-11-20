@@ -94,13 +94,6 @@ the values defined in the extension will automatically set for this category.
                </appInfo>
             </annotation>
          </attribute>
-         <attribute name="editorID" type="string">
-            <annotation>
-               <documentation>
-                  The id of the Editor to open for an entity of this category.
-               </documentation>
-            </annotation>
-         </attribute>
       </complexType>
    </element>
 
