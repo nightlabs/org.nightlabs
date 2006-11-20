@@ -313,12 +313,24 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	/** Create a new Editor instance. This is called by the Workspace. */
 	public AbstractEditor() 
 	{
+		init();
 		setEditDomain(new DefaultEditDomain(this));            
 		filterMan = new FilterManager(getFilterNameProvider()); 
-		getModelFactory();
 //		initJ2DRegistry();
 	}
+	
+	protected void init() {
 
+	}
+	
+//	protected DefaultEditDomain getEditDomain() 
+//	{
+//		 if (super.getEditDomain() == null) {
+//			 setEditDomain(new DefaultEditDomain(this));
+//		 }
+//		 return super.getEditDomain();
+//	}
+	
 //	protected void initJ2DRegistry() 
 //	{
 //	Map hints = new HashMap();
