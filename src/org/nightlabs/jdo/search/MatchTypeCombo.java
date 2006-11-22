@@ -32,10 +32,7 @@ import java.util.List;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.composite.XComposite.LayoutDataMode;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
