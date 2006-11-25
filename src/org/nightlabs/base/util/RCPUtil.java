@@ -28,9 +28,11 @@ package org.nightlabs.base.util;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IContributionItem;
@@ -572,5 +574,16 @@ public class RCPUtil
 	
 	public static boolean isDisplayThread() {
 		return Display.getDefault().getThread().equals(Thread.currentThread());
+	}
+
+	/**
+	 * This method is a convenience method calling
+	 * <code>ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString()</code>
+	 *
+	 * @return Returns a {@link File} instance pointing to the workspace root directory.
+	 */
+	public File getResourcesWorkspace()
+	{
+		return new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString());
 	}
 }
