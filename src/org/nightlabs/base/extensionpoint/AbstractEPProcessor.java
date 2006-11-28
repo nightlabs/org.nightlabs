@@ -152,7 +152,8 @@ implements IEPProcessor
 	 */
 	protected boolean checkString(String s) 
 	{
-		if (s == null || "".equals(s))
+		if (s == null || s.trim().equals("") )
+//		if (s == null || "".equals(s) )
 			return false;
 		
 		return true;
