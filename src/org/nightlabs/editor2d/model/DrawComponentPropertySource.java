@@ -30,8 +30,12 @@ package org.nightlabs.editor2d.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -51,6 +55,8 @@ import org.nightlabs.language.LanguageCf;
 public class DrawComponentPropertySource 
 implements IPropertySource
 {	
+	private static final Logger logger = Logger.getLogger(DrawComponentPropertySource.class);
+	
 	public static final String CATEGORY_NAME = EditorPlugin.getResourceString("property.category.name");
 	public static final String CATEGORY_GEOM = EditorPlugin.getResourceString("property.category.geom");		
 	public static final String CATEGORY_ROTATION = EditorPlugin.getResourceString("property.category.rotation");
@@ -119,16 +125,16 @@ implements IPropertySource
 		return drawComponent;
 	}
 	
-	protected List descriptors = null;
-	protected List getDescriptors() {
+	protected List<IPropertyDescriptor> descriptors = null;
+	protected List<IPropertyDescriptor> getDescriptors() {
 		if (descriptors == null)
-			descriptors = new ArrayList();
+			descriptors = new ArrayList<IPropertyDescriptor>();
 		return descriptors;
 	}
 		
-	protected List createPropertyDescriptors() 
+	protected List<IPropertyDescriptor> createPropertyDescriptors() 
 	{
-		List descriptors = getDescriptors();
+		List<IPropertyDescriptor> descriptors = getDescriptors();
 		
 		// Name
 		descriptors.add(createNamePD());				
@@ -147,8 +153,40 @@ implements IPropertySource
 		// RotationY
 		descriptors.add(createRotationYPD());
 		
+		// PropertyDescriptors from extension point
+//		descriptors.addAll(getExtensionPointProperties());
+		List<IPropertyDescriptor> extensionPointProperties = getExtensionPointProperties(); 
+		if (!extensionPointProperties.isEmpty())
+			descriptors.addAll(extensionPointProperties);
+		
 		return descriptors;
 	}
+
+	protected List<IPropertyDescriptor> getExtensionPointProperties() 
+	{		
+		List<DrawComponentProperty> properties = 
+			DrawComponentPropertyRegistry.sharedInstance().getDrawComponentProperty(
+					getDrawComponent().getRoot().getClass().getName(),
+					getDrawComponent().getClass().getName());
+		if (properties != null) 
+		{
+			List<IPropertyDescriptor> descriptors = new ArrayList<IPropertyDescriptor>(properties.size());			
+			for (DrawComponentProperty property : properties) {
+				property.setDrawComponent(getDrawComponent());
+				descriptors.add(property.getPropertyDescriptor());
+				id2DrawComponentProperty.put(property.getID(), property);
+			}
+			
+			if (logger.isDebugEnabled())
+				logger.debug(properties.size()+" extension point properties registered for "+getDrawComponent().getClass());
+			
+			return descriptors;
+		}
+		return Collections.EMPTY_LIST;
+	}
+	
+	private Map<String, DrawComponentProperty> id2DrawComponentProperty = 
+		new HashMap<String, DrawComponentProperty>();
 	
 	protected PropertyDescriptor createNamePD() 
 	{
@@ -223,7 +261,9 @@ implements IPropertySource
 			return new IPropertyDescriptor[0];
 		
 		List descriptors = getDescriptors();		
-		return (IPropertyDescriptor[])descriptors.toArray( new IPropertyDescriptor[] {} );		
+		return (IPropertyDescriptor[])descriptors.toArray( new IPropertyDescriptor[descriptors.size()]);
+//		return (IPropertyDescriptor[])descriptors.toArray( new IPropertyDescriptor[] {} );		
+//		return (IPropertyDescriptor[])descriptors.toArray();		
 	}
 	
 	/**
@@ -255,7 +295,13 @@ implements IPropertySource
 		else if (id.equals(DrawComponent.PROP_NAME)) {
 			return drawComponent.getI18nText().getText(nameLangMan.getCurrentLanguageID());
 		}		
-						
+		
+		// properties from extension point
+		DrawComponentProperty property = id2DrawComponentProperty.get(id);
+		if (property != null) {
+			property.getPropertyValue();
+		}
+		
 		return null;
 	}
 	
@@ -312,6 +358,12 @@ implements IPropertySource
 		else if (id.equals(DrawComponent.PROP_NAME)) {
 			drawComponent.setName((String)value);
 			return;
+		}
+		
+		// properties from extension point
+		DrawComponentProperty property = id2DrawComponentProperty.get(id);
+		if (property != null) {
+			property.setPropertyValue(value);
 		}
 	}
 			

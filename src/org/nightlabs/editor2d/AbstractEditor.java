@@ -314,7 +314,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	public AbstractEditor() 
 	{
 		init();
-		setEditDomain(new DefaultEditDomain(this));            
+//		setEditDomain(new DefaultEditDomain(this));            
 		filterMan = new FilterManager(getFilterNameProvider()); 
 //		initJ2DRegistry();
 	}
@@ -323,13 +323,13 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 	}
 	
-//	protected DefaultEditDomain getEditDomain() 
-//	{
-//		 if (super.getEditDomain() == null) {
-//			 setEditDomain(new DefaultEditDomain(this));
-//		 }
-//		 return super.getEditDomain();
-//	}
+	protected DefaultEditDomain getEditDomain() 
+	{
+		 if (super.getEditDomain() == null) {
+			 setEditDomain(new DefaultEditDomain(this));
+		 }
+		 return super.getEditDomain();
+	}
 	
 //	protected void initJ2DRegistry() 
 //	{

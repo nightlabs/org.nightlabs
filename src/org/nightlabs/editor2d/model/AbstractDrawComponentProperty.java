@@ -23,40 +23,26 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.app;
+package org.nightlabs.editor2d.model;
 
-import org.nightlabs.base.app.AbstractApplication;
-import org.nightlabs.base.app.AbstractWorkbenchAdvisor;
-import org.nightlabs.editor2d.EditorPerspective;
+import org.nightlabs.editor2d.DrawComponent;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class Editor2DWorkbenchAdvisor 
-extends AbstractWorkbenchAdvisor 
+public abstract class AbstractDrawComponentProperty 
+implements DrawComponentProperty 
 {
 
-	public Editor2DWorkbenchAdvisor() {
-		super();		
+	public Class getDrawComponentClass() {
+		return drawComponent.getClass();
 	}
 
-//	/**
-//	 * @see org.nightlabs.base.app.AbstractWorkbenchAdvisor#initApplication()
-//	 */
-//	protected AbstractApplication initApplication() {
-//		return new Editor2DApplication();
-//	}
-
-	/**
-	 * @see org.eclipse.ui.application.WorkbenchAdvisor#getInitialWindowPerspectiveId()
-	 */
-	public String getInitialWindowPerspectiveId() {
-		return EditorPerspective.ID_PERSPECTIVE;
+	private DrawComponent drawComponent;
+	public void setDrawComponent(DrawComponent dc) {
+		this.drawComponent = dc;
 	}
-
-//	public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) 
-//	{
-//		return new DefaultActionBuilder(configurer, true, true, true, true, true, true, true, 
-//				false, true, true, true, true, true, true, true, true);
-//	}
+	public DrawComponent getDrawComponent() {
+		return drawComponent;
+	}
 }
