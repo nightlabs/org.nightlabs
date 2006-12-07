@@ -299,7 +299,7 @@ implements IPropertySource
 		// properties from extension point
 		DrawComponentProperty property = id2DrawComponentProperty.get(id);
 		if (property != null) {
-			property.getPropertyValue();
+			return property.getPropertyValue();
 		}
 		
 		return null;
