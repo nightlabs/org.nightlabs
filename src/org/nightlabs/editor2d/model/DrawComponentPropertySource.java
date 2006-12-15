@@ -299,6 +299,7 @@ implements IPropertySource
 		// properties from extension point
 		DrawComponentProperty property = id2DrawComponentProperty.get(id);
 		if (property != null) {
+			property.setDrawComponent(drawComponent);
 			return property.getPropertyValue();
 		}
 		
@@ -363,6 +364,7 @@ implements IPropertySource
 		// properties from extension point
 		DrawComponentProperty property = id2DrawComponentProperty.get(id);
 		if (property != null) {
+			property.setDrawComponent(drawComponent);
 			property.setPropertyValue(value);
 		}
 	}
