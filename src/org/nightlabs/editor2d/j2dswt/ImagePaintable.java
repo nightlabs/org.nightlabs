@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Control;
 import org.holongate.j2d.IPaintable;
-import org.nightlabs.editor2d.viewer.RenderingHintsManager;
+import org.nightlabs.editor2d.util.RenderingHintsManager;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
