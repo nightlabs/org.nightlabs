@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
+import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 import org.nightlabs.config.Config;
@@ -28,7 +29,7 @@ public class KeyReaderUseCaseRegistry
 		return _sharedInstance;
 	}
 
-	@Override
+	@Implement
 	public String getExtensionPointID()
 	{
 		return "org.nightlabs.keyreader.keyReaderUseCase";
@@ -36,7 +37,7 @@ public class KeyReaderUseCaseRegistry
 
 	private Map<String, KeyReaderUseCase> keyReaderUseCases = new HashMap<String, KeyReaderUseCase>();
 
-	@Override
+	@Implement
 	public void processElement(IExtension extension, IConfigurationElement element)
 			throws EPProcessorException
 	{
