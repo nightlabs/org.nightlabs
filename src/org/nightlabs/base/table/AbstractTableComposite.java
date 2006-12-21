@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
@@ -237,6 +238,25 @@ implements ISelectionProvider
 			if (elements.contains(items[i].getData()))
 				items[i].setChecked(true);
 		}
+	}
+	
+	/**
+	 * If the this table-composite's table was created with
+	 * the {@link SWT#CHECK} flag this method will return a list of all
+	 * checked elements.
+	 * 
+	 * @return a list of all checked Elements.
+	 */
+	public List<ElementType> getCheckedElements() {
+		if ((table.getStyle() & SWT.CHECK) == 0)
+			throw new IllegalStateException("Table is not of type SWT.CHECK, can't return checked Items!");
+		List<ElementType> checkedElements = new LinkedList<ElementType>();
+		TableItem[] items = tableViewer.getTable().getItems();
+		for (int i = 0; i < items.length; i++) {
+			if (items[i].getChecked())
+				checkedElements.add((ElementType)items[i].getData());
+		}
+		return checkedElements;
 	}
 	
 	/**

@@ -32,6 +32,8 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 /**
+ * TODO: Use Generics for this table provider.
+ * 
  * Adapter for ContentProviders for Tables.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
