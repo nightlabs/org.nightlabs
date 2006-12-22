@@ -15,12 +15,4 @@ extends AbstractConnectionCfEdit
 		new Label(page, SWT.WRAP).setText("Parallel connections are not yet supported! Sorry!");
 		return page;
 	}
-
-	public void load()
-	{
-	}
-
-	public void save()
-	{
-	}
 }
