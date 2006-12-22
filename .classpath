@@ -4,5 +4,6 @@
 	<classpathentry exported="true" sourcepath="/KeyReader/src" kind="lib" path="lib/KeyReader.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="var" path="WORKSPACE/NightLabsConnection/dist/NightLabsConnection.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

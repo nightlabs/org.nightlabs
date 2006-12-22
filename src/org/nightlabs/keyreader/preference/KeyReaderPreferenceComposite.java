@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
@@ -62,7 +63,10 @@ extends XComposite
 		super(parent, style);
 		getGridLayout().numColumns = 2;
 
-		keyReaderUseCaseList = new ListComposite<KeyReaderUseCase>(this, SWT.SINGLE, keyReaderUseCaseLabelProvider);
+		SashForm sashForm = new SashForm(this, SWT.HORIZONTAL);
+		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		keyReaderUseCaseList = new ListComposite<KeyReaderUseCase>(sashForm, SWT.SINGLE, keyReaderUseCaseLabelProvider);
 		keyReaderUseCaseList.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event)
 			{
@@ -71,7 +75,7 @@ extends XComposite
 		});
 
 
-		detailComposite = new XComposite(this, SWT.BORDER);
+		detailComposite = new XComposite(sashForm, SWT.BORDER);
 		detailComposite.getGridLayout().numColumns = 2;
 
 		new Label(detailComposite, SWT.NONE).setText("Driver:");

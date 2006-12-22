@@ -12,7 +12,7 @@
       <page
             class="org.nightlabs.keyreader.preference.KeyReaderPreferencePage"
             id="org.nightlabs.keyreader.preference.KeyReaderPreferencePage"
-            name="KeyReader Preferences"/>
+            name="Key Reader"/>
    </extension>
 
 </plugin>
