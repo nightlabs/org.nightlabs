@@ -60,7 +60,7 @@ public class ThrowableHandlerDetailArea extends Composite {
 	public void setThrowable(Throwable err) {
 		this.error = err;
 		if (error != null) {
-			textAreaStackTrace.setText(Utils.getStacktraceAsString(err));
+			textAreaStackTrace.setText(Utils.getStackTraceAsString(err));
 //			
 //			StringBuffer stackTraceBuf = new StringBuffer();
 //			err.printStackTrace();
