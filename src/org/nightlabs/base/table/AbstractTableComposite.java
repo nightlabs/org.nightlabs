@@ -207,7 +207,7 @@ implements ISelectionProvider
 	 *  
 	 * @param elements The elements to select.
 	 */
-	public void setSelectedEelements(List<ElementType> elements) {
+	public void setSelectedElements(List<ElementType> elements) {
 		TableItem[] items = tableViewer.getTable().getItems();
 		List<Integer> selIndexes = new ArrayList<Integer>();
 		for (int i = 0; i < items.length; i++) {
@@ -229,7 +229,7 @@ implements ISelectionProvider
 	 * 
 	 * @param elements The element to check.
 	 */
-	public void setCheckedEelements(List<ElementType> elements) {
+	public void setCheckedElements(List<ElementType> elements) {
 		if ((table.getStyle() & SWT.CHECK) == 0)
 			return;
 		TableItem[] items = tableViewer.getTable().getItems();
