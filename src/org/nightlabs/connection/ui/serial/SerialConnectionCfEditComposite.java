@@ -1,5 +1,8 @@
 package org.nightlabs.connection.ui.serial;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gnu.io.CommPortIdentifier;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -8,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.composite.ComboComposite;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.connection.rxtx.config.SerialConnectionCf;
 
 public class SerialConnectionCfEditComposite
@@ -74,7 +78,14 @@ public class SerialConnectionCfEditComposite
 	private void load()
 	{
 		addressCombo.removeAll();
-		for (CommPortIdentifier cpi : SerialConnectionCf.getSerialPortIdentifiers())
+		List<CommPortIdentifier> cpis;
+		try {
+			cpis = SerialConnectionCf.getSerialPortIdentifiers();
+		} catch (Throwable t) {
+			cpis = new ArrayList<CommPortIdentifier>();
+			ExceptionHandlerRegistry.asyncHandleException(t);
+		}
+		for (CommPortIdentifier cpi : cpis)
 			addressCombo.addElement(cpi.getName());
 
 		SerialConnectionCf connectionCf = (SerialConnectionCf) serialConnectionCfEdit.getConnectionCf();
