@@ -33,9 +33,11 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.composite.LabeledComboComposite;
 import org.nightlabs.base.composite.LabeledText;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.print.DocumentPrinterDelegateConfig;
@@ -54,8 +56,11 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 	private Button typeExtEngine;
 	
 	private Composite editWrapper;
-	private StackLayout stackLayout;
+	private StackLayout stackLayout;	
 	private XComposite sysCalLEditComposite;
+	private XComposite firstLine;
+	private LabeledText expectedReturnValue;
+	private LabeledComboComposite templates;
 	private LabeledText commandPattern;
 	private LabeledText parameterPattern;
 	
@@ -149,6 +154,35 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 		editWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		sysCalLEditComposite = new XComposite(editWrapper, SWT.NONE);
+		firstLine = new XComposite(sysCalLEditComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		firstLine.getGridData().grabExcessVerticalSpace = false;
+		firstLine.getGridLayout().numColumns = 2;
+		expectedReturnValue = new LabeledText(firstLine, "expected return value");
+		templates = new LabeledComboComposite(firstLine, SWT.BORDER | SWT.READ_ONLY, true);
+		templates.getLabel().setText("templates");
+		templates.getCombo().add("Acrobat Reader Windows /t");
+		templates.getCombo().add("Acrobat Reader Windows /p/h (Only default printer)");
+		templates.getCombo().addSelectionListener(new SelectionListener() {
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+			public void widgetSelected(SelectionEvent e) {
+				switch (templates.getCombo().getSelectionIndex()) {
+				case 0:
+					expectedReturnValue.setText("1");
+					commandPattern.setText("C:\\Programme\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe");
+					parameterPattern.setText("/t ${FILE} ${$PRINTSERVICE}");
+					break;
+				case 1:
+					expectedReturnValue.setText("1");
+					commandPattern.setText("C:\\Programme\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe");
+					parameterPattern.setText("/h/p ${FILE}");
+					break;
+				default:
+					throw new IllegalStateException("Some bogus was selected");
+				}
+			}
+		});
+		
 		commandPattern = new LabeledText(sysCalLEditComposite, NLBasePlugin.getResourceString("preferencePage.documentPrinter.editConfig.commandPattern"));
 		parameterPattern = new LabeledText(sysCalLEditComposite, NLBasePlugin.getResourceString("preferencePage.documentPrinter.editConfig.parameterPattern"));
 				
@@ -160,6 +194,7 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 	private void clearAll() {
 		typeSysCall.setSelection(false);
 		typeExtEngine.setSelection(false);
+		expectedReturnValue.setText("");
 		commandPattern.getTextControl().setText("");
 		parameterPattern.getTextControl().setText("");
 		className.getTextControl().setText("");
@@ -179,6 +214,7 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 			if (printerConfig instanceof SystemCallDelegateConfig) {
 				typeSysCall.setSelection(true);
 				SystemCallDelegateConfig config = (SystemCallDelegateConfig)printerConfig;
+				expectedReturnValue.setText(Integer.toString(config.getExpectedReturnValue()));
 				if (config.getCommandPattern() != null)
 					commandPattern.getTextControl().setText(config.getCommandPattern());
 				if (config.getParameterPattern() != null)
@@ -198,6 +234,7 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 		DocumentPrinterDelegateConfig result = null;
 		if (typeSysCall.getSelection()) {
 			result = new SystemCallDelegateConfig();
+			((SystemCallDelegateConfig)result).setExpectedReturnValue(Integer.parseInt(expectedReturnValue.getText()));
 			((SystemCallDelegateConfig)result).setCommandPattern(commandPattern.getTextControl().getText());
 			((SystemCallDelegateConfig)result).setParameterPattern(parameterPattern.getTextControl().getText());
 		}

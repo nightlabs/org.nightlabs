@@ -73,7 +73,7 @@ public class EditPrinterConfigurationComposite extends XComposite {
 		this.printerUseCaseID = printerUseCaseID;		
 		printerUseCase = PrinterConfigurationRegistry.sharedInstance().getPrinterUseCase(printerUseCaseID);
 		if (printerUseCase == null)
-			throw new RuntimeException("The PrinterUseCase to be edited is not registered: "+printerUseCaseID);
+			throw new RuntimeException("The PrinterUseCase to be edited is not registered: '"+printerUseCaseID+"'!");
 		if (_printerConfiguration != null)
 			printerConfiguration = _printerConfiguration;
 		else
