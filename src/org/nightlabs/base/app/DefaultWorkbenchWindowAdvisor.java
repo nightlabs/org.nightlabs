@@ -79,7 +79,7 @@ extends WorkbenchWindowAdvisor
 		configurer.setShowMenuBar(true);
 		configurer.setShowStatusLine(true);
 		configurer.setShowCoolBar(true);
-		configurer.setShowPerspectiveBar(false);
+		configurer.setShowPerspectiveBar(true);
 		configurer.setShowProgressIndicator(true);
 	}			
 
