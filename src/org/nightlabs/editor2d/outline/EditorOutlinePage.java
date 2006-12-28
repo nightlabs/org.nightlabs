@@ -64,8 +64,6 @@ import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorContextMenuProvider;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.actions.DeletePageAction;
-import org.nightlabs.editor2d.actions.NewPageAction;
 import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 
@@ -87,11 +85,8 @@ implements IAdaptable
   private IAction showOutlineAction; 
   private IAction showOverviewAction;
   private IAction filterOutlineAction;
-  private Thumbnail thumbnail;
   private DisposeListener disposeListener;
-  
-  private Canvas overview;  
-    
+      
   public EditorOutlinePage(AbstractEditor editor, EditPartViewer viewer){
     super(viewer);
     this.editor = editor;
@@ -201,13 +196,24 @@ implements IAdaptable
   	}  	
   }
   
+  private Canvas overview;  
+  private Thumbnail thumbnail;
+//  private PreviewComposite overview;
   public void createControl(Composite parent){
     pageBook = new PageBook(parent, SWT.NONE);
     outline = getViewer().createControl(pageBook);
- 
+    
 //    overview = new Canvas(pageBook, SWT.NONE);    
-//    overview = new J2DCanvas(pageBook, SWT.NONE, new J2DSamplePaintable("TestMessage"));        
-    overview = new J2DCanvas(pageBook, SWT.NONE, new DrawComponentPaintable(editor.getMultiLayerDrawComponent()));    
+//    overview = new J2DCanvas(pageBook, SWT.NONE, new J2DSamplePaintable("TestMessage"));    
+    overview = new J2DCanvas(pageBook, SWT.NONE, 
+    		new DrawComponentPaintable(editor.getMultiLayerDrawComponent()));
+    
+//    RootEditPart rep = editor.getOutlineGraphicalViewer().getRootEditPart();
+//    ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart) rep;
+//    Viewport viewport = ((Viewport)root.getFigure());  
+//    PreviewViewport previewViewport = new PreviewViewport(viewport);
+//    overview = new PreviewComposite(editor.getMultiLayerDrawComponent(), previewViewport, pageBook, SWT.NONE);
+    
     pageBook.showPage(outline);
     configureOutlineViewer();
     hookOutlineViewer();

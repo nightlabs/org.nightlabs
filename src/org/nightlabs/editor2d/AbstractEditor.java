@@ -1065,7 +1065,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		FileDialog dialog = new FileDialog(getSite().getWorkbenchWindow().getShell(), SWT.SAVE);
 		String inputFileName = getEditorInput().getName();
 		dialog.setFileName(inputFileName);      
-		String[] fileExtensions = getIOFilterMan().getAvailableFileExtensionsAsStrings();      
+//		String[] fileExtensions = getIOFilterMan().getAvailableFileExtensionsAsStrings();      
+		String[] fileExtensions = getIOFilterMan().getWriteFileExtensions(true);
 		if (fileExtensions != null)
 			dialog.setFilterExtensions(fileExtensions);
 
