@@ -100,4 +100,15 @@ implements IViewport
 		viewport.setViewLocation(x, y);
 	}
 
+	public Rectangle getInitRealBounds() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Rectangle getInitViewBounds() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 }
