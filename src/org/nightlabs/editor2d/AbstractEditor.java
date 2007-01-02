@@ -79,6 +79,7 @@ import org.eclipse.gef.ui.actions.ToggleRulerVisibilityAction;
 import org.eclipse.gef.ui.actions.ToggleSnapToGeometryAction;
 import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
+import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
@@ -319,8 +320,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //		initJ2DRegistry();
 	}
 	
-	protected void init() {
-
+	protected void init() 
+	{
+		getPalettePreferences().setPaletteState(FlyoutPaletteComposite.STATE_PINNED_OPEN);
 	}
 	
 	protected DefaultEditDomain getEditDomain() 
@@ -1297,7 +1299,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		
 		Rectangle pageBounds = PredefinedPageUtil.getPageBounds(dotUnit, defaultPage);
 		getMultiLayerDrawComponent().setResolution(resolution);  	  	
-		getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 	  	
+		getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 			
 	}	
 	
 	protected ResolutionUnitRegistry getResolutionUnitRegistry() {
