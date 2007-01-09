@@ -1160,7 +1160,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 					}										
 				} catch (MalformedURLException e) {
 					logger.warn("fileInput.getFile() "+f+" could not be transformed into ULR", e);
-					logger.warn("prepartion of IOFilterInformationProvider for IOFilter "+ioFilter.getName().getText(Locale.getDefault().getLanguage()) +"failed!");
+					logger.warn("prepartion of IOFilterInformationProvider for IOFilter "+ioFilter.getName().getText(Locale.getDefault().getLanguage()) +" failed!");
 				}
 			}
 		}		
