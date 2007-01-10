@@ -42,9 +42,14 @@ extends ViewerSorter
 		return _compare(viewer, (T)e1, (T)e2);
 	}
 
+	protected int superCompare(Viewer viewer, Object e1, Object e2) 
+	{
+		return super.compare(viewer, e1, e2);
+	}
+	
 	protected abstract int _compare(Viewer viewer, T e1, T e2);
 
-	abstract InvertableSorter getInverseSorter();
+	public abstract InvertableSorter getInverseSorter();
 
 	public abstract int getSortDirection();
 }

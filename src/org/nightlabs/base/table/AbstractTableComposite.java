@@ -44,6 +44,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.nightlabs.base.composite.XComposite;
 
@@ -96,7 +97,16 @@ implements ISelectionProvider
 	protected void initTable() {
 		createTableColumns(tableViewer, table);
 		setTableProvider(tableViewer);
+		
+		if (sortColumns) {
+			for (int i=0; i<tableViewer.getTable().getColumnCount(); i++) {
+				TableColumn tableColumn = tableViewer.getTable().getColumn(i);
+				new TableSortSelectionListener(tableViewer, tableColumn, new GenericInvertViewerSorter(i), SWT.UP);
+			}
+		}
 	}
+	
+	private boolean sortColumns = true;
 	
 	/**
 	 * Calls refresh for the TableViewer.

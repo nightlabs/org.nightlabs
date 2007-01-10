@@ -26,19 +26,28 @@
 
 package org.nightlabs.base.tree;
 
+import java.text.Collator;
 import java.util.List;
+import java.util.Locale;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.table.GenericInvertViewerSorter;
+import org.nightlabs.base.table.InvertableStringViewerSorter;
 
 /**
  * A composite with a {@link TreeViewer} to be used as base for tree-composites.
@@ -92,23 +101,167 @@ implements ISelectionProvider
 	 * @param init Whether to call init directly.
 	 * @param headerVisible Whether the header of the TreeViewer should be visible.
 	 */
-	public AbstractTreeComposite(Composite parent, int style, boolean setLayoutData, boolean init, boolean headerVisible) {
-		super(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER, setLayoutData ? XComposite.LayoutDataMode.GRID_DATA:  XComposite.LayoutDataMode.NONE);
+	public AbstractTreeComposite(Composite parent, int style, boolean setLayoutData, boolean init, boolean headerVisible) 
+	{
+//		super(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER, setLayoutData ? XComposite.LayoutDataMode.GRID_DATA:  XComposite.LayoutDataMode.NONE);
+//		treeViewer = new TreeViewer(this, style);
+//		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+//		treeViewer.getTree().setHeaderVisible(headerVisible);
+//		if (init)
+//			init();
+		this(parent, style, setLayoutData, init, headerVisible, true);
+	}
+	
+	/**
+	 * See {@link #AbstractTreeComposite(Composite, boolean)}. The other
+	 * parameters are used to control the trees look.
+	 * 
+	 * @param parent The parent to use.
+	 * @param style The style to use for treeViewer. The style of the wrapping Composite will be SWT.NONE.
+	 * @param setLayoutData Whether to set a LayoutData (of fill both) for the wrapping Composite.
+	 * @param init Whether to call init directly.
+	 * @param headerVisible Whether the header of the TreeViewer should be visible.
+	 * @param sortColumns determines if the header is automatically sorted
+	 */
+	public AbstractTreeComposite(Composite parent, int style, boolean setLayoutData, 
+			boolean init, boolean headerVisible, boolean sortColumns) 
+	{
+		super(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER, setLayoutData ? XComposite.LayoutDataMode.GRID_DATA : XComposite.LayoutDataMode.NONE);
 		treeViewer = new TreeViewer(this, style);
 		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		treeViewer.getTree().setHeaderVisible(headerVisible);
+		this.sortColumns = sortColumns;
 		if (init)
 			init();
-	}
+	}	
+	
+//	/**
+//	 * Init calls {@link #setTreeProvider(TreeViewer)} and {@link #createTreeColumns(Tree)}
+//	 * with the appropriate parameters.
+//	 */
+//	public void init() {
+//		setTreeProvider(treeViewer);
+//		createTreeColumns(treeViewer.getTree());
+//	}
 	
 	/**
 	 * Init calls {@link #setTreeProvider(TreeViewer)} and {@link #createTreeColumns(Tree)}
 	 * with the appropriate parameters.
 	 */
-	public void init() {
+	public void init() 
+	{
 		setTreeProvider(treeViewer);
 		createTreeColumns(treeViewer.getTree());
+		
+//		if (sortColumns) 
+//		{
+//			for (int i=0; i<treeViewer.getTree().getColumns().length; i++) {
+//				TreeColumn treeColumn = treeViewer.getTree().getColumn(i);
+//				treeViewer.getTree().setSortColumn(treeColumn);
+//				treeColumn.addListener(SWT.Selection, sortListener);
+//			}
+//			treeViewer.getTree().setSortDirection(SWT.UP);			
+//		}
+		
+		if (sortColumns) 
+		{
+			for (int i=0; i<treeViewer.getTree().getColumns().length; i++) {
+				TreeColumn treeColumn = treeViewer.getTree().getColumn(i);
+				new TreeSortSelectionListener(treeViewer, treeColumn, new GenericInvertViewerSorter(i), SWT.UP);
+			}			
+		}		
+		
 	}
+	
+	private boolean sortColumns = true;
+//	private Listener sortListener = new Listener() 
+//	{
+//		private int sortDirection = SWT.UP;		
+//    public void handleEvent(Event e) 
+//    {
+//    	if (e.widget instanceof TreeColumn) {
+//        TreeItem[] items = treeViewer.getTree().getItems();
+//        Collator collator = Collator.getInstance(Locale.getDefault());
+//        TreeColumn column = (TreeColumn)e.widget;
+//        int index = column == treeViewer.getTree().getColumns()[0] ? 0 : 1;
+//        for (int i = 1; i < items.length; i++) {
+//            String value1 = items[i].getText(index);
+//            for (int j = 0; j < i; j++){
+//                String value2 = items[j].getText(index);
+//                if (collator.compare(value1, value2) < 0) {
+//                    String[] values = {items[i].getText(0), items[i].getText(1)};
+//                    items[i].dispose();
+//                    TreeItem item = new TreeItem(treeViewer.getTree(), SWT.NONE, j);
+//                    item.setText(values);
+//                    items = treeViewer.getTree().getItems();
+//                    break;
+//                }
+//            }
+//        }
+//        if (sortDirection == SWT.UP)
+//        	sortDirection = SWT.DOWN;
+//        if (sortDirection == SWT.DOWN)
+//        	sortDirection = SWT.UP;
+//        
+//        treeViewer.getTree().setSortDirection(sortDirection);
+//        treeViewer.getTree().setSortColumn(column);    		
+//    	}
+//    }
+//	};
+	
+	// Add sort indicator and sort data when column selected
+//	private Listener sortListener = new Listener() {
+//		public void handleEvent(Event e) {
+//			// determine new sort column and direction
+//			TreeColumn sortColumn = treeViewer.getTree().getSortColumn();
+//			TreeColumn currentColumn = (TreeColumn) e.widget;
+//			int dir = treeViewer.getTree().getSortDirection();
+//			if (sortColumn == currentColumn) {
+//				dir = dir == SWT.UP ? SWT.DOWN : SWT.UP;
+//			} else {
+//				treeViewer.getTree().setSortColumn(currentColumn);
+//				dir = SWT.UP;
+//			}
+//			// sort the data based on column and direction
+//			final int index = currentColumn == treeViewer.getTree().getColumns()[0] ? 0 : 1;
+//			TreeItem[] items = treeViewer.getTree().getItems();
+//			Collator collator = Collator.getInstance(Locale.getDefault());
+//      for (int i = 1; i < items.length; i++) {
+//        String value1 = items[i].getText(index);
+//        for (int j = 0; j < i; j++){
+//            String value2 = items[j].getText(index);
+//            if (collator.compare(value1, value2) < 0) {
+//                String[] values = {items[i].getText(0), items[i].getText(1)};
+//                items[i].dispose();
+//                TreeItem item = new TreeItem(treeViewer.getTree(), SWT.NONE, j);
+//                item.setText(values);
+//                items = treeViewer.getTree().getItems();
+//                break;
+//            }
+//        }
+//      }			
+//			// update data displayed in table
+//			treeViewer.getTree().setSortDirection(dir);			
+//		}
+//	};	
+	
+//	private Listener sortListener = new Listener() {
+//		public void handleEvent(Event e) {
+//			// determine new sort column and direction
+//			TreeColumn sortColumn = treeViewer.getTree().getSortColumn();
+//			TreeColumn currentColumn = (TreeColumn) e.widget;
+//			int dir = treeViewer.getTree().getSortDirection();
+//			if (sortColumn == currentColumn) {
+//				dir = dir == SWT.UP ? SWT.DOWN : SWT.UP;
+//			} else {
+//				treeViewer.getTree().setSortColumn(currentColumn);
+//				dir = SWT.UP;
+//			}
+//			treeViewer.getTree().setSortDirection(dir);
+//			treeViewer.getTree().setSortColumn(currentColumn);
+////			treeViewer.setSorter(new ViewerSorter());
+//		}
+//	};	
 	
 	public abstract void setTreeProvider(TreeViewer treeViewer);
 	
@@ -183,7 +336,7 @@ implements ISelectionProvider
 	}
 	
 	public void setInput(Object input) {
-		treeViewer.setInput(input);
+		treeViewer.setInput(input);		
 	}
 
 	public void addSelectionChangedListener(ISelectionChangedListener listener)

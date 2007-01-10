@@ -56,7 +56,8 @@ public class TableSortSelectionListener implements SelectionListener {
 	 *						values are {@link SWT#UP} and {@link SWT#DOWN}
 	 */
 	public TableSortSelectionListener(TableViewer viewer, TableColumn column,
-			AbstractInvertableTableSorter sorter, int defaultDirection) {
+//			AbstractInvertableTableSorter sorter, int defaultDirection) {
+			InvertableSorter sorter, int defaultDirection) {
 		this(viewer, column, sorter, defaultDirection, false);
 	}
 
@@ -82,7 +83,8 @@ public class TableSortSelectionListener implements SelectionListener {
 	 *		should be global (=> configuration) and not differ from view to view. (Marco)
 	 */
 	public TableSortSelectionListener(TableViewer viewer, TableColumn column,
-			AbstractInvertableTableSorter sorter, int defaultDirection,
+//			AbstractInvertableTableSorter sorter, int defaultDirection,
+			InvertableSorter sorter, int defaultDirection,
 			boolean keepDirection) {
 		this.viewer = viewer;
 		this.column = column;
@@ -116,7 +118,6 @@ public class TableSortSelectionListener implements SelectionListener {
 				newSorter = sorter;
 			}
 		}
- 
 		currentSorter = newSorter;
 		chooseColumnForSorting();
 	}

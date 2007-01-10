@@ -41,7 +41,7 @@ public abstract class AbstractInvertableTableSorter<T> extends InvertableSorter<
 		}
 
 		@Override
-		InvertableSorter getInverseSorter() {
+		public InvertableSorter getInverseSorter() {
 			return AbstractInvertableTableSorter.this;
 		}
 
@@ -52,7 +52,7 @@ public abstract class AbstractInvertableTableSorter<T> extends InvertableSorter<
 	};
 
 	@Override
-	InvertableSorter getInverseSorter() {
+	public InvertableSorter getInverseSorter() {
 		return inverse;
 	}
 
