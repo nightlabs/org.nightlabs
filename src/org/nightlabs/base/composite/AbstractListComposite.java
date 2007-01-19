@@ -469,4 +469,19 @@ implements ISelectionProvider
 
 		internal_setSelection(si);
 	}
+	
+	/**
+	 * Selects the given element.
+	 * @param element The element to be selected.
+	 */
+	public void setSelection(final T element) {
+		IStructuredSelection sel = new StructuredSelection() {
+			@Override
+			public Object getFirstElement() {
+				return element;
+			}
+		};
+		
+		setSelection(sel);
+	}
 }

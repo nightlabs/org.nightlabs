@@ -28,6 +28,8 @@ package org.nightlabs.base.language;
 
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
@@ -129,13 +131,25 @@ public class I18nTextEditor extends XComposite
 			l.setLayoutData(gd);
 		}
 
+		final LanguageChangeListener languageChangeListener = new LanguageChangeListener() {
+			public void languageChanged(LanguageChangeEvent event) {
+				storeText();
+				loadText();
+			}
+		};
+		
 		if (languageChooser == null) {
-			languageChooser = new LanguageChooserCombo(this, false);
+			this.languageChooser = new LanguageChooserCombo(this, false);
 			// TODO On the long run, the I18nTextEditor itself should be a combobox
 			// in this mode, showing the language flag on the left.
+		} else {
+			this.languageChooser = languageChooser;
+			addDisposeListener(new DisposeListener() {
+				public void widgetDisposed(DisposeEvent e) {
+					I18nTextEditor.this.languageChooser.removeLanguageChangeListener(languageChangeListener);
+				}
+			});
 		}
-
-		this.languageChooser = languageChooser;
 
 //		text = new Text(this, SWT.BORDER | SWT.READ_ONLY); // TODO: READ_ONLY default? Not neccessary any more with refactor to buffer
 		text = new Text(this, SWT.BORDER); 
@@ -147,13 +161,7 @@ public class I18nTextEditor extends XComposite
 			}
 		});
 
-		languageChooser.addLanguageChangeListener(new LanguageChangeListener() {
-			public void languageChanged(LanguageChangeEvent event)
-			{
-				storeText();
-				loadText();
-			}
-		});
+		languageChooser.addLanguageChangeListener(languageChangeListener);
 
 		text.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e)
