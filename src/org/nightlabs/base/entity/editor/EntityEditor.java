@@ -46,7 +46,7 @@ import org.nightlabs.base.entity.EntityEditorRegistry;
 import org.nightlabs.base.job.FadeableCompositeJob;
 
 /**
- * An abstract base class for entity editors. It provides
+ * A base class for entity editors. It provides
  * the method {@link #addPages()} using the EntityEditorRegistry
  * to add pages registered via extension point.
  * 

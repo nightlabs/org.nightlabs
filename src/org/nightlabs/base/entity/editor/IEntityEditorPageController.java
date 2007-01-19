@@ -74,7 +74,8 @@ public interface IEntityEditorPageController extends IPropertyChangeSupport {
 	/**
 	 * Load the data special to the implementation of a page controller
 	 * and write status to the given monitor. This is very likely to be called
-	 * on a non-gui thread.
+	 * on a non-gui thread. This Method is invoked asynchroniously by the abstract EntityEditorPageController,
+	 * so its better to extend the abstract Controller than to write job management yourself. 
 	 * @param monitor The monitor to write status to.
 	 */
 	public void doLoad(IProgressMonitor monitor);
@@ -82,7 +83,8 @@ public interface IEntityEditorPageController extends IPropertyChangeSupport {
 	/**
 	 * Save the data special to the implementation of a page controller
 	 * and write status to the given monitor. This is very likely to be called
-	 * on a non-gui thread.
+	 * on a non-gui thread. The Method will be called by EntityEditor after packaging into an 
+	 * asynchronous callback job.
 	 * @param monitor The monitor to write status to.
 	 */
 	public void doSave(IProgressMonitor monitor);
