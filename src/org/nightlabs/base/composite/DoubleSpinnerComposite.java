@@ -25,6 +25,7 @@
  ******************************************************************************/
 package org.nightlabs.base.composite;
 
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -143,6 +144,14 @@ extends XComposite
 	}
 	public void removeSelectionListener(SelectionListener listener) {
 		spinner.removeSelectionListener(listener);
+	}
+	
+	public void addModifyListener(ModifyListener listener) {
+		spinner.addModifyListener(listener);
+	}
+	
+	public void removeModifyListener(ModifyListener listener) {
+		spinner.removeModifyListener(listener);
 	}
 
 }
