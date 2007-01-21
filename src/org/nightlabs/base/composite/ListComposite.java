@@ -91,7 +91,7 @@ public class ListComposite<T> extends AbstractListComposite<T>
 	{
 		style |= SWT.BORDER;
 		if (caption != null) {
-			XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, 2);
+			XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA, 2);
 			label = new Label(comp, SWT.NONE);
 			label.setText(caption);
 			list = new List(comp, style | SWT.V_SCROLL | SWT.H_SCROLL);
