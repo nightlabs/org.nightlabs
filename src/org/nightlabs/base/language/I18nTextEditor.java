@@ -161,7 +161,8 @@ public class I18nTextEditor extends XComposite
 			}
 		});
 
-		languageChooser.addLanguageChangeListener(languageChangeListener);
+		if (languageChooser != null)
+			languageChooser.addLanguageChangeListener(languageChangeListener);
 
 		text.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e)
