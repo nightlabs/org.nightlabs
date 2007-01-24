@@ -282,7 +282,10 @@ public class XComposite extends Composite
 	 */
 	public GridData getGridData()
 	{
-		return (GridData)getLayoutData();
+		if (getLayoutData() == null)
+			setLayoutData(new GridData());
+		
+		return (GridData) getLayoutData();
 	}
 	
 	private FormToolkit toolkit;
