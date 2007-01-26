@@ -74,10 +74,7 @@ extends AbstractEPProcessor
 	{
 		if (element.getName().equalsIgnoreCase(ELEMENT_DRAWCOMPONENT_PROPERTY)) 
 		{
-			
-
-			String dcClassName = element.getAttribute(ATTRIBUTE_DRAWCOMPONENT_CLASS);
-			
+			String dcClassName = element.getAttribute(ATTRIBUTE_DRAWCOMPONENT_CLASS);			
 			DrawComponentProperty dcProperty = null;
 			try {
 				dcProperty = (DrawComponentProperty) element.createExecutableExtension(ATTRIBUTE_DRAWCOMPONENT_PROPERTY);
@@ -85,8 +82,7 @@ extends AbstractEPProcessor
 				logger.warn("There occured an error when trying to create the drawComponentProperty "+element.getAttribute(ATTRIBUTE_DRAWCOMPONENT_PROPERTY), e);
 			}
 			
-			String rootDrawComponentClassName = element.getAttribute(ATTRIBUTE_ROOT_DRAWCOMPONENT_CLASS);
-			
+			String rootDrawComponentClassName = element.getAttribute(ATTRIBUTE_ROOT_DRAWCOMPONENT_CLASS);			
 			if (checkString(dcClassName) && dcProperty != null && checkString(rootDrawComponentClassName)) 
 			{
 				Map<String, List<DrawComponentProperty>> dcClass2DrawComponentProperties = rootClass2dcClass2DrawComponentProperties.get(rootDrawComponentClassName);

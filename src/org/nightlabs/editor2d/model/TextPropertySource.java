@@ -88,6 +88,8 @@ extends ShapeDrawComponentPropertySource
 		descriptors.add(createItalicPD());		
 		// Text
 		descriptors.add(createTextPD());
+		// Visible
+		descriptors.add(createVisiblePD());
 		
 		return descriptors;
 	}	

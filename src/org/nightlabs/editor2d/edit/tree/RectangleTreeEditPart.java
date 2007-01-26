@@ -30,6 +30,7 @@ package org.nightlabs.editor2d.edit.tree;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.AbstractPaletteFactory;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.RectangleDrawComponent;
@@ -39,14 +40,11 @@ import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
 public class RectangleTreeEditPart 
 extends DrawComponentTreeEditPart 
 {
-//  public static Image RECTANGLE_ICON = ImageDescriptor.createFromURL(EditorPlugin.getDefault().getBundle().getEntry(EditorPlugin.getResourceString("icon_rectangle"))).createImage();
-//  public static Image RECTANGLE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/rectangle16.gif").createImage();  
+//	public static Image RECTANGLE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+//			AbstractPaletteFactory.class, "Rectangle").createImage();	
 	public static Image RECTANGLE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			AbstractPaletteFactory.class, "Rectangle").createImage();	
+			AbstractPaletteFactory.class, "Rectangle", ImageFormat.gif).createImage();	
 	  
-  /**
-   * @param model
-   */
   public RectangleTreeEditPart(RectangleDrawComponent model) {
     super(model);
   }
@@ -65,8 +63,10 @@ extends DrawComponentTreeEditPart
   	return (RectangleDrawComponent) getModel();
   }
   
-  public Image getImage() {
+//  public Image getImage() {
+//    return RECTANGLE_ICON;
+//  }
+  protected Image getOutlineImage() {
     return RECTANGLE_ICON;
   }
-
 }

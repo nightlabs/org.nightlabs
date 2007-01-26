@@ -32,6 +32,7 @@ import java.beans.PropertyChangeEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.AbstractPaletteFactory;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EllipseDrawComponent;
@@ -47,23 +48,23 @@ extends DrawComponentTreeEditPart
 	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
 			.getLogger(EllipseTreeEditPart.class);
 	
+//	public static Image ELLIPSE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+//			AbstractPaletteFactory.class, "Ellipse").createImage();	
 	public static Image ELLIPSE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			AbstractPaletteFactory.class, "Ellipse").createImage();	
+			AbstractPaletteFactory.class, "Ellipse", ImageFormat.gif).createImage();	
   
-  /**
-   * @param model
-   */
   public EllipseTreeEditPart(EllipseDrawComponent model) {
     super(model);
   }
 
-  /* (non-Javadoc)
-   * @see org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart#getIcon()
-   */
-  public Image getImage() {
+//  public Image getImage() {
+//    return ELLIPSE_ICON;
+//  }
+  public Image getOutlineImage() {
     return ELLIPSE_ICON;
   }
 
+  
   public IPropertySource getPropertySource()
   {
     if (propertySource == null)

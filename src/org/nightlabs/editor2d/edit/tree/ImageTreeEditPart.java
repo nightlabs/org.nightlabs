@@ -30,6 +30,7 @@ package org.nightlabs.editor2d.edit.tree;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.AbstractPaletteFactory;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
@@ -39,17 +40,22 @@ import org.nightlabs.editor2d.model.ImagePropertySource;
 public class ImageTreeEditPart 
 extends DrawComponentTreeEditPart 
 {
+//	public static Image IMAGE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+//			AbstractPaletteFactory.class, "Image").createImage();	
 	public static Image IMAGE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			AbstractPaletteFactory.class, "Image").createImage();	
-  
+			AbstractPaletteFactory.class, "Image", ImageFormat.gif).createImage();	
+	
   public ImageTreeEditPart(ImageDrawComponent drawComponent) {
     super(drawComponent);
   }
 
-  protected Image getImage() {
+//  protected Image getImage() {
+//    return IMAGE_ICON;
+//  }
+  protected Image getOutlineImage() {
     return IMAGE_ICON;
   }
-
+  
   public ImageDrawComponent getImageDrawComponent() {
   	return (ImageDrawComponent) getModel();
   }

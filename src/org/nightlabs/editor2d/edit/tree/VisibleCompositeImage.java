@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * NightLabs Editor2D - Graphical editor framework                             *
+ * JFire - it's hot - Free ERP System - http://jfire.org                       *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -25,50 +25,47 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.edit.tree;
 
+import org.eclipse.jface.resource.CompositeImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.swt.graphics.Point;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.ShapeDrawComponent;
-import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
 
 /**
- * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
+ * @author Daniel.Mazurek [at] NightLabs [dot] de
+ *
  */
-public class ShapeTreeEditPart 
-extends DrawComponentTreeEditPart 
+public class VisibleCompositeImage 
+extends CompositeImageDescriptor 
 {
-//	public static Image SHAPE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-//			ShapeTreeEditPart.class).createImage();	
-	public static Image SHAPE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			ShapeTreeEditPart.class, "", ImageFormat.gif).createImage();	
-	
-	/**
-	 * @param drawComponent
-	 */
-	public ShapeTreeEditPart(ShapeDrawComponent shapeDrawComponent) {
-		super(shapeDrawComponent);
+
+	public VisibleCompositeImage(Image image) {
+		this.image = image;
 	}
 
-//	@Override
-//	protected Image getImage() {
-//		return SHAPE_ICON;
-//	}
+	private Image image;
+	
 	@Override
-	protected Image getOutlineImage() {
-		return SHAPE_ICON;
+	protected void drawCompositeImage(int width, int height) 
+	{
+//		image = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+//				LayerView.class, "", ImageDimension._16x16, ImageFormat.gif).createImage();	
+		drawImage(image.getImageData(), 0, 0);
+		
+		Image invisibleImage = SharedImages.getSharedImage(EditorPlugin.getDefault(), 
+				VisibleCompositeImage.class, "", ImageDimension._8x8, ImageFormat.gif);
+		
+		drawImage(invisibleImage.getImageData(), 0, 8);
 	}
-	
-	public ShapeDrawComponent getShapeDrawComponent() {
-		return (ShapeDrawComponent) getDrawComponent();
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.resource.CompositeImageDescriptor#getSize()
+	 */
+	@Override
+	protected Point getSize() {
+		return new Point(16, 16);
 	}
-	
-	public IPropertySource getPropertySource()
-  {
-    if (propertySource == null) {
-      propertySource = new ShapeDrawComponentPropertySource(getShapeDrawComponent());
-    }
-    return propertySource;
-  }  	
+
 }

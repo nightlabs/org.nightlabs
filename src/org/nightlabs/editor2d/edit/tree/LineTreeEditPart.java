@@ -30,6 +30,7 @@ package org.nightlabs.editor2d.edit.tree;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.AbstractPaletteFactory;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.LineDrawComponent;
@@ -39,21 +40,19 @@ import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
 public class LineTreeEditPart 
 extends DrawComponentTreeEditPart 
 {
-//  public static Image LINE_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/line16.gif").createImage();
+//	public static Image LINE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+//			AbstractPaletteFactory.class, "Line").createImage();	
 	public static Image LINE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			AbstractPaletteFactory.class, "Line").createImage();	
-  
-  /**
-   * @param drawComponent
-   */
+			AbstractPaletteFactory.class, "Line", ImageFormat.gif).createImage();	
+	
   public LineTreeEditPart(LineDrawComponent drawComponent) {
     super(drawComponent);
   }
 
-  /* (non-Javadoc)
-   * @see org.eclipse.gef.editparts.AbstractTreeEditPart#getImage()
-   */
-  protected Image getImage() {
+//  protected Image getImage() {
+//    return LINE_ICON;
+//  }
+  protected Image getOutlineImage() {
     return LINE_ICON;
   }
 

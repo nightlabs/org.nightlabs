@@ -27,6 +27,7 @@ package org.nightlabs.editor2d.model;
 
 import java.util.List;
 
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.nightlabs.base.celleditor.CheckboxCellEditor;
 import org.nightlabs.base.property.CheckboxPropertyDescriptor;
@@ -73,6 +74,13 @@ extends DrawComponentPropertySource
 //		descriptors.add(createPageSizePD());
 		// Show Page Bounds
 		descriptors.add(createShowPageBoundsPD());
+		// Visible
+		descriptors.add(createVisiblePD());		
+		
+		// PropertyDescriptors from extension point
+		List<IPropertyDescriptor> extensionPointProperties = getExtensionPointProperties(); 
+		if (!extensionPointProperties.isEmpty())
+			descriptors.addAll(extensionPointProperties);
 		
 		return descriptors;
 	}

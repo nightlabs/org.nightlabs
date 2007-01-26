@@ -41,10 +41,12 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.nightlabs.base.i18n.UnitRegistryEP;
 import org.nightlabs.base.language.LanguageManager;
+import org.nightlabs.base.property.CheckboxPropertyDescriptor;
 import org.nightlabs.base.property.DoublePropertyDescriptor;
 import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.properties.NamePropertyDescriptor;
 import org.nightlabs.editor2d.properties.RotationPropertyDescriptor;
 import org.nightlabs.editor2d.unit.DotUnit;
@@ -152,9 +154,10 @@ implements IPropertySource
 		descriptors.add(createRotationXPD());		
 		// RotationY
 		descriptors.add(createRotationYPD());
+		// Visible
+		descriptors.add(createVisiblePD());
 		
 		// PropertyDescriptors from extension point
-//		descriptors.addAll(getExtensionPointProperties());
 		List<IPropertyDescriptor> extensionPointProperties = getExtensionPointProperties(); 
 		if (!extensionPointProperties.isEmpty())
 			descriptors.addAll(extensionPointProperties);
@@ -295,7 +298,9 @@ implements IPropertySource
 		else if (id.equals(DrawComponent.PROP_NAME)) {
 			return drawComponent.getI18nText().getText(nameLangMan.getCurrentLanguageID());
 		}		
-		
+		else if (id.equals(DrawComponent.PROP_VISIBLE)) {
+			return new Boolean(drawComponent.isVisible());
+		}		
 		// properties from extension point
 		DrawComponentProperty property = id2DrawComponentProperty.get(id);
 		if (property != null) {
@@ -360,6 +365,9 @@ implements IPropertySource
 			drawComponent.setName((String)value);
 			return;
 		}
+		else if (id.equals(DrawComponent.PROP_VISIBLE)) {
+			drawComponent.setVisible(((Boolean)value).booleanValue());
+		}
 		
 		// properties from extension point
 		DrawComponentProperty property = id2DrawComponentProperty.get(id);
@@ -369,5 +377,11 @@ implements IPropertySource
 		}
 	}
 			
+	protected PropertyDescriptor createVisiblePD() 
+	{
+		PropertyDescriptor pd = new CheckboxPropertyDescriptor(Layer.PROP_VISIBLE, 
+				EditorPlugin.getResourceString("property.visible.label"), false);
+		return pd;
+	}
 }
 

@@ -30,12 +30,15 @@ package org.nightlabs.editor2d.edit.tree;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import org.apache.log4j.Logger;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
+import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.internal.decorators.DecoratorManager;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.decorators.VisibleDecorator;
 import org.nightlabs.editor2d.editpolicy.DrawComponentEditPolicy;
 import org.nightlabs.editor2d.editpolicy.tree.DrawComponentTreeEditPolicy;
 import org.nightlabs.editor2d.model.DrawComponentPropertySource;
@@ -67,7 +70,22 @@ extends AbstractTreeEditPart
     return super.getAdapter(key);
   }  
   
-  protected abstract Image getImage();
+//  protected abstract Image getImage();
+  protected abstract Image getOutlineImage();
+  
+  private Image image;
+  protected Image getImage() 
+  {
+  	if (image == null) {
+			if (!getDrawComponent().isVisible()) {
+				image = getVisibleCompositeImage().createImage(true);				
+			} else {
+				image = getOutlineImage();
+			}
+  		image = getOutlineImage();
+  	}
+  	return image;
+  }
   
   public IPropertySource getPropertySource()
   {
@@ -161,60 +179,76 @@ extends AbstractTreeEditPart
 	{
 		String propertyName = evt.getPropertyName();		
 		if (propertyName.equals(DrawComponent.PROP_BOUNDS)) {
-//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 			return;
 		}
 		else if (propertyName.equals(DrawComponent.PROP_HEIGHT)) {
-//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_WIDTH)) {
-//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_X)) {
-//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_Y)) {
-//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_ROTATION)) {
-//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_ROTATION_X)) {
-//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_ROTATION_Y)) {
-//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 			return;			
 		}						
 		else if (propertyName.equals(DrawComponent.PROP_RENDER_MODE)) {
-//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 			return;			
 		}		
 		else if (propertyName.equals(DrawComponent.PROP_NAME)) {
-//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(DrawComponent.PROP_LANGUAGE_ID)) {
-//			LOGGER.debug(propertyName+"changed!");
 			refreshVisuals();
 			return;			
-		}					
+		}	
+		else if (propertyName.equals(DrawComponent.PROP_VISIBLE)) {
+			if (!getDrawComponent().isVisible()) {
+				image = getVisibleCompositeImage().createImage(true);				
+			} else {
+				image = getOutlineImage();
+			}			
+//			notifyLabelDecorator();	
+			refreshVisuals();
+			return;
+		}	
 	}  
 	
+	private VisibleCompositeImage visibleCompositeImage;
+	private VisibleCompositeImage getVisibleCompositeImage() {
+		if (visibleCompositeImage == null) {
+			visibleCompositeImage = new VisibleCompositeImage(getOutlineImage());
+		}
+		return visibleCompositeImage;
+	}
+	
+	protected void notifyLabelDecorator() 
+	{
+		((DecoratorManager)EditorPlugin.getDefault().getWorkbench().getDecoratorManager()).labelProviderChanged(new
+				LabelProviderChangedEvent(((DecoratorManager)EditorPlugin.getDefault().getWorkbench().getDecoratorManager()), this));
+		VisibleDecorator decorator = VisibleDecorator.getVisibleDecorator();
+		if(decorator!=null) {
+			decorator.refresh(this); 		
+		}
+	}
 }

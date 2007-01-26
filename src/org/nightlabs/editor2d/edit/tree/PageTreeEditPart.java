@@ -28,6 +28,7 @@ package org.nightlabs.editor2d.edit.tree;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.model.PagePropertySource;
@@ -38,8 +39,10 @@ import org.nightlabs.editor2d.model.PagePropertySource;
 public class PageTreeEditPart 
 extends DrawComponentContainerTreeEditPart 
 { 
+//	public static Image PAGE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+//			PageTreeEditPart.class).createImage();	
 	public static Image PAGE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			PageTreeEditPart.class).createImage();	
+			PageTreeEditPart.class, "", ImageFormat.gif).createImage();	
 	
 	/**
 	 * @param model the PageDrawComponent to initialze this PageTreeEditPart with 
@@ -48,8 +51,12 @@ extends DrawComponentContainerTreeEditPart
 		super(model);
 	}
 
+//	@Override
+//	protected Image getImage() {
+//		return PAGE_ICON;
+//	}
 	@Override
-	protected Image getImage() {
+	protected Image getOutlineImage() {
 		return PAGE_ICON;
 	}
 

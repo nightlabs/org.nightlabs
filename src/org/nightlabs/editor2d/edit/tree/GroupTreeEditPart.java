@@ -28,6 +28,7 @@ package org.nightlabs.editor2d.edit.tree;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.GroupDrawComponent;
 import org.nightlabs.editor2d.model.GroupPropertySource;
@@ -38,8 +39,10 @@ import org.nightlabs.editor2d.model.GroupPropertySource;
 public class GroupTreeEditPart 
 extends DrawComponentContainerTreeEditPart 
 {
+//	public static Image GROUP_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+//			GroupTreeEditPart.class).createImage();	
 	public static Image GROUP_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			GroupTreeEditPart.class).createImage();	
+			GroupTreeEditPart.class, "", ImageFormat.gif).createImage();	
 
 	public GroupTreeEditPart(GroupDrawComponent model) {
 		super(model);
@@ -49,14 +52,15 @@ extends DrawComponentContainerTreeEditPart
 		return (GroupDrawComponent) getModel();
 	}
 	
-	/**
-	 * @see org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart#getImage()
-	 */
+//	@Override
+//	protected Image getImage() {
+//		return GROUP_ICON;
+//	}
 	@Override
-	protected Image getImage() {
+	protected Image getOutlineImage() {
 		return GROUP_ICON;
 	}
-
+		
 	public IPropertySource getPropertySource()
   {
     if (propertySource == null) {

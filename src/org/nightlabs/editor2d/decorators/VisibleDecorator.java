@@ -23,52 +23,64 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.edit.tree;
+package org.nightlabs.editor2d.decorators;
 
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.IDecoration;
+import org.eclipse.jface.viewers.ILightweightLabelDecorator;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.LabelProviderChangedEvent;
+import org.eclipse.ui.IDecoratorManager;
+import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.ShapeDrawComponent;
-import org.nightlabs.editor2d.model.ShapeDrawComponentPropertySource;
+import org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart;
+import org.nightlabs.editor2d.edit.tree.VisibleCompositeImage;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class ShapeTreeEditPart 
-extends DrawComponentTreeEditPart 
+public class VisibleDecorator 
+extends LabelProvider 
+implements ILightweightLabelDecorator 
 {
-//	public static Image SHAPE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-//			ShapeTreeEditPart.class).createImage();	
-	public static Image SHAPE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			ShapeTreeEditPart.class, "", ImageFormat.gif).createImage();	
-	
-	/**
-	 * @param drawComponent
-	 */
-	public ShapeTreeEditPart(ShapeDrawComponent shapeDrawComponent) {
-		super(shapeDrawComponent);
+
+	public VisibleDecorator() {
+
 	}
 
-//	@Override
-//	protected Image getImage() {
-//		return SHAPE_ICON;
-//	}
-	@Override
-	protected Image getOutlineImage() {
-		return SHAPE_ICON;
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.ILightweightLabelDecorator#decorate(java.lang.Object, org.eclipse.jface.viewers.IDecoration)
+	 */
+	public void decorate(Object element, IDecoration decoration) 
+	{
+		if(element instanceof DrawComponentTreeEditPart) 
+		{	
+			// TODO: manually update the image of the DrawComponentTreeEditPart and call refresh
+			ImageDescriptor invisibleImage = SharedImages.getSharedImageDescriptor(
+					EditorPlugin.getDefault(), 
+					VisibleCompositeImage.class, "", ImageDimension._8x8, ImageFormat.gif);
+			
+			decoration.addOverlay(invisibleImage);
+//			decoration.addPrefix("[Sample]");
+			decoration.addSuffix("{invisible}");
+		}
+	}
+
+	public static VisibleDecorator getVisibleDecorator()
+	{
+		IDecoratorManager decoratorManager = WorkbenchPlugin.getDefault().getWorkbench().getDecoratorManager();
+  
+	  if (decoratorManager.getEnabled("org.nightlabs.editor2d.decorators.VisibleDecorator")) {
+	  	return (VisibleDecorator) decoratorManager.getLightweightLabelDecorator("org.nightlabs.editor2d.decorators.VisibleDecorator");
+	  }
+	  return null;
 	}
 	
-	public ShapeDrawComponent getShapeDrawComponent() {
-		return (ShapeDrawComponent) getDrawComponent();
+	public void refresh(Object part) {
+		this.fireLabelProviderChanged(new LabelProviderChangedEvent(this,part));
 	}
-	
-	public IPropertySource getPropertySource()
-  {
-    if (propertySource == null) {
-      propertySource = new ShapeDrawComponentPropertySource(getShapeDrawComponent());
-    }
-    return propertySource;
-  }  	
+
 }

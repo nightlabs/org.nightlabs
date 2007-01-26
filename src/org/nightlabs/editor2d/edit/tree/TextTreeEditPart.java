@@ -32,6 +32,7 @@ import java.beans.PropertyChangeEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.AbstractPaletteFactory;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.TextDrawComponent;
@@ -46,17 +47,21 @@ extends DrawComponentTreeEditPart
 	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
 			.getLogger(TextTreeEditPart.class);
 	
-//  public static final Image TEXT_ICON = ImageDescriptor.createFromFile(EditorPlugin.class, "icons/text16.gif").createImage();
+//	public static final Image TEXT_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+//			AbstractPaletteFactory.class, "Text").createImage();		
 	public static final Image TEXT_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			AbstractPaletteFactory.class, "Text").createImage();		
-  
+			AbstractPaletteFactory.class, "Text", ImageFormat.gif).createImage();  
+	
   public TextTreeEditPart(TextDrawComponent drawComponent) {
     super(drawComponent);
   }
 
-  protected Image getImage() {
+//  protected Image getImage() {
+//    return TEXT_ICON;
+//  }
+  protected Image getOutlineImage() {
     return TEXT_ICON;
-  }
+  }  
 
   public TextDrawComponent getTextDrawComponent() {
     return (TextDrawComponent) getModel();

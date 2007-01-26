@@ -60,10 +60,10 @@ extends DrawComponentContainerTreeEditPart
   	return (MultiLayerDrawComponent) getModel();
   }
   
-  /* (non-Javadoc)
-   * @see org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart#getIcon()
-   */
-  public Image getImage() {
+//  public Image getImage() {
+//    return null;
+//  }
+  public Image getOutlineImage() {
     return null;
   }
 
