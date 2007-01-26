@@ -48,6 +48,13 @@ public class SharedImages
 	}
 
 	public static enum ImageDimension {
+		// for image decorators
+		_8x8 {
+			public String toString()
+			{
+				return "8x8";
+			}
+		},		
 		_16x16 {
 			public String toString()
 			{
@@ -212,6 +219,20 @@ public class SharedImages
 		return sharedInstance().getImageDescriptor(plugin, clazz, suffix, IMAGE_DIMENSION_DEFAULT.toString(), IMAGE_FORMAT_DEFAULT); 
 	}
 
+	/**
+	 * Get the ImageDescriptor for the given clazz and suffix under the given plugin. The image will be
+	 * searched based on the NightLabs coding guidelines.
+	 * 
+	 * @param plugin The plugin the image is package in.
+	 * @param clazz The class using the image
+	 * @param suffix The suffix for the image desired
+	 * @param imageFormat format The extension of the image to be loaded (e.g. "png" or "gif")
+	 * @see #getSharedImageDescriptor(Plugin, Class, String, org.nightlabs.base.resource.SharedImages.ImageDimension, org.nightlabs.base.resource.SharedImages.ImageFormat)
+	 */
+	public static ImageDescriptor getSharedImageDescriptor(Plugin plugin, Class clazz, String suffix, ImageFormat imageFormat) {
+		return sharedInstance().getImageDescriptor(plugin, clazz, suffix, IMAGE_DIMENSION_DEFAULT.toString(), imageFormat); 
+	}
+	
 	/**
 	 * Get the ImageDescriptor for the given clazz and suffix under the given plugin. The image will be
 	 * searched based on the NightLabs coding guidelines.
