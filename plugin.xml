@@ -264,37 +264,20 @@
          name="Visiblet Decorator"
          point="org.eclipse.ui.decorators">
       <decorator
-            lightweight="true"
-            objectClass="org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart"
-            location="TOP_LEFT"
-            label="Visible Decorator"
-            icon="icons\edit\tree\VisibleCompositeImage.8x8.gif"
-            state="true"
-            class="org.nightlabs.editor2d.decorators.VisibleDecorator"
-            id="org.nightlabs.editor2d.decorators.VisibleDecorator"/>
-   </extension>    
-<!--   
-   <extension
-         point="org.eclipse.ui.decorators">
-      <decorator
             adaptable="true"
-            class="org.nightlabs.editor2d.decorators.ReadOnly"
-            id="org.nightlabs.editor2d.decorators.ReadOnly"
-            label="Read-only Decorator"
+            class="org.nightlabs.editor2d.decorators.VisibleDecorator"
+            icon="icons\edit\tree\VisibleCompositeImage.8x8.gif"
+            id="org.nightlabs.editor2d.decorators.VisibleDecorator"
+            label="Visible Decorator"
             lightweight="true"
+            location="BOTTOM_LEFT"
+            objectClass="org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart"
             state="true">
          <enablement>
-            <and>
-               <objectClass name="org.nightlabs.editor2d.DrawComponent"/>
-               <or>
-                  <objectClass name="org.nightlabs.editor2d.impl.LayerImpl"/>
-                  <objectClass name="org.nightlabs.editor2d.impl.PageDrawComponentImpl"/>
-               </or>
-            </and>
+            <objectClass name="org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart"/>
          </enablement>
       </decorator>
-   </extension>
--->
+   </extension>    
        
 <!--
    <extension

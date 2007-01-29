@@ -32,8 +32,12 @@ import java.beans.PropertyChangeListener;
 
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IDecoratorManager;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.decorators.DecoratorDefinition;
 import org.eclipse.ui.internal.decorators.DecoratorManager;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.editor2d.DrawComponent;
@@ -55,6 +59,7 @@ extends AbstractTreeEditPart
    */
   public DrawComponentTreeEditPart(DrawComponent drawComponent) {
     super(drawComponent);
+//    this.image = getOutlineImage();
   } 
   
   public Object getAdapter(Class key)
@@ -73,18 +78,36 @@ extends AbstractTreeEditPart
 //  protected abstract Image getImage();
   protected abstract Image getOutlineImage();
   
-  private Image image;
-  protected Image getImage() 
-  {
-  	if (image == null) {
-			if (!getDrawComponent().isVisible()) {
-				image = getVisibleCompositeImage().createImage(true);				
-			} else {
-				image = getOutlineImage();
-			}
-  		image = getOutlineImage();
-  	}
-  	return image;
+//  private Image image;
+//  public void setImage(Image image) {
+//  	image.dispose();
+//  	this.image = image;
+//  	refreshVisuals();
+//  }
+  
+//  protected Image getImage() 
+//  {
+//  	if (image == null) {
+//			if (!getDrawComponent().isVisible()) {
+//				image = getVisibleCompositeImage().createImage(true);				
+//			} else {
+//				image = getOutlineImage();
+//			}
+//  		image = getOutlineImage();
+//  	}
+//  	return image;
+//  }
+  
+  public Image getTreeImage() {
+  	return getOutlineImage();
+  }
+  
+  public String getTreeText() {
+  	return getText();
+  }
+  
+  protected Image getImage() {
+  	return getOutlineImage();
   }
   
   public IPropertySource getPropertySource()
@@ -177,6 +200,8 @@ extends AbstractTreeEditPart
   
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{
+//		notifyLabelDecorator();
+		
 		String propertyName = evt.getPropertyName();		
 		if (propertyName.equals(DrawComponent.PROP_BOUNDS)) {
 			refreshVisuals();
@@ -223,32 +248,37 @@ extends AbstractTreeEditPart
 			return;			
 		}	
 		else if (propertyName.equals(DrawComponent.PROP_VISIBLE)) {
-			if (!getDrawComponent().isVisible()) {
-				image = getVisibleCompositeImage().createImage(true);				
-			} else {
-				image = getOutlineImage();
-			}			
-//			notifyLabelDecorator();	
+			notifyLabelDecorator();
 			refreshVisuals();
 			return;
-		}	
-	}  
-	
-	private VisibleCompositeImage visibleCompositeImage;
-	private VisibleCompositeImage getVisibleCompositeImage() {
-		if (visibleCompositeImage == null) {
-			visibleCompositeImage = new VisibleCompositeImage(getOutlineImage());
 		}
-		return visibleCompositeImage;
-	}
+		else if (propertyName.equals("VisibleScript")) {
+			// TODO: add extension point to register property name with appropriate decoration id 
+			notifyLabelDecorator();
+			refreshVisuals();
+			return;
+		}
+	}  
+		
+//	protected void notifyLabelDecorator() 
+//	{
+//		String DECORATOR_ID = "org.nightlabs.editor2d.decorators.VisibleDecorator";		
+//		DecoratorManager decoratorManager = (DecoratorManager) PlatformUI.getWorkbench().getDecoratorManager();	  
+//	  if (decoratorManager.getEnabled(DECORATOR_ID)) {
+//	  	decoratorManager.labelProviderChanged(new LabelProviderChangedEvent(decoratorManager, this));
+//	  }
+//	}
 	
 	protected void notifyLabelDecorator() 
-	{
-		((DecoratorManager)EditorPlugin.getDefault().getWorkbench().getDecoratorManager()).labelProviderChanged(new
-				LabelProviderChangedEvent(((DecoratorManager)EditorPlugin.getDefault().getWorkbench().getDecoratorManager()), this));
-		VisibleDecorator decorator = VisibleDecorator.getVisibleDecorator();
-		if(decorator!=null) {
-			decorator.refresh(this); 		
+	{		
+		// TODO: create static instance which can cache the decorator definitions which match, to avoid iterate each time
+		DecoratorManager decoratorManager = (DecoratorManager) PlatformUI.getWorkbench().getDecoratorManager();
+		for (int i=0; i<decoratorManager.getAllDecoratorDefinitions().length; i++) {
+			DecoratorDefinition df = decoratorManager.getAllDecoratorDefinitions()[i];
+			if (df.isEnabledFor(this)) {
+				decoratorManager.labelProviderChanged(new LabelProviderChangedEvent(decoratorManager, this));
+			}
 		}
-	}
+	}	
+	
 }

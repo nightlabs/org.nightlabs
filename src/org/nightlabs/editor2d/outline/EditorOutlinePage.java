@@ -123,7 +123,7 @@ implements IAdaptable
 //      new EditorTemplateTransferDropTargetListener(getViewer()));
 
     createActions();
-    
+        
     showPage(ID_OUTLINE);        
   }
     

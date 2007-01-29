@@ -533,7 +533,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	public Object getAdapter(Class type)
 	{
 		if (type == IContentOutlinePage.class) {
-			treeViewer = new TreeViewer();
+//			treeViewer = new TreeViewer();
+			treeViewer = new org.nightlabs.editor2d.outline.TreeViewer();
 			outlinePage = new EditorOutlinePage(this, treeViewer);        
 			return outlinePage;
 		}

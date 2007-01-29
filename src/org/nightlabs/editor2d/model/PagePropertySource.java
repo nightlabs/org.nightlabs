@@ -199,7 +199,9 @@ extends DrawComponentPropertySource
 //			pageSize.setResolution(getPageDrawComponent().getResolution());
 //			return pageSize;
 //		}
-		return null;
+		
+//		return null;
+		return super.getPropertyValue(id);
 	}
 	
 	/**
@@ -232,7 +234,8 @@ extends DrawComponentPropertySource
 //					(int)pageSize.getPageWidth(), (int)pageSize.getPageHeight());
 //			getPageDrawComponent().setPageBounds(pageBounds);
 //			getPageDrawComponent().setResolution(pageSize.getResolution());
-//		}				
+//		}	
+		super.setPropertyValue(id, value);
 	}
 	
 }

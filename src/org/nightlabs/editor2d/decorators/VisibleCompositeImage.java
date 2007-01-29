@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * NightLabs Editor2D - Graphical editor framework                             *
+ * JFire - it's hot - Free ERP System - http://jfire.org                       *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -25,46 +25,44 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.decorators;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.IDecoration;
-import org.eclipse.jface.viewers.ILightweightLabelDecorator;
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.resource.CompositeImageDescriptor;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.base.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.resource.SharedImages.ImageFormat;
-import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart;
 
 /**
- * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
+ * @author Daniel.Mazurek [at] NightLabs [dot] de
+ *
  */
-public class VisibleDecorator 
-extends LabelProvider 
-implements ILightweightLabelDecorator 
+public class VisibleCompositeImage 
+extends CompositeImageDescriptor 
 {
-	public VisibleDecorator() {
 
+	public VisibleCompositeImage(Image image) {
+		this.image = image;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ILightweightLabelDecorator#decorate(java.lang.Object, org.eclipse.jface.viewers.IDecoration)
-	 */
-	public void decorate(Object element, IDecoration decoration) 
-	{
-		if(element instanceof DrawComponentTreeEditPart) 
-		{	
-			DrawComponentTreeEditPart dctep = (DrawComponentTreeEditPart) element;
-			DrawComponent dc = dctep.getDrawComponent();
-			if (!dc.isVisible()) {
-				ImageDescriptor invisibleImage = SharedImages.getSharedImageDescriptor(
-						EditorPlugin.getDefault(), 
-						VisibleCompositeImage.class, "", ImageDimension._8x8, ImageFormat.gif);
-				
-				decoration.addOverlay(invisibleImage);
-				decoration.addSuffix("[invisible]");				
-			}
-		}
-	}
+	private Image image;
 	
+	@Override
+	protected void drawCompositeImage(int width, int height) 
+	{
+//		image = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
+//				LayerView.class, "", ImageDimension._16x16, ImageFormat.gif).createImage();	
+		drawImage(image.getImageData(), 0, 0);
+		
+		Image invisibleImage = SharedImages.getSharedImage(EditorPlugin.getDefault(), 
+				VisibleCompositeImage.class, "", ImageDimension._8x8, ImageFormat.gif);
+		
+		drawImage(invisibleImage.getImageData(), 0, 8);
+	}
+
+	@Override
+	protected Point getSize() {
+		return new Point(16, 16);
+	}
+
 }

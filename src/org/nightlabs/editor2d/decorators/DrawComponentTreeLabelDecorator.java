@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * JFire - it's hot - Free ERP System - http://jfire.org                       *
+ * NightLabs Editor2D - Graphical editor framework                             *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -23,49 +23,63 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.editor2d.edit.tree;
+package org.nightlabs.editor2d.decorators;
 
-import org.eclipse.jface.resource.CompositeImageDescriptor;
+import org.eclipse.jface.viewers.ILabelDecorator;
+import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.nightlabs.base.resource.SharedImages;
-import org.nightlabs.base.resource.SharedImages.ImageDimension;
-import org.nightlabs.base.resource.SharedImages.ImageFormat;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart;
 
 /**
- * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
+ * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
-public class VisibleCompositeImage 
-extends CompositeImageDescriptor 
+public class DrawComponentTreeLabelDecorator 
+implements ILabelDecorator 
 {
 
-	public VisibleCompositeImage(Image image) {
-		this.image = image;
-	}
-
-	private Image image;
-	
-	@Override
-	protected void drawCompositeImage(int width, int height) 
+	public Image decorateImage(Image image, Object element) 
 	{
-//		image = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-//				LayerView.class, "", ImageDimension._16x16, ImageFormat.gif).createImage();	
-		drawImage(image.getImageData(), 0, 0);
-		
-		Image invisibleImage = SharedImages.getSharedImage(EditorPlugin.getDefault(), 
-				VisibleCompositeImage.class, "", ImageDimension._8x8, ImageFormat.gif);
-		
-		drawImage(invisibleImage.getImageData(), 0, 8);
+		if (element instanceof DrawComponentTreeEditPart) {
+			DrawComponentTreeEditPart dctep = (DrawComponentTreeEditPart) element;
+			DrawComponent dc = dctep.getDrawComponent();
+			if (!dc.isVisible()) {
+				return new VisibleCompositeImage(image).createImage();
+			}
+		}
+		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.resource.CompositeImageDescriptor#getSize()
-	 */
-	@Override
-	protected Point getSize() {
-		return new Point(16, 16);
+	public String decorateText(String text, Object element) 
+	{
+		if (element instanceof DrawComponentTreeEditPart) {
+			DrawComponentTreeEditPart dctep = (DrawComponentTreeEditPart) element;
+			DrawComponent dc = dctep.getDrawComponent();
+			if (!dc.isVisible()) {
+				return text + "[invisible]";
+			}			
+		}		
+		return null;
+	}
+
+	public void addListener(ILabelProviderListener listener) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void dispose() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean isLabelProperty(Object element, String property) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void removeListener(ILabelProviderListener listener) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
