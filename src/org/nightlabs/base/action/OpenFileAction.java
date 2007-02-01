@@ -91,13 +91,16 @@ extends Action
 		return null;
 	}
 	
+	private File lastDirectory = null; 
 	public void run() 
 	{
 		FileDialog dialog = new FileDialog(Display.getDefault().getActiveShell(), SWT.OPEN);
 		IEditorRegistry editorRegistry = PlatformUI.getWorkbench().getEditorRegistry();
 		String[] fileExtensions = getFileExtensions(editorRegistry);
 		dialog.setFilterExtensions(fileExtensions);
-		String fullFileName = dialog.open();
+		if (lastDirectory != null)
+			dialog.setFilterPath(lastDirectory.getAbsolutePath());
+		String fullFileName = dialog.open();		
 		// Cancel pressed
 		if (fullFileName == null)
 			return;
@@ -106,6 +109,11 @@ extends Action
 		if (!file.exists()) {
 			return;
 		}
+		
+		if (file.isDirectory())
+			lastDirectory = file;
+		else
+			lastDirectory = file.getParentFile();
 		
 		try {
 			boolean foundEditor = IOUtil.openFile(file);
@@ -119,7 +127,36 @@ extends Action
 					NLBasePlugin.getResourceString("action.openfile.error.message2")
 			);			
 		}		
-	}
+	}	
+//	public void run() 
+//	{
+//		FileDialog dialog = new FileDialog(Display.getDefault().getActiveShell(), SWT.OPEN);
+//		IEditorRegistry editorRegistry = PlatformUI.getWorkbench().getEditorRegistry();
+//		String[] fileExtensions = getFileExtensions(editorRegistry);
+//		dialog.setFilterExtensions(fileExtensions);
+//		String fullFileName = dialog.open();
+//		// Cancel pressed
+//		if (fullFileName == null)
+//			return;
+//		
+//		File file = new File(fullFileName);
+//		if (!file.exists()) {
+//			return;
+//		}
+//		
+//		try {
+//			boolean foundEditor = IOUtil.openFile(file);
+//			if (foundEditor)
+//				addFileToHistory(fullFileName);				
+//		} catch (PartInitException e) {
+//			e.printStackTrace();
+//			RCPUtil.showErrorDialog(
+//					NLBasePlugin.getResourceString("action.openfile.error.message1")
+//					+ " " + fullFileName + " " + 
+//					NLBasePlugin.getResourceString("action.openfile.error.message2")
+//			);			
+//		}		
+//	}
 	
 	public static final String HISTORY_FILE_ADDED = "history file added";
 	protected void addFileToHistory(String fileName) 
