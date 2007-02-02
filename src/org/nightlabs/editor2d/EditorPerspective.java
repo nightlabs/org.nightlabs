@@ -28,6 +28,7 @@ package org.nightlabs.editor2d;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
+import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.editor2d.views.LayerView;
 import org.nightlabs.editor2d.views.QuickOptionsView;
 
@@ -60,6 +61,7 @@ implements IPerspectiveFactory
     rightBottom.addView(LayerView.ID_VIEW);
     rightBottom.addView(QuickOptionsView.ID);
                
+    RCPUtil.addAllPerspectiveShortcuts(layout);
     layout.addPerspectiveShortcut(ID_PERSPECTIVE);  
     layout.addShowViewShortcut(IPageLayout.ID_PROP_SHEET);
     layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
