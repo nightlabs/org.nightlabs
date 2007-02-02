@@ -42,6 +42,7 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlingThreadGroup;
 import org.nightlabs.base.exceptionhandler.SaveRunnableRunner;
+import org.nightlabs.base.extensionpoint.RemoveExtensionRegistry;
 import org.nightlabs.util.Utils;
 
 /**
@@ -289,6 +290,13 @@ implements IPlatformRunnable
 			NLBasePlugin.getDefault().setApplication(this);
 			this.arguments = (String[]) args;
 			SafeRunnable.setRunner(new SaveRunnableRunner());
+			
+			try {
+				RemoveExtensionRegistry.sharedInstance().removeRegisteredExtensions();
+			} catch (Throwable t) {
+				logger.error("There occured an error while tyring to remove all registered extensions");
+			}
+			
 			applicationThread.start();
 			synchronized (mutex) {
 				mutex.wait();

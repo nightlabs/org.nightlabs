@@ -22,6 +22,7 @@
  <extension-point id="resolutionUnit" name="ResolutionUnit" schema="schema/resolutionUnit.exsd"/>
  <extension-point id="cache" name="General Cache Extension Point" schema="schema/cache.exsd"/>
  <extension-point id="login" name="Login" schema="schema/login.exsd"/>
+ <extension-point id="removeExtension" name="removeExtension" schema="schema/removeExtension.exsd"/>
  <extension
        point="org.nightlabs.base.exceptionhandler">
     <exceptionHandler
@@ -172,5 +173,30 @@
          point="org.nightlabs.base.cache">
       <cacheFactory class="org.nightlabs.base.cache.DummyCacheFactory"/>
    </extension>
-
+   
+<!--   
+   <extension
+         point="org.nightlabs.base.removeExtension">
+      <removeExtension
+            attributeName="id"
+            attributePattern="org.eclipse.ui.edit.text.actionSet.navigation"
+            elementPath="actionSet"
+            extensionPointID="org.eclipse.ui.actionSets"/>
+      <removeExtension
+            attributeName="id"
+            attributePattern="org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo"
+            elementPath="actionSet"
+            extensionPointID="org.eclipse.ui.actionSets"/>
+      <removeExtension
+            attributeName="id"
+            attributePattern="org.eclipse.ui.WorkingSetActionSet"
+            elementPath="actionSet"
+            extensionPointID="org.eclipse.ui.actionSets"/>
+      <removeExtension
+            attributeName="id"
+            attributePattern=".*eclipse.*resource.*"
+            elementPath="perspective"
+            extensionPointID="org.eclipse.ui.perspectives"/>
+   </extension>
+-->
 </plugin>
