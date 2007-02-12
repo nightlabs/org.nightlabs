@@ -51,7 +51,7 @@ extends AbstractDrawComponentContainerEditPart
 	private static final Logger logger = Logger.getLogger(GroupEditPart.class);
 	
 	public GroupEditPart(GroupDrawComponent group) {
-		super(group);
+		super(group);		
 	}
 
 	public GroupDrawComponent getGroupDrawComponent() {
@@ -75,24 +75,7 @@ extends AbstractDrawComponentContainerEditPart
 		{
 			logger.debug(propertyName);
 			Collection<DrawComponent> children = (Collection<DrawComponent>) evt.getNewValue();
-			if (children != null) 
-			{
-				for (Iterator<DrawComponent> it = children.iterator(); it.hasNext(); ) 
-				{
-					Object o = getViewer().getEditPartRegistry().get(it.next());
-					if (o != null && o instanceof GraphicalEditPart) 
-					{
-						GraphicalEditPart gep = (GraphicalEditPart) o;
-						IFigure figure = gep.getFigure();
-						if (figure instanceof DrawComponentFigure) {
-							DrawComponentFigure dcFigure = (DrawComponentFigure) figure;
-							dcFigure.setContains(false);
-							logger.debug("DrawComponentFigure found and set contains to false!");
-						}					
-					}
-				}
-				refresh();				
-			}
+			setContains(false, children);
 			return;
 		}
 		else if (propertyName.equals(DrawComponentContainer.CHILD_REMOVED)) 
@@ -103,24 +86,41 @@ extends AbstractDrawComponentContainerEditPart
 			if (newChildren != null && oldChildren != null) 
 			{
 				oldChildren.removeAll(newChildren);
-				for (Iterator<DrawComponent> it = oldChildren.iterator(); it.hasNext(); ) 
-				{
-					Object o = getViewer().getEditPartRegistry().get(it.next());
-					if (o != null && o instanceof GraphicalEditPart) 
-					{
-						GraphicalEditPart gep = (GraphicalEditPart) o;
-						IFigure figure = gep.getFigure();
-						if (figure instanceof DrawComponentFigure) {
-							DrawComponentFigure dcFigure = (DrawComponentFigure) figure;
-							dcFigure.setContains(true);
-							logger.debug("DrawComponentFigure found and set contains to true!");
-						}					
-					}
-				}
-				refresh();										
+				setContains(true, oldChildren);
 			}
 			return;
 		}		
 	} 	
     
+	protected void setContains(boolean contains, Collection<DrawComponent> drawComponents) 
+	{
+		if (drawComponents != null) 
+		{
+			for (Iterator<DrawComponent> it = drawComponents.iterator(); it.hasNext(); ) 
+			{
+				Object o = getViewer().getEditPartRegistry().get(it.next());
+				if (o != null && o instanceof GraphicalEditPart) 
+				{
+					GraphicalEditPart gep = (GraphicalEditPart) o;
+					IFigure figure = gep.getFigure();
+					if (figure instanceof DrawComponentFigure) {
+						DrawComponentFigure dcFigure = (DrawComponentFigure) figure;
+						dcFigure.setContains(contains);
+//						dcFigure.setEnabled(contains);
+//						dcFigure.setOpaque(contains);
+						dcFigure.setVisible(contains);
+						logger.debug("DrawComponentFigure found and set contains to "+contains);
+					}					
+				}
+			}			
+		}
+		refresh();
+	}
+
+	@Override
+	public void activate() {
+		super.activate();
+		setContains(false, getGroupDrawComponent().getDrawComponents());
+	}
+	
 }

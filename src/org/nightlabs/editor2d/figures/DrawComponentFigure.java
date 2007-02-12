@@ -118,7 +118,7 @@ implements RendererFigure
   	return contains;
   }
   
-  private boolean accurateContains = false;
+  private boolean accurateContains = true;
   /**
    * determines if the {@link Figure#containsPoint(int, int)} should be calculated accurately
    * e.g. only the interior of a {@link Shape} including the {@link DrawComponentFigure#getHitTolerance()} 
@@ -151,90 +151,138 @@ implements RendererFigure
   public boolean isAccurateContains() {
   	return accurateContains;
   }
-  
-  private Area outlineArea = null;  
+    
+  @Override
   public boolean containsPoint(int x, int y) 
   {
   	if (contains) {  		
-      if (accurateContains && drawComponent != null) {
+  		if (drawComponent != null) {
         if (drawComponent instanceof ShapeDrawComponent) {
           ShapeDrawComponent sdc = (ShapeDrawComponent) drawComponent;
-          if (sdc.isFill())
-            return sdc.getGeneralShape().contains(x,y);
-          else {
-            if (outlineArea == null) {
-              Rectangle outerBounds = getBounds().getCopy();
-              Rectangle innerBounds = getBounds().getCopy();
-              outerBounds.expand((int)hitTolerance, (int)hitTolerance);
-              innerBounds.shrink((int)hitTolerance, (int)hitTolerance);
-              GeneralShape outerGS = (GeneralShape) sdc.getGeneralShape().clone();
-              GeneralShape innerGS = (GeneralShape) sdc.getGeneralShape().clone();
-              J2DUtil.transformGeneralShape(outerGS, getBounds(), outerBounds);
-              J2DUtil.transformGeneralShape(innerGS, getBounds(), innerBounds);
-              outlineArea = new Area(outerGS);
-              Area innerArea = new Area(innerGS); 
-              outlineArea.exclusiveOr(innerArea);             
-            }
-            boolean contains = outlineArea.contains(x,y);
-            outlineArea = null;
-            return contains;
+          // if shape is not filled always do accurate hit test
+          if (!sdc.isFill()) {
+          	hitTestArea = getAccurateHitTestArea();
+          	boolean contains = hitTestArea.contains(x, y);
+          	// TODO cache the hitTestArea if the bounds did not changed
+          	hitTestArea = null;
+          	return contains;
           }
-        }      
-      }
+          else {
+          	if (accurateContains)
+              return sdc.getGeneralShape().contains(x,y);
+          	// if not accurate just test the bounds
+          	else
+          		return super.containsPoint(x, y);
+          }
+        }   			
+  		}     
       return super.containsPoint(x, y);  		
   	} 
   	return false;
   }
   
+	@Override
+	public boolean intersects(Rectangle rect) 
+	{
+	 	if (contains) {  		
+  		if (drawComponent != null) {
+        if (drawComponent instanceof ShapeDrawComponent) {
+          ShapeDrawComponent sdc = (ShapeDrawComponent) drawComponent;
+          // if shape is not filled always do accurate hit test
+          if (!sdc.isFill()) {
+          	hitTestArea = getAccurateHitTestArea();
+          	boolean intersects = hitTestArea.intersects(rect.x, rect.y, rect.width, rect.height);
+          	// TODO cache the hitTestArea if the bounds did not changed
+          	hitTestArea = null;
+          	return intersects;
+          }
+          else {
+          	if (accurateContains)
+              return sdc.getGeneralShape().intersects(rect.x, rect.y, rect.width, rect.height);
+          	// if not accurate just test the bounds
+          	else
+          		return super.intersects(rect);
+          }
+        }   			
+  		}     
+      return super.intersects(rect);	
+  	} 
+  	return false;
+	}
+	
+//  private Area outlineArea = null;  
 //  public boolean containsPoint(int x, int y) 
 //  {
 //  	if (contains) {  		
 //      if (accurateContains && drawComponent != null) {
-//      	return getAccurateHitTestArea().contains(x, y);
+//        if (drawComponent instanceof ShapeDrawComponent) {
+//          ShapeDrawComponent sdc = (ShapeDrawComponent) drawComponent;
+//          if (sdc.isFill())
+//            return sdc.getGeneralShape().contains(x,y);
+//          else {
+//            if (outlineArea == null) {
+//              Rectangle outerBounds = getBounds().getCopy();
+//              Rectangle innerBounds = getBounds().getCopy();
+//              outerBounds.expand((int)hitTolerance, (int)hitTolerance);
+//              innerBounds.shrink((int)hitTolerance, (int)hitTolerance);
+//              GeneralShape outerGS = (GeneralShape) sdc.getGeneralShape().clone();
+//              GeneralShape innerGS = (GeneralShape) sdc.getGeneralShape().clone();
+//              J2DUtil.transformGeneralShape(outerGS, getBounds(), outerBounds);
+//              J2DUtil.transformGeneralShape(innerGS, getBounds(), innerBounds);
+//              outlineArea = new Area(outerGS);
+//              Area innerArea = new Area(innerGS); 
+//              outlineArea.exclusiveOr(innerArea);             
+//            }
+//            boolean contains = outlineArea.contains(x,y);
+//            outlineArea = null;
+//            return contains;
+//          }
+//        }      
 //      }
 //      return super.containsPoint(x, y);  		
 //  	} 
 //  	return false;
 //  }
-//    
-//  private Shape hitTestArea = null;
-//  public void clearHitTestArea() {
-//  	hitTestArea = null;
-//  }
-//  
-//  private void paintHitTestArea(Graphics2D g2d) {
-//  	g2d.draw(getAccurateHitTestArea());
-//  }
-//  
-//  protected Shape getAccurateHitTestArea() 
-//  {
-//    if (hitTestArea == null) 
-//    {
-//    	if (drawComponent instanceof ShapeDrawComponent) 
-//    	{
-//    		ShapeDrawComponent sdc = (ShapeDrawComponent) drawComponent;
-//        Rectangle outerBounds = getBounds().getCopy();
-//        Rectangle innerBounds = getBounds().getCopy();
-//        outerBounds.expand((int)hitTolerance, (int)hitTolerance);
-//        innerBounds.shrink((int)hitTolerance, (int)hitTolerance);
-//        GeneralShape outerGS = (GeneralShape) sdc.getGeneralShape().clone();
-//        GeneralShape innerGS = (GeneralShape) sdc.getGeneralShape().clone();
-//        J2DUtil.transformGeneralShape(outerGS, getBounds(), outerBounds);
-//        J2DUtil.transformGeneralShape(innerGS, getBounds(), innerBounds);
-//        Area outlineArea = new Area(outerGS);
-//        Area innerArea = new Area(innerGS); 
-//        outlineArea.exclusiveOr(innerArea);  
-//        hitTestArea = outlineArea;
-//    	}
-//    	else 
-//    	{
-//        Rectangle outerBounds = getBounds().getCopy();
-//    		outerBounds.expand((int)hitTolerance, (int)hitTolerance);
-//    		hitTestArea = J2DUtil.toAWTRectangle(outerBounds);
-//    	}
-//    }
-//  	return hitTestArea;
-//  }
+    
+  private Shape hitTestArea = null;
+  public void clearHitTestArea() {
+  	hitTestArea = null;
+  }
+  
+  // only for debug
+  private void paintHitTestArea(Graphics2D g2d) {
+  	g2d.draw(getAccurateHitTestArea());
+  }
+  
+  protected Shape getAccurateHitTestArea() 
+  {
+    if (hitTestArea == null) 
+    {
+    	if (drawComponent instanceof ShapeDrawComponent) 
+    	{
+    		ShapeDrawComponent sdc = (ShapeDrawComponent) drawComponent;
+        Rectangle outerBounds = getBounds().getCopy();
+        Rectangle innerBounds = getBounds().getCopy();
+        outerBounds.expand((int)hitTolerance, (int)hitTolerance);
+        innerBounds.shrink((int)hitTolerance, (int)hitTolerance);
+        GeneralShape outerGS = (GeneralShape) sdc.getGeneralShape().clone();
+        GeneralShape innerGS = (GeneralShape) sdc.getGeneralShape().clone();
+        J2DUtil.transformGeneralShape(outerGS, getBounds(), outerBounds);
+        J2DUtil.transformGeneralShape(innerGS, getBounds(), innerBounds);
+        Area outlineArea = new Area(outerGS);
+        Area innerArea = new Area(innerGS); 
+        outlineArea.exclusiveOr(innerArea);  
+        hitTestArea = outlineArea;
+    	}
+    	else 
+    	{
+        Rectangle outerBounds = getBounds().getCopy();
+    		outerBounds.expand((int)hitTolerance, (int)hitTolerance);
+    		hitTestArea = J2DUtil.toAWTRectangle(outerBounds);
+    	}
+    }
+  	return hitTestArea;
+  }
   
   public static final double DEFAULT_HIT_TOLERANCE = 5;
   private double hitTolerance = DEFAULT_HIT_TOLERANCE;
@@ -278,6 +326,7 @@ implements RendererFigure
     return zoomListener;
   }
 
+  @Override
 	public Rectangle getBounds() 
 	{
 		if (drawComponent != null)
@@ -288,9 +337,13 @@ implements RendererFigure
  	
 	public void dispose() 
 	{
-		outlineArea = null;
+//		outlineArea = null;
+		hitTestArea = null;
 		if (j2d != null)
 			j2d.dispose();
 		j2d = null;
+		if (g2d != null)
+			g2d.dispose();
 	}
+		
 }
