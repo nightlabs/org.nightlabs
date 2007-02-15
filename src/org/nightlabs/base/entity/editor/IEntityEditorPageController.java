@@ -27,6 +27,7 @@
 package org.nightlabs.base.entity.editor;
 
 import java.beans.PropertyChangeSupport;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -49,6 +50,8 @@ import org.nightlabs.util.bean.IPropertyChangeSupport;
  * property changes. Pages should use this listeners to reflect the changes in their UI.
  * Implementors should try to subclass {@link PropertyChangeSupport} wherever possible.</p>
  * 
+ * This interface should not be implemented but instead extend {@link EntityEditorController} 
+ * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
@@ -59,9 +62,12 @@ public interface IEntityEditorPageController extends IPropertyChangeSupport {
 	 * This will be called immediately after the controller is created.
 	 * @param page the page this controller is associated with.
 	 * @deprecated see {@link EntityEditorPageController#getPage()}
+	 * @see #getPages()
 	 */
 	public void setPage(IFormPage page);
-	
+
+	public Set<IFormPage> getPages();
+
 	/**
 	 * Set the {@link EntityEditorController} this page controller is
 	 * registered to. This will also be called right after creation.

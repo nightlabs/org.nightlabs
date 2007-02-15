@@ -28,6 +28,8 @@ package org.nightlabs.base.entity.editor;
 
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -181,6 +183,12 @@ implements IEntityEditorPageController
 		this.editorController = editorController;
 		if (loadJob != null)
 			editorController.putLoadJob(this, loadJob);
+	}
+
+	private Set<IFormPage> pages = new HashSet<IFormPage>();
+
+	public Set<IFormPage> getPages() {
+		return pages;
 	}
 
 	/* (non-Javadoc)

@@ -29,6 +29,7 @@ package org.nightlabs.base.entity.editor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -231,4 +232,21 @@ public class EntityEditor extends CommitableFormEditor
 	public Collection<IEntityEditorPageController> getPageControllers() {
 		return getController().getPageControllers().values();
 	}
+	
+	/**
+	 * returns the associated instance of the given IEntityEditorPageController class or null if not contained
+	 * 
+	 * @param clazz the IEntityEditorPageController class you want to get the associated instance for
+	 * @return the associated instance of the given IEntityEditorPageController class or null if not contained
+	 */
+	public IEntityEditorPageController getPageController(Class clazz) 
+	{
+		for (Map.Entry<String, IEntityEditorPageController> entry : getController().getPageControllers().entrySet()) {
+			if (entry.getValue().getClass().equals(clazz)) {
+				return entry.getValue();
+			}
+		}
+		return null;
+	}	
+	
 }

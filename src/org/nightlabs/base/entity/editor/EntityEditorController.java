@@ -143,6 +143,7 @@ public class EntityEditorController
 		if (pageController == null)
 			return;
 		pageController.setPage(page);
+		pageController.getPages().add(page);
 		pageController.setEntityEditorController(this);
 		pageControllers.put(page.getId(), pageController);
 		Collection<IFormPage> controllerPageCollection = controllerPages.get(pageController);
