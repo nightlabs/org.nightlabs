@@ -26,6 +26,9 @@ package org.nightlabs.base.editor;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -39,6 +42,12 @@ import org.eclipse.ui.forms.editor.IFormPage;
  */
 public abstract class CommitableFormEditor extends FormEditor
 {
+	@Override
+	public void init(IEditorSite arg0, IEditorInput arg1) throws PartInitException {
+		super.init(arg0, arg1);
+		super.firePropertyChange(PROP_TITLE);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
