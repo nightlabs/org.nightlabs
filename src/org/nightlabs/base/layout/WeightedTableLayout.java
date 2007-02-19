@@ -118,8 +118,14 @@ extends TableLayout
 		return weights[columnIndex];
 	}
 
+	private boolean firstTime = true;
+	
 	public void layout(Composite c, boolean flush) 
 	{
+		if (!firstTime) {
+			return;
+		}
+		
 		int columnCount;
 		if (c instanceof Table)
 			columnCount = ((Table)c).getColumnCount();
@@ -132,7 +138,8 @@ extends TableLayout
 		ScrollBar sb = c.getVerticalBar();
 		if(sb.isEnabled() && sb.isVisible()) 
 			width -= sb.getSize().x;
-
+//			width += sb.getSize().x;
+		
 		int totalWeight = 0;
 		int totalFixedWidth = 0;
 		for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
@@ -162,6 +169,8 @@ extends TableLayout
 			else
 				throw new IllegalArgumentException("Composite c is neither a " + Table.class.getName() + " nor a " + Tree.class.getName());
 		}
+		
+		firstTime = false;
 	}
 }
 
