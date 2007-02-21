@@ -8,8 +8,10 @@ import java.util.List;
 
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
@@ -209,7 +211,17 @@ implements TimePatternSetEdit
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Minute");
 
-		table.setLayout(new WeightedTableLayout(new int[] {10, 10, 10, 10, 10, 10}));
+//		table.setLayout(new WeightedTableLayout(new int[] {10, 10, 10, 10, 10, 10}));
+		TableLayout l = new TableLayout();
+		l.addColumnData(new ColumnWeightData(1, 50));
+		l.addColumnData(new ColumnWeightData(1, 50));
+		l.addColumnData(new ColumnWeightData(1, 50));
+		l.addColumnData(new ColumnWeightData(1, 50));
+		l.addColumnData(new ColumnWeightData(1, 50));
+		l.addColumnData(new ColumnWeightData(1, 50));
+		table.setLayout(l);
+		
+		
 
 		tableViewer.setColumnProperties(new String[] {
 				COLUMN_PROPERTY_YEAR,
