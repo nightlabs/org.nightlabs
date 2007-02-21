@@ -28,6 +28,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.SectionPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.nightlabs.base.notification.IDirtyStateManager;
 
 /**
  * A section part with the ability to set it undirty.
@@ -35,7 +36,9 @@ import org.eclipse.ui.forms.widgets.Section;
  * @version $Revision$ - $Date$
  * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
-public class RestorableSectionPart extends SectionPart
+public class RestorableSectionPart 
+extends SectionPart
+implements IDirtyStateManager
 {
 	/**
 	 * Create an instance of this section part and add
