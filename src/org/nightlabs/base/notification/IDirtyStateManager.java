@@ -4,7 +4,7 @@
 package org.nightlabs.base.notification;
 
 /**
- * Interface that can be used to notify implementators of 
+ * Interface that can be used to notify implementors of 
  * changes in the lifecycle of some object.
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
