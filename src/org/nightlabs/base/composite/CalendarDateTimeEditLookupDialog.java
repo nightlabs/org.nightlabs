@@ -1,8 +1,10 @@
 package org.nightlabs.base.composite;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -12,7 +14,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -21,110 +24,98 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.nightlabs.l10n.DateFormatProvider;
 
+import org.vafada.swtcalendar.SWTCalendar;
+import org.vafada.swtcalendar.SWTCalendarEvent;
+import org.vafada.swtcalendar.SWTCalendarListener;
+
 public class CalendarDateTimeEditLookupDialog
 		extends Dialog
 {
-	private DateTimeEdit dateTimeEdit;
-	private Calendar calendar;
-
-	private Spinner year = null;
-	private Spinner month = null;
-	private Spinner day = null;
-
-	private Spinner hour = null;
-	private Spinner minute = null;
-	private Spinner second = null;
-	private Spinner milliSec = null;
-
-	private Map<Integer, Spinner> calendarField2Spinner = new HashMap<Integer, Spinner>();
-
-	protected Spinner getSpinnerByCalendarField(int field)
-	{
-		Spinner spinner = calendarField2Spinner.get(field);
-		if (spinner == null)
-			throw new IllegalStateException("No Spinner registered for field " + field);
-
-		return spinner;
-	}
-
-	protected int getCalendarFieldBySpinner(Spinner spinner)
-	{
-		return ((Integer)spinner.getData()).intValue();
-	}
+	
+	private SWTCalendar cal;
+	private Label day;
 
 	public CalendarDateTimeEditLookupDialog(Shell parentShell, DateTimeEdit dateTimeEdit)
 	{
 		super(parentShell);
-		this.dateTimeEdit = dateTimeEdit;
-		this.calendar = Calendar.getInstance();
-		this.calendar.setTime(dateTimeEdit.getDate());
+		this.cal = new SWTCalendar(parentShell, SWT.NONE | SWTCalendar.RED_SUNDAY);
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent)
-	{
+	protected Control createDialogArea(Composite parent) {
+		
 		Composite page = (Composite) super.createDialogArea(parent);
-		int numColumns = 0;
+		RowLayout rLayout_cal = new RowLayout();
+	    rLayout_cal.type = SWT.VERTICAL;
+	    page.setLayout(rLayout_cal);
+	    
+	    Label localeLabel = new Label(page, SWT.SINGLE);
+	    localeLabel.setText("Locale:");
+	    // combobox for the choosable locales
+	    final Combo localeCombo = new Combo(page, SWT.DROP_DOWN | SWT.READ_ONLY);
+	   
+	    // search for available locales in java.util.Calendar and get the count
+	    Locale[] temp = Calendar.getAvailableLocales();
+	    int count = 0;
+	    for (int i = 0; i < temp.length; i++) {
+	    	if (temp[i].getCountry().length() > 0) {
+	    		count++;
+	    	}
+	    }
 
-		if ((DateFormatProvider.DATE & dateTimeEdit.getFlags()) == DateFormatProvider.DATE) {
-			++numColumns;
-			XComposite dateComp = new XComposite(page, SWT.BORDER);
-			dateComp.getGridLayout().numColumns = 3;
+	    // fill in all locales in the combobox
+	    final Locale[] locales = new Locale[count];
+	    count = 0;
+	    for (int i = 0; i < temp.length; i++) {
+	    	if (temp[i].getCountry().length() > 0) {
+	    		locales[count] = temp[i];
+	    		localeCombo.add(locales[count].getDisplayName());
+	    		count++;
+	    	}
+	    }
 
-			new Label(dateComp, SWT.NONE).setText("Year");
-			new Label(dateComp, SWT.NONE).setText("Month");
-			new Label(dateComp, SWT.NONE).setText("Day");
+	    // set the default locale in the combobox
+	    for (int i = 0; i < locales.length; i++) {
+	    	if (locales[i].equals(Locale.getDefault())) {
+	    		localeCombo.select(i);
+	    		break;
+	    	}
+	    }
+    
+	    // Leerzeile
+        final Label leer = new Label(page, SWT.NONE);
+	    
+	    // initialize the time
+	    DateFormat df_temp = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
+	    day.setText(df_temp.format(cal.getCalendar().getTime()));
+    
+	    DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
+	    day.setText(df.format(cal.getCalendar().getTime()));
+	    cal.addSWTCalendarListener(new SWTCalendarListener() {
+	    	public void dateChanged(SWTCalendarEvent calendarEvent) {
+	    		Locale _locale = locales[localeCombo.getSelectionIndex()];
+	    		DateFormat df2 = DateFormat.getDateInstance(DateFormat.LONG, _locale);
+	    		day.setText(df2.format(calendarEvent.getCalendar().getTime()));
+	    	}
+	    });
 
-			year = createSpinner(dateComp, Calendar.YEAR);
-			month = createSpinner(dateComp, Calendar.MONTH);
-			month.setMaximum(month.getMaximum() + 1); // unfortunately, months start with 0 in java :-(
-			day = createSpinner(dateComp, Calendar.DAY_OF_MONTH);
-		}
+	    localeCombo.addSelectionListener(new SelectionListener() {
+	    	public void widgetSelected(SelectionEvent event) {
+	    		Locale _locale = locales[localeCombo.getSelectionIndex()];
+	    		DateFormat df2 = DateFormat.getDateInstance(DateFormat.LONG, _locale);
+	    		day.setText(df2.format(cal.getCalendar().getTime()));
+	    		cal.setLocale(_locale);
+	    	}
 
-		if ((DateFormatProvider.TIME & dateTimeEdit.getFlags()) == DateFormatProvider.TIME) {
-			++numColumns;
-			XComposite timeComp = new XComposite(page, SWT.BORDER);
-			timeComp.getGridLayout().numColumns = 2;
+	    	public void widgetDefaultSelected(SelectionEvent event) {
 
-			new Label(timeComp, SWT.NONE).setText("Hour");
-			new Label(timeComp, SWT.NONE).setText("Minute");
-
-			if ((DateFormatProvider.TIME_SEC & dateTimeEdit.getFlags()) == DateFormatProvider.TIME_SEC)
-				new Label(timeComp, SWT.NONE).setText("Second");
-
-			if ((DateFormatProvider.TIME_MSEC & dateTimeEdit.getFlags()) == DateFormatProvider.TIME_MSEC)
-				new Label(timeComp, SWT.NONE).setText("Millis");
-
-			hour = createSpinner(timeComp, Calendar.HOUR_OF_DAY);
-			minute = createSpinner(timeComp, Calendar.MINUTE);
-
-			if ((DateFormatProvider.TIME_SEC & dateTimeEdit.getFlags()) == DateFormatProvider.TIME_SEC) {
-				++timeComp.getGridLayout().numColumns;
-				second = createSpinner(timeComp, Calendar.SECOND);
-			}
-
-			if ((DateFormatProvider.TIME_MSEC & dateTimeEdit.getFlags()) == DateFormatProvider.TIME_MSEC) {
-				++timeComp.getGridLayout().numColumns;
-				milliSec = createSpinner(timeComp, Calendar.MILLISECOND);
-			}
-		}
-
-		page.setLayout(new GridLayout(numColumns, false));
-		return page;
+	    	}
+	    });
+	    
+	    return page;
+	
 	}
-
-	private Spinner createSpinner(Composite parent, int field)
-	{
-		Spinner spinner = new Spinner(parent, SWT.BORDER);
-		spinner.setMinimum(calendar.getMinimum(field) - 1);
-		spinner.setMaximum(calendar.getMaximum(field) +  1);
-		spinner.setSelection(getCalendarValue(field));
-		spinner.setData(new Integer(field));
-		calendarField2Spinner.put(field, spinner);
-		spinner.addSelectionListener(fieldChangedListener);
-		return spinner;
-	}
-
+		
 	@Override
 	protected void initializeBounds()
 	{
@@ -136,48 +127,5 @@ public class CalendarDateTimeEditLookupDialog
 		r.y = mouse.y;
 		getShell().setBounds(r);
 	}
-
-	protected int getCalendarValue(int field)
-	{
-		int val = calendar.get(field);
-
-		// why the hell do the months start with 0?!?!?!
-		if (Calendar.MONTH == field)
-			++val;
-
-		return val;
-	}
-
-	protected void setCalendarValue(int field, int value)
-	{
-		// why the hell do the months start with 0?!?!?!
-		if (Calendar.MONTH == field)
-			--value;
-
-		calendar.set(field, value);
-	}
-
-	private SelectionListener fieldChangedListener = new SelectionAdapter() {
-		@Override
-		public void widgetSelected(SelectionEvent e)
-		{
-			Spinner spinner = (Spinner) e.getSource();
-			updateField(spinner, getCalendarFieldBySpinner(spinner));
-		}
-	};
-
-	private void updateField(Spinner spinner, int field)
-	{
-		int newVal = spinner.getSelection();
-		int oldVal = getCalendarValue(field);
-		calendar.add(field, newVal - oldVal);
-		for (Map.Entry<Integer, Spinner> me : calendarField2Spinner.entrySet()) {
-			me.getValue().setSelection(getCalendarValue(me.getKey().intValue()));
-		}
-	}
-
-	public Date getDate()
-	{
-		return calendar.getTime();
-	}
+	
 }
