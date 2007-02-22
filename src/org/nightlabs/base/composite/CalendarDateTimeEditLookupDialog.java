@@ -50,37 +50,10 @@ public class CalendarDateTimeEditLookupDialog
 	    page.setLayout(rLayout_cal);
 	    
 	    Label localeLabel = new Label(page, SWT.SINGLE);
-	    localeLabel.setText("Locale:");
-	    // combobox for the choosable locales
-	    final Combo localeCombo = new Combo(page, SWT.DROP_DOWN | SWT.READ_ONLY);
-	   
-	    // search for available locales in java.util.Calendar and get the count
-	    Locale[] temp = Calendar.getAvailableLocales();
-	    int count = 0;
-	    for (int i = 0; i < temp.length; i++) {
-	    	if (temp[i].getCountry().length() > 0) {
-	    		count++;
-	    	}
-	    }
-
-	    // fill in all locales in the combobox
-	    final Locale[] locales = new Locale[count];
-	    count = 0;
-	    for (int i = 0; i < temp.length; i++) {
-	    	if (temp[i].getCountry().length() > 0) {
-	    		locales[count] = temp[i];
-	    		localeCombo.add(locales[count].getDisplayName());
-	    		count++;
-	    	}
-	    }
-
-	    // set the default locale in the combobox
-	    for (int i = 0; i < locales.length; i++) {
-	    	if (locales[i].equals(Locale.getDefault())) {
-	    		localeCombo.select(i);
-	    		break;
-	    	}
-	    }
+	    localeLabel.setText("Your Locale:");
+	    
+	    Label locale = new Label(page, SWT.SINGLE);
+	    locale.setText(Locale.getDefault().getDisplayName());
     
 	    // Leerzeile
         final Label leer = new Label(page, SWT.NONE);
@@ -93,22 +66,9 @@ public class CalendarDateTimeEditLookupDialog
 	    day.setText(df.format(cal.getCalendar().getTime()));
 	    cal.addSWTCalendarListener(new SWTCalendarListener() {
 	    	public void dateChanged(SWTCalendarEvent calendarEvent) {
-	    		Locale _locale = locales[localeCombo.getSelectionIndex()];
+	    		Locale _locale = Locale.getDefault();
 	    		DateFormat df2 = DateFormat.getDateInstance(DateFormat.LONG, _locale);
 	    		day.setText(df2.format(calendarEvent.getCalendar().getTime()));
-	    	}
-	    });
-
-	    localeCombo.addSelectionListener(new SelectionListener() {
-	    	public void widgetSelected(SelectionEvent event) {
-	    		Locale _locale = locales[localeCombo.getSelectionIndex()];
-	    		DateFormat df2 = DateFormat.getDateInstance(DateFormat.LONG, _locale);
-	    		day.setText(df2.format(cal.getCalendar().getTime()));
-	    		cal.setLocale(_locale);
-	    	}
-
-	    	public void widgetDefaultSelected(SelectionEvent event) {
-
 	    	}
 	    });
 	    
