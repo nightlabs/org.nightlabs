@@ -26,10 +26,14 @@
 
 package org.nightlabs.base.wizard;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -153,4 +157,16 @@ public class DynamicPathWizardDialog extends WizardDialog {
 		if (page instanceof IDynamicPathWizardPage)
 			((IDynamicPathWizardPage)page).onShow();
 	}
+	
+	@Override
+	public void create() 
+	{
+		super.create();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Point shellSize = getShell().getSize();
+		int diffWidth = screenSize.width - shellSize.x;
+		int diffHeight = screenSize.height - shellSize.y;
+		getShell().setLocation(diffWidth/2, diffHeight/2);
+	}	
+	
 }
