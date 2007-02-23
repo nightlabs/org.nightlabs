@@ -19,6 +19,7 @@
     <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/activation.jar"/>
     <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/mailapi.jar"/>
     <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/smtp.jar"/>
+    <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/swtcalendar.jar"/>
 <!--
     <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/activation.jar"/>
     <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/mailapi.jar"/>
