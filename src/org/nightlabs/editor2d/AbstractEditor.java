@@ -154,6 +154,8 @@ import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 import org.nightlabs.editor2d.outline.filter.NameProvider;
+import org.nightlabs.editor2d.page.DocumentProperties;
+import org.nightlabs.editor2d.page.DocumentPropertiesRegistry;
 import org.nightlabs.editor2d.preferences.Preferences;
 import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintSetupAction;
@@ -1271,21 +1273,64 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		}
 	}
 
+//	protected void initialzePage() 
+//	{
+//		logger.debug("initialize Page!");
+//		mldc = getMultiLayerDrawComponent();
+//		loadAdditional();
+//
+//		String pageID = Preferences.getPreferenceStore().getString(
+//				Preferences.PREF_PREDEFINED_PAGE_ID);
+//		IPredefinedPage defaultPage = getPredefinedPageRegistry().getPage(pageID);
+//		IUnit pageUnit = defaultPage.getUnit();    	
+//		String resolutionUnitID = Preferences.getPreferenceStore().getString(
+//				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID);
+//		IResolutionUnit resUnit = getResolutionUnitRegistry().getResolutionUnit(resolutionUnitID);
+//		Resolution resolution = new ResolutionImpl(resUnit, 
+//				Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION)); 
+//		
+//		DotUnit dotUnit = (DotUnit) getUnitRegistry().getUnit(DotUnit.UNIT_ID);
+//		if (dotUnit == null) {
+//			dotUnit = new DotUnit(resolution);
+//			getUnitRegistry().addUnit(dotUnit, UnitConstants.UNIT_CONTEXT_EDITOR2D);			
+//		}
+//		else 
+//			dotUnit.setResolution(resolution);    	
+//
+//		String unitID = Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_UNIT_ID);
+//		getUnitManager().setCurrentUnit(getUnitRegistry().getUnit(unitID));
+//		
+//		Rectangle pageBounds = PredefinedPageUtil.getPageBounds(dotUnit, defaultPage);
+//		getMultiLayerDrawComponent().setResolution(resolution);  	  	
+//		getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 			
+//	}	
+	
 	protected void initialzePage() 
 	{
 		logger.debug("initialize Page!");
 		mldc = getMultiLayerDrawComponent();
 		loadAdditional();
 
-		String pageID = Preferences.getPreferenceStore().getString(
-				Preferences.PREF_PREDEFINED_PAGE_ID);
-		IPredefinedPage defaultPage = getPredefinedPageRegistry().getPage(pageID);
-		IUnit pageUnit = defaultPage.getUnit();    	
-		String resolutionUnitID = Preferences.getPreferenceStore().getString(
-				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID);
-		IResolutionUnit resUnit = getResolutionUnitRegistry().getResolutionUnit(resolutionUnitID);
-		Resolution resolution = new ResolutionImpl(resUnit, 
-				Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION)); 
+//		String pageID = Preferences.getPreferenceStore().getString(
+//				Preferences.PREF_PREDEFINED_PAGE_ID);
+//		IPredefinedPage defaultPage = getPredefinedPageRegistry().getPage(pageID);
+//		IUnit pageUnit = defaultPage.getUnit();    	
+//		String resolutionUnitID = Preferences.getPreferenceStore().getString(
+//				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID);
+//		IResolutionUnit resUnit = getResolutionUnitRegistry().getResolutionUnit(resolutionUnitID);
+//		Resolution resolution = new ResolutionImpl(resUnit, 
+//				Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION));
+		
+		IPredefinedPage defaultPage = null;
+		Resolution resolution = null;
+		Map<Class, DocumentProperties> editorClass2DocumentProperties = 
+			DocumentPropertiesRegistry.sharedInstance().getDocumentConfModule().getEditorClass2DocumentProperties();
+		DocumentProperties documentProperties = editorClass2DocumentProperties.get(this.getClass());
+		if (documentProperties != null) {
+			resolution = new ResolutionImpl(documentProperties.getResolutionUnit(),
+					documentProperties.getResolution());
+			defaultPage = documentProperties.getPredefinedPage();
+		}
 		
 		DotUnit dotUnit = (DotUnit) getUnitRegistry().getUnit(DotUnit.UNIT_ID);
 		if (dotUnit == null) {

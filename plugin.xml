@@ -2,6 +2,7 @@
 <?eclipse version="3.0"?>
 <plugin>
    <extension-point id="drawComponentProperty" name="drawComponentProperty" schema="schema/drawComponentProperty.exsd"/>
+   <extension-point id="documentProperties" name="documentProperties" schema="schema/documentProperties.exsd"/>
    <extension
          point="org.eclipse.ui.views">
       <view

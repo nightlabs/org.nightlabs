@@ -25,7 +25,18 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.preferences;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -33,15 +44,25 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.registry.EditorRegistry;
+import org.nightlabs.base.composite.ComboComposite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.base.i18n.ResolutionUnitEP;
 import org.nightlabs.base.i18n.UnitRegistryEP;
 import org.nightlabs.base.print.page.PredefinedPageEP;
+import org.nightlabs.config.Config;
+import org.nightlabs.editor2d.Editor;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.config.DocumentConfigModule;
+import org.nightlabs.editor2d.page.DocumentProperties;
+import org.nightlabs.editor2d.page.DocumentPropertiesRegistry;
 import org.nightlabs.editor2d.page.PageOrientationComposite;
 import org.nightlabs.editor2d.page.PredefinedPageComposite;
 import org.nightlabs.editor2d.page.ResolutionUnitComposite;
@@ -70,7 +91,32 @@ implements IWorkbenchPreferencePage
 	private UnitComposite unitComp = null;
 	private Text resolutionText = null;
 	private PageOrientationComposite orientationComp = null;
-			
+	private ComboComposite<Class> editorChooseCombo = null;
+	
+//	private DocumentConfigModule documentConfigModule = null;
+	protected  DocumentConfigModule getDocumentConfigModule() {
+//		if (documentConfigModule == null)
+//			documentConfigModule = (DocumentConfigModule) Config.sharedInstance().createConfigModule(DocumentConfigModule.class);
+//		return documentConfigModule;
+		return DocumentPropertiesRegistry.sharedInstance().getDocumentConfModule();
+	}
+	
+	private ISelectionChangedListener editorListener = new ISelectionChangedListener() {
+		public void selectionChanged(SelectionChangedEvent event) {
+			ISelection selection = event.getSelection();
+			if (!selection.isEmpty() && selection instanceof StructuredSelection) {
+				StructuredSelection structuredSelection = (StructuredSelection) selection;
+				Object firstElement = structuredSelection.getFirstElement();
+				if (firstElement instanceof Class) {
+					DocumentProperties documentProperties = getDocumentConfigModule().getEditorClass2DocumentProperties().get((Class)firstElement);
+					if (documentProperties != null) {
+						setDocumentProperties(documentProperties);
+					}
+				}
+			}
+		}
+	};
+	
 	/**
 	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
 	 */
@@ -78,8 +124,21 @@ implements IWorkbenchPreferencePage
 	protected Control createContents(Composite parent) 
 	{
 		Composite content = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		content.setLayout(new GridLayout(2, true));
+		content.setLayout(new GridLayout(2, false));
 		content.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		// Editors
+		Label editorSelectLabel = new Label(content, SWT.NONE);
+		editorSelectLabel.setText(EditorPlugin.getResourceString("preferences.document.properties.editorSelect.label"));
+		editorChooseCombo = new ComboComposite<Class>(content, SWT.NONE, getEditorClasses(), editorLabelProvider);
+		editorChooseCombo.selectElement(Editor.class);
+		editorChooseCombo.addSelectionChangedListener(editorListener);
+		editorChooseCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		Label separator = new Label(content, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData separatorData = new GridData(GridData.FILL_HORIZONTAL);
+		separatorData.horizontalSpan = 2;
+		separator.setLayoutData(separatorData);
 		
 		// Predefined Pages
 		Label pageSelectLabel = new Label(content, SWT.NONE);
@@ -150,37 +209,89 @@ implements IWorkbenchPreferencePage
 		}
 		return res; 
 	}
+
+	private DocumentProperties getCurrentDocmuentProperties() 
+	{
+		return new DocumentProperties(pageComp.getSelectedPage(), orientationComp.getOrientation(),
+				resUnitComp.getSelectedResolutionUnit(), getResolution());
+	}
 	
+	private void setDocumentProperties(DocumentProperties documentProperties) 
+	{
+		pageComp.selectPage(documentProperties.getPredefinedPage());
+		resUnitComp.selectResolutionUnit(documentProperties.getResolutionUnit());
+		resolutionText.setText(""+documentProperties.getResolution());
+		orientationComp.selectOrientation(documentProperties.getOrientation());
+	}
+	
+	private List<Class> getEditorClasses() 
+	{
+		Map<Class, DocumentProperties> editorClass2DocumentProperties = getDocumentConfigModule().getEditorClass2DocumentProperties();
+		List<Class> editorClasses = new ArrayList<Class>();
+		for (Map.Entry<Class, DocumentProperties> entry : editorClass2DocumentProperties.entrySet()) {
+			Class editorClass = entry.getKey();
+			editorClasses.add(editorClass);
+		}
+		return editorClasses;
+	}
+	
+//	private ILabelProvider getEditorLabelProvider() 
+//	{
+//  	IEditorRegistry editorRegistry = PlatformUI.getWorkbench().getEditorRegistry();
+//  	String editorID = null;
+//  	String editorName = editorRegistry.findEditor(editorID).;
+//	}
+
+	private ILabelProvider editorLabelProvider = new LabelProvider() 
+	{
+		@Override
+		public String getText(Object element) 
+		{			
+			String editorID = getDocumentConfigModule().getEditorClass2EditorID().get((Class)element);
+			IEditorDescriptor editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry().findEditor(editorID);
+			if (editorDescriptor != null) {
+				return editorDescriptor.getLabel();
+			}
+			return super.getText(element);
+		}		
+	};
+			
 	@Override
 	public boolean performOk() 
 	{
-		Preferences.getPreferenceStore().setValue(Preferences.PREF_PREDEFINED_PAGE_ID, 
-				pageComp.getSelectedPage().getPageID());
-		Preferences.getPreferenceStore().setValue(Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID, 
-				resUnitComp.getSelectedResolutionUnit().getResolutionID());
+//		Preferences.getPreferenceStore().setValue(Preferences.PREF_PREDEFINED_PAGE_ID, 
+//				pageComp.getSelectedPage().getPageID());
+//		Preferences.getPreferenceStore().setValue(Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID, 
+//				resUnitComp.getSelectedResolutionUnit().getResolutionID());
 		Preferences.getPreferenceStore().setValue(Preferences.PREF_STANDARD_UNIT_ID, 
 				unitComp.getSelectedUnit().getUnitID());		
-		Preferences.getPreferenceStore().setValue(Preferences.PREF_DOCUMENT_RESOLUTION,
-				getResolution());
-		Preferences.getPreferenceStore().setValue(Preferences.PREF_PAGE_ORIENTATION_ID,
-				orientationComp.getOrientation());
-				
+//		Preferences.getPreferenceStore().setValue(Preferences.PREF_DOCUMENT_RESOLUTION,
+//				getResolution());
+//		Preferences.getPreferenceStore().setValue(Preferences.PREF_PAGE_ORIENTATION_ID,
+//				orientationComp.getOrientation());
+		Map<Class, DocumentProperties> editorClass2DocumentProperties = getDocumentConfigModule().getEditorClass2DocumentProperties();
+		editorClass2DocumentProperties.put(editorChooseCombo.getSelectedElement(), getCurrentDocmuentProperties());
+		getDocumentConfigModule().setEditorClass2DocumentProperties(editorClass2DocumentProperties);
+		
 		return super.performOk();
 	}
-
+	
 	@Override
 	protected void performDefaults() 
 	{
-		pageComp.selectPage(PredefinedPageEP.sharedInstance().getPageRegistry().getPage(
-				Preferences.PREF_PREDEFINED_PAGE_ID_DEFAULT));
-		resUnitComp.selectResolutionUnit(ResolutionUnitEP.sharedInstance().getResolutionUnitRegistry().getResolutionUnit(
-				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID_DEFAULT));
+//		pageComp.selectPage(PredefinedPageEP.sharedInstance().getPageRegistry().getPage(
+//				Preferences.PREF_PREDEFINED_PAGE_ID_DEFAULT));
+//		resUnitComp.selectResolutionUnit(ResolutionUnitEP.sharedInstance().getResolutionUnitRegistry().getResolutionUnit(
+//				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID_DEFAULT));
 		unitComp.selectUnit(UnitRegistryEP.sharedInstance().getUnitRegistry().getUnit(
 				Preferences.PREF_STANDARD_UNIT_ID_DEFAULT));
-		resolutionText.setText(""+Preferences.getPreferenceStore().getDefaultDouble(
-				Preferences.PREF_DOCUMENT_RESOLUTION));
-		orientationComp.selectOrientation(Preferences.getPreferenceStore().getDefaultInt(
-				Preferences.PREF_PAGE_ORIENTATION_ID));
+//		resolutionText.setText(""+Preferences.getPreferenceStore().getDefaultDouble(
+//				Preferences.PREF_DOCUMENT_RESOLUTION));
+//		orientationComp.selectOrientation(Preferences.getPreferenceStore().getDefaultInt(
+//				Preferences.PREF_PAGE_ORIENTATION_ID));
+		editorChooseCombo.selectElement(Editor.class);
+		DocumentProperties documentProperties = getDocumentConfigModule().getEditorClass2DocumentProperties().get(Editor.class);
+		setDocumentProperties(documentProperties);
 		
 		super.performDefaults();
 	}
