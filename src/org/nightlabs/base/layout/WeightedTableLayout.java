@@ -118,13 +118,12 @@ extends TableLayout
 		return weights[columnIndex];
 	}
 
-	private boolean firstTime = true;
-	
+//	private boolean firstTime = true;	
 	public void layout(Composite c, boolean flush) 
 	{
-		if (!firstTime) {
-			return;
-		}
+//		if (!firstTime) {
+//			return;
+//		}
 		
 		int columnCount;
 		if (c instanceof Table)
@@ -170,7 +169,7 @@ extends TableLayout
 				throw new IllegalArgumentException("Composite c is neither a " + Table.class.getName() + " nor a " + Tree.class.getName());
 		}
 		
-		firstTime = false;
+//		firstTime = false;
 	}
 }
 

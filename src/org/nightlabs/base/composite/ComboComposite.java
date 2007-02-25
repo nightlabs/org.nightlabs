@@ -61,8 +61,8 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 
 	public ComboComposite(Composite parent, int style, List<T> elements, String caption) {
 		super(parent, style,  new LabelProvider(), false, caption);
+		createGuiControl(this, style, caption);
 		addElements(elements);
-		createGuiControl(parent, style, caption);
 	}
 
 //	public ComboComposite(Composite parent, int style, ILabelProvider labelProvider, LayoutMode layoutMode,
