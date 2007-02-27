@@ -15,6 +15,7 @@ Bundle-ClassPath: org.nightlabs.connection.jar
 Export-Package: org.nightlabs.connection,
  org.nightlabs.connection.ui,
  org.nightlabs.connection.ui.parallel,
- org.nightlabs.connection.ui.serial
+ org.nightlabs.connection.ui.serial,
+ org.nightlabs.connection.ui.tcp
 Eclipse-RegisterBuddy: org.nightlabs.base,
  org.nightlabs.jfire.base.j2ee
