@@ -385,6 +385,26 @@ public class RCPUtil
 	}
 
 	/**
+	 * If there is an open editor for the given <code>input</code>,
+	 * it will be closed. If no editor can be found, this
+	 * method is a no-op.
+	 *
+	 * @param input The input specifying the editor to close.
+	 * @param save Whether or not to save - this is passed to {@link IWorkbenchPage#closeEditor(IEditorPart, boolean)}.
+	 * @return <code>true</code>, if no open editor was found or if it has been successfully closed.
+	 *		<code>false</code>, if the open editor for the given <code>input</code> was not closed (e.g. because
+	 *		the user cancelled closing in case <code>save == true</code>).
+	 */
+	public static boolean closeEditor(IEditorInput input, boolean save) {
+		IWorkbenchPage page = getActiveWorkbenchPage();
+		IEditorPart editor = page.findEditor(input);
+		if (editor == null)
+			return true;
+
+		return page.closeEditor(editor, save);
+	}
+
+	/**
 	 * Finds the view with the given id in the workbench's
 	 * active workbenchpage. Returns null if no view for the
 	 * given viewID was found.
