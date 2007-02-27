@@ -37,6 +37,7 @@ import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.config.DocumentConfigModule;
 import org.nightlabs.i18n.unit.resolution.IResolutionUnit;
 import org.nightlabs.print.page.IPredefinedPage;
+import org.osgi.framework.Bundle;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -88,8 +89,11 @@ extends AbstractEPProcessor
 				try {
 //					Object editor = element.createExecutableExtension(ATTRIBUTE_EDITOR_CLASS);
 //					editorClass = editor.getClass();
-					
-					editorClass = extension.getDeclaringPluginDescriptor().getPlugin().getBundle().loadClass(editorClassName);					
+
+//				editorClass = extension.getDeclaringPluginDescriptor().getPlugin().getBundle().loadClass(editorClassName);					
+					Bundle bundle = Platform.getBundle(extension.getNamespaceIdentifier());
+					if (bundle != null)
+						editorClass = bundle.loadClass(editorClassName);
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}				
