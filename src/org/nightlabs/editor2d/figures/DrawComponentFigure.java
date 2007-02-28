@@ -40,6 +40,7 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ZoomListener;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
+import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.render.Renderer;
 import org.nightlabs.editor2d.util.J2DUtil;
@@ -157,6 +158,9 @@ implements RendererFigure
   {
   	if (contains) {  		
   		if (drawComponent != null) {
+  			if (drawComponent instanceof TextDrawComponent) {
+  				return super.containsPoint(x, y);
+  			}
         if (drawComponent instanceof ShapeDrawComponent) {
           ShapeDrawComponent sdc = (ShapeDrawComponent) drawComponent;
           // if shape is not filled always do accurate hit test
