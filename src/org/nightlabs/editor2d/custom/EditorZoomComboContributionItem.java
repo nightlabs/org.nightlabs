@@ -313,7 +313,11 @@ extends XContributionItem
   	
 		zoomManager.setZoomLevels(getZoomLevels(factor));
 		zoomManager.setUIMultiplier(1/factor);		
-  	zoomManager.setZoom(factor);  	
+//  	zoomManager.setZoom(factor);
+		if (zm.getZoom() == 1.0)
+			zoomManager.setZoom(factor);
+		else
+			zoomManager.setZoom(zm.getZoom());
   	
   	refresh(true);
 

@@ -28,6 +28,8 @@
 package org.nightlabs.editor2d;
 
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -48,6 +50,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.swing.Timer;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -66,6 +70,7 @@ import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.editparts.J2DScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
+import org.eclipse.gef.editparts.ZoomListener;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.rulers.RulerProvider;
@@ -99,6 +104,7 @@ import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
@@ -571,7 +577,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		{
 			Object zoomAdapter = getGraphicalViewer().getProperty(ZoomManager.class.toString());
 		  if (zoomAdapter != null && zoomAdapter instanceof ZoomManager) {
-  			zoomManager = ((ZoomManager)zoomAdapter);  
+  			zoomManager = ((ZoomManager)zoomAdapter);   			
 		  }			
 		}
 		return zoomManager;		
@@ -701,9 +707,27 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		viewerManager.setDescriptorManager(getDescriptorManager());
 		
 		// FilterManager
-		configureFilterManager();      
+		configureFilterManager();  
+		
+//		zoomAll();
 	}
 
+	private void zoomAll() {
+		if (getZoomManager() != null) {
+			getZoomManager().setZoomAsText(ZoomManager.FIT_ALL);
+			logger.info("zoomAll");
+		} 
+		else {
+			Display.getDefault().timerExec(2000, new Runnable(){			
+				public void run() {
+					zoomAll();
+				}			
+			});
+			logger.info("ZoomAll does not worked, zoomManager == null");
+			logger.info("started Timer");
+		}		
+	}
+	
 	protected void initializeActionRegistry() 
 	{
 		super.initializeActionRegistry();
@@ -1271,6 +1295,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			long duration = System.currentTimeMillis() - start;
 			logger.debug("setInput() took "+duration+" ms!");
 		}
+		
+		zoomAll();
 	}
 
 //	protected void initialzePage() 
