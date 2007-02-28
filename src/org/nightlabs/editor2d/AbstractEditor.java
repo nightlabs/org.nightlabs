@@ -331,6 +331,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	protected void init() 
 	{
 		getPalettePreferences().setPaletteState(FlyoutPaletteComposite.STATE_PINNED_OPEN);
+		getPalettePreferences().setDockLocation(PositionConstants.WEST);
 	}
 	
 	protected DefaultEditDomain getEditDomain() 
