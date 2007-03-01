@@ -19,6 +19,7 @@ public class InheritanceToggleButton
 		getGridData().grabExcessHorizontalSpace = false;
 		getGridData().grabExcessVerticalSpace = false;
 		button = new Button(this, SWT.TOGGLE);
+		button.setToolTipText("Inherit?");
 		button.setImage(SharedImages.getSharedImage(NLBasePlugin.getDefault(), InheritanceToggleButton.class));
 		GridData gd = new GridData();
 //		gd.widthHint = 80;
