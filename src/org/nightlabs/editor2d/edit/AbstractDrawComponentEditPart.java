@@ -29,6 +29,8 @@ package org.nightlabs.editor2d.edit;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
@@ -40,6 +42,7 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.figures.DrawComponentFigure;
 import org.nightlabs.editor2d.figures.RendererFigure;
 import org.nightlabs.editor2d.model.DrawComponentPropertySource;
@@ -165,8 +168,11 @@ implements EditorRequestConstants
     
     // start listening for changes in the model
     hookIntoDrawComponent(getDrawComponent());
-    
+            
     super.activate();
+    
+    if (getDrawComponent().isTemplate())
+    	setContains(false);
   }
   
   /**
@@ -309,7 +315,12 @@ implements EditorRequestConstants
 		else if (propertyName.equals(DrawComponent.TRANSFORM_CHANGED)) {
 			refreshVisuals();
 			return;
-		}				
+		}
+		else if (propertyName.equals(DrawComponent.PROP_TEMPLATE)) {
+			boolean template = ((Boolean)evt.getNewValue());
+			setContains(!template);
+			return;
+		} 
 	}
 	  
   /**
@@ -351,4 +362,33 @@ implements EditorRequestConstants
 //    
 //    return super.understandsRequest(req);
 //  }  
+  
+	protected void setContains(boolean contains) 
+	{
+		Collection<DrawComponent> drawComponents = new ArrayList<DrawComponent>(1);
+		if (getDrawComponent() instanceof DrawComponentContainer) {
+			drawComponents = ((DrawComponentContainer)getDrawComponent()).getDrawComponents();
+		} else {
+			drawComponents.add(getDrawComponent());
+		}
+		
+		for (Iterator<DrawComponent> it = drawComponents.iterator(); it.hasNext(); ) 
+		{
+			Object o = getViewer().getEditPartRegistry().get(it.next());
+			if (o != null && o instanceof GraphicalEditPart) 
+			{
+				GraphicalEditPart gep = (GraphicalEditPart) o;
+				IFigure figure = gep.getFigure();
+				if (figure instanceof DrawComponentFigure) {
+					DrawComponentFigure dcFigure = (DrawComponentFigure) figure;
+					dcFigure.setContains(contains);
+					dcFigure.setVisible(contains);
+					logger.info("DrawComponentFigure found and set contains to "+contains);
+				}					
+			}
+		}			
+		
+		refresh();
+	}
+	
 }

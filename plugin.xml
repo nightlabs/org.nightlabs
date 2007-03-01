@@ -68,7 +68,7 @@
             class="org.nightlabs.editor2d.Editor"
             contributorClass="org.nightlabs.editor2d.EditorActionBarContributor"
             default="false"
-            extensions="e2d"
+            extensions="e2d, e2t"
             icon="icons/EditorPlugin-Logo.16x16.png"
             id="org.nightlabs.editor2d.Editor"
             name="%editor.name"/>

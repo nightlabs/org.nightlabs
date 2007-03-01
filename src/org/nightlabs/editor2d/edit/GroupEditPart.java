@@ -66,6 +66,63 @@ extends AbstractDrawComponentContainerEditPart
     return propertySource;
   }
 
+//	@Override
+//	protected void propertyChanged(PropertyChangeEvent evt) 
+//	{
+//		super.propertyChanged(evt);
+//		String propertyName = evt.getPropertyName();
+//		if (propertyName.equals(DrawComponentContainer.CHILD_ADDED)) 
+//		{
+//			logger.debug(propertyName);
+//			Collection<DrawComponent> children = (Collection<DrawComponent>) evt.getNewValue();
+//			setContains(false, children);
+//			return;
+//		}
+//		else if (propertyName.equals(DrawComponentContainer.CHILD_REMOVED)) 
+//		{
+//			logger.debug(propertyName);
+//			Collection<DrawComponent> newChildren = (Collection<DrawComponent>) evt.getNewValue();
+//			Collection<DrawComponent> oldChildren = (Collection<DrawComponent>) evt.getOldValue();
+//			if (newChildren != null && oldChildren != null) 
+//			{
+//				oldChildren.removeAll(newChildren);
+//				setContains(true, oldChildren);
+//			}
+//			return;
+//		}		
+//	} 	
+//    
+//	protected void setContains(boolean contains, Collection<DrawComponent> drawComponents) 
+//	{
+//		if (drawComponents != null) 
+//		{
+//			for (Iterator<DrawComponent> it = drawComponents.iterator(); it.hasNext(); ) 
+//			{
+//				Object o = getViewer().getEditPartRegistry().get(it.next());
+//				if (o != null && o instanceof GraphicalEditPart) 
+//				{
+//					GraphicalEditPart gep = (GraphicalEditPart) o;
+//					IFigure figure = gep.getFigure();
+//					if (figure instanceof DrawComponentFigure) {
+//						DrawComponentFigure dcFigure = (DrawComponentFigure) figure;
+//						dcFigure.setContains(contains);
+////						dcFigure.setEnabled(contains);
+////						dcFigure.setOpaque(contains);
+//						dcFigure.setVisible(contains);
+//						logger.debug("DrawComponentFigure found and set contains to "+contains);
+//					}					
+//				}
+//			}			
+//		}
+//		refresh();
+//	}
+//
+//	@Override
+//	public void activate() {
+//		super.activate();
+//		setContains(false, getGroupDrawComponent().getDrawComponents());
+//	}
+	
 	@Override
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{
@@ -74,53 +131,28 @@ extends AbstractDrawComponentContainerEditPart
 		if (propertyName.equals(DrawComponentContainer.CHILD_ADDED)) 
 		{
 			logger.debug(propertyName);
-			Collection<DrawComponent> children = (Collection<DrawComponent>) evt.getNewValue();
-			setContains(false, children);
+//			Collection<DrawComponent> children = (Collection<DrawComponent>) evt.getNewValue();
+			setContains(false);
 			return;
 		}
 		else if (propertyName.equals(DrawComponentContainer.CHILD_REMOVED)) 
 		{
 			logger.debug(propertyName);
-			Collection<DrawComponent> newChildren = (Collection<DrawComponent>) evt.getNewValue();
-			Collection<DrawComponent> oldChildren = (Collection<DrawComponent>) evt.getOldValue();
-			if (newChildren != null && oldChildren != null) 
-			{
-				oldChildren.removeAll(newChildren);
-				setContains(true, oldChildren);
-			}
+			setContains(false);
+//			Collection<DrawComponent> newChildren = (Collection<DrawComponent>) evt.getNewValue();
+//			Collection<DrawComponent> oldChildren = (Collection<DrawComponent>) evt.getOldValue();
+//			if (newChildren != null && oldChildren != null) 
+//			{
+//				oldChildren.removeAll(newChildren);
+//				setContains(true, oldChildren);
+//			}
 			return;
 		}		
-	} 	
-    
-	protected void setContains(boolean contains, Collection<DrawComponent> drawComponents) 
-	{
-		if (drawComponents != null) 
-		{
-			for (Iterator<DrawComponent> it = drawComponents.iterator(); it.hasNext(); ) 
-			{
-				Object o = getViewer().getEditPartRegistry().get(it.next());
-				if (o != null && o instanceof GraphicalEditPart) 
-				{
-					GraphicalEditPart gep = (GraphicalEditPart) o;
-					IFigure figure = gep.getFigure();
-					if (figure instanceof DrawComponentFigure) {
-						DrawComponentFigure dcFigure = (DrawComponentFigure) figure;
-						dcFigure.setContains(contains);
-//						dcFigure.setEnabled(contains);
-//						dcFigure.setOpaque(contains);
-						dcFigure.setVisible(contains);
-						logger.debug("DrawComponentFigure found and set contains to "+contains);
-					}					
-				}
-			}			
-		}
-		refresh();
 	}
-
+	
 	@Override
 	public void activate() {
 		super.activate();
-		setContains(false, getGroupDrawComponent().getDrawComponents());
-	}
-	
+		setContains(false);
+	}	
 }

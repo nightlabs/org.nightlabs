@@ -28,8 +28,6 @@
 package org.nightlabs.editor2d;
 
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -50,8 +48,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.swing.Timer;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -67,10 +63,8 @@ import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
-import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.editparts.J2DScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
-import org.eclipse.gef.editparts.ZoomListener;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.rulers.RulerProvider;
@@ -88,6 +82,7 @@ import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
+import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.J2DGraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
@@ -175,7 +170,6 @@ import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 import org.nightlabs.editor2d.viewer.render.RendererRegistry;
 import org.nightlabs.i18n.unit.IUnit;
 import org.nightlabs.i18n.unit.UnitRegistry;
-import org.nightlabs.i18n.unit.resolution.IResolutionUnit;
 import org.nightlabs.i18n.unit.resolution.Resolution;
 import org.nightlabs.i18n.unit.resolution.ResolutionImpl;
 import org.nightlabs.i18n.unit.resolution.ResolutionUnitRegistry;
@@ -728,7 +722,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			logger.info("started Timer");
 		}		
 	}
-	
+		
 	protected void initializeActionRegistry() 
 	{
 		super.initializeActionRegistry();
@@ -1283,7 +1277,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			if (!fileInput.isSaved()) {
 				initialzePage();
 			} else {        	
-				load(fileInput);        	
+				load(fileInput);
+				zoomAll();				
 			}            	      	
 		} 
 		else
@@ -1297,7 +1292,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			logger.debug("setInput() took "+duration+" ms!");
 		}
 		
-		zoomAll();
 	}
 
 //	protected void initialzePage() 

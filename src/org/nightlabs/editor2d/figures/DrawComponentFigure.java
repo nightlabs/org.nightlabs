@@ -38,11 +38,15 @@ import org.eclipse.draw2d.J2DGraphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ZoomListener;
+import org.eclipse.swt.graphics.GC;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.render.Draw2DRenderContext;
+import org.nightlabs.editor2d.render.RenderContext;
 import org.nightlabs.editor2d.render.Renderer;
+import org.nightlabs.editor2d.render.j2d.J2DRenderContext;
 import org.nightlabs.editor2d.util.J2DUtil;
 import org.nightlabs.editor2d.util.RenderUtil;
 
@@ -66,11 +70,26 @@ implements RendererFigure
   
   public static void paintJ2D(Graphics2D graphics, DrawComponent drawComponent, Renderer renderer) 
   {
-  	if (renderer == null && drawComponent != null)
-  		renderer = drawComponent.getRenderer();
   	RenderUtil.paintJ2DRenderer(renderer, drawComponent, graphics);  	
   }
-        
+          
+  public static void paintDraw2D(Graphics g, DrawComponent dc, Renderer r) 
+  {
+		if (r != null && dc != null && g != null) 
+		{				
+			RenderContext rc = r.getRenderContext();
+			if (rc instanceof Draw2DRenderContext) {
+				((Draw2DRenderContext)rc).paint(dc, g);
+			}
+			else {
+				rc = r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE);
+				if (rc != null) {
+					((Draw2DRenderContext) rc).paint(dc, g);
+				}  					
+			}
+		}					
+  }
+    
   public void paint(Graphics graphics) 
   {  	
     if (graphics instanceof J2DGraphics) 
@@ -82,7 +101,10 @@ implements RendererFigure
       paint(g2d);      
 //      paintHitTestArea(g2d);
       g2d.dispose();
-    }
+    } 
+    else {
+    	paintDraw2D(graphics, drawComponent, renderer);
+    }    	
   }
         
   private Renderer renderer;   

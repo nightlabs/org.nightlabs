@@ -156,6 +156,8 @@ implements IPropertySource
 		descriptors.add(createRotationYPD());
 		// Visible
 		descriptors.add(createVisiblePD());
+		// Template
+		descriptors.add(createTemplatePD());
 		
 		// PropertyDescriptors from extension point
 		List<IPropertyDescriptor> extensionPointProperties = getExtensionPointProperties(); 
@@ -300,7 +302,11 @@ implements IPropertySource
 		}		
 		else if (id.equals(DrawComponent.PROP_VISIBLE)) {
 			return new Boolean(drawComponent.isVisible());
+		}
+		else if (id.equals(DrawComponent.PROP_TEMPLATE)) {
+			return new Boolean(drawComponent.isTemplate());
 		}		
+		
 		// properties from extension point
 		DrawComponentProperty property = id2DrawComponentProperty.get(id);
 		if (property != null) {
@@ -367,6 +373,11 @@ implements IPropertySource
 		}
 		else if (id.equals(DrawComponent.PROP_VISIBLE)) {
 			drawComponent.setVisible(((Boolean)value).booleanValue());
+			return;
+		}
+		else if (id.equals(DrawComponent.PROP_TEMPLATE)) {
+			drawComponent.setTemplate(((Boolean)value).booleanValue());
+			return;
 		}
 		
 		// properties from extension point
@@ -379,9 +390,17 @@ implements IPropertySource
 			
 	protected PropertyDescriptor createVisiblePD() 
 	{
-		PropertyDescriptor pd = new CheckboxPropertyDescriptor(Layer.PROP_VISIBLE, 
+		PropertyDescriptor pd = new CheckboxPropertyDescriptor(DrawComponent.PROP_VISIBLE, 
 				EditorPlugin.getResourceString("property.visible.label"), false);
 		return pd;
 	}
+	
+	protected PropertyDescriptor createTemplatePD() 
+	{
+		PropertyDescriptor pd = new CheckboxPropertyDescriptor(DrawComponent.PROP_TEMPLATE, 
+				"Template", false);
+		return pd;
+	}
+	
 }
 
