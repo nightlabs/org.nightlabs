@@ -46,7 +46,6 @@ import org.nightlabs.base.property.DoublePropertyDescriptor;
 import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.properties.NamePropertyDescriptor;
 import org.nightlabs.editor2d.properties.RotationPropertyDescriptor;
 import org.nightlabs.editor2d.unit.DotUnit;

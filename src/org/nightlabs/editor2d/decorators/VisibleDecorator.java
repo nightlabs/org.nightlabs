@@ -62,8 +62,16 @@ implements ILightweightLabelDecorator
 						VisibleCompositeImage.class, "", ImageDimension._8x8, ImageFormat.gif);
 				
 				decoration.addOverlay(invisibleImage);
-				decoration.addSuffix("[invisible]");				
+				decoration.addSuffix(" [invisible]");				
 			}
+			if (dc.isTemplate()) {
+//				ImageDescriptor invisibleImage = SharedImages.getSharedImageDescriptor(
+//						EditorPlugin.getDefault(), 
+//						VisibleCompositeImage.class, "", ImageDimension._8x8, ImageFormat.gif);
+//				decoration.addOverlay(invisibleImage);
+				decoration.addSuffix(" [template]");				
+			}
+			
 		}
 	}
 	
