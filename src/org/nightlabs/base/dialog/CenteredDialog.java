@@ -60,12 +60,26 @@ extends Dialog
 	public void create() 
 	{
 		super.create();
+		setToCenteredLocation();
+	}
+	
+	/**
+	 * This is called by {@link #create()} but can be used to have a centered dialog with a specific size.
+	 * A code snippet for that would be
+	 * <pre>
+	 * super.create();
+	 * getSchell().setSize(300, 400);
+	 * setToCenteredLocation();
+	 * </pre>
+	 *
+	 */
+	protected void setToCenteredLocation() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Point shellSize = getShell().getSize();
 		int diffWidth = screenSize.width - shellSize.x;
 		int diffHeight = screenSize.height - shellSize.y;
 		getShell().setLocation(diffWidth/2, diffHeight/2);
-	}	
+	}
 	
 	public boolean checkWidget(Widget w) 
 	{
