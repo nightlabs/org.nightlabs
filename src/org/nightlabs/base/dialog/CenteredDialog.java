@@ -68,7 +68,7 @@ extends Dialog
 	 * A code snippet for that would be
 	 * <pre>
 	 * super.create();
-	 * getSchell().setSize(300, 400);
+	 * getShell().setSize(300, 400);
 	 * setToCenteredLocation();
 	 * </pre>
 	 *
