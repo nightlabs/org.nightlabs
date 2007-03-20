@@ -156,13 +156,13 @@ implements ILanguageManager
 		addLanguage(langCf);
 	}
 		
-	protected Map languageID2LanguageCf = new HashMap();	
+	protected Map<String, LanguageCf> languageID2LanguageCf = new HashMap<String, LanguageCf>();	
 
-	private Collection unmodifiableLanguages = null;
+	private Collection<LanguageCf> unmodifiableLanguages = null;
 	/**
 	 * @return a java.util.Collection which contains all added {@link org.nightlabs.language.LanguageCf}s.
 	 */
-	public Collection getLanguages() {
+	public Collection<LanguageCf> getLanguages() {
 		if (unmodifiableLanguages == null)
 			unmodifiableLanguages = Collections.unmodifiableCollection(langCfMod.getLanguages());
 		return unmodifiableLanguages;

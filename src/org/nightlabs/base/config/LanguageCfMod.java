@@ -30,19 +30,21 @@ import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.config.CfModList;
 import org.nightlabs.config.ConfigModule;
 import org.nightlabs.config.InitException;
+import org.nightlabs.language.LanguageCf;
 
 public class LanguageCfMod 
 extends ConfigModule
 {
-	public LanguageCfMod() {
-		super();
-	}
+	private static final long serialVersionUID = 1L;
 
-	protected CfModList languages = null;	
-	public CfModList getLanguages() {
+	public LanguageCfMod() { }
+
+	protected CfModList<LanguageCf> languages = null;
+
+	public CfModList<LanguageCf> getLanguages() {
 		return languages;
 	}
-	public void setLanguages(CfModList languages) {
+	public void setLanguages(CfModList<LanguageCf> languages) {
 		this.languages = languages;		
 	}
 
@@ -55,9 +57,9 @@ extends ConfigModule
 		languages.setOwnerCfMod(this);
 	}
 
-	protected CfModList createDefaultLanguage() 
+	protected CfModList<LanguageCf> createDefaultLanguage() 
 	{
-		CfModList l = new CfModList(this);
+		CfModList<LanguageCf> l = new CfModList<LanguageCf>(this);
 		l.add(LanguageManager.createDefaultLanguage());		
 		return l;
 	}
