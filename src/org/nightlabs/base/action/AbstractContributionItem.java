@@ -39,6 +39,10 @@ import org.eclipse.swt.widgets.ToolItem;
 public abstract class AbstractContributionItem 
 extends XContributionItem 
 {
+	public AbstractContributionItem() {
+		super();
+	}
+	
 	public AbstractContributionItem(String id, String name) 
 	{
 		super();
@@ -72,8 +76,11 @@ extends XContributionItem
 	protected String name = "";
 	public String getName() {
 		return name;
+	}			
+	public void setName(String name) {
+		this.name = name;
 	}
-			
+	
 	protected void setSize() 
 	{
 		if (fillToolBar && toolBarFilled) 

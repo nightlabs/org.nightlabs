@@ -40,6 +40,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.action.ContributionItemSetRegistry;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlingThreadGroup;
 import org.nightlabs.base.exceptionhandler.SaveRunnableRunner;
 import org.nightlabs.base.extensionpoint.RemoveExtensionRegistry;
@@ -292,7 +293,7 @@ implements IPlatformRunnable
 			SafeRunnable.setRunner(new SaveRunnableRunner());
 			
 			try {
-				RemoveExtensionRegistry.sharedInstance().removeRegisteredExtensions();
+				RemoveExtensionRegistry.sharedInstance().removeRegisteredExtensions();				
 			} catch (Throwable t) {
 				logger.error("There occured an error while tyring to remove all registered extensions");
 			}

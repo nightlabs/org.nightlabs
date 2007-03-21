@@ -178,14 +178,14 @@ public class DateTimeEdit extends XComposite
 
 	private void lookupButtonClicked()
 	{
-//		CalendarDateTimeEditLookupDialog dialog = new CalendarDateTimeEditLookupDialog(getShell(), this);
-//		if (dialog.open() == CalendarDateTimeEditLookupDialog.OK) {
-//			//setDate(dialog.getDate());
-//		}
-		DateTimeEditLookupDialog dialog = new DateTimeEditLookupDialog(getShell(), this);
+		CalendarDateTimeEditLookupDialog dialog = new CalendarDateTimeEditLookupDialog(getShell(), this);
 		if (dialog.open() == CalendarDateTimeEditLookupDialog.OK) {
 			setDate(dialog.getDate());
 		}
+//		DateTimeEditLookupDialog dialog = new DateTimeEditLookupDialog(getShell(), this);
+//		if (dialog.open() == CalendarDateTimeEditLookupDialog.OK) {
+//			setDate(dialog.getDate());
+//		}
 	}
 
 	private LinkedList modifyListeners = null;

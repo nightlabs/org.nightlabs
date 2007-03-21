@@ -113,7 +113,7 @@ public class DateTimeEditLookupDialog
 		return page;
 	}
 
-	private Spinner createSpinner(Composite parent, int field)
+	protected Spinner createSpinner(Composite parent, int field)
 	{
 		Spinner spinner = new Spinner(parent, SWT.BORDER);
 		spinner.setMinimum(calendar.getMinimum(field) - 1);
@@ -166,7 +166,7 @@ public class DateTimeEditLookupDialog
 		}
 	};
 
-	private void updateField(Spinner spinner, int field)
+	protected void updateField(Spinner spinner, int field)
 	{
 		int newVal = spinner.getSelection();
 		int oldVal = getCalendarValue(field);

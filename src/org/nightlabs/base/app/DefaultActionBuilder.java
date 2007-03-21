@@ -55,11 +55,13 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.internal.handlers.ShowKeyAssistHandler;
 import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.action.ContributionItemSetRegistry;
 import org.nightlabs.base.action.INewFileAction;
 import org.nightlabs.base.action.NewFileRegistry;
 import org.nightlabs.base.action.OpenFileAction;
 import org.nightlabs.base.action.ReOpenFileAction;
 import org.nightlabs.base.config.RecentFileCfMod;
+import org.nightlabs.base.extensionpoint.EPProcessorException;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 
@@ -435,6 +437,12 @@ extends ActionBarAdvisor
 
 	public void fillCoolBar(ICoolBarManager coolBar) 
 	{
+		try {
+			ContributionItemSetRegistry.sharedInstance().contributeToCoolBar(coolBar);
+		} catch (EPProcessorException e) {
+			logger.error("There occured an error while processing the ContributionItemSetRegistry!", e);
+			e.printStackTrace();
+		}
 	}
 	
 	public void dispose() 

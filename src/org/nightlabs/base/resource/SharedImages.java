@@ -54,7 +54,14 @@ public class SharedImages
 			{
 				return "8x8";
 			}
-		},		
+		},
+		// for button images in Contribution items
+		_12x12 {
+			public String toString()
+			{
+				return "12x12";
+			}
+		},				
 		_16x16 {
 			public String toString()
 			{

@@ -49,6 +49,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.SubContributionItem;
+import org.eclipse.jface.action.SubContributionManager;
 import org.eclipse.jface.action.SubCoolBarManager;
 import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
@@ -269,7 +270,9 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 	 */
 	public int contributeToCoolBar(ICoolBarManager coolBarManager)
 	{
-		((SubCoolBarManager)coolBarManager).setVisible(true);
+		if (coolBarManager instanceof SubContributionManager) 
+			((SubCoolBarManager)coolBarManager).setVisible(true);
+			
 		String baseID = this.getClass().getName();
 		String orphanageToolbarID = baseID + '.' + ORPHANAGE_TOOLBAR_ID;
 
@@ -281,7 +284,14 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 		// convert the existing items of the real coolbar-manager into a Map - the new items might
 		// already exist because of Eclipse's workspace memory (and then the old ones need to be
 		// manipulated - new ones would be ignored because of a bug/feature in the EclipseRCP)
-		IContributionItem[] coolBarItems = ((SubCoolBarManager)coolBarManager).getParent().getItems();
+		IContributionItem[] coolBarItems = null;
+		if (coolBarManager instanceof SubCoolBarManager) {
+			coolBarItems = ((SubCoolBarManager)coolBarManager).getParent().getItems();
+		}
+		else if (coolBarManager instanceof IContributionManager) {
+			coolBarItems = ((IContributionManager)coolBarManager).getItems();
+		}
+//			IContributionItem[] coolBarItems = ((SubCoolBarManager)coolBarManager).getParent().getItems();
 
 		// key: String itemId
 		// value: IXContributionItem
@@ -347,7 +357,11 @@ public abstract class AbstractActionRegistry extends AbstractEPProcessor
 
 		coolBarManager.update(true);
 
-		return res;
+		return res;			
+//		} 
+//		else {
+//			return contribute(coolBarManager, KIND_COOLBAR);
+//		}
 	}
 
 	protected static ToolBarContributionItem getToolBarContributionItem(Object item)
