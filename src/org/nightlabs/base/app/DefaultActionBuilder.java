@@ -433,6 +433,13 @@ extends ActionBarAdvisor
 		}
 		
 		helpMenu.add(aboutAction);
+		
+		try {
+			ContributionItemSetRegistry.sharedInstance().contributeToMenuBar(menuBar);
+		} catch (EPProcessorException e) {
+			logger.error("There occured an error while processing the ContributionItemSetRegistry!", e);
+			e.printStackTrace();
+		}		
 	}
 
 	public void fillCoolBar(ICoolBarManager coolBar) 

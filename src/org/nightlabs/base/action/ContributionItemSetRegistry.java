@@ -29,7 +29,10 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.ICoolBarManager;
 import org.nightlabs.base.action.registry.AbstractActionRegistry;
+import org.nightlabs.base.action.registry.ActionDescriptor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 
 /**
@@ -91,7 +94,6 @@ extends AbstractActionRegistry
 				try {
 					IXContributionItem contributionItem = (IXContributionItem) element.createExecutableExtension(ATTRIBUTE_CLASS);
 					contributionItem.setId(id);
-//					contributionItem.setName(name);
 					if (contributionItem instanceof AbstractContributionItem) {
 						AbstractContributionItem abstractContributionItem = (AbstractContributionItem) contributionItem;
 						abstractContributionItem.setName(name);
@@ -112,8 +114,34 @@ extends AbstractActionRegistry
 	}
 
 	@Override
-	protected String getActionElementName()
-	{
+	protected String getActionElementName() {
 		return ELEMENT_CONTRIBUTION_ITEM;
 	}
+
+	@Override
+	public int contributeToCoolBar(ICoolBarManager coolBarManager) 
+	{
+//		return super.contributeToCoolBar(coolBarManager);
+		checkPerspectiveListenerAdded();
+		
+		if (!isAffectedOfPerspectiveExtension()) {
+			for (ActionDescriptor actionDescriptor : getActionDescriptors()) {
+				IXContributionItem contributionItem = actionDescriptor.getContributionItem();
+				coolBarManager.add(contributionItem);
+			}
+			return getActionDescriptors().size();			
+		} 
+		else {
+			if (getActiveExtensionIDs() != null) {
+				for (String extensionID : getActiveExtensionIDs()) {
+					ActionDescriptor actionDescriptor = getActionDescriptor(extensionID, false);
+					IXContributionItem contributionItem = actionDescriptor.getContributionItem();
+					coolBarManager.add(contributionItem);
+				}
+				return getActionDescriptors().size();							
+			}
+			return 0;
+		}		
+	}
+		
 }

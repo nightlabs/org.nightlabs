@@ -29,6 +29,7 @@ package org.nightlabs.base.extensionpoint;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -55,6 +56,8 @@ import org.eclipse.core.runtime.Platform;
 public abstract class AbstractEPProcessor 
 implements IEPProcessor
 {
+	private static final Logger logger = Logger.getLogger(AbstractEPProcessor.class);
+	
 	/**
 	 * Return the extension-point id here this EPProcessor should process.
 	 */
@@ -135,11 +138,26 @@ implements IEPProcessor
 	 */
 	public void checkProcessing() 
 	{
+		checkProcessing(true);
+	}
+
+	/**
+	 * Assures that this processor has processed its extensions
+	 * 
+	 * @param throwExceptionIfErrorOccurs determines if a RuntimeException should be thrown
+	 * if a EPProcessorException occurs or only an error should be logged
+	 */
+	public void checkProcessing(boolean throwExceptionIfErrorOccurs) 
+	{
 		if (!isProcessed()) {
 			try {
 				process();
-			} catch (EPProcessorException e) {
-				throw new RuntimeException(e);
+			} 
+			catch (EPProcessorException e) {
+				if (throwExceptionIfErrorOccurs)
+					throw new RuntimeException(e);
+				else
+					logger.error("There occured an error during processing extension-point "+getExtensionPointID()+"!", e);					
 			}  	  		
 		}
 	}

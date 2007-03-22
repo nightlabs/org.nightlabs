@@ -110,7 +110,7 @@ extends XContributionItem
 	public void fill(CoolBar parent, int index) 
 	{
 		if (fillCoolBar) {
-			CoolItem coolItem = new CoolItem(parent, SWT.SEPARATOR, index);
+			coolItem = new CoolItem(parent, SWT.SEPARATOR, index);
 			control = createControl(parent);
 			coolItem.setControl(control);
 			coolBarFilled = true;

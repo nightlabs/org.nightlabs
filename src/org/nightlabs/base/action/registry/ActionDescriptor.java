@@ -27,6 +27,7 @@
 package org.nightlabs.base.action.registry;
 
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IContributionManager;
 
 import org.nightlabs.base.action.IXContributionItem;
@@ -61,12 +62,17 @@ public class ActionDescriptor extends ItemDescriptor
 	 */
 	private boolean visibleInContextmenu;
 
+	/**
+	 * the id of the {@link IAction} or the {@link IContributionItem}
+	 */
+	private String id;
+	
 	public ActionDescriptor() { }
 
 	public void init(
 			IAction action, IXContributionItem contributionItem, String menubarPath, String toolbarPath,
 			String contextmenuPath, boolean visible,
-			boolean visibleInMenubar, boolean visibleInToolbar, boolean visibleInContextmenu)
+			boolean visibleInMenubar, boolean visibleInToolbar, boolean visibleInContextmenu, String id)
 	{
 		this.action = action;
 		this.contributionItem = contributionItem;
@@ -77,6 +83,7 @@ public class ActionDescriptor extends ItemDescriptor
 		this.visibleInMenubar = visibleInMenubar;
 		this.visibleInToolbar = visibleInToolbar;
 		this.visibleInContextmenu = visibleInContextmenu;
+		this.id = id;
 	}
 
 	public IAction getAction()
@@ -98,6 +105,10 @@ public class ActionDescriptor extends ItemDescriptor
 	public String getContextmenuPath()
 	{
 		return contextmenuPath;
+	}
+	public String getID() 
+	{
+		return id;
 	}
 
 	/**
@@ -146,5 +157,8 @@ public class ActionDescriptor extends ItemDescriptor
 	public void setVisibleInContextmenu(boolean visibleInContextmenu)
 	{
 		this.visibleInContextmenu = visibleInContextmenu;
+	}
+	public void setID(String id) {
+		this.id = id;
 	}
 }

@@ -31,12 +31,15 @@ import java.awt.Toolkit;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.nightlabs.base.action.ContributionItemSetRegistry;
 import org.nightlabs.base.app.DefaultActionBuilder.ActionBarItem;
+import org.nightlabs.base.extensionpoint.EPProcessorException;
 
 /**
  * 
@@ -46,6 +49,8 @@ import org.nightlabs.base.app.DefaultActionBuilder.ActionBarItem;
 public class DefaultWorkbenchWindowAdvisor 
 extends WorkbenchWindowAdvisor 
 {
+	private static final Logger logger = Logger.getLogger(DefaultWorkbenchWindowAdvisor.class);
+	
 	/**
 	 * @param configurer
 	 */
@@ -87,4 +92,14 @@ extends WorkbenchWindowAdvisor
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		return new Point(screenSize.width, screenSize.height);
 	}
+
+	@Override
+	public void postWindowOpen() {
+		try {
+			ContributionItemSetRegistry.sharedInstance().checkPerspectiveListenerAdded();
+		} catch (EPProcessorException e) {
+			logger.error("There occured an error getting the ContributionItemSetRegistry", e);
+		}
+	}
+		
 }
