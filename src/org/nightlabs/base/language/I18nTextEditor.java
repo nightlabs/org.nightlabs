@@ -112,12 +112,12 @@ public class I18nTextEditor extends XComposite
 	 * @param languageChooser The {@link LanguageChooser} to listen to.
 	 * @param caption The header to display for the editor.
 	 */
-	public I18nTextEditor(Composite parent, LanguageChooser languageChooser, String caption)
+	public I18nTextEditor(Composite parent, LanguageChooser _languageChooser, String caption)
 	{
 		super(parent, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER);
 		getGridData().grabExcessVerticalSpace = false;
 
-		if (languageChooser == null)
+		if (_languageChooser == null)
 			getGridLayout().numColumns = 2;
 
 		setEditMode(EditMode.DIRECT);
@@ -138,12 +138,12 @@ public class I18nTextEditor extends XComposite
 			}
 		};
 		
-		if (languageChooser == null) {
+		if (_languageChooser == null) {
 			this.languageChooser = new LanguageChooserCombo(this, false);
 			// TODO On the long run, the I18nTextEditor itself should be a combobox
 			// in this mode, showing the language flag on the left.
 		} else {
-			this.languageChooser = languageChooser;
+			this.languageChooser = _languageChooser;
 			addDisposeListener(new DisposeListener() {
 				public void widgetDisposed(DisposeEvent e) {
 					I18nTextEditor.this.languageChooser.removeLanguageChangeListener(languageChangeListener);
@@ -161,8 +161,8 @@ public class I18nTextEditor extends XComposite
 			}
 		});
 
-		if (languageChooser != null)
-			languageChooser.addLanguageChangeListener(languageChangeListener);
+		if (this.languageChooser != null)
+			this.languageChooser.addLanguageChangeListener(languageChangeListener);
 
 		text.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e)
