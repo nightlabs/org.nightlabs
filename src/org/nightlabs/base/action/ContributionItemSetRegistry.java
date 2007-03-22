@@ -120,7 +120,9 @@ extends AbstractActionRegistry
 	@Override
 	public int contributeToCoolBar(ICoolBarManager coolBarManager) 
 	{
-//		return super.contributeToCoolBar(coolBarManager);
+		if (!perspectiveListenerAdded)
+			earlyContributed = true;
+		
 		checkPerspectiveListenerAdded();
 		
 		if (!isAffectedOfPerspectiveExtension()) {
@@ -131,13 +133,15 @@ extends AbstractActionRegistry
 			return getActionDescriptors().size();			
 		} 
 		else {
+			// TODO: why is the contributionItem after restore not visible although it is added
 			if (getActiveExtensionIDs() != null) {
 				for (String extensionID : getActiveExtensionIDs()) {
 					ActionDescriptor actionDescriptor = getActionDescriptor(extensionID, false);
 					IXContributionItem contributionItem = actionDescriptor.getContributionItem();
 					coolBarManager.add(contributionItem);
+//					coolBarManager.update(true);
 				}
-				return getActionDescriptors().size();							
+				return getActiveExtensionIDs().size();							
 			}
 			return 0;
 		}		

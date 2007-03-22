@@ -39,7 +39,8 @@ public class ActionDescriptor extends ItemDescriptor
 	private String menubarPath;
 	private String toolbarPath;
 	private String contextmenuPath;
-
+//	private String groupMarkerName;
+	
 	/**
 	 * Used to determine whether to show the Action or not.
 	 * @see #setVisible(boolean)
@@ -110,7 +111,11 @@ public class ActionDescriptor extends ItemDescriptor
 	{
 		return id;
 	}
-
+//	public String getGroupMarkerName() 
+//	{
+//		return groupMarkerName;
+//	}
+	
 	/**
 	 * Important: Not only <code>visible</code> alone decides whether to show an Action or not.
 	 * Additionally, the result of {@link #isVisibleInMenubar()}, {@link #isVisibleInToolbar()}
@@ -158,7 +163,12 @@ public class ActionDescriptor extends ItemDescriptor
 	{
 		this.visibleInContextmenu = visibleInContextmenu;
 	}
-	public void setID(String id) {
+	public void setID(String id) 
+	{
 		this.id = id;
 	}
+//	public void setGroupMarkerName(String groupMarkerName) 
+//	{
+//		this.groupMarkerName = groupMarkerName;
+//	}
 }

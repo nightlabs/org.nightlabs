@@ -285,6 +285,9 @@ extends AbstractEPProcessor
 	 */
 	public int contributeToCoolBar(ICoolBarManager coolBarManager)
 	{
+		if (!perspectiveListenerAdded)
+			earlyContributed = true;
+		
 		if (coolBarManager instanceof SubContributionManager) 
 			((SubCoolBarManager)coolBarManager).setVisible(true);
 			
@@ -693,6 +696,9 @@ extends AbstractEPProcessor
 	 */
 	protected int contribute(IContributionManager contributionManager, String kind)
 	{
+		if (!perspectiveListenerAdded)
+			earlyContributed = true;
+		
 			int visibleContributionItemCount = 0;
 
 			List menuSorted;
@@ -1007,10 +1013,20 @@ extends AbstractEPProcessor
 			if (RCPUtil.getActiveWorkbenchWindow() != null) {
 				RCPUtil.getActiveWorkbenchWindow().addPerspectiveListener(perspectiveListener);
 				perspectiveListenerAdded = true;
+				// if there were early contributions, before a perspective listener could be added
+				// also display the necessary items
+				if (earlyContributed) {					
+					perspectiveChange(RCPUtil.getActiveWorkbenchWindow().getActivePage().getPerspective());
+				}
 			}
 		}
 		return perspectiveListenerAdded;
 	}
+	
+//	protected boolean checkEarlyContribution() {
+//		if (!perspectiveListenerAdded)
+//			earlyContributed = true;			
+//	}
 	
 	/**
 	 * Override this method if you need an extended <code>ActionDescriptor</code>. Note, that you
@@ -1067,21 +1083,21 @@ extends AbstractEPProcessor
 			MenuDescriptor menuDescriptor = new MenuDescriptor(id, label, path);
 			menuRaw.add(menuDescriptor);
 
+//			String separatorName = "";
+//			String groupMarkerName = "";			
 			IConfigurationElement[] children = element.getChildren();
 			for (int i = 0; i < children.length; ++i) {
 				IConfigurationElement child = children[i];
 				if (ELEMENT_NAME_SEPARATOR.equals(child.getName())) {
 					String name = child.getAttribute(ATTRIBUTE_NAME_SEPARATOR_NAME);
 					if (child.getAttribute(ATTRIBUTE_NAME_SEPARATOR_PATH) != null)
-						logger.warn("There is a separator's path specified within a menu. This path will be ignored! You should not specify a path when using a separator inside of a menu! plugin=" + extension.getNamespace()+ " extension-point=" + getExtensionPointID());
-
+						logger.warn("There is a separator's path specified within a menu. This path will be ignored! You should not specify a path when using a separator inside of a menu! plugin=" + extension.getNamespaceIdentifier()+ " extension-point=" + getExtensionPointID());
 					menuDescriptor.addSubItem(new SeparatorDescriptor(name));
 				}
 				else if (ELEMENT_NAME_GROUP_MARKER.equals(child.getName())) {
 					String name = child.getAttribute(ATTRIBUTE_NAME_GROUP_MARKER_NAME);
 					if (child.getAttribute(ATTRIBUTE_NAME_GROUP_MARKER_PATH) != null)
-						logger.warn("There is a group-marker's path specified within a menu. This path will be ignored! You should not specify a path when using a group-marker inside of a menu! plugin=" + extension.getNamespace()+ " extension-point=" + getExtensionPointID());
-
+						logger.warn("There is a group-marker's path specified within a menu. This path will be ignored! You should not specify a path when using a group-marker inside of a menu! plugin=" + extension.getNamespaceIdentifier()+ " extension-point=" + getExtensionPointID());
 					menuDescriptor.addSubItem(new GroupMarkerDescriptor(name));
 				}
 				else
@@ -1147,6 +1163,7 @@ extends AbstractEPProcessor
 					parseBooleanAcceptingNull(visibleInMenubar, true),
 					parseBooleanAcceptingNull(visibleInToolbar, true), parseBooleanAcceptingNull(visibleInContextmenu, true),
 					id);
+//			actionDescriptor.setGroupMarkerName(groupMarkerName);
 			initActionDescriptor(actionDescriptor, extension, element);
 			actionDescriptorsByID.put(id, actionDescriptor);
 			menuRaw.add(actionDescriptor);
@@ -1154,11 +1171,6 @@ extends AbstractEPProcessor
 		else
 			throw new IllegalArgumentException("element.name=\"" + elementName + "\" unknown!");
 	}
-
-//	/**
-//	 * Your ContributionItem MUST 
-//	 */
-//	public static final String METHOD_NAME_CONTRIBUTION_ITEM_SET_ID = "setId"; 
 
 	protected static boolean parseBooleanAcceptingNull(String s, boolean defaultVal)
 	{
@@ -1183,15 +1195,16 @@ extends AbstractEPProcessor
 //	private Map<IContributionManager, Collection<String>> contributionManager2ExtensionIDs = 
 //		new HashMap<IContributionManager, Collection<String>>();
 	
-	private boolean perspectiveListenerAdded = false;
+	protected boolean earlyContributed = false;
+	protected boolean perspectiveListenerAdded = false;
 	protected boolean isAffectedOfPerspectiveExtension() 
 	{			
 		boolean isAffected = PerspectiveExtensionRegistry.sharedInstance().
 			getRegisteredExtensionPointIDs().contains(getExtensionPointID());
-		if (isAffected)
-			logger.info("ExtensionPoint "+getExtensionPointID()+" affected by perspectiveExtension!");
-		else
-			logger.info("ExtensionPoint "+getExtensionPointID()+" NOT affected by perspectiveExtension!");
+//		if (isAffected)
+//			logger.info("ExtensionPoint "+getExtensionPointID()+" affected by perspectiveExtension!");
+//		else
+//			logger.info("ExtensionPoint "+getExtensionPointID()+" NOT affected by perspectiveExtension!");
 		
 		return isAffected;
 	}
@@ -1220,6 +1233,8 @@ extends AbstractEPProcessor
 	
 	protected void perspectiveChange(IPerspectiveDescriptor perspective) 
 	{
+		logger.info("perspectiveChange for perspective "+perspective.getId());
+		
 		activePerspectiveID = perspective.getId();
 		if (isAffectedOfPerspectiveExtension()) 
 		{
@@ -1261,12 +1276,14 @@ extends AbstractEPProcessor
 			perspectiveChange(perspective);
 		}			
 		public void perspectiveChanged(IWorkbenchPage page, IPerspectiveDescriptor perspective, String changeId) {
+			perspectiveChange(perspective);
 		}	
 		public void perspectiveChanged(IWorkbenchPage page, IPerspectiveDescriptor perspective, IWorkbenchPartReference partRef, String changeId) {
 		}	
 		public void perspectiveSavedAs(IWorkbenchPage page, IPerspectiveDescriptor oldPerspective, IPerspectiveDescriptor newPerspective) {			
 		}	
 		public void perspectiveOpened(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
+			perspectiveChange(perspective);
 		}	
 		public void perspectiveDeactivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {			
 		}	
