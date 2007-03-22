@@ -29,7 +29,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
-import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.nightlabs.base.action.registry.AbstractActionRegistry;
 import org.nightlabs.base.action.registry.ActionDescriptor;

@@ -1218,56 +1218,59 @@ extends AbstractEPProcessor
 		return activeExtensionIDs;
 	}
 	
-//	private Collection oldActiveExtensionIDs = Collections.EMPTY_LIST;
 	protected void perspectiveChange(IPerspectiveDescriptor perspective) 
 	{
 		activePerspectiveID = perspective.getId();
-		if (isAffectedOfPerspectiveExtension()) {
-//			oldActiveExtensionIDs = new ArrayList(getActiveExtensionIDs()); 
+		if (isAffectedOfPerspectiveExtension()) 
+		{
+			Collection oldActiveExtensionIDs = Collections.EMPTY_LIST;
+			if (getActiveExtensionIDs() != null)
+				oldActiveExtensionIDs = new ArrayList(getActiveExtensionIDs()); 
 			updateActivePerspectiveExtensions();
-			if (PlatformUI.getWorkbench().getActiveWorkbenchWindow() instanceof WorkbenchWindow) {
+			if (PlatformUI.getWorkbench().getActiveWorkbenchWindow() instanceof WorkbenchWindow) 
+			{
 				WorkbenchWindow workbenchWindow = (WorkbenchWindow) PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 				ICoolBarManager coolBarManager = workbenchWindow.getCoolBarManager();
-				if (coolBarManager != null)
-					contributeToCoolBar(coolBarManager);
+				if (coolBarManager != null) {
+					removeContributionItems(coolBarManager, oldActiveExtensionIDs);
+					contributeToCoolBar(coolBarManager);					
+				}
 				IToolBarManager toolBarManager = workbenchWindow.getToolBarManager();
-				if (toolBarManager != null)
-					contributeToToolBar(toolBarManager);
+				if (toolBarManager != null) {
+					removeContributionItems(toolBarManager, oldActiveExtensionIDs);					
+					contributeToToolBar(toolBarManager);					
+				}
 				IMenuManager menuManager = workbenchWindow.getMenuManager();
-				if (menuManager != null)
-					contributeToMenuBar(menuManager);				
+				if (menuManager != null) {
+					removeContributionItems(menuManager, oldActiveExtensionIDs);
+					contributeToMenuBar(menuManager);					
+				}				
 			}
 		}		
 	}
 	
-	private IPerspectiveListener3 perspectiveListener = new IPerspectiveListener3()
-	{	
-		public void perspectiveChanged(IWorkbenchPage page, IPerspectiveDescriptor perspective, String changeId) {
-//			perspectiveChange(perspective);
+	protected void removeContributionItems(IContributionManager manager, Collection<String> ids) {
+		for (String id : ids) {
+			manager.remove(id);
 		}
+	}
 	
+	private IPerspectiveListener3 perspectiveListener = new IPerspectiveListener3()
+	{
 		public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
 			perspectiveChange(perspective);
-		}
-	
+		}			
+		public void perspectiveChanged(IWorkbenchPage page, IPerspectiveDescriptor perspective, String changeId) {
+		}	
 		public void perspectiveChanged(IWorkbenchPage page, IPerspectiveDescriptor perspective, IWorkbenchPartReference partRef, String changeId) {
-//			perspectiveChange(perspective);
-		}
-	
-		public void perspectiveSavedAs(IWorkbenchPage page, IPerspectiveDescriptor oldPerspective, IPerspectiveDescriptor newPerspective) {
-			
-		}
-	
+		}	
+		public void perspectiveSavedAs(IWorkbenchPage page, IPerspectiveDescriptor oldPerspective, IPerspectiveDescriptor newPerspective) {			
+		}	
 		public void perspectiveOpened(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
-//			perspectiveChange(perspective);
-		}
-	
-		public void perspectiveDeactivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
-			
-		}
-	
+		}	
+		public void perspectiveDeactivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {			
+		}	
 		public void perspectiveClosed(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
-//			perspectiveChange(perspective);
 		}	
 	};
 	
