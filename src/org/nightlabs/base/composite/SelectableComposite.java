@@ -31,6 +31,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -96,7 +98,16 @@ public class SelectableComposite extends XComposite {
 //		button.addSelectionListener()
 //		Display.getDefault().getShells()[0].addListener(SWT.MouseUp, shellMouseListener);
 		Shell[] shs = Display.getDefault().getShells();
-		shs[shs.length-1].addListener(SWT.MouseUp, shellMouseListener);
+		final Shell shell = shs[shs.length-1];
+		shell.addListener(SWT.MouseUp, shellMouseListener);
+		// Marco: I think we need to remove the listener on dispose. Added the listener on 2007-03-27. Is this correct?
+		addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent e)
+			{
+				if (!shell.isDisposed())
+					shell.removeListener(SWT.MouseUp, shellMouseListener);
+			}
+		});
 	}
 	
 
