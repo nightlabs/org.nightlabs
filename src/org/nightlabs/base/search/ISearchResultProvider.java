@@ -79,4 +79,10 @@ public interface ISearchResultProvider<T>
 	 * @return the searchContext
 	 */
 	String getContext();
+	
+	/**
+	 * sets the search text
+	 * @param text the searchText to set
+	 */
+	void setSearchText(String text);
 }

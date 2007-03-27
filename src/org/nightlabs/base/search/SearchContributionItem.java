@@ -38,6 +38,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.action.AbstractContributionItem;
@@ -76,7 +78,7 @@ extends AbstractContributionItem
 		textData.minimumWidth = 100;		
 		searchText.setLayoutData(textData);
 				
-		searchButton = new Button(comp, SWT.NONE);
+		searchButton = new Button(comp, SWT.BOTTOM | SWT.PUSH);
 //		Point buttonSize = searchButton.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 //		GridData buttonData = new GridData(buttonSize.x, buttonSize.y);
 //		buttonData.minimumWidth = buttonSize.x;
@@ -88,49 +90,83 @@ extends AbstractContributionItem
 		searchText.addSelectionListener(buttonSelectionListener);
 		searchButton.addSelectionListener(buttonSelectionListener);
 		
-		searchTypeCombo = new Combo(comp, SWT.NONE);
-		fillSearchTypeCombo();
-		searchTypeCombo.addSelectionListener(comboSelectionListener);
+		Menu menu = new Menu(searchButton);
+		menu.setVisible(true);
+		menu.setEnabled(true);
+		searchTypes = new ArrayList<String>(SearchResultProviderRegistry.sharedInstance().getRegisteredNames());
+		for (String type : searchTypes) {
+			MenuItem menuItem = new MenuItem(menu, SWT.PUSH);
+			menuItem.setText(type);
+			menuItem.addSelectionListener(new SelectionListener(){			
+				public void widgetSelected(SelectionEvent e) {
+					selectedType = ((MenuItem) e.getSource()).getText();
+					searchPressed();
+				}			
+				public void widgetDefaultSelected(SelectionEvent e) {
+					widgetSelected(e);
+				}			
+			});
+		}
+		searchButton.setMenu(menu);
+
+		selectedType = searchTypes.get(0);
+		
+//		searchTypeCombo = new Combo(comp, SWT.NONE);
+//		fillSearchTypeCombo();
+//		searchTypeCombo.addSelectionListener(comboSelectionListener);
 		
 		return comp;
 	}
 
 	private Text searchText;
 	private Button searchButton;	
-	private Combo searchTypeCombo;
-	
 	private List<String> searchTypes = null;
-	private void fillSearchTypeCombo() 
-	{
-		searchTypes = new ArrayList<String>(SearchResultProviderRegistry.sharedInstance().getRegisteredNames());
-		searchTypeCombo.setItems(searchTypes.toArray(new String[searchTypes.size()]));
-		if (searchTypeCombo.getItemCount() > 0)
-			searchTypeCombo.select(0);
-	}
 	
-	private SelectionListener comboSelectionListener = new SelectionListener(){	
-		public void widgetSelected(SelectionEvent e) {
-			 
-		}	
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}	
-	};
+//	private Combo searchTypeCombo;
+//	private void fillSearchTypeCombo() 
+//	{
+//		searchTypes = new ArrayList<String>(SearchResultProviderRegistry.sharedInstance().getRegisteredNames());
+//		searchTypeCombo.setItems(searchTypes.toArray(new String[searchTypes.size()]));
+//		if (searchTypeCombo.getItemCount() > 0)
+//			searchTypeCombo.select(0);
+//	}	
+//	private SelectionListener comboSelectionListener = new SelectionListener(){	
+//		public void widgetSelected(SelectionEvent e) {
+//			 
+//		}	
+//		public void widgetDefaultSelected(SelectionEvent e) {
+//			widgetSelected(e);
+//		}	
+//	};	
+//	protected String getSelectedType() {
+//		return searchTypes.get(searchTypeCombo.getSelectionIndex());
+//	}
+	
+	private String selectedType = null;
+	protected String getSelectedType() {
+		return selectedType;
+	}
+		
+	private void searchPressed() 
+	{
+		String selectedType = getSelectedType();
+		ISearchResultProvider searchResultProvider = SearchResultProviderRegistry.
+			sharedInstance().getSearchResultProvider(selectedType);
+		if (searchResultProvider != null) { 
+			searchResultProvider.setSearchText(searchText.getText());
+			Collection selectedObjects = searchResultProvider.getSelectedObjects();
+			if (selectedObjects != null) {
+				SelectionManager.sharedInstance().notify(new NotificationEvent(
+						SearchContributionItem.this, searchResultProvider.getSelectionZone(), 
+						selectedObjects, searchResultProvider.getResultTypeClass()));
+			}
+		}		
+	}
 	
 	private SelectionListener buttonSelectionListener = new SelectionListener()
 	{	
 		public void widgetSelected(SelectionEvent e) {
-			String selectedType = searchTypes.get(searchTypeCombo.getSelectionIndex());
-			ISearchResultProvider searchResultProvider = SearchResultProviderRegistry.
-				sharedInstance().getSearchResultProvider(selectedType);
-			if (searchResultProvider != null) { 
-				Collection selectedObjects = searchResultProvider.getSelectedObjects();
-				if (selectedObjects != null) {
-					SelectionManager.sharedInstance().notify(new NotificationEvent(
-							SearchContributionItem.this, searchResultProvider.getSelectionZone(), 
-							selectedObjects, searchResultProvider.getResultTypeClass()));
-				}
-			}
+			searchPressed();
 		}	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
