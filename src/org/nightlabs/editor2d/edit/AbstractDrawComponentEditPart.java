@@ -51,6 +51,8 @@ import org.nightlabs.editor2d.util.EditorUtil;
 import org.nightlabs.editor2d.util.J2DUtil;
 import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 
+import sun.security.action.GetBooleanAction;
+
 public abstract class AbstractDrawComponentEditPart 
 extends AbstractGraphicalEditPart
 implements EditorRequestConstants
@@ -58,7 +60,10 @@ implements EditorRequestConstants
 	private static final Logger logger = Logger.getLogger(AbstractDrawComponentEditPart.class);
 	
   public AbstractDrawComponentEditPart(DrawComponent drawComponent) {
-    setModel(drawComponent);
+    setModel(drawComponent);   
+        
+//    drawComponent.clearBounds();
+//    drawComponent.getBounds();
   }
   
   protected Label tooltip = new Label();

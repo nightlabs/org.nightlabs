@@ -51,7 +51,10 @@ extends AbstractDrawComponentContainerEditPart
 	private static final Logger logger = Logger.getLogger(GroupEditPart.class);
 	
 	public GroupEditPart(GroupDrawComponent group) {
-		super(group);		
+		super(group);
+		
+    group.clearBounds();
+    group.getBounds();
 	}
 
 	public GroupDrawComponent getGroupDrawComponent() {
