@@ -32,6 +32,7 @@ import java.io.File;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -605,5 +606,15 @@ public class RCPUtil
 	public File getResourcesWorkspace()
 	{
 		return new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString());
+	}
+	
+	/**
+	 * Returns a {@link File} representation of the given {@link IResource}.
+	 * 
+	 * @param resource The resource to get the {@link File} from.
+	 * @return A {@link File} representation of the given {@link IResource}.
+	 */
+	public static File getResourceAsFile(IResource resource) {
+		return new File(resource.getWorkspace().getRoot().getLocation().toFile(), resource.getFullPath().toOSString());
 	}
 }
