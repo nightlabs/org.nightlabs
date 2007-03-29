@@ -304,10 +304,10 @@ public class SharedImages
 	protected static final ImageDescriptor FLAG_FRANCE_16x16 = 		
 		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "France");
 	
-	protected static Map languageID2ImageDesc;
+	protected static Map<String, ImageDescriptor> languageID2ImageDesc;
 
 	static {
-		languageID2ImageDesc = new HashMap();
+		languageID2ImageDesc = new HashMap<String, ImageDescriptor>();
 		languageID2ImageDesc.put(Locale.ENGLISH.getLanguage(), FLAG_USA_16x16);
 		languageID2ImageDesc.put(Locale.GERMAN.getLanguage(), FLAG_GERMANY_16x16);
 		languageID2ImageDesc.put(Locale.FRENCH.getLanguage(), FLAG_FRANCE_16x16);		

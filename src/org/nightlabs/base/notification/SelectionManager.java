@@ -65,7 +65,7 @@ public class SelectionManager extends NotificationManager
 	 *		value: NotificationEvent event<br/>
 	 * }
 	 */
-	private Map eventsByZone = new HashMap();
+	private Map<String, Map<Class, NotificationEvent>> eventsByZone = new HashMap<String, Map<Class,NotificationEvent>>();
 	private RWLock eventsByZoneMutex = new RWLock("eventsByZoneMutex");
 
 	protected void registerEvent(NotificationEvent event)
@@ -73,7 +73,7 @@ public class SelectionManager extends NotificationManager
 		eventsByZoneMutex.acquireWriteLock();
 		try {
 			String zone = event.getZone();
-			Set zones = new HashSet();
+			Set<String> zones = new HashSet<String>();
 			if (zone != null) {
 				zones.add(null);
 				zones.add(zone);
@@ -86,9 +86,9 @@ public class SelectionManager extends NotificationManager
 			for (Iterator itZones = zones.iterator(); itZones.hasNext(); ) {
 				zone = (String)itZones.next();
 
-				Map eventsByClass = (Map) eventsByZone.get(zone);
+				Map<Class, NotificationEvent> eventsByClass = eventsByZone.get(zone);
 				if (eventsByClass == null) {
-					eventsByClass = new HashMap();
+					eventsByClass = new HashMap<Class, NotificationEvent>();
 					eventsByZone.put(zone, eventsByClass);
 				}
 

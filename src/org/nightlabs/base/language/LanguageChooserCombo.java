@@ -56,7 +56,7 @@ public class LanguageChooserCombo
 	private static final Logger logger = Logger.getLogger(LanguageChooserCombo.class);
 
 	private Combo combo;
-	private List languages = new ArrayList();
+	private List<LanguageCf> languages = new ArrayList<LanguageCf>();
 
 	public LanguageChooserCombo(Composite parent)
 	{

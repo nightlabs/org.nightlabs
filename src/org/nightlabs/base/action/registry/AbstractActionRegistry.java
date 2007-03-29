@@ -40,7 +40,6 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.ContributionItem;
-import org.eclipse.jface.action.CoolBarManager;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
@@ -56,15 +55,12 @@ import org.eclipse.jface.action.SubCoolBarManager;
 import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.IActionBars2;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveListener3;
-import org.eclipse.ui.IPerspectiveListener4;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.WorkbenchWindow;
-import org.eclipse.ui.internal.registry.PerspectiveRegistry;
 import org.nightlabs.base.action.IXContributionItem;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
@@ -121,11 +117,11 @@ extends AbstractEPProcessor
 	/**
 	 * Contains all ActionDescriptors and MenuDescriptors in the order in which they have been read.
 	 */
-	private List menuRaw = new ArrayList();
+	private List<ItemDescriptor> menuRaw = new ArrayList<ItemDescriptor>();
 
-	private List menuSortedForMenubar = null;
-	private List menuSortedForContextmenu = null;
-	private List menuSortedForToolbar = null;
+	private List<ItemDescriptor> menuSortedForMenubar = null;
+	private List<ItemDescriptor> menuSortedForContextmenu = null;
+	private List<ItemDescriptor> menuSortedForToolbar = null;
 
 	protected static final String KIND_MENUBAR = "menubar";
 	protected static final String KIND_CONTEXTMENU = "contextmenu";
@@ -229,7 +225,7 @@ extends AbstractEPProcessor
 	
 		// key: String itemId
 		// value: IXContributionItem
-		Map coolBarItemMap = new HashMap(coolBarItems.length);
+		Map<String, IContributionItem> coolBarItemMap = new HashMap<String, IContributionItem>(coolBarItems.length);
 		for (int i = 0; i < coolBarItems.length; ++i) {
 			IContributionItem coolBarItem = coolBarItems[i];
 			coolBarItemMap.put(coolBarItem.getId(), coolBarItem);
@@ -313,7 +309,7 @@ extends AbstractEPProcessor
 
 		// key: String itemId
 		// value: IXContributionItem
-		Map coolBarItemMap = new HashMap(coolBarItems.length);
+		Map<String, IContributionItem> coolBarItemMap = new HashMap<String, IContributionItem>(coolBarItems.length);
 		for (int i = 0; i < coolBarItems.length; ++i) {
 			IContributionItem coolBarItem = coolBarItems[i];
 			coolBarItemMap.put(coolBarItem.getId(), coolBarItem);
@@ -701,7 +697,7 @@ extends AbstractEPProcessor
 		
 			int visibleContributionItemCount = 0;
 
-			List menuSorted;
+			List<ItemDescriptor> menuSorted;
 			if (KIND_MENUBAR.equals(kind))
 				menuSorted = menuSortedForMenubar;
 			else if (KIND_CONTEXTMENU.equals(kind))
@@ -714,12 +710,12 @@ extends AbstractEPProcessor
 				throw new IllegalArgumentException("kind \"" + kind + "\" invalid!");
 
 			boolean firstRun = menuSorted == null;
-			LinkedList menuRaw = null;
+			LinkedList<ItemDescriptor> menuRaw = null;
 			int lastMenuRawSize = 0;
 			if (firstRun) {
-				menuRaw = new LinkedList(this.menuRaw);
+				menuRaw = new LinkedList<ItemDescriptor>(this.menuRaw);
 				lastMenuRawSize = menuRaw.size();
-				menuSorted = new LinkedList();
+				menuSorted = new LinkedList<ItemDescriptor>();
 			}
 			
 //			contributionManager.removeAll();
@@ -1222,7 +1218,7 @@ extends AbstractEPProcessor
 		return activePerspectiveID;
 	}
 	
-	private Collection<String> activeExtensionIDs = Collections.EMPTY_LIST;
+	private Collection<String> activeExtensionIDs = Collections.emptyList();
 	public Collection<String> getActiveExtensionIDs() 
 	{
 		if (!isAffectedOfPerspectiveExtension()) {
@@ -1238,9 +1234,9 @@ extends AbstractEPProcessor
 		activePerspectiveID = perspective.getId();
 		if (isAffectedOfPerspectiveExtension()) 
 		{
-			Collection oldActiveExtensionIDs = Collections.EMPTY_LIST;
+			Collection<String> oldActiveExtensionIDs = Collections.emptyList();
 			if (getActiveExtensionIDs() != null)
-				oldActiveExtensionIDs = new ArrayList(getActiveExtensionIDs()); 
+				oldActiveExtensionIDs = new ArrayList<String>(getActiveExtensionIDs()); 
 			updateActivePerspectiveExtensions();
 			if (PlatformUI.getWorkbench().getActiveWorkbenchWindow() instanceof WorkbenchWindow) 
 			{

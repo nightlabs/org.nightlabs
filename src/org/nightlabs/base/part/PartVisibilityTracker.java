@@ -185,10 +185,10 @@ public class PartVisibilityTracker {
 		private IWorkbenchPart part;
 		private IWorkbenchPartReference partRef;
 		private int status;
-		private List listeners = new LinkedList();
+		private List<PartVisibilityListener> listeners = new LinkedList<PartVisibilityListener>();
 		
 		private boolean haveDelayedHideStatusChanges = false;
-		private boolean doNotification = false;
+//		private boolean doNotification = false;
 		
 		public PartStatus(IWorkbenchPart part) {
 			this.part = part;
@@ -268,7 +268,7 @@ public class PartVisibilityTracker {
 		 *
 		 */
 		public void notifyListeners(int newStatus) {
-			for (Iterator iter = new LinkedList(listeners).iterator(); iter.hasNext();) {
+			for (Iterator iter = new LinkedList<PartVisibilityListener>(listeners).iterator(); iter.hasNext();) {
 				PartVisibilityListener listener = (PartVisibilityListener) iter.next();
 				switch (newStatus) {
 					case PART_STATUS_HIDDEN:
@@ -308,7 +308,7 @@ public class PartVisibilityTracker {
 	 * key: IWorkbenchPart part<br/>
 	 * value: PartStatus satus
 	 */
-	private Map partStati = new HashMap();
+	private Map<IWorkbenchPart, PartStatus> partStati = new HashMap<IWorkbenchPart, PartStatus>();
 
 	/**
 	 * 

@@ -35,6 +35,8 @@ import org.nightlabs.language.LanguageCf;
  */
 public class LanguageChangeEvent implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private LanguageChooser languageChooser;
 	private LanguageCf oldLanguage;
 	private LanguageCf newLanguage;

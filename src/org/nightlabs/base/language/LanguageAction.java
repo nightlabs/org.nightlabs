@@ -26,6 +26,8 @@
 
 package org.nightlabs.base.language;
 
+import java.util.Locale;
+
 import org.eclipse.jface.action.Action;
 
 import org.nightlabs.base.resource.SharedImages;
@@ -53,7 +55,8 @@ extends Action
 
 	public void run() 
 	{
-		langMan.setCurrentLanguageID(languageID);
+		Locale.setDefault(new Locale(languageID));
+//		langMan.setCurrentLanguageID(languageID);
 	}
 	
 	

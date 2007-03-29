@@ -34,6 +34,8 @@ import org.nightlabs.config.InitException;
  */
 public class ErrorReportSenderCfMod extends ConfigModule
 {
+	private static final long serialVersionUID = 1L;
+	
 	private String errorReportSenderClass;
 	
 	public ErrorReportSenderCfMod()

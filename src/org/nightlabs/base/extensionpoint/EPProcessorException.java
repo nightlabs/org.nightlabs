@@ -29,9 +29,13 @@ package org.nightlabs.base.extensionpoint;
 import org.eclipse.core.runtime.IExtension;
 
 /**
+ * Thrown when an error occurs during the processing of an extension-point.
+ * 
  * @author Alexander Bieber
  */
 public class EPProcessorException extends Exception {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 

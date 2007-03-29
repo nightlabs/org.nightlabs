@@ -58,7 +58,7 @@ public class FadeableComposite extends XComposite implements Fadeable
 	 * key: {@link Control} control<br/>
 	 * value: Boolean enabled
 	 */
-	private Map controlEnabled = new HashMap();
+	private Map<Control, Boolean> controlEnabled = new HashMap<Control, Boolean>();
 	private boolean getControlOriginalEnabled(Control control)
 	{
 		Boolean b = (Boolean)controlEnabled.get(control);

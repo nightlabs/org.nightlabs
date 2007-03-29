@@ -42,7 +42,7 @@ extends XCellEditor
 {
 	private List<T> types = null;
 	private ILabelProvider labelProvider = null;	
-	private CComboComposite comboComposite = null;
+	private CComboComposite<T> comboComposite = null;
 
 	public GenericComboBoxCellEditor(Composite parent, List<T> types, ILabelProvider labelProvider) 
 	{
@@ -71,7 +71,7 @@ extends XCellEditor
 	
 	@Override
 	protected Control createControl(Composite parent) {
-		comboComposite = new CComboComposite(types, labelProvider, parent, SWT.NONE, comboStyle);
+		comboComposite = new CComboComposite<T>(types, labelProvider, parent, SWT.NONE, comboStyle);
 		return comboComposite;
 	}
 
@@ -85,9 +85,10 @@ extends XCellEditor
 		comboComposite.setFocus();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void doSetValue(Object value) {
-		comboComposite.selectElement(value);
+		comboComposite.selectElement((T) value);
 	}
 	
 }

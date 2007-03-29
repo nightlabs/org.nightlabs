@@ -34,7 +34,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.swt.widgets.Display;
-
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 
@@ -53,13 +52,13 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 	 */
 	private static final Logger logger = Logger.getLogger(ExceptionHandlerRegistry.class);
 	
-	private Map exceptionHandlers = new HashMap();
+	private Map<String, IExceptionHandler> exceptionHandlers = new HashMap<String, IExceptionHandler>();
 
 	// Dummy object to provide thread safety
 	// IMPROVE other synchronization strategy
 	private Object synchronizedObject = new Object();
 	
-	protected Map getExceptionHandlers(){
+	protected Map<String, IExceptionHandler> getExceptionHandlers(){
 		return exceptionHandlers;
 	}
 	
@@ -71,7 +70,7 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 //				throw new DuplicateHandlerRegistryException("An exceptionHandler was already defined for "+targetType);
 			logger.debug("An exceptionHandler was already defined for "+targetType+" !");
 			
-			exceptionHandlers.put(targetType,handler);
+			exceptionHandlers.put(targetType, handler);
 		}
 	}
 	
@@ -246,7 +245,7 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 	private boolean handleException(final Thread thread, final Throwable exception, boolean async)
 	{
 		// TODO: Do we need to find out on which thread we are, or is syncExec intelligent enough?
-		Throwable handlingException = null;
+//		Throwable handlingException = null;
 		final ExceptionHandlerSearchResult handlerSearch = sharedInstance().searchHandler(exception);
 		if (handlerSearch.getHandler() != null){
 			try {
@@ -291,7 +290,7 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 		try{
 			if (element.getName().toLowerCase().equals("exceptionhandler")) {
 				String targetType = element.getAttribute("targetType");
-				String handlerClassStr = element.getAttribute("class");
+//				String handlerClassStr = element.getAttribute("class");
 				IExceptionHandler handler = (IExceptionHandler) element.createExecutableExtension("class");
 				if (!IExceptionHandler.class.isAssignableFrom(handler.getClass()))
 					throw new IllegalArgumentException("Specified class for element exceptionHandler must implement "+IExceptionHandler.class.getName()+". "+handler.getClass().getName()+" does not.");

@@ -40,7 +40,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.nightlabs.base.NLBasePlugin;
-import org.nightlabs.base.action.ContributionItemSetRegistry;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlingThreadGroup;
 import org.nightlabs.base.exceptionhandler.SaveRunnableRunner;
 import org.nightlabs.base.extensionpoint.RemoveExtensionRegistry;

@@ -35,11 +35,13 @@ import org.nightlabs.config.InitException;
 public class RecentFileCfMod 
 extends ConfigModule
 {
-	protected List recentFileNames = null;
-	public List getRecentFileNames() {		
+	private static final long serialVersionUID = 1L;
+	
+	protected List<String> recentFileNames = null;
+	public List<String> getRecentFileNames() {		
 		return recentFileNames;
 	}
-	public void setRecentFileNames(List recentFileNames) {
+	public void setRecentFileNames(List<String> recentFileNames) {
 		this.recentFileNames = recentFileNames;
 	}
 	
@@ -55,7 +57,7 @@ extends ConfigModule
 	throws InitException 
 	{
 		if (recentFileNames == null)
-			recentFileNames = new ArrayList();				
+			recentFileNames = new ArrayList<String>();				
 	}
 		
 }

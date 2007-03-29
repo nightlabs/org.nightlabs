@@ -27,10 +27,14 @@
 package org.nightlabs.base.exceptionhandler;
 
 /**
+ * Thrown when a duplicate registration of an ExceptionHandler is found.
+ * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
 public class DuplicateHandlerRegistryException extends RuntimeException {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 

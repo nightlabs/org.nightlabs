@@ -37,8 +37,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-
-import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.custom.ColorCombo;
 
 /**
@@ -48,7 +46,7 @@ import org.nightlabs.base.custom.ColorCombo;
  */
 public abstract class ComboContributionItem extends XContributionItem {
 
-	private XComposite wrapper;
+//	private XComposite wrapper;
 	private ColorCombo combo;
 	private List entries;
 
@@ -167,7 +165,7 @@ public abstract class ComboContributionItem extends XContributionItem {
 		return updating;
 	}
 	
-	private List nullAddedSelListener = new LinkedList();
+	private List<SelectionListener> nullAddedSelListener = new LinkedList<SelectionListener>();
 	
 	/**
 	 * Call this to add a SelectionListener to the Combo. This is neccessary

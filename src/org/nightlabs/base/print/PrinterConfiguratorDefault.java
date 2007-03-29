@@ -26,7 +26,6 @@
 
 package org.nightlabs.base.print;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.composite.XComposite;
@@ -39,7 +38,7 @@ import org.nightlabs.print.PrinterInterface;
  */
 public class PrinterConfiguratorDefault implements PrinterConfigurator {
 
-	private static Logger logger = Logger.getLogger(PrinterConfiguratorDefault.class); 
+//	private static Logger logger = Logger.getLogger(PrinterConfiguratorDefault.class); 
 	
 	private PrinterConfiguration initialConfiguration;
 	private PrinterConfiguratorComposite configuratorComposite;

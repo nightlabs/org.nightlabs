@@ -61,8 +61,8 @@ import org.nightlabs.base.composite.XComposite.LayoutMode;
  */
 public class HorizontalMultiColumnCompositeList extends Composite implements ISelectionProvider {
 
-	private List children = new ArrayList();
-	private Set selectedChildren = new HashSet();
+	private List<SelectableComposite> children = new ArrayList<SelectableComposite>();
+	private Set<SelectableComposite> selectedChildren = new HashSet<SelectableComposite>();
 	/**
 	 * SelectionListener to add and remove to selectedChildren 
 	 */
@@ -89,8 +89,6 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 				}
 			}
 		}
-		public void compositeDoubleClicked(SelectableComposite composite) {
-		}
 	};
 	
 	/**
@@ -116,7 +114,7 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 		}
 	};
 	
-	private Set keySet = new HashSet();
+	private Set<Integer> keySet = new HashSet<Integer>();
 	private KeyListener keyListener = new KeyListener() {
 		public void keyPressed(KeyEvent evt) {
 			keySet.add(new Integer(evt.keyCode));
@@ -372,7 +370,7 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 		int carrierHeight = carrierWrapper.getSize().y;
 		int width = carrierWrapper.getSize().x;
 		int columnWidth = (width - (2*horizontalSpacing)) / numColumns;
-		int compositeWidth = columnWidth - (horizontalSpacing / 2);
+//		int compositeWidth = columnWidth - (horizontalSpacing / 2);
 		columnScrollInc = columnWidth + (horizontalSpacing / 2);
 		int yRun = verticalMargin;
 		int xRun = horizontalSpacing;

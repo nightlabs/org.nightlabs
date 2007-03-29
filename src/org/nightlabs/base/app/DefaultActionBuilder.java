@@ -27,6 +27,7 @@
 package org.nightlabs.base.app;
 
 import java.beans.PropertyChangeEvent;
+
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -540,7 +541,7 @@ extends ActionBarAdvisor
 	{
 		NewFileRegistry newFileRegistry = NewFileRegistry.sharedInstance(); 
 		Map categoryID2Actions = newFileRegistry.getCategory2Actions();
-		List defaultActions = new ArrayList();
+		List<INewFileAction> defaultActions = new ArrayList<INewFileAction>();
 		for (Iterator it = categoryID2Actions.keySet().iterator(); it.hasNext(); ) 
 		{
 			String categoryID = (String) it.next();

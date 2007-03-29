@@ -45,6 +45,8 @@ import org.nightlabs.io.DataBuffer;
 public class ErrorReport
 implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private Throwable thrownException;
 	private Throwable triggerException;
 	private String userComment;

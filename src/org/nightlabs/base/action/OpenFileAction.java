@@ -84,7 +84,7 @@ extends Action
 		}
 	}	
 	
-	protected List getRecentFileNames() {
+	protected List<String> getRecentFileNames() {
 		if (historyConfig != null)
 			return historyConfig.getRecentFileNames();
 		
@@ -176,7 +176,7 @@ extends Action
 	protected String[] getFileExtensions(IEditorRegistry editorRegistry) 
 	{
 		IFileEditorMapping[] mappings = editorRegistry.getFileEditorMappings();
-		List extensions = new ArrayList(mappings.length);		
+		List<String> extensions = new ArrayList<String>(mappings.length);		
 		for (int mapCount=0; mapCount<mappings.length; mapCount++) {
 			IFileEditorMapping map = mappings[mapCount];
 			String extension = map.getExtension();			

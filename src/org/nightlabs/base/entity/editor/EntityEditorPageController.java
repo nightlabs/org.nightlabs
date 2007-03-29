@@ -91,6 +91,8 @@ implements IEntityEditorPageController
 		
 		private EntityEditorPageController controller;
 		private CompoundProgressMonitor cMonitor;
+		private Throwable loadException;
+		private boolean loaded = false;
 		
 		public LoadJob(EntityEditorPageController controller) {
 			super("Loading entities ...");
@@ -103,10 +105,12 @@ implements IEntityEditorPageController
 			try {
 				controller.doLoad(cMonitor);
 				controller.setLoaded(true);
+				this.loaded = true;
 			} catch (Throwable t) {
 				// Workaround as we can not get a grip of exceptions within jobs
-				controller.setLoadException(t);
+				this.loadException = t;
 				controller.setLoaded(false);
+				this.loaded = false;
 				return Status.CANCEL_STATUS; // TODO: Write error status
 			}
 			synchronized (controller.getMutex()) {
@@ -117,6 +121,14 @@ implements IEntityEditorPageController
 		
 		public CompoundProgressMonitor getCompoundProgressMonitor() {
 			return cMonitor;
+		}
+		
+		public Throwable getLoadException() {
+			return loadException;
+		}
+		
+		public boolean isLoaded() {
+			return loaded;
 		}
 	}
 	
@@ -142,10 +154,6 @@ implements IEntityEditorPageController
 	 */
 	private LoadJob loadJob = null;
 	
-	/**
-	 * The error that might have occured during background load.
-	 */
-	private Throwable loadException = null;
 	/**
 	 * Whether the load job is currently running
 	 */
@@ -230,13 +238,6 @@ implements IEntityEditorPageController
 	 */
 	protected void setLoaded(boolean loaded) {
 		this.loaded = loaded;
-	}
-	/**
-	 * Set the loading error.
-	 * @param loadException Loading error.
-	 */
-	protected void setLoadException(Throwable loadException) {
-		this.loadException = loadException;
 	}
 	/**
 	 * Return the mutex used to synchronize the background loading.

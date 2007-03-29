@@ -53,7 +53,7 @@ extends AbstractLanguageChooser
 	private static final Logger logger = Logger.getLogger(LanguageChooserImageCombo.class);
 	
 	protected ColorCombo combo;
-	protected List languages = new ArrayList();
+	protected List<LanguageCf> languages = new ArrayList<LanguageCf>();
 	
 	public LanguageChooserImageCombo(Composite parent) {
 		this(parent, true, true);

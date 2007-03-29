@@ -31,7 +31,6 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
-
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 
@@ -60,7 +59,7 @@ extends AbstractEPProcessor
 		return sharedInstance;
 	}	
 		
-	protected Map editorID2PerspectiveID = new HashMap();
+	protected Map<String, String> editorID2PerspectiveID = new HashMap<String, String>();
 	public String getPerspectiveID(String editorID) 
 	{
 		checkProcessing();

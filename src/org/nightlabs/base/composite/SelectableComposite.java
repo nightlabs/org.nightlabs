@@ -169,7 +169,7 @@ public class SelectableComposite extends XComposite {
 		return compositeListIdx;
 	}
 	
-	private Set selectionListeners = new HashSet();
+	private Set<SelectableCompositeListener> selectionListeners = new HashSet<SelectableCompositeListener>();
 	
 	protected void notifySelectionListeners() {
 		notifySelectionListeners(0);

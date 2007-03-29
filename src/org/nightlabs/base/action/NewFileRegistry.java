@@ -54,7 +54,7 @@ extends AbstractEPProcessor
 		return sharedInstance;
 	}
 	
-	protected Map category2Actions = new HashMap();
+	protected Map<String, List<INewFileAction>> category2Actions = new HashMap<String, List<INewFileAction>>();
 	
 	/**
 	 * 
@@ -119,11 +119,11 @@ extends AbstractEPProcessor
 					
 //					category2Actions.put(categoryID, action);
 					if (category2Actions.containsKey(categoryID)) {
-						List actions = (List) category2Actions.get(categoryID);
+						List<INewFileAction> actions = category2Actions.get(categoryID);
 						actions.add(action);
 					}
 					else {
-						List actions = new LinkedList();
+						List<INewFileAction> actions = new LinkedList<INewFileAction>();
 						actions.add(action);
 						category2Actions.put(categoryID, actions);						
 					}					
@@ -153,7 +153,7 @@ extends AbstractEPProcessor
 	protected class CategoryRegistry 
 	extends AbstractEPProcessor 
 	{ 
-		protected Map categoryID2name = new HashMap();
+		protected Map<String, String> categoryID2name = new HashMap<String, String>();
 		
 		public String getExtensionPointID() {
 			return EXTENSION_POINT_ID;
@@ -162,7 +162,7 @@ extends AbstractEPProcessor
 		public String getCategoryName(String categoryID) 
 		{
 			checkProcessing();
-			return (String) categoryID2name.get(categoryID);
+			return categoryID2name.get(categoryID);
 		}
 
 		public void processElement(IExtension extension, IConfigurationElement element) 

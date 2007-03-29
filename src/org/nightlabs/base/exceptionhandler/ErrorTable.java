@@ -122,7 +122,7 @@ public class ErrorTable extends AbstractTableComposite
 	public void setSelectedItem(ErrorItem toBeSelected)
 	{
 		TableItem[] tableItems = getTable().getItems();
-		ErrorItem current;
+//		ErrorItem current;
 		for(int i = 0; i < tableItems.length; i++)
 		{
 			if(((ErrorItem)tableItems[i].getData()) == toBeSelected)

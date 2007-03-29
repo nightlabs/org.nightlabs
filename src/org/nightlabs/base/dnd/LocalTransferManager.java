@@ -40,7 +40,7 @@ public class LocalTransferManager {
 	 * key String: objectkey
 	 * value SoftReferene: A SoftReferene to the object held here
 	 */
-	private Map transferObjects = new HashMap();
+	private Map<String, WeakReference<Object>> transferObjects = new HashMap<String, WeakReference<Object>>();
 	
 	public LocalTransferManager() {
 		super();
@@ -53,7 +53,7 @@ public class LocalTransferManager {
 			while (transferObjects.containsKey(key))
 				key = Integer.toHexString(object.hashCode())+"_"+Long.toHexString(System.currentTimeMillis());
 			
-			WeakReference softReference = new WeakReference(object);
+			WeakReference<Object> softReference = new WeakReference<Object>(object);
 			
 			transferObjects.put(key, softReference);
 			return key;

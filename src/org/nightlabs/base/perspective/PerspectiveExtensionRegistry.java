@@ -46,7 +46,7 @@ public class PerspectiveExtensionRegistry
 extends AbstractEPProcessor 
 {
 	private static final Logger logger = Logger.getLogger(PerspectiveExtensionRegistry.class);
-	
+
 	private static PerspectiveExtensionRegistry sharedInstance;
 	public static PerspectiveExtensionRegistry sharedInstance() {
 		if (sharedInstance == null) {
@@ -57,17 +57,17 @@ extends AbstractEPProcessor
 		}
 		return sharedInstance;
 	}
-	
+
 	protected PerspectiveExtensionRegistry() {
-		
+
 	}
-	
+
 	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.perspectiveExtension";
 	public static final String ELEMENT_PERSPECTIVE_EXTENSION = "perspectiveExtension";
 	public static final String ATTRIBUTE_TARGET_ID = "targetID";
 	public static final String ELEMENT_CONTRIBUTION_ITEM_SET_ID = "contributionItemSetID";
 	public static final String ATTRIBUTE_ID = "id";
-	
+
 	@Override
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;
@@ -99,7 +99,7 @@ extends AbstractEPProcessor
 						extensionIDs.add(id);
 						extensionPointID2ExtensionIDs.put(extensionPointID, extensionIDs);
 						perspectiveID2ExtensionPointID2ExtensionID.put(targetID, extensionPointID2ExtensionIDs);
-						
+
 						Map<String, Collection<String>> perspectiveID2ExtensionIDs = 
 							extensionPointID2PerspectiveID2extensionIDs.get(extensionPointID);
 						if (perspectiveID2ExtensionIDs == null)
@@ -123,19 +123,19 @@ extends AbstractEPProcessor
 	public Map<String, Collection<String>> getExtensionPointID2ExtensionIDs(String perspectiveID) 
 	{
 		checkProcessing(false);
-		
+
 		if (perspectiveID2ExtensionPointID2ExtensionID.get(perspectiveID) != null)
 			return Collections.unmodifiableMap(
 					perspectiveID2ExtensionPointID2ExtensionID.get(perspectiveID));
 		else
-			return Collections.EMPTY_MAP;
+			return Collections.emptyMap();
 	}
-	
+
 	private Collection<String> registeredExtensionPointIDs = null;
 	public Collection<String> getRegisteredExtensionPointIDs() 
 	{
 		checkProcessing(false);
-		
+
 		if (registeredExtensionPointIDs == null) 
 		{
 			registeredExtensionPointIDs = new HashSet<String>();
@@ -147,17 +147,17 @@ extends AbstractEPProcessor
 		}
 		return registeredExtensionPointIDs;
 	}
-	
+
 	private Map<String, Map<String, Collection<String>>> extensionPointID2PerspectiveID2extensionIDs = 
 		new HashMap<String, Map<String,Collection<String>>>();	
 	public Map<String, Collection<String>> getPerspectiveID2ExtensionIDs(String extensionPointID) 
 	{
 		checkProcessing(false);
-		
+
 		if (extensionPointID2PerspectiveID2extensionIDs.get(extensionPointID) != null)
 			return Collections.unmodifiableMap(
 					extensionPointID2PerspectiveID2extensionIDs.get(extensionPointID));
 		else
-			return Collections.EMPTY_MAP;
+			return Collections.emptyMap();
 	}
 }

@@ -195,12 +195,12 @@ public class CurrencyEdit extends XComposite
 		return parseException;
 	}
 
-	private LinkedList modifyListeners = null;
+	private LinkedList<ModifyListener> modifyListeners = null;
 
 	public void addModifyListener(ModifyListener modifyListener)
 	{
 		if (modifyListeners == null)
-			modifyListeners = new LinkedList();
+			modifyListeners = new LinkedList<ModifyListener>();
 
 		modifyListeners.add(modifyListener);
 	}

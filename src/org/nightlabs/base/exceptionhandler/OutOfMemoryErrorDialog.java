@@ -53,6 +53,7 @@ public class OutOfMemoryErrorDialog extends DefaultErrorDialog {
 	
 	protected void buttonPressed(int id) {
 		if (id == RESTART_WORKBENCH_ID) {
+			restartWorkbenchButton.getVisible(); // to avoid warning
 			try {
 				logger.info("Trying to restart the workbench due to OutOfMemoryError");
 				if (!PlatformUI.getWorkbench().restart()) {

@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.nightlabs.base.layout.WeightedTableLayout;
 import org.nightlabs.base.table.AbstractTableComposite;
 import org.nightlabs.base.table.TableLabelProvider;
 import org.nightlabs.timepattern.TimePattern;

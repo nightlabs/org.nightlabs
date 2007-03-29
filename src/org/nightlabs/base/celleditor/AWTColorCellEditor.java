@@ -48,7 +48,7 @@ extends DialogCellEditor
   /*
 	 * The default extent in pixels.
 	 */
-	private static final int DEFAULT_EXTENT = 16;
+//	private static final int DEFAULT_EXTENT = 16;
 	
 	/**
 	 * Gap between between image and text in pixels.

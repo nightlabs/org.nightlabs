@@ -43,6 +43,7 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.nightlabs.base.entity.editor.EntityEditorPageController.LoadJob;
 
 /**
  * <p>Controller used by {@link EntityEditor} to hold the
@@ -257,6 +258,12 @@ public class EntityEditorController
 		public void done(IJobChangeEvent event) {
 			runningJobs--;
 			runPossibleJobs();
+			Job job = event.getJob();
+			if (job != null && (job instanceof LoadJob)) {
+				LoadJob loadJob = (LoadJob) job;
+				if (!loadJob.isLoaded() && loadJob.getLoadException() != null)
+					throw new RuntimeException(loadJob.getLoadException());
+			}
 		}
 		public void running(IJobChangeEvent event) {
 		}

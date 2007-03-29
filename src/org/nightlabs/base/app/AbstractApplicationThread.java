@@ -125,8 +125,8 @@ extends Thread
 			throw new RuntimeException(e);
 		}
 		finally {
-			synchronized(getApplication().getMutex()) {
-				getApplication().getMutex().notifyAll();
+			synchronized(AbstractApplication.getMutex()) {
+				AbstractApplication.getMutex().notifyAll();
 			}
 		}
 	}

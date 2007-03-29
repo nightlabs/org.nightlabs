@@ -30,6 +30,7 @@ import java.net.URL;
 import org.nightlabs.base.wizard.DynamicPathWizard;
 
 /**
+ * TODO: What information is this for ?!?
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
@@ -45,7 +46,7 @@ extends DynamicPathWizard
 
 	@Override
 	public boolean performFinish() {
-		return false;
+		return this.url != null;
 	}
 
 }

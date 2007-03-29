@@ -41,7 +41,7 @@ public abstract class AbstractLanguageChooser
 	extends XComposite
 	implements LanguageChooser
 {
-	private List languageChangeListeners = new LinkedList();
+	private List<LanguageChangeListener> languageChangeListeners = new LinkedList<LanguageChangeListener>();
 
 	/**
 	 * @param parent

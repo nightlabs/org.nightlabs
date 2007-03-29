@@ -30,8 +30,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.celleditor.XSpinnerCellEditor;
 
-import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
-
 /**
  * @author Daniel.Mazurek <at> Nightlabs <dot> de
  *

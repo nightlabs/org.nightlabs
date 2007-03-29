@@ -309,10 +309,10 @@ extends XComposite
 		int numberOfAfterCommaDigits = 2;
 		label.setText(
 				NLBasePlugin.getResourceString("composite.printPreview.width.label") + " = " + 
-				Utils.shortenDouble(getPageWidth(getCurrentUnit()), numberOfAfterCommaDigits) + " " +
+				Utils.truncateDouble(getPageWidth(getCurrentUnit()), numberOfAfterCommaDigits) + " " +
 				getCurrentUnit().getUnitSymbol() + ", " +
 				NLBasePlugin.getResourceString("composite.printPreview.height.label") + " = " +
-				Utils.shortenDouble(getPageHeight(getCurrentUnit()), numberOfAfterCommaDigits) + " " + 
+				Utils.truncateDouble(getPageHeight(getCurrentUnit()), numberOfAfterCommaDigits) + " " + 
 				getCurrentUnit().getUnitSymbol());
 	}
 	

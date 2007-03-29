@@ -54,7 +54,7 @@ implements ISelectionSupport
 	 * @return the Base Class which determines which objects are allowed
 	 * in the selection 
 	 */
-	public abstract Class getSelectionClass();
+	public abstract Class<? extends Object> getSelectionClass();
 	
 	/**
 	 * 

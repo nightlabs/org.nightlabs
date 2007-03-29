@@ -35,7 +35,7 @@ import org.nightlabs.language.LanguageCf;
 public abstract class AbstractSimpleLanguageChooser 
 implements LanguageChooser
 {
-	protected List languageChangeListeners = new LinkedList();
+	protected List<LanguageChangeListener> languageChangeListeners = new LinkedList<LanguageChangeListener>();
 	protected LanguageCf oldLanguage = null;
 	
 	public AbstractSimpleLanguageChooser() {

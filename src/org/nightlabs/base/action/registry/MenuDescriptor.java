@@ -38,7 +38,7 @@ public class MenuDescriptor extends ItemDescriptor
 	/**
 	 * A List with instances of either SeparatorDescriptor or GroupMarkerDescriptor
 	 */
-	private List subItems = new ArrayList();
+	private List<ItemDescriptor> subItems = new ArrayList<ItemDescriptor>();
 
 	public void addSubItem(ItemDescriptor item)
 	{

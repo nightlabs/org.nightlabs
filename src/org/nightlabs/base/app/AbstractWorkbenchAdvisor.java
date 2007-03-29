@@ -26,6 +26,8 @@
 
 package org.nightlabs.base.app;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
@@ -56,7 +58,7 @@ extends WorkbenchAdvisor
 		try {
 			application = initApplication();
 			try {
-				getApplication().initializeLogging();
+				AbstractApplication.initializeLogging();
 			} catch (Throwable t) {
 				System.out.println("Could not initialize logging !!!");
 			}  		
@@ -111,7 +113,7 @@ extends WorkbenchAdvisor
 	throws ConfigException
 	{
 //		initialize the Config
-		Config.createSharedInstance("config.xml", true, getApplication().getConfigDir());		
+		Config.createSharedInstance(new File(AbstractApplication.getConfigDir(), "config.xml"), true);		
 	}	
 
 	/**
@@ -169,6 +171,6 @@ extends WorkbenchAdvisor
 	 * @return the WorkbenchWindowAdvisor for this WorkbenchAdvisor
 	 */
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
-		return new DefaultWorkbenchWindowAdvisor(configurer, getApplication().getApplicationName());
+		return new DefaultWorkbenchWindowAdvisor(configurer, AbstractApplication.getApplicationName());
 	}		
 }

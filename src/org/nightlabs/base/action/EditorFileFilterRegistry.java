@@ -42,7 +42,7 @@ extends AbstractEPProcessor
 {
 	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.editorfilefilter";
 
-	private List patterns = new ArrayList();
+	private List<String> patterns = new ArrayList<String>();
 	
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;

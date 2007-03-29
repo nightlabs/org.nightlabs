@@ -26,28 +26,21 @@
 
 package org.nightlabs.base.tree;
 
-import java.text.Collator;
 import java.util.List;
-import java.util.Locale;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.table.GenericInvertViewerSorter;
-import org.nightlabs.base.table.InvertableStringViewerSorter;
 
 /**
  * A composite with a {@link TreeViewer} to be used as base for tree-composites.
