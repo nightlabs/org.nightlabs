@@ -152,10 +152,12 @@ extends AbstractContributionItem
 		if (searchResultProvider != null) { 
 			searchResultProvider.setSearchText(searchText.getText());
 			Collection selectedObjects = searchResultProvider.getSelectedObjects();
+			Collection<Class> subjectClassesToClear = new ArrayList<Class>();
+			subjectClassesToClear.add(searchResultProvider.getResultTypeClass());
 			if (selectedObjects != null) {
 				SelectionManager.sharedInstance().notify(new NotificationEvent(
 						SearchContributionItem.this, searchResultProvider.getSelectionZone(), 
-						selectedObjects, searchResultProvider.getResultTypeClass()));
+						selectedObjects, subjectClassesToClear));
 			}
 		}		
 	}
