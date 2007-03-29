@@ -26,7 +26,6 @@
 
 package org.nightlabs.jdo.search;
 
-import org.nightlabs.j2ee.InitialContextProvider;
 
 
 /**
@@ -47,5 +46,5 @@ public interface SearchResultFetcher {
 	 * @param criteriaBuilder
 	 * @param login
 	 */
-	public void searchTriggered(SearchFilterProvider filterProvider, InitialContextProvider login);
+	public void searchTriggered(SearchFilterProvider filterProvider);
 }

@@ -81,7 +81,7 @@ public class SelectionNotificationProxy implements ISelectionChangedListener
 
 	private Set<Class> managedClasses = new HashSet<Class>();
 
-	private static final List EMPTY_LIST = Collections.unmodifiableList(new LinkedList());
+	private static final List EMPTY_LIST = Collections.unmodifiableList(new LinkedList<Class>());
 
 	public void selectionChanged(SelectionChangedEvent event) 
 	{

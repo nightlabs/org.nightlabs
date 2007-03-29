@@ -39,7 +39,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
@@ -53,7 +52,7 @@ public class SearchFilterItemList
 	extends ScrolledComposite {
 	
 	private XComposite listWrapper;
-	private List searchFilterItemEditors = new ArrayList();
+	private List<SearchFilterItemEditor> searchFilterItemEditors = new ArrayList<SearchFilterItemEditor>();
 	
 	public SearchFilterItemList(Composite parent, int style) {
 		super(parent, style | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -141,7 +140,7 @@ public class SearchFilterItemList
 			
 			itemEditor.getControl(wrapper);
 			searchFilterItemEditors.add(itemEditor);
-			SearchFilterItemEditorCloser closer = new SearchFilterItemEditorCloser(wrapper,SWT.NONE,SearchFilterItemList.this,itemEditor);
+			new SearchFilterItemEditorCloser(wrapper,SWT.NONE,SearchFilterItemList.this,itemEditor);
 			SearchFilterItemList.this.setMinSize(listWrapper.computeSize(SWT.DEFAULT,SWT.DEFAULT));
 //			listWrapper.setSize(listWrapper.computeSize(SWT.DEFAULT,SWT.DEFAULT));
 			listWrapper.layout();

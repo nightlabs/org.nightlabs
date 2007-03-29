@@ -29,8 +29,6 @@ package org.nightlabs.jdo.search;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-import org.nightlabs.j2ee.InitialContextProvider;
-
 /**
  * SearchFilterProvider providing a changable list of SearchFilterItems
  * for the search. The class has to be instatiated with a {@link org.nightlabs.jdo.search.SearchFilterItemListMutator}
@@ -55,7 +53,6 @@ public abstract class AbstractItemBasedSearchFilterProvider implements SearchFil
 	protected SearchFilterItemListMutator listMutator;
 	protected AbstractItemBasedSearchFilterProviderComposite providerComposite;
 	protected SearchResultFetcher resultFetcher;
-	protected InitialContextProvider login;
 	
 	/**
 	 * Used to create custom instances of implementors of SearchFilter.<br/>
@@ -79,9 +76,8 @@ public abstract class AbstractItemBasedSearchFilterProvider implements SearchFil
 		this.listMutator = listMutator;
 	}
 
-	public void setSearchResultFetcher(SearchResultFetcher resultFetcher, InitialContextProvider login) {
+	public void setSearchResultFetcher(SearchResultFetcher resultFetcher) {
 		this.resultFetcher = resultFetcher;
-		this.login = login;
 	}
 	
 	public void setListMutator(SearchFilterItemListMutator listMutator) {
@@ -93,8 +89,7 @@ public abstract class AbstractItemBasedSearchFilterProvider implements SearchFil
 			int style,
 			SearchFilterProvider searchFilterProvider,
 			SearchFilterItemListMutator listMutator,
-			SearchResultFetcher resultFetcher,
-			InitialContextProvider login
+			SearchResultFetcher resultFetcher
 		);
 	
 	/**
@@ -106,8 +101,7 @@ public abstract class AbstractItemBasedSearchFilterProvider implements SearchFil
 			SWT.NONE,
 			this,
 			listMutator,
-			resultFetcher,
-			login
+			resultFetcher
 		);
 		return providerComposite;
 	}

@@ -54,7 +54,7 @@ public abstract class MatchTypeCombo extends XComposite {
 	
 	private Combo combo;
 	
-	private List displayingTypes = new ArrayList();
+	private List<Integer> displayingTypes = new ArrayList<Integer>();
 	
 	/**
 	 * @param parent

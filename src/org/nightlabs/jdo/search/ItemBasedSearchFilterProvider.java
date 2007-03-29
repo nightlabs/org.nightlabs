@@ -28,8 +28,6 @@ package org.nightlabs.jdo.search;
 
 import org.eclipse.swt.widgets.Composite;
 
-import org.nightlabs.j2ee.InitialContextProvider;
-
 /**
  * Default implementation of a ItemBased SearchFilterProvider.
  * 
@@ -47,16 +45,14 @@ public abstract class ItemBasedSearchFilterProvider extends
 			int style, 
 			SearchFilterProvider searchFilterProvider, 
 			SearchFilterItemListMutator listMutator, 
-			SearchResultFetcher resultFetcher, 
-			InitialContextProvider login
+			SearchResultFetcher resultFetcher
 		) {
 		return new ItemBasedSearchFilterProviderComposite(
 				parent,
 				style,
 				searchFilterProvider,
 				listMutator,
-				resultFetcher,
-				login
+				resultFetcher
 			);
 	}
 

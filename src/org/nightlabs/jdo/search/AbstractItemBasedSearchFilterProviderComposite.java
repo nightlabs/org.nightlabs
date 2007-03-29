@@ -33,10 +33,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
-import org.nightlabs.j2ee.InitialContextProvider;
 import org.nightlabs.jdo.JdoPlugin;
 
 /**
@@ -59,7 +57,6 @@ public abstract class AbstractItemBasedSearchFilterProviderComposite extends Com
 	
 	private SearchFilterItemListMutator listMutator;
 	private SearchResultFetcher resultFetcher;
-	private InitialContextProvider login;
 	private SearchFilterProvider searchFilterProvider;
 	
 	
@@ -82,13 +79,11 @@ public abstract class AbstractItemBasedSearchFilterProviderComposite extends Com
 		int style,
 		SearchFilterProvider searchFilterProvider,
 		SearchFilterItemListMutator listMutator,
-		SearchResultFetcher resultFetcher,
-		InitialContextProvider login
+		SearchResultFetcher resultFetcher
 	) {
 		super(parent, style);
 		this.listMutator = listMutator;
 		this.resultFetcher = resultFetcher;
-		this.login = login;
 		this.searchFilterProvider = searchFilterProvider;
 		
 		this.setLayout(new GridLayout());
@@ -169,7 +164,7 @@ public abstract class AbstractItemBasedSearchFilterProviderComposite extends Com
 		}
 		if (evt.getSource().equals(buttonSearch)) {
 			if (listMutator != null)
-				resultFetcher.searchTriggered(searchFilterProvider,login);
+				resultFetcher.searchTriggered(searchFilterProvider);
 		}
 	}
 	
