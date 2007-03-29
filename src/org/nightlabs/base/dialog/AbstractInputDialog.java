@@ -31,6 +31,9 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Shell;
 
 import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.config.DialogCf;
+import org.nightlabs.base.config.DialogCfMod;
+import org.nightlabs.config.Config;
 
 public abstract class AbstractInputDialog 
 extends InputDialog
@@ -63,4 +66,38 @@ extends InputDialog
 	}
 
 	protected abstract void okPressed();
+
+	protected DialogCfMod getDialogCfMod()
+	{
+		return (DialogCfMod) Config.sharedInstance().createConfigModule(DialogCfMod.class);
+	}
+
+	protected String getDialogIdentifier()
+	{
+		return this.getClass().getName();
+	}
+
+	@Override
+	public void create()
+	{
+		super.create();
+
+		DialogCf cf = getDialogCfMod().getDialogCf(getDialogIdentifier());
+		if (cf != null) {
+			getShell().setLocation(cf.getX(), cf.getY());
+			getShell().setSize(cf.getWidth(), cf.getHeight());
+		}
+	}
+
+	@Override
+	public boolean close()
+	{
+		getDialogCfMod().createDialogCf(
+				getDialogIdentifier(),
+				getShell().getLocation().x,
+				getShell().getLocation().y,
+				getShell().getSize().x,
+				getShell().getSize().y);
+		return super.close();
+	}
 }

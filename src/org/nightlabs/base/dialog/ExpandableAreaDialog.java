@@ -38,8 +38,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-
 import org.nightlabs.base.composite.ExpandableWrapperComposite;
+import org.nightlabs.base.config.DialogCf;
+import org.nightlabs.base.config.DialogCfMod;
+import org.nightlabs.config.Config;
 
 /**
  * Defines a Dialog with a "twistie" for toggling the expansion-state of a Composite.
@@ -216,6 +218,13 @@ public class ExpandableAreaDialog extends Dialog {
 	 */
 	public void create() {
 		super.create();
+
+		DialogCf cf = getDialogCfMod().getDialogCf(getDialogIdentifier());
+		if (cf != null) {
+			getShell().setLocation(cf.getX(), cf.getY());
+			getShell().setSize(cf.getWidth(), cf.getHeight());
+		}
+
 		doRelayout();
 	}
 	
@@ -365,5 +374,27 @@ public class ExpandableAreaDialog extends Dialog {
 			return expComp;
 		}
 		
+	}
+
+	protected DialogCfMod getDialogCfMod()
+	{
+		return (DialogCfMod) Config.sharedInstance().createConfigModule(DialogCfMod.class);
+	}
+
+	protected String getDialogIdentifier()
+	{
+		return this.getClass().getName();
+	}
+
+	@Override
+	public boolean close()
+	{
+		getDialogCfMod().createDialogCf(
+				getDialogIdentifier(),
+				getShell().getLocation().x,
+				getShell().getLocation().y,
+				getShell().getSize().x,
+				getShell().getSize().y);
+		return super.close();
 	}
 }

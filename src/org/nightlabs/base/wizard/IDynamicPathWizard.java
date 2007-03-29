@@ -35,6 +35,13 @@ import org.eclipse.jface.wizard.IWizardPage;
 public interface IDynamicPathWizard extends IWizard
 {
 	/**
+	 * @return an identifier used for managing settings of this wizard. The {@link DynamicPathWizardDialog} uses this
+	 *		for managing sizes and positions. It must not be <code>null</code>. The default implementation in
+	 *		{@link DynamicPathWizard} returns the class name of the concrete implementation.
+	 */
+	String getIdentifier();
+
+	/**
 	 * <strong>Important API change:</strong> Since this method exists, you
 	 * MUST NOT overwrite {@link #getWizardEntryPage()} anymore!!!
 	 * <p>

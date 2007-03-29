@@ -123,6 +123,16 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
+	 * This implementation (in <code>DynamicPathWizard</code>) returns: <code>this.getClass().getName()</code>
+	 */
+	public String getIdentifier()
+	{
+		return this.getClass().getName();
+	}
+
+	/**
 	 * @see org.eclipse.jface.wizard.Wizard#addPages()
 	 */
 	public void addPages()

@@ -34,6 +34,9 @@ import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
+import org.nightlabs.base.config.DialogCf;
+import org.nightlabs.base.config.DialogCfMod;
+import org.nightlabs.config.Config;
 
 /**
  * @author Daniel.Mazurek <at> NightLabs <dot> de
@@ -57,12 +60,42 @@ extends Dialog
 		super(parentShell);	
 	}
 
+	protected DialogCfMod getDialogCfMod()
+	{
+		return (DialogCfMod) Config.sharedInstance().createConfigModule(DialogCfMod.class);
+	}
+
+	protected String getDialogIdentifier()
+	{
+		return this.getClass().getName();
+	}
+
+	@Override
+	public boolean close()
+	{
+		getDialogCfMod().createDialogCf(
+				getDialogIdentifier(),
+				getShell().getLocation().x,
+				getShell().getLocation().y,
+				getShell().getSize().x,
+				getShell().getSize().y);
+		return super.close();
+	}
+
 	public void create() 
 	{
 		super.create();
-		setToCenteredLocation();
+
+		DialogCf cf = getDialogCfMod().getDialogCf(getDialogIdentifier());
+		if (cf == null) {
+			setToCenteredLocation();
+		}
+		else {
+			getShell().setLocation(cf.getX(), cf.getY());
+			getShell().setSize(cf.getWidth(), cf.getHeight());
+		}
 	}
-	
+
 	/**
 	 * This is called by {@link #create()} but can be used to have a centered dialog with a specific size.
 	 * A code snippet for that would be

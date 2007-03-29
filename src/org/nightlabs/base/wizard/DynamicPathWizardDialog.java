@@ -31,6 +31,7 @@ import java.awt.Toolkit;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.graphics.Point;
@@ -38,8 +39,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-
+import org.nightlabs.base.config.DialogCf;
+import org.nightlabs.base.config.DialogCfMod;
 import org.nightlabs.base.util.RCPUtil;
+import org.nightlabs.config.Config;
 
 
 /**
@@ -59,7 +62,7 @@ public class DynamicPathWizardDialog extends WizardDialog {
 		dynamicWizard = wizard;
 		dynamicWizard.setDynamicWizardDialog(this);
 	}
-	
+
 	/**
 	 * Overrides and makes it public so the wizard can
 	 * trigger the update of the dialog buttons.
@@ -83,10 +86,6 @@ public class DynamicPathWizardDialog extends WizardDialog {
 	protected void backPressed() {
 		buttonBar.setFocus(); // to trigger all GUI-element-to-backend-object-store-methods
 		super.backPressed();
-//		if (dynamicWizard.getPopulator() != null &&
-//				getCurrentPage() == dynamicWizard.getWizardEntryPage()) {
-//			dynamicWizard.removeAllDynamicWizardPages();
-//		}
 	}
 	
 	protected void nextPressed() {
@@ -115,8 +114,7 @@ public class DynamicPathWizardDialog extends WizardDialog {
 		buttonBar.setFocus(); // to trigger all GUI-element-to-backend-object-store-methods
 		super.cancelPressed();
 	}
-	
-	
+
 
 	protected Control createContents(Composite parent) {
 		Control result = super.createContents(parent);
@@ -162,11 +160,44 @@ public class DynamicPathWizardDialog extends WizardDialog {
 	public void create() 
 	{
 		super.create();
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Point shellSize = getShell().getSize();
-		int diffWidth = screenSize.width - shellSize.x;
-		int diffHeight = screenSize.height - shellSize.y;
-		getShell().setLocation(diffWidth/2, diffHeight/2);
-	}	
-	
+
+		DialogCf cf = getDialogCfMod().getDialogCf(getWizardIdentifier(getWizard()));
+		if (cf == null) {
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			Point shellSize = getShell().getSize();
+			int diffWidth = screenSize.width - shellSize.x;
+			int diffHeight = screenSize.height - shellSize.y;
+			getShell().setLocation(diffWidth/2, diffHeight/2);
+		}
+		else {
+			getShell().setLocation(cf.getX(), cf.getY());
+			getShell().setSize(cf.getWidth(), cf.getHeight());
+		}
+	}
+
+	private static DialogCfMod getDialogCfMod()
+	{
+		return (DialogCfMod) Config.sharedInstance().createConfigModule(DialogCfMod.class);
+	}
+
+	private static String getWizardIdentifier(IWizard wizard)
+	{
+		String wizardIdentifier = wizard instanceof IDynamicPathWizard ? ((IDynamicPathWizard)wizard).getIdentifier() : wizard.getClass().getName();
+		if (wizardIdentifier == null)
+			throw new IllegalStateException("identifier is null! Check the class " + wizard.getClass().getName());
+
+		return wizardIdentifier;
+	}
+
+	@Override
+	public boolean close()
+	{
+		getDialogCfMod().createDialogCf(
+				getWizardIdentifier(getWizard()),
+				getShell().getLocation().x,
+				getShell().getLocation().y,
+				getShell().getSize().x,
+				getShell().getSize().y);
+		return super.close();
+	}
 }
