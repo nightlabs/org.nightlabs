@@ -19,7 +19,6 @@ import org.nightlabs.base.composite.ComboComposite;
 import org.nightlabs.base.composite.ListComposite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.config.Config;
-import org.nightlabs.config.ConfigException;
 import org.nightlabs.connection.Connection;
 import org.nightlabs.connection.ConnectionImplementation;
 import org.nightlabs.connection.ConnectionImplementationRegistry;
@@ -312,11 +311,7 @@ extends XComposite
 
 	public void load()
 	{
-		try {
-			keyReaderConfigModule = (KeyReaderConfigModule) Config.sharedInstance().createConfigModule(KeyReaderConfigModule.class);
-		} catch (ConfigException e) {
-			throw new RuntimeException(e);
-		}
+		keyReaderConfigModule = (KeyReaderConfigModule) Config.sharedInstance().createConfigModule(KeyReaderConfigModule.class);
 
 		for (KeyReaderImplementation keyReaderImplementation : KeyReaderImplementationRegistry.sharedInstance().getKeyReaderImplementations())
 			className2KeyReaderImplementation.put(keyReaderImplementation.getKeyReaderClassName(), keyReaderImplementation);
