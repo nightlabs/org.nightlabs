@@ -26,7 +26,9 @@
 
 package org.nightlabs.base.tree;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -39,6 +41,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.table.GenericInvertViewerSorter;
 
@@ -50,15 +53,21 @@ import org.nightlabs.base.table.GenericInvertViewerSorter;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public abstract class AbstractTreeComposite
+public abstract class AbstractTreeComposite<ElementType>
 extends XComposite
 implements ISelectionProvider
 {
 
 	private TreeViewer treeViewer;
 	
-	public static int DEFAULT_STYLE_SINGLE = SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION;
-	public static int DEFAULT_STYLE_MULTI = SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION;
+	/**
+	 * Default set of styles to use when constructing a single-selection viewer. 
+	 */
+	public static int DEFAULT_STYLE_SINGLE = SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL;
+	/**
+	 * Default set of styles to use when constructing a multi-selection viewer. 
+	 */
+	public static int DEFAULT_STYLE_MULTI = SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL;
 	
 	/**
 	 * Convenience parameter with 
@@ -120,7 +129,7 @@ implements ISelectionProvider
 			boolean init, boolean headerVisible, boolean sortColumns) 
 	{
 		super(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER, setLayoutData ? XComposite.LayoutDataMode.GRID_DATA : XComposite.LayoutDataMode.NONE);
-		treeViewer = new TreeViewer(this, style);
+		treeViewer = createTreeViewer(style);
 		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		treeViewer.getTree().setHeaderVisible(headerVisible);
 		this.sortColumns = sortColumns;
@@ -164,6 +173,10 @@ implements ISelectionProvider
 			}			
 		}		
 		
+	}
+	
+	protected TreeViewer createTreeViewer(int style) {
+		return new TreeViewer(this, style);		
 	}
 	
 	private boolean sortColumns = true;
@@ -346,4 +359,53 @@ implements ISelectionProvider
 	{
 		treeViewer.setSelection(selection);
 	}
+	
+	/**
+	 * The tree might hold a special type of node objects that contain the real objects.
+	 * This method can be used to intercept when the selection is read in order to return the
+	 * real selection object.
+	 * The default implementation returns the given obj. 
+	 * 
+	 * @see #getSelectedElements()
+	 * @see #getFirstSelectedElement()
+	 * 
+	 * @param obj The viewers selection object. 
+	 * @return The selection object that should be passed as selection.
+	 */
+	protected ElementType getSelectionObject(Object obj) {
+		return (ElementType) obj;
+	}
+	
+	/**
+	 * Returns the first selected element.
+	 * Note that the element returned here might not be 
+	 * of the (node)type of elements managed by this viewer.
+	 * The result might have been replaced by an element extracted from the selected tree node. 
+	 * 
+	 * @return The (first) selected element or null.
+	 */
+	public ElementType getFirstSelectedElement() {
+		if (getTree().getSelectionCount() == 1) {
+			return getSelectionObject(getTree().getSelection()[0].getData());
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns all selected elements in a Set.
+	 * Note that the elements returned here might not be 
+	 * of the (node)type of elements managed by this viewer.
+	 * The results might have been replaced by an element extracted from the selected tree nodes.
+	 *  
+	 * @return All selected elements in a Set.
+	 */
+	public Set<ElementType> getSelectedElements() {
+		TreeItem[] items = getTree().getSelection();
+		Set<ElementType> result = new HashSet<ElementType>();
+		for (int i = 0; i < items.length; i++) {
+			result.add(getSelectionObject(items[i].getData()));
+		}
+		return result;
+	}
+	
 }

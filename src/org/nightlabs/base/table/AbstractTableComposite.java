@@ -59,7 +59,13 @@ extends XComposite
 implements ISelectionProvider
 {
 
+	/**
+	 * Default set of styles to use when constructing a single-selection viewer. 
+	 */
 	public static int DEFAULT_STYLE_SINGLE = SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE;
+	/**
+	 * Default set of styles to use when constructing a multi-selection viewer. 
+	 */
 	public static int DEFAULT_STYLE_MULTI = SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI;
 	
 	protected TableViewer tableViewer;
