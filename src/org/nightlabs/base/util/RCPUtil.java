@@ -41,6 +41,9 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
@@ -616,5 +619,35 @@ public class RCPUtil
 	 */
 	public static File getResourceAsFile(IResource resource) {
 		return new File(resource.getWorkspace().getRoot().getLocation().toFile(), resource.getFullPath().toOSString());
+	}
+	
+	/**
+	 * Sets the font of the given Control to its old font adding/removing the given styles.
+	 * So, for example, to maket the text bold do:
+	 * <pre>
+	 * RCPUtil.setControlFontStyle(myControl, SWT.BOLD, 0);
+	 * </pre>
+	 * Styles are first added then removed.
+	 * 
+	 * @param control The {@link Control} to change the font of.
+	 * @param addStyle The style flag(s that should be added to the controls actual font.
+	 * @param removeStyle The style flag(s) that should be removed from the contros actual font.
+	 */
+	public static void setControlFontStyle(Control control, int addStyle, int removeStyle) {
+		Font oldFont = control.getFont();
+		int newStyle = oldFont.getFontData()[0].getStyle() | addStyle;
+		newStyle = newStyle & (~removeStyle);
+		final Font newFont = new Font(
+				oldFont.getDevice(), 
+				oldFont.getFontData()[0].getName(), 
+				oldFont.getFontData()[0].getHeight(), 
+				newStyle
+			);
+		control.setFont(newFont);
+		control.addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent e) {
+				newFont.dispose();
+			}			
+		});
 	}
 }
