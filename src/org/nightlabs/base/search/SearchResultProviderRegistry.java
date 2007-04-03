@@ -32,6 +32,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 
@@ -48,6 +52,7 @@ extends AbstractEPProcessor
 	public static final String ELEMENT_SEARCH_RESULT_PROVIDER = "searchResultProvider";
 	public static final String ATTRIBUTE_FACTORY_CLASS = "factoryClass";
 	public static final String ATTRIBUTE_DEFAULT = "default";
+	public static final String ATTRIBUTE_DECORATOR = "decorator";
 
 	private static SearchResultProviderRegistry sharedInstance;
 	public static SearchResultProviderRegistry sharedInstance() {
@@ -86,7 +91,15 @@ extends AbstractEPProcessor
 					String defaultValue = element.getAttribute(ATTRIBUTE_DEFAULT);
 					if (defaultValue != null && defaultValue.equalsIgnoreCase(Boolean.toString(true))) {
 						defaultName = name; 
-					}					
+					}
+					
+					String decoratorString = element.getAttribute(ATTRIBUTE_DECORATOR);
+					if (checkString(decoratorString)) {
+						ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(extension.getNamespaceIdentifier(), decoratorString);
+						if (imageDescriptor != null) {
+							name2Image.put(name, imageDescriptor.createImage());
+						}
+					}
 				} catch (Exception e) {
 					logger.error("There occured an error during initalizing the class "+element.getAttribute(ATTRIBUTE_FACTORY_CLASS), e);
 				}				
@@ -126,4 +139,16 @@ extends AbstractEPProcessor
 		
 		return null;
 	}
+	
+	private Map<String, Image> name2Image = new HashMap<String, Image>();
+	public Image getImage(String name) 
+	{
+		Image image = name2Image.get(name);
+		if (image != null) {
+			SearchCompositeImage searchImage = new SearchCompositeImage(image);
+			return searchImage.createImage();
+		}
+		return null;
+	}
+	
 }

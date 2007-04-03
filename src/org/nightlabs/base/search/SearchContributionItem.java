@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
@@ -43,6 +44,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.swt.widgets.CoolItem;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -140,6 +142,8 @@ extends AbstractContributionItem
 		return selectedType;
 	}
 		
+	private Item selectedItem = null;
+	
 	private void searchPressed() 
 	{
 		String selectedType = getSelectedType();
@@ -178,6 +182,7 @@ extends AbstractContributionItem
 			menuItem.addSelectionListener(new SelectionListener(){			
 				public void widgetSelected(SelectionEvent e) {
 					selectedType = ((MenuItem) e.getSource()).getText();
+					setItemImage(selectedItem);
 					searchPressed();
 				}			
 				public void widgetDefaultSelected(SelectionEvent e) {
@@ -218,6 +223,8 @@ extends AbstractContributionItem
 	  			}
 	  		}
 	  	});
+	  	selectedItem = searchItem;
+	  	setItemImage(selectedItem);
 	  	toolBar.layout(true, true);	 	  	
 		}
 	}	
@@ -256,6 +263,8 @@ extends AbstractContributionItem
 	  			}	  			
 	  		}
 	  	});	  	
+	  	selectedItem = searchItem;
+	  	setItemImage(selectedItem);
 	  	toolBar.layout(true, true);
 	  	
 	  	CoolItem coolItem = new CoolItem(coolBar, SWT.SEPARATOR);
@@ -274,5 +283,13 @@ extends AbstractContributionItem
 	{
 		selectedType = SearchResultProviderRegistry.sharedInstance().getDefault();
 //		NLBasePlugin.getDefault().getPreferenceStore().getString(name);
+	}
+	
+	protected void setItemImage(Item item) 
+	{
+		Image image = SearchResultProviderRegistry.sharedInstance().getImage(selectedType);
+		if (image != null && item != null) {
+			item.setImage(image);
+		}		
 	}
 }
