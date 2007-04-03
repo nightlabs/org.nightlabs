@@ -69,9 +69,16 @@ extends AbstractContributionItem
 {
 	private static final Logger logger = Logger.getLogger(SearchContributionItem.class);
 	
+	public SearchContributionItem() {
+		super();
+//		checkSelectedType();
+	}
+	
 	@Override
 	protected Control createControl(Composite parent) 
 	{
+		checkSelectedType();
+		
 		Composite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		GridLayout layout = new GridLayout(1, false);
 		layout.verticalSpacing = 0;
@@ -115,8 +122,8 @@ extends AbstractContributionItem
 	{
 		searchTypes = new ArrayList<String>(SearchResultProviderRegistry.sharedInstance().getRegisteredNames());
 		searchTypeCombo.setItems(searchTypes.toArray(new String[searchTypes.size()]));
-		if (searchTypeCombo.getItemCount() > 0)
-			searchTypeCombo.select(0);
+		if (searchTypes.indexOf(selectedType) != -1)
+			searchTypeCombo.select(searchTypes.indexOf(selectedType));
 	}	
 	
 	private SelectionListener comboSelectionListener = new SelectionListener(){	
@@ -178,12 +185,13 @@ extends AbstractContributionItem
 				}			
 			});
 		}
-		selectedType = searchTypes.get(0);		
+//		selectedType = searchTypes.get(0);		
 		return menu;
 	}
 	
 	public void fill(ToolBar parent, int index) 
 	{
+		checkSelectedType();
 		if (fillToolBar) 
 		{
 			toolItem = new ToolItem(parent, SWT.SEPARATOR, index);			
@@ -217,6 +225,7 @@ extends AbstractContributionItem
 	@Override
 	public void fill(CoolBar parent, int index) 
 	{
+		checkSelectedType();
 		if (fillCoolBar) 
 		{
 			final CoolBar coolBar = parent;
@@ -260,4 +269,10 @@ extends AbstractContributionItem
 		}
 	}
 		
+//	public static final String SELECTED_TYPE_PREFERENCE_NAME = "selectedSearchType";
+	protected void checkSelectedType() 
+	{
+		selectedType = SearchResultProviderRegistry.sharedInstance().getDefault();
+//		NLBasePlugin.getDefault().getPreferenceStore().getString(name);
+	}
 }

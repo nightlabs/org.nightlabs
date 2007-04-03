@@ -47,13 +47,15 @@ extends AbstractEPProcessor
 	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.searchResultProvider";
 	public static final String ELEMENT_SEARCH_RESULT_PROVIDER = "searchResultProvider";
 	public static final String ATTRIBUTE_FACTORY_CLASS = "factoryClass";
+	public static final String ATTRIBUTE_DEFAULT = "default";
 
 	private static SearchResultProviderRegistry sharedInstance;
 	public static SearchResultProviderRegistry sharedInstance() {
 		if (sharedInstance == null) {
 			synchronized (SearchResultProviderRegistry.class) {
-				if (sharedInstance == null)
+				if (sharedInstance == null) {
 					sharedInstance = new SearchResultProviderRegistry();
+				}
 			}
 		}
 		return sharedInstance;
@@ -79,7 +81,12 @@ extends AbstractEPProcessor
 					String context = searchResultProvider.getContext();
 					String name = searchResultProvider.getName().getText();
 					name2SearchResultProvider.put(name, factory);
-					context2SearchResultProvider.put(context, factory);					
+					context2SearchResultProvider.put(context, factory);
+					
+					String defaultValue = element.getAttribute(ATTRIBUTE_DEFAULT);
+					if (defaultValue != null && defaultValue.equalsIgnoreCase(Boolean.toString(true))) {
+						defaultName = name; 
+					}					
 				} catch (Exception e) {
 					logger.error("There occured an error during initalizing the class "+element.getAttribute(ATTRIBUTE_FACTORY_CLASS), e);
 				}				
@@ -108,4 +115,15 @@ extends AbstractEPProcessor
 		return null;
 	}
 	
+	private String defaultName = null;
+	public String getDefault() 
+	{
+		checkProcessing();
+		if (defaultName != null)
+			return defaultName;
+		if (defaultName == null && !getRegisteredNames().isEmpty())
+			return getRegisteredNames().iterator().next();
+		
+		return null;
+	}
 }
