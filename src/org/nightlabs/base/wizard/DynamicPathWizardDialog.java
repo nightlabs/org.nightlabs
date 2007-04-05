@@ -79,7 +79,6 @@ public class DynamicPathWizardDialog extends WizardDialog {
 	 * @see org.eclipse.jface.dialogs.Dialog#getButton(int)
 	 */
 	public Button getButton(int id) {
-		// TODO Auto-generated method stub
 		return super.getButton(id);
 	}
 	
@@ -103,6 +102,7 @@ public class DynamicPathWizardDialog extends WizardDialog {
 	protected void finishPressed()
 	{
 		buttonBar.setFocus(); // to trigger all GUI-element-to-backend-object-store-methods
+		storeDialogSize();
 		super.finishPressed();
 	}
 
@@ -192,12 +192,16 @@ public class DynamicPathWizardDialog extends WizardDialog {
 	@Override
 	public boolean close()
 	{
+		storeDialogSize();
+		return super.close();
+	}
+	
+	protected void storeDialogSize() {
 		getDialogCfMod().createDialogCf(
 				getWizardIdentifier(getWizard()),
 				getShell().getLocation().x,
 				getShell().getLocation().y,
 				getShell().getSize().x,
 				getShell().getSize().y);
-		return super.close();
 	}
 }
