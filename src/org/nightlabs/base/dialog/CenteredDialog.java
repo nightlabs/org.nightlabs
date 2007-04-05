@@ -82,18 +82,33 @@ extends Dialog
 		return super.close();
 	}
 
+	@Override
+	protected void configureShell(Shell newShell)
+	{
+		super.configureShell(newShell);
+
+		DialogCf cf = getDialogCfMod().getDialogCf(getDialogIdentifier());
+		if (cf == null) {
+			setToCenteredLocation(newShell);
+		}
+		else {
+			newShell.setLocation(cf.getX(), cf.getY());
+			newShell.setSize(cf.getWidth(), cf.getHeight());
+		}
+	}
+
 	public void create() 
 	{
 		super.create();
 
-		DialogCf cf = getDialogCfMod().getDialogCf(getDialogIdentifier());
-		if (cf == null) {
-			setToCenteredLocation();
-		}
-		else {
-			getShell().setLocation(cf.getX(), cf.getY());
-			getShell().setSize(cf.getWidth(), cf.getHeight());
-		}
+//		DialogCf cf = getDialogCfMod().getDialogCf(getDialogIdentifier());
+//		if (cf == null) {
+//			setToCenteredLocation();
+//		}
+//		else {
+//			getShell().setLocation(cf.getX(), cf.getY());
+//			getShell().setSize(cf.getWidth(), cf.getHeight());
+//		}
 	}
 
 	/**
@@ -106,13 +121,22 @@ extends Dialog
 	 * getShell().setSize(300, 400);
 	 * setToCenteredLocation();
 	 * </pre>
+	 * </p>
+	 * <p>
+	 * Please do not call this method outside of your implementation oif {@link #configureShell(Shell)}!
+	 * Instead (after <code>configureShell(Shell)</code> was called) you should call {@link #setToCenteredLocation()}.
+	 * </p>
 	 */
-	protected void setToCenteredLocation() {
+	protected void setToCenteredLocation(Shell newShell) {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Point shellSize = getShell().getSize();
+		Point shellSize = newShell.getSize();
 		int diffWidth = screenSize.width - shellSize.x;
 		int diffHeight = screenSize.height - shellSize.y;
-		getShell().setLocation(diffWidth/2, diffHeight/2);
+		newShell.setLocation(diffWidth/2, diffHeight/2);
+	}
+
+	protected void setToCenteredLocation() {
+		setToCenteredLocation(getShell());
 	}
 
 	/**
@@ -121,25 +145,34 @@ extends Dialog
 	 * size and location was not previously stored, so this method should
 	 * be used to initialise a dialog that is created for the first time.
 	 * <p>
-	 * A code snippet for doing so while overwriting {@link #create()} is :
+	 * A code snippet for doing so while overwriting {@link #configureShell(Shell)} is:
 	 * <pre>
-	 * super.create();
+	 * super.configureShell(Shell)
 	 * setToCenteredLocationPreferredSize(300, 400);
-	 * </pre> 
+	 * </pre>
+	 * </p>
+	 * <p>
+	 * Please do not call this method outside of your implementation oif {@link #configureShell(Shell)}!
+	 * Instead (after <code>configureShell(Shell)</code> was called) you should call {@link #setToCenteredLocationPreferredSize(int, int)}.
+	 * </p>
 	 * 
 	 * @param width The preferred width of the dialog (when no width was stored previously)
 	 * @param height The preferred height of the dialog (when no height was stored previously)
 	 */
-	protected void setToCenteredLocationPreferredSize(int width, int height) {
+	protected void setToCenteredLocationPreferredSize(Shell newShell, int width, int height) {
 		DialogCf cf = getDialogCfMod().getDialogCf(getDialogIdentifier());
 		if (cf == null) {
-			getShell().setSize(width, height);
-			setToCenteredLocation();
+			newShell.setSize(width, height);
+			setToCenteredLocation(newShell);
 		}
 		else {
-			getShell().setSize(cf.getWidth(), cf.getHeight());
-			getShell().setLocation(cf.getX(), cf.getY());
+			newShell.setSize(cf.getWidth(), cf.getHeight());
+			newShell.setLocation(cf.getX(), cf.getY());
 		}
+	}
+
+	protected void setToCenteredLocationPreferredSize(int width, int height) {
+		setToCenteredLocationPreferredSize(getShell(), width, height);
 	}
 	
 	public boolean checkWidget(Widget w) 
