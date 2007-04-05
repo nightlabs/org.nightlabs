@@ -98,13 +98,14 @@ extends Dialog
 
 	/**
 	 * This is called by {@link #create()} but can be used to have a centered dialog with a specific size.
-	 * A code snippet for that would be
+	 * To center the dialog its current size will be taken.
+	 * <p>
+	 * A code snippet for that would be (overwriting create()):
 	 * <pre>
 	 * super.create();
 	 * getShell().setSize(300, 400);
 	 * setToCenteredLocation();
 	 * </pre>
-	 *
 	 */
 	protected void setToCenteredLocation() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -112,6 +113,33 @@ extends Dialog
 		int diffWidth = screenSize.width - shellSize.x;
 		int diffHeight = screenSize.height - shellSize.y;
 		getShell().setLocation(diffWidth/2, diffHeight/2);
+	}
+
+	/**
+	 * Use this method to create a centered dialog of a specific size.
+	 * Note that the size given here will only apply to dialogs whose 
+	 * size and location was not previously stored, so this method should
+	 * be used to initialise a dialog that is created for the first time.
+	 * <p>
+	 * A code snippet for doing so while overwriting {@link #create()} is :
+	 * <pre>
+	 * super.create();
+	 * setToCenteredLocationPreferredSize(300, 400);
+	 * </pre> 
+	 * 
+	 * @param width The preferred width of the dialog (when no width was stored previously)
+	 * @param height The preferred height of the dialog (when no height was stored previously)
+	 */
+	protected void setToCenteredLocationPreferredSize(int width, int height) {
+		DialogCf cf = getDialogCfMod().getDialogCf(getDialogIdentifier());
+		if (cf == null) {
+			getShell().setSize(width, height);
+			setToCenteredLocation();
+		}
+		else {
+			getShell().setSize(cf.getWidth(), cf.getHeight());
+			getShell().setLocation(cf.getX(), cf.getY());
+		}
 	}
 	
 	public boolean checkWidget(Widget w) 
