@@ -99,6 +99,16 @@ public class CountdownButton
 		return countdownLengthSec;
 	}
 
+	public int getCountdownRest()
+	{
+		return countdownRest;
+	}
+	public void setCountdownRest(int countdownRest)
+	{
+		this.countdownRest = countdownRest;
+		setText(getText());
+	}
+
 	protected Button createButton(int style)
 	{
 		return new Button(this, style);
