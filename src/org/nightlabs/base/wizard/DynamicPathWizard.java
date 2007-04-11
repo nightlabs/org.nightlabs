@@ -378,6 +378,8 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 			lastPage = page;
 			page = page.getNextPage();
 		}
+		if (!(lastPage instanceof IDynamicPathWizardPage))
+			return true;
 		if (lastPage == null || (lastPage instanceof IDynamicPathWizardPage && ((IDynamicPathWizardPage)lastPage).canBeLastPage()))
 			return true;
 		else
