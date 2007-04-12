@@ -66,7 +66,7 @@ public class I18nTableTextEditor extends XComposite{
 		//Initial TableViewer
 		int tableStyle = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | 
 		SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
-		Table table = new Table(getParent(), tableStyle);
+		Table table = new Table(this, tableStyle);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		table.setLayoutData(gd);
