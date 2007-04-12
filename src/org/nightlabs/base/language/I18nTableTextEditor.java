@@ -169,7 +169,8 @@ public class I18nTableTextEditor extends XComposite{
 	public void setI18nTableItemList(I18nTableItemList tableItemList) {
 		i18nTableItemList = tableItemList;
 	}
-	
-	
-	
+
+	public void setCellModifier(ICellModifier cellModifier) {
+		this.cellModifier = cellModifier;
+	}
 }
