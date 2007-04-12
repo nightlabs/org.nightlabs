@@ -46,6 +46,10 @@ public class I18nTableTextEditor extends XComposite{
 	
 	private I18nTableItemList i18nTableItemList;
 	
+	private I18nTableTextEditor(){
+		super(null, 0);
+	}
+	
 	public I18nTableTextEditor(Composite parent, int style, I18nTableItemList i18nTableItemList) {
 		super(parent, style);
 		this.i18nTableItemList = i18nTableItemList;
