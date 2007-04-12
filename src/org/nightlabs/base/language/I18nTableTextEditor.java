@@ -75,7 +75,7 @@ public class I18nTableTextEditor extends XComposite{
 			columnNames = new String[]{"Column1", "Column2", "Column3"};
 		tableViewer.setColumnProperties(columnNames);
 		
-		int columnWidth = getParent().getBounds().width / columnNames.length;
+//		int columnWidth = getParent().getBounds().width / columnNames.length;
 		int[] columnAlignments = new int[] {
 				SWT.LEFT, SWT.LEFT, SWT.LEFT};
 
@@ -83,9 +83,8 @@ public class I18nTableTextEditor extends XComposite{
 			TableColumn tableColumn =
 				new TableColumn(table, columnAlignments[i], i);
 			tableColumn.setText(columnNames[i]);
-			tableColumn.setWidth(columnWidth);
+			tableColumn.setWidth(150);
 		}//for
-
 
 		//Create the cell editors
 		CellEditor[] editors = new CellEditor[columnNames.length];
