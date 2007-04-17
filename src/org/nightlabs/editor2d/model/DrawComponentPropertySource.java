@@ -50,6 +50,7 @@ import org.nightlabs.editor2d.properties.NamePropertyDescriptor;
 import org.nightlabs.editor2d.properties.RotationPropertyDescriptor;
 import org.nightlabs.editor2d.unit.DotUnit;
 import org.nightlabs.editor2d.util.UnitUtil;
+import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.unit.IUnit;
 import org.nightlabs.language.LanguageCf;
 
@@ -297,7 +298,8 @@ implements IPropertySource
 			return new Integer(drawComponent.getRotationY());
 		}		
 		else if (id.equals(DrawComponent.PROP_NAME)) {
-			return drawComponent.getI18nText().getText(nameLangMan.getCurrentLanguageID());
+//			return drawComponent.getI18nText().getText(nameLangMan.getCurrentLanguageID());
+			return drawComponent.getI18nText();
 		}		
 		else if (id.equals(DrawComponent.PROP_VISIBLE)) {
 			return new Boolean(drawComponent.isVisible());
@@ -367,7 +369,8 @@ implements IPropertySource
 			return;
 		}
 		else if (id.equals(DrawComponent.PROP_NAME)) {
-			drawComponent.setName((String)value);
+//			drawComponent.setName((I18n)value);
+			drawComponent.getI18nText().copyFrom((I18nText)value);
 			return;
 		}
 		else if (id.equals(DrawComponent.PROP_VISIBLE)) {

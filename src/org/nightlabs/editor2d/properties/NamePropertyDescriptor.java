@@ -29,11 +29,9 @@ package org.nightlabs.editor2d.properties;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.celleditor.XTextCellEditor;
+import org.nightlabs.base.celleditor.XI18nTextCellEditor;
 import org.nightlabs.base.labelprovider.I18nTextLabelProvider;
-import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.property.XPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 
@@ -47,29 +45,24 @@ extends XPropertyDescriptor
 	public NamePropertyDescriptor(DrawComponent dc, Object id, String displayName, 
 			boolean readOnly) {
 		super(id, displayName, readOnly);
-		this.dc = dc;
+//		this.dc = dc;
 	}	
 	
-	protected DrawComponent dc;
+//	protected DrawComponent dc;
 	
-//  public ILabelProvider getLabelProvider() 
-//  {
-////  	return new I18nTextLabelProvider(dc.getI18nText(), dc.getLanguageId());
-//  	return new I18nTextLabelProvider(dc.getI18nText(),
-//  			NameLanguageManager.sharedInstance().getCurrentLanguageID());  	
-//	}	  
-
-  public ILabelProvider getLabelProvider() 
-  {
-  	return new I18nTextLabelProvider(dc.getI18nText(), 
-  			LanguageManager.sharedInstance().getCurrentLanguageID());  	
+  public ILabelProvider getLabelProvider() {
+  	return new I18nTextLabelProvider(false);
 	}	  
-		
-  public CellEditor createPropertyEditor(Composite parent) 
-  {
-    CellEditor editor = new XTextCellEditor(parent, SWT.NONE, readOnly);
-    if (getValidator() != null)
-        editor.setValidator(getValidator());
-    return editor;
-  } 
+
+  public CellEditor createPropertyEditor(Composite parent) {
+  	return new XI18nTextCellEditor(parent);
+  }
+  
+//  public CellEditor createPropertyEditor(Composite parent) 
+//  {
+//    CellEditor editor = new XTextCellEditor(parent, SWT.NONE, readOnly);
+//    if (getValidator() != null)
+//        editor.setValidator(getValidator());
+//    return editor;
+//  } 
 }
