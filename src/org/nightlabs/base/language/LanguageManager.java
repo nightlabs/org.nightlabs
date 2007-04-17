@@ -37,7 +37,6 @@ import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-
 import org.nightlabs.base.config.LanguageCfMod;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.config.Config;
@@ -62,7 +61,9 @@ implements ILanguageManager
 	 * @return the default Language, by default the corresponding languageID is <code>Locale.getDefault().getLanguage()</code>.
 	 */
 	public static LanguageCf createDefaultLanguage() {
-		return new LanguageCf(Locale.getDefault().getLanguage());		
+		LanguageCf lcf = new LanguageCf(Locale.getDefault().getLanguage());
+		lcf.init(null);
+		return lcf;
 	}
 	
 	/**
@@ -70,7 +71,9 @@ implements ILanguageManager
 	 * @return a LanguageCf with the given languageID
 	 */
 	public static LanguageCf createLanguage(String languageID) {
-		return new LanguageCf(languageID);
+		LanguageCf lcf = new LanguageCf(languageID);
+		lcf.init(null);
+		return lcf;
 	}
 	
 	/**
@@ -122,6 +125,7 @@ implements ILanguageManager
 		if (languageID2LanguageCf.containsKey(langCf.getLanguageID()))
 			return;
 
+		langCf.init(langCfMod.getLanguageIDs());
 		langCfMod.getLanguages().add(langCf);
 		languageID2LanguageCf.put(langCf.getLanguageID(), langCf);
 		// config is saved on exit.
@@ -155,7 +159,7 @@ implements ILanguageManager
 		LanguageCf langCf = createLanguage(getLanguageID(locale));
 		addLanguage(langCf);
 	}
-		
+
 	protected Map<String, LanguageCf> languageID2LanguageCf = new HashMap<String, LanguageCf>();	
 
 	private Collection<LanguageCf> unmodifiableLanguages = null;

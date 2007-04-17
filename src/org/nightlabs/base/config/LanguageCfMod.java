@@ -26,6 +26,9 @@
 
 package org.nightlabs.base.config;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.config.CfModList;
 import org.nightlabs.config.ConfigModule;
@@ -48,6 +51,15 @@ extends ConfigModule
 		this.languages = languages;		
 	}
 
+	public Set<String> getLanguageIDs()
+	{
+		Set<String> languageIDs = new HashSet<String>(languages.size());
+		for (LanguageCf languageCf : languages)
+			languageIDs.add(languageCf.getLanguageID());
+
+		return languageIDs;
+	}
+
 	public void init() 
 	throws InitException 
 	{
@@ -55,6 +67,11 @@ extends ConfigModule
 		if (languages == null || languages.isEmpty())
 			languages = createDefaultLanguage();
 		languages.setOwnerCfMod(this);
+
+		for (LanguageCf languageCf : languages) {
+			if (languageCf.init(getLanguageIDs()))
+				setChanged();
+		}
 	}
 
 	protected CfModList<LanguageCf> createDefaultLanguage() 
@@ -63,7 +80,7 @@ extends ConfigModule
 		l.add(LanguageManager.createDefaultLanguage());		
 		return l;
 	}
-	
+
 //	public static Collection createDefaultLanguages() 
 //	{
 //		List languages = new ArrayList();

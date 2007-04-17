@@ -59,7 +59,7 @@ import org.nightlabs.language.LanguageCf;
  * @author Marco Schulze - marco at nightlabs dot de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public class I18nTextEditor extends XComposite
+public class I18nTextEditor extends XComposite implements II18nTextEditor
 {
 	private I18nText original;
 	private I18nText work;
@@ -189,12 +189,8 @@ public class I18nTextEditor extends XComposite
 	 */
 	private ListenerList modifyListeners = null;
 
-	/**
-	 * Add a {@link ModifyListener} to this editor. The listener
-	 * will get triggered only when the text was actually modified by the user, 
-	 * not when the edit changes its text.
-	 * 
-	 * @param l The {@link ModifyListener} to add.
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#addModifyListener(org.eclipse.swt.events.ModifyListener)
 	 */
 	public void addModifyListener(ModifyListener l) {
 		if (modifyListeners == null)
@@ -203,9 +199,8 @@ public class I18nTextEditor extends XComposite
 		modifyListeners.add(l);
 	}
 
-	/**
-	 * Remove the given modify listener.
-	 * @param l The listener to remove.
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#removeModifyListener(org.eclipse.swt.events.ModifyListener)
 	 */
 	public void removeModifyListener(ModifyListener l) {
 		if (modifyListeners == null)
@@ -222,12 +217,8 @@ public class I18nTextEditor extends XComposite
 		return text.getText();
 	}
 
-	/**
-	 * In contrast to {@link #getI18nText()}, this method always returns the same instance
-	 * as passed by {@link #setI18nText(I18nText)} before. In the {@link EditMode#DIRECT},
-	 * this method is exactly identical to {@link #getI18nText()} 
-	 *
-	 * @return the original object as passed to {@link #setI18nText(I18nText)}
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#getOriginal()
 	 */
 	public I18nText getOriginal()
 	{
@@ -235,15 +226,8 @@ public class I18nTextEditor extends XComposite
 		return original;
 	}
 
-	/**
-	 * This method first applies all modifications to the work-<code>I18nText</code> instance
-	 * (which is either the original or a buffer, depending on the {@link EditMode}) and
-	 * then returns it.
-	 *  
-	 * @return the {@link I18nText} buffer used by the editor, if {@link EditMode#BUFFERED}
-	 *		is used, or the original object, if {@link EditMode#DIRECT} is used.
-	 *
-	 * @see #getOriginal()
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#getI18nText()
 	 */
 	public I18nText getI18nText()
 	{
@@ -251,38 +235,24 @@ public class I18nTextEditor extends XComposite
 		return work;
 	}
 
-	/**
-	 * Copies all values from the buffer
-	 * to the {@link I18nText} originally passed
-	 * on the last call to {@link #setI18nText(I18nText)}.
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#copyToOriginal()
 	 */
 	public void copyToOriginal() {
 		if (original != null && work != original)
 			work.copyTo(original);
 	}
 
-	/**
-	 * Set the instance of {@link I18nText} that shall be edited by this editor.
-	 * This method will call
-	 * {@link #setEditMode(org.nightlabs.base.language.I18nTextEditor.EditMode)}
-	 * and set {@link EditMode#DIRECT}, if the <code>i18nText</code> is an instance
-	 * of {@link I18nTextBuffer}. For all other implementations of {@link I18nText},
-	 * it will set {@link EditMode#BUFFERED}. If you don't like this "auto-sensing",
-	 * you can call {@link #setI18nText(I18nText, org.nightlabs.base.language.I18nTextEditor.EditMode)}
-	 * with a non-<code>null</code> <code>editMode</code>.
-	 * 
-	 * @param i18nText The {@link I18nText} that should be displayed and made editable.
-	 *		Can be <code>null</code> (wich will render this editor read-only).
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#setI18nText(org.nightlabs.i18n.I18nText)
 	 */
 	public void setI18nText(I18nText i18nText)
 	{
 		setI18nText(i18nText, null);
 	}
 
-	/**
-	 * @param i18nText The {@link I18nText} to be edited. Can be <code>null</code> (wich will render this editor read-only).
-	 * @param editMode The mode - i.e. how to edit. If <code>editMode == null</code>
-	 *		this method behaves like {@link #setI18nText(I18nText)}.
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#setI18nText(org.nightlabs.i18n.I18nText, org.nightlabs.base.language.I18nTextEditor.EditMode)
 	 */
 	public void setI18nText(I18nText i18nText, EditMode editMode)
 	{
@@ -355,6 +325,9 @@ public class I18nTextEditor extends XComposite
 			work.copyFrom(original);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#getEditMode()
+	 */
 	public EditMode getEditMode()
 	{
 		return editMode;
@@ -371,6 +344,9 @@ public class I18nTextEditor extends XComposite
 	 */
 	private boolean loadingText = false;
 
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#refresh()
+	 */
 	public void refresh()
 	{
 		loadText();
@@ -436,10 +412,8 @@ public class I18nTextEditor extends XComposite
 		return languageChooser;
 	}
 
-	/**
-	 * Sets whether the text can be edited. 
-	 * @param editable the editable.
-	 * @see org.eclipse.swt.widgets.Text#setEditable(boolean)
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#setEditable(boolean)
 	 */
 	public void setEditable(boolean editable) {
 		text.setEditable(editable);
@@ -454,9 +428,8 @@ public class I18nTextEditor extends XComposite
 		text.setSelection(start, end);
 	}
 	
-	/**
-	 * Resets the I18nTextEditor in a way that the connection to the associated I18nText is removed
-	 * and nothing is displayed in the text field.
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#reset()
 	 */
 	public void reset() {
 		setI18nText(null);
