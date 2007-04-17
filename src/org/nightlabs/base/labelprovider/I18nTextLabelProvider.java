@@ -26,6 +26,8 @@
 
 package org.nightlabs.base.labelprovider;
 
+import java.util.Locale;
+
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
@@ -35,12 +37,21 @@ import org.nightlabs.i18n.I18nText;
 public class I18nTextLabelProvider 
 extends LabelProvider
 {
-	protected I18nText text;
-	protected String languageID;
-	public I18nTextLabelProvider(I18nText text, String languageID) {
+	private String languageID;
+	private boolean showImage = true;
+	
+	public I18nTextLabelProvider() {
+		this(null, true);
+	}
+
+	public I18nTextLabelProvider(boolean showImage) {
+		this(null, showImage);
+	}
+	
+	public I18nTextLabelProvider(String languageID, boolean showImage) {
 		super();
-		this.text = text;
 		this.languageID = languageID;
+		this.showImage = showImage;
 	}
 	
   public String getText(Object element) 
@@ -50,8 +61,10 @@ extends LabelProvider
 
     if (element instanceof I18nText) {
     	I18nText i18nText = (I18nText) element;
-    	if (i18nText != null)
+    	if (languageID != null)
     		return i18nText.getText(languageID);
+    	
+    	return i18nText.getText();
     }
 
     return super.getText(element);    	
@@ -59,33 +72,13 @@ extends LabelProvider
   
   public Image getImage(Object element) 
   {
-    return LanguageManager.getImage(languageID);
-//    if (element instanceof I18nText) {
-//    	I18nText i18nText = (I18nText) element;
-//    	if (i18nText != null) {
-//    		String languageText = i18nText.getText();
-//    		String languageID = getLanguageID(languageText);
-////    		ImageDescriptor imageDesc = SharedImages.getImageDescriptor(languageID);
-//    		// TODO: this is jsut a test
-//    		ImageDescriptor imageDesc = SharedImages.getImageDescriptor(I18nText.DEFAULT_LANGUAGEID);
-//    		if (imageDesc != null)
-//    			return imageDesc.createImage();
-//    	}    		
-//    }
-//    
-//    return null;
+  	if (showImage) {
+    	if (languageID != null)
+    		return LanguageManager.getImage(languageID);
+    	
+    	return LanguageManager.getImage(Locale.getDefault().getLanguage());  		
+  	}
+  	return null;
  	}
   
-//  protected String getLanguageID(String languageText) 
-//  {
-//  	for (Iterator it = text.getTexts().iterator(); it.hasNext(); ) {
-//  		Map.Entry entry = (Map.Entry) it.next();
-//  		String value = (String) entry.getValue();
-//  		if (value.equals(languageText)) {
-//  			String languageID = (String) entry.getKey();
-//  			return languageID;
-//  		}
-//  	}
-//  	return null;
-//  }
 }
