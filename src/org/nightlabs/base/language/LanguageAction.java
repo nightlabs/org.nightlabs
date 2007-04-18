@@ -48,9 +48,10 @@ extends Action
 
 	protected void init() 
 	{
-		setId(ID+languageID);
+		setId(ID+'#'+languageID);
 		setText(LanguageManager.getNativeLanguageName(languageID));
-		setImageDescriptor(SharedImages.getImageDescriptor(languageID));
+//		setImageDescriptor(SharedImages.getImageDescriptor(languageID));
+		setImageDescriptor(LanguageManager.sharedInstance().getFlag16x16ImageDescriptor(languageID));
 	}
 
 	public void run() 

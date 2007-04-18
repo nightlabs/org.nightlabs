@@ -27,7 +27,6 @@
 package org.nightlabs.base.resource;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Plugin;
@@ -38,14 +37,14 @@ import org.nightlabs.base.NLBasePlugin;
 public class SharedImages
 {
 
-	// TODO: Flag Icons should come from Server
-	public static ImageDescriptor getImageDescriptor(String languageID) 
-	{
-		if (languageID == null)
-			return null;
-		
-		return (ImageDescriptor) languageID2ImageDesc.get(languageID);
-	}
+//	// TODO: Flag Icons should come from Server
+//	public static ImageDescriptor getImageDescriptor(String languageID) 
+//	{
+//		if (languageID == null)
+//			return null;
+//		
+//		return (ImageDescriptor) languageID2ImageDesc.get(languageID);
+//	}
 
 	public static enum ImageDimension {
 		// for image decorators
@@ -304,14 +303,14 @@ public class SharedImages
 	protected static final ImageDescriptor FLAG_FRANCE_16x16 = 		
 		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "France");
 	
-	protected static Map<String, ImageDescriptor> languageID2ImageDesc;
-
-	static {
-		languageID2ImageDesc = new HashMap<String, ImageDescriptor>();
-		languageID2ImageDesc.put(Locale.ENGLISH.getLanguage(), FLAG_USA_16x16);
-		languageID2ImageDesc.put(Locale.GERMAN.getLanguage(), FLAG_GERMANY_16x16);
-		languageID2ImageDesc.put(Locale.FRENCH.getLanguage(), FLAG_FRANCE_16x16);		
-	}
+//	protected static Map<String, ImageDescriptor> languageID2ImageDesc;
+//
+//	static {
+//		languageID2ImageDesc = new HashMap<String, ImageDescriptor>();
+//		languageID2ImageDesc.put(Locale.ENGLISH.getLanguage(), FLAG_USA_16x16);
+//		languageID2ImageDesc.put(Locale.GERMAN.getLanguage(), FLAG_GERMANY_16x16);
+//		languageID2ImageDesc.put(Locale.FRENCH.getLanguage(), FLAG_FRANCE_16x16);		
+//	}
 
 	public static final ImageDescriptor EDIT_16x16 = 		
 		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Edit");

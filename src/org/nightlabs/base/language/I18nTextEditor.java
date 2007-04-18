@@ -139,7 +139,7 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 		};
 		
 		if (_languageChooser == null) {
-			this.languageChooser = new LanguageChooserCombo(this, false);
+			this.languageChooser = new LanguageChooserCombo(this); //, false);
 			// TODO On the long run, the I18nTextEditor itself should be a combobox
 			// in this mode, showing the language flag on the left.
 		} else {

@@ -28,6 +28,9 @@ package org.nightlabs.base.language;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,9 +39,11 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.config.LanguageCfMod;
-import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 import org.nightlabs.language.LanguageCf;
@@ -172,6 +177,44 @@ implements ILanguageManager
 		return unmodifiableLanguages;
 	}
 
+	public Image getFlag16x16Image(String languageID)
+	{
+		String imageRegistryKey = getImageRegistryKeyForFlag16x16(languageID);
+		getFlag16x16ImageDescriptor(languageID); // this ensures that the ImageDescriptor is registered in the ImageRegistry
+		return NLBasePlugin.getDefault().getImageRegistry().get(imageRegistryKey); // the ImageRegistry creates an Image instance for the descriptor if necessary
+	}
+
+	private static String getImageRegistryKeyForFlag16x16(String languageID)
+	{
+		return LanguageManager.class.getName() + "-flag-" + languageID + ".16x16";
+	}
+
+	public ImageDescriptor getFlag16x16ImageDescriptor(String languageID)
+	{
+		String imageRegistryKey = getImageRegistryKeyForFlag16x16(languageID);
+		ImageRegistry imageRegistry = NLBasePlugin.getDefault().getImageRegistry();
+		ImageDescriptor imageDescriptor = imageRegistry.getDescriptor(imageRegistryKey);
+		if (imageDescriptor == null) {
+			LanguageCf languageCf = getLanguage(languageID, true);
+			byte[] flagData = languageCf._getFlagIcon16x16();
+
+			InputStream in = flagData != null ? new ByteArrayInputStream(flagData) : LanguageCf.class.getResourceAsStream("resource/Flag-fallback.16x16.png");
+			try {
+				ImageData imageData = new ImageData(in);
+				imageDescriptor = ImageDescriptor.createFromImageData(imageData);
+			} finally {
+				try {
+					in.close();
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
+			imageRegistry.put(imageRegistryKey, imageDescriptor);
+		}
+
+		return imageDescriptor;
+	}
+
 	/**
 	 * Convenience method which calls {@link #getLanguage(String, boolean)}.
 	 */
@@ -197,12 +240,12 @@ implements ILanguageManager
 	}
 
 	/**
-	 * 
 	 * @param languageID
 	 * @return the Native Name of the Language 
 	 */
 	public static String getNativeLanguageName(String languageID) {
-		return getLocale(languageID).getDisplayLanguage();
+		Locale l = getLocale(languageID);
+		return l.getDisplayLanguage(l);
 	}
 
 	protected LanguageCf currentLanguage;
@@ -224,8 +267,9 @@ implements ILanguageManager
 	}
 
 	/**
-	 * 
 	 * @param newCurrentLanguage The current Language to set
+	 * @deprecated The current language should be controlled by {@link Locale}. And changing the language on the fly is not that easy as all the labels
+	 * are already loaded.
 	 */
 	public void setCurrentLanguage(LanguageCf newCurrentLanguage) 
 	{
@@ -233,7 +277,11 @@ implements ILanguageManager
 		this.currentLanguage = newCurrentLanguage;
 		pcs.firePropertyChange(LANGUAGE_CHANGED, oldLanguage, currentLanguage);
 	}
-	
+
+	/**
+	 * @deprecated The current language should be controlled by {@link Locale}. And changing the language on the fly is not that easy as all the labels
+	 * are already loaded.
+	 */
 	public void setCurrentLanguageID(String newLanguageID) 
 	{
 		if (languageID2LanguageCf.containsKey(newLanguageID)) {
@@ -263,19 +311,19 @@ implements ILanguageManager
 		pcs.removePropertyChangeListener(pcl);
 	}
 		
-	/**
-	 * 
-	 * @param languageID the ID of the Language (e.g. en, de, us) (@see java.util.Locale.getLanguage())
-	 * @return the flag of the country for the given Language
-	 */
-	public static Image getImage(String languageID) 
-	{
-		ImageDescriptor desc = SharedImages.getImageDescriptor(languageID); 
-		if (desc != null)
-			return desc.createImage();
-		
-		return null;
-	}
+//	/**
+//	 * 
+//	 * @param languageID the ID of the Language (e.g. en, de, us) (@see java.util.Locale.getLanguage())
+//	 * @return the flag of the country for the given Language
+//	 */
+//	public static Image getImage(String languageID) 
+//	{
+//		ImageDescriptor desc = SharedImages.getImageDescriptor(languageID); 
+//		if (desc != null)
+//			return desc.createImage();
+//		
+//		return null;
+//	}
 
 	/**
 	 * Calling this method will cause the config module to be marked as changed.

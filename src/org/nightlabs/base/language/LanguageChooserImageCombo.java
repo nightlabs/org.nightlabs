@@ -39,11 +39,13 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-
 import org.nightlabs.base.custom.ColorCombo;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.language.LanguageCf;
 
+/**
+ * @deprecated Please use the {@link LanguageChooserCombo} instead!
+ */
 public class LanguageChooserImageCombo 
 extends AbstractLanguageChooser
 {
@@ -88,13 +90,13 @@ extends AbstractLanguageChooser
 		  	if (userLanguageID.equals(language.getLanguageID()))
 		  		languageIdx = languages.size();
 		  	languages.add(language);
-		  	Image image = LanguageManager.getImage(language.getLanguageID());
+		  	Image image = LanguageManager.sharedInstance().getFlag16x16Image(language.getLanguageID());
 		  	if (showImage && showText)
 		  		combo.add(image, language.getNativeName());
 		  	else if (showImage && !showText)
 		  		combo.add(image, "");
 		  	else if (!showImage && showText)
-		  		combo.add(null, language.getNativeName());		  	
+		  		combo.add(null, language.getNativeName());
 		  }
 
 		  if (languageIdx < 0)

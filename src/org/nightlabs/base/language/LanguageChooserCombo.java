@@ -35,9 +35,10 @@ import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.custom.ColorCombo;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.language.LanguageCf;
 
@@ -55,20 +56,27 @@ public class LanguageChooserCombo
 	 */
 	private static final Logger logger = Logger.getLogger(LanguageChooserCombo.class);
 
-	private Combo combo;
+	private ColorCombo combo;
 	private List<LanguageCf> languages = new ArrayList<LanguageCf>();
+
+	public static enum Mode {
+		iconOnly,
+		textOnly,
+		iconAndText
+	}
 
 	public LanguageChooserCombo(Composite parent)
 	{
-		this(parent, true);
+		this(parent, Mode.iconAndText);
 	}
 
-	public LanguageChooserCombo(Composite parent, boolean grabExcessHorizontalSpace)
+	public LanguageChooserCombo(Composite parent, Mode mode)
 	{
 		super(parent, SWT.NONE, true);
 		((GridData)getLayoutData()).grabExcessVerticalSpace = false;
-		((GridData)getLayoutData()).grabExcessHorizontalSpace = grabExcessHorizontalSpace;
-		combo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
+//		((GridData)getLayoutData()).grabExcessHorizontalSpace = grabExcessHorizontalSpace;
+		((GridData)getLayoutData()).grabExcessHorizontalSpace = false;
+		combo = new ColorCombo(this, SWT.BORDER | SWT.READ_ONLY);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(
 				new SelectionAdapter() {
@@ -90,7 +98,21 @@ public class LanguageChooserCombo
 		  	if (userLanguageID.equals(language.getLanguageID()))
 		  		languageIdx = languages.size();
 		  	languages.add(language);
-		  	combo.add(language.getNativeName());
+//		  	combo.add(language.getNativeName());
+		  	Image image = LanguageManager.sharedInstance().getFlag16x16Image(language.getLanguageID());
+		  	switch (mode) {
+					case iconAndText:
+						combo.add(image, language.getName().getText());
+					break;
+					case iconOnly:
+						combo.add(image, "");
+					break;
+					case textOnly:
+						combo.add(null, language.getName().getText());
+					break;
+					default:
+						throw new IllegalStateException("Invalid mode: " + mode);
+				}
 		  }
 
 		  if (languageIdx < 0)

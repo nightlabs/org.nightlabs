@@ -28,7 +28,6 @@ package org.nightlabs.base.labelprovider;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-
 import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.i18n.I18nText;
 
@@ -54,13 +53,13 @@ extends LabelProvider
 
     return ""; //$NON-NLS-1$
   }
-  
+
   public Image getImage(Object element) 
   {
     if (element == null)
       return null; //$NON-NLS-1$
 
-    return LanguageManager.getImage(LanguageManager.sharedInstance().getCurrentLanguageID());    
+    return LanguageManager.sharedInstance().getFlag16x16Image(LanguageManager.sharedInstance().getCurrentLanguageID());    
  	}
   
 //  protected String getLanguageID(String languageText) 

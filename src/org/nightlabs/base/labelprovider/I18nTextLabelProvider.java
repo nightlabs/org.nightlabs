@@ -30,7 +30,6 @@ import java.util.Locale;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-
 import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.i18n.I18nText;
 
@@ -74,9 +73,9 @@ extends LabelProvider
   {
   	if (showImage) {
     	if (languageID != null)
-    		return LanguageManager.getImage(languageID);
+    		return LanguageManager.sharedInstance().getFlag16x16Image(languageID);
     	
-    	return LanguageManager.getImage(Locale.getDefault().getLanguage());  		
+    	return LanguageManager.sharedInstance().getFlag16x16Image(Locale.getDefault().getLanguage());  		
   	}
   	return null;
  	}
