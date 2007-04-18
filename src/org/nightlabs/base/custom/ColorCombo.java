@@ -75,6 +75,7 @@ import org.eclipse.swt.widgets.Widget;
 public class ColorCombo 
 extends Composite
 {
+	private Label imageLabel;
 	private Text text;
 	private int visibleItemCount = 5;
 	private Shell popup;
@@ -115,7 +116,10 @@ extends Composite
  */
 public ColorCombo (Composite parent, int style) {
 	super (parent, style = checkStyle (style));
-	
+
+	imageLabel = new Label(this, SWT.NONE);
+	imageLabel.setBackground(getDefaultBackgroundColor());
+
 	int textStyle = SWT.SINGLE;
 	if ((style & SWT.READ_ONLY) != 0) textStyle |= SWT.READ_ONLY;
 	if ((style & SWT.FLAT) != 0) textStyle |= SWT.FLAT;
@@ -398,23 +402,35 @@ public Point computeSize (int wHint, int hHint, boolean changed)
 {
 	checkWidget ();
 	int width = 0, height = 0;
-//	TableItem[] items = list.getItems();
+
+	Point maxImageSize = new Point(0, 0);
+	TableItem[] items = getItems();
+
 	int textWidth = 0;
 	GC gc = new GC (text);
 	int spacer = gc.stringExtent (" ").x; //$NON-NLS-1$
-//	for (int i = 0; i < items.length; i++) {
-//		TableItem item = items[i];
-//		item.getText();
-//		textWidth = Math.max (gc.stringExtent( (items[i]).x, textWidth));
-//	}	
+	for (int i = 0; i < items.length; i++) {
+		TableItem item = items[i];
+		item.getText();
+		textWidth = Math.max(gc.stringExtent(items[i].getText()).x, textWidth);
+
+		Image img = item.getImage();
+		maxImageSize.x = Math.max(maxImageSize.x, img == null ? 0 : img.getBounds().width);
+		maxImageSize.y = Math.max(maxImageSize.y, img == null ? 0 : img.getBounds().height);
+	}	
 	gc.dispose();
 	Point textSize = text.computeSize (SWT.DEFAULT, SWT.DEFAULT, changed);
 	Point arrowSize = arrow.computeSize (SWT.DEFAULT, SWT.DEFAULT, changed);
 	Point listSize = table.computeSize (wHint, SWT.DEFAULT, changed);
 	int borderWidth = getBorderWidth ();
-	
+
+	int imageTextSpace = maxImageSize.x == 0 ? 0 : imageTextSpaceConst;
+
 	height = Math.max (hHint, Math.max (textSize.y, arrowSize.y) + 2*borderWidth);
-	width = Math.max (wHint, Math.max (textWidth + 2*spacer + arrowSize.x + 2*borderWidth, listSize.x));
+//	width = Math.max (wHint, Math.max (textWidth + 2*spacer + arrowSize.x + 2*borderWidth, listSize.x));
+//	width += maxImageSize.x + imageTextSpace;
+	// XXX This works but it's wrong.
+	width = Math.max (wHint, Math.max (maxImageSize.x + imageTextSpace + textWidth + 2*spacer + arrowSize.x + 2*borderWidth, listSize.x));
 	return new Point (width, height);
 }
 
@@ -946,9 +962,19 @@ void internalLayout (boolean changed) {
 	int width = rect.width;
 	int height = rect.height;
 	Point arrowSize = arrow.computeSize (SWT.DEFAULT, height, changed);
-	text.setBounds (0, 0, width - arrowSize.x, height);
+
+	Image img = imageLabel.getImage();
+	int imageWidth = img == null ? 0 : img.getBounds().width;
+	int imageHeight = img == null ? 0 : img.getBounds().height;
+
+	int imageTextSpace = imageWidth == 0 ? 0 : imageTextSpaceConst;
+
+	imageLabel.setBounds(0, (height - imageHeight) / 2, imageWidth, imageHeight);
+	text.setBounds (imageWidth + imageTextSpace, 0, width - arrowSize.x - imageWidth - imageTextSpace, height);
 	arrow.setBounds (width - arrowSize.x, 0, arrowSize.x, arrowSize.y);
 }
+
+private static int imageTextSpaceConst = 4;
 
 void listEvent (Event event) {
 	switch (event.type) {
@@ -973,7 +999,11 @@ void listEvent (Event event) {
 		case SWT.Selection: {
 			int index = table.getSelectionIndex ();
 			if (index == -1) return;
-			text.setText (table.getItem (index).getText());
+			TableItem tableItem = table.getItem(index);
+			int oldImgWidth = imageLabel.getImage() == null ? 0 : imageLabel.getImage().getBounds().width;
+			int newImgWidth = tableItem.getImage() == null ? 0 : tableItem.getImage().getBounds().width;
+			imageLabel.setImage(tableItem.getImage());
+			text.setText (tableItem.getText());
 //			text.selectAll ();
 			textSelectAll();			
 			table.setSelection (index);
@@ -983,6 +1013,10 @@ void listEvent (Event event) {
 			e.doit = event.doit;
 			notifyListeners (SWT.Selection, e);
 			event.doit = e.doit;
+
+			if (oldImgWidth != newImgWidth)
+				layout(true, true);
+
 			break;
 		}
 		case SWT.Traverse: {
@@ -1238,17 +1272,27 @@ public void removeSelectionListener (SelectionListener listener) {
 public void select (int index) {
 	checkWidget();
 	if (index == -1) {
+		imageLabel.setImage(null);
 		table.deselectAll ();
 		text.setText (""); //$NON-NLS-1$
 		return;
 	}
 	if (0 <= index && index < table.getItemCount()) {
 		if (index != getSelectionIndex()) {
-			text.setText (table.getItem (index).getText());
+			TableItem tableItem = table.getItem (index);
+
+			int oldImgWidth = imageLabel.getImage() == null ? 0 : imageLabel.getImage().getBounds().width;
+			int newImgWidth = tableItem.getImage() == null ? 0 : tableItem.getImage().getBounds().width;
+			imageLabel.setImage(tableItem.getImage());
+
+			text.setText (tableItem.getText());
 //			text.selectAll ();
 			textSelectAll();
 			table.select (index);
 			table.showSelection ();
+
+			if (oldImgWidth != newImgWidth)
+				layout(true, true);
 		}
 	}
 }
