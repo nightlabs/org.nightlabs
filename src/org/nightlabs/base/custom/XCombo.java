@@ -62,15 +62,15 @@ import org.eclipse.swt.widgets.Widget;
 
 /**
  * A Custom Implementation of a ComboBox which is able not only to show Strings but also
- * Images (@link org.eclipse.swt.graphics.Image)  
+ * {@link org.eclipse.swt.graphics.Image}s.  
  * 
- * This Composite and its implementation (greate parts are adopted) is created more less like a CCombo 
- * (@link org.eclipse.swt.custom.CCombo) but  
- * internal it uses a Table (@link org.eclipse.swt.widgets.Table) instead of a 
- * List (@link org.eclipse.swt.widgets.List) for displaying the entries
+ * This Composite and its implementation (greate parts are adopted) is created more less
+ * like a {@link org.eclipse.swt.custom.CCombo} but
+ * internally, it uses a {@link org.eclipse.swt.widgets.Table} instead of a 
+ * {@link org.eclipse.swt.widgets.List} for displaying the entries.
  * 
  * @author Daniel.Mazurek [AT] NightLabs [DOT] com
- *
+ * @author Marco Schulze - Marco at NightLabs dot de
  */
 public class XCombo 
 extends Composite
