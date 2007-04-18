@@ -39,7 +39,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.custom.ColorCombo;
+import org.nightlabs.base.custom.XCombo;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.language.LanguageCf;
 
@@ -57,7 +57,7 @@ public class LanguageChooserCombo
 	 */
 	private static final Logger logger = Logger.getLogger(LanguageChooserCombo.class);
 
-	private ColorCombo combo;
+	private XCombo combo;
 	private List<LanguageCf> languages = new ArrayList<LanguageCf>();
 
 	public static enum Mode {
@@ -77,7 +77,7 @@ public class LanguageChooserCombo
 		((GridData)getLayoutData()).grabExcessVerticalSpace = false;
 //		((GridData)getLayoutData()).grabExcessHorizontalSpace = grabExcessHorizontalSpace;
 		((GridData)getLayoutData()).grabExcessHorizontalSpace = false;
-		combo = new ColorCombo(this, SWT.BORDER | SWT.READ_ONLY);
+		combo = new XCombo(this, SWT.BORDER | SWT.READ_ONLY);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(
 				new SelectionAdapter() {

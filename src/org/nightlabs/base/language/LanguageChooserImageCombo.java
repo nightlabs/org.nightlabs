@@ -39,7 +39,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.custom.ColorCombo;
+import org.nightlabs.base.custom.XCombo;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.language.LanguageCf;
 
@@ -54,7 +54,7 @@ extends AbstractLanguageChooser
 	 */
 	private static final Logger logger = Logger.getLogger(LanguageChooserImageCombo.class);
 	
-	protected ColorCombo combo;
+	protected XCombo combo;
 	protected List<LanguageCf> languages = new ArrayList<LanguageCf>();
 	
 	public LanguageChooserImageCombo(Composite parent) {
@@ -76,7 +76,7 @@ extends AbstractLanguageChooser
 		if (!showImage && !showText)
 			throw new IllegalArgumentException("either showImage or showText must be true!");
 		
-		combo = new ColorCombo(this, SWT.BORDER | SWT.READ_ONLY);
+		combo = new XCombo(this, SWT.BORDER | SWT.READ_ONLY);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(comboSelectionListener);
 		try {

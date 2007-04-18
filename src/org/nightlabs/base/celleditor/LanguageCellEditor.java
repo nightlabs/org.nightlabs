@@ -53,7 +53,7 @@ extends CellEditor
 	protected I18nTextEditor textEditor;
 		
   /**
-   * Creates a ColorCombo and adds some listener to it
+   * Creates a XCombo and adds some listener to it
    */
   protected Control createControl(Composite parent) 
   {	

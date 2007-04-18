@@ -72,7 +72,7 @@ import org.eclipse.swt.widgets.Widget;
  * @author Daniel.Mazurek [AT] NightLabs [DOT] com
  *
  */
-public class ColorCombo 
+public class XCombo 
 extends Composite
 {
 	private Label imageLabel;
@@ -114,7 +114,7 @@ extends Composite
  * @see SWT#FLAT
  * @see Widget#getStyle()
  */
-public ColorCombo (Composite parent, int style) {
+public XCombo (Composite parent, int style) {
 	super (parent, style = checkStyle (style));
 
 	imageLabel = new Label(this, SWT.NONE);
@@ -150,7 +150,7 @@ public ColorCombo (Composite parent, int style) {
 				arrowEvent (event);
 				return;
 			}
-			if (ColorCombo.this == event.widget) {
+			if (XCombo.this == event.widget) {
 				comboEvent (event);
 				return;
 			}
@@ -162,7 +162,7 @@ public ColorCombo (Composite parent, int style) {
 	filter = new Listener() {
 		public void handleEvent(Event event) {
 			Shell shell = ((Control)event.widget).getShell ();
-			if (shell == ColorCombo.this.getShell ()) {
+			if (shell == XCombo.this.getShell ()) {
 				handleFocus (SWT.FocusOut);
 			}
 		}
@@ -429,7 +429,6 @@ public Point computeSize (int wHint, int hHint, boolean changed)
 	height = Math.max (hHint, Math.max (textSize.y, arrowSize.y) + 2*borderWidth);
 //	width = Math.max (wHint, Math.max (textWidth + 2*spacer + arrowSize.x + 2*borderWidth, listSize.x));
 //	width += maxImageSize.x + imageTextSpace;
-	// XXX This works but it's wrong.
 	width = Math.max (wHint, Math.max (maxImageSize.x + imageTextSpace + textWidth + 2*spacer + arrowSize.x + 2*borderWidth, listSize.x));
 	return new Point (width, height);
 }
@@ -541,7 +540,7 @@ void dropDown (boolean drop) {
 Label getAssociatedLabel () {
 	Control[] siblings = getParent ().getChildren ();
 	for (int i = 0; i < siblings.length; i++) {
-		if (siblings [i] == ColorCombo.this) {
+		if (siblings [i] == XCombo.this) {
 			if (i > 0 && siblings [i-1] instanceof Label) {
 				return (Label) siblings [i-1];
 			}

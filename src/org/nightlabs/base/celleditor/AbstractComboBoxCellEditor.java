@@ -41,7 +41,7 @@ import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.nightlabs.base.custom.ColorCombo;
+import org.nightlabs.base.custom.XCombo;
 
 public abstract class AbstractComboBoxCellEditor 
 extends CellEditor
@@ -65,10 +65,10 @@ extends CellEditor
 //	}
 
   /**
-   * the ColorCombo which will display 
+   * the XCombo which will display 
    */
-	private ColorCombo comboBox;
-	public ColorCombo getComboBox() {
+	private XCombo comboBox;
+	public XCombo getComboBox() {
 		return comboBox;
 	}
 	
@@ -82,7 +82,7 @@ extends CellEditor
    */
   protected Control createControl(Composite parent) 
   {	
-	  comboBox = new ColorCombo(parent, getStyle());
+	  comboBox = new XCombo(parent, getStyle());
 //  	comboBox = new Combo(parent, getStyle());
 	  comboBox.setFont(parent.getFont());
 	

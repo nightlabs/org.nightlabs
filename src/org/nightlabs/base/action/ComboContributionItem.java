@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.nightlabs.base.custom.ColorCombo;
+import org.nightlabs.base.custom.XCombo;
 
 /**
  * A ContributionItem for a ToolBar showing a defined List of items.
@@ -47,7 +47,7 @@ import org.nightlabs.base.custom.ColorCombo;
 public abstract class ComboContributionItem extends XContributionItem {
 
 //	private XComposite wrapper;
-	private ColorCombo combo;
+	private XCombo combo;
 	private List entries;
 
 	private boolean updating;
@@ -89,7 +89,7 @@ public abstract class ComboContributionItem extends XContributionItem {
 	{
 //		wrapper = new XComposite(parent, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER, XComposite.LAYOUT_DATA_MODE_NONE);
 //		wrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo = new ColorCombo(parent, SWT.READ_ONLY);
+		combo = new XCombo(parent, SWT.READ_ONLY);
 		combo.setSize(200, 30);
 		
 		for (Iterator iter = nullAddedSelListener.iterator(); iter.hasNext();) {
@@ -128,7 +128,7 @@ public abstract class ComboContributionItem extends XContributionItem {
 	 * Returns the Combo control
 	 * @return the Combo control
 	 */
-	public ColorCombo getCombo() {
+	public XCombo getCombo() {
 		return combo;
 	}
 

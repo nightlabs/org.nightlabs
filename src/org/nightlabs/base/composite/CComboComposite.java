@@ -35,7 +35,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
-import org.nightlabs.base.custom.ColorCombo;
+import org.nightlabs.base.custom.XCombo;
 
 /**
  * @author Daniel.Mazurek at Nightlabs dot de
@@ -124,14 +124,14 @@ extends XComposite
 	private int comboStyle = SWT.BORDER | SWT.READ_ONLY;
 	private ILabelProvider labelProvider = null;
 	private List<T> types = null;
-	private ColorCombo imageCombo = null;	
-//	public ColorCombo getCombo() {
+	private XCombo imageCombo = null;	
+//	public XCombo getCombo() {
 //		return imageCombo;
 //	}
 	
 	protected void populateCombo() 
 	{
-		imageCombo = new ColorCombo(this, comboStyle);
+		imageCombo = new XCombo(this, comboStyle);
 		imageCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		for (T type : types) {
 			imageCombo.add(labelProvider.getImage(type), labelProvider.getText(type));
@@ -162,7 +162,7 @@ extends XComposite
 	
 	/**
 	 * @param listener
-	 * @see org.nightlabs.base.custom.ColorCombo#addModifyListener(org.eclipse.swt.events.ModifyListener)
+	 * @see org.nightlabs.base.custom.XCombo#addModifyListener(org.eclipse.swt.events.ModifyListener)
 	 */
 	public void addModifyListener(ModifyListener listener) {
 		imageCombo.addModifyListener(listener);
@@ -170,7 +170,7 @@ extends XComposite
 
 	/**
 	 * @param listener
-	 * @see org.nightlabs.base.custom.ColorCombo#addSelectionListener(org.eclipse.swt.events.SelectionListener)
+	 * @see org.nightlabs.base.custom.XCombo#addSelectionListener(org.eclipse.swt.events.SelectionListener)
 	 */
 	public void addSelectionListener(SelectionListener listener) {
 		imageCombo.addSelectionListener(listener);
@@ -178,7 +178,7 @@ extends XComposite
 
 	/**
 	 * @param listener
-	 * @see org.nightlabs.base.custom.ColorCombo#removeModifyListener(org.eclipse.swt.events.ModifyListener)
+	 * @see org.nightlabs.base.custom.XCombo#removeModifyListener(org.eclipse.swt.events.ModifyListener)
 	 */
 	public void removeModifyListener(ModifyListener listener) {
 		imageCombo.removeModifyListener(listener);
@@ -186,7 +186,7 @@ extends XComposite
 
 	/**
 	 * @param listener
-	 * @see org.nightlabs.base.custom.ColorCombo#removeSelectionListener(org.eclipse.swt.events.SelectionListener)
+	 * @see org.nightlabs.base.custom.XCombo#removeSelectionListener(org.eclipse.swt.events.SelectionListener)
 	 */
 	public void removeSelectionListener(SelectionListener listener) {
 		imageCombo.removeSelectionListener(listener);
@@ -195,7 +195,7 @@ extends XComposite
 	/**
 	 * @param index
 	 * @return
-	 * @see org.nightlabs.base.custom.ColorCombo#getItem(int)
+	 * @see org.nightlabs.base.custom.XCombo#getItem(int)
 	 */
 	public TableItem getItem(int index) {
 		return imageCombo.getItem(index);
@@ -203,7 +203,7 @@ extends XComposite
 
 	/**
 	 * @return
-	 * @see org.nightlabs.base.custom.ColorCombo#getItemCount()
+	 * @see org.nightlabs.base.custom.XCombo#getItemCount()
 	 */
 	public int getItemCount() {
 		return imageCombo.getItemCount();
@@ -211,7 +211,7 @@ extends XComposite
 
 	/**
 	 * @param index
-	 * @see org.nightlabs.base.custom.ColorCombo#select(int)
+	 * @see org.nightlabs.base.custom.XCombo#select(int)
 	 */
 	public void select(int index) {
 		imageCombo.select(index);
