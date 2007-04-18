@@ -37,7 +37,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.custom.XCombo;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
