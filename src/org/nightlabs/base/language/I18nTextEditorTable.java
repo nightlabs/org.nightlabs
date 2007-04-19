@@ -35,6 +35,7 @@ import org.nightlabs.i18n.I18nText;
  */
 public class I18nTextEditorTable extends XComposite{
 	
+	private Table table;
 	private TableViewer tableViewer;
 	
 	private String[] columnNames;
@@ -53,9 +54,7 @@ public class I18nTextEditorTable extends XComposite{
 	public I18nTextEditorTable(Composite parent, int style, I18nTextEditorTableItemList i18nTableItemList) {
 		super(parent, style);
 		this.i18nTableItemList = i18nTableItemList;
-	}
-	
-	public void generateI18nTableTextEditor(){
+		
 		GridLayout gridLayout = new GridLayout();
 	    gridLayout.numColumns = 1;
 	    gridLayout.horizontalSpacing = 1;
@@ -66,14 +65,16 @@ public class I18nTextEditorTable extends XComposite{
 		//Initial TableViewer
 		int tableStyle = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | 
 		SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
-		Table table = new Table(this, tableStyle);
+		table = new Table(this, tableStyle);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		table.setLayoutData(gd);
 
 		tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
-
+	}
+	
+	public void generateI18nTableTextEditor(){
 		//Set Columns
 		if(columnNames == null)
 			columnNames = new String[]{"Column1", "Column2", "Column3"};
