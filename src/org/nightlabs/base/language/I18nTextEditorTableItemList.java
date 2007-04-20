@@ -5,6 +5,9 @@ import java.util.Map;
 
 
 public abstract class I18nTextEditorTableItemList {
+	/*
+	 * Map of ID & I18nTextEditorTableItem
+	 */
 	protected Map<String, I18nTextEditorTableItem> i18nTableItemMap = new HashMap<String, I18nTextEditorTableItem>();
 
 	public void setI18nTableItemMap(Map<String, I18nTextEditorTableItem> tableItemMap) {
