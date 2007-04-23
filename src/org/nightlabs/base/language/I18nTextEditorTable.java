@@ -48,6 +48,7 @@ import org.nightlabs.language.LanguageCf;
  * {@link #copyToOriginal()} to let that be done for you.
  * 
  * @author Chairat Kongarayawetchakun - Chairat at nightlabs dot de
+ * @author Marco Schulze - Marco at NightLabs dot de
  */
 public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 {
