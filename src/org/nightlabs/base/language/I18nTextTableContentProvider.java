@@ -9,6 +9,10 @@ import org.eclipse.jface.viewers.Viewer;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.language.LanguageCf;
 
+/**
+ * @deprecated Marco: I moved this class into the I18nTextEditorTable as a private static subclass.
+ * This class is not used anymore and will be removed within the next few days.
+ */
 public class I18nTextTableContentProvider implements IStructuredContentProvider // , I18nTextTableListener // Marco: I don't think that we need this interface.
 {
 ////		private I18nTextTableItemList i18nTextTableList;

@@ -1,5 +1,7 @@
 package org.nightlabs.base.language;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -13,6 +15,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -26,8 +29,10 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.language.I18nTextEditor.EditMode;
+import org.nightlabs.base.table.TableContentProvider;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
+import org.nightlabs.language.LanguageCf;
 
 /**
  * Editor Table Composite for {@link I18nText}s. This will provide (or use) a
@@ -47,15 +52,15 @@ import org.nightlabs.i18n.I18nTextBuffer;
 public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 {
 	// Marco: constants should be final.
-	private static final String COLUMN_FLAG     = "Flag";
-	private static final String COLUMN_LANGUAGE = "Language";
-	private static final String COLUMN_VALUE    = "Value";
+	private static final String COLUMN_FLAG_NAME     = "Flag"; //$NON-NLS-1$
+	private static final String COLUMN_LANGUAGE_NAME = "Language"; //$NON-NLS-1$
+	private static final String COLUMN_VALUE_NAME    = "Value"; //$NON-NLS-1$
 
 	private static final int COLUMN_FLAG_INDEX = 0;
 	private static final int COLUMN_LANGUAGE_INDEX = 1;
 	private static final int COLUMN_VALUE_INDEX = 2;
 
-	private String[] COLUMN_PROPERTIES = { COLUMN_FLAG, COLUMN_LANGUAGE, COLUMN_VALUE };
+	private static final String[] COLUMN_NAMES = { COLUMN_FLAG_NAME, COLUMN_LANGUAGE_NAME, COLUMN_VALUE_NAME };
 
 	private I18nText original;
 	private I18nText work;
@@ -103,8 +108,9 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 //	}
 //
 //	public void generateI18nTableTextEditor() {
-		// Set Columns
-		tableViewer.setColumnProperties(COLUMN_PROPERTIES);
+
+		// set Columns
+		tableViewer.setColumnProperties(COLUMN_NAMES);
 
 		new TableColumn(table, SWT.LEFT).setText("F"); // TODO Externalise: Eclipse Menu => Source => Externalize Strings...
 		new TableColumn(table, SWT.LEFT).setText("Language");
@@ -126,7 +132,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 //			tableColumn.setWidth(150);
 //		}// for
 
-// Marco: I think we need only one cell-editor, because we have only one column (with one type)
+// Marco: I think we need only one cell-editor, because we have only one column (with one type) to edit
 //		// Create the cell editors
 //		CellEditor[] editors = new CellEditor[columnNames.length];
 //
@@ -147,8 +153,8 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 		tableViewer.setCellModifier(new I18nTextEditorTableCellModifier());
 
 		// Set the cell modifier for the viewer
-//		tableViewer.setCellModifier(new I18nTextCellModifier(Arrays.asList(columnNames),i18nTextTableItemList)); // Marco: commented this out temporarily in order to get rid of the I18nTextTableContentProvider
-		tableViewer.setContentProvider(new I18nTextTableContentProvider()); // Marco: removed the parameters - a ContentProvider never gets its content immutable this way - it gets it via the callback-method inputChanged(...) 
+//		tableViewer.setCellModifier(new I18nTextCellModifier(Arrays.asList(columnNames),i18nTextTableItemList)); // Marco: commented this out temporarily in order to get rid of the I18nTextEditorTableContentProvider
+		tableViewer.setContentProvider(new I18nTextEditorTableContentProvider()); // Marco: removed the parameters - a ContentProvider never gets its content immutable this way - it gets it via the callback-method inputChanged(...) 
 		tableViewer.setLabelProvider(new I18nTextLabelProvider());
 //		tableViewer.setInput(i18nTextTableItemList); // Marco: there is no input yet!
 	}
@@ -430,7 +436,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 	{
 		public boolean canModify(Object element, String property)
 		{
-			return COLUMN_VALUE.equals(property);
+			return COLUMN_VALUE_NAME.equals(property);
 		}
 
 		@SuppressWarnings("unchecked")
@@ -442,7 +448,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 		@SuppressWarnings("unchecked")
 		public void modify(Object element, String property, Object value)
 		{
-			if (COLUMN_VALUE.equals(property)) {
+			if (COLUMN_VALUE_NAME.equals(property)) {
 				TableItem tableItem = (TableItem) element;
 				Map.Entry<String, String> mapEntry = (Entry<String, String>) tableItem.getData();
 				String languageID = mapEntry.getKey();
@@ -591,7 +597,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 //	}
 
 	/////////////////////////////////////////////////
-	public class I18nTextLabelProvider 
+	private class I18nTextLabelProvider 
 	extends LabelProvider
 	implements ITableLabelProvider {
 
@@ -616,13 +622,13 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 			Map.Entry<String, String> item = (Map.Entry<String, String>)element;
 			switch (columnIndex) {
 				case COLUMN_FLAG_INDEX:
-					return "";
+					return ""; //$NON-NLS-1$
 				case COLUMN_LANGUAGE_INDEX:
 					return LanguageManager.sharedInstance().getLanguage(item.getKey(), true).getName().getText();
 				case COLUMN_VALUE_INDEX:
 					return item.getValue();
 				default :
-					return ""; 	
+					return ""; 	 //$NON-NLS-1$
 			}
 		}
 
@@ -667,6 +673,43 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 //			}//else
 //
 //			return result;
+		}
+	}
+
+	private static class I18nTextEditorTableContentProvider extends TableContentProvider
+	{
+		private I18nText i18nText = null;
+
+		@Override
+		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
+			if (newInput instanceof I18nText)
+				this.i18nText = (I18nText) newInput;
+			else
+				this.i18nText = null;
+		}
+
+		// Return the i18nText as an array of Objects
+		@SuppressWarnings("unchecked")
+		@Override
+		public Object[] getElements(Object parent) {
+			if (i18nText == null)
+				return new Object[0];
+
+			Collection<LanguageCf> languageCfs = LanguageManager.sharedInstance().getLanguages();
+			Map<String, String> es = new HashMap<String, String>(languageCfs.size());
+			for (Map.Entry<String, String> me : i18nText.getTexts()) {
+				String languageID = me.getKey();
+				String text = me.getValue();
+				es.put(languageID, text);
+			}
+
+			for (LanguageCf languageCf : languageCfs) {
+				String languageID = languageCf.getLanguageID();
+				if (!es.containsKey(languageID))
+					es.put(languageID, ""); //$NON-NLS-1$
+			}
+
+			return es.entrySet().toArray();
 		}
 	}
 }
