@@ -43,6 +43,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -318,4 +319,15 @@ implements ISelectionProvider
 	{
 		tableViewer.setSelection(selection);
 	}
+
+	@Override
+	public Menu getMenu() {
+		return getTable().getMenu();
+	}
+
+	@Override
+	public void setMenu(Menu menu) {
+		getTable().setMenu(menu);
+	}
+	
 }
