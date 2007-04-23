@@ -9,10 +9,14 @@ import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.language.LanguageCf;
 
+/**
+ * @deprecated Marco: This whole class is not necessary!
+ */
 public class I18nTextTableItemList {
 	/*
 	 * Map of ID & I18nText
 	 */
+	// Marco: why do you manage multiple instances of I18nText? there is only ONE instance!
 	protected Map<String, I18nText> i18nTableItemMap = new HashMap<String, I18nText>();
 
 	public void setI18nTableItemMap(Map<String, I18nText> tableItemMap) {

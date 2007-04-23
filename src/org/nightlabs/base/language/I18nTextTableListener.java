@@ -2,6 +2,9 @@ package org.nightlabs.base.language;
 
 import org.nightlabs.i18n.I18nText;
 
+/**
+ * @deprecated Marco: What's this interface good for? I think that's mumpiz ;-)
+ */
 public interface I18nTextTableListener {
 		/**
 		 * Update the view to reflect the fact that a I18nText was added 
