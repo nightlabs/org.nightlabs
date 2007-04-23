@@ -1,6 +1,5 @@
 package org.nightlabs.base.language;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -92,20 +91,13 @@ public class I18nTextTableItemList {
 	public void updateI18nTextMap(Object obj){
 		this.obj = obj;
 
-		Map<Object, Object> newI18nTextMap = new HashMap<Object, Object>();
-
-		String[] languageCodeArray = new String[supportLanguages.length];
-		for(int i = 0; i < supportLanguages.length; i++){
-			languageCodeArray[i] = supportLanguages[i].getLanguageID();
-		}//for
-		Arrays.sort(languageCodeArray);
+		Map<Object, I18nText> newI18nTextMap = new HashMap<Object, I18nText>();
 
 		I18nText i18nText = (I18nText)obj;
-		for(int i = 0; i < languageCodeArray.length; i ++){
-			String value = i18nText.getText(languageCodeArray[i]);
-			newI18nTextMap.put(languageCodeArray[i], value);
+		for(int i = 0; i < supportLanguages.length; i++){
+			newI18nTextMap.put(supportLanguages[i].getLanguageID(), i18nText);
 		}//for
-
+		
 		createI18nTextMap(newI18nTextMap);		
 	}
 
@@ -113,23 +105,22 @@ public class I18nTextTableItemList {
 	/*
 	 * Create geographyNames of input
 	 */
-	public void createI18nTextMap(Map<Object, Object> newI18nTextMap){
+	public void createI18nTextMap(Map<Object, I18nText> newI18nTextMap){
 		I18nText i18nText =  null;
 		Set<Object> inputLanguageKeySet = (newI18nTextMap == null ? null : newI18nTextMap.keySet());
-
 		for (int i = 0; i < supportLanguages.length; i++) {
 			if(inputLanguageKeySet != null && inputLanguageKeySet.size() > 0){
 				for(Object inputLang : inputLanguageKeySet){
-					if(inputLang instanceof String) {
+					if(inputLang != null && inputLang instanceof String) {
 						String inputLanguageID = (String)inputLang;
 						if(inputLanguageID.equalsIgnoreCase(supportLanguages[i].getLanguageID())){
-							if(i18nTableItemMap.get(inputLang) == null){
+							if(i18nTableItemMap.get(inputLang).getText(supportLanguages[i].getLanguageID()) == null){
 								i18nText = new I18nTextBuffer();
-								i18nText.setText(inputLanguageID, (newI18nTextMap.get(inputLang)).toString());
+								i18nText.setText(inputLanguageID, (newI18nTextMap.get(inputLang)).getText(inputLanguageID));
 							}//if
 							else{
 								i18nText = (I18nText)i18nTableItemMap.get(inputLanguageID);
-								i18nText.setText("", newI18nTextMap.get(inputLang).toString());
+								i18nText.setText(inputLanguageID, newI18nTextMap.get(inputLang).getText(inputLanguageID));
 							}//else
 							i18nTableItemMap.put(inputLanguageID, i18nText);
 						}//if
@@ -138,6 +129,7 @@ public class I18nTextTableItemList {
 			}//if
 			else{
 				i18nText = new I18nTextBuffer();
+				i18nText.setText(supportLanguages[i].getLanguageID(), "???");
 				i18nTableItemMap.put(supportLanguages[i].getLanguageID(), i18nText);
 			}//else
 		}//for

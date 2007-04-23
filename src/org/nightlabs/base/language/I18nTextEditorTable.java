@@ -1,8 +1,10 @@
 package org.nightlabs.base.language;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.core.runtime.ListenerList;
@@ -15,9 +17,11 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -27,6 +31,7 @@ import org.nightlabs.base.language.I18nTextEditor.EditMode;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.language.LanguageCf;
+import org.nightlabs.util.Utils;
 
 /**
  * Editor Table Composite for {@link I18nText}s. This will provide (or use) a
@@ -44,6 +49,10 @@ import org.nightlabs.language.LanguageCf;
  * @author Chairat Kongarayawetchakun - Chairat at nightlabs dot de
  */
 public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
+	private final String FLAG_COLUMN			= "Flag";
+	private final String LANGUAGE_COLUMN 		= "Language";
+	private final String VALUE_COLUMN 			= "Value";
+
 	private I18nText original;
 	private I18nText work;
 	private I18nTextBuffer buffer = null;
@@ -51,11 +60,15 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
 	private Table table;
 	private TableViewer tableViewer;
 
-	private String[] columnNames;
-	private boolean[] editableColumns;
+	//Set column names
+	private String[] columnNames = new String[] {FLAG_COLUMN,
+			LANGUAGE_COLUMN,
+			VALUE_COLUMN
+	};
+	private boolean[] editableColumns = new boolean[]{false, false, true};
 
 	private I18nTextTableItemList i18nTextTableItemList;
-	
+
 	private I18nTextEditorTable() {
 		super(null, 0);
 	}
@@ -82,12 +95,12 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
 
 		tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
+
+		generateI18nTableTextEditor();
 	}
 
 	public void generateI18nTableTextEditor() {
 		// Set Columns
-		if (columnNames == null)
-			columnNames = new String[] { "Column1", "Column2", "Column3" };
 		tableViewer.setColumnProperties(columnNames);
 
 		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT, SWT.LEFT };
@@ -130,6 +143,15 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
 	}
 
 	/**
+	 * Return the TableViewer
+	 * 
+	 * @return TableViewer
+	 */
+	public TableViewer getTableViewer() {
+		return tableViewer;
+	}
+
+	/**
 	 * Return the I18nTableItemList
 	 * 
 	 * @return I18nTableItemList of I18nText items
@@ -147,13 +169,8 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
 		return editableColumns;
 	}
 
-	/**
-	 * Return the TableViewer
-	 * 
-	 * @return TableViewer
-	 */
-	public TableViewer getTableViewer() {
-		return tableViewer;
+	public void setEditableColumns(boolean[] editableColumns) {
+		this.editableColumns = editableColumns;
 	}
 
 	/**
@@ -167,18 +184,6 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
 
 	public void setColumnNames(String[] columnNames) {
 		this.columnNames = columnNames;
-	}
-
-	public void setEditableColumns(boolean[] editableColumns) {
-		this.editableColumns = editableColumns;
-	}
-
-	protected void setI18nTableItemList(I18nTextTableItemList tableItemList) {
-//		i18nTableItemList = tableItemList;
-	}
-
-	protected void setCellModifier(ICellModifier cellModifier) {
-		//	this.cellModifier = cellModifier;
 	}
 
 	/** ************************************************************************** */
@@ -267,6 +272,46 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
 		setI18nText(null);
 	}
 
+	/**
+	 * If the {@link EditMode} is {@link EditMode#DIRECT}, this editor will
+	 * work directly with the {@link I18nText} that has been passed to
+	 * {@link #setI18nText(I18nText)}. That means, every modification is
+	 * directly forwarded to the original {@link I18nText} object (on
+	 * focus lost or when calling {@link #getI18nText()}). This behaviour is
+	 * useful when you create a new object (e.g. in a wizard page). In this case,
+	 * it's not necessary to call {@link #copyToOriginal()}.
+	 * <p>
+	 * If you edit an existing object, it is (in most cases) not desired to modify it
+	 * directly, but instead to transfer all data only from the UI to the object, if
+	 * the user explicitely applies his changes (in order to transfer them to the server
+	 * as well). Therefore, you can use the {@link EditMode#BUFFERED}, which will
+	 * cause an internal {@link I18nTextBuffer} to be created. 
+	 * </p>
+	 *
+	 * @param editMode The new {@link EditMode}.
+	 */
+	public void setEditMode(EditMode editMode) {
+		this.editMode = editMode;
+
+		switch (editMode) {
+		case DIRECT:
+			work = original;
+			break;
+		case BUFFERED:
+			if (buffer == null)
+				buffer = new I18nTextBuffer();
+
+			buffer.clear();
+			work = buffer;
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown editMode: " + editMode);
+		}
+
+		if (work != original && work != null && original != null)
+			work.copyFrom(original);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -274,6 +319,20 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
 	 */
 	public void setEditable(boolean editable) {
 //		text.setEditable(editable);
+	}
+
+	protected void _setI18nText(I18nText i18nText, EditMode editMode)
+	{
+		original = i18nText;
+
+		if (editMode != null)
+			setEditMode(editMode);
+		else {
+			if (original instanceof I18nTextBuffer)
+				setEditMode(EditMode.DIRECT);
+			else
+				setEditMode(EditMode.BUFFERED);
+		}
 	}
 
 	/*
@@ -292,12 +351,11 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
 	 *      org.nightlabs.base.language.I18nTextEditor.EditMode)
 	 */
 	public void setI18nText(I18nText i18nText, EditMode editMode) {
-//		storeText();
-//		_setI18nText(i18nText, editMode);
-//		loadText();
+		storeText();
+		_setI18nText(i18nText, editMode);
+		loadText();
 	}
 
-	/*********************************************************************
 	/**
 	 * This method stores the currently edited text into the "backend" {@link I18nText}
 	 * object. This method is automatically called whenever the <tt>I18nTextEditor</tt>
@@ -411,8 +469,8 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
 
 				i18nText.setText("", value.toString());
 
-				Map<Object, Object> newI18nTextMap = new HashMap<Object, Object>();
-				newI18nTextMap.put(languageID, valueString);
+				Map<Object, I18nText> newI18nTextMap = new HashMap<Object, I18nText>();
+				newI18nTextMap.get(languageID);
 				i18nTextTableItemList.createI18nTextMap(newI18nTextMap);
 				break;
 			default :
@@ -424,45 +482,45 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
 
 		private void updateTemplateData(I18nTextTableItemList i18nTextTableItemList){
 //			try {
-//				GeographyTemplateDataAdmin geoAdmin = new GeographyTemplateDataAdmin();
-//
-//				String rootOrganisationID = SecurityReflector.getUserDescriptor().getOrganisationID(); //TODO Change to root orgID
-//				if(geographyNameList.getGeographyObject() instanceof Country){
-//					Country country = (Country)geographyNameList.getGeographyObject();
+//			GeographyTemplateDataAdmin geoAdmin = new GeographyTemplateDataAdmin();
 
-//					Collection<GeographyName> geographyNames = geographyNameList.getGeographyNames().values();
-//					for(GeographyName geographyName : geographyNames){
-//					country.getName().setText(geographyName.getLanguageID(), geographyName.getValue());
-//					}//for
-//					geoAdmin.storeGeographyTemplateCountryData(country);
-//				}//if
-//				else if(geographyNameList.getGeographyObject() instanceof Region){
-//					Region region = (Region)geographyNameList.getGeographyObject();
-//
-//					Collection<GeographyName> geographyNames = geographyNameList.getI18nTableItemMap().values();
-//					for(GeographyName geographyName : geographyNames){
-//						region.getName().setText(geographyName.getLanguageID(), geographyName.getValue());
-//					}//for
-//					geoAdmin.storeGeographyTemplateRegionData(region);
-//				}//if
-//				else if(geographyNameList.getGeographyObject() instanceof City){
-//					City city = (City)geographyNameList.getGeographyObject();
-//
-//					Collection<GeographyName> geographyNames = geographyNameList.getI18nTableItemMap().values();
-//					for(GeographyName geographyName : geographyNames){
-//						city.getName().setText(geographyName.getLanguageID(), geographyName.getValue());
-//					}//for
-//					geoAdmin.storeGeographyTemplateCityData(city);
-//				}//if
-//				else if(geographyNameList.getGeographyObject() instanceof Location){
-//					Location location = (Location)geographyNameList.getGeographyObject();
-//
-//					Collection<GeographyName> geographyNames = geographyNameList.getI18nTableItemMap().values();
-//					for(GeographyName geographyName : geographyNames){
-//						location.getName().setText(geographyName.getLanguageID(), geographyName.getValue());
-//					}//for
-//					geoAdmin.storeGeographyTemplateLocationData(location);
-//				}//if
+//			String rootOrganisationID = SecurityReflector.getUserDescriptor().getOrganisationID(); //TODO Change to root orgID
+//			if(geographyNameList.getGeographyObject() instanceof Country){
+//			Country country = (Country)geographyNameList.getGeographyObject();
+
+//			Collection<GeographyName> geographyNames = geographyNameList.getGeographyNames().values();
+//			for(GeographyName geographyName : geographyNames){
+//			country.getName().setText(geographyName.getLanguageID(), geographyName.getValue());
+//			}//for
+//			geoAdmin.storeGeographyTemplateCountryData(country);
+//			}//if
+//			else if(geographyNameList.getGeographyObject() instanceof Region){
+//			Region region = (Region)geographyNameList.getGeographyObject();
+
+//			Collection<GeographyName> geographyNames = geographyNameList.getI18nTableItemMap().values();
+//			for(GeographyName geographyName : geographyNames){
+//			region.getName().setText(geographyName.getLanguageID(), geographyName.getValue());
+//			}//for
+//			geoAdmin.storeGeographyTemplateRegionData(region);
+//			}//if
+//			else if(geographyNameList.getGeographyObject() instanceof City){
+//			City city = (City)geographyNameList.getGeographyObject();
+
+//			Collection<GeographyName> geographyNames = geographyNameList.getI18nTableItemMap().values();
+//			for(GeographyName geographyName : geographyNames){
+//			city.getName().setText(geographyName.getLanguageID(), geographyName.getValue());
+//			}//for
+//			geoAdmin.storeGeographyTemplateCityData(city);
+//			}//if
+//			else if(geographyNameList.getGeographyObject() instanceof Location){
+//			Location location = (Location)geographyNameList.getGeographyObject();
+
+//			Collection<GeographyName> geographyNames = geographyNameList.getI18nTableItemMap().values();
+//			for(GeographyName geographyName : geographyNames){
+//			location.getName().setText(geographyName.getLanguageID(), geographyName.getValue());
+//			}//for
+//			geoAdmin.storeGeographyTemplateLocationData(location);
+//			}//if
 
 //			}//try
 //			finally {
@@ -497,19 +555,24 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
 		public String getColumnText(Object element, int columnIndex) {
 			String result = "";
 			I18nText item = (I18nText) element;
-			switch (columnIndex) {
-			case 0: 	// FLAG_COLUMN
-				result = "FLAG";
-				break;
-			case 1 :	// LANGUAGE_NAME_COLUMN
-//				result = item.getLanguageID();
-				break;
-			case 2 :	// VALUE_COLUMN
-				result = item.getText();
-				break;
-			default :
-				break; 	
-			}
+			String[] languageIDs = item.getLanguageIDs().toArray(new String[0]);
+			if(languageIDs != null && languageIDs.length > 0){
+				String languageID = languageIDs[0];
+				if(languageID != null && !languageID.equals("")){
+					switch (columnIndex) {
+					case 0: 	// FLAG_COLUMN
+						break;
+					case 1 :	// LANGUAGE_NAME_COLUMN
+						result = new Locale(languageID.toUpperCase()).getDisplayName();
+						break;
+					case 2 :	// VALUE_COLUMN
+						result = item.getText(languageID);
+						break;
+					default :
+						break; 	
+					}
+				}//if
+			}//if
 			return result;
 		}
 
@@ -517,9 +580,32 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor {
 		 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object, int)
 		 */
 		public Image getColumnImage(Object element, int columnIndex) {
-			return /*(columnIndex == 0) ?   // COMPLETED_COLUMN?
-					getImage(((Object) element).isCompleted()) :*/
-			null;
+			Image result = null;
+			I18nText item = (I18nText) element;
+			String[] languageIDs = item.getLanguageIDs().toArray(new String[0]);
+			if(languageIDs != null && languageIDs.length > 0){
+				String languageID = languageIDs[0];
+				if(languageID != null && !languageID.equals("")){
+					LanguageCf cf = new LanguageCf(languageID);
+					cf.init(null);
+					switch (columnIndex) {
+					case 0: 	// FLAG_COLUMN
+						result = new Image(Display.getCurrent(), new ImageData(new ByteArrayInputStream(Utils.decodeHexStr(cf.getFlagIcon16x16()))));
+						break;
+					case 1 :	// LANGUAGE_NAME_COLUMN
+						break;
+					case 2 :	// VALUE_COLUMN
+						break;
+					default :
+						break; 	
+					}
+				}//if
+			}//if
+			else{
+				result = null; 
+			}//else
+
+			return result;
 		}
 	}
 }
