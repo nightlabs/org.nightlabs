@@ -70,21 +70,8 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 	private Table table;
 	private TableViewer tableViewer;
 
-//	//Set column names
-//	private String[] columnNames = new String[] {FLAG_COLUMN,
-//			LANGUAGE_COLUMN,
-//			VALUE_COLUMN
-//	};
-//	private boolean[] editableColumns = new boolean[]{false, false, true};
-
-	// Marco: Why do we need this constructor?
-//	private I18nTextEditorTable() {
-//		super(null, 0);
-//	}
-
 	public I18nTextEditorTable(Composite parent) {
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-//		this.i18nTextTableItemList = i18nTextTableItemList;
 
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
@@ -102,13 +89,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 		table.setLayoutData(gd);
 
 		tableViewer = new TableViewer(table);
-		tableViewer.setUseHashlookup(true); // TODO Marco: Do we need this? Isn't this true by default? Maybe we should simply extend our AbstraceTableComposite and then activate it there, if it makes always sense.
-
-// Marco: Why separating the methods here?
-//		generateI18nTableTextEditor();
-//	}
-//
-//	public void generateI18nTableTextEditor() {
+//		tableViewer.setUseHashlookup(true); // TODO Marco: Do we need this? Isn't this true by default? Maybe we should simply extend our AbstraceTableComposite and then activate it there, if it makes always sense.
 
 		// set Columns
 		tableViewer.setColumnProperties(COLUMN_NAMES);
@@ -123,91 +104,14 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 		tableLayout.addColumnData(new ColumnWeightData(80));
 		table.setLayout(tableLayout);
 
-		// Marco: We don't set the width of a column! We use a Layout for this purpose!
-//		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT, SWT.LEFT };
-//
-//		for (int i = 0; i < columnNames.length; i++) {
-//			TableColumn tableColumn = new TableColumn(table,
-//					columnAlignments[i], i);
-//			tableColumn.setText(columnNames[i]);
-//			tableColumn.setWidth(150);
-//		}// for
-
-// Marco: I think we need only one cell-editor, because we have only one column (with one type) to edit
-//		// Create the cell editors
-//		CellEditor[] editors = new CellEditor[columnNames.length];
-//
-//		if (editableColumns == null)
-//			editableColumns = new boolean[columnNames.length];
-//		else {
-//			for (int i = 0; i < columnNames.length; i++) {
-//				if (editableColumns[i] == true) {
-//					TextCellEditor textEditor = new TextCellEditor(table);
-//					((Text) textEditor.getControl()).setTextLimit(60); // Marco: why this?
-//					editors[i] = textEditor;
-//				}// if
-//			}// for
-//		}// else
-
 		// Assign the cell editors to the viewer
 		tableViewer.setCellEditors(new CellEditor[] { null, null, new TextCellEditor(table) });
 		tableViewer.setCellModifier(new I18nTextEditorTableCellModifier());
 
 		// Set the cell modifier for the viewer
-//		tableViewer.setCellModifier(new I18nTextCellModifier(Arrays.asList(columnNames),i18nTextTableItemList)); // Marco: commented this out temporarily in order to get rid of the I18nTextEditorTableContentProvider
 		tableViewer.setContentProvider(new I18nTextEditorTableContentProvider()); // Marco: removed the parameters - a ContentProvider never gets its content immutable this way - it gets it via the callback-method inputChanged(...) 
 		tableViewer.setLabelProvider(new I18nTextLabelProvider());
-//		tableViewer.setInput(i18nTextTableItemList); // Marco: there is no input yet!
 	}
-
-// Marco: These methods should not be public - actually we don't need them at all
-//	public void setTableViewer(TableViewer tableViewer) {
-//		this.tableViewer = tableViewer;
-//	}
-//
-//	/**
-//	 * Return the TableViewer
-//	 * 
-//	 * @return TableViewer
-//	 */
-//	public TableViewer getTableViewer() {
-//		return tableViewer;
-//	}
-
-//	/**
-//	 * Return the I18nTableItemList
-//	 * 
-//	 * @return I18nTableItemList of I18nText items
-//	 */
-//	protected I18nTextTableItemList getI18nTableItemList() {
-//		return null;//i18nTableItemList;
-//	}
-
-//	/**
-//	 * Return the array of booleans
-//	 * 
-//	 * @return Array of booleans
-//	 */
-//	protected boolean[] getEditableColumns() {
-//		return editableColumns;
-//	}
-//
-//	public void setEditableColumns(boolean[] editableColumns) {
-//		this.editableColumns = editableColumns;
-//	}
-
-//	/**
-//	 * Return the column names in a collection
-//	 * 
-//	 * @return List containing column names
-//	 */
-//	protected java.util.List getColumnNames() {
-//		return Arrays.asList(columnNames);
-//	}
-//
-//	public void setColumnNames(String[] columnNames) {
-//		this.columnNames = columnNames;
-//	}
 
 	/** ************************************************************************** */
 	/**
@@ -389,23 +293,6 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 	 */
 	private void storeText()
 	{
-		// Marco: Probably we don't need to do anything in this method, because we can implement the CellModifier in a way that it updates this.work directly.
-//		String newText = text.getText();
-//		if (!newText.equals(orgText)) {
-//		if (work == null) {
-//		if (original == null) {
-//		_setI18nText(new I18nTextBuffer(), null);
-//		}
-//		else
-//		throw new IllegalStateException("work == null, but original != null - how's that possible?!");
-//		}
-
-//		if (textLanguage == null)
-//		textLanguage = languageChooser.getLanguage();
-
-//		work.setText(textLanguage.getLanguageID(), newText);
-//		orgText = newText;
-//		}
 	}
 
 	/**
@@ -419,7 +306,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 //		loadingText = true;
 //		try {
 //		String txt = null;
-
+//
 //		if (work != null) {
 //		textLanguage = languageChooser.getLanguage();
 //		txt = work.getText(textLanguage.getLanguageID());
@@ -474,158 +361,19 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 		}
 	}
 
-// Marco: I reimplemented this class above
-//	private class I18nTextCellModifier implements ICellModifier {
-//		private List<String> i18ntexts;
-//		private I18nTextTableItemList i18nTextTableItemList;
-//
-//		/**
-//		 * Constructor 
-//		 * @param TableViewerExample an instance of a TableViewerExample 
-//		 */
-//		public I18nTextCellModifier(List i18ntexts, I18nTextTableItemList i18nTextTableItemList) {
-//			super();
-//			this.i18ntexts = i18ntexts;
-//			this.i18nTextTableItemList = i18nTextTableItemList;
-//		}
-//
-//		/**
-//		 * @see org.eclipse.jface.viewers.ICellModifier#canModify(java.lang.Object, java.lang.String)
-//		 */
-//		public boolean canModify(Object element, String property) {
-//			return true;
-//		}
-//
-//		/**
-//		 * @see org.eclipse.jface.viewers.ICellModifier#getValue(java.lang.Object, java.lang.String)
-//		 */
-//		public Object getValue(Object element, String property) {
-//
-//			// Find the index of the column
-//			int columnIndex = i18ntexts.indexOf(property);
-//
-//			Object result = null;
-//			I18nText i18nText = (I18nText) element;
-//
-//			switch (columnIndex) {
-//			case 0 : break;
-//			case 1 : break;
-//			case 2 : // VALUE_COLUMN 
-//				String stringValue = i18nText.getText();
-//				result = stringValue;					
-//				break;
-//			default :
-//				result = "";
-//			}
-//			return result;	
-//		}
-//
-//		/**
-//		 * @see org.eclipse.jface.viewers.ICellModifier#modify(java.lang.Object, java.lang.String, java.lang.Object)
-//		 */
-//		public void modify(Object element, String property, Object value) {	
-//
-//			// Find the index of the column 
-//			int columnIndex	= i18ntexts.indexOf(property);
-//
-//			TableItem item = (TableItem) element;
-//			I18nText i18nText = (I18nText) item.getData();
-//			String valueString = "";
-//			String languageID = item.getText(1);
-//			switch (columnIndex) {
-//			case 2 : // VALUE_COLUMN 
-//				valueString = ((String)value).trim();
-//
-//				i18nText.setText("", value.toString());
-//
-//				Map<Object, I18nText> newI18nTextMap = new HashMap<Object, I18nText>();
-//				newI18nTextMap.get(languageID);
-//				i18nTextTableItemList.createI18nTextMap(newI18nTextMap);
-//				break;
-//			default :
-//			}
-//
-//			i18nTextTableItemList.i18nTextChanged(i18nText);
-////			updateTemplateData(i18nTextEditorTableItemList);
-//		}
-//
-////		private void updateTemplateData(I18nTextTableItemList i18nTextTableItemList){
-//////			try {
-//////			GeographyTemplateDataAdmin geoAdmin = new GeographyTemplateDataAdmin();
-////
-//////			String rootOrganisationID = SecurityReflector.getUserDescriptor().getOrganisationID(); //TODO Change to root orgID
-//////			if(geographyNameList.getGeographyObject() instanceof Country){
-//////			Country country = (Country)geographyNameList.getGeographyObject();
-////
-//////			Collection<GeographyName> geographyNames = geographyNameList.getGeographyNames().values();
-//////			for(GeographyName geographyName : geographyNames){
-//////			country.getName().setText(geographyName.getLanguageID(), geographyName.getValue());
-//////			}//for
-//////			geoAdmin.storeGeographyTemplateCountryData(country);
-//////			}//if
-//////			else if(geographyNameList.getGeographyObject() instanceof Region){
-//////			Region region = (Region)geographyNameList.getGeographyObject();
-////
-//////			Collection<GeographyName> geographyNames = geographyNameList.getI18nTableItemMap().values();
-//////			for(GeographyName geographyName : geographyNames){
-//////			region.getName().setText(geographyName.getLanguageID(), geographyName.getValue());
-//////			}//for
-//////			geoAdmin.storeGeographyTemplateRegionData(region);
-//////			}//if
-//////			else if(geographyNameList.getGeographyObject() instanceof City){
-//////			City city = (City)geographyNameList.getGeographyObject();
-////
-//////			Collection<GeographyName> geographyNames = geographyNameList.getI18nTableItemMap().values();
-//////			for(GeographyName geographyName : geographyNames){
-//////			city.getName().setText(geographyName.getLanguageID(), geographyName.getValue());
-//////			}//for
-//////			geoAdmin.storeGeographyTemplateCityData(city);
-//////			}//if
-//////			else if(geographyNameList.getGeographyObject() instanceof Location){
-//////			Location location = (Location)geographyNameList.getGeographyObject();
-////
-//////			Collection<GeographyName> geographyNames = geographyNameList.getI18nTableItemMap().values();
-//////			for(GeographyName geographyName : geographyNames){
-//////			location.getName().setText(geographyName.getLanguageID(), geographyName.getValue());
-//////			}//for
-//////			geoAdmin.storeGeographyTemplateLocationData(location);
-//////			}//if
-////
-//////			}//try
-//////			finally {
-//////			}//finally
-////		}
-//	}
-
 	/////////////////////////////////////////////////
 	private class I18nTextLabelProvider 
 	extends LabelProvider
 	implements ITableLabelProvider {
-
-//		Names of images used to represent checkboxes
-//		public static final String CHECKED_IMAGE 	= "checked";
-//		public static final String UNCHECKED_IMAGE  = "unchecked";
-
-//		For the checkbox images
-//		private static ImageRegistry imageRegistry = new ImageRegistry();
-
-
-//		/**
-//		 * Returns the image with the given key, or <code>null</code> if not found.
-//		 */
-//		private Image getImage(boolean isSelected) {
-//		String key = isSelected ? CHECKED_IMAGE : UNCHECKED_IMAGE;
-//		return  null/*imageRegistry.get(key)*/;
-//		}
 
 		@SuppressWarnings("unchecked")
 		public String getColumnText(Object element, int columnIndex) {
 			Map.Entry<String, String> item = (Map.Entry<String, String>)element;
 			switch (columnIndex) {
 				case COLUMN_FLAG_INDEX:
-					return ""; //$NON-NLS-1$
+					return null; //$NON-NLS-1$
 				case COLUMN_LANGUAGE_INDEX:
-					return LanguageManager.sharedInstance().getLanguage(item.getKey(), true).getName().getText();
+					return item.getKey()/*LanguageManager.sharedInstance().getLanguage(item.getKey(), true).getName().getText()*/;
 				case COLUMN_VALUE_INDEX:
 					return item.getValue();
 				default :
@@ -641,39 +389,12 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 			Map.Entry<String, String> item = (Map.Entry<String, String>)element;
 			switch (columnIndex) {
 				case COLUMN_FLAG_INDEX:
-					return LanguageManager.sharedInstance().getFlag16x16Image(item.getKey());
+					return isSupported(item)?LanguageManager.sharedInstance().getFlag16x16Image(item.getKey()):null;
 				case COLUMN_LANGUAGE_INDEX:
 				case COLUMN_VALUE_INDEX:
 				default :
 					return null; 	
 			}
-
-//			Image result = null;
-//			I18nText item = (I18nText) element;
-//			String[] languageIDs = item.getLanguageIDs().toArray(new String[0]);
-//			if(languageIDs != null && languageIDs.length > 0){
-//				String languageID = languageIDs[0];
-//				if(languageID != null && !languageID.equals("")){
-//					LanguageCf cf = new LanguageCf(languageID);
-//					cf.init(null);
-//					switch (columnIndex) {
-//					case 0: 	// FLAG_COLUMN
-//						result = new Image(Display.getCurrent(), new ImageData(new ByteArrayInputStream(Utils.decodeHexStr(cf.getFlagIcon16x16()))));
-//						break;
-//					case 1 :	// LANGUAGE_NAME_COLUMN
-//						break;
-//					case 2 :	// VALUE_COLUMN
-//						break;
-//					default :
-//						break; 	
-//					}
-//				}//if
-//			}//if
-//			else{
-//				result = null; 
-//			}//else
-//
-//			return result;
 		}
 	}
 
@@ -712,5 +433,15 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 
 			return es.entrySet().toArray();
 		}
+	}
+	
+	private LanguageCf[] supportLanguages = LanguageManager.sharedInstance().getLanguages().toArray(new LanguageCf[0]);
+	protected boolean isSupported(Entry item){
+		boolean result = false;
+		for(int i = 0; i < supportLanguages.length; i++){
+			if(supportLanguages[i].getLanguageID().equals(item.getKey()))
+				result = true;
+		}//for
+		return result;
 	}
 }
