@@ -420,8 +420,8 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 			Collection<LanguageCf> languageCfs = LanguageManager.sharedInstance().getLanguages();
 			Map<String, String> es = new HashMap<String, String>(languageCfs.size());
 			for (Map.Entry<String, String> me : i18nText.getTexts()) {
-				if(isSupported(me)){
-					String languageID = me.getKey();
+				String languageID = me.getKey();
+				if(LanguageManager.sharedInstance().getLanguage(languageID, false) != null){ 
 					String text = me.getValue();
 					es.put(languageID, text);
 				}//if
@@ -434,16 +434,6 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 			}
 
 			return es.entrySet().toArray();
-		}
-		
-		private LanguageCf[] supportLanguages = LanguageManager.sharedInstance().getLanguages().toArray(new LanguageCf[0]);
-		private boolean isSupported(Entry item){
-			boolean result = false;
-			for(int i = 0; i < supportLanguages.length; i++){
-				if(supportLanguages[i].getLanguageID().equals(item.getKey()))
-					result = true;
-			}//for
-			return result;
 		}
 	}
 }
