@@ -373,7 +373,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 				case COLUMN_FLAG_INDEX:
 					return null; //$NON-NLS-1$
 				case COLUMN_LANGUAGE_INDEX:
-					return item.getKey()/*LanguageManager.sharedInstance().getLanguage(item.getKey(), true).getName().getText()*/;
+					return LanguageManager.sharedInstance().getLanguage(item.getKey(), true).getName().getText();
 				case COLUMN_VALUE_INDEX:
 					return item.getValue();
 				default :
@@ -389,7 +389,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 			Map.Entry<String, String> item = (Map.Entry<String, String>)element;
 			switch (columnIndex) {
 				case COLUMN_FLAG_INDEX:
-					return isSupported(item)?LanguageManager.sharedInstance().getFlag16x16Image(item.getKey()):null;
+					return LanguageManager.sharedInstance().getFlag16x16Image(item.getKey());
 				case COLUMN_LANGUAGE_INDEX:
 				case COLUMN_VALUE_INDEX:
 				default :
@@ -420,9 +420,11 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 			Collection<LanguageCf> languageCfs = LanguageManager.sharedInstance().getLanguages();
 			Map<String, String> es = new HashMap<String, String>(languageCfs.size());
 			for (Map.Entry<String, String> me : i18nText.getTexts()) {
-				String languageID = me.getKey();
-				String text = me.getValue();
-				es.put(languageID, text);
+				if(isSupported(me)){
+					String languageID = me.getKey();
+					String text = me.getValue();
+					es.put(languageID, text);
+				}//if
 			}
 
 			for (LanguageCf languageCf : languageCfs) {
@@ -433,15 +435,15 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 
 			return es.entrySet().toArray();
 		}
-	}
-	
-	private LanguageCf[] supportLanguages = LanguageManager.sharedInstance().getLanguages().toArray(new LanguageCf[0]);
-	protected boolean isSupported(Entry item){
-		boolean result = false;
-		for(int i = 0; i < supportLanguages.length; i++){
-			if(supportLanguages[i].getLanguageID().equals(item.getKey()))
-				result = true;
-		}//for
-		return result;
+		
+		private LanguageCf[] supportLanguages = LanguageManager.sharedInstance().getLanguages().toArray(new LanguageCf[0]);
+		private boolean isSupported(Entry item){
+			boolean result = false;
+			for(int i = 0; i < supportLanguages.length; i++){
+				if(supportLanguages[i].getLanguageID().equals(item.getKey()))
+					result = true;
+			}//for
+			return result;
+		}
 	}
 }
