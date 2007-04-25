@@ -278,7 +278,18 @@
             <objectClass name="org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart"/>
          </enablement>
       </decorator>
-   </extension>    
+   </extension>
+  <extension
+        point="org.nightlabs.editor2d.documentProperties">
+     <documentProperties
+           editorClass="org.nightlabs.editor2d.Editor"
+           editorID="org.nightlabs.editor2d.Editor"
+           orientation="vertical"
+           predefinedPageID="A4"
+           resolution="762"
+           resolutionUnit="org.nightlabs.i18n.unit.resolution.DPIResolutionUnit">
+     </documentProperties>
+  </extension>    
        
 <!--
    <extension
