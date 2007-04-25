@@ -41,7 +41,7 @@ public class XComposite extends Composite
 	private ChildStatusController childStatusController = new ChildStatusController();
 
 	public static enum LayoutMode {
-		ORDINARY_WRAPPER, TIGHT_WRAPPER, TOP_BOTTOM_WRAPPER, LEFT_RIGHT_WRAPPER 
+		ORDINARY_WRAPPER, TIGHT_WRAPPER, TOP_BOTTOM_WRAPPER, LEFT_RIGHT_WRAPPER, TOTAL_WRAPPER
 	}
 
 	public static enum LayoutDataMode {
@@ -94,6 +94,16 @@ public class XComposite extends Composite
 				layout.marginWidth = 0;
 				layout.marginLeft = 0;
 				layout.marginRight = 0;
+				return;		
+			case TOTAL_WRAPPER:
+				layout.horizontalSpacing = 0;
+				layout.verticalSpacing = 0;
+				layout.marginHeight = 0;
+				layout.marginWidth = 0;
+				layout.marginLeft = 0;
+				layout.marginRight = 0;
+				layout.marginTop = 0;
+				layout.marginBottom = 0;
 				return;				
 			default:
 				throw new IllegalArgumentException("layoutMode = " + layoutMode + " is unknown!");
