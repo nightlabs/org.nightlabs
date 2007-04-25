@@ -31,6 +31,7 @@ public class TestView
 
 		i18nTextEditorTable = new I18nTextEditorTable(page);
 		i18nText.setText(Locale.getDefault().getLanguage(), "Test in my language.");
+		i18nText.setText(Locale.FRENCH.getLanguage(), "C'est francais :-)");
 		i18nTextEditorTable.setI18nText(i18nText);
 
 		testButton = new Button(page, SWT.PUSH);
