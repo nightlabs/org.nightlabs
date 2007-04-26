@@ -102,6 +102,7 @@ implements IWizardHopPage
 //	{
 //		return wizardHop.getPreviousPage(this);
 //	}
+
 	
 	@Override
 	public void setWizard(IWizard newWizard) {
@@ -109,7 +110,7 @@ implements IWizardHopPage
 		if (wizardHop == null)
 			return;
 		for (IWizardHopPage hopPage : wizardHop.getHopPages()) {
-			if (hopPage != this)
+			if (hopPage != this && hopPage.getWizard() != newWizard)
 				hopPage.setWizard(newWizard);
 		}
 	}
