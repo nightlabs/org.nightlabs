@@ -141,15 +141,7 @@ extends AbstractEPProcessor
 		}
 		return null;
 	}
-	
-	protected boolean checkString(String s) 
-	{
-		if (s == null || "".equals(s))
-			return false;
 		
-		return true;
-	}
-	
 	protected class CategoryRegistry 
 	extends AbstractEPProcessor 
 	{ 

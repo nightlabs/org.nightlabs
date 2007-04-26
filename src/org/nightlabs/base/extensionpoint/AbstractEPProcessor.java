@@ -168,7 +168,7 @@ implements IEPProcessor
 	 * @return true if the String is neither null nor an empty String otherwise 
 	 * returns false
 	 */
-	protected boolean checkString(String s) 
+	public static boolean checkString(String s) 
 	{
 		if (s == null || s.trim().equals("") )
 //		if (s == null || "".equals(s) )

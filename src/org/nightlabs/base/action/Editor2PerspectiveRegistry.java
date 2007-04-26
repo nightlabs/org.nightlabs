@@ -82,13 +82,5 @@ extends AbstractEPProcessor
 			editorID2PerspectiveID.put(editorID, perspectiveID);
 		}
 	}
-
-	protected boolean checkString(String s) 
-	{
-		if (s == null || "".equals(s))
-			return false;
-		
-		return true;
-	}
 	
 }
