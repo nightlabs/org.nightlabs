@@ -993,9 +993,8 @@ extends AbstractEPProcessor
 
 	public synchronized void process() throws EPProcessorException
 	{
-		if (elementNameAction == null)
-			elementNameAction = getActionElementName();
-
+//		if (elementNameAction == null)
+//			elementNameAction = getActionElementName();
 		super.process();
 
 		if (isAffectedOfPerspectiveExtension()) {
@@ -1058,6 +1057,9 @@ extends AbstractEPProcessor
 	public void processElement(IExtension extension, IConfigurationElement element)
 			throws EPProcessorException
 	{
+		if (elementNameAction == null)
+			elementNameAction = getActionElementName();
+		
 		String elementName = element.getName();
 		if (ELEMENT_NAME_SEPARATOR.equals(elementName)) {
 			String name = element.getAttribute(ATTRIBUTE_NAME_SEPARATOR_NAME);

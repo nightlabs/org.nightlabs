@@ -48,7 +48,8 @@ public class DefaultEditorActionBarContributionRegistry extends AbstractActionRe
 	 */
 	@Override
 	public String getExtensionPointID() {
-		throw new UnsupportedOperationException("This should never be called!");
+//		throw new UnsupportedOperationException("This should never be called!");
+		return DefaultEditorActionBarContributionRegistry.class.getName();
 	}
 
 }

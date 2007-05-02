@@ -26,6 +26,7 @@
  <extension-point id="contributionItemSet" name="contributionItemSet" schema="schema/contributionItemSet.exsd"/>
  <extension-point id="perspectiveExtension" name="perspectiveExtension" schema="schema/perspectiveExtension.exsd"/>
  <extension-point id="searchResultProvider" name="searchResultProvider" schema="schema/searchResultProvider.exsd"/>
+ <extension-point id="editorActionBarContribution" name="editorActionBarContribution" schema="schema/editorActionBarContribution.exsd"/>
  <extension
        point="org.nightlabs.base.exceptionhandler">
     <exceptionHandler
