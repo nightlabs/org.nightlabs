@@ -3,6 +3,7 @@
  */
 package org.nightlabs.base.action.registry.editor;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -21,52 +22,32 @@ import org.nightlabs.base.action.registry.ActionDescriptor;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class XEditorActionBarContributor extends EditorActionBarContributor {
-
+public class XEditorActionBarContributor 
+extends EditorActionBarContributor 
+{
+	private static final Logger logger = Logger.getLogger(XEditorActionBarContributor.class);
+	
 	private IEditorPart activeEditor;
 	private AbstractActionRegistry actionRegistry;
 	
 	public XEditorActionBarContributor() {
 	}
 	
-//	private ISelectionChangedListener selectionChangedListener = new ISelectionChangedListener() {
-//		public void selectionChanged(SelectionChangedEvent event) 
-//		{
-//			for (ActionDescriptor actionDescriptor : getActionRegistry().getActionDescriptors()) {
-//				if (actionDescriptor.getAction() instanceof ISelectionAction) {
-//					ISelectionAction selectionAction = (ISelectionAction) actionDescriptor.getAction();
-//					selectionAction.setSelection(event.getSelection());
-//				}
-//			}
-//			updateActions();
-//		}
-//	};
-
 	private ISelectionListener selectionListener = new ISelectionListener(){	
 		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-			if (part.equals(activeEditor)) {
-				for (ActionDescriptor actionDescriptor : getActionRegistry().getActionDescriptors()) {
-					if (actionDescriptor.getAction() instanceof ISelectionAction) {
-						ISelectionAction selectionAction = (ISelectionAction) actionDescriptor.getAction();
-						selectionAction.setSelection(selection);
-					}
-				}
+//			if (part.equals(activeEditor)) {
+				updateSelectionSections(selection);
 				updateActions();				
-			}
+				logger.info("selection changed");
+//			}
 		}	
 	};
 	
-//	protected AbstractActionRegistry getActionRegistry() {
-//		if (getActiveEditor() == null)
-//			throw new IllegalStateException("Can not obtain actionRegistry, activeEditor == null!");
-//		if (actionRegistry == null) 
-//			actionRegistry = EditorActionBarContributorRegistry.sharedInstance().getActionRegistry(getActiveEditor().getEditorSite().getId());
-//		return actionRegistry;
-//	}
-
-	protected AbstractActionRegistry getActionRegistry() {
+	public AbstractActionRegistry getActionRegistry() 
+	{
 		if (actionRegistry == null && getActiveEditor() != null) 
-			actionRegistry = EditorActionBarContributorRegistry.sharedInstance().getActionRegistry(getActiveEditor().getEditorSite().getId());
+			actionRegistry = EditorActionBarContributorRegistry.sharedInstance().getActionRegistry(
+					getActiveEditor().getEditorSite().getId());
 		return actionRegistry;
 	}
 	
@@ -75,17 +56,29 @@ public class XEditorActionBarContributor extends EditorActionBarContributor {
 		if (getActionRegistry() != null) {
 			for (ActionDescriptor actionDescriptor : getActionRegistry().getActionDescriptors()) {
 				if (actionDescriptor.getAction() instanceof IUpdateAction) {
-					actionDescriptor.getAction().setEnabled(((IUpdateAction)actionDescriptor.getAction()).calculateEnabled());
+					boolean enabled = ((IUpdateAction)actionDescriptor.getAction()).calculateEnabled();
+					actionDescriptor.getAction().setEnabled(enabled);
 //					actionDescriptor.setVisible(((IUpdateAction)actionDescriptor.getAction()).calculateVisible());
+					logger.info("enabled = "+enabled+" for action "+actionDescriptor.getAction().getId());
 				}
 			}			
 		}
 	}
 	
+	protected void updateSelectionSections(ISelection selection) 
+	{
+		for (ActionDescriptor actionDescriptor : getActionRegistry().getActionDescriptors()) {
+			if (actionDescriptor.getAction() instanceof ISelectionAction) {
+				ISelectionAction selectionAction = (ISelectionAction) actionDescriptor.getAction();
+				selectionAction.setSelection(selection);
+			}
+		}		
+	}
+	
 	@Override
-	public void setActiveEditor(IEditorPart targetEditor) {
+	public void setActiveEditor(IEditorPart targetEditor) 
+	{
 		if (activeEditor != null)
-//			activeEditor.getSite().getSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
 			activeEditor.getSite().getPage().removeSelectionListener(selectionListener);
 		
 		if (targetEditor == null) {
@@ -93,20 +86,23 @@ public class XEditorActionBarContributor extends EditorActionBarContributor {
 			return;
 		}
 		
+		IEditorPart oldEditorPart = activeEditor;
 		super.setActiveEditor(targetEditor);
 		this.activeEditor = targetEditor;
 		for (ActionDescriptor actionDescriptor : getActionRegistry().getActionDescriptors()) {
 			if (actionDescriptor.getAction() instanceof IWorkbenchPartAction) {
 				((IWorkbenchPartAction)actionDescriptor.getAction()).setActivePart(targetEditor);
 			}
-		}		
-//		activeEditor.getSite().getSelectionProvider().addSelectionChangedListener(selectionChangedListener);		
+		}
 		activeEditor.getSite().getPage().addSelectionListener(selectionListener);
+		updateSelectionSections(activeEditor.getSite().getPage().getSelection());
+		updateActions();
+//		logger.info("selectionListener added to activeEditor "+getActiveEditor().getEditorSite().getId());
 		
-		if (contributedToToolBar)
+		if (contributedToToolBar && !activeEditor.equals(oldEditorPart))
 			contributeToToolBar(getActionBars().getToolBarManager());
 		
-		if (contributedToMenu)
+		if (contributedToMenu && !activeEditor.equals(oldEditorPart))
 			contributeToMenu(getActionBars().getMenuManager());		
 	}
 	
@@ -147,9 +143,8 @@ public class XEditorActionBarContributor extends EditorActionBarContributor {
 	@Override
 	public void dispose() {
 		if (activeEditor != null)
-//			activeEditor.getSite().getSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
 			activeEditor.getSite().getPage().removeSelectionListener(selectionListener);
 		super.dispose();
 	}
-	
+		
 }

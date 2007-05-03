@@ -32,6 +32,7 @@ import java.io.IOException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveRegistry;
@@ -41,6 +42,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 
 import org.nightlabs.base.action.Editor2PerspectiveRegistry;
+import org.nightlabs.base.util.RCPUtil;
 
 public class IOUtil
 {
@@ -101,6 +103,27 @@ public class IOUtil
 		return false;
   }
    
+  public static boolean openEditor(IEditorInput input, String editorID) 
+  {
+  	IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+  	IEditorRegistry editorRegistry = PlatformUI.getWorkbench().getEditorRegistry();  	
+  	String perspectiveID = Editor2PerspectiveRegistry.sharedInstance().getPerspectiveID(editorID);
+  	if (perspectiveID != null) {
+  		IPerspectiveDescriptor perspectiveDescriptor = perspectiveRegistry.findPerspectiveWithId(perspectiveID);
+  		if (perspectiveDescriptor != null) {
+	  	  try {
+		  		IWorkbench workbench = PlatformUI.getWorkbench();	  	  	
+					workbench.showPerspective(perspectiveID, 
+					    workbench.getActiveWorkbenchWindow());
+					RCPUtil.openEditor(input, editorID);					
+				} catch (Exception e) {
+					return false;
+				}	  			  			
+  		}
+  	}
+		return true;  	
+  }
+  
   public static boolean openFile(File file) 
   throws PartInitException 
   {
