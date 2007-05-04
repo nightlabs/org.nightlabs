@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -41,7 +42,6 @@ import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IFileEditorMapping;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.config.RecentFileCfMod;
 import org.nightlabs.base.io.IOUtil;
@@ -121,7 +121,8 @@ extends Action
 				addFileToHistory(fullFileName);				
 		} catch (PartInitException e) {
 			e.printStackTrace();
-			RCPUtil.showErrorDialog(
+			MessageDialog.openError(RCPUtil.getActiveWorkbenchShell(),
+					"Error", 
 					NLBasePlugin.getResourceString("action.openfile.error.message1")
 					+ " " + fullFileName + " " + 
 					NLBasePlugin.getResourceString("action.openfile.error.message2")

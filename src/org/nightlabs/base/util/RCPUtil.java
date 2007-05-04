@@ -40,20 +40,19 @@ import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -68,7 +67,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.NLBasePlugin;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -307,24 +305,10 @@ public class RCPUtil
 	 * @param buttonStyle the buttonStyle
 	 * @return the returnCode of the Dialog
 	 */
-	public static int showErrorDialog(String message, int buttonStyle) 
+	public static void showErrorDialog(String message) 
 	{
-		MessageBox errorDialog = new MessageBox(getWorkbenchShell(), SWT.ICON_ERROR | buttonStyle);
-		errorDialog.setMessage(message);
-		errorDialog.setText(NLBasePlugin.getResourceString("action.openfile.error.title"));
-		return errorDialog.open();				
+		MessageDialog.openError(getActiveWorkbenchShell(), NLBasePlugin.getResourceString("action.openfile.error.title"), message);
 	}
-	
-	/**
-	 * opens a ErrorDialog with the given message
-	 * 
-	 * @param message the message to display
-	 * @return the returnCode of the Dialog
-	 */
-	public static int showErrorDialog(String message) 
-	{
-		return showErrorDialog(message, SWT.OK);
-	}	
 	
 	/**
 	 * opens a MessageBox which asks the user if he want to overwrite the file,
@@ -333,15 +317,15 @@ public class RCPUtil
 	 * @param fileName the name of the file
 	 * @return the returnCode of the Dialog
 	 */
-	public static int showConfirmOverwriteDialog(String fileName) 
+	public static boolean showConfirmOverwriteDialog(String fileName) 
 	{
-		MessageBox errorDialog = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.ICON_INFORMATION | SWT.OK | SWT.CANCEL);
-		errorDialog.setMessage(
+		return MessageDialog.openConfirm(
+				getActiveWorkbenchShell(), 
+				NLBasePlugin.getResourceString("action.openfile.confirmoverwrite.title"), 
 				NLBasePlugin.getResourceString("action.openfile.confirmoverwrite.message1")
 				+ " " + fileName + " " +
-				NLBasePlugin.getResourceString("action.openfile.confirmoverwrite.message2"));
-		errorDialog.setText(NLBasePlugin.getResourceString("action.openfile.confirmoverwrite.title"));
-		return errorDialog.open();	  	
+				NLBasePlugin.getResourceString("action.openfile.confirmoverwrite.message2")
+			);
 	}
 	
 	/**
@@ -451,30 +435,6 @@ public class RCPUtil
 //		IConfigurationElement[] configPerspectives =  Platform.getExtensionRegistry().getConfigurationElementsFor("org.eclipse.ui.perspectives");
 //		for(int i = 0; i < configPerspectives.length; i++)
 //			layout.addPerspectiveShortcut(configPerspectives[i].getAttribute("id"));
-	}
-	
-	/**
-	 * 
-	 * @param layout the GridLayout to apply the given LayoutMode to 
-	 * @param layoutMode the LayoutMode to apply
-	 * @see LayoutMode
-	 * @return the given GridLayout with the applied LayoutMode
-	 */
-	public static GridLayout applyLayout(GridLayout layout, LayoutMode layoutMode) 
-	{
-		if (layoutMode == LayoutMode.TIGHT_WRAPPER) 
-		{
-			layout.horizontalSpacing = 0;
-			layout.verticalSpacing = 0;
-			layout.marginHeight = 0;
-			layout.marginWidth = 0;
-
-			layout.marginLeft = 0;
-			layout.marginRight = 0;
-			layout.marginTop = 0;
-			layout.marginBottom = 0;
-		}
-		return layout;
 	}
 	
 	/**

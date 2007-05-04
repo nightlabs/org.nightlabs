@@ -29,8 +29,8 @@ package org.nightlabs.base.action;
 import java.io.File;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PartInitException;
-
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.io.IOUtil;
 import org.nightlabs.base.util.RCPUtil;
@@ -71,11 +71,12 @@ extends Action
 		} 
 		catch (PartInitException e) 
 		{
-			RCPUtil.showErrorDialog(
+			MessageDialog.openError(RCPUtil.getActiveWorkbenchShell(),
+					"Error", 
 					NLBasePlugin.getResourceString("action.openfile.error.message1")
 					+ " " + fileName + " " + 
 					NLBasePlugin.getResourceString("action.openfile.error.message2")
-			);	
+			);			
 			e.printStackTrace();			
 		}
 	}
