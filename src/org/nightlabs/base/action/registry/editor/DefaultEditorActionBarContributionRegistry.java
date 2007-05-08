@@ -13,11 +13,10 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class DefaultEditorActionBarContributionRegistry extends AbstractActionRegistry {
+public class DefaultEditorActionBarContributionRegistry 
+extends AbstractActionRegistry 
+{
 
-	/**
-	 * 
-	 */
 	public DefaultEditorActionBarContributionRegistry() {
 	}
 

@@ -1230,9 +1230,8 @@ extends AbstractEPProcessor
 	}
 	
 	protected void perspectiveChange(IPerspectiveDescriptor perspective) 
-	{
-		logger.info("perspectiveChange for perspective "+perspective.getId());
-		
+	{		
+//		logger.debug("perspectiveChange for perspective "+perspective.getId());		
 		activePerspectiveID = perspective.getId();
 		if (isAffectedOfPerspectiveExtension()) 
 		{

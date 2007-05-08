@@ -37,8 +37,8 @@ extends EditorActionBarContributor
 		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 //			if (part.equals(activeEditor)) {
 				updateSelectionSections(selection);
-				updateActions();				
-				logger.info("selection changed");
+				updateActions();									
+				logger.debug("selection changed");
 //			}
 		}	
 	};
@@ -59,7 +59,9 @@ extends EditorActionBarContributor
 					boolean enabled = ((IUpdateAction)actionDescriptor.getAction()).calculateEnabled();
 					actionDescriptor.getAction().setEnabled(enabled);
 //					actionDescriptor.setVisible(((IUpdateAction)actionDescriptor.getAction()).calculateVisible());
-					logger.info("enabled = "+enabled+" for action "+actionDescriptor.getAction().getId());
+					
+					if (logger.isDebugEnabled())
+						logger.debug("enabled = "+enabled+" for action "+actionDescriptor.getAction().getId());
 				}
 			}			
 		}
@@ -78,6 +80,9 @@ extends EditorActionBarContributor
 	@Override
 	public void setActiveEditor(IEditorPart targetEditor) 
 	{
+		if (logger.isDebugEnabled())
+			logger.debug("setActiveEditor called");
+		
 		if (activeEditor != null)
 			activeEditor.getSite().getPage().removeSelectionListener(selectionListener);
 		
@@ -86,6 +91,7 @@ extends EditorActionBarContributor
 			return;
 		}
 		
+		actionRegistry = null;
 		IEditorPart oldEditorPart = activeEditor;
 		super.setActiveEditor(targetEditor);
 		this.activeEditor = targetEditor;

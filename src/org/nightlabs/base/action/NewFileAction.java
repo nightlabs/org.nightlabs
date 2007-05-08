@@ -31,7 +31,7 @@ import java.io.File;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.NLBasePlugin;
-import org.nightlabs.base.io.IOUtil;
+import org.nightlabs.base.editor.Editor2PerspectiveRegistry;
 
 public class NewFileAction 
 extends Action 
@@ -79,7 +79,7 @@ implements INewFileAction
 		nextFileCount();		
 		File file = createFile(fileExtension);
 		try {			
-			IOUtil.openFile(file, false);
+			Editor2PerspectiveRegistry.sharedInstance().openFile(file, false);
 		} catch (PartInitException e) {			
 			throw new RuntimeException(e);
 		} 

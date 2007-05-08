@@ -25,10 +25,7 @@
  ******************************************************************************/
 package org.nightlabs.base.action;
 
-import java.util.List;
-
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionProvider;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -36,11 +33,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
  */
 public interface ISelectionAction 
 extends IUpdateAction 
-{
-//	void setSelectionProvider(ISelectionProvider provider);
-//	
-//	public List getSelectedObjects();
-	
+{	
 	public ISelection getSelection();
 	
 	public void setSelection(ISelection selection);

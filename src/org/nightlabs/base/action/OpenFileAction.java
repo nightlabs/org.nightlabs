@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -44,7 +43,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.config.RecentFileCfMod;
-import org.nightlabs.base.io.IOUtil;
+import org.nightlabs.base.editor.Editor2PerspectiveRegistry;
+import org.nightlabs.base.editor.EditorFileFilterRegistry;
 import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
@@ -79,8 +79,7 @@ extends Action
 		try {
 			historyConfig = (RecentFileCfMod) Config.sharedInstance().createConfigModule(RecentFileCfMod.class);
 		} catch (ConfigException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}	
 	
@@ -116,48 +115,18 @@ extends Action
 			lastDirectory = file.getParentFile();
 		
 		try {
-			boolean foundEditor = IOUtil.openFile(file);
+			boolean foundEditor = Editor2PerspectiveRegistry.sharedInstance().openFile(file);
 			if (foundEditor)
 				addFileToHistory(fullFileName);				
 		} catch (PartInitException e) {
 			e.printStackTrace();
-			MessageDialog.openError(RCPUtil.getActiveWorkbenchShell(),
-					"Error", 
+			RCPUtil.showErrorDialog(
 					NLBasePlugin.getResourceString("action.openfile.error.message1")
 					+ " " + fullFileName + " " + 
 					NLBasePlugin.getResourceString("action.openfile.error.message2")
 			);			
 		}		
 	}	
-//	public void run() 
-//	{
-//		FileDialog dialog = new FileDialog(Display.getDefault().getActiveShell(), SWT.OPEN);
-//		IEditorRegistry editorRegistry = PlatformUI.getWorkbench().getEditorRegistry();
-//		String[] fileExtensions = getFileExtensions(editorRegistry);
-//		dialog.setFilterExtensions(fileExtensions);
-//		String fullFileName = dialog.open();
-//		// Cancel pressed
-//		if (fullFileName == null)
-//			return;
-//		
-//		File file = new File(fullFileName);
-//		if (!file.exists()) {
-//			return;
-//		}
-//		
-//		try {
-//			boolean foundEditor = IOUtil.openFile(file);
-//			if (foundEditor)
-//				addFileToHistory(fullFileName);				
-//		} catch (PartInitException e) {
-//			e.printStackTrace();
-//			RCPUtil.showErrorDialog(
-//					NLBasePlugin.getResourceString("action.openfile.error.message1")
-//					+ " " + fullFileName + " " + 
-//					NLBasePlugin.getResourceString("action.openfile.error.message2")
-//			);			
-//		}		
-//	}
 	
 	public static final String HISTORY_FILE_ADDED = "history file added";
 	protected void addFileToHistory(String fileName) 

@@ -28,17 +28,20 @@ package org.nightlabs.base.action;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PartInitException;
+
 import org.nightlabs.base.NLBasePlugin;
-import org.nightlabs.base.io.IOUtil;
+import org.nightlabs.base.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.util.RCPUtil;
 
 public class ReOpenFileAction 
 extends Action
 {
-	public static final String ID = ReOpenFileAction.class.getName();	
+	public static final String ID = ReOpenFileAction.class.getName();
+	private static final Logger logger = Logger.getLogger(ReOpenFileAction.class);
+	
 	protected String fileName;
 	
 	public ReOpenFileAction(String fileName) 
@@ -66,18 +69,17 @@ extends Action
 		try 
 		{
 			File file = new File(fileName);
-			if (file.exists())
-				IOUtil.openFile(file);				
+			if (file.exists())						 
+				Editor2PerspectiveRegistry.sharedInstance().openFile(file);
 		} 
 		catch (PartInitException e) 
 		{
-			MessageDialog.openError(RCPUtil.getActiveWorkbenchShell(),
-					"Error", 
+			RCPUtil.showErrorDialog(
 					NLBasePlugin.getResourceString("action.openfile.error.message1")
 					+ " " + fileName + " " + 
 					NLBasePlugin.getResourceString("action.openfile.error.message2")
-			);			
-			e.printStackTrace();			
+			);
+			logger.error(e);	
 		}
 	}
 		

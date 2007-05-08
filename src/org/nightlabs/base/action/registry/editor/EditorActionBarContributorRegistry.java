@@ -17,26 +17,19 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class EditorActionBarContributorRegistry extends AbstractEPProcessor {
-
+public class EditorActionBarContributorRegistry 
+extends AbstractEPProcessor 
+{
 	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.editorActionBarContribution";
-	
 	public static final String ELEMENT_REGISTRY = "editorActionBarContributionRegistry";
 	public static final String ATTRIBUTE_TARGET_EDITOR_ID = "targetEditorID";
-
 	public static final String ELEMENT_EDITOR_ACTION_BAR_CONTRIBUTION = "editorActionBarContribution";
 
 	private Map<String, AbstractActionRegistry> editorID2ActionRegistry = new HashMap<String, AbstractActionRegistry>();
 	
-	/**
-	 * 
-	 */
-	public EditorActionBarContributorRegistry() {
+	protected EditorActionBarContributorRegistry() {
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.base.extensionpoint.AbstractEPProcessor#getExtensionPointID()
-	 */
 	@Override
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;
@@ -47,11 +40,9 @@ public class EditorActionBarContributorRegistry extends AbstractEPProcessor {
 		return editorID2ActionRegistry.get(targetEditorID);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.base.extensionpoint.AbstractEPProcessor#processElement(org.eclipse.core.runtime.IExtension, org.eclipse.core.runtime.IConfigurationElement)
-	 */
 	@Override
-	public void processElement(IExtension extension, IConfigurationElement element) throws EPProcessorException {
+	public void processElement(IExtension extension, IConfigurationElement element) 
+	throws EPProcessorException {
 		if (element.getName().equalsIgnoreCase(ELEMENT_REGISTRY)) {
 			String targetEditorID = element.getAttribute(ATTRIBUTE_TARGET_EDITOR_ID);
 			if (!checkString(targetEditorID))
@@ -77,8 +68,7 @@ public class EditorActionBarContributorRegistry extends AbstractEPProcessor {
 		}
 	}
 	
-	private static EditorActionBarContributorRegistry sharedInstance;
-	
+	private static EditorActionBarContributorRegistry sharedInstance;	
 	public static EditorActionBarContributorRegistry sharedInstance() {
 		if (sharedInstance == null)
 			sharedInstance = new EditorActionBarContributorRegistry();
