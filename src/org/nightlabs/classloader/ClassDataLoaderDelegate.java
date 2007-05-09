@@ -50,7 +50,7 @@ public interface ClassDataLoaderDelegate extends ResourceFinder
 		 */
 		public ClassData(byte[] _classDataAsByteArray, int _offset, int _length) {
 			if (_classDataAsByteArray == null)
-				throw new NullPointerException("constructor-param classDataAsByteArray must not be null. ");
+				throw new NullPointerException("constructor-param classDataAsByteArray must not be null.");
 			if (_offset < 0)
 				throw new IllegalArgumentException("constructor-param offset < 0!");
 			if (_length < 0)
