@@ -71,7 +71,7 @@ implements ISelectionProvider
 	
 	/**
 	 * Convenience parameter with 
-	 * {@link #DEFAULT_STYLE_SINGLE}, a GridData, 
+	 * {@link #DEFAULT_STYLE_SINGLE_BORDER}, a GridData, 
 	 * directly inited and visible headers for the tree.
 	 * @see #AbstractTreeComposite(Composite, int, boolean, boolean, boolean)
 	 * 

@@ -63,13 +63,20 @@ implements ISelectionProvider
 {
 
 	/**
-	 * Default set of styles to use when constructing a single-selection viewer. 
+	 * Default set of styles to use when constructing a single-selection viewer with border. 
 	 */
-	public static int DEFAULT_STYLE_SINGLE = SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE;
+	public static int DEFAULT_STYLE_SINGLE_BORDER = SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE;
+	
+	/**
+	 * Default set of styles to use when constructing a single-selection viewer without border. 
+	 */
+	public static int DEFAULT_STYLE_SINGLE = SWT.FULL_SELECTION | SWT.SINGLE;
+	
 	/**
 	 * Default set of styles to use when constructing a multi-selection viewer. 
+	 * This is used as default value when constructing an {@link AbstractTableComposite} without viewerStyle
 	 */
-	public static int DEFAULT_STYLE_MULTI = SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI;
+	public static int DEFAULT_STYLE_MULTI_BORDER = SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI;
 	
 	protected TableViewer tableViewer;
 	protected Table table;
@@ -79,7 +86,7 @@ implements ISelectionProvider
 	}
 	
 	public AbstractTableComposite(Composite parent, int style, boolean initTable) {
-		this(parent, style, initTable, DEFAULT_STYLE_MULTI);
+		this(parent, style, initTable, DEFAULT_STYLE_MULTI_BORDER);
 	}
 	
 	public AbstractTableComposite(Composite parent, int style, boolean initTable, int viewerStyle) {
