@@ -41,6 +41,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -304,6 +306,24 @@ implements ISelectionProvider
 	{
 		tableViewer.addSelectionChangedListener(listener);
 	}
+	
+	/**
+	 * Adds a selection listener that is triggered whenever the check state of a
+	 * table item is gets changed.
+	 * 
+	 * @param listener
+	 */
+	public void addCheckStateChangedListener(final SelectionListener listener) {
+		table.addSelectionListener(new SelectionListener () {
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				if (e.detail == SWT.CHECK)
+					listener.widgetSelected(e);
+			}
+		});
+	}
 
 	public ISelection getSelection()
 	{
@@ -313,6 +333,10 @@ implements ISelectionProvider
 	public void removeSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		tableViewer.removeSelectionChangedListener(listener);
+	}
+	
+	public void removeCheckStateChangedListener(SelectionListener listener) {
+		table.removeSelectionListener(listener);
 	}
 
 	public void setSelection(ISelection selection)

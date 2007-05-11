@@ -24,6 +24,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -69,8 +70,12 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 
 	private Table table;
 	private TableViewer tableViewer;
-
+	
 	public I18nTextEditorTable(Composite parent) {
+		this(parent, null);
+	}
+
+	public I18nTextEditorTable(Composite parent, String title) {
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		GridLayout gridLayout = new GridLayout();
@@ -79,6 +84,9 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 		this.setLayout(gridLayout);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
+		
+		if (title != null)
+			new Label(this, SWT.NONE).setText(title);
 
 		// Initial TableViewer
 		int tableStyle = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL

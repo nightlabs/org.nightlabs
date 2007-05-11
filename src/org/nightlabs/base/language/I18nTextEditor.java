@@ -294,6 +294,9 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 	 * useful when you create a new object (e.g. in a wizard page). In this case,
 	 * it's not necessary to call {@link #copyToOriginal()}.
 	 * <p>
+	 * <b>Important:</b> The value set here is overridden when a new {@link I18nText}
+	 * is set using {@link #setI18nText(I18nText)}.
+	 * <p>
 	 * If you edit an existing object, it is (in most cases) not desired to modify it
 	 * directly, but instead to transfer all data only from the UI to the object, if
 	 * the user explicitely applies his changes (in order to transfer them to the server
@@ -365,7 +368,7 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 
 			if (work != null) {
 				textLanguage = languageChooser.getLanguage();
-				txt = work.getText(textLanguage.getLanguageID());
+				txt = work.getText(textLanguage.getLanguageID(), false);
 			}
 			if (txt == null) txt = "";
 			text.setText(txt);
