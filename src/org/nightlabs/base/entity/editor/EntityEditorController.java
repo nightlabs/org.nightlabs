@@ -56,7 +56,7 @@ import org.nightlabs.base.entity.editor.EntityEditorPageController.LoadJob;
  * 
  * <p>Addtitionally {@link EntityEditorController} provides a pool of Jobs
  * that will be scheduled by the controller taking care that not more than 
- * a configurable number of jobs runs simultanously.</p> 
+ * a configurable number of jobs run simultanously.</p> 
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
