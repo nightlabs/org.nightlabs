@@ -25,11 +25,10 @@
  ******************************************************************************/
 package org.nightlabs.base.editor;
 
-import org.eclipse.swt.SWT;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -55,9 +54,9 @@ extends RestorableSectionPart
 		((GridLayout)container.getLayout()).numColumns = 1;		
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		messageLabel = new Label(container, SWT.NONE);
-		messageLabel.setText(" ");
-		messageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		messageLabel = new Label(container, SWT.NONE);
+//		messageLabel.setText(" ");
+//		messageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
 	private Composite container;
@@ -65,8 +64,21 @@ extends RestorableSectionPart
 		return container;
 	}
 	
-	private Label messageLabel;
+//	private Label messageLabel;
 	public void setMessage(String message) {
-		messageLabel.setText(message);
-	}	
+//		messageLabel.setText(message);
+		setMessage(message, IMessageProvider.NONE);
+	}
+
+	/**
+	 * 
+	 * @param message the message to display
+	 * @param style the style of the message
+	 * The valid message styles are one of <code>IMessageProvider.NONE</code>,
+	 * <code>IMessageProvider.INFORMATION</code>,<code>IMessageProvider.WARNING</code>, or
+	 * <code>IMessageProvider.ERROR</code>.
+	 */
+	public void setMessage(String message, int style) {
+		getManagedForm().getForm().getForm().setMessage(message, style);
+	}
 }
