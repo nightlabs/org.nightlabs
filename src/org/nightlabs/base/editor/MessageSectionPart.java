@@ -65,12 +65,17 @@ extends RestorableSectionPart
 	}
 	
 //	private Label messageLabel;
+	/**
+	 * sets the message to display
+	 * @param message the message to set
+	 */
 	public void setMessage(String message) {
 //		messageLabel.setText(message);
 		setMessage(message, IMessageProvider.NONE);
 	}
 
 	/**
+	 * sets the message to display
 	 * 
 	 * @param message the message to display
 	 * @param style the style of the message
