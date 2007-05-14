@@ -7,9 +7,14 @@ import org.eclipse.ui.IWorkbenchPart;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
+ * @author Daniel Mazurek <!-- daniel [AT] nightlabs [DOT] de -->
  */
-public interface IWorkbenchPartAction extends IUpdateAction {
-
+public interface IWorkbenchPartAction 
+extends IUpdateAction 
+{
+	/**
+	 * sets the active workbench part
+	 * @param part the IWorkbenchPart to set
+	 */
 	void setActivePart(IWorkbenchPart part);
 }

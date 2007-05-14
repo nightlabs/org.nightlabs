@@ -34,7 +34,15 @@ import org.eclipse.jface.viewers.ISelection;
 public interface ISelectionAction 
 extends IUpdateAction 
 {	
+	/**
+	 * returns the current selection
+	 * @return the current selection 
+	 */
 	public ISelection getSelection();
 	
+	/**
+	 * sets the selection
+	 * @param selection the selection to set
+	 */
 	public void setSelection(ISelection selection);
 }
