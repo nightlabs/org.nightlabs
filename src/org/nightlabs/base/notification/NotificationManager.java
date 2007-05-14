@@ -26,17 +26,12 @@
 
 package org.nightlabs.base.notification;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
-
-import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
-import org.nightlabs.notification.Interceptor;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 
@@ -46,31 +41,10 @@ import org.nightlabs.notification.NotificationListener;
 public abstract class NotificationManager
 extends org.nightlabs.notification.NotificationManager
 {
-	private AbstractEPProcessor notificationInterceptorEPProcessor = new AbstractEPProcessor() {
-
-		public String getExtensionPointID()
-		{
-			return "org.nightlabs.base.notificationinterceptor";
-		}
-
-		public void processElement(IExtension extension, IConfigurationElement element) throws EPProcessorException
-		{
-			try {
-				Interceptor interceptor = (Interceptor) element.createExecutableExtension("class");
-//				String name =
-					element.getAttribute("name");
-
-				addInterceptor(interceptor);
-			} catch (Throwable e) {
-				throw new EPProcessorException("Extension to "+getExtensionPointID()+" with class "+element.getAttribute("class")+" has errors!", e);
-			}
-		}
-	};
-
 	protected NotificationManager()
 	{
 		try {
-			notificationInterceptorEPProcessor.process();
+			new NotificationManagerInterceptorEPProcessor(this).process();
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
 		}
