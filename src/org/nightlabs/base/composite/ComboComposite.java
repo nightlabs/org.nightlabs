@@ -119,6 +119,7 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 			label = new Label(comp, SWT.NONE);
 			label.setText(caption);
 			combo = new Combo(comp, style);
+			combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		} else {
 			combo = new Combo(parent, style);
 			if (parent.getLayout() instanceof GridLayout) {

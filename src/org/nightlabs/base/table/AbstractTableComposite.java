@@ -257,7 +257,7 @@ implements ISelectionProvider
 	 * 
 	 * @param elements The element to check.
 	 */
-	public void setCheckedElements(List<ElementType> elements) {
+	public void setCheckedElements(Collection<ElementType> elements) {
 		if ((table.getStyle() & SWT.CHECK) == 0)
 			return;
 		TableItem[] items = tableViewer.getTable().getItems();
