@@ -57,6 +57,7 @@ extends RestorableSectionPart
 //		messageLabel = new Label(container, SWT.NONE);
 //		messageLabel.setText(" ");
 //		messageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		getManagedForm().getForm().setText(arg0)
 	}
 
 	private Composite container;
@@ -70,7 +71,6 @@ extends RestorableSectionPart
 	 * @param message the message to set
 	 */
 	public void setMessage(String message) {
-//		messageLabel.setText(message);
 		setMessage(message, IMessageProvider.NONE);
 	}
 
