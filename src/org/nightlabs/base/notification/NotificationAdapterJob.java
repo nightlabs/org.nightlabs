@@ -29,8 +29,9 @@ package org.nightlabs.base.notification;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
-
+import org.nightlabs.base.progress.ProgressMonitorWrapper;
 import org.nightlabs.notification.NotificationEvent;
+import org.nightlabs.progress.ProgressMonitor;
 
 
 public abstract class NotificationAdapterJob implements NotificationListenerJob
@@ -58,6 +59,7 @@ public abstract class NotificationAdapterJob implements NotificationListenerJob
 	}
 	
 	private IProgressMonitor progressMonitor;
+	private ProgressMonitor progressMonitorWrapper;
 
 	/**
 	 * @see org.nightlabs.base.notification.NotificationListenerJob#setProgressMonitor(org.eclipse.core.runtime.IProgressMonitor)
@@ -73,6 +75,15 @@ public abstract class NotificationAdapterJob implements NotificationListenerJob
 		return progressMonitor;
 	}
 
+	public ProgressMonitor getProgressMonitorWrapper() {
+		if (progressMonitorWrapper == null) {
+			if (progressMonitor == null)
+				throw new IllegalStateException("getProgressMonitorWrapper() must not be called before setProgressMonitor(IProgressMonitor).");
+			progressMonitorWrapper = new ProgressMonitorWrapper(progressMonitor);
+		}
+		return progressMonitorWrapper;
+	}
+	
 	/**
 	 * @see org.nightlabs.base.notification.NotificationListenerJob#getRule()
 	 */

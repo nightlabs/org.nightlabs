@@ -61,7 +61,7 @@ extends MessageSectionPart
 	/**
 	 * This should be called after contributing to the ToolBarManager ({@link #getToolBarManager()})
 	 */
-	public void udpateToolBarManager() {
+	public void updateToolBarManager() {
 		toolBarManager.update(true);
 	}
 	
