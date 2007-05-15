@@ -10,7 +10,7 @@ import org.eclipse.ui.IWorkbenchPart;
  * @author Daniel Mazurek <!-- daniel [AT] nightlabs [DOT] de -->
  */
 public interface IWorkbenchPartAction 
-extends IUpdateAction 
+extends IUpdateActionOrContributionItem 
 {
 	/**
 	 * sets the active workbench part

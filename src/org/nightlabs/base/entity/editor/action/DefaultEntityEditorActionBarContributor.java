@@ -23,26 +23,44 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.base.action;
+package org.nightlabs.base.entity.editor.action;
 
-import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.nightlabs.base.action.registry.AbstractActionRegistry;
+import org.nightlabs.base.action.registry.editor.EditorActionBarContributorRegistry;
+import org.nightlabs.base.extensionpoint.EPProcessorException;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public interface ISelectionAction 
-extends IUpdateActionOrContributionItem 
-{	
-	/**
-	 * returns the current selection
-	 * @return the current selection 
-	 */
-	public ISelection getSelection();
+public class DefaultEntityEditorActionBarContributor 
+extends AbstractActionRegistry 
+{
+	public DefaultEntityEditorActionBarContributor() {
+	}
+
+	@Override
+	protected Object createActionOrContributionItem(
+			IExtension extension, IConfigurationElement element) 
+	throws EPProcessorException 
+	{
+		try {
+			return element.createExecutableExtension("class");
+		} catch (CoreException e) {
+			throw new EPProcessorException(e.getMessage(), extension, e);
+		}
+	}
 	
-	/**
-	 * sets the selection
-	 * @param selection the selection to set
-	 */
-	public void setSelection(ISelection selection);
+	@Override
+	public String getExtensionPointID() {
+		return DefaultEntityEditorActionBarContributor.class.getName();
+	}
+
+	@Override
+	protected String getActionElementName() {
+		return EntityEditorActionBarContributorRegistry.ELEMENT_EDITOR_ACTION_BAR_CONTRIBUTION;
+	}	
 }

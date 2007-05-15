@@ -4,13 +4,17 @@
 package org.nightlabs.base.action;
 
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
+
 
 /**
+ * This interface can be implemented addtionally to {@link IAction} or
+ * {@link IContributionItem} in order to support visibility/enabled-calculation.
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  * @author Daniel Mazurek <!-- daniel [AT] nightlabs [DOT] de -->
  */
-public interface IUpdateAction
-extends IAction
+public interface IUpdateActionOrContributionItem
 {
 	/**
 	 * returns if the action should be enabled

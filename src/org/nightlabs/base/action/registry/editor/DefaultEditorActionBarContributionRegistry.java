@@ -47,7 +47,6 @@ extends AbstractActionRegistry
 	 */
 	@Override
 	public String getExtensionPointID() {
-//		throw new UnsupportedOperationException("This should never be called!");
 		return DefaultEditorActionBarContributionRegistry.class.getName();
 	}
 

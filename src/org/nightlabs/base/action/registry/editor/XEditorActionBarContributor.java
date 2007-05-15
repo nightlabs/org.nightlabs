@@ -13,7 +13,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.EditorActionBarContributor;
 import org.nightlabs.base.action.ISelectionAction;
-import org.nightlabs.base.action.IUpdateAction;
+import org.nightlabs.base.action.IUpdateActionOrContributionItem;
 import org.nightlabs.base.action.IWorkbenchPartAction;
 import org.nightlabs.base.action.registry.AbstractActionRegistry;
 import org.nightlabs.base.action.registry.ActionDescriptor;
@@ -38,8 +38,8 @@ extends EditorActionBarContributor
 //			if (part.equals(activeEditor)) {
 				updateSelectionSections(selection);
 				updateActions();									
-				logger.debug("selection changed");
 //			}
+			logger.debug("selection changed");
 		}	
 	};
 	
@@ -55,8 +55,8 @@ extends EditorActionBarContributor
 	{
 		if (getActionRegistry() != null) {
 			for (ActionDescriptor actionDescriptor : getActionRegistry().getActionDescriptors()) {
-				if (actionDescriptor.getAction() instanceof IUpdateAction) {
-					boolean enabled = ((IUpdateAction)actionDescriptor.getAction()).calculateEnabled();
+				if (actionDescriptor.getAction() instanceof IUpdateActionOrContributionItem) {
+					boolean enabled = ((IUpdateActionOrContributionItem)actionDescriptor.getAction()).calculateEnabled();
 					actionDescriptor.getAction().setEnabled(enabled);
 //					actionDescriptor.setVisible(((IUpdateAction)actionDescriptor.getAction()).calculateVisible());
 					
@@ -103,7 +103,7 @@ extends EditorActionBarContributor
 		activeEditor.getSite().getPage().addSelectionListener(selectionListener);
 		updateSelectionSections(activeEditor.getSite().getPage().getSelection());
 		updateActions();
-//		logger.info("selectionListener added to activeEditor "+getActiveEditor().getEditorSite().getId());
+		logger.debug("selectionListener added to activeEditor "+getActiveEditor().getEditorSite().getId());
 		
 		if (contributedToToolBar && !activeEditor.equals(oldEditorPart))
 			contributeToToolBar(getActionBars().getToolBarManager());

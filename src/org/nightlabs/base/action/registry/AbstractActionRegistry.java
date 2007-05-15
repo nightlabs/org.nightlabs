@@ -1172,7 +1172,7 @@ extends AbstractEPProcessor
 
 	protected static boolean parseBooleanAcceptingNull(String s, boolean defaultVal)
 	{
-		return s == null || "".equals(s) ? true : Boolean.parseBoolean(s);
+		return s == null || "".equals(s) ? defaultVal : Boolean.parseBoolean(s);
 	}
 
 	public Collection<ActionDescriptor> getActionDescriptors()
