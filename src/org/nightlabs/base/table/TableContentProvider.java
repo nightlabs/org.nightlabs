@@ -68,7 +68,6 @@ public class TableContentProvider implements IStructuredContentProvider {
 			return (Object[]) inputElement;
 		else {			
 			return new Object[] {inputElement};
-//			throw new IllegalArgumentException("This basic implementation of getElements(...) (from " + TableContentProvider.class + ") does not support the inputElement type " + (inputElement == null ? null : inputElement.getClass().getName()));
 		}
 	}
 

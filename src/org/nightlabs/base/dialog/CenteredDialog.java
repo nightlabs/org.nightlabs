@@ -29,6 +29,7 @@ package org.nightlabs.base.dialog;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.graphics.Point;
@@ -45,6 +46,7 @@ import org.nightlabs.config.Config;
 public class CenteredDialog 
 extends Dialog 
 {
+	private static final Logger logger = Logger.getLogger(CenteredDialog.class);
 
 	/**
 	 * @param parentShell
@@ -73,12 +75,16 @@ extends Dialog
 	@Override
 	public boolean close()
 	{
-		getDialogCfMod().createDialogCf(
-				getDialogIdentifier(),
-				getShell().getLocation().x,
-				getShell().getLocation().y,
-				getShell().getSize().x,
-				getShell().getSize().y);
+		if (getShell() == null)
+			logger.error("No shell!", new IllegalStateException("No shell existing!"));
+		else {
+			getDialogCfMod().createDialogCf(
+					getDialogIdentifier(),
+					getShell().getLocation().x,
+					getShell().getLocation().y,
+					getShell().getSize().x,
+					getShell().getSize().y);
+		}
 		return super.close();
 	}
 
