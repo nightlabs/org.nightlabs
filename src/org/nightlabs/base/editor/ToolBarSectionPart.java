@@ -38,7 +38,6 @@ import org.eclipse.ui.forms.editor.IFormPage;
 public class ToolBarSectionPart 
 extends MessageSectionPart 
 {
-	
 	private ToolBar toolBar;
 	private ToolBarManager toolBarManager;
 
@@ -46,8 +45,11 @@ extends MessageSectionPart
 		super(page, parent, style, title);
 		toolBar = new ToolBar(getSection(), SWT.NONE);
 		toolBarManager = new ToolBarManager(toolBar);
+		toolBar.setBackground(getSection().getBackground());
+		toolBar.setBackgroundImage(getSection().getBackgroundImage());
+		toolBar.setBackgroundMode(SWT.INHERIT_FORCE);
 		getSection().setTextClient(toolBar);
-		toolBarManager.update(true);
+//		toolBarManager.update(true);
 	}
 
 	/**

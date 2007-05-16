@@ -3,7 +3,6 @@ package org.nightlabs.base.composite;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.NLBasePlugin;
@@ -21,10 +20,6 @@ extends XComposite
 		getGridData().grabExcessVerticalSpace = false;
 		button = new Button(this, SWT.TOGGLE);
 		button.setToolTipText("Inherit?");
-		button.setImage(SharedImages.getSharedImage(NLBasePlugin.getDefault(), InheritanceToggleButton.class));
-		GridData gd = new GridData();
-		gd.heightHint = 24;
-		button.setLayoutData(gd);		
 		button.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
 				if (button.getSelection())
@@ -36,11 +31,12 @@ extends XComposite
 				widgetSelected(e);
 			}		
 		});
+		setSelection(true);
 	}
 
-	public void addSelectionListener(SelectionListener arg0)
+	public void addSelectionListener(SelectionListener selectionListener)
 	{
-		button.addSelectionListener(arg0);
+		button.addSelectionListener(selectionListener);
 	}
 
 	public boolean getSelection()
@@ -48,9 +44,14 @@ extends XComposite
 		return button.getSelection();
 	}
 
-	public void setSelection(boolean arg0)
+	public void setSelection(boolean selection)
 	{
-		button.setSelection(arg0);
+		button.setSelection(selection);
+		if (selection)
+			button.setImage(SharedImages.getSharedImage(NLBasePlugin.getDefault(), InheritanceToggleButton.class));
+		else
+			button.setImage(SharedImages.getSharedImage(NLBasePlugin.getDefault(), InheritanceToggleButton.class, "Unlink"));
+		
 	}
 
 }

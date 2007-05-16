@@ -225,7 +225,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 	 *
 	 * @param editMode The new {@link EditMode}.
 	 */
-	public void setEditMode(EditMode editMode) {
+	protected void setEditMode(EditMode editMode) {
 		this.editMode = editMode;
 
 		switch (editMode) {
