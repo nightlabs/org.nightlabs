@@ -67,6 +67,7 @@ import org.eclipse.jface.wizard.Wizard;
  */
 
 /**
+ * 
  * Used for Wizards with dynamic WizardPages.
  * Intended to be used as follows.<br/>
  * Subclass DynamicPathWizardPage and implement
@@ -81,6 +82,10 @@ import org.eclipse.jface.wizard.Wizard;
  *   of the added pages they will appear in the same order as added.
  * </p>
  * 
+ * FIXME: must be rewritten as from Eclipse 3.2, Wizard works different then in 3.1
+ * Wizard.createPageControls() does not work properly when in addPages() only addDynamicPage() is called
+ * instead of addPage()   
+ *  
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  * @author Marco Schulze
  */

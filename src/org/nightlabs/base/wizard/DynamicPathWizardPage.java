@@ -153,11 +153,21 @@ implements IDynamicPathWizardPage
 		}
 	}
 
+	private boolean shown = false;
+
+	/**
+	 * @see org.nightlabs.base.wizard.IDynamicPathWizardPage#isShown()
+	 */
+	public boolean isShown() {
+		return shown;
+	}
+	
 	/**
 	 * @see org.nightlabs.base.wizard.IDynamicPathWizardPage#onShow()
 	 */
 	public void onShow()
 	{
+		shown = true;
 	}
 
 	/**
