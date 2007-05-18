@@ -67,6 +67,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.composite.ChildStatusController;
+import org.nightlabs.base.composite.XComposite;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -123,6 +125,13 @@ public class RCPUtil
 
 	/**
 	 * Recursively sets the enabled flag for the given Composite and all its children.
+	 * <p>
+	 * <b>Important:</b> It is highly recommended to extend your containers in a way that they
+	 * automatically do this and when re-enabling the container do <b>not</b> enable child-elements
+	 * that where disabled before. The {@link XComposite} already implements this behaviour (just
+	 * like other NightLabs-UI elements as well). In order to implement this behaviour yourself,
+	 * you should use a {@link ChildStatusController}.
+	 * </p>
 	 * 
 	 * @param comp The parent control
 	 * @param enabled The enabled flag to set
