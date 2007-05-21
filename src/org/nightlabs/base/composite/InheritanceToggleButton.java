@@ -14,6 +14,7 @@ extends XComposite
 {
 	private Button button;
 	private Label captionLabel;
+	private boolean selected;
 
 	public InheritanceToggleButton(Composite parent)
 	{
@@ -29,6 +30,8 @@ extends XComposite
 		button.setToolTipText("Inherit?");
 		button.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
+				selected = button.getSelection();
+				
 				if (button.getSelection())
 					button.setImage(SharedImages.getSharedImage(NLBasePlugin.getDefault(), InheritanceToggleButton.class));
 				else
@@ -74,12 +77,13 @@ extends XComposite
 
 	public boolean getSelection()
 	{
-		return button.getSelection();
+		return selected;
 	}
 
 	public void setSelection(boolean selection)
 	{
 		button.setSelection(selection);
+		selected = selection;
 		if (selection)
 			button.setImage(SharedImages.getSharedImage(NLBasePlugin.getDefault(), InheritanceToggleButton.class));
 		else
