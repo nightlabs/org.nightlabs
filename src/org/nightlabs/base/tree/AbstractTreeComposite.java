@@ -92,7 +92,7 @@ implements ISelectionProvider
 	public AbstractTreeComposite(Composite parent, boolean init) {
 		this(parent, DEFAULT_STYLE_SINGLE, true, init, true);
 	}
-	
+		
 	/**
 	 * See {@link #AbstractTreeComposite(Composite, boolean)}. The other
 	 * parameters are used to control the trees look.
@@ -105,12 +105,6 @@ implements ISelectionProvider
 	 */
 	public AbstractTreeComposite(Composite parent, int style, boolean setLayoutData, boolean init, boolean headerVisible) 
 	{
-//		super(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER, setLayoutData ? XComposite.LayoutDataMode.GRID_DATA:  XComposite.LayoutDataMode.NONE);
-//		treeViewer = new TreeViewer(this, style);
-//		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		treeViewer.getTree().setHeaderVisible(headerVisible);
-//		if (init)
-//			init();
 		this(parent, style, setLayoutData, init, headerVisible, true);
 	}
 	
