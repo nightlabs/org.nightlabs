@@ -68,6 +68,9 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 	private LanguageChooser languageChooser;
 	private LanguageCf textLanguage;
 	private Text text;
+	protected Text getText() {
+		return text;
+	}
 
 	/**
 	 * Create a new {@link I18nTextEditor} with a new default (combo)
@@ -103,7 +106,7 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 	{
 		this(parent, languageChooser, (String)null);
 	}
-
+	
 	/**
 	 * Create a new {@link I18nTextEditor} listening to languagechanges
 	 * of the given {@link LanguageChooser} and the given caption as descriptive header.
@@ -115,9 +118,19 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 	public I18nTextEditor(Composite parent, LanguageChooser _languageChooser, String caption)
 	{
 		super(parent, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER);
-		getGridData().grabExcessVerticalSpace = false;
+		init();
+		createContext(parent, languageChooser, caption);
+	}
 
-		if (_languageChooser == null)
+	protected void init() {
+		// empty by default
+	}
+	
+	protected void createContext(Composite parent, LanguageChooser languageChooser, String caption) 
+	{
+//		getGridData().grabExcessVerticalSpace = false;
+		
+		if (languageChooser == null)
 			getGridLayout().numColumns = 2;
 
 		setEditMode(EditMode.DIRECT);
@@ -126,7 +139,6 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 			Label l = new Label(this, SWT.NONE);
 			l.setText(caption);
 			GridData gd = new GridData();			
-//			gd.grabExcessHorizontalSpace = true;
 			gd.horizontalSpan = getGridLayout().numColumns;
 			l.setLayoutData(gd);
 		}
@@ -138,12 +150,12 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 			}
 		};
 		
-		if (_languageChooser == null) {
+		if (languageChooser == null) {
 			this.languageChooser = new LanguageChooserCombo(this); //, false);
 			// TODO On the long run, the I18nTextEditor itself should be a combobox
 			// in this mode, showing the language flag on the left.
 		} else {
-			this.languageChooser = _languageChooser;
+			this.languageChooser = languageChooser;
 			addDisposeListener(new DisposeListener() {
 				public void widgetDisposed(DisposeEvent e) {
 					I18nTextEditor.this.languageChooser.removeLanguageChangeListener(languageChangeListener);
@@ -151,9 +163,7 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 			});
 		}
 
-//		text = new Text(this, SWT.BORDER | SWT.READ_ONLY); // TODO: READ_ONLY default? Not neccessary any more with refactor to buffer
-		text = new Text(this, SWT.BORDER); 
-		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text = createText(this);
 		text.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent arg0)
 			{
@@ -179,9 +189,15 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 					((ModifyListener)listeners[i]).modifyText(e);
 				}
 			}
-		});
+		});		
 	}
-
+	
+	protected Text createText(Composite parent) {
+		text = new Text(parent, SWT.BORDER); 
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return text;
+	}
+	
 	/**
 	 * List of modifyListeners. They will only be triggered
 	 * if the text is actually modified by the user, not
