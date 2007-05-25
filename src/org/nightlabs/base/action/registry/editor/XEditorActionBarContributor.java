@@ -3,6 +3,8 @@
  */
 package org.nightlabs.base.action.registry.editor;
 
+import java.util.Collection;
+
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
@@ -69,6 +71,8 @@ extends EditorActionBarContributor
 	
 	protected void updateSelectionSections(ISelection selection) 
 	{
+		if (getActionRegistry() == null)
+			return;
 		for (ActionDescriptor actionDescriptor : getActionRegistry().getActionDescriptors()) {
 			if (actionDescriptor.getAction() instanceof ISelectionAction) {
 				ISelectionAction selectionAction = (ISelectionAction) actionDescriptor.getAction();
@@ -95,9 +99,12 @@ extends EditorActionBarContributor
 		IEditorPart oldEditorPart = activeEditor;
 		super.setActiveEditor(targetEditor);
 		this.activeEditor = targetEditor;
-		for (ActionDescriptor actionDescriptor : getActionRegistry().getActionDescriptors()) {
-			if (actionDescriptor.getAction() instanceof IWorkbenchPartAction) {
-				((IWorkbenchPartAction)actionDescriptor.getAction()).setActivePart(targetEditor);
+		
+		if (getActionRegistry() != null) {
+			for (ActionDescriptor actionDescriptor : getActionRegistry().getActionDescriptors()) {
+				if (actionDescriptor.getAction() instanceof IWorkbenchPartAction) {
+					((IWorkbenchPartAction)actionDescriptor.getAction()).setActivePart(targetEditor);
+				}
 			}
 		}
 		activeEditor.getSite().getPage().addSelectionListener(selectionListener);
