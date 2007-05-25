@@ -25,39 +25,36 @@
  ******************************************************************************/
 package org.nightlabs.base.search;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.nightlabs.base.notification.SelectionManager;
+import org.nightlabs.notification.NotificationEvent;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public interface SearchResultProviderFactory 
+public abstract class AbstractSelectionZoneActionHandler 
+extends AbstractSearchResultActionHandler 
 {
-	ISearchResultProvider createSearchResultProvider();
+
+	public AbstractSelectionZoneActionHandler() {
+	}
+
+	public void run() 
+	{
+		Collection selectedObjects = getSearchResultProvider().getSelectedObjects();
+		Collection<Class> subjectClassesToClear = new ArrayList<Class>();
+		subjectClassesToClear.add(getSearchResultProvider().getFactory().getResultTypeClass());		
+		if (selectedObjects != null) {
+			SelectionManager.sharedInstance().notify(new NotificationEvent(
+					AbstractSelectionZoneActionHandler.this, 
+					getSelectionZone(), 
+					selectedObjects, 
+					subjectClassesToClear));
+		}
+	}	
 	
-//	/**
-//	 * returns the zone of the selection which will be used for firing selectionEvents
-//	 * if the getSelectedObjects() of the {@link ISearchResultProvider} which is created by 
-//	 * {@link SearchResultProviderFactory#createSearchResultProvider()} is not empty
-//	 * 
-//	 * @return the zone of the selection which will be used for firing selectionEvents
-//	 * if the ISearchResultProvider.getSelectedObjects() is not empty
-//	 * 
-//	 * @see SelectionManager
-//	 * @see NotificationEvent
-//	 */
-//	String getSelectionZone();
-//
-//	/**
-//	 * returns the multilanguage capable name of the type of search
-//	 * @return the multilanguage capable name of the type of search
-//	 * 
-//	 * @see I18nText
-//	 */
-//	I18nText getName();
-//	
-//	/**
-//	 * return the searchContext
-//	 * @return the searchContext
-//	 */
-//	String getContext();	
+	public abstract String getSelectionZone();
 }

@@ -25,17 +25,16 @@
  ******************************************************************************/
 package org.nightlabs.base.search;
 
-import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 
@@ -49,10 +48,16 @@ extends AbstractEPProcessor
 	private static final Logger logger = Logger.getLogger(SearchResultProviderRegistry.class);
 	
 	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.searchResultProvider";
-	public static final String ELEMENT_SEARCH_RESULT_PROVIDER = "searchResultProvider";
-	public static final String ATTRIBUTE_FACTORY_CLASS = "factoryClass";
-	public static final String ATTRIBUTE_DEFAULT = "default";
+	public static final String ELEMENT_SEARCH_RESULT_PROVIDER_FACTORY = "searchResultProviderFactory";
+	public static final String ELEMENT_SEARCH_RESULT_HANDLER = "searchResultActionHandler";
+	public static final String ATTRIBUTE_CLASS = "class";
+	public static final String ATTRIBUTE_PRIORITY = "priority";
 	public static final String ATTRIBUTE_DECORATOR = "decorator";
+	public static final String ATTRIBUTE_ICON = "icon";
+	public static final String ATTRIBUTE_PERSPECTIVE_ID = "perspectiveID";
+	public static final String ATTRIBUTE_ID = "id";
+	public static final String ATTRIBUTE_NAME = "name";
+	public static final String ATTRIBUTE_SEARCH_RESULT_PROVIDER_FACTORY_ID = "searchResultProviderFactoryID";
 
 	private static SearchResultProviderRegistry sharedInstance;
 	public static SearchResultProviderRegistry sharedInstance() {
@@ -77,78 +82,84 @@ extends AbstractEPProcessor
 	public void processElement(IExtension extension, IConfigurationElement element)
 	throws EPProcessorException 
 	{
-		if (element.getName().equals(ELEMENT_SEARCH_RESULT_PROVIDER)) 
-		{
-			if (checkString(element.getAttribute(ATTRIBUTE_FACTORY_CLASS))) {
+		if (element.getName().equals(ELEMENT_SEARCH_RESULT_PROVIDER_FACTORY)) {
+			if (checkString(element.getAttribute(ATTRIBUTE_CLASS))) {
 				try {
-					SearchResultProviderFactory factory = (SearchResultProviderFactory) element.createExecutableExtension(ATTRIBUTE_FACTORY_CLASS);
-					ISearchResultProvider searchResultProvider = factory.createSearchResultProvider();
-					String context = searchResultProvider.getContext();
-					String name = searchResultProvider.getName().getText();
-					name2SearchResultProvider.put(name, factory);
-					context2SearchResultProvider.put(context, factory);
-					
-					String defaultValue = element.getAttribute(ATTRIBUTE_DEFAULT);
-					if (defaultValue != null && defaultValue.equalsIgnoreCase(Boolean.toString(true))) {
-						defaultName = name; 
-					}
-					
-					String decoratorString = element.getAttribute(ATTRIBUTE_DECORATOR);
-					if (checkString(decoratorString)) {
-						ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(extension.getNamespaceIdentifier(), decoratorString);
-						if (imageDescriptor != null) {
-							name2Image.put(name, imageDescriptor.createImage());
-						}
-					}
+					ISearchResultProviderFactory factory = (ISearchResultProviderFactory) element.createExecutableExtension(ATTRIBUTE_CLASS);
+					factories.add(factory);
 				} catch (Exception e) {
-					logger.error("There occured an error during initalizing the class "+element.getAttribute(ATTRIBUTE_FACTORY_CLASS), e);
+					logger.error("There occured an error during initalizing the class "+element.getAttribute(ATTRIBUTE_CLASS), e);
 				}				
 			}
 		}
-	}
+		if (element.getName().equals(ELEMENT_SEARCH_RESULT_HANDLER)) {
+			String factoryID = element.getAttribute(ATTRIBUTE_SEARCH_RESULT_PROVIDER_FACTORY_ID);
+			String className = element.getAttribute(ATTRIBUTE_CLASS);
+			String perspectiveID = element.getAttribute(ATTRIBUTE_PERSPECTIVE_ID);
+			if (checkString(className) && checkString(factoryID)) {
+				try {
+					ISearchResultActionHandler actionHandler = (ISearchResultActionHandler) element.createExecutableExtension(ATTRIBUTE_CLASS);
+					Map<String, ISearchResultActionHandler> perspectiveID2ActionHandler = factoryID2PerspectiveID2ActionHandler.get(factoryID); 
+					if (perspectiveID2ActionHandler == null) {
+						perspectiveID2ActionHandler = new HashMap<String, ISearchResultActionHandler>();
+						factoryID2PerspectiveID2ActionHandler.put(factoryID, perspectiveID2ActionHandler);
+					}
 
-	private Map<String, SearchResultProviderFactory> name2SearchResultProvider = new HashMap<String, SearchResultProviderFactory>();
-	private Map<String, SearchResultProviderFactory> context2SearchResultProvider = new HashMap<String, SearchResultProviderFactory>();
-	
-	public Collection<String> getRegisteredNames() {
-		checkProcessing();
-		return name2SearchResultProvider.keySet();
+					if (!checkString(perspectiveID))
+						perspectiveID = ISearchResultProviderFactory.WILDCARD_PERSPECTIVE_ID;
+					
+					if (perspectiveID2ActionHandler.get(perspectiveID) != null) {
+							ISearchResultActionHandler oldActionHandler = perspectiveID2ActionHandler.get(perspectiveID);
+							logger.warn("There already exists an actionHandler for the perspectiveID "+perspectiveID+" and the factoryID "+factoryID);
+							logger.warn("actionHandler "+oldActionHandler+" has been replaced by actionHandler "+actionHandler);						
+					}
+										
+					perspectiveID2ActionHandler.put(perspectiveID, actionHandler);
+				} catch (Exception e) {
+					logger.error("There occured an error during initalizing the class "+element.getAttribute(ATTRIBUTE_CLASS), e);
+				}				
+			}
+		}		
 	}
 	
-	public Collection<String> getRegisteredContexts() {
-		checkProcessing();
-		return context2SearchResultProvider.keySet();
-	}
-	
-	public ISearchResultProvider getSearchResultProvider(String name) {
-		checkProcessing();
-		SearchResultProviderFactory factory = name2SearchResultProvider.get(name);
-		if (factory != null)
-			return factory.createSearchResultProvider();
-		return null;
-	}
-	
-	private String defaultName = null;
-	public String getDefault() 
-	{
-		checkProcessing();
-		if (defaultName != null)
-			return defaultName;
-		if (defaultName == null && !getRegisteredNames().isEmpty())
-			return getRegisteredNames().iterator().next();
-		
-		return null;
-	}
-	
-	private Map<String, Image> name2Image = new HashMap<String, Image>();
-	public Image getImage(String name) 
-	{
-		Image image = name2Image.get(name);
-		if (image != null) {
-			SearchCompositeImage searchImage = new SearchCompositeImage(image);
-			return searchImage.createImage();
+	private Comparator<ISearchResultProviderFactory> factoryComparator = new Comparator<ISearchResultProviderFactory>(){
+		public int compare(ISearchResultProviderFactory o1, ISearchResultProviderFactory o2) {
+			return o1.getPriority() - o2.getPriority();
 		}
-		return null;
+	};
+	
+	private SortedSet<ISearchResultProviderFactory> factories = new TreeSet<ISearchResultProviderFactory>(factoryComparator);	
+	public Set<ISearchResultProviderFactory> getFactories() {
+		check();
+		return factories;
+	}
+	
+//	private Map<String, Set<ISearchResultActionHandler>> factoryID2ActionHandlers = new HashMap<String, Set<ISearchResultActionHandler>>();
+	private Map<String, Map<String, ISearchResultActionHandler>> factoryID2PerspectiveID2ActionHandler = new HashMap<String, Map<String, ISearchResultActionHandler>>();	
+	private Map<String, SearchResultProviderRegistryUseCase> useCase2RegistryUse = new HashMap<String, SearchResultProviderRegistryUseCase>();
+	public SearchResultProviderRegistryUseCase getUseCase(String useCase) {
+		check();
+		return useCase2RegistryUse.get(useCase);
+	}	
+	public void addUseCase(String useCaseString, SearchResultProviderRegistryUseCase useCase) {
+		useCase2RegistryUse.put(useCaseString, useCase);
+	}
+	
+	private boolean checked = false;
+	protected void check()
+	{
+		if (!checked) {
+			checkProcessing();
+			for (ISearchResultProviderFactory factory : factories) {
+				Map<String, ISearchResultActionHandler> perspectiveID2ActionHandler = factoryID2PerspectiveID2ActionHandler.get(factory.getID());
+				if (perspectiveID2ActionHandler != null) {
+					for (Map.Entry<String, ISearchResultActionHandler> entry : perspectiveID2ActionHandler.entrySet()) {
+						factory.addActionHandler(entry.getValue(), entry.getKey());
+					}					
+				}
+			}
+			checked = true;
+		}
 	}
 	
 }

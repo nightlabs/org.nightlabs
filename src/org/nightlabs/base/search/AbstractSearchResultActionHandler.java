@@ -25,29 +25,22 @@
  ******************************************************************************/
 package org.nightlabs.base.search;
 
-import java.util.Collection;
-
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public interface ISearchResultProvider<T> 
-{	
-	/**
-	 * returns a Collection which contains the result of the search
-	 * @return a Collection which contains the result of the search 
-	 */
-	Collection<T> getSelectedObjects();
-		
-	/**
-	 * sets the search text
-	 * @param text the searchText to set
-	 */
-	void setSearchText(String text);
-	
-	/**
-	 * returns the factory
-	 * @return the factory
-	 */
-	ISearchResultProviderFactory getFactory(); 
+public abstract class AbstractSearchResultActionHandler 
+implements ISearchResultActionHandler 
+{
+	public AbstractSearchResultActionHandler() {
+	}
+
+	private ISearchResultProvider searchResultProvider = null;
+	public ISearchResultProvider getSearchResultProvider() {
+		return searchResultProvider;
+	}
+	public void setSearchResultProvider(ISearchResultProvider searchResultProvider) {
+		this.searchResultProvider = searchResultProvider;
+	}
+
 }

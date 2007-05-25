@@ -28,6 +28,8 @@ package org.nightlabs.base.search;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
@@ -51,16 +53,15 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.PlatformUI;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.action.AbstractContributionItem;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
-import org.nightlabs.base.notification.SelectionManager;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.base.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.util.RCPUtil;
-import org.nightlabs.notification.NotificationEvent;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -70,94 +71,126 @@ public class SearchContributionItem
 extends AbstractContributionItem 
 {
 	private static final Logger logger = Logger.getLogger(SearchContributionItem.class);
+
+	private ISearchResultProviderFactory selectedFactory = null;	
+	private Item selectedItem = null;
+	private Text searchText = null;		
 	
 	public SearchContributionItem() {
 		super();
-//		checkSelectedType();
 	}
 	
-	@Override
-	protected Control createControl(Composite parent) 
-	{
-		checkSelectedType();
-		
-		Composite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		GridLayout layout = new GridLayout(1, false);
-		layout.verticalSpacing = 0;
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		layout.marginLeft = 0;
-		layout.marginRight = 0;
-		layout.marginTop = 0;
-		layout.marginBottom = 0;
-		comp.setLayout(layout);
-
-		createText(comp);
-		
-		searchButton = new Button(comp, SWT.BOTTOM | SWT.PUSH);
-		searchButton.setImage(SharedImages.getSharedImage(NLBasePlugin.getDefault(), 
-				SearchContributionItem.class, "", ImageDimension._12x12, ImageFormat.png));		
-		searchButton.addSelectionListener(buttonSelectionListener);
-				
-		searchTypeCombo = new Combo(comp, SWT.NONE);
-		fillSearchTypeCombo();
-		searchTypeCombo.addSelectionListener(comboSelectionListener);
-		
-		return comp;
+	protected ISearchResultProviderFactory getSelectedFactory() {
+		if (selectedFactory == null) {
+			selectedFactory = getUseCase().getCurrentSearchResultProviderFactory(); 
+		}
+		return selectedFactory;
 	}
-
+	
+	protected SearchResultProviderRegistryUseCase getUseCase() {
+		SearchResultProviderRegistryUseCase useCase = SearchResultProviderRegistry.sharedInstance().getUseCase(getUseCaseKey());
+		if (useCase == null) {
+			useCase = new SearchResultProviderRegistryUseCase();
+			// TODO get the factory with the highest priority
+			ISearchResultProviderFactory factory = useCase.getFactory2Instance().keySet().iterator().next();
+			useCase.setCurrentSearchResultProviderFactory(factory);
+		}
+		return useCase;
+	}
+	
+	protected void updateUseCase() 
+	{
+		SearchResultProviderRegistryUseCase useCase = getUseCase();
+		if (searchText != null && !searchText.isDisposed()) {
+			useCase.setCurrentSearchText(searchText.getText());
+		}
+		useCase.setCurrentSearchResultProviderFactory(getSelectedFactory());
+	}
+	
+	protected String getUseCaseKey() {
+		return SearchContributionItem.class.getName() + RCPUtil.getActivePerspectiveID();
+	}
+		
 	protected void createText(Composite parent) 
 	{
 		searchText = new Text(parent, SWT.BORDER);
-//		GridData textData = new GridData(100, 15);
-//		textData.minimumWidth = 100;
-//		searchText.setLayoutData(textData);		
 		searchText.addSelectionListener(buttonSelectionListener);		
 	}
 	
-	private Text searchText;
-	private List<String> searchTypes = null;
-	
-	private Button searchButton;		
-	private Combo searchTypeCombo;
-	private void fillSearchTypeCombo() 
-	{
-		searchTypes = new ArrayList<String>(SearchResultProviderRegistry.sharedInstance().getRegisteredNames());
-		searchTypeCombo.setItems(searchTypes.toArray(new String[searchTypes.size()]));
-		if (searchTypes.indexOf(selectedType) != -1)
-			searchTypeCombo.select(searchTypes.indexOf(selectedType));
-	}	
-	
-	private SelectionListener comboSelectionListener = new SelectionListener(){	
-		public void widgetSelected(SelectionEvent e) {
-			selectedType = searchTypes.get(searchTypeCombo.getSelectionIndex());
-		}	
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}	
-	};
+//	private Button searchButton = null;	
+//	private Combo searchTypeCombo;
+//	
+//	private void fillSearchTypeCombo() 
+//	{		
+//		searchTypeCombo.setItems(getSearchTypes().toArray(new String[getSearchTypes().size()]));
+//		if (getSearchTypes().indexOf(selectedType) != -1)
+//			searchTypeCombo.select(getSearchTypes().indexOf(selectedType));
+//	}	
+//	
+//	private SelectionListener comboSelectionListener = new SelectionListener(){	
+//		public void widgetSelected(SelectionEvent e) {
+//			selectedType = searchTypes.get(searchTypeCombo.getSelectionIndex());
+//		}	
+//		public void widgetDefaultSelected(SelectionEvent e) {
+//			widgetSelected(e);
+//		}	
+//	};
 		
-	private String selectedType = null;
-	protected String getSelectedType() {
-		return selectedType;
+//	private String selectedType = null;
+//	protected String getSelectedType() {
+//		return selectedType;
+//	}
+
+//	private ISearchResultProvider selectedSearchResultProvider = null;
+//	protected ISearchResultProvider getSelectedSearchResultProvider() {
+//		return selectedSearchResultProvider;
+//	}
+	
+	protected Control createControl(Composite parent) {
+		return null;
 	}
-		
-	private Item selectedItem = null;
 	
-	private void searchPressed() 
+//	@Override
+//	protected Control createControl(Composite parent) 
+//	{
+//		checkSelectedType();
+//		
+//		Composite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+//		GridLayout layout = new GridLayout(1, false);
+//		layout.verticalSpacing = 0;
+//		layout.marginHeight = 0;
+//		layout.marginWidth = 0;
+//		layout.marginLeft = 0;
+//		layout.marginRight = 0;
+//		layout.marginTop = 0;
+//		layout.marginBottom = 0;
+//		comp.setLayout(layout);
+//	
+//		createText(comp);
+//		
+//		searchButton = new Button(comp, SWT.BOTTOM | SWT.PUSH);
+//		searchButton.setImage(SharedImages.getSharedImage(NLBasePlugin.getDefault(), 
+//				SearchContributionItem.class, "", ImageDimension._12x12, ImageFormat.png));		
+//		searchButton.addSelectionListener(buttonSelectionListener);
+//				
+//		searchTypeCombo = new Combo(comp, SWT.NONE);
+//		fillSearchTypeCombo();
+//		searchTypeCombo.addSelectionListener(comboSelectionListener);
+//		
+//		return comp;
+//	}	
+		
+	protected void searchPressed() 
 	{
-		String selectedType = getSelectedType();
-		ISearchResultProvider searchResultProvider = SearchResultProviderRegistry.
-			sharedInstance().getSearchResultProvider(selectedType);
-		if (searchResultProvider != null) { 
+		if (getSelectedFactory() != null) {
+			ISearchResultProvider searchResultProvider = getUseCase().getFactory2Instance().get(getSelectedFactory());
+			updateUseCase();
 			searchResultProvider.setSearchText(searchText.getText());
-			Collection selectedObjects = searchResultProvider.getSelectedObjects();
-			Collection<Class> subjectClassesToClear = new ArrayList<Class>();
-			subjectClassesToClear.add(searchResultProvider.getResultTypeClass());
-			if (selectedObjects != null) {
-				SelectionManager.sharedInstance().notify(new NotificationEvent(
-						SearchContributionItem.this, searchResultProvider.getSelectionZone(), 
-						selectedObjects, subjectClassesToClear));
+//			Collection selectedObjects = searchResultProvider.getSelectedObjects();			
+			ISearchResultActionHandler actionHandler = getSelectedFactory().getActionHandler();
+			if (actionHandler != null) {
+				actionHandler.setSearchResultProvider(searchResultProvider);
+				actionHandler.run();
 			}
 		}		
 	}
@@ -175,28 +208,30 @@ extends AbstractContributionItem
 	protected Menu createMenu() 
 	{
 		Menu menu = new Menu(RCPUtil.getActiveWorkbenchShell(), SWT.POP_UP);
-		searchTypes = new ArrayList<String>(SearchResultProviderRegistry.sharedInstance().getRegisteredNames());
-		for (String type : searchTypes) {
-			MenuItem menuItem = new MenuItem(menu, SWT.PUSH);
-			menuItem.setText(type);
+		Map<ISearchResultProviderFactory, ISearchResultProvider> factory2Instance = getUseCase().getFactory2Instance();
+		for (Map.Entry<ISearchResultProviderFactory, ISearchResultProvider> entry : factory2Instance.entrySet()) {
+			ISearchResultProviderFactory factory = entry.getKey();
+			MenuItem menuItem = new MenuItem(menu, SWT.PUSH);			
+			menuItem.setText(factory.getName().getText());
+			menuItem.setImage(factory.getImage());
+			menuItem.setData(factory);
 			menuItem.addSelectionListener(new SelectionListener(){			
 				public void widgetSelected(SelectionEvent e) {
-					selectedType = ((MenuItem) e.getSource()).getText();
-					setItemImage(selectedItem);
+					selectedFactory = (ISearchResultProviderFactory) ((MenuItem) e.getSource()).getData();
+					selectedItem.setImage(getSelectedFactory().getComposedDecoratorImage());
 					searchPressed();
 				}			
 				public void widgetDefaultSelected(SelectionEvent e) {
 					widgetSelected(e);
 				}			
 			});
-		}
-//		selectedType = searchTypes.get(0);		
+		}		
 		return menu;
 	}
 	
 	public void fill(ToolBar parent, int index) 
 	{
-		checkSelectedType();
+//		checkSelectedType();
 		if (fillToolBar) 
 		{
 			toolItem = new ToolItem(parent, SWT.SEPARATOR, index);			
@@ -224,7 +259,7 @@ extends AbstractContributionItem
 	  		}
 	  	});
 	  	selectedItem = searchItem;
-	  	setItemImage(selectedItem);
+	  	selectedItem.setImage(getSelectedFactory().getComposedDecoratorImage());
 	  	toolBar.layout(true, true);	 	  	
 		}
 	}	
@@ -232,7 +267,7 @@ extends AbstractContributionItem
 	@Override
 	public void fill(CoolBar parent, int index) 
 	{
-		checkSelectedType();
+//		checkSelectedType();
 		if (fillCoolBar) 
 		{
 			final CoolBar coolBar = parent;
@@ -264,7 +299,7 @@ extends AbstractContributionItem
 	  		}
 	  	});	  	
 	  	selectedItem = searchItem;
-	  	setItemImage(selectedItem);
+	  	selectedItem.setImage(getSelectedFactory().getComposedDecoratorImage());
 	  	toolBar.layout(true, true);
 	  	
 	  	CoolItem coolItem = new CoolItem(coolBar, SWT.SEPARATOR);
@@ -272,24 +307,20 @@ extends AbstractContributionItem
 	  	Point size = toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT);	  	
 	  	Point coolSize = coolItem.computeSize(size.x, size.y);
 	  	coolItem.setMinimumSize(coolSize.x - 10, coolSize.y);
-//	  	coolItem.setPreferredSize(coolSize.x, coolSize.y);
 	  	coolItem.setSize(coolSize.x - 10, coolSize.y);	  	
-//	  	logger.info("size = "+size);
 		}
 	}
 		
-//	public static final String SELECTED_TYPE_PREFERENCE_NAME = "selectedSearchType";
-	protected void checkSelectedType() 
-	{
-		selectedType = SearchResultProviderRegistry.sharedInstance().getDefault();
-//		NLBasePlugin.getDefault().getPreferenceStore().getString(name);
-	}
-	
-	protected void setItemImage(Item item) 
-	{
-		Image image = SearchResultProviderRegistry.sharedInstance().getImage(selectedType);
-		if (image != null && item != null) {
-			item.setImage(image);
-		}		
-	}
+//	protected void checkSelectedType() {
+//		selectedType = SearchResultProviderRegistry.sharedInstance().getDefault();
+//	}
+//	
+//	protected void setItemImage(Item item) 
+//	{
+//		Image image = SearchResultProviderRegistry.sharedInstance().
+//			getComposedImage(selectedType);
+//		if (image != null && item != null) {
+//			item.setImage(image);
+//		}		
+//	}
 }

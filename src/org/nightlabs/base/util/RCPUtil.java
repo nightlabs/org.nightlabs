@@ -308,6 +308,15 @@ public class RCPUtil
 	}
 
 	/**
+	 * returns the id of the current perspective
+	 * @return the id of the current perspective
+	 */
+	public static String getActivePerspectiveID() {
+		IWorkbenchPage page = getActiveWorkbenchPage();
+		return page == null ? null : page.getPerspective().getId();		
+	}
+	
+	/**
 	 * opens a ErrorDialog with the given message 
 	 * 
 	 * @param message the message to display
