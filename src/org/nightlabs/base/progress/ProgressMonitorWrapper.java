@@ -55,4 +55,15 @@ public class ProgressMonitorWrapper implements ProgressMonitor {
 		monitor.worked(work);
 	}
 
+	public boolean isCanceled() {
+		return monitor.isCanceled();
+	}
+
+	public void setCanceled(boolean canceled) {
+		monitor.setCanceled(canceled);
+	}
+
+	public void internalWorked(double worked) {
+		monitor.internalWorked(worked);
+	}
 }
