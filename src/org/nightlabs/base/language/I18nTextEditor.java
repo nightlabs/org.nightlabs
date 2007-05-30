@@ -117,30 +117,36 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 	 */
 	public I18nTextEditor(Composite parent, LanguageChooser _languageChooser, String caption)
 	{
-		super(parent, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER);
-		init();
-		createContext(parent, languageChooser, caption);
+		this(parent, _languageChooser, caption, true);
 	}
 
-	protected void init() {
-		// empty by default
+	public I18nTextEditor(Composite parent, LanguageChooser _languageChooser, String caption, boolean createUI)
+	{
+		super(parent, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER);
+
+		if (createUI)
+			createContext(parent, languageChooser, caption);
 	}
-	
+
+//	protected void init() {
+//		// empty by default
+//	}
+
+	private Label captionLabel;
+
+	protected void createLanguageChooser(Composite parent)
+	{
+		getGridLayout().numColumns = 2;
+		this.languageChooser = new LanguageChooserCombo(parent); //, false);
+	}
+
 	protected void createContext(Composite parent, LanguageChooser languageChooser, String caption) 
 	{
-//		getGridData().grabExcessVerticalSpace = false;
-		
-		if (languageChooser == null)
-			getGridLayout().numColumns = 2;
-
 		setEditMode(EditMode.DIRECT);
 
 		if (caption != null) {
-			Label l = new Label(this, SWT.NONE);
-			l.setText(caption);
-			GridData gd = new GridData();			
-			gd.horizontalSpan = getGridLayout().numColumns;
-			l.setLayoutData(gd);
+			captionLabel = new Label(this, SWT.NONE);
+			captionLabel.setText(caption);
 		}
 
 		final LanguageChangeListener languageChangeListener = new LanguageChangeListener() {
@@ -151,9 +157,7 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 		};
 		
 		if (languageChooser == null) {
-			this.languageChooser = new LanguageChooserCombo(this); //, false);
-			// TODO On the long run, the I18nTextEditor itself should be a combobox
-			// in this mode, showing the language flag on the left.
+			createLanguageChooser(this);
 		} else {
 			this.languageChooser = languageChooser;
 			addDisposeListener(new DisposeListener() {
@@ -161,6 +165,12 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 					I18nTextEditor.this.languageChooser.removeLanguageChangeListener(languageChangeListener);
 				}
 			});
+		}
+
+		if (captionLabel != null) {
+			GridData gd = new GridData();			
+			gd.horizontalSpan = getGridLayout().numColumns;
+			captionLabel.setLayoutData(gd);
 		}
 
 		text = createText(this);

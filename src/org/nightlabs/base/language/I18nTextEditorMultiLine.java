@@ -74,14 +74,23 @@ extends I18nTextEditor
 	 * @param chooser
 	 * @param caption
 	 */
-	public I18nTextEditorMultiLine(Composite parent, LanguageChooser chooser, String caption, int lineCount) {
-		super(parent, chooser, caption);
+	public I18nTextEditorMultiLine(Composite parent, LanguageChooser languageChooser, String caption, int lineCount) {
+		super(parent, languageChooser, caption, false);
 		this.lineCount = lineCount;
-	}	
+		createContext(parent, languageChooser, caption);
+	}
 
 	public static final int DEFAULT_LINECOUNT = -1;
-	private int singleLineHeight = 21;
+	private int singleLineHeight = 21; // TODO this should be calculated by computeSize
 	private int lineCount = DEFAULT_LINECOUNT;
+
+	@Override
+	protected void createLanguageChooser(Composite parent)
+	{
+		int oldNumColumns = getGridLayout().numColumns;
+		super.createLanguageChooser(parent);
+		getGridLayout().numColumns = oldNumColumns;
+	}
 	
 	@Override
 	protected Text createText(Composite parent) 
