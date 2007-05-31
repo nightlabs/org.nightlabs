@@ -48,7 +48,7 @@ import org.nightlabs.base.table.TableLabelProvider;
  */
 public class ErrorTable extends AbstractTableComposite
 {
-	public static class ContentProvider extends TableContentProvider
+	private static class ContentProvider extends TableContentProvider
 	{
 		@Override
 		public Object[] getElements(Object inputElement)
@@ -60,7 +60,7 @@ public class ErrorTable extends AbstractTableComposite
 	}
 	
 	
-	public static class LabelProvider extends TableLabelProvider
+	private static class LabelProvider extends TableLabelProvider
 	{
 		public String getColumnText(Object element, int columnIndex)
 		{
