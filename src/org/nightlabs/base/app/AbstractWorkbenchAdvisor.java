@@ -33,7 +33,9 @@ import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
+import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 
@@ -172,5 +174,37 @@ extends WorkbenchAdvisor
 	 */
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
 		return new DefaultWorkbenchWindowAdvisor(configurer, AbstractApplication.getApplicationName());
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.application.WorkbenchAdvisor#getInitialWindowPerspectiveId()
+	 */
+	@Override
+	public String getInitialWindowPerspectiveId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void postShutdown() {
+		super.postShutdown();
+		checkClearWorkspace();
 	}		
+	
+	protected void checkClearWorkspace() 
+	{
+		String[] args = NLBasePlugin.getDefault().getApplication().getArguments();
+		boolean doClearWorkspace = true;
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
+			String val = i + 1 < args.length ? args[i + 1] : null;
+			if ("--clearWorkspace".equals(arg))
+				doClearWorkspace = Boolean.parseBoolean(val);
+		}
+		if (doClearWorkspace) {
+			logger.info("************ clearing workspace! **************");
+			RCPUtil.clearWorkspace(false);
+		}
+	}
+	
 }

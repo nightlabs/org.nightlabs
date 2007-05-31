@@ -36,6 +36,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -69,6 +70,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.ChildStatusController;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.util.Utils;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -627,5 +629,21 @@ public class RCPUtil
 				newFont.dispose();
 			}			
 		});
+	}
+	
+	/**
+	 * clears the workspace folder
+	 * @param ask determines if the user should be asked before
+	 */
+	public static void clearWorkspace(boolean ask) 
+	{
+		if (ask) {
+			boolean ok = MessageDialog.openConfirm(RCPUtil.getActiveWorkbenchShell(), 
+					"Clear Workspace", "Do you really want to clear your workspace?");
+			if (!ok)
+				return;
+		}
+		File workspace = Platform.getLocation().toFile();
+		Utils.deleteDirectoryRecursively(workspace);		
 	}
 }
