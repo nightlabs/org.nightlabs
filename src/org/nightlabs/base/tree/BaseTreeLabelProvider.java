@@ -10,7 +10,7 @@ import org.nightlabs.base.table.TableLabelProvider;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-class BaseTreeLabelProvider extends TableLabelProvider {
+public class BaseTreeLabelProvider extends TableLabelProvider {
 
 	/**
 	 * 
