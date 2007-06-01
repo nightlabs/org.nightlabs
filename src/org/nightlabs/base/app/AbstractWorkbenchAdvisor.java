@@ -27,6 +27,7 @@
 package org.nightlabs.base.app;
 
 import java.io.File;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
@@ -95,7 +96,6 @@ extends WorkbenchAdvisor
 //	return ClassLoader.getSystemClassLoader() instanceof DelegatingClassLoader;
 //	}	
 
-
 	/**
 	 * Checks the {@link ExceptionHandlerRegistry} for registered handlers by invoking
 	 * {@link ExceptionHandlerRegistry#searchHandler(Throwable)}. For the found item the 
@@ -137,6 +137,12 @@ extends WorkbenchAdvisor
 		} catch (ConfigException e) {
 			logger.error("Saving config failed!", e);
 		}
+		
+		Set<IWorkbenchListener> listener = WorkbenchListenerRegistry.sharedInstance().getListener();
+		for (IWorkbenchListener workbenchListener : listener) {
+			workbenchListener.preShutdown();
+		}
+		
 		return superResult;
 	}
 
@@ -189,6 +195,11 @@ extends WorkbenchAdvisor
 	public void postShutdown() {
 		super.postShutdown();
 		checkClearWorkspace();
+		
+		Set<IWorkbenchListener> listener = WorkbenchListenerRegistry.sharedInstance().getListener();
+		for (IWorkbenchListener workbenchListener : listener) {
+			workbenchListener.postShutdown();
+		}
 	}		
 	
 	protected void checkClearWorkspace() 
@@ -206,5 +217,35 @@ extends WorkbenchAdvisor
 			RCPUtil.clearWorkspace(false);
 		}
 	}
-	
+
+	@Override
+	public boolean openWindows() 
+	{
+		boolean openWindows = super.openWindows();
+		Set<IWorkbenchListener> listener = WorkbenchListenerRegistry.sharedInstance().getListener();
+		for (IWorkbenchListener workbenchListener : listener) {
+			workbenchListener.openWindows();
+		}
+		return openWindows;
+	}
+
+	@Override
+	public void postStartup() 
+	{
+		super.postStartup();
+		Set<IWorkbenchListener> listener = WorkbenchListenerRegistry.sharedInstance().getListener();
+		for (IWorkbenchListener workbenchListener : listener) {
+			workbenchListener.postStartup();
+		}		
+	}
+
+	@Override
+	public void preStartup() {
+		super.preStartup();
+		Set<IWorkbenchListener> listener = WorkbenchListenerRegistry.sharedInstance().getListener();
+		for (IWorkbenchListener workbenchListener : listener) {
+			workbenchListener.preStartup();
+		}		
+	}	
+		
 }

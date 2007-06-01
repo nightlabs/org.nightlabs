@@ -23,59 +23,26 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.base.editor;
+package org.nightlabs.base.app;
 
-import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.forms.editor.IFormPage;
+import org.eclipse.ui.application.WorkbenchAdvisor;
+
 
 /**
- * 
- * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
+ * @author Daniel.Mazurek [at] NightLabs [dot] de
+ *
  */
-public class ToolBarSectionPart 
-extends MessageSectionPart 
+public interface IWorkbenchListener 
 {
-	private ToolBar toolBar;
-	private ToolBarManager toolBarManager;
-
-	public ToolBarSectionPart(IFormPage page, Composite parent, int style, String title) {
-		super(page, parent, style, title);
-		toolBar = new ToolBar(getSection(), SWT.NONE);
-		toolBarManager = new ToolBarManager(toolBar);
-		toolBar.setBackground(getSection().getBackground());
-		toolBar.setBackgroundImage(getSection().getBackgroundImage());
-		toolBar.setBackgroundMode(SWT.INHERIT_FORCE);
-		getSection().setTextClient(toolBar);
-//		toolBarManager.update(true);
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public ToolBarManager getToolBarManager() {
-		return toolBarManager;
-	}
-
-	/**
-	 * This should be called after contributing to the ToolBarManager ({@link #getToolBarManager()})
-	 */
-	public void updateToolBarManager() 
-	{
-//		for (int i=0; i<getToolBarManager().getItems().length; i++) {
-//			IContributionItem item = getToolBarManager().getItems()[i];
-//			if (item instanceof ToolItem) {
-//				ToolItem toolItem = (ToolItem) item;
-//				toolItem.getControl().setBackground(getSection().getTitleBarBackground());
-//			}
-//		}		
-		
-		toolBarManager.update(true);
-	}
+	void openWindows();
+	void postShutdown();
+	void postStartup();
+	void preShutdown();
+	void preStartup();
 	
+//	void postWindowClose();
+//	void postWindowCreate();
+//	void postWindowOpen();
+//	void postWindowRestore();
+//	void preWindowOpen();
 }

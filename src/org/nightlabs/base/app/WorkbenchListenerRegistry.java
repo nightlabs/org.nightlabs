@@ -23,59 +23,71 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
-package org.nightlabs.base.editor;
+package org.nightlabs.base.app;
 
-import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.forms.editor.IFormPage;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
+import org.nightlabs.base.extensionpoint.EPProcessorException;
 
 /**
- * 
- * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
+ * @author Daniel.Mazurek [at] NightLabs [dot] de
+ *
  */
-public class ToolBarSectionPart 
-extends MessageSectionPart 
+public class WorkbenchListenerRegistry
+extends AbstractEPProcessor
 {
-	private ToolBar toolBar;
-	private ToolBarManager toolBarManager;
-
-	public ToolBarSectionPart(IFormPage page, Composite parent, int style, String title) {
-		super(page, parent, style, title);
-		toolBar = new ToolBar(getSection(), SWT.NONE);
-		toolBarManager = new ToolBarManager(toolBar);
-		toolBar.setBackground(getSection().getBackground());
-		toolBar.setBackgroundImage(getSection().getBackgroundImage());
-		toolBar.setBackgroundMode(SWT.INHERIT_FORCE);
-		getSection().setTextClient(toolBar);
-//		toolBarManager.update(true);
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public ToolBarManager getToolBarManager() {
-		return toolBarManager;
-	}
-
-	/**
-	 * This should be called after contributing to the ToolBarManager ({@link #getToolBarManager()})
-	 */
-	public void updateToolBarManager() 
-	{
-//		for (int i=0; i<getToolBarManager().getItems().length; i++) {
-//			IContributionItem item = getToolBarManager().getItems()[i];
-//			if (item instanceof ToolItem) {
-//				ToolItem toolItem = (ToolItem) item;
-//				toolItem.getControl().setBackground(getSection().getTitleBarBackground());
-//			}
-//		}		
-		
-		toolBarManager.update(true);
+	private static final Logger logger = Logger.getLogger(WorkbenchListenerRegistry.class);
+	
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.workbenchListener";
+	public static final String ELEMENT_WORKBENCH_LISTENER = "workbenchListener";
+	public static final String ATTRIBUTE_CLASS = "class";
+	
+	private static WorkbenchListenerRegistry sharedInstance;
+	public static WorkbenchListenerRegistry sharedInstance() {
+		if (sharedInstance == null) {
+			synchronized (WorkbenchListenerRegistry.class) {
+				if (sharedInstance == null)
+					sharedInstance = new WorkbenchListenerRegistry();
+			}
+		}
+		return sharedInstance;
 	}
 	
+	protected WorkbenchListenerRegistry() {
+	}
+
+	@Override
+	public String getExtensionPointID() {
+		return EXTENSION_POINT_ID;
+	}
+
+	@Override
+	public void processElement(IExtension extension, IConfigurationElement element)
+	throws EPProcessorException 
+	{
+		if (element.getName().equalsIgnoreCase(ELEMENT_WORKBENCH_LISTENER)) {
+			String className = element.getAttribute(ATTRIBUTE_CLASS);
+			if (checkString(className)) {
+				IWorkbenchListener listener;
+				try {
+					listener = (IWorkbenchListener) element.createExecutableExtension(ATTRIBUTE_CLASS);
+					listeners.add(listener);
+				} catch (CoreException e) {
+					logger.error("Could not create IWorkbenchListener "+className);
+				}
+			}
+		}
+	}
+
+	private Set<IWorkbenchListener> listeners = new HashSet<IWorkbenchListener>();
+	public Set<IWorkbenchListener> getListener() {
+		checkProcessing();
+		return listeners;
+	}
 }

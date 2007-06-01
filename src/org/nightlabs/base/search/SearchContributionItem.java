@@ -25,22 +25,14 @@
  ******************************************************************************/
 package org.nightlabs.base.search;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.CoolBar;
@@ -53,14 +45,9 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.PlatformUI;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.action.AbstractContributionItem;
-import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.base.resource.SharedImages;
-import org.nightlabs.base.resource.SharedImages.ImageDimension;
-import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.util.RCPUtil;
 
 /**
@@ -313,14 +300,6 @@ extends AbstractContributionItem
 		
 //	protected void checkSelectedType() {
 //		selectedType = SearchResultProviderRegistry.sharedInstance().getDefault();
-//	}
-//	
-//	protected void setItemImage(Item item) 
-//	{
-//		Image image = SearchResultProviderRegistry.sharedInstance().
-//			getComposedImage(selectedType);
-//		if (image != null && item != null) {
-//			item.setImage(image);
-//		}		
-//	}
+//	}	
+
 }
