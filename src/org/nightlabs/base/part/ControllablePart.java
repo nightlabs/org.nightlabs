@@ -27,7 +27,6 @@
 package org.nightlabs.base.part;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IWorkbenchPart;
 
 /**
  * ControllableParts are used together with {@link org.nightlabs.base.part.PartController}s.
@@ -42,9 +41,8 @@ import org.eclipse.ui.IWorkbenchPart;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public interface ControllablePart 
-//extends IViewPart 
-extends IWorkbenchPart
+public interface ControllablePart  
+//extends IWorkbenchPart
 {
 
 	/**
@@ -66,6 +64,6 @@ extends IWorkbenchPart
 	 * @return Whether this Part can be displayed.
 	 */
 	boolean canDisplayPart();
-	
-	
+		
+//	void createPartControl(Composite parent);		
 }

@@ -302,7 +302,7 @@ public abstract class PartController {
 	public void createPartControl(final ControllablePart part, Composite parent) {
 		ControlledPart controlledPart = getControlledPart(part);
 		if (controlledPart == null)
-			throw new IllegalStateException("The ControlledPart instance of part "+part.getTitle()+"("+part.getClass().getName()+") could not be found. Maybe it was not registered. Use PartController#registerPart() prior to this method.");
+			throw new IllegalStateException("The ControlledPart instance of part "+part+"("+part.getClass().getName()+") could not be found. Maybe it was not registered. Use PartController#registerPart() prior to this method.");
 		if (part != null) {
 			controlledPart.createPartControl(parent);
 			controlledPart.getWrapper().addDisposeListener(

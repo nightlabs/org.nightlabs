@@ -32,6 +32,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.nightlabs.base.composite.XComposite;
 
 /**
  * @version $Revision: 4430 $ - $Date: 2006-08-20 17:18:07 +0000 (Sun, 20 Aug 2006) $
@@ -46,9 +47,11 @@ public class EntityEditorUtil
 	 * @param numColumns How many columns the layout should have.
 	 * @return The client Composite
 	 */
-	/*package*/ public static Composite createCompositeClient(FormToolkit toolkit, Section section, int numColumns)
+	public static Composite createCompositeClient(FormToolkit toolkit, Section section, int numColumns)
 	{
 		Composite client = toolkit.createComposite(section);
+//		XComposite client = new XComposite(section, SWT.NONE);
+//		client.setToolkit(toolkit);
 		GridLayout layout = new GridLayout();
 		layout.marginRight = layout.marginLeft = toolkit.getBorderStyle() != SWT.NULL ? 0 : 2;
 		layout.numColumns = numColumns;

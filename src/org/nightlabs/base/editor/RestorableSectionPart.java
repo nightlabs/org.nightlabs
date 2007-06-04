@@ -23,7 +23,9 @@
  ******************************************************************************/
 package org.nightlabs.base.editor;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.SectionPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -50,6 +52,7 @@ implements IDirtyStateManager
 	public RestorableSectionPart(Composite parent, FormToolkit toolkit, int style)
 	{
 		super(parent, toolkit, style);
+		adaptSection(toolkit);
 	}
 
 	/**
@@ -64,8 +67,10 @@ implements IDirtyStateManager
 	public RestorableSectionPart(Section section, IManagedForm managedForm)
 	{
 		super(section);
-		if(managedForm != null)
+		if(managedForm != null) {
+			adaptSection(managedForm.getToolkit());
 			managedForm.addPart(this);
+		}
 	}
 	
 	/**
@@ -78,5 +83,31 @@ implements IDirtyStateManager
 		// set dirty = false
 		super.commit(false);
 		getManagedForm().dirtyStateChanged();
+	}
+	
+	protected void adaptSection(FormToolkit toolkit) 
+	{
+		Section section = getSection();
+		FormColors colors = toolkit.getColors();
+		int sectionStyle = section.getStyle();		
+//		Composite parent = section.getParent();
+//		if (section.toggle != null) {
+//			section.toggle.setHoverDecorationColor(colors
+//					.getColor(FormColors.TB_TOGGLE_HOVER));
+//			section.toggle.setDecorationColor(colors
+//					.getColor(FormColors.TB_TOGGLE));
+//		}
+//		section.setFont(boldFontHolder.getBoldFont(parent.getFont()));
+		if ((sectionStyle & Section.TITLE_BAR) != 0
+				|| (sectionStyle & Section.SHORT_TITLE_BAR) != 0) {
+			colors.initializeSectionToolBarColors();
+			section.setTitleBarBackground(colors.getColor(FormColors.TB_GBG));
+			section.setTitleBarBorderColor(colors
+					.getColor(FormColors.TB_BORDER));
+			section.setTitleBarGradientBackground(colors
+					.getColor(FormColors.TB_GBG));
+			section.setTitleBarForeground(colors.getColor(FormColors.TB_FG));
+		}
+		getSection().setBackgroundMode(SWT.INHERIT_FORCE);
 	}
 }

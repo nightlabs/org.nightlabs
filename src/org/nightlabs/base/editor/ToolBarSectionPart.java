@@ -73,7 +73,9 @@ extends MessageSectionPart
 //				ToolItem toolItem = (ToolItem) item;
 //				toolItem.getControl().setBackground(getSection().getTitleBarBackground());
 //			}
-//		}		
+//		}
+//		getSection().setBackgroundMode(SWT.INHERIT_FORCE);
+		getSection().setBackground(getSection().getTitleBarBackground());
 		
 		toolBarManager.update(true);
 	}
