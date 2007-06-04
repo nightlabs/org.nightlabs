@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.base;visibility:=reexport,
  org.nightlabs.connection;visibility:=reexport,
- org.nightlabs.jfire.base.j2ee;resolution:=optional
+ org.nightlabs.jfire.base.j2ee;resolution:=optional,
+ org.nightlabs.jfire.base
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.keyreader,
  org.nightlabs.keyreader.preference

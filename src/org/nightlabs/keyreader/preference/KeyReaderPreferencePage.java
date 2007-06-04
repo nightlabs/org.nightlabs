@@ -1,31 +1,22 @@
 package org.nightlabs.keyreader.preference;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.nightlabs.jfire.base.preferences.LSDPreferencePage;
 
+//TODO LSDPreferencePage should only be used when KeyReaderConfigModule comes from server not when used as lib in client
 public class KeyReaderPreferencePage
-		extends PreferencePage
-		implements IWorkbenchPreferencePage
+extends LSDPreferencePage
 {
 	private static final Logger logger = Logger.getLogger(KeyReaderPreferencePage.class);
-	private IWorkbench workbench;
 	private KeyReaderPreferenceComposite keyReaderPreferenceComposite;
 
-	public void init(IWorkbench workbench)
-	{
-		this.workbench = workbench;
-	}
-
-	protected Control createContents(Composite parent)
+	@Override
+	public void createPartContents(Composite parent)
 	{
 		keyReaderPreferenceComposite = new KeyReaderPreferenceComposite(parent, SWT.NONE);
 		updateApplyButton();
-		return keyReaderPreferenceComposite;
 	}
 
 	@Override
