@@ -24,7 +24,6 @@ public class KeyReaderPreferencePage
 	protected Control createContents(Composite parent)
 	{
 		keyReaderPreferenceComposite = new KeyReaderPreferenceComposite(parent, SWT.NONE);
-//		getApplyButton().setEnabled(false);
 		updateApplyButton();
 		return keyReaderPreferenceComposite;
 	}
