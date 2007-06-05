@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Table;
  * @author Niklas Schiffler <nick@nightlabs.de>
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
+ * @deprecated Should not be used anymore. Marco.
  */
 public interface EntityList 
 {
