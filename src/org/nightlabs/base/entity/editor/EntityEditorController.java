@@ -186,7 +186,6 @@ public class EntityEditorController
 		return pageControllers;
 	}
 	
-
 	/**
 	 * Adds a new job to the pool, that might be scheduled instantly or 
 	 * some time later, depending on the numer of already running jobs.
@@ -281,18 +280,31 @@ public class EntityEditorController
 	{
 	}
 
-	public void checkDirtyPageControllers() {
+//	public void checkDirtyPageControllers() {
+//		this.dirtyPageControllers.clear();
+//		for (Entry<IEntityEditorPageController, Collection<IFormPage>> entry : controllerPages.entrySet()) {
+//			boolean dirty = false;
+//			for (IFormPage page : entry.getValue()) {
+//				if (page.isDirty()) {
+//					dirty = true;
+//					break;
+//				}
+//			}
+//			if (dirty)
+//				dirtyPageControllers.add(entry.getKey());
+//		}
+//	}
+	
+	public void checkDirtyPageControllers() 
+	{
 		this.dirtyPageControllers.clear();
 		for (Entry<IEntityEditorPageController, Collection<IFormPage>> entry : controllerPages.entrySet()) {
-			boolean dirty = false;
 			for (IFormPage page : entry.getValue()) {
+				// FIXME: check why pages are not dirty although the dirtyState is set 
 				if (page.isDirty()) {
-					dirty = true;
-					break;
+					dirtyPageControllers.add(entry.getKey());
 				}
 			}
-			if (dirty)
-				dirtyPageControllers.add(entry.getKey());
 		}
 	}
 	
@@ -305,17 +317,7 @@ public class EntityEditorController
 	public void doSave(IProgressMonitor monitor)
 	{
 		logger.debug("Calling all page controllers doSave() method."); 
-//		for (Entry<IEntityEditorPageController, Collection<IFormPage>> entry : controllerPages.entrySet()) {
-//			boolean dirty = false;
-//			for (IFormPage page : entry.getValue()) {
-//				if (page.isDirty()) {
-//					dirty = true;
-//					break;
-//				}
-//			}
-//			if (dirty)
-//				entry.getKey().doSave(monitor);
-//		}
+		checkDirtyPageControllers();
 		for (IEntityEditorPageController dirtyController : dirtyPageControllers) {
 			dirtyController.doSave(monitor);
 		}

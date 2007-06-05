@@ -163,6 +163,15 @@ public class EntityEditor extends CommitableFormEditor
 		if (controller != null)
 			controller.checkDirtyPageControllers();
 		super.doSave(monitor);
+		
+//		controller.doSave(monitor);
+//		Display.getDefault().asyncExec(new Runnable() {
+//			public void run() {
+//				editorDirtyStateChanged();
+//			}
+//		});
+		
+		// FIXME: check why saving is not done when workbench is shutdown
 		int active = getActivePage();
 		Job saveJob = null;
 		if (active >= 0) {
@@ -193,7 +202,7 @@ public class EntityEditor extends CommitableFormEditor
 				}
 			};
 		}
-		
+		saveJob.setUser(true);
 		saveJob.schedule();
 	}
 	
