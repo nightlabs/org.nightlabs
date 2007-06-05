@@ -205,7 +205,7 @@ extends WorkbenchAdvisor
 	protected void checkClearWorkspace() 
 	{
 		String[] args = NLBasePlugin.getDefault().getApplication().getArguments();
-		boolean doClearWorkspace = true;
+		boolean doClearWorkspace = false;
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
 			String val = i + 1 < args.length ? args[i + 1] : null;
