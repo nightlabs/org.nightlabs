@@ -37,7 +37,10 @@ import java.util.*;
 /**
  * The main plugin class to be used in the desktop.
  */
-public class NLBasePlugin extends AbstractUIPlugin {
+public class NLBasePlugin extends AbstractUIPlugin 
+{
+	public static final String PLUGIN_ID = "org.nightlabs.base";
+	
 	//The shared instance.
 	private static NLBasePlugin plugin;
 	//Resource bundle.
