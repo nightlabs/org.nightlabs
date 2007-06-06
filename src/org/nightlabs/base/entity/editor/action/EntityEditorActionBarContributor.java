@@ -38,8 +38,8 @@ extends MultiPageEditorActionBarContributor
 	@Override
 	public void setActivePage(IEditorPart activeEditor) 
 	{
-		if (logger.isDebugEnabled())
-			logger.debug("setActivePage: "+activeEditor);
+//		if (logger.isDebugEnabled())
+//			logger.debug("setActivePage: "+activeEditor);
 		
 		actionRegistry = null;
 		if (getActiveEditor() != null && getActiveEditor() instanceof FormEditor) {
@@ -51,7 +51,7 @@ extends MultiPageEditorActionBarContributor
 			removeContributions();
 			contributeAll();
 		}
-		logger.debug("ActivePage: "+activePage);
+//		logger.debug("ActivePage: "+activePage);
 	}
 	public IFormPage getActivePage() {
 		return activePage;
@@ -66,8 +66,8 @@ extends MultiPageEditorActionBarContributor
 	@Override
 	public void setActiveEditor(IEditorPart targetEditor) 
 	{
-		if (logger.isDebugEnabled())
-			logger.debug("setActiveEditor: "+targetEditor);
+//		if (logger.isDebugEnabled())
+//			logger.debug("setActiveEditor: "+targetEditor);
 		
 		if (activeEditor != null)
 			activeEditor.getSite().getPage().removeSelectionListener(selectionListener);
@@ -82,8 +82,8 @@ extends MultiPageEditorActionBarContributor
 		super.setActiveEditor(targetEditor);
 		this.activeEditor = targetEditor;
 		activeEditor.getSite().getPage().addSelectionListener(selectionListener);
-		if (logger.isDebugEnabled())
-			logger.debug("selectionListener added to activeEditor "+activeEditor.getEditorSite().getId());		
+//		if (logger.isDebugEnabled())
+//			logger.debug("selectionListener added to activeEditor "+activeEditor.getEditorSite().getId());		
 
 		updateWorkbenchPartActions();
 		setActivePage(this.activeEditor);
@@ -138,8 +138,8 @@ extends MultiPageEditorActionBarContributor
 					getActiveEditor().getEditorSite().getId(), 
 					getActivePage().getClass().getName());				
 		}
-		if (logger.isDebugEnabled())
-			logger.debug(actionRegistry != null ? "actionRegistry != null" : "actionRegistry == null");
+//		if (logger.isDebugEnabled())
+//			logger.debug(actionRegistry != null ? "actionRegistry != null" : "actionRegistry == null");
 		
 		return actionRegistry;
 	}
@@ -150,7 +150,7 @@ extends MultiPageEditorActionBarContributor
 				updateSelectionSections(selection);
 				updateUpdateActions();									
 //			}
-			logger.debug("selection changed");
+//			logger.debug("selection changed");
 		}	
 	};	
 	
@@ -164,8 +164,8 @@ extends MultiPageEditorActionBarContributor
 //					actionDescriptor.setVisible(true);
 					actionDescriptor.setVisible(((IUpdateActionOrContributionItem)actionDescriptor.getAction()).calculateVisible());
 					
-					if (logger.isDebugEnabled())
-						logger.debug("enabled = "+enabled+" for action "+actionDescriptor.getAction().getId());
+//					if (logger.isDebugEnabled())
+//						logger.debug("enabled = "+enabled+" for action "+actionDescriptor.getAction().getId());
 				}
 			}			
 		}
@@ -178,8 +178,8 @@ extends MultiPageEditorActionBarContributor
 				if (actionDescriptor.getAction() instanceof ISelectionAction) {
 					ISelectionAction selectionAction = (ISelectionAction) actionDescriptor.getAction();
 					selectionAction.setSelection(selection);
-					if (logger.isDebugEnabled())
-						logger.debug("selection changed for action "+actionDescriptor.getAction().getId());					
+//					if (logger.isDebugEnabled())
+//						logger.debug("selection changed for action "+actionDescriptor.getAction().getId());					
 				}
 			}			
 		}
@@ -191,8 +191,8 @@ extends MultiPageEditorActionBarContributor
 			for (ActionDescriptor actionDescriptor : getActionRegistry().getActionDescriptors()) {
 				if (actionDescriptor.getAction() instanceof IWorkbenchPartAction) {
 					((IWorkbenchPartAction)actionDescriptor.getAction()).setActivePart(activeEditor);
-					if (logger.isDebugEnabled())
-						logger.debug("activePart changed for action "+actionDescriptor.getAction().getId());										
+//					if (logger.isDebugEnabled())
+//						logger.debug("activePart changed for action "+actionDescriptor.getAction().getId());										
 				}
 			}			
 		}
@@ -206,7 +206,7 @@ extends MultiPageEditorActionBarContributor
 //		updateActions();
 		if (getActionRegistry() != null) {
 			int visibleItems = getActionRegistry().contributeToCoolBar(coolBarManager);
-			logger.debug("contributeToCoolBar "+visibleItems+" visibleItems!");
+//			logger.debug("contributeToCoolBar "+visibleItems+" visibleItems!");
 		}
 	}
 	
@@ -218,7 +218,7 @@ extends MultiPageEditorActionBarContributor
 //		updateActions();
 		if (getActionRegistry() != null) {
 			int visibleItems = getActionRegistry().contributeToToolBar(toolBarManager);
-			logger.debug("contributeToToolBar "+visibleItems+" visibleItems!");
+//			logger.debug("contributeToToolBar "+visibleItems+" visibleItems!");
 		}		
 	}
 	
@@ -230,7 +230,7 @@ extends MultiPageEditorActionBarContributor
 //		updateActions();
 		if (getActionRegistry() != null) {
 			int visibleItems = getActionRegistry().contributeToMenuBar(menuManager);
-			logger.debug("contributeToMenu "+visibleItems+" visibleItems!");
+//			logger.debug("contributeToMenu "+visibleItems+" visibleItems!");
 		}
 	}
 	
@@ -241,7 +241,7 @@ extends MultiPageEditorActionBarContributor
 			activeEditor.getSite().getPage().removeSelectionListener(selectionListener);
 		
 		removeContributions();		
-		logger.debug("Dispose");		
+//		logger.debug("Dispose");		
 		super.dispose();
 	}	
 }
