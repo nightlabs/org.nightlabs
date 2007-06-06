@@ -48,7 +48,8 @@ public class ThrowableHandler implements IExceptionHandler
 		{
 			logger.error("ThrowableHandler handling an error!", thrownException);
 			//DefaultErrorDialog dlg = new DefaultErrorDialog(thrownException, triggerException);
-			DefaultErrorDialog.addError(DefaultErrorDialog.class, null, null, thrownException, triggerException);	
+			//DefaultErrorDialog.addError(DefaultErrorDialog.class, null, null, thrownException, triggerException);
+			ErrorDialogFactory.showError(DefaultErrorDialog.class, null, null, thrownException, triggerException);
 			
 		} catch (Throwable error)
 		{

@@ -10,6 +10,7 @@ public class SimpleExceptionHandler implements IExceptionHandler
 	
 	public void handleException(Thread thread, Throwable thrownException, Throwable triggerException)
 	{
-		DefaultErrorDialog.addError(DefaultErrorDialog.class, null, message, thrownException, triggerException);
+//		DefaultErrorDialog.addError(DefaultErrorDialog.class, null, message, thrownException, triggerException);
+		ErrorDialogFactory.showError(DefaultErrorDialog.class, null, message, thrownException, triggerException);
 	}
 }

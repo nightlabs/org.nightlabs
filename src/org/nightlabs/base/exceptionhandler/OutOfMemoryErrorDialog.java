@@ -48,7 +48,8 @@ public class OutOfMemoryErrorDialog extends DefaultErrorDialog {
 	
 	protected void createCustomButtons(Composite parent) {
 		restartWorkbenchButton = createButton(parent, RESTART_WORKBENCH_ID, "Shutdown Workbench", false);
-		super.createCustomButtons(parent);
+		// TODO:
+//		super.createCustomButtons(parent);
 	}
 	
 	protected void buttonPressed(int id) {
