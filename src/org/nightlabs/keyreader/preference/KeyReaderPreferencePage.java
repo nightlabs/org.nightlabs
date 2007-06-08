@@ -3,6 +3,7 @@ package org.nightlabs.keyreader.preference;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.composite.XComposite.LayoutDataMode;
 import org.nightlabs.jfire.base.preferences.LSDPreferencePage;
 
 //TODO LSDPreferencePage should only be used when KeyReaderConfigModule comes from server not when used as lib in client
@@ -15,7 +16,7 @@ extends LSDPreferencePage
 	@Override
 	public void createPartContents(Composite parent)
 	{
-		keyReaderPreferenceComposite = new KeyReaderPreferenceComposite(parent, SWT.NONE);
+		keyReaderPreferenceComposite = new KeyReaderPreferenceComposite(parent, SWT.NONE, LayoutDataMode.NONE);
 		updateApplyButton();
 	}
 

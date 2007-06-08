@@ -57,9 +57,9 @@ extends XComposite
 		}
 	};
 
-	public KeyReaderPreferenceComposite(Composite parent, int style)
+	public KeyReaderPreferenceComposite(Composite parent, int style, LayoutDataMode layoutDataMode)
 	{
-		super(parent, style);
+		super(parent, style, layoutDataMode);
 		getGridLayout().numColumns = 2;
 
 		SashForm sashForm = new SashForm(this, SWT.HORIZONTAL);
