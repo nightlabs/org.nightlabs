@@ -47,17 +47,27 @@ import org.nightlabs.config.Config;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
  */
-public class DynamicPathWizardDialog extends WizardDialog {
-
+public class DynamicPathWizardDialog extends WizardDialog 
+{
 	private DynamicPathWizard dynamicWizard;
 
-	public DynamicPathWizardDialog(DynamicPathWizard wizard) {
-		this(RCPUtil.getActiveWorkbenchShell(),wizard);
+	/**
+	 * Create a new DynamicPathWizardDialog.
+	 * @param wizard The wizard to show
+	 */
+	public DynamicPathWizardDialog(DynamicPathWizard wizard)
+	{
+		this(RCPUtil.getActiveWorkbenchShell(), wizard);
 	}
 
-	public DynamicPathWizardDialog(Shell shell, DynamicPathWizard wizard) {
+	/**
+	 * Create a new DynamicPathWizardDialog.
+	 * @param shell The parent shell
+	 * @param wizard The wizard to show
+	 */
+	public DynamicPathWizardDialog(Shell shell, DynamicPathWizard wizard)
+	{
 		super(shell, wizard);
 		dynamicWizard = wizard;
 		dynamicWizard.setDynamicWizardDialog(this);
