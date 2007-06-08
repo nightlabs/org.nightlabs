@@ -102,8 +102,7 @@ public class EntityEditor extends CommitableFormEditor
 	 * Get the editor id.
 	 * @return The editor id
 	 */
-	public String getEditorID()
-	{
+	public String getEditorID() {
 		return getEditorSite().getId();
 	}
 
@@ -111,8 +110,7 @@ public class EntityEditor extends CommitableFormEditor
 	 * @see org.eclipse.ui.part.EditorPart#doSaveAs()
 	 */
 	@Override
-	public void doSaveAs()
-	{
+	public void doSaveAs() {
 		// Save as not supported by entity editor 
 	}
 
@@ -120,8 +118,7 @@ public class EntityEditor extends CommitableFormEditor
 	 * @see org.eclipse.ui.part.EditorPart#isSaveAsAllowed()
 	 */
 	@Override
-	public boolean isSaveAsAllowed()
-	{
+	public boolean isSaveAsAllowed() {
 		return false;
 	}
 	
@@ -138,14 +135,15 @@ public class EntityEditor extends CommitableFormEditor
 	private IRunnableWithProgress saveRunnable = new IRunnableWithProgress() {
 		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 			controller.doSave(monitor);
+			// FIXME: remove if commit problem is solved
+			commitFormPages(true);
 			Thread.sleep(1000);
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					editorDirtyStateChanged();
 				}
 			});
-		}
-		
+		}		
 	};
 	
 	/**
@@ -162,14 +160,14 @@ public class EntityEditor extends CommitableFormEditor
 	public void doSave(IProgressMonitor monitor) {
 		if (controller != null)
 			controller.checkDirtyPageControllers();
-		super.doSave(monitor);
+//		super.doSave(monitor);
 		
-//		controller.doSave(monitor);
-//		Display.getDefault().asyncExec(new Runnable() {
-//			public void run() {
-//				editorDirtyStateChanged();
-//			}
-//		});
+//		try {
+//			saveRunnable.run(monitor);
+//			super.doSave(monitor);
+//		} catch (Throwable t) {
+//			
+//		}
 		
 		// FIXME: check why saving is not done when workbench is shutdown
 		int active = getActivePage();
@@ -203,7 +201,7 @@ public class EntityEditor extends CommitableFormEditor
 			};
 		}
 		saveJob.setUser(true);
-		saveJob.schedule();
+		saveJob.schedule();		
 	}
 	
 	/**

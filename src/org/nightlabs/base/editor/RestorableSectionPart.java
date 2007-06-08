@@ -85,6 +85,21 @@ implements IDirtyStateManager
 		getManagedForm().dirtyStateChanged();
 	}
 	
+	/**
+	 * By default this method is overriden and does nothing.
+	 * 
+	 * This is done to avoid undirty state, when section is used in FormEditor
+	 * and page changes, where commit on the page and all included formParts is performed
+	 * 
+	 * Inheritans can use method {@link #markUndirty()} to remove dirty state
+	 */
+	@Override
+	public void commit(boolean onSave) 
+	{
+		if (onSave)			
+			super.commit(onSave);
+	}
+
 	protected void adaptSection(FormToolkit toolkit) 
 	{
 		Section section = getSection();
@@ -110,4 +125,5 @@ implements IDirtyStateManager
 		}
 		getSection().setBackgroundMode(SWT.INHERIT_FORCE);
 	}
+	
 }

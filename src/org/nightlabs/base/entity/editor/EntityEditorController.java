@@ -295,6 +295,10 @@ public class EntityEditorController
 //		}
 //	}
 	
+	/**
+	 * Iterates through all IFormPages, and if a page is dirty the corresponding controller is added
+	 * to the dirtyPageControllers 
+	 */
 	public void checkDirtyPageControllers() 
 	{
 		this.dirtyPageControllers.clear();
@@ -309,8 +313,8 @@ public class EntityEditorController
 	}
 	
 	/**
-	 * Delegates to the {@link IEntityEditorPageController#doLoad(IProgressMonitor)}
-	 * method of all known {@link IEntityEditorPageController}s.
+	 * Delegates to the {@link IEntityEditorPageController#doSave(IProgressMonitor)}
+	 * method of all known dirty {@link IEntityEditorPageController}s.
 	 * 
 	 * @param monitor The progress monitor to use.
 	 */
