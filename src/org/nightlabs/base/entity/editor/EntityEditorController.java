@@ -321,7 +321,7 @@ public class EntityEditorController
 	public void doSave(IProgressMonitor monitor)
 	{
 		logger.debug("Calling all page controllers doSave() method."); 
-		checkDirtyPageControllers();
+//		checkDirtyPageControllers();
 		for (IEntityEditorPageController dirtyController : dirtyPageControllers) {
 			dirtyController.doSave(monitor);
 		}

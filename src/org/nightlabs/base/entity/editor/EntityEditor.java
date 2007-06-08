@@ -135,8 +135,8 @@ public class EntityEditor extends CommitableFormEditor
 	private IRunnableWithProgress saveRunnable = new IRunnableWithProgress() {
 		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 			controller.doSave(monitor);
-			// FIXME: remove if commit problem is solved
-			commitFormPages(true);
+//			// is called here instead of super.doSave() in doSave()
+//			commitFormPages(true);
 			Thread.sleep(1000);
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
@@ -160,7 +160,7 @@ public class EntityEditor extends CommitableFormEditor
 	public void doSave(IProgressMonitor monitor) {
 		if (controller != null)
 			controller.checkDirtyPageControllers();
-//		super.doSave(monitor);
+		super.doSave(monitor);
 		
 //		try {
 //			saveRunnable.run(monitor);
