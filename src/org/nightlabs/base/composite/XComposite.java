@@ -41,7 +41,7 @@ public class XComposite extends Composite
 	private ChildStatusController childStatusController = new ChildStatusController();
 
 	public static enum LayoutMode {
-		ORDINARY_WRAPPER, TIGHT_WRAPPER, TOP_BOTTOM_WRAPPER, LEFT_RIGHT_WRAPPER, TOTAL_WRAPPER
+		NONE, ORDINARY_WRAPPER, TIGHT_WRAPPER, TOP_BOTTOM_WRAPPER, LEFT_RIGHT_WRAPPER, TOTAL_WRAPPER
 	}
 
 	public static enum LayoutDataMode {
@@ -71,6 +71,7 @@ public class XComposite extends Composite
 	public static void configureLayout(LayoutMode layoutMode, GridLayout layout) {
 		switch (layoutMode) 
 		{
+			case NONE:
 			case ORDINARY_WRAPPER:
 				return;
 			case TIGHT_WRAPPER:
@@ -122,6 +123,9 @@ public class XComposite extends Composite
 	 */
 	public static GridLayout getLayout(LayoutMode layoutMode, GridLayout layout, int cols)
 	{
+		if (LayoutMode.NONE == layoutMode)
+			return null;
+
 		if (layout == null)
 			layout = new GridLayout(cols, false);
 		configureLayout(layoutMode, layout);

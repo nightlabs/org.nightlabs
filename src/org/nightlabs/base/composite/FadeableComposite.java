@@ -40,6 +40,8 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.nightlabs.base.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * This composite grays out if {@link #setFaded(boolean)} is called with value <tt>true</tt>.
@@ -147,6 +149,18 @@ public class FadeableComposite extends XComposite implements Fadeable
 		super(parent, style, layoutMode);
 	}	
 	
+	public FadeableComposite(Composite parent, int style, LayoutDataMode layoutDataMode) {
+		super(parent, style, layoutDataMode);
+	}
+
+	public FadeableComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode, int cols) {
+		super(parent, style, layoutMode, layoutDataMode, cols);
+	}
+
+	public FadeableComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
+		super(parent, style, layoutMode, layoutDataMode);
+	}
+
 	/**
 	 * This method must be called on the SWT GUI thread!
 	 * <p>
