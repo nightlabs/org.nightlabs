@@ -6,9 +6,17 @@ package org.nightlabs.base.progress;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
+
 /**
+ * This is a wrapper for {@link IProgressMonitor}s to be used inside our {@link ProgressMonitor} based
+ * framework. The counter wrapper is {@link RCPProgressMonitor}.
+ * <br> <br>
+ * Note: Try to not wrap a monitor too many times! Try an {@link INSTANCEOF} and use the getter to 
+ * 	extract the wrapped monitor.
+ * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
+ * @author Marius Heinzmann [marius<at>NightLabs<dot>de]
  */
 public class ProgressMonitorWrapper implements ProgressMonitor {
 
@@ -65,5 +73,13 @@ public class ProgressMonitorWrapper implements ProgressMonitor {
 
 	public void internalWorked(double worked) {
 		monitor.internalWorked(worked);
+	}
+	
+	/**
+	 * Returns the wrapped {@link IProgressMonitor}.
+	 * @return the wrapped {@link IProgressMonitor}.
+	 */
+	public IProgressMonitor getIProgressMonitor() {
+		return monitor;
 	}
 }

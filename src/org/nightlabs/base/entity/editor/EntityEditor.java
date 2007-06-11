@@ -45,6 +45,8 @@ import org.nightlabs.base.composite.Fadeable;
 import org.nightlabs.base.editor.CommitableFormEditor;
 import org.nightlabs.base.entity.EntityEditorRegistry;
 import org.nightlabs.base.job.FadeableCompositeJob;
+import org.nightlabs.base.progress.RCPProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * A base class for entity editors. It provides
@@ -72,7 +74,6 @@ public class EntityEditor extends CommitableFormEditor
 	 * This editor's controller, that will delegate
 	 * loading and saving of the enity to the 
 	 * page controllers of the registered pages.
-	 * 
 	 */
 	private EntityEditorController controller;
 	
@@ -177,9 +178,9 @@ public class EntityEditor extends CommitableFormEditor
 			if (page instanceof Fadeable)
 				saveJob = new FadeableCompositeJob("Async save", ((Fadeable)page), this) {
 					@Override
-					public IStatus run(IProgressMonitor monitor, Object source) {
+					public IStatus run(ProgressMonitor monitor, Object source) {
 						try {
-							saveRunnable.run(monitor);
+							saveRunnable.run(new RCPProgressMonitor(monitor));
 						} catch (Exception e) {
 							throw new RuntimeException(e);
 						}

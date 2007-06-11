@@ -26,12 +26,11 @@
 
 package org.nightlabs.base.job;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.composite.Fadeable;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Niklas Schiffler <nick@nightlabs.de>
@@ -49,7 +48,7 @@ public abstract class FadeableCompositeJob extends Job
   	this.source = source;
   }
 
-  protected IStatus run(IProgressMonitor monitor)
+  protected IStatus run(ProgressMonitor monitor)
   {
   	IStatus ret = Status.CANCEL_STATUS;
   	try
@@ -82,5 +81,5 @@ public abstract class FadeableCompositeJob extends Job
     return ret;
   }
 
-  public abstract IStatus run(IProgressMonitor monitor, Object source);
+  public abstract IStatus run(ProgressMonitor monitor, Object source);
 }
