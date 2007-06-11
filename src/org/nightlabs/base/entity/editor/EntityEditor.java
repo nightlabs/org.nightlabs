@@ -67,6 +67,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * 
  * @author Marc Klinger - marc[at]nightlabs[dot]de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
+ * @author Daniel Mazurek - daniel[at]nightlabs[dot]de
  */
 public class EntityEditor extends CommitableFormEditor
 {
@@ -74,6 +75,7 @@ public class EntityEditor extends CommitableFormEditor
 	 * This editor's controller, that will delegate
 	 * loading and saving of the enity to the 
 	 * page controllers of the registered pages.
+	 * 
 	 */
 	private EntityEditorController controller;
 	
@@ -136,8 +138,6 @@ public class EntityEditor extends CommitableFormEditor
 	private IRunnableWithProgress saveRunnable = new IRunnableWithProgress() {
 		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 			controller.doSave(monitor);
-//			// is called here instead of super.doSave() in doSave()
-//			commitFormPages(true);
 			Thread.sleep(1000);
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
@@ -165,7 +165,6 @@ public class EntityEditor extends CommitableFormEditor
 		
 //		try {
 //			saveRunnable.run(monitor);
-//			super.doSave(monitor);
 //		} catch (Throwable t) {
 //			
 //		}
@@ -201,7 +200,7 @@ public class EntityEditor extends CommitableFormEditor
 				}
 			};
 		}
-		saveJob.setUser(true);
+//		saveJob.setUser(true);
 		saveJob.schedule();		
 	}
 	

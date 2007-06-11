@@ -26,6 +26,8 @@
 
 package org.nightlabs.base.entity.editor;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -42,7 +44,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.eclipse.ui.part.EditorPart;
 import org.nightlabs.base.entity.editor.EntityEditorPageController.LoadJob;
 
 /**
@@ -141,10 +145,12 @@ public class EntityEditorController
 	 */
 	public void addPageController(IFormPage page, IEntityEditorPageFactory pageFactory) {
 		IEntityEditorPageController pageController = pageFactory.createPageController(editor);
-		if (pageController == null)
+		if (pageController == null || page == null)
 			return;
-		pageController.setPage(page);
-		pageController.getPages().add(page);
+		pageController.addPage(page);
+		editor.addPropertyListener(dirtyStateListener);
+//		page.addPropertyListener(dirtyStateListener);
+		
 		pageController.setEntityEditorController(this);
 		pageControllers.put(page.getId(), pageController);
 		Collection<IFormPage> controllerPageCollection = controllerPages.get(pageController);
@@ -154,6 +160,24 @@ public class EntityEditorController
 		}
 		controllerPageCollection.add(page);
 	}
+	
+	private IPropertyListener dirtyStateListener = new IPropertyListener(){
+		public void propertyChanged(Object source, int propId) {
+			if (EditorPart.PROP_DIRTY == propId) {				
+				if (source instanceof EntityEditor) {
+					EntityEditor editor = (EntityEditor) source;
+					if (editor.isDirty()) {
+						IFormPage page = editor.getActivePageInstance();						
+						IEntityEditorPageController pageController = pageControllers.get(page.getId());
+						if (pageController != null) {
+							logger.info("pageControler.markDirty() for page "+page.getId());
+							pageController.markDirty();
+						}		
+					}
+				}				
+			}
+		}
+	};
 	
 	/**
 	 * Returns the page controller registered to the given page.
@@ -279,22 +303,23 @@ public class EntityEditorController
 	public void doLoad(IProgressMonitor monitor)
 	{
 	}
-
-//	public void checkDirtyPageControllers() {
+	
+//	/**
+//	 * Iterates through all IFormPages, and if a page is dirty the corresponding controller is added
+//	 * to the dirtyPageControllers 
+//	 */
+//	public void checkDirtyPageControllers() 
+//	{
 //		this.dirtyPageControllers.clear();
 //		for (Entry<IEntityEditorPageController, Collection<IFormPage>> entry : controllerPages.entrySet()) {
-//			boolean dirty = false;
-//			for (IFormPage page : entry.getValue()) {
+//			for (IFormPage page : entry.getValue()) { 
 //				if (page.isDirty()) {
-//					dirty = true;
-//					break;
+//					dirtyPageControllers.add(entry.getKey());
 //				}
 //			}
-//			if (dirty)
-//				dirtyPageControllers.add(entry.getKey());
 //		}
 //	}
-	
+
 	/**
 	 * Iterates through all IFormPages, and if a page is dirty the corresponding controller is added
 	 * to the dirtyPageControllers 
@@ -303,12 +328,10 @@ public class EntityEditorController
 	{
 		this.dirtyPageControllers.clear();
 		for (Entry<IEntityEditorPageController, Collection<IFormPage>> entry : controllerPages.entrySet()) {
-			for (IFormPage page : entry.getValue()) {
-				// FIXME: check why pages are not dirty although the dirtyState is set 
-				if (page.isDirty()) {
-					dirtyPageControllers.add(entry.getKey());
-				}
-			}
+			IEntityEditorPageController controller = entry.getKey();
+			if (controller.isDirty()) {
+				dirtyPageControllers.add(entry.getKey());
+			}				
 		}
 	}
 	
@@ -324,6 +347,7 @@ public class EntityEditorController
 //		checkDirtyPageControllers();
 		for (IEntityEditorPageController dirtyController : dirtyPageControllers) {
 			dirtyController.doSave(monitor);
+			dirtyController.markUndirty();
 		}
 	}
 

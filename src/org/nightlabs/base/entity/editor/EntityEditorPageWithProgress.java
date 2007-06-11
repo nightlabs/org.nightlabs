@@ -86,7 +86,6 @@ import org.nightlabs.base.progress.SaveProgressMonitorPart;
  */
 public abstract class EntityEditorPageWithProgress extends FormPage implements Fadeable
 {
-
 	/**
 	 * Wrapper that holds the stack layout.
 	 */

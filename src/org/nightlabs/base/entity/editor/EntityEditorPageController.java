@@ -28,6 +28,7 @@ package org.nightlabs.base.entity.editor;
 
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -132,10 +133,10 @@ implements IEntityEditorPageController
 		}
 	}
 	
-	/**
-	 * The page this controller is associated with
-	 */
-	private IFormPage page;
+//	/**
+//	 * The page this controller is associated with
+//	 */
+//	private IFormPage page;
 	
 	/**
 	 * Stores the loading status
@@ -162,6 +163,11 @@ implements IEntityEditorPageController
 	 * Whether the load job is already finished
 	 */
 	private boolean loadJobDone = false;
+	
+	/**
+	 * determines if the controller os dirty or not
+	 */
+	private boolean dirty = false;
 	
 	/**
 	 * Create a new page controller that
@@ -196,28 +202,13 @@ implements IEntityEditorPageController
 	private Set<IFormPage> pages = new HashSet<IFormPage>();
 
 	public Set<IFormPage> getPages() {
-		return pages;
+		return Collections.unmodifiableSet(pages);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.base.entity.editor.IEntityEditorPageController#setPage(org.eclipse.ui.forms.editor.IFormPage)
-	 */
-	public void setPage(IFormPage page) {
-		this.page = page;
+	public void addPage(IFormPage page) {
+		pages.add(page);
 	}
 	
-	/**
-	 * Returns the page associated with this controller.
-	 * 
-	 * @return The page associated with this controller.
-	 * @deprecated There is a 1-n relation from one controller to many pages. That's why, this method makes no sense and will
-	 *		be removed. Instead, there should be a method getPages() which returns all pages that are associated with this
-	 *		controller. Furthermore, this method should be part of the interface! Marco.
-	 */
-	public IFormPage getPage() {
-		return page;
-	}
-
 	/**
 	 * Returns the editor controller this page controller is linked to. 
 	 * @return Tthe editor controller this page controller is linked to.
@@ -345,5 +336,32 @@ implements IEntityEditorPageController
 			throw new RuntimeException("Loading entity failed", e);
 		}
 	}
+	
+	/**
+	 * determines if the controller is dirty, 
+	 * once the page or one of the pages were dirty the controller
+	 * stys sirty even if the page has been cleaned 
+	 * (e.g. by a calling of commit of an included section)
+	 */
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	/**
+	 * marks the controller dirty
+	 */
+	public void markDirty() {
+		dirty = true;
+	}
+
+	/**
+	 * removes the dirty state, after calling this method 
+	 * {@link #isDirty()} returns false
+	 * 
+	 */
+	public void markUndirty() {
+		dirty = false;
+	}
+		
 }
 	

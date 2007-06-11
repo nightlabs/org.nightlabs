@@ -31,6 +31,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.nightlabs.base.notification.IDirtyStateManager;
 import org.nightlabs.util.bean.IPropertyChangeSupport;
 
 /**
@@ -55,17 +56,29 @@ import org.nightlabs.util.bean.IPropertyChangeSupport;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public interface IEntityEditorPageController extends IPropertyChangeSupport {
-	
+public interface IEntityEditorPageController 
+extends IPropertyChangeSupport, IDirtyStateManager 
+{
+//	/**
+//	 * Set the page this controller is associated with.
+//	 * This will be called immediately after the controller is created.
+//	 * @param page the page this controller is associated with.
+//	 * @deprecated see {@link EntityEditorPageController#getPage()}
+//	 * @see #getPages()
+//	 */
+//	public void setPage(IFormPage page);
+
 	/**
-	 * Set the page this controller is associated with.
+	 * Adds a page to this controller which is associated with it.
 	 * This will be called immediately after the controller is created.
-	 * @param page the page this controller is associated with.
-	 * @deprecated see {@link EntityEditorPageController#getPage()}
+	 * @param page the page this controller is associated with. 
 	 * @see #getPages()
 	 */
-	public void setPage(IFormPage page);
-
+	public void addPage(IFormPage page);
+	
+	/**
+	 * Returns a Set of all pages for which the controller is responsible 
+	 */
 	public Set<IFormPage> getPages();
 
 	/**
