@@ -71,7 +71,7 @@ public class EPProcessorException extends Exception {
 	 * @param cause
 	 */
 	public EPProcessorException(String message, IExtension extension) {
-		super(message+" The extension is located in "+extension.getNamespaceIdentifier()+"."); // and has the id "+extension.getExtensionPointUniqueIdentifier());
+		super(message+" The extension is located in " + extension.getNamespaceIdentifier() + "."); // and has the id "+extension.getExtensionPointUniqueIdentifier());
 	}
 	
 	/**
@@ -79,6 +79,6 @@ public class EPProcessorException extends Exception {
 	 * @param cause
 	 */
 	public EPProcessorException(String message, IExtension extension, Throwable cause) {
-		super(message+" The extension is located in "+extension.getNamespaceIdentifier()+".", cause); // and has the id "+extension.getExtensionPointUniqueIdentifier());
+		super(message+" The extension is located in " + extension.getNamespaceIdentifier() + ".", cause); // and has the id "+extension.getExtensionPointUniqueIdentifier());
 	}
 }

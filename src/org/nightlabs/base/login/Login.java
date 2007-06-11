@@ -18,11 +18,7 @@ extends AbstractEPProcessor
 			synchronized (Login.class) {
 				if (sharedInstance == null) {
 					sharedInstance = new Login();
-					try {
-						sharedInstance.process();
-					} catch (EPProcessorException e) {
-						throw new RuntimeException(e);
-					}
+					sharedInstance.process();
 				}
 			}
 		}
@@ -111,7 +107,7 @@ extends AbstractEPProcessor
 
 	@Implement
 	public void processElement(IExtension extension, IConfigurationElement element)
-	throws EPProcessorException
+	throws Exception
 	{
 		ILoginDelegate loginDelegate;
 		try {

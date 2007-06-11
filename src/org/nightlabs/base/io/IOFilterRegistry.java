@@ -33,7 +33,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
-import org.nightlabs.base.extensionpoint.EPProcessorException;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.io.IOFilter;
@@ -75,7 +74,7 @@ extends AbstractEPProcessor
 	
 	
 	public void processElement(IExtension extension, IConfigurationElement element)
-	throws EPProcessorException 
+	throws Exception 
 	{
 		if (ioFilterMan == null)
 			ioFilterMan = new IOFilterMan();

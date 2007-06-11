@@ -101,11 +101,7 @@ public class EntityListRegistry extends AbstractEPProcessor {
 	 */
 	public List getEntityLists(String viewID) {
 		if (!isProcessed())
-			try {
-				process();
-			} catch (EPProcessorException e) {
-				throw new RuntimeException(e);
-			}
+			process();
 		Map listMap = (Map)entityListsByViews.get(viewID);
 		if (listMap == null)
 			return null;
@@ -125,7 +121,7 @@ public class EntityListRegistry extends AbstractEPProcessor {
 	 * @see org.nightlabs.base.extensionpoint.AbstractEPProcessor#processElement(IExtension, org.eclipse.core.runtime.IConfigurationElement)
 	 */
 	public void processElement(IExtension extension, IConfigurationElement element)
-			throws EPProcessorException {
+			throws Exception {
 		if (element.getName().equalsIgnoreCase("entityList")) {
 			String id = element.getAttribute("id");
 			if (id == null || "".equals(id))

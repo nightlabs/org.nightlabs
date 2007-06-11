@@ -36,7 +36,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
-import org.nightlabs.base.extensionpoint.EPProcessorException;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -80,7 +79,7 @@ extends AbstractEPProcessor
 
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element)
-	throws EPProcessorException 
+	throws Exception 
 	{
 		if (element.getName().equals(ELEMENT_SEARCH_RESULT_PROVIDER_FACTORY)) {
 			if (checkString(element.getAttribute(ATTRIBUTE_CLASS))) {

@@ -282,10 +282,9 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 	 * For each element one instance of exceptionHandler.class is registered
 	 * in the {@link ExceptionHandlerRegistry}. 
 	 * @param element
-	 * @throws EPProcessorException
 	 */
 	public void processElement(IExtension extension, IConfigurationElement element) 
-	throws EPProcessorException
+	throws Exception
 	{
 		try{
 			if (element.getName().toLowerCase().equals("exceptionhandler")) {

@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.base.extensionpoint.EPProcessorException;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 
@@ -43,11 +42,7 @@ extends org.nightlabs.notification.NotificationManager
 {
 	protected NotificationManager()
 	{
-		try {
-			new NotificationManagerInterceptorEPProcessor(this).process();
-		} catch (EPProcessorException e) {
-			throw new RuntimeException(e);
-		}
+		new NotificationManagerInterceptorEPProcessor(this).process();
 	}
 
 	/**

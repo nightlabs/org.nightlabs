@@ -103,11 +103,7 @@ public class EntityManagerViewRegistry extends AbstractEPProcessor {
 	 */
 	public Set getManagerViewsForEntityID(String entityID) {
 		if (!isProcessed())
-			try {
-				process();
-			} catch (EPProcessorException e) {
-				throw new RuntimeException(e);
-			}
+			process();
 		return (Set)managerViewsByEntities.get(entityID);
 	}
 
@@ -121,11 +117,7 @@ public class EntityManagerViewRegistry extends AbstractEPProcessor {
 	 */
 	public List getManagerViewsForEntityID(String listViewID, String entityID) {
 		if (!isProcessed())
-			try {
-				process();
-			} catch (EPProcessorException e) {
-				throw new RuntimeException(e);
-			}
+			process();
 		Map managerViewsMap =  (Map)managerViewsByWrappedEntities.get(listViewID);
 		if (managerViewsMap == null)
 			return null;
@@ -142,12 +134,7 @@ public class EntityManagerViewRegistry extends AbstractEPProcessor {
 	 * @return All entityIDs managed by the View with the given viewID in a Set or null
 	 */
 	public List getManagedEntitiesForManagerViewID(String managerViewID) {
-		if (!isProcessed())
-			try {
-				process();
-			} catch (EPProcessorException e) {
-				throw new RuntimeException(e);
-			}
+		checkProcessing();
 		return (List)managedEnitiesByManagerView.get(managerViewID);
 	}
 
@@ -158,19 +145,14 @@ public class EntityManagerViewRegistry extends AbstractEPProcessor {
 	 * @param managerViewID
 	 */
 	public Set getListViewsForManagerView(String managerViewID) {
-		if (!isProcessed())
-			try {
-				process();
-			} catch (EPProcessorException e) {
-				throw new RuntimeException(e);
-			}
+		checkProcessing();
 		return (Set)listViewsByManager.get(managerViewID);
 	}
 	/**
 	 * @see org.nightlabs.base.extensionpoint.AbstractEPProcessor#processElement(IExtension, org.eclipse.core.runtime.IConfigurationElement)
 	 */
 	public void processElement(IExtension extension, IConfigurationElement element)
-			throws EPProcessorException {
+			throws Exception {
 		if (element.getName().equalsIgnoreCase("entityManagerView")) {
 			
 			String entityID = element.getAttribute("entityID");

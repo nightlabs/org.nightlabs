@@ -27,7 +27,7 @@ implements IEPProcessListener
 	}
 
 	@Override
-	public void processElement(IExtension extension, IConfigurationElement element) throws EPProcessorException
+	public void processElement(IExtension extension, IConfigurationElement element) throws Exception
 	{
 		try
 		{

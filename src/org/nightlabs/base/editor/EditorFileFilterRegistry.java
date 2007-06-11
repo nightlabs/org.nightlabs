@@ -49,7 +49,7 @@ extends AbstractEPProcessor
 	}
 
 	public void processElement(IExtension extension, IConfigurationElement element) 
-	throws EPProcessorException 
+	throws Exception 
 	{
 		if (element.getName().equalsIgnoreCase("editorFileFilter")) {
 			String pattern = element.getAttribute("pattern");

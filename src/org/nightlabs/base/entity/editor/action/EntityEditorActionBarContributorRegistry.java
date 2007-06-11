@@ -78,7 +78,7 @@ extends AbstractEPProcessor
 	
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element)
-	throws EPProcessorException 
+	throws Exception 
 	{
 		if (element.getName().equalsIgnoreCase(ELEMENT_EDITOR_CONTRIBUTION)) {
 			String targetEditorID = element.getAttribute(ATTRIBUTE_TARGET_EDITOR_ID);

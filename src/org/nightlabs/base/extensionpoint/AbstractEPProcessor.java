@@ -37,101 +37,103 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
 /**
- * Used for parsing extensions to a certian point.
+ * Used for parsing extensions to a certian extension-point.
+ * <p>
  * Calling {@link #process()} will cause {@link #processElement(IExtension, IConfigurationElement)}
  * to be called for every extension defined to the point returned by {@link #getExtensionPointID()}.
+ * </p>
+ * <p>
  * The IConfigurationElement passed to processElement is the root element of the extension.
  * Usually one will use element.createExecutableExtension() to get a instance of
- * the extensions object.<br/>
+ * the extensions object.
+ * </p>
+ * <p>
  * A common usage is subclassing this to a registry which registeres its
- * entries in processElement lazily by doing 
- * <pre>
- *	if (!isProcessed())
- *		process();
- * </pre>
+ * entries in processElement lazily by calling {@link #checkProcessing()}
  * everytime when asked for one element fist.
+ * </p>
  * 
  * @author Alexander Bieber
  */
 public abstract class AbstractEPProcessor 
 implements IEPProcessor
 {
+	/**
+	 * Log4J Logger used for this class.
+	 */
 	private static final Logger logger = Logger.getLogger(AbstractEPProcessor.class);
-	
+
 	/**
 	 * Return the extension-point id here this EPProcessor should process.
 	 */
 	public abstract String getExtensionPointID();
-	
+
 	/**
 	 * Process all extension to the extension-point defined by {@link #getExtensionPointID()}
 	 */
-	public abstract void processElement(IExtension extension, IConfigurationElement element) throws EPProcessorException;
-	
-	
+	public abstract void processElement(IExtension extension, IConfigurationElement element) throws Exception;
+
+
 	private List<IEPProcessListener> processListeners;
-	
+
 	public AbstractEPProcessor()
 	{
 		processListeners = new ArrayList<IEPProcessListener>();
 	}
-	
+
 	private boolean processed = false;
 	public boolean isProcessed() {
 		return processed;
 	}
-	
+
 	private boolean processing = false;
-	
+
 	protected boolean isProcessing() {
 		return processing;
 	}
-	
-	public synchronized void process() throws EPProcessorException{
+
+	public synchronized void process(){
 		processing = true;
 		try {
-			try {
-				for(IEPProcessListener listener : processListeners)
-					listener.preProcess();
-				
-				IExtensionRegistry registry = Platform.getExtensionRegistry();
-				if (registry != null) 
-				{
-					IExtensionPoint extensionPoint = registry.getExtensionPoint(getExtensionPointID());
-					if (extensionPoint == null) {
-						throw new EPProcessorException(
-								"Unable to resolve extension-point: " + getExtensionPointID());
-					}	        
-					
-					IExtension[] extensions = extensionPoint.getExtensions();
-					// For each extension ...
-					for (int i = 0; i < extensions.length; i++) {           
-						IExtension extension = extensions[i];
-						IConfigurationElement[] elements = 
-							extension.getConfigurationElements();
-						// For each member of the extension ...
-						for (int j = 0; j < elements.length; j++) {
-							IConfigurationElement element = elements[j];
-							processElement(extension, element);               
-						}
+			for(IEPProcessListener listener : processListeners)
+				listener.preProcess();
+
+			IExtensionRegistry registry = Platform.getExtensionRegistry();
+			if (registry != null) 
+			{
+				IExtensionPoint extensionPoint = registry.getExtensionPoint(getExtensionPointID());
+				if (extensionPoint == null) {
+					throw new IllegalStateException("Unable to resolve extension-point: " + getExtensionPointID());
+				}	        
+
+				IExtension[] extensions = extensionPoint.getExtensions();
+				// For each extension ...
+				for (int i = 0; i < extensions.length; i++) {           
+					IExtension extension = extensions[i];
+					IConfigurationElement[] elements = 
+						extension.getConfigurationElements();
+					// For each member of the extension ...
+					for (int j = 0; j < elements.length; j++) {
+						IConfigurationElement element = elements[j];
+						try {
+							processElement(extension, element);
+						} catch (Exception e) {
+							// Only log the error and continue
+							logger.error("Error processing extension element. The element is located in an extension in bundle: " + extension.getNamespaceIdentifier(), e);
+						}               
 					}
-					
-					for(IEPProcessListener listener : processListeners)
-						listener.postProcess();
-					
-					processed = true;	    		
 				}
-			}catch(Throwable e){
-				if (e instanceof EPProcessorException)
-					throw (EPProcessorException)e;
-				else
-					throw new EPProcessorException(e);
+
+				for(IEPProcessListener listener : processListeners)
+					listener.postProcess();
+
+				processed = true;	    		
 			}
 		} finally {
 			processing = false;
 		}
 	}
-	
+
 	/**
 	 * Assures that this processor 
 	 * has processed its extensions
@@ -153,7 +155,7 @@ implements IEPProcessor
 			try {
 				process();
 			} 
-			catch (EPProcessorException e) {
+			catch (Throwable e) {
 				if (throwExceptionIfErrorOccurs)
 					throw new RuntimeException(e);
 				else
@@ -161,7 +163,7 @@ implements IEPProcessor
 			}  	  		
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param s the String to check
@@ -171,17 +173,17 @@ implements IEPProcessor
 	public static boolean checkString(String s) 
 	{
 		if (s == null || s.trim().equals("") )
-//		if (s == null || "".equals(s) )
+//			if (s == null || "".equals(s) )
 			return false;
-		
+
 		return true;
 	}  
-	
+
 	public void addProcessListener(IEPProcessListener listener)
 	{
 		processListeners.add(listener);
 	}
-	
+
 	public void removeProcessListener(IEPProcessListener listener)
 	{
 		processListeners.remove(listener);

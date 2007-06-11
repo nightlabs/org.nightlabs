@@ -69,7 +69,7 @@ extends AbstractEPProcessor
 
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element)
-	throws EPProcessorException 
+	throws Exception 
 	{
 		if (element.getName().equalsIgnoreCase(ELEMENT_REMOVE_EXTENSION)) 
 		{

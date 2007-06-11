@@ -39,7 +39,7 @@ public class NotificationManagerInterceptorEPProcessor extends AbstractEPProcess
 	public void processElement(
 		IExtension extension,
 		IConfigurationElement element
-	) throws EPProcessorException 
+	) throws Exception 
 	{
 		try {
 			Interceptor interceptor = (Interceptor) element.createExecutableExtension("class");

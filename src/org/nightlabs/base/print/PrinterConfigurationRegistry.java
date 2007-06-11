@@ -115,7 +115,7 @@ public class PrinterConfigurationRegistry extends AbstractEPProcessor {
 	 */
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element) 
-	throws EPProcessorException 
+	throws Exception 
 	{
 		if (element.getName().equalsIgnoreCase("printerConfiguratorFactory"))
 			processConfigurator(extension, element);
@@ -215,11 +215,7 @@ public class PrinterConfigurationRegistry extends AbstractEPProcessor {
 	public static PrinterConfigurationRegistry sharedInstance() {
 		if (sharedInstance == null) {
 			sharedInstance = new PrinterConfigurationRegistry();
-			try {
-				sharedInstance.process();
-			} catch (EPProcessorException e) {
-				throw new RuntimeException(e);
-			}
+			sharedInstance.process();
 			sharedInstance.validate();
 		}
 		return sharedInstance;

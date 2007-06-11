@@ -173,7 +173,7 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 	 */
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element)
-	throws EPProcessorException
+	throws Exception
 	{
 		try {
 			if("category".equalsIgnoreCase(element.getName())) {
@@ -242,7 +242,6 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 	 */
 	@Override
 	public synchronized void process() 
-	throws EPProcessorException 
 	{
 		super.process();
 		category2Bindings = new HashMap<IEntityTreeCategory, Collection<IEntityTreeCategoryBinding>>();

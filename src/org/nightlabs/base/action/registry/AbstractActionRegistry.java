@@ -991,7 +991,7 @@ extends AbstractEPProcessor
 	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_TOOLBAR = "visibleInToolbar";
 	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_CONTEXTMENU = "visibleInContextmenu";
 
-	public synchronized void process() throws EPProcessorException
+	public synchronized void process()
 	{
 //		if (elementNameAction == null)
 //			elementNameAction = getActionElementName();
@@ -1055,7 +1055,7 @@ extends AbstractEPProcessor
 	}
 
 	public void processElement(IExtension extension, IConfigurationElement element)
-			throws EPProcessorException
+			throws Exception
 	{
 		if (elementNameAction == null)
 			elementNameAction = getActionElementName();

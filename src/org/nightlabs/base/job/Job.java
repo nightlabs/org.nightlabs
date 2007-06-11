@@ -26,13 +26,23 @@ public abstract class Job extends org.eclipse.core.runtime.jobs.Job {
 	private IProgressMonitor subProgressMonitor;
 	
 	/**
-	 * @param name
+	 * Create a new Job with the given name.
+	 * 
+	 * @param name The name of the new Job.
 	 */
 	public Job(String name) {
 		super(name);
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This implementation invokes {@link #run(ProgressMonitor)} with
+	 * a {@link ProgressMonitorWrapper} wrapping around the {@link IProgressMonitor} passed.
+	 * </p>
+	 * <p>
+	 * Note that the error handling is not done by the Job API but by the {@link ExceptionHandlerRegistry}.
+	 * </p>
 	 * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
@@ -50,6 +60,16 @@ public abstract class Job extends org.eclipse.core.runtime.jobs.Job {
 	
 	protected abstract IStatus run(ProgressMonitor monitor);
 	
+	/**
+	 * Returns a {@link ProgressMonitorWrapper} wrapping around the {@link IProgressMonitor} of this Job.
+	 * <p> 
+	 * Note that this is set when the Job runs and will not
+	 * be accessible before {@link #run(IProgressMonitor)} was invoked and 
+	 * an {@link IllegalStateException} will be thrown then.
+	 * </p>
+	 * 
+	 * @return A {@link ProgressMonitorWrapper} wrapping arount the {@link IProgressMonitor} of this Job.
+	 */
 	public ProgressMonitorWrapper getProgressMonitorWrapper() {
 		if (progressMonitorWrapper == null) {
 			if (progressMonitor == null)
@@ -59,7 +79,17 @@ public abstract class Job extends org.eclipse.core.runtime.jobs.Job {
 		return progressMonitorWrapper;
 	}
 	
-	
+	/**
+	 * Returns a {@link ProgressMonitorWrapper} wrapping around a {@link SubProgressMonitor} to the {@link IProgressMonitor} of this Job.
+	 * <p> 
+	 * Note that this is set when the Job runs and will not
+	 * be accessible before {@link #run(IProgressMonitor)} was invoked and 
+	 * an {@link IllegalStateException} will be thrown then.
+	 * </p>
+	 * 
+	 * @param subTicks The number of ticks the sub-task wants to notify.
+	 * @return A {@link ProgressMonitorWrapper} wrapping around a {@link SubProgressMonitor} to the {@link IProgressMonitor} of this Job.
+	 */
 	public ProgressMonitorWrapper getSubProgressMonitorWrapper(int subTicks) {
 		if (subProgressMonitorWrapper == null) {
 			if (progressMonitor == null)
@@ -69,5 +99,19 @@ public abstract class Job extends org.eclipse.core.runtime.jobs.Job {
 		}
 		return subProgressMonitorWrapper;
 	}
-
+	
+	/**
+	 * Retuns the {@link IProgressMonitor} this Job runs with.
+	 * <p> 
+	 * Note that this is set when the Job runs and will not
+	 * be accessible before {@link #run(IProgressMonitor)} was invoked and 
+	 * an {@link IllegalStateException} will be thrown then.
+	 * </p>
+	 * @return The {@link IProgressMonitor} this Job runs with.
+	 */
+	public IProgressMonitor getProgressMonitor() {
+		if (this.progressMonitor == null)
+			throw new IllegalStateException("getProgressMonitor must not be called before run(IProgressMonitor) was invoked.");
+		return progressMonitor;
+	}
 }
