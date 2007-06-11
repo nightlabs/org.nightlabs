@@ -32,7 +32,7 @@ extends AbstractEPProcessor
 	}
 
 	public void processElement(IExtension extension, IConfigurationElement element)
-			throws EPProcessorException
+			throws Exception
 	{
 		try {
 			KeyReader keyReader = (KeyReader) element.createExecutableExtension("class");

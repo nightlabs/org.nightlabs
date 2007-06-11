@@ -39,7 +39,7 @@ public class KeyReaderUseCaseRegistry
 
 	@Implement
 	public void processElement(IExtension extension, IConfigurationElement element)
-			throws EPProcessorException
+			throws Exception
 	{
 		String keyReaderID = element.getAttribute("keyReaderID");
 		if (keyReaderID == null || "".equals(keyReaderID))
