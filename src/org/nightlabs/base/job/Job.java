@@ -5,7 +5,9 @@ package org.nightlabs.base.job;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.progress.ProgressMonitorWrapper;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -36,7 +38,14 @@ public abstract class Job extends org.eclipse.core.runtime.jobs.Job {
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		this.progressMonitor = monitor;
-		return run(getProgressMonitorWrapper());
+		IStatus status;
+		try {
+			status = run(getProgressMonitorWrapper());
+		} catch (Throwable t) {
+			status = Status.CANCEL_STATUS;
+			ExceptionHandlerRegistry.asyncHandleException(t);
+		}
+		return status;
 	}
 	
 	protected abstract IStatus run(ProgressMonitor monitor);
