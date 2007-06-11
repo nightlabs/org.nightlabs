@@ -34,7 +34,7 @@ public class ConnectionImplementationRegistry
 	private Map<String, ConnectionImplementation> connectionClassName2ConnectionImplementation = null;
 
 	public void processElement(IExtension extension, IConfigurationElement element)
-			throws EPProcessorException
+			throws Exception
 	{
 		try {
 			Connection connection = (Connection) element.createExecutableExtension("class");

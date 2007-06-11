@@ -36,7 +36,7 @@ public class ConnectionCfEditRegistry
 	private Map<String, ConnectionCfEditFactory> connectionClassName2ConnectionCfEditFactory = new HashMap<String, ConnectionCfEditFactory>();
 
 	public void processElement(IExtension extension, IConfigurationElement element)
-	throws EPProcessorException
+	throws Exception
 	{
 		try {
 			ConnectionCfEditFactory factory = (ConnectionCfEditFactory) element.createExecutableExtension("class");
