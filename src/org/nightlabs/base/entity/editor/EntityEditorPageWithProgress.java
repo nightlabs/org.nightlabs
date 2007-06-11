@@ -192,7 +192,6 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		ScrolledForm form = managedForm.getForm();
 		form.setExpandHorizontal(true);
 		form.setExpandVertical(true);
-//		form.
 		FormToolkit toolkit = managedForm.getToolkit();
 		String formText = getPageFormTitle();		
 		form.setText(formText == null ? "" : formText); 
@@ -233,7 +232,8 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	 * @param pWrapper The composite wrapping the progress monitor.
 	 */
 	protected void configureProgressWrapper(XComposite pWrapper) {
-		pWrapper.getGridLayout().marginLeft = 5;
+		pWrapper.getGridLayout().marginWidth = 20;
+		pWrapper.getGridLayout().marginHeight = 20;
 	}
 	
 	/**
@@ -245,7 +245,10 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	 * @return A new gui representation of an {@link IProgressMonitor}.
 	 */
 	protected IProgressMonitor createProgressMonitorPart(Composite progressWrapper) {
-		return new SaveProgressMonitorPart(progressWrapper, null);		
+		SaveProgressMonitorPart monitor = new SaveProgressMonitorPart(progressWrapper, new GridLayout());
+		GridData gridData = new GridData(300, 150);
+		monitor.setLayoutData(gridData);
+		return monitor;
 	}
 	
 	/**
@@ -266,7 +269,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		layout.numColumns = 1;
 		layout.horizontalSpacing = 10;
 		parent.setLayout(layout);
-		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
+//		parent.setLayoutData(new GridData(GridData.FILL_BOTH | SWT.CENTER));
 	}
 	
 	/**
@@ -327,7 +330,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		stackLayout.marginWidth = 0;
 		wrapper.setLayout(stackLayout);
 		
-		progressWrapper = new XComposite(wrapper, SWT.NONE, XComposite.LayoutMode.ORDINARY_WRAPPER);
+		progressWrapper = new XComposite(wrapper, SWT.NONE);
 		configureProgressWrapper(progressWrapper);		
 		progressMonitorPart = createProgressMonitorPart(progressWrapper);
 		

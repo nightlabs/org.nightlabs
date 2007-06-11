@@ -177,6 +177,13 @@ extends Dialog
 		}
 	}
 
+	/**
+	 * Since this method relies on the shell being already instantiated, you <b>must</b> only call it
+	 * after {@link #create()} has been called!
+	 *   
+	 * @param width the width if none has been set before.
+	 * @param height the height if none has been set before.
+	 */
 	protected void setToCenteredLocationPreferredSize(int width, int height) {
 		setToCenteredLocationPreferredSize(getShell(), width, height);
 	}
