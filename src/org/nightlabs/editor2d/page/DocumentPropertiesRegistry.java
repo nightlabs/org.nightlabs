@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
-import org.nightlabs.base.extensionpoint.EPProcessorException;
 import org.nightlabs.base.print.page.PredefinedPageEP;
 import org.nightlabs.config.Config;
 import org.nightlabs.editor2d.PageDrawComponent;
@@ -79,7 +78,7 @@ extends AbstractEPProcessor
 
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element)
-	throws EPProcessorException 
+	throws Exception 
 	{
 		if (element.getName().equalsIgnoreCase(ELEMENT_DOCUMENT_PROPERTIES)) 
 		{

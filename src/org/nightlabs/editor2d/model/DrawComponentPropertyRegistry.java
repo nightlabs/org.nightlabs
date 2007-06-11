@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
-import org.nightlabs.base.extensionpoint.EPProcessorException;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -70,7 +69,7 @@ extends AbstractEPProcessor
 
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element) 
-	throws EPProcessorException 
+	throws Exception 
 	{
 		if (element.getName().equalsIgnoreCase(ELEMENT_DRAWCOMPONENT_PROPERTY)) 
 		{
