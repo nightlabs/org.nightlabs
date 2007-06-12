@@ -177,7 +177,7 @@ public class EntityEditor extends CommitableFormEditor
 			if (page instanceof Fadeable)
 				saveJob = new FadeableCompositeJob("Async save", ((Fadeable)page), this) {
 					@Override
-					public IStatus run(ProgressMonitor monitor, Object source) {
+					protected IStatus run(ProgressMonitor monitor, Object source) throws Exception {
 						try {
 							saveRunnable.run(new RCPProgressMonitor(monitor));
 						} catch (Exception e) {

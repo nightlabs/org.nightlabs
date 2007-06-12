@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.composite.Fadeable;
+import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -48,7 +49,7 @@ public abstract class FadeableCompositeJob extends Job
   	this.source = source;
   }
 
-  protected IStatus run(ProgressMonitor monitor)
+  protected IStatus run(ProgressMonitor monitor) throws Exception
   {
   	IStatus ret = Status.CANCEL_STATUS;
   	try
@@ -63,7 +64,11 @@ public abstract class FadeableCompositeJob extends Job
   					}
   				}
   		);
-  		ret = run(monitor, source);
+  		try {
+  			ret = run(monitor, source);
+  		} catch (Exception e) {
+  			ExceptionHandlerRegistry.asyncHandleException(e);
+  		}
   	}
   	finally
   	{
@@ -81,5 +86,5 @@ public abstract class FadeableCompositeJob extends Job
     return ret;
   }
 
-  public abstract IStatus run(ProgressMonitor monitor, Object source);
+  protected abstract IStatus run(ProgressMonitor monitor, Object source) throws Exception;
 }

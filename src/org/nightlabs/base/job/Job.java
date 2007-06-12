@@ -58,7 +58,19 @@ public abstract class Job extends org.eclipse.core.runtime.jobs.Job {
 		return status;
 	}
 	
-	protected abstract IStatus run(ProgressMonitor monitor);
+	/**
+	 * Implement this method to do the Jobs work.
+	 * Note that this method might throw and exception if 
+	 * something fails during the job. The calling method
+	 * will catch all exceptions and handle it with 
+	 * the {@link ExceptionHandlerRegistry} instead of the Job 
+	 * API error handler.
+	 * 
+	 * @param monitor The monitor to report progress.
+	 * @return The status the Job finished with.
+	 * @throws Exception If something fails during the Job.
+	 */
+	protected abstract IStatus run(ProgressMonitor monitor) throws Exception;
 	
 	/**
 	 * Returns a {@link ProgressMonitorWrapper} wrapping around the {@link IProgressMonitor} of this Job.
