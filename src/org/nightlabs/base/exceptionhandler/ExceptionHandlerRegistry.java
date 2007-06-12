@@ -40,10 +40,11 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
 /**
  * Maintains a Map of {@link IExceptionHandler} and is able 
  * to search the right handler for an exception.
+ * <p>
  * This class staticly holds a default registry as singleton static member and 
  * provides some static convenience methods statically which
  * work with the default shared instance.
- * 
+ * </p>
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de> 
  */
 public class ExceptionHandlerRegistry extends AbstractEPProcessor {
@@ -51,6 +52,31 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(ExceptionHandlerRegistry.class);
+	
+	/**
+	 * The registry can be set to different modes.
+	 */
+	public static enum Mode {
+		/**
+		 * Mode processByHandler indicates that
+		 * exceptions passed to the registry
+		 * will be processed by the appropriate
+		 * registered {@link IExceptionHandler}.
+		 */
+		processByHandler,
+		/**
+		 * Mode bypass indicates that
+		 * exceptions passed to the registry
+		 * will only be logged and not passed
+		 * to {@link IExceptionHandler}s.
+		 */
+		bypass
+	}
+	
+	/**
+	 * The current mode of the registry, will be initialised with {@link Mode#processByHandler}.
+	 */
+	private Mode mode = Mode.processByHandler;
 	
 	private Map<String, IExceptionHandler> exceptionHandlers = new HashMap<String, IExceptionHandler>();
 
@@ -242,10 +268,34 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 		return sharedInstance().handleException(thread, exception, false);
 	}
 
+	/**
+	 * Sets the mode of the registry.
+	 * See the mode description on what they mean.
+	 * 
+	 * @param mode The mode to set.
+	 */
+	public void setMode(Mode mode) {
+		this.mode = mode;
+	}
+	
+	/**
+	 * Searches the {@link IExceptionHandler} for the given exception and invokes 
+	 * its {@link IExceptionHandler#handleException(Thread, Throwable, Throwable)} method.
+	 * <p>
+	 * Note, that if the {@link #mode} of the registry is {@link Mode#bypass} this
+	 * method will simply log the error and return.
+	 * </p>
+	 * @param thread The thread the exception occured on.
+	 * @param exception The exception to handle.
+	 * @param async Whether to handle asynchronously (value = <code>true</code>) or synchronously (value <code>true</code>) 
+	 * @return Whether a appropriate handler could be found and invoked.
+	 */
 	private boolean handleException(final Thread thread, final Throwable exception, boolean async)
 	{
-		// TODO: Do we need to find out on which thread we are, or is syncExec intelligent enough?
-//		Throwable handlingException = null;
+		if (mode == Mode.bypass) {
+			logger.error("ExceptionHandlerRegistry bypassing (Mode.bypass) Exception: ", exception);
+			return true;
+		}
 		final ExceptionHandlerSearchResult handlerSearch = sharedInstance().searchHandler(exception);
 		if (handlerSearch.getHandler() != null){
 			try {
