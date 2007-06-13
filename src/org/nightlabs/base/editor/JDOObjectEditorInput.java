@@ -26,6 +26,7 @@ package org.nightlabs.base.editor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
+import org.nightlabs.jdo.ObjectID;
 
 /**
  * A generic base class for editor inputs using a
@@ -34,12 +35,12 @@ import org.eclipse.ui.IPersistableElement;
  * @version $Revision$ - $Date$
  * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
-public class JDOObjectEditorInput<JDOObjectID> implements IEditorInput
+public class JDOObjectEditorInput<ID extends ObjectID> implements IEditorInput
 {
 	/**
 	 * The JDO Object ID.
 	 */
-	JDOObjectID jdoObjectID;
+	ID jdoObjectID;
 	
 	String name;
 	
@@ -50,7 +51,7 @@ public class JDOObjectEditorInput<JDOObjectID> implements IEditorInput
 	 * JDO Object ID.
 	 * @param jdoObjectID The JDO Object ID
 	 */
-	public JDOObjectEditorInput(JDOObjectID jdoObjectID)
+	public JDOObjectEditorInput(ID jdoObjectID)
 	{
 		this.jdoObjectID = jdoObjectID;
 	}
@@ -59,7 +60,7 @@ public class JDOObjectEditorInput<JDOObjectID> implements IEditorInput
 	 * Get the JDO Object ID
 	 * @return The JDO Object ID
 	 */
-	public JDOObjectID getJDOObjectID()
+	public ID getJDOObjectID()
 	{
 		return jdoObjectID;
 	}
