@@ -25,12 +25,10 @@
  ******************************************************************************/
 package org.nightlabs.base.editor;
 
-import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.forms.editor.IFormPage;
 
 /**
