@@ -24,12 +24,16 @@ public abstract class SelectionListenerAction
 	
 	protected ISelection selection;
 	
+	public SelectionListenerAction(ISelectionProvider selectionProvider) {
+		this(selectionProvider, "");
+	}
+	
 	public SelectionListenerAction(ISelectionProvider selectionProvider, String text) {
-		super(selectionProvider, text);
+		this(selectionProvider, text, null);
 	}
 	
 	public SelectionListenerAction(ISelectionProvider selectionProvider, String text, ImageDescriptor image) {
-		this(selectionProvider, text);
+		super(selectionProvider, text);
 		setImageDescriptor(image);
 	}
 

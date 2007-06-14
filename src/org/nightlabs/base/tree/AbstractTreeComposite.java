@@ -332,7 +332,7 @@ implements ISelectionProvider
 	 */
 	public void setSelection(Object element)
 	{
-		getTreeViewer().setSelection(new StructuredSelection(element));
+		getTreeViewer().setSelection(new StructuredSelection(element), true);
 	}
 	
 	public void setInput(Object input) {
