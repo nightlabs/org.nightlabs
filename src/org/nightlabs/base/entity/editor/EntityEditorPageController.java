@@ -42,6 +42,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.progress.CompoundProgressMonitor;
 import org.nightlabs.base.util.RCPUtil;
 
@@ -362,6 +363,28 @@ implements IEntityEditorPageController
 	public void markUndirty() {
 		dirty = false;
 	}
-		
+	
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This implementation does nothing.
+	 * </p>
+	 * @see org.nightlabs.base.entity.editor.IEntityEditorPageController#dispose()
+	 */
+	@Implement
+	public void dispose() {
+		// does nothing
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This implementation does nothing.
+	 * </p>
+	 * @see org.nightlabs.base.entity.editor.IEntityEditorPageController#editorFocussed()
+	 */
+	public void editorFocussed() {
+		// does nothing
+	}
 }
 	

@@ -26,8 +26,6 @@
 
 package org.nightlabs.base.entity.editor;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -170,7 +168,7 @@ public class EntityEditorController
 						IFormPage page = editor.getActivePageInstance();						
 						IEntityEditorPageController pageController = pageControllers.get(page.getId());
 						if (pageController != null) {
-							logger.info("pageControler.markDirty() for page "+page.getId());
+							logger.debug("pageControler.markDirty() for page "+page.getId());
 							pageController.markDirty();
 						}		
 					}
@@ -304,27 +302,11 @@ public class EntityEditorController
 	{
 	}
 	
-//	/**
-//	 * Iterates through all IFormPages, and if a page is dirty the corresponding controller is added
-//	 * to the dirtyPageControllers 
-//	 */
-//	public void checkDirtyPageControllers() 
-//	{
-//		this.dirtyPageControllers.clear();
-//		for (Entry<IEntityEditorPageController, Collection<IFormPage>> entry : controllerPages.entrySet()) {
-//			for (IFormPage page : entry.getValue()) { 
-//				if (page.isDirty()) {
-//					dirtyPageControllers.add(entry.getKey());
-//				}
-//			}
-//		}
-//	}
-
 	/**
 	 * Iterates through all IFormPages, and if a page is dirty the corresponding controller is added
 	 * to the dirtyPageControllers 
 	 */
-	public void checkDirtyPageControllers() 
+	public void populateDirtyPageControllers() 
 	{
 		this.dirtyPageControllers.clear();
 		for (Entry<IEntityEditorPageController, Collection<IFormPage>> entry : controllerPages.entrySet()) {
@@ -336,6 +318,18 @@ public class EntityEditorController
 	}
 	
 	/**
+	 * @return <code>true</code> if at least one of the {@link IEntityEditorPageController}s associated
+	 * with this controller is dirty, <code>false</code> otherwise.
+	 */
+	public boolean hasDirtyPageControllers() {
+		for (IEntityEditorPageController controller : controllerPages.keySet()) {
+			if (controller.isDirty())
+				return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * Delegates to the {@link IEntityEditorPageController#doSave(IProgressMonitor)}
 	 * method of all known dirty {@link IEntityEditorPageController}s.
 	 * 
@@ -344,11 +338,31 @@ public class EntityEditorController
 	public void doSave(IProgressMonitor monitor)
 	{
 		logger.debug("Calling all page controllers doSave() method."); 
-//		checkDirtyPageControllers();
 		for (IEntityEditorPageController dirtyController : dirtyPageControllers) {
 			dirtyController.doSave(monitor);
 			dirtyController.markUndirty();
 		}
 	}
 
+	/**
+	 * Called when the associated editor gets the focus.
+	 * It delegates the 
+	 *
+	 */
+	public void editorFocussed() {
+		for (IEntityEditorPageController controller : controllerPages.keySet()) {
+			controller.dispose();
+		}
+	}
+	
+	/**
+	 * Dispatches to all {@link IEntityEditorPageController}s registered with this controller and
+	 * calls {@link IEntityEditorPageController#editorFocussed()}.
+	 */
+	public void dispose() {
+		for (IEntityEditorPageController controller : controllerPages.keySet()) {
+			controller.editorFocussed();
+		}
+	}
+	
 }

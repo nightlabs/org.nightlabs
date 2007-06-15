@@ -146,6 +146,24 @@ public class EntityEditor extends CommitableFormEditor
 			});
 		}		
 	};
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * In spite of the super implementation that checks the {@link IFormPage}s for their dirty state,
+	 * this implementation asks the {@link EntityEditorController} associated with this Editor
+	 * whether one of its {@link IEntityEditorPageControllerController}s is dirty.
+	 * (See {@link EntityEditorController#hasDirtyPageControllers()}) 
+	 * </p>
+	 * @see org.eclipse.ui.forms.editor.FormEditor#isDirty()
+	 */
+	@Override
+	public boolean isDirty() {
+		boolean controllerDirty = controller != null ? controller.hasDirtyPageControllers() : false;
+		if (controllerDirty)
+			return true;
+		return super.isDirty();
+	}
 	
 	/**
 	 * {@inheritDoc}
@@ -160,7 +178,7 @@ public class EntityEditor extends CommitableFormEditor
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		if (controller != null)
-			controller.checkDirtyPageControllers();
+			controller.populateDirtyPageControllers();
 		super.doSave(monitor);
 		
 //		try {
@@ -255,5 +273,21 @@ public class EntityEditor extends CommitableFormEditor
 		}
 		return null;
 	}	
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * Additionally to its super implementation this implementation
+	 * invokes {@link EntityEditorController#dispose()} on the controller
+	 * associated with this editor. 
+	 * </p>
+	 * @see org.eclipse.ui.forms.editor.FormEditor#dispose()
+	 */
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (controller != null)
+			controller.dispose();
+	}
 	
 }

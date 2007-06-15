@@ -108,4 +108,14 @@ extends IPropertyChangeSupport, IDirtyStateManager
 	 */
 	public void doSave(IProgressMonitor monitor);
 	
+	/**
+	 * Performs cleanups when the editor is closed.
+	 */
+	public void dispose();
+	
+	/**
+	 * Called when the editor of this controller gets the focus.
+	 */
+	public void editorFocussed();
+	
 }
