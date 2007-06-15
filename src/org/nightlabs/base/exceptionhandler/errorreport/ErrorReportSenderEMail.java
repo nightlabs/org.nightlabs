@@ -26,31 +26,28 @@
 
 package org.nightlabs.base.exceptionhandler.errorreport;
 
-/**
- * @author Simon Lehmann - simon@nightlabs.de
- */
-
-import java.util.Iterator;
 import java.util.Properties;
-import javax.mail.*;
+
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
-
 import org.nightlabs.config.Config;
 
+/**
+ * @author Simon Lehmann - simon@nightlabs.de
+ * @author Marc Klinger - marc[at]nightlabs[dot]de
+ */
 public class ErrorReportSenderEMail implements ErrorReportSender
 {
 	/**
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(ErrorReportSenderEMail.class);
-
-	public ErrorReportSenderEMail()
-	{
-		super();
-	}
 
 	/**
 	 * @see org.nightlabs.exceptiontest.wizard.ErrorReportSender#sendErrorReport(org.nightlabs.exceptiontest.wizard.ErrorReport)
@@ -61,41 +58,26 @@ public class ErrorReportSenderEMail implements ErrorReportSender
 			ErrorReportEMailCfMod cfMod = (ErrorReportEMailCfMod) Config.sharedInstance().createConfigModule(ErrorReportEMailCfMod.class);		
 			Properties props = new Properties();
 			props.put("mail.host", cfMod.getSmtpHost());
-//			props.put("mail.from", cfMod.getMailFrom());
-			
+			props.put("mail.smtp.localhost", cfMod.getSmtpLocalhost());
 
 			Session mailConnection = Session.getInstance(props, null);
 			Message msg = new MimeMessage(mailConnection);
 			Address mailFrom = new InternetAddress(cfMod.getMailFrom());
-			//Address simon = new InternetAddress("simon@nightlabs.de", "Simon Lehmann");
 
-			//msg.setContent();
 			msg.setText(errorReport.toString());
 			msg.setFrom(mailFrom);
 			
-			
-//			for (int i= 0; i < cfMod.getMailTo().size(); i++)
-//			{
-//				msg.addRecipient(Message.RecipientType.TO, new InternetAddress((String)cfMod.getMailTo().get(i)));
-//				System.out.println(cfMod.getMailTo().get(i));
-//			}
-//			Iterator it = cfMod.getMailTo().iterator();
-//			while(it.hasNext())
-//				msg.setRecipient(Message.RecipientType.TO, new InternetAddress((String)it.next()));
-				
-			for(Iterator it2 = cfMod.getMailTo().iterator(); it2.hasNext();)
-				msg.addRecipient(Message.RecipientType.TO, new InternetAddress((String)it2.next()));
-			
-			
+			for (String recipient : cfMod.getMailTo())
+				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 			
 			msg.setSubject(errorReport.getThrownException().getClass().getName() +  " " + errorReport.getTimeAsString());
-			
 
 			Transport.send(msg);
-			System.out.println("Message was sent!");
+			
+			logger.info("Message was sent to "+cfMod.getMailTo().size()+" recipient(s)");
+			
 		} catch (Exception e) {
 			logger.fatal("Sending error report by eMail failed.", e);
 		}
 	}
-
 }

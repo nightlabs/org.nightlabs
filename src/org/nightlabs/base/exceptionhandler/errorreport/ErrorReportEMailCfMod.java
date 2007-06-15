@@ -34,6 +34,7 @@ import org.nightlabs.config.InitException;
 
 /**
  * @author Simon Lehmann - simon@nightlabs.de
+ * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
 public class ErrorReportEMailCfMod extends ConfigModule
 {
@@ -42,55 +43,100 @@ public class ErrorReportEMailCfMod extends ConfigModule
 	private String mailFrom = null;
 	private List<String> mailTo = null;
 	private String smtpHost = null;
+	private String smtpLocalhost = null;
 
-
-	public ErrorReportEMailCfMod()
-	{
-	}
-
-	/**
+	/* (non-Javadoc)
 	 * @see org.nightlabs.config.ConfigModule#init()
 	 */
+	@Override
 	public void init() throws InitException
 	{
 		super.init();
 		if (mailFrom == null)
 			mailFrom = "jfire"+'@'+"nightlabs.org";
-		if (mailTo == null)
-		{
+		if (mailTo == null) {
 			mailTo = new CfModList<String>(this);
 			mailTo.add("bugreport"+'@'+"nightlabs.org");
 		}
 		if (smtpHost == null)
 			smtpHost = "mail.nightlabs.de";
+		if(smtpLocalhost == null)
+			smtpLocalhost = "www.nightlabs.org";
 	}
 
+	/**
+	 * Get the mailFrom.
+	 * @return the mailFrom
+	 */
 	public String getMailFrom()
 	{
 		return mailFrom;
 	}
+
+	/**
+	 * Set the mailFrom.
+	 * @param mailFrom the mailFrom to set
+	 */
 	public void setMailFrom(String mailFrom)
 	{
 		this.mailFrom = mailFrom;
 		setChanged();
 	}
-	public List getMailTo()
+
+	/**
+	 * Get the mailTo.
+	 * @return the mailTo
+	 */
+	public List<String> getMailTo()
 	{
 		return mailTo;
 	}
+
+	/**
+	 * Set the mailTo.
+	 * @param mailTo the mailTo to set
+	 */
 	public void setMailTo(List<String> mailTo)
 	{
 		this.mailTo = mailTo;
 		setChanged();
 	}
 
+	/**
+	 * Get the smtpHost.
+	 * @return the smtpHost
+	 */
 	public String getSmtpHost()
 	{
 		return smtpHost;
 	}
+
+	/**
+	 * Set the smtpHost.
+	 * @param smtpHost the smtpHost to set
+	 */
 	public void setSmtpHost(String smtpHost)
 	{
 		this.smtpHost = smtpHost;
+		setChanged();
+	}
+
+	/**
+	 * Get the smtpLocalhost.
+	 * @return the smtpLocalhost
+	 */
+	public String getSmtpLocalhost()
+	{
+		return smtpLocalhost;
+	}
+
+	/**
+	 * Set the smtpLocalhost.
+	 * @param smtpLocalhost the smtpLocalhost to set
+	 */
+	public void setSmtpLocalhost(String smtpLocalhost)
+	{
+		this.smtpLocalhost = smtpLocalhost;
 		setChanged();
 	}
 }
