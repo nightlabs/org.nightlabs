@@ -10,7 +10,7 @@ import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * @author Niklas Schiffler <nick@nightlabs.de>
- *
+ * @deprecated
  */
 public class XForm extends Form
 {

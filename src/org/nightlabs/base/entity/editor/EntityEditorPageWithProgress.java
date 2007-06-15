@@ -35,6 +35,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -45,6 +46,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.nightlabs.base.composite.Fadeable;
 import org.nightlabs.base.composite.FadeableComposite;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.form.NightlabsFormsToolkit;
 import org.nightlabs.base.progress.CompoundProgressMonitor;
 import org.nightlabs.base.progress.SaveProgressMonitorPart;
 
@@ -192,7 +194,8 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		ScrolledForm form = managedForm.getForm();
 		form.setExpandHorizontal(true);
 		form.setExpandVertical(true);
-		FormToolkit toolkit = managedForm.getToolkit();
+//		FormToolkit toolkit = managedForm.getToolkit();
+		FormToolkit toolkit = new NightlabsFormsToolkit(managedForm.getForm().getDisplay());
 		String formText = getPageFormTitle();		
 		form.setText(formText == null ? "" : formText); 
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -334,16 +337,14 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		configureProgressWrapper(progressWrapper);		
 		progressMonitorPart = createProgressMonitorPart(progressWrapper);
 		
-		pageWrapper = managedForm.getToolkit().createForm(wrapper);
+		pageWrapper = toolkit.createForm(wrapper);
 		configurePageWrapper(pageWrapper.getBody());
-//		pageWrapper = managedForm.getToolkit().createForm(wrapper);
-//		configurePageWrapper(pageWrapper);
 		
 		asyncLoadJob.schedule();		
 		
 		addSections(pageWrapper.getBody());
 		configureInitialStack();
-		wrapper.setToolkit(managedForm.getToolkit());
+		wrapper.setToolkit(toolkit);
 		wrapper.adaptToToolkit();
 	}
 
@@ -402,5 +403,9 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	public boolean isDisposed()
 	{
 		return wrapper.isDisposed();
+	}
+	
+	public void setMenu(Menu menu) {
+		wrapper.getParent().setMenu(menu);
 	}
 }

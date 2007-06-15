@@ -360,4 +360,10 @@ public class SharedImages
 	public static final ImageDescriptor SEARCH_24x24 = 		
 		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Search",
 				ImageDimension._24x24);	
+	
+	public static final ImageDescriptor UP_16x16 = 
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Up");
+	
+	public static final ImageDescriptor DOWN_16x16 = 
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Down");
 }

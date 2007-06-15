@@ -26,7 +26,6 @@
 package org.nightlabs.base.action;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.InheritanceToggleButton;
 import org.nightlabs.base.resource.SharedImages;
