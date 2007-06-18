@@ -62,22 +62,22 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 	private static final int ERROR_TABLE_HEIGHT_HINT = 180;
 
 	private static final int STACK_TRACE_LINE_COUNT = 15;
-	
+
 	protected static final int SEND_ERROR_REPORT_ID = IDialogConstants.CLIENT_ID + 1;
-	
-  /**
-   * Dialog title (a localized string).
-   */
-  private String title;
-	
+
+	/**
+	 * Dialog title (a localized string).
+	 */
+	private String title;
+
 	/** 
 	 * Collection of all errors currently displayed/displayable.
 	 */
 	private List<ErrorItem> errorList = new ArrayList<ErrorItem>();
 	private ErrorTable errorTable;
-  private Text stackTraceText;
-  private Button detailsButton;
-	
+	private Text stackTraceText;
+	private Button detailsButton;
+
 	public DefaultErrorDialog()
 	{
 		super(
@@ -90,11 +90,11 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 				0);
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
-	
+
 	public void showError(String dialogTitle, String message, Throwable thrownException, Throwable triggerException)
 	{
 		this.title = dialogTitle == null ? JFaceResources.getString("Problem_Occurred") : dialogTitle; //$NON-NLS-1$
-		
+
 		ErrorItem errorItem = new ErrorItem(message, thrownException, triggerException);
 		errorList.add(errorItem);
 		if(errorTable != null) {
@@ -111,14 +111,14 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 		ErrorDialogFactory.addDialog(this);
 		return super.open();
 	}
-	
+
 	@Override
 	public boolean close()
 	{
 		ErrorDialogFactory.removeDialog(this);
 		return super.close();
 	}
-	
+
 	@Override
 	protected void configureShell(Shell shell)
 	{
@@ -126,28 +126,28 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 		if(this.title != null)
 			shell.setText(this.title);
 	}
-	
+
 	@Override
 	protected void buttonPressed(int buttonId)
 	{
 		switch(buttonId) {
-			case IDialogConstants.DETAILS_ID:
-				boolean show = ((GridData)stackTraceText.getLayoutData()).heightHint == 0;
-				System.out.println("showing stack trace: "+show);
-				showStackTrace(show);
-				break;
-			case SEND_ERROR_REPORT_ID:
-				ErrorItem error = errorTable.getSelectedItem();
-				ErrorReport errorReport = new ErrorReport(error.getThrownException(), error.getTriggerException());
-				ErrorReportWizardDialog dlg = new ErrorReportWizardDialog(errorReport);
-				okPressed();
-				dlg.open();
-				break;
-			default:
-				super.buttonPressed(buttonId);
+		case IDialogConstants.DETAILS_ID:
+			boolean show = ((GridData)stackTraceText.getLayoutData()).heightHint == 0;
+			System.out.println("showing stack trace: "+show);
+			showStackTrace(show);
+			break;
+		case SEND_ERROR_REPORT_ID:
+			ErrorItem error = errorTable.getSelectedItem();
+			ErrorReport errorReport = new ErrorReport(error.getThrownException(), error.getTriggerException());
+			ErrorReportWizardDialog dlg = new ErrorReportWizardDialog(errorReport);
+			okPressed();
+			dlg.open();
+			break;
+		default:
+			super.buttonPressed(buttonId);
 		}
 	}
-	
+
 	private void setErrorItem(ErrorItem errorItem)
 	{
 		String message = errorItem.getMessage();
@@ -160,9 +160,9 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 		if(stackTraceText != null)
 			stackTraceText.setText(ErrorReport.getExceptionStackTraceAsString(errorItem.getThrownException()));
 	}
-	
+
 	boolean errorTableVisible = false;
-	
+
 	private void showErrorTable(boolean newVisible)
 	{
 		if(errorTable != null) {
@@ -171,17 +171,17 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 				return;
 			Point windowSize = getShell().getSize();
 			Point oldSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT);
-			
+
 			errorTableGD.heightHint = newVisible ? ERROR_TABLE_HEIGHT_HINT : 0;
 			errorTable.setVisible(true);
 
 			Point newSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT);
 			getShell().setSize(new Point(windowSize.x, windowSize.y + (newSize.y - oldSize.y)));
-			
+
 		}
 		errorTableVisible = newVisible;
 	}
-	
+
 	private void showStackTrace(boolean visible) 
 	{
 		Point windowSize = getShell().getSize();
@@ -199,7 +199,7 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 		Point newSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		getShell().setSize(new Point(windowSize.x, windowSize.y + (newSize.y - oldSize.y)));
 	}
-	
+
 	@Override
 	protected Control createCustomArea(Composite parent)
 	{
@@ -232,7 +232,7 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 				});
 		return errorTable;
 	}
-	
+
 	protected Control createStackTraceText(Composite parent) 
 	{
 		stackTraceText = new Text(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI);
@@ -251,7 +251,7 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 		stackTraceText.setLayoutData(data);
 		return stackTraceText;
 	}
-	
+
 	@Override
 	protected void createButtonsForButtonBar(Composite parent)
 	{

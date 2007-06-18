@@ -38,7 +38,15 @@ public class ErrorItem
 	
 	public ErrorItem(String message, Throwable thrownException, Throwable triggerException)
 	{
-		this.message = message;
+		if (message == null) {
+			if (triggerException != null) {
+				this.message = triggerException.getLocalizedMessage();
+			} else if (thrownException != null) {
+				this.message = thrownException.getLocalizedMessage();
+			}
+		} else {
+			this.message = message;
+		}
 		this.thrownException = thrownException;
 		this.triggerException = triggerException;
 	}
