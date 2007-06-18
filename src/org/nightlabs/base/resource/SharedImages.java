@@ -322,10 +322,6 @@ public class SharedImages
 	public static final ImageDescriptor ADD_16x16 = 		
 		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Create");
 	
-	public static final ImageDescriptor ADD_24x24 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Create",
-				ImageDimension._24x24);
-
 	public static final ImageDescriptor DELETE_16x16 = 		
 		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Delete");	
 	

@@ -13,7 +13,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /**
  * Used to work around the problem with the {@link FormToolkit}, which recursively overrides the
- * menu! see {@link FormToolkit#adapt(Composite)}
+ * menu! see {@link FormToolkit#adapt(Composite)} <br> <br>
+ * This is now changed so that the menu of a child is only set if there was none before.
  * 
  * <p> This should only be a temporary solution. We will have to look at the Manifest Editor, 
  * for example, to see how to omit this workaround!</p>
@@ -38,5 +39,9 @@ public class NightlabsFormsToolkit extends FormToolkit {
 				((Control) e.widget).setFocus();
 			}
 		});
+		// only propagate the menu down the tree, if the child has none yet
+		// otherwise all menus set in the lower parts of the tree are overridden
+		if (composite.getMenu() == null)
+			composite.setMenu(composite.getParent().getMenu());
 	}
 }
