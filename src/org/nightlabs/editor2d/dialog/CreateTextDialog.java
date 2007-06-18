@@ -56,6 +56,7 @@ import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.base.dialog.CenteredDialog;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.request.TextCreateRequest;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.util.FontUtil;
 
 public class CreateTextDialog 
@@ -83,14 +84,14 @@ extends CenteredDialog
   
   protected Control createDialogArea(Composite parent) 
   {
-    getShell().setText(EditorPlugin.getResourceString("dialog.createText.title"));
+    getShell().setText(Messages.getString("dialog.CreateTextDialog.createText")); //$NON-NLS-1$
     
     dialogComp = new XComposite(parent, SWT.NONE);    
     dialogComp.setLayout(new GridLayout(2, false));    
     
     // name
     Label nameLabel = new Label(dialogComp, SWT.NONE);
-    nameLabel.setText(EditorPlugin.getResourceString("label.name"));    
+    nameLabel.setText(Messages.getString("dialog.CreateTextDialog.name"));     //$NON-NLS-1$
     text = new Text(dialogComp, SWT.BORDER);
     text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
     text.addModifyListener(new ModifyListener(){
@@ -101,23 +102,22 @@ extends CenteredDialog
     
     // font
     Label fontLabel = new Label(dialogComp, SWT.NONE);
-    fontLabel.setText("Font");
+    fontLabel.setText(Messages.getString("dialog.CreateTextDialog.font")); //$NON-NLS-1$
     Composite detailComp = new XComposite(dialogComp, SWT.NONE, 
     		LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 4);    
     
     createFontCombo(detailComp);
     createSizeCombo(detailComp);
     boldButton = new Button(detailComp, SWT.TOGGLE);
-    boldButton.setText("B");
+    boldButton.setText(Messages.getString("dialog.CreateTextDialog.bold")); //$NON-NLS-1$
     italicButton = new Button(detailComp, SWT.TOGGLE);
-    italicButton.setText("I");
+    italicButton.setText(Messages.getString("dialog.CreateTextDialog.italic")); //$NON-NLS-1$
     
     // preview
     Label previewLabel = new Label(dialogComp, SWT.NONE);
-    previewLabel.setText("Preview");
+    previewLabel.setText(Messages.getString("dialog.CreateTextDialog.preview")); //$NON-NLS-1$
     previewText = new Text(dialogComp, SWT.READ_ONLY | SWT.BORDER | SWT.WRAP);    
     previewText.setText(previewString);
-//    previewText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
     previewText.setLayoutData(new GridData(GridData.FILL_BOTH));
     
     fontCombo.addSelectionListener(previewListener);
@@ -126,14 +126,14 @@ extends CenteredDialog
     italicButton.addSelectionListener(previewListener);
     updatePreview();
     
-    logger.info("getDefaultFont() = "+getDefaultFont());       
+    logger.info("getDefaultFont() = "+getDefaultFont());        //$NON-NLS-1$
     return dialogArea;
   }  
     
   protected void checkEmptyString() 
   {
   	if (getButton(Dialog.OK) != null) {
-  		if (text.getText().trim().equals(""))
+  		if (text.getText().trim().equals("")) //$NON-NLS-1$
   			getButton(Dialog.OK).setEnabled(false);
   		else
   			getButton(Dialog.OK).setEnabled(true);  		
@@ -149,9 +149,7 @@ extends CenteredDialog
 		}
 	};
   
-//  private String previewString = "AaBbCcDdEeFeGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
-//	private String previewString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	private String previewString = "abcdefghijklmnopqrstuvwxyz";
+	private String previewString = Messages.getString("dialog.CreateTextDialog.previewString"); //$NON-NLS-1$
   protected void updatePreview() 
   {
   	checkEmptyString();
