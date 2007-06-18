@@ -31,118 +31,167 @@ package org.nightlabs.editor2d.dialog;
 
 import java.awt.Font;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.composite.XComposite.LayoutMode;
+import org.nightlabs.base.dialog.CenteredDialog;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.request.TextCreateRequest;
 import org.nightlabs.util.FontUtil;
 
 public class CreateTextDialog 
-extends Dialog 
-{
-  protected TextCreateRequest request;
-  
+extends CenteredDialog
+{  
+	private static final Logger logger = Logger.getLogger(CreateTextDialog.class);
+	
   public CreateTextDialog(Shell parentShell, TextCreateRequest request) 
   {
     super(parentShell);
     this.request = request;
+    setShellStyle(getShellStyle() | SWT.RESIZE);
   }
-   
-  protected String defaultFontName = new String("Arial");
-  protected int defaultSize = 24;
   
-  protected int style = SWT.NONE;
-  protected Combo fontCombo;
-  protected Text text;
-  protected Combo sizeCombo;
-  protected Button italicButton; 
-  protected Button boldButton;
+  private TextCreateRequest request;  
+  private int defaultSize = 18;
+  private Combo fontCombo;
+  private Text text;
+  private Combo sizeCombo;
+  private Button italicButton; 
+  private Button boldButton;
+  private String[] fonts;
+  private Composite dialogComp;
+  private Text previewText;
   
-  protected int fontStyle = Font.PLAIN;
-//  protected int[] sizeArray = new int[] {8,10,12,14,16,18,24,30,36};
-  protected String[] fonts;
-  
-  protected Composite dialogComp;
   protected Control createDialogArea(Composite parent) 
   {
     getShell().setText(EditorPlugin.getResourceString("dialog.createText.title"));
     
-    dialogComp = new Composite(parent, style);    
-    GridLayout layout = new GridLayout();
-    dialogComp.setLayout(layout);    
-
-    Composite nameComp = new Composite(dialogComp, style);
-    nameComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-    GridLayout nameLayout = new GridLayout();
-    nameLayout.numColumns = 2;
-    nameLayout.marginWidth = 0;
-    nameComp.setLayout(nameLayout);    
+    dialogComp = new XComposite(parent, SWT.NONE);    
+    dialogComp.setLayout(new GridLayout(2, false));    
     
-    Label nameLabel = new Label(nameComp, style);
-    nameLabel.setText(EditorPlugin.getResourceString("label.name"));
+    // name
+    Label nameLabel = new Label(dialogComp, SWT.NONE);
+    nameLabel.setText(EditorPlugin.getResourceString("label.name"));    
+    text = new Text(dialogComp, SWT.BORDER);
+    text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+    text.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent evt) {
+				updatePreview();
+			}
+		});
     
-    // TODO: Why is this text so short ????? 
-    text = new Text(nameComp, style | SWT.BORDER);
-//    GridData textData = new GridData(GridData.FILL_BOTH);
-    GridData textData = new GridData();
-    textData.horizontalAlignment = GridData.FILL;
-    textData.grabExcessHorizontalSpace = true;
-    text.setLayoutData(textData);
-    
-    Composite detailComp = new Composite(dialogComp, style);
-    GridLayout detailLayout = new GridLayout();
-    detailLayout.numColumns = 4;
-    detailLayout.marginWidth = 0;
-    detailComp.setLayout(detailLayout);    
+    // font
+    Label fontLabel = new Label(dialogComp, SWT.NONE);
+    fontLabel.setText("Font");
+    Composite detailComp = new XComposite(dialogComp, SWT.NONE, 
+    		LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 4);    
     
     createFontCombo(detailComp);
     createSizeCombo(detailComp);
-    
-    boldButton = new Button(detailComp, style | SWT.TOGGLE);
+    boldButton = new Button(detailComp, SWT.TOGGLE);
     boldButton.setText("B");
-    
-    italicButton = new Button(detailComp, style | SWT.TOGGLE);
+    italicButton = new Button(detailComp, SWT.TOGGLE);
     italicButton.setText("I");
     
+    // preview
+    Label previewLabel = new Label(dialogComp, SWT.NONE);
+    previewLabel.setText("Preview");
+    previewText = new Text(dialogComp, SWT.READ_ONLY | SWT.BORDER | SWT.WRAP);    
+    previewText.setText(previewString);
+//    previewText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+    previewText.setLayoutData(new GridData(GridData.FILL_BOTH));
+    
+    fontCombo.addSelectionListener(previewListener);
+    sizeCombo.addSelectionListener(previewListener);
+    boldButton.addSelectionListener(previewListener);
+    italicButton.addSelectionListener(previewListener);
+    updatePreview();
+    
+    logger.info("getDefaultFont() = "+getDefaultFont());       
     return dialogArea;
   }  
     
+  protected void checkEmptyString() 
+  {
+  	if (getButton(Dialog.OK) != null) {
+  		if (text.getText().trim().equals(""))
+  			getButton(Dialog.OK).setEnabled(false);
+  		else
+  			getButton(Dialog.OK).setEnabled(true);  		
+  	}
+  }
+  
+  private SelectionListener previewListener = new SelectionListener() {
+		public void widgetSelected(SelectionEvent e) {
+			updatePreview();
+		}
+		public void widgetDefaultSelected(SelectionEvent e) {
+			widgetSelected(e);
+		}
+	};
+  
+//  private String previewString = "AaBbCcDdEeFeGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
+//	private String previewString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private String previewString = "abcdefghijklmnopqrstuvwxyz";
+  protected void updatePreview() 
+  {
+  	checkEmptyString();
+  	previewText.setText(text.getText());
+		previewText.setFont(getSelectedFont());
+		previewText.redraw();
+		if (getDialogArea() != null)
+			((Composite)getDialogArea()).layout(true, true);
+  }
   
   protected void createFontCombo(Composite parent) 
   {
-    fontCombo = new Combo(parent, style | SWT.READ_ONLY);
-    GridData gridData = new GridData(GridData.FILL_BOTH);
-    gridData.grabExcessHorizontalSpace = true;
-    fontCombo.setLayoutData(gridData);    
+    fontCombo = new Combo(parent, SWT.READ_ONLY);
+    fontCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));    
     
     fonts = FontUtil.getSystemFonts();
     fontCombo.setItems(fonts);  
     
     for (int i=0; i<fonts.length; i++) {
       String f = fonts[i];
-      if (f.equals(defaultFontName)) {
+      if (f.equals(getDefaultFont().getName())) {
         fontCombo.select(i);
       }
     }    
   }
   
-  public String[] getFontSizes() {
+  protected String[] getFontSizes() {
     return FontUtil.getFontSizes();
+  }
+  
+  protected Font getDefaultFont() {
+//  	return FontUtil.getDefaultFont();
+  	FontData[] fontDatas = Display.getDefault().getSystemFont().getFontData();
+  	FontData fontData = fontDatas[0];
+  	return new Font(fontData.getName(), fontData.getStyle(), fontData.getHeight());
   }
   
   protected void createSizeCombo(Composite parent) 
   {
-    sizeCombo = new Combo(parent, style | SWT.READ_ONLY);
+    sizeCombo = new Combo(parent, SWT.NONE);
     String[] sizes = getFontSizes();
     sizeCombo.setItems(sizes);
     
@@ -151,37 +200,76 @@ extends Dialog
       if (f.equals(Integer.toString(defaultSize))) {
         sizeCombo.select(i);
       }
-    }    
+    }
+    
+    sizeCombo.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent evt) {
+				String text = sizeCombo.getText();
+				try {
+					Integer.parseInt(text);
+					getButton(Dialog.OK).setEnabled(true);
+				} catch (NumberFormatException e) {
+					getButton(Dialog.OK).setEnabled(false);
+				}
+			}
+		});
+  }
+    
+  public org.eclipse.swt.graphics.Font getSelectedFont() {
+    int size = Integer.parseInt(sizeCombo.getText());    
+    int fontIndex = fontCombo.getSelectionIndex();
+    String fontName = fontCombo.getItem(fontIndex);
+    int fontStyle = getSWTFontStyle();
+    return new org.eclipse.swt.graphics.Font(Display.getDefault(),
+    		fontName, size, fontStyle);
   }
   
-//  protected String[] createSizeArray() 
-//  {
-//    String[] stringSizes = new String[sizeArray.length];
-//    for (int i=0; i<sizeArray.length; i++) {
-//      stringSizes[i] = Integer.toString(sizeArray[i]);
-//    }
-//    return stringSizes;
-//  }
-  
-  protected void okPressed() 
+  private int getFontStyle() 
   {
+  	int fontStyle = Font.PLAIN;
+  	
     if (boldButton.getSelection())
       fontStyle = Font.BOLD;
     
     if (italicButton.getSelection())
       fontStyle = fontStyle | Font.ITALIC;
+
+    return fontStyle;
+  }
+  
+  private int getSWTFontStyle() {
+  	int fontStyle = SWT.NORMAL;
+  	
+    if (boldButton.getSelection())
+      fontStyle = fontStyle | SWT.BOLD;
     
-    int sizeIndex = sizeCombo.getSelectionIndex();
-    int size = Integer.parseInt(sizeCombo.getItem(sizeIndex));
-    
+    if (italicButton.getSelection())
+      fontStyle = fontStyle | SWT.ITALIC;
+
+    return fontStyle;  	
+  }
+  
+  protected void okPressed() 
+  {
+  	int fontStyle = getFontStyle();
+    int size = Integer.parseInt(sizeCombo.getText());    
     int fontIndex = fontCombo.getSelectionIndex();
     String fontName = fontCombo.getItem(fontIndex);
     
-    request.setText(text.getText());
+    String text = this.text.getText();
+    request.setText(text);
     request.setFontName(fontName);
     request.setFontSize(size);
     request.setFontStyle(fontStyle);
     
     super.okPressed();
-  }  
+  }
+
+	@Override
+	protected Control createContents(Composite parent) {
+		Control ctrl = super.createContents(parent);
+		getButton(Dialog.OK).setEnabled(false);
+		return ctrl;
+	}
+  
 }

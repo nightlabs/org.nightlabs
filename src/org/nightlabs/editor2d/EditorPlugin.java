@@ -73,7 +73,7 @@ extends AbstractUIPlugin
 		resourceBundle = Platform.getResourceBundle(getBundle());	
 		
 		// init System Fonts
-    FontUtil.initSystemFonts();
+    FontUtil.getSystemFonts();
     
     // TODO: Holongate Draw2D-PreferencePage does not store values 
     Map hints = new HashMap();
@@ -129,32 +129,4 @@ extends AbstractUIPlugin
 		return resourceBundle;
 	}	
 	
-//	/**
-//	 * Returns the string from the plugin's resource bundle,
-//	 * or 'key' if not found.
-//	 */
-//	public static String getResourceString(String key) {
-//		ResourceBundle bundle = EditorPlugin.getDefault().getResourceBundle();
-//		try {
-//			return (bundle != null) ? bundle.getString(key) : key;
-//		} catch (MissingResourceException e) {
-//			return key;
-//		}
-//	}
-//
-//	/**
-//	 * Returns the plugin's resource bundle,
-//	 */
-//	public ResourceBundle getResourceBundle() 
-//	{
-//	  if (resourceBundle == null) 
-//	  {
-//			try {
-//			  resourceBundle = ResourceBundle.getBundle("org.nightlabs.editor2d.plugin");
-//			} catch (MissingResourceException x) {
-//				resourceBundle = null;
-//			}	  	    
-//	  }
-//		return resourceBundle;
-//	}
 }
