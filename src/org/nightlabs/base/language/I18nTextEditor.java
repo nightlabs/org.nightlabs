@@ -125,7 +125,7 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 		super(parent, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER);
 
 		if (createUI)
-			createContext(parent, languageChooser, caption);
+			createContext(parent, _languageChooser, caption);
 	}
 
 //	protected void init() {
