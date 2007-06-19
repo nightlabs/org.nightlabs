@@ -46,6 +46,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.nightlabs.base.composite.Fadeable;
 import org.nightlabs.base.composite.FadeableComposite;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.form.NightlabsFormsToolkit;
 import org.nightlabs.base.progress.CompoundProgressMonitor;
 import org.nightlabs.base.progress.SaveProgressMonitorPart;
 
@@ -193,8 +194,8 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		ScrolledForm form = managedForm.getForm();
 		form.setExpandHorizontal(true);
 		form.setExpandVertical(true);
-		FormToolkit toolkit = managedForm.getToolkit();
-//		FormToolkit toolkit = new NightlabsFormsToolkit(managedForm.getForm().getDisplay());
+//		FormToolkit toolkit = managedForm.getToolkit();
+		FormToolkit toolkit = new NightlabsFormsToolkit(managedForm.getForm().getDisplay());
 		String formText = getPageFormTitle();		
 		form.setText(formText == null ? "" : formText); 
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
