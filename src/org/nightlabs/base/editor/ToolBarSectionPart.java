@@ -25,11 +25,16 @@
  ******************************************************************************/
 package org.nightlabs.base.editor;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.nightlabs.base.action.IUpdateActionOrContributionItem;
 
 /**
  * 
@@ -40,6 +45,8 @@ extends MessageSectionPart
 {
 	private ToolBar toolBar;
 	private ToolBarManager toolBarManager;
+	
+	private LinkedList<IAction> registeredActions = null; 
 
 	public ToolBarSectionPart(IFormPage page, Composite parent, int style, String title) {
 		super(page, parent, style, title);
@@ -59,9 +66,45 @@ extends MessageSectionPart
 	public ToolBarManager getToolBarManager() {
 		return toolBarManager;
 	}
+	
+	/**
+	 * Registers the given action and adds it to the toolbarManager.
+	 * <p>
+	 * {@link #updateToolBarManager()} will iterate all registered actions
+	 * and check whether they implement {@link IUpdateActionOrContributionItem} and
+	 * set their enablement state according to their {@link IUpdateActionOrContributionItem#calculateEnabled()} method.
+	 * </p>
+	 * @param action The action to register.
+	 */
+	public void registerAction(IAction action) {
+		registerAction(action, true);
+	}
+
+	/**
+	 * Registers the given action.
+	 * <p>
+	 * {@link #updateToolBarManager()} will iterate all registered actions
+	 * and check whether they implement {@link IUpdateActionOrContributionItem} and
+	 * set their enablement state according to their {@link IUpdateActionOrContributionItem#calculateEnabled()} method.
+	 * </p>
+	 * @param action The action to register.
+	 * @param addToToolbarManager Whether to add the action to the toolbarManager
+	 */
+	public synchronized void registerAction(IAction action, boolean addToToolbarManager) {
+		if (registeredActions == null)
+			registeredActions = new LinkedList<IAction>();
+		registeredActions.add(action);
+		if (addToToolbarManager)
+			getToolBarManager().add(action);
+	}
 
 	/**
 	 * This should be called after contributing to the ToolBarManager ({@link #getToolBarManager()})
+	 * and everytime you want the actions to be updated.
+	 * <p>
+	 * This iterates all {@link IAction}s registered by {@link #registerAction(IAction, boolean)} 
+	 * and sets their enablement state according to their {@link IUpdateActionOrContributionItem#calculateEnabled()} method.
+	 * </p>
 	 */
 	public void updateToolBarManager() 
 	{
@@ -74,7 +117,13 @@ extends MessageSectionPart
 //		}
 //		getSection().setBackgroundMode(SWT.INHERIT_FORCE);
 		getSection().setBackground(getSection().getTitleBarBackground());
-		
+		if (registeredActions != null) {
+			for (IAction action : new ArrayList<IAction> (registeredActions)) {
+				if (action instanceof IUpdateActionOrContributionItem) {
+					action.setEnabled(((IUpdateActionOrContributionItem) action).calculateEnabled());
+				}
+			}
+		}
 		toolBarManager.update(true);
 	}
 	

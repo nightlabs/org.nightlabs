@@ -26,6 +26,7 @@
 package org.nightlabs.base.action;
 
 import org.eclipse.jface.action.Action;
+import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.InheritanceToggleButton;
 import org.nightlabs.base.resource.SharedImages;
@@ -35,7 +36,7 @@ import org.nightlabs.base.resource.SharedImages;
  *
  */
 public abstract class InheritanceAction 
-extends Action 
+extends Action implements IUpdateActionOrContributionItem
 {
 	public static final String ID = InheritanceAction.class.getName();
 	
@@ -74,5 +75,24 @@ extends Action
 		else
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(NLBasePlugin.getDefault(), InheritanceToggleButton.class, "Unlink"));		
 	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>Returns <code>true</code>.</p>
+	 * @see org.nightlabs.base.action.IUpdateActionOrContributionItem#calculateEnabled()
+	 */
+	@Implement
+	public boolean calculateEnabled() {
+		return true;
+	}
 	
+	/**
+	 * {@inheritDoc}
+	 * <p>Returns <code>true</code>.</p>
+	 * @see org.nightlabs.base.action.IUpdateActionOrContributionItem#calculateVisible()
+	 */
+	@Implement
+	public boolean calculateVisible() {
+		return true;
+	}
 }
