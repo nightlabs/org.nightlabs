@@ -27,6 +27,7 @@
 package org.nightlabs.base.progress;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.ProgressIndicator;
 import org.eclipse.jface.wizard.ProgressMonitorPart;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -58,6 +59,14 @@ public class SaveProgressMonitorPart extends ProgressMonitorPart {
 		super(parent, layout, arg2);
 	}
 
+	private boolean checkGUIexists() {
+		ProgressIndicator indicator = SaveProgressMonitorPart.super.fProgressIndicator;
+		if (indicator == null || indicator.isDisposed())
+			return false;
+		
+		return true;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.ProgressMonitorPart#beginTask(java.lang.String, int)
@@ -65,6 +74,9 @@ public class SaveProgressMonitorPart extends ProgressMonitorPart {
 	public void beginTask(final String title, final int work) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				if (! checkGUIexists())
+					return;
+
 				SaveProgressMonitorPart.super.beginTask(title, work);
 			}
 		});
@@ -77,6 +89,9 @@ public class SaveProgressMonitorPart extends ProgressMonitorPart {
 	public void done() {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				if (! checkGUIexists())
+					return;
+
 				SaveProgressMonitorPart.super.done();
 			}
 		});
@@ -89,6 +104,9 @@ public class SaveProgressMonitorPart extends ProgressMonitorPart {
 	public void internalWorked(final double worked) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				if (! checkGUIexists())
+					return;
+					
 				SaveProgressMonitorPart.super.internalWorked(worked);
 			}
 		});
@@ -105,6 +123,11 @@ public class SaveProgressMonitorPart extends ProgressMonitorPart {
 		final BooleanHolder holder = new BooleanHolder();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				if (! checkGUIexists()) {
+					holder.bool = true;
+					return;
+				}
+
 				holder.bool = SaveProgressMonitorPart.super.isCanceled();
 			}
 		});
@@ -118,6 +141,9 @@ public class SaveProgressMonitorPart extends ProgressMonitorPart {
 	public void setCanceled(final boolean canceled) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				if (! checkGUIexists())
+					return;
+
 				SaveProgressMonitorPart.super.setCanceled(canceled);
 			}
 		});
@@ -130,6 +156,9 @@ public class SaveProgressMonitorPart extends ProgressMonitorPart {
 	public void setTaskName(final String taskName) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				if (! checkGUIexists())
+					return;
+				
 				SaveProgressMonitorPart.super.setTaskName(taskName);
 			}
 		});
@@ -142,6 +171,9 @@ public class SaveProgressMonitorPart extends ProgressMonitorPart {
 	public void subTask(final String name) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				if (! checkGUIexists())
+					return;
+				
 				SaveProgressMonitorPart.super.subTask(name);
 			}
 		});
@@ -154,10 +186,12 @@ public class SaveProgressMonitorPart extends ProgressMonitorPart {
 	public void worked(final int worked) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				if (! checkGUIexists())
+					return;
+
 				SaveProgressMonitorPart.super.worked(worked);
 			}
 		});
 	}
-	
 	
 }

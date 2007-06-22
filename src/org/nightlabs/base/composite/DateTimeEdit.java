@@ -102,7 +102,7 @@ public class DateTimeEdit extends XComposite
 	 */
 	public DateTimeEdit(Composite parent, long flags, Date date, String caption)
 	{
-		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		super(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER);
 		this.flags = flags;
 		this.getGridData().grabExcessHorizontalSpace = false;
 		this.getGridData().grabExcessVerticalSpace = false;
@@ -144,7 +144,7 @@ public class DateTimeEdit extends XComposite
 			});
 		}
 
-		text = new Text(this, SWT.BORDER);
+		text = new Text(this, getBorderStyle());
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.addModifyListener(textModifyListener);
 		text.addFocusListener(new FocusAdapter() {

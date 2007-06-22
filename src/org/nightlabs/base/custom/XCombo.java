@@ -59,6 +59,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Widget;
+import org.nightlabs.base.composite.XComposite;
 
 /**
  * A Custom Implementation of a ComboBox which is able not only to show Strings but also
@@ -73,7 +74,7 @@ import org.eclipse.swt.widgets.Widget;
  * @author Marco Schulze - Marco at NightLabs dot de
  */
 public class XCombo 
-extends Composite
+extends XComposite
 {
 	private Label imageLabel;
 	private Text text;
@@ -115,8 +116,9 @@ extends Composite
  * @see Widget#getStyle()
  */
 public XCombo (Composite parent, int style) {
-	super (parent, style = checkStyle (style));
-
+	super (parent, style = checkStyle (style, parent), LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.NONE);
+//	getGridLayout().horizontalSpacing = 2;
+	
 	imageLabel = new Label(this, SWT.NONE);
 	imageLabel.setBackground(getDefaultBackgroundColor());
 
@@ -201,9 +203,9 @@ private boolean isReadOnly() {
 	return (getStyle() & SWT.READ_ONLY) != 0;
 }
 
-static int checkStyle (int style) {
-	int mask = SWT.BORDER | SWT.READ_ONLY | SWT.FLAT | SWT.LEFT_TO_RIGHT | SWT.RIGHT_TO_LEFT;
-	return style & mask;
+static int checkStyle (int style, Composite parent) {
+	int mask = XComposite.getBorderStyle(parent) | SWT.READ_ONLY | SWT.FLAT | SWT.LEFT_TO_RIGHT | SWT.RIGHT_TO_LEFT;
+	return style | mask;
 }
 
 /**

@@ -77,7 +77,7 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 	public ComboComposite(Composite parent, int style, ILabelProvider labelProvider, String caption) {
 		super(parent, style, labelProvider, false, caption);
 //		this.comboStyle = SWT.READ_ONLY;
-		createGuiControl(this, SWT.BORDER, caption);
+		createGuiControl(this, style, caption);
 	}
 
 
@@ -110,7 +110,7 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 	protected Control createGuiControl(Composite parent, int style, String caption) {
 //		this.getGridData().grabExcessVerticalSpace = false;
 		this.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		style |= SWT.BORDER;
+		style |= getBorderStyle();
 		if ((style & SWT.SIMPLE) == 0 && (style & SWT.DROP_DOWN) == 0)
 			style |= SWT.DROP_DOWN;
 		if (caption != null) {

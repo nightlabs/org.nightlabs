@@ -92,7 +92,7 @@ extends XComposite
 	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, 
 			int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
-		this(types, labelProvider, parent, style, layoutMode, layoutDataMode, SWT.BORDER | SWT.READ_ONLY);
+		this(types, labelProvider, parent, style, layoutMode, layoutDataMode, XComposite.getBorderStyle(parent) | SWT.READ_ONLY);
 	}
 	
 	/**
@@ -112,7 +112,7 @@ extends XComposite
 		if (types == null)
 			throw new IllegalArgumentException("param types must not be null!");
 		
-		this.comboStyle = comboStyle;
+		this.comboStyle = style;
 		this.types = types;
 		if (labelProvider == null)
 			this.labelProvider = new LabelProvider();
@@ -121,13 +121,10 @@ extends XComposite
 		populateCombo();
 	}
 	
-	private int comboStyle = SWT.BORDER | SWT.READ_ONLY;
+	private int comboStyle = SWT.READ_ONLY;
 	private ILabelProvider labelProvider = null;
 	private List<T> types = null;
 	private XCombo imageCombo = null;	
-//	public XCombo getCombo() {
-//		return imageCombo;
-//	}
 	
 	protected void populateCombo() 
 	{
@@ -144,6 +141,25 @@ extends XComposite
 		if (selectionIndex != -1)
 			return types.get(selectionIndex);
 		return null;			
+	}
+	
+	public int getSelectionIndex()
+	{
+		return imageCombo.getSelectionIndex();
+	}
+	
+	public void setSelection(int index)
+	{
+		imageCombo.select(index);
+	}
+	
+	public void setSelection(T element)
+	{
+		int index = types.indexOf(element);
+		if (index == -1)
+			return;
+
+		imageCombo.select(index);
 	}
 	
 	public boolean selectElement(T element) 
@@ -223,6 +239,13 @@ extends XComposite
 		for (T type : types) {
 			imageCombo.add(labelProvider.getImage(type), labelProvider.getText(type));
 		}
+	}
+
+	/**
+	 * @return the backend XCombo widget.
+	 */
+	public XCombo getCombo() {
+		return imageCombo;
 	}
 	
 }

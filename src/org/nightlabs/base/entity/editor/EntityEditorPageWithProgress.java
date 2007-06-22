@@ -196,6 +196,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		form.setExpandVertical(true);
 //		FormToolkit toolkit = managedForm.getToolkit();
 		FormToolkit toolkit = new NightlabsFormsToolkit(managedForm.getForm().getDisplay());
+//		toolkit.setBorderStyle(SWT.BORDER);
 		String formText = getPageFormTitle();		
 		form.setText(formText == null ? "" : formText); 
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -328,6 +329,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		configureBody(body);
 		
 		wrapper = new FadeableComposite(body, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
+		wrapper.setToolkit(toolkit); // set this so that all child XComposites set this one as well and getBorderStyle() works correctly
 		stackLayout = new StackLayout();
 		stackLayout.marginHeight = 0;
 		stackLayout.marginWidth = 0;

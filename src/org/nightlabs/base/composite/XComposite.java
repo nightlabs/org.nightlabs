@@ -26,15 +26,16 @@
 
 package org.nightlabs.base.composite;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.nightlabs.base.custom.XCombo;
+import org.nightlabs.base.form.NightlabsFormsToolkit;
 
 public class XComposite extends Composite
 {
@@ -262,6 +263,9 @@ public class XComposite extends Composite
 
 		this.setForeground(parent.getForeground());
 		this.setBackground(parent.getBackground());
+//		TODO: 
+//		if (parent instanceof XComposite)
+//			toolkit = ((XComposite) parent).getToolkit(false);
 
 		setLayout(getLayout(layoutMode, null, cols));
 		setLayoutDataMode(layoutDataMode, this);
@@ -310,7 +314,7 @@ public class XComposite extends Composite
 			return toolkit;
 		
 		if (createIfNotSet)
-			toolkit = new FormToolkit(Display.getDefault());
+			toolkit = new NightlabsFormsToolkit(Display.getDefault());
 		
 		return toolkit;
 	}
@@ -353,16 +357,62 @@ public class XComposite extends Composite
 	}
 	
 	private void checkBorders(Control control, FormToolkit toolkit) {
-		if (control instanceof Text) {
+		if (control instanceof Spinner)	{
 			control.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-			toolkit.paintBordersFor(control.getParent());
+			
+		}	else if (control instanceof XCombo) {
+			control.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TREE_BORDER);
 		}
-		else if (control instanceof Table || control instanceof Tree) {
-			control.getParent().setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-//			System.err.println("Added paint listener for "+control.getParent());
-			toolkit.paintBordersFor(control.getParent());
-//			control.getParent().addPaintListener(test);
-			toolkit.adapt(control.getParent());			
-		}
+		
+		toolkit.paintBordersFor(control.getParent());
 	}
+	
+	/**
+	 * Returns the boarder flag according to the context this composite is used in;\
+	 * Forms => SWT.NONE, since the toolkit draws one if needed\
+	 * Other => SWT.Border <b>
+	 * 
+	 * <p>This method should be called if you want to create a border in any context but don't want to 
+	 * have a double border in the Form context.</p>
+	 * 
+	 * <p>The check of being in a form or not is done by checking the assigned Toolkit and if
+	 * necessary all the way up to the root of the composite tree.</p>
+	 * 
+	 * @return the boarder flag according to the context this composite is used in; Forms => SWT.NONE, 
+	 * since the toolkit draws one if needed; Other => SWT.Border
+	 */
+	public int getBorderStyle() {
+		return XComposite.getBorderStyle(this);
+	}
+	
+	/**
+	 * @see #getBorderStyle()
+	 * @param comp the composite starting from which we traverse the composite tree upwards. 
+	 * @return  the boarder flag according to the context this composite is used in; Forms => SWT.NONE, 
+	 * since the toolkit draws one if needed; Other => SWT.Border
+	 */
+	public static int getBorderStyle(Composite comp) {
+	// walk up the composite tree and check the toolkit 
+		Composite tmp = comp;
+		while( tmp != null ) {
+			if (tmp instanceof XComposite) {
+				XComposite xTmp = (XComposite) tmp;
+				if (xTmp.toolkit != null) {
+//					if (comp instanceof XComposite) { // TODO: Omit, otherwise layout 
+//						// set the toolkit of the startpoint if possible in order to shorten 
+//						// search paths from the levels below.
+//						((XComposite)comp).toolkit = xTmp.toolkit;
+//					}
+					if(xTmp.toolkit instanceof FormToolkit)
+						return SWT.NONE;
+				}
+			}
+			tmp = tmp.getParent();
+		} // walk up the composite tree
+
+		// if no Xcomposite in the tree above this one has a toolkit set 
+		// => assume we're in no FormPage context
+		return SWT.BORDER;
+	}
+	
 }

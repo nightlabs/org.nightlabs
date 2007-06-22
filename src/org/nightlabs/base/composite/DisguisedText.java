@@ -49,7 +49,7 @@ public class DisguisedText {
 	 * @param parent
 	 */
 	public static Text createText(Composite parent) {
-		Text text = new Text(parent,SWT.NONE);
+		Text text = new Text(parent, SWT.NONE);
 		text.setBackground(parent.getBackground());
 		return text;
 	}
@@ -66,14 +66,14 @@ public class DisguisedText {
 	public static LabeledDisguisedText createLabeledText(String title, Composite parent) {
 		Label label = new Label(parent, SWT.NONE);
 		label.setText(title);
-		label.setLayoutData(new GridData());
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Text text = createText(parent);
 		text.setText("");
 		text.setEditable(true);
-		GridData gd = new GridData();
-		gd.grabExcessHorizontalSpace = true;
-		gd.horizontalAlignment = GridData.FILL;
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+//		gd.grabExcessHorizontalSpace = true;
+//		gd.horizontalAlignment = GridData.FILL;
 		text.setLayoutData(gd);
 		LabeledDisguisedText result = new LabeledDisguisedText();
 		result.setLabelControl(label);

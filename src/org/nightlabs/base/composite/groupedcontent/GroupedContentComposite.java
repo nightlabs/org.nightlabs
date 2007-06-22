@@ -49,7 +49,7 @@ public class GroupedContentComposite extends XComposite {
 	private XComposite tableWrapper;
 	private GroupedContentSwitcherTable switcherTable;
 	
-	private Composite contentWrapper;
+	private XComposite contentWrapper;
 	private StackLayout contentStackLayout;
 	
 	private List<GroupedContentProvider> groupedContentProvider = new ArrayList<GroupedContentProvider>();
@@ -88,9 +88,9 @@ public class GroupedContentComposite extends XComposite {
 		switcherTable = new GroupedContentSwitcherTable(tableWrapper, SWT.NONE);
 		switcherTable.getTableViewer().addSelectionChangedListener(switcherListener);
 		
-		contentWrapper = new Composite(this, SWT.NONE);
+		contentWrapper = new XComposite(this, SWT.NONE);
 		contentWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
-		contentStackLayout = new StackLayout();		
+		contentStackLayout = new StackLayout();
 		contentWrapper.setLayout(contentStackLayout);
 	}
 	
@@ -99,7 +99,7 @@ public class GroupedContentComposite extends XComposite {
 		this.groupedContentProvider.add(groupedContentProvider);
 		switcherTable.setInput(this.groupedContentProvider);
 		preSelect();
-		layout(true, true);		
+//		layout(true, true);		
 	}
 	
 	public void addGroupedContentProvider(GroupedContentProvider groupedContentProvider, int index) {
@@ -112,7 +112,7 @@ public class GroupedContentComposite extends XComposite {
 	protected void selectContentProvider(GroupedContentProvider contentProvider) {
 		Composite providerComp = (Composite)providerComposites.get(contentProvider);
 		if (providerComp == null) {
-			providerComp = contentProvider.createGroupContent(contentWrapper);			
+			providerComp = contentProvider.createGroupContent(contentWrapper);
 			providerComposites.put(contentProvider, providerComp);
 		}
 		contentStackLayout.topControl = providerComp;
