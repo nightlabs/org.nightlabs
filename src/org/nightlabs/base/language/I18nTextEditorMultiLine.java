@@ -95,7 +95,7 @@ extends I18nTextEditor
 	@Override
 	protected Text createText(Composite parent) 
 	{
-		Text text = new Text(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		Text text = new Text(parent, getBorderStyle() | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);		
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		if (lineCount != DEFAULT_LINECOUNT && lineCount > 0) {
 			gridData.heightHint = lineCount * singleLineHeight;
