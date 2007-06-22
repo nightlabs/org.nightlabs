@@ -119,12 +119,11 @@ extends Thread
 			}
 			
 			platformResultCode = PlatformUI.createAndRunWorkbench(display, workbenchAdvisor);
-		}
-		catch(Throwable e) {
+		} catch(Throwable e) {
 			e.printStackTrace();
+			logger.error("run: " + e.getMessage(), e);
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			synchronized(AbstractApplication.getMutex()) {
 				AbstractApplication.getMutex().notifyAll();
 			}
