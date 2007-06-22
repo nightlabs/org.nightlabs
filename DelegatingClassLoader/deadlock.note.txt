@@ -1,0 +1,6 @@
+Note, that these deadlocks don't occur anymore with the new OSGI-integrated classloading
+with the client's org.nightlabs.jfire.base.j2ee project! The deadlocks where caused by
+the client-side "global class publish" feature - not by loading classes from the server.
+
+More infos:
+  https://www.jfire.org/modules/phpwiki/index.php/Buddy%20and%20remote%20classloading
