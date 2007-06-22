@@ -646,4 +646,51 @@ public class RCPUtil
 		File workspace = Platform.getLocation().toFile();
 		Utils.deleteDirectoryRecursively(workspace);		
 	}
+	
+	/**
+	 * Adds a new {@link org.eclipse.ui.internal.layout.IWindowTrim} 
+	 * to the {@link org.eclipse.ui.internal.layout.TrimLayout} of the given shell
+	 * and prepends it to the the trim with the given id (pependTo). 
+	 * The new trim  will be filled with the contents of the given contributionItem.
+	 * 
+	 * @param shell The shell to add the trim to.
+	 * @param contributionItem The contributionItem to fill the trim with.
+	 * @param prependTo The id of the trim the new trim should be prepended to.
+	 */
+	@SuppressWarnings("restriction")
+	public static void addContributionItemTrim(
+			Shell shell, 
+			IContributionItem contributionItem, 
+			String prependTo
+	) {
+		if (shell != null && (shell.getLayout() instanceof org.eclipse.ui.internal.layout.TrimLayout)) {
+			// This is how the WorkbenchWindow add the progress and heapstatus controls
+			// can't be that wrong :-)
+			org.eclipse.ui.internal.layout.TrimLayout layout = (org.eclipse.ui.internal.layout.TrimLayout) shell.getLayout();
+			Composite comp = new Composite(shell, SWT.NONE);
+			contributionItem.fill(comp);
+			org.eclipse.ui.internal.WindowTrimProxy trimProxy = new org.eclipse.ui.internal.WindowTrimProxy(
+					comp,
+					contributionItem.getId(), //$NON-NLS-1$
+					contributionItem.getClass().getSimpleName(), SWT.BOTTOM | SWT.TOP
+			) {
+
+				public void handleClose() {
+					getControl().dispose();
+				}
+
+				public boolean isCloseable() {
+					return true;
+				}
+			};
+			org.eclipse.ui.internal.layout.IWindowTrim prependTrim = layout.getTrim(prependTo);
+			trimProxy.setWidthHint(comp.computeSize(SWT.DEFAULT, SWT.DEFAULT).x);
+			trimProxy.setHeightHint(comp.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+			layout.addTrim(SWT.BOTTOM, trimProxy, prependTrim);
+
+			comp.setVisible(true);
+		}
+	}
+
+	
 }
