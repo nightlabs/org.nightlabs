@@ -40,8 +40,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.base.composite.XComposite.LayoutDataMode;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
 
 /**
  * This composite grays out if {@link #setFaded(boolean)} is called with value <tt>true</tt>.
