@@ -403,8 +403,10 @@ public class XComposite extends Composite
 //						// search paths from the levels below.
 //						((XComposite)comp).toolkit = xTmp.toolkit;
 //					}
-					if(xTmp.toolkit instanceof FormToolkit)
-						return SWT.NONE;
+					if(xTmp.toolkit instanceof FormToolkit) {
+						return xTmp.toolkit.getBorderStyle();
+//						return SWT.NONE;
+					}
 				}
 			}
 			tmp = tmp.getParent();
