@@ -35,6 +35,8 @@ import org.eclipse.swt.accessibility.AccessibleControlEvent;
 import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.swt.accessibility.AccessibleTextAdapter;
 import org.eclipse.swt.accessibility.AccessibleTextEvent;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -50,7 +52,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -116,7 +117,7 @@ extends XComposite
  * @see Widget#getStyle()
  */
 public XCombo (Composite parent, int style) {
-	super (parent, style = checkStyle (style, parent), LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.NONE);
+	super (parent, style = checkStyle (style, parent), LayoutMode.NONE, LayoutDataMode.NONE);
 //	getGridLayout().horizontalSpacing = 2;
 	
 	imageLabel = new Label(this, SWT.NONE);
@@ -179,8 +180,21 @@ public XCombo (Composite parent, int style) {
 	int [] arrowEvents = {SWT.Selection, SWT.FocusIn};
 	for (int i=0; i<arrowEvents.length; i++) arrow.addListener (arrowEvents [i], listener);
 	
+	addControlListener(new ControlAdapter() {
+	
+		@Override
+		public void controlResized(ControlEvent e) {
+			XCombo.this.controlResized(e);
+		}
+	
+	});
+	
 	createPopup(null, -1);
 	initAccessible();
+}
+
+protected void controlResized(ControlEvent e) {
+	internalLayout(false);
 }
 
 // Custom Method to determine default bg Color of a text to avoid grey bg if style == SWT.READ_ONLY
@@ -194,9 +208,8 @@ private Color getDefaultBackgroundColor() {
 // Custom Method to which avoid the selecting of the text if the style == SWT.READ_ONLY
 private void textSelectAll()  
 {
-//	if ( (getStyle() & SWT.READ_ONLY) == 0)
-	if (isReadOnly())
-		text.selectAll ();			
+	if (! isReadOnly())
+		text.selectAll ();
 }
 
 private boolean isReadOnly() {
@@ -225,11 +238,7 @@ static int checkStyle (int style, Composite parent) {
  * @see #add(Image, String, int)
  */
 public void add (Image image, String text) {
-	checkWidget();
-	if (text == null) SWT.error (SWT.ERROR_NULL_ARGUMENT);
-	TableItem item = new TableItem(table, getStyle());
-	item.setImage(image);
-	item.setText(text);
+	add(image, text, -1);
 }
 
 /**
@@ -259,6 +268,8 @@ public void add (Image image, String text) {
 public void add (Image image, String text, int index) {
 	checkWidget();
 	if (text == null) SWT.error (SWT.ERROR_NULL_ARGUMENT);
+	if (index < 0)
+		index = table.getItemCount();
 	TableItem item = new TableItem(table, getStyle(), index);
 	item.setImage(image);
 	item.setText(text);
@@ -410,7 +421,7 @@ public Point computeSize (int wHint, int hHint, boolean changed)
 
 	int textWidth = 0;
 	GC gc = new GC (text);
-	int spacer = gc.stringExtent (" ").x; //$NON-NLS-1$
+	int spacer = gc.stringExtent (" ").x;
 	for (int i = 0; i < items.length; i++) {
 		TableItem item = items[i];
 		item.getText();
@@ -496,7 +507,7 @@ void dropDown (boolean drop) {
 	if (!drop) {
 		popup.setVisible (false);
 		if (!isDisposed ()&& arrow.isFocusControl()) {
-			text.setFocus();
+			setFocus();
 		}
 		return;
 	}
@@ -516,7 +527,9 @@ void dropDown (boolean drop) {
 	itemCount = (itemCount == 0) ? visibleItemCount : Math.min(visibleItemCount, itemCount);
 	int itemHeight = table.getItemHeight () * itemCount;
 	Point listSize = table.computeSize (SWT.DEFAULT, itemHeight, false);
-	table.setBounds (1, 1, Math.max (size.x - 2, listSize.x), listSize.y);
+	// Since the Scrollbar widths are always added (thanks to Windoof compatibility) we need to prune 
+	// of the unnecessary space by ignoring the listSize.y and simply use the calculated height
+	table.setBounds (1, 1, Math.max (size.x - 2, listSize.x), itemHeight);
 	
 	int index = table.getSelectionIndex ();
 	if (index != -1) table.setTopIndex (index);
@@ -775,12 +788,12 @@ void handleFocus (int type) {
 //			if (getEditable ()) text.selectAll ();
 			if (getEditable ()) textSelectAll();			
 			hasFocus = true;
-			Shell shell = getShell ();
-			shell.removeListener (SWT.Deactivate, listener);
-			shell.addListener (SWT.Deactivate, listener);
-			Display display = getDisplay ();
-			display.removeFilter (SWT.FocusIn, filter);
-			display.addFilter (SWT.FocusIn, filter);
+//			Shell shell = getShell ();
+//			shell.removeListener (SWT.Deactivate, listener);
+//			shell.addListener (SWT.Deactivate, listener);
+//			Display display = getDisplay ();
+//			display.removeFilter (SWT.FocusIn, filter);
+//			display.addFilter (SWT.FocusIn, filter);
 			Event e = new Event ();
 			notifyListeners (SWT.FocusIn, e);
 			break;
@@ -790,10 +803,10 @@ void handleFocus (int type) {
 			Control focusControl = getDisplay ().getFocusControl ();
 			if (focusControl == arrow || focusControl == table || focusControl == text) return;
 			hasFocus = false;
-			Shell shell = getShell ();
-			shell.removeListener(SWT.Deactivate, listener);
-			Display display = getDisplay ();
-			display.removeFilter (SWT.FocusIn, filter);
+//			Shell shell = getShell ();
+//			shell.removeListener(SWT.Deactivate, listener);
+//			Display display = getDisplay ();
+//			display.removeFilter (SWT.FocusIn, filter);
 			Event e = new Event ();
 			notifyListeners (SWT.FocusOut, e);
 			break;
@@ -958,8 +971,8 @@ public boolean isFocusControl () {
 }
 
 void internalLayout (boolean changed) {
-	if (isDropped ()) dropDown (false);
-	Rectangle rect = getClientArea ();
+//	if (isDropped ()) dropDown (false); why was this here? (Marius)
+	Rectangle rect =  getClientArea ();
 	int width = rect.width;
 	int height = rect.height;
 	Point arrowSize = arrow.computeSize (SWT.DEFAULT, height, changed);
@@ -1094,7 +1107,10 @@ void popupEvent(Event event) {
 			dropDown (false);
 			break;
 		case SWT.Deactivate:
-			dropDown (false);
+			// This is already done by arrowEvent(event.type == SWT.Selection).
+			// if this is also done here, the popup is not getting invisible, since right after this event,
+			// the arrowEvent is triggered which makes the popup visible again.
+//			dropDown (false);
 			break;
 	}
 }
@@ -1207,7 +1223,8 @@ protected int getTableItemIndex(String text)
  */
 public void removeAll () {
 	checkWidget();
-	text.setText (""); //$NON-NLS-1$
+	imageLabel.setImage(null);
+	text.setText ("");
 	table.removeAll ();
 }
 
@@ -1275,7 +1292,7 @@ public void select (int index) {
 	if (index == -1) {
 		imageLabel.setImage(null);
 		table.deselectAll ();
-		text.setText (""); //$NON-NLS-1$
+		text.setText ("");
 		return;
 	}
 	if (0 <= index && index < table.getItemCount()) {
@@ -1325,13 +1342,16 @@ public void setEditable (boolean editable) {
 
 public void setEnabled (boolean enabled) {
 	super.setEnabled(enabled);
-	if (popup != null) popup.setVisible (false);
+//	if (popup != null) popup.setVisible (false);
 	if (text != null) text.setEnabled(enabled);
 	if (arrow != null) arrow.setEnabled(enabled);
 }
 public boolean setFocus () {
 	checkWidget();
-	return text.setFocus ();
+	if (getEditable())
+		return text.setFocus ();
+	
+	return false;
 }
 
 public void setFont (Font font) {
@@ -1357,8 +1377,8 @@ public void setForeground (Color color) {
  * <code>add</code>'ing the new item at that index.
  *
  * @param index the index for the item
- * @param string the new text for the item
  * @param image the image for the item
+ * @param string the new text for the item
  *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_INVALID_RANGE - if the index is not between 0 and the number of elements in the list minus 1 (inclusive)</li>
@@ -1369,12 +1389,10 @@ public void setForeground (Color color) {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
  */
-public void setItem (int index, String string, Image image) {
+public void setItem (int index, Image image, String text) {
 	checkWidget();
-//	list.setItem (index, string);
-	TableItem item = new TableItem(table, getStyle());
-	item.setText(index, string);
-	item.setImage(image);
+	remove(index);
+	add(image, text, index);
 }
 
 /**
@@ -1392,10 +1410,12 @@ public void setItem (int index, String string, Image image) {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
  */
-public void setLayout (Layout layout) {
-	checkWidget ();
-	return;
-}
+// Don't allow to set Layout, since own layout is done by internalLayout(boolean)
+//public void setLayout (Layout layout) {
+//	checkWidget ();
+//	return;
+//}
+//
 
 /**
  * Sets the selection in the receiver's text field to the
@@ -1458,6 +1478,7 @@ public void setText (String string) {
 	textSelectAll();	
 	table.setSelection (index);
 	table.showSelection ();
+	internalLayout(false);
 }
 
 /**
