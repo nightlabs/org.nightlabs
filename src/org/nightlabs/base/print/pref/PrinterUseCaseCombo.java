@@ -61,7 +61,8 @@ public class PrinterUseCaseCombo extends CComboComposite<PrinterUseCase> {
 					}
 				},
 				parent, 
-				style
+				style,
+				(String)null
 			);
 		
 	}

@@ -36,7 +36,8 @@ public class PrintServiceCombo extends CComboComposite<PrintService> {
 				new ArrayList<PrintService>(PrintUtil.lookupPrintServices()), 
 				new LabelProvider(),
 				parent, 
-				style | SWT.READ_ONLY
+				style | SWT.READ_ONLY,
+				(String) null
 			);
 	}	
 	

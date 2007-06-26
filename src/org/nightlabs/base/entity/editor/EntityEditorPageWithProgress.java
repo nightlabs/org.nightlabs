@@ -40,15 +40,14 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.Form;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.nightlabs.base.composite.Fadeable;
 import org.nightlabs.base.composite.FadeableComposite;
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.form.NightlabsFormsToolkit;
 import org.nightlabs.base.progress.CompoundProgressMonitor;
 import org.nightlabs.base.progress.SaveProgressMonitorPart;
+import org.nightlabs.base.toolkit.IToolkit;
 
 /**
  * <p>An editor page to be used when you need to load data (with the editors controller)
@@ -92,7 +91,6 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	 * Wrapper that holds the stack layout.
 	 */
 	private FadeableComposite wrapper;
-//	private Composite pageWrapper;
 	/**
 	 * Wrapper for the page's real content
 	 */
@@ -194,9 +192,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		ScrolledForm form = managedForm.getForm();
 		form.setExpandHorizontal(true);
 		form.setExpandVertical(true);
-//		FormToolkit toolkit = managedForm.getToolkit();
-		FormToolkit toolkit = new NightlabsFormsToolkit(managedForm.getForm().getDisplay());
-//		toolkit.setBorderStyle(SWT.BORDER);
+		IToolkit toolkit = (IToolkit) getEditor().getToolkit(); // CommitableFormEditor uses NightlabsFormToolkit
 		String formText = getPageFormTitle();		
 		form.setText(formText == null ? "" : formText); 
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -322,14 +318,14 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	 * @param managedForm The managed form
 	 * @param toolkit The tookit to use
 	 */
-	private void fillBody(IManagedForm managedForm, FormToolkit toolkit) 
+	private void fillBody(IManagedForm managedForm, IToolkit toolkit) 
 	{
 		Composite body = managedForm.getForm().getBody();
 		configureForm(managedForm.getForm());
 		configureBody(body);
 		
 		wrapper = new FadeableComposite(body, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
-		wrapper.setToolkit(toolkit); // set this so that all child XComposites set this one as well and getBorderStyle() works correctly
+		wrapper.setToolkit(toolkit);
 		stackLayout = new StackLayout();
 		stackLayout.marginHeight = 0;
 		stackLayout.marginWidth = 0;
@@ -346,8 +342,6 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		
 		addSections(pageWrapper.getBody());
 		configureInitialStack();
-		wrapper.setToolkit(toolkit);
-		wrapper.adaptToToolkit();
 	}
 
 	/**

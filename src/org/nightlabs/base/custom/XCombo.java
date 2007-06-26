@@ -131,7 +131,7 @@ public XCombo (Composite parent, int style) {
 	if (isReadOnly())	
 		text.setBackground(getDefaultBackgroundColor());
 
-	int arrowStyle = SWT.ARROW | SWT.DOWN;
+	int arrowStyle = SWT.DOWN | SWT.ARROW;
 	if ((style & SWT.FLAT) != 0) arrowStyle |= SWT.FLAT;
 	arrow = new Button (this, arrowStyle);
 
@@ -331,6 +331,10 @@ public void addSelectionListener(SelectionListener listener) {
 	addListener (SWT.Selection,typedListener);
 	addListener (SWT.DefaultSelection,typedListener);
 }
+
+// TODO: This is used to ship around an event dispatching order problem. see arrowEvent and popupEvent
+private long popupTime = 0;
+
 void arrowEvent (Event event) {
 	switch (event.type) {
 		case SWT.FocusIn: {
@@ -338,6 +342,12 @@ void arrowEvent (Event event) {
 			break;
 		}
 		case SWT.Selection: {
+			// TODO: This is a dirty hack to get rid of the unclosable popup.
+			long eventTime = event.time & 0xFFFFFFFFL;
+			if (Math.abs(eventTime - popupTime) < 100)
+				return;
+			
+			popupTime = eventTime;
 			dropDown (!isDropped ());
 			break;
 		}
@@ -1107,10 +1117,16 @@ void popupEvent(Event event) {
 			dropDown (false);
 			break;
 		case SWT.Deactivate:
-			// This is already done by arrowEvent(event.type == SWT.Selection).
-			// if this is also done here, the popup is not getting invisible, since right after this event,
-			// the arrowEvent is triggered which makes the popup visible again.
-//			dropDown (false);
+			// This deactivation causes a problem if one clicks on the button to close the popup.
+			// In this case, this event will close the popup, but since the SWT.Selection for the button 
+			// is triggered as well, it will be rebuilt!
+			// TODO: This is a dirty hack to get rid of the unclosable popup.
+			long eventTime = event.time & 0xFFFFFFFFL;
+			if (Math.abs(eventTime - popupTime) < 100)
+				return;
+
+			popupTime = eventTime;
+			dropDown (false);
 			break;
 	}
 }

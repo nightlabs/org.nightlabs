@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.Composite;import org.eclipse.swt.widgets.Label;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
+ * @deprecated use {@link CComboComposite} instead and set a text.
  */
 public class LabeledComboComposite extends XComposite {
 

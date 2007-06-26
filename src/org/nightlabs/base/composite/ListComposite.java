@@ -89,7 +89,7 @@ public class ListComposite<T> extends AbstractListComposite<T>
 	@Override
 	protected Control createGuiControl(Composite parent, int style, String caption)
 	{
-		style |= SWT.BORDER;
+		style |= getBorderStyle();
 		if (caption != null) {
 			XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA, 2);
 			label = new Label(comp, SWT.NONE);

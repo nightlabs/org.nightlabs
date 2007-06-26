@@ -60,7 +60,8 @@ public class ConfiguratorCombo extends CComboComposite<ConfiguratorFactoryEntry>
 				new ArrayList<ConfiguratorFactoryEntry>(PrinterConfigurationRegistry.sharedInstance().getPrinterConfiguratorEntries()), 
 				new LabelProvider(),
 				parent, 
-				style
+				style,
+				null // caption
 			);
 	}
 

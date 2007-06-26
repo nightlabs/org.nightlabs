@@ -60,11 +60,8 @@ public class LabeledText extends XComposite {
 		super(parent, wrapperStyle,
 				LayoutMode.TIGHT_WRAPPER, 
 				setLayoutData ? LayoutDataMode.GRID_DATA : LayoutDataMode.NONE);
-//		this.setLayout(new GridLayout());
 		getGridLayout().verticalSpacing = 5;
 		this.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		this.getGridLayout().marginWidth = 1; // FIXME: rewrite FormLayout.borderPainter to paint into the inside
-//		this.getGridLayout().marginHeight = 1;
 		
 		if (caption != null) {
 			labelCaption = new Label(this, labelStyle);

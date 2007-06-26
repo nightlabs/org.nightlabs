@@ -71,7 +71,7 @@ extends XCellEditor
 	
 	@Override
 	protected Control createControl(Composite parent) {
-		comboComposite = new CComboComposite<T>(types, labelProvider, parent, SWT.NONE, comboStyle);
+		comboComposite = new CComboComposite<T>(types, labelProvider, parent, SWT.NONE,(String)null, comboStyle);
 		return comboComposite;
 	}
 

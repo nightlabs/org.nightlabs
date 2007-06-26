@@ -32,10 +32,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.nightlabs.base.custom.XCombo;
 import org.nightlabs.base.form.NightlabsFormsToolkit;
+import org.nightlabs.base.toolkit.IToolkit;
 
 public class XComposite extends Composite
 {
@@ -161,41 +159,6 @@ public class XComposite extends Composite
 	{
 		this(parent, style, LayoutMode.ORDINARY_WRAPPER);
 	}
-	
-//	/**
-//	 * Calls {@link #XComposite(Composite, int, int)} with
-//	 * <code>layoutMode = </code>{@link #LAYOUT_MODE_ORDINARY_WRAPPER}.
-//	 */
-//	public XComposite(Composite parent, int style)
-//	{
-//		this(parent, style, LAYOUT_MODE_ORDINARY_WRAPPER);
-//	}
-//
-//	/**
-//	 * Calls {@link #XComposite(Composite, int, int, int)} with
-//	 * <code>layoutDataMode = </code>{@link #LAYOUT_DATA_MODE_GRID_DATA}.
-//	 */
-//	public XComposite(Composite parent, int style, int layoutMode)
-//	{
-//		this(parent, style, layoutMode, LAYOUT_DATA_MODE_GRID_DATA);
-//	}
-//
-//	/**
-//	 * @param parent The Composite into which this newly created one will be embedded as child.
-//	 * @param style A combination of the SWT style flags.
-//	 * @param layoutMode One of the <code>LAYOUT_MODE_*</code> constants.
-//	 * @param layoutDataMode One of the <code>LAYOUT_DATA_MODE_*</code> constants.
-//	 *
-//	 * @see #LAYOUT_MODE_ORDINARY_WRAPPER
-//	 * @see #LAYOUT_MODE_TIGHT_WRAPPER
-//	 *
-//	 * @see #LAYOUT_DATA_MODE_NONE
-//	 * @see #LAYOUT_DATA_MODE_GRID_DATA
-//	 */
-//	public XComposite(Composite parent, int style, int layoutMode, int layoutDataMode)
-//	{
-//		this(parent, style, int2LayoutMode(layoutMode), int2LayoutDataMode(layoutDataMode));	
-//	}
 
 	/**
 	 * Calls {@link #XComposite(Composite, int, LayoutMode, LayoutDataMode)}
@@ -263,9 +226,8 @@ public class XComposite extends Composite
 
 		this.setForeground(parent.getForeground());
 		this.setBackground(parent.getBackground());
-//		TODO: 
-//		if (parent instanceof XComposite)
-//			toolkit = ((XComposite) parent).getToolkit(false);
+//	 force all XComposites to have the same toolkit as the highest one
+		toolkit = XComposite.retrieveToolkit(parent);
 
 		setLayout(getLayout(layoutMode, null, cols));
 		setLayoutDataMode(layoutDataMode, this);
@@ -307,8 +269,13 @@ public class XComposite extends Composite
 		return (GridData) getLayoutData();
 	}
 	
-	private FormToolkit toolkit;
-	public FormToolkit getToolkit(boolean createIfNotSet) 
+	protected IToolkit toolkit;
+	
+	public IToolkit getToolkit() {
+		return getToolkit(false);
+	}
+	
+	public IToolkit getToolkit(boolean createIfNotSet) 
 	{
 		if (toolkit != null)
 			return toolkit;
@@ -322,54 +289,54 @@ public class XComposite extends Composite
 	/**
 	 * Assigns this composite a toolkit.
 	 */
-	public void setToolkit(FormToolkit toolkit) {
+	public void setToolkit(IToolkit toolkit) {
 		this.toolkit = toolkit;
 	}
 	
 	@Override
-	public void layout(boolean arg0, boolean arg1) {
-		if (toolkit != null) {
+	public void layout(boolean ignoreCachedInformation, boolean recurseDown) {
+		if (toolkit != null) { 
 			adaptToToolkit();
 		}
-		super.layout(arg0, arg1);
+		super.layout(ignoreCachedInformation, recurseDown);
 		super.redraw();
 	}
 	
 	public void adaptToToolkit() {
 		if (toolkit != null)
-			adaptComposite(this, toolkit);
+			adaptComposite(this, toolkit, true);
 	}
 	
-	private void adaptComposite(Composite comp, FormToolkit toolkit) {
+	private void adaptComposite(Composite comp, IToolkit toolkit, boolean checkChildrenForBorders) {
 		toolkit.adapt(comp);
-		if (comp instanceof XComposite) {
-			((XComposite)comp).setToolkit(toolkit);
-		}
-		Control[] children = comp.getChildren();
-		for (int i = 0; i < children.length; i++) {
-			checkBorders(children[i], toolkit);
-			if (children[i] instanceof Composite) {
-				adaptComposite((Composite)children[i], toolkit);
+		
+		for (Control child : comp.getChildren()) {
+			boolean paintBorder = false;
+			if (checkChildrenForBorders)
+			 paintBorder = toolkit.checkForBorders(child);
+
+			// stop at XComposite children, since they 
+			// will adapt everything beneath themselves through the call to child.layout(bool, bool)
+			// #layout(boolean, boolean) isn't called for every XComposite, in fact in nearly none... damn
+			// TODO: But since it is called few times the adaption is done too often and too many border painters
+			// 			 are added. This needs some performance improvements!
+//			if (child instanceof XComposite) {
+//				return;
+//			}
+			
+			if (child instanceof Composite) {
+//			 if a painter has been added and child is an own widget -> adapt elements beneath child but 
+//				don't draw additional borders beneath child
+				adaptComposite((Composite)child, toolkit, !paintBorder);
 			}
 			else
-				toolkit.adapt(children[i], false, false);
+				toolkit.adapt(child, false, false);
 		}
-	}
-	
-	private void checkBorders(Control control, FormToolkit toolkit) {
-		if (control instanceof Spinner)	{
-			control.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-			
-		}	else if (control instanceof XCombo) {
-			control.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TREE_BORDER);
-		}
-		
-		toolkit.paintBordersFor(control.getParent());
 	}
 	
 	/**
-	 * Returns the boarder flag according to the context this composite is used in;\
-	 * Forms => SWT.NONE, since the toolkit draws one if needed\
+	 * Returns the boarder flag according to the context this composite is used in;
+	 * Forms => SWT.NONE, since the toolkit draws one if needed
 	 * Other => SWT.Border <b>
 	 * 
 	 * <p>This method should be called if you want to create a border in any context but don't want to 
@@ -392,29 +359,26 @@ public class XComposite extends Composite
 	 * since the toolkit draws one if needed; Other => SWT.Border
 	 */
 	public static int getBorderStyle(Composite comp) {
-	// walk up the composite tree and check the toolkit 
-		Composite tmp = comp;
-		while( tmp != null ) {
-			if (tmp instanceof XComposite) {
-				XComposite xTmp = (XComposite) tmp;
-				if (xTmp.toolkit != null) {
-//					if (comp instanceof XComposite) { // TODO: Omit, otherwise layout 
-//						// set the toolkit of the startpoint if possible in order to shorten 
-//						// search paths from the levels below.
-//						((XComposite)comp).toolkit = xTmp.toolkit;
-//					}
-					if(xTmp.toolkit instanceof FormToolkit) {
-						return xTmp.toolkit.getBorderStyle();
-//						return SWT.NONE;
-					}
-				}
-			}
-			tmp = tmp.getParent();
-		} // walk up the composite tree
-
+		// walk up the composite tree and check the toolkit 
+		IToolkit toolkit = retrieveToolkit(comp);
+		if (toolkit != null)
+			return toolkit.getBorderStyle();
+			
 		// if no Xcomposite in the tree above this one has a toolkit set 
 		// => assume we're in no FormPage context
 		return SWT.BORDER;
+	}
+	
+	private static IToolkit retrieveToolkit(Composite comp) {
+		Composite tmp = comp;
+		while( tmp != null ) {
+			if (tmp instanceof XComposite) {
+					return ((XComposite) tmp).toolkit;
+			}
+			tmp = tmp.getParent();
+		} // walk up the composite tree
+		
+		return null;
 	}
 	
 }

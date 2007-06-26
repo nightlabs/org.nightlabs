@@ -19,8 +19,7 @@ Bundle-ClassPath: org.nightlabs.base.jar,
 Bundle-Activator: org.nightlabs.base.NLBasePlugin
 Bundle-Vendor: NightLabs.com
 Bundle-Localization: plugin
-Export-Package: .,
- com.sun.activation.registries,
+Export-Package: com.sun.activation.registries,
  com.sun.activation.viewers,
  com.sun.mail.handlers,
  com.sun.mail.smtp,
@@ -160,6 +159,7 @@ Export-Package: .,
  org.nightlabs.base.table,
  org.nightlabs.base.timepattern,
  org.nightlabs.base.timepattern.builder,
+ org.nightlabs.base.toolkit,
  org.nightlabs.base.tree,
  org.nightlabs.base.util,
  org.nightlabs.base.wizard,

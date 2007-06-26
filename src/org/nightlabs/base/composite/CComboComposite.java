@@ -34,6 +34,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableItem;
 import org.nightlabs.base.custom.XCombo;
 
@@ -50,9 +51,9 @@ extends XComposite
 	 * @param parent the parent Composite
 	 * @param style the SWT style flag
 	 */
-	public CComboComposite(List<T> types, Composite parent, int style)
+	public CComboComposite(List<T> types, Composite parent, int style, String caption)
 	{
-		this(types, new LabelProvider(), parent, style);
+		this(types, new LabelProvider(), parent, style, caption);
 	}
 
 	/**
@@ -62,9 +63,9 @@ extends XComposite
 	 * @param parent the parent Composite
 	 * @param style the SWT style flag
 	 */
-	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, int style)
+	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, int style, String caption)
 	{
-		this(types, labelProvider, parent, style, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
+		this(types, labelProvider, parent, style, caption, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 	}
 
 	/**
@@ -75,9 +76,9 @@ extends XComposite
 	 * @param style the SWT style flag
 	 * @param comboStyle the SWT style flag of the combo 
 	 */
-	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, int style, int comboStyle)
+	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, int style, String caption, int comboStyle)
 	{
-		this(types, labelProvider, parent, style, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, comboStyle);
+		this(types, labelProvider, parent, style, caption, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, comboStyle);
 	}
 	
 	/**
@@ -90,9 +91,9 @@ extends XComposite
 	 * @param layoutDataMode the layoutDataMode to set
 	 */
 	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, 
-			int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+			int style, String caption, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
-		this(types, labelProvider, parent, style, layoutMode, layoutDataMode, XComposite.getBorderStyle(parent) | SWT.READ_ONLY);
+		this(types, labelProvider, parent, style, caption, layoutMode, layoutDataMode, XComposite.getBorderStyle(parent) | SWT.READ_ONLY);
 	}
 	
 	/**
@@ -106,14 +107,25 @@ extends XComposite
 	 * @param comboStyle the SWT style flag for the combo
 	 */
 	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, 
-			int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode, int comboStyle)
+			int style, String text, LayoutMode layoutMode, LayoutDataMode layoutDataMode, int comboStyle)
 	{
 		super(parent, style, layoutMode, layoutDataMode);
 		if (types == null)
 			throw new IllegalArgumentException("param types must not be null!");
+
+		wrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		wrapper.getGridLayout().verticalSpacing = 5;
 		
-		this.comboStyle = style;
 		this.types = types;
+		
+		if ( text != null && ! "".equals(text) ) {
+			label = new Label(wrapper, SWT.NONE);
+			setCaption(text);
+		}
+		
+		imageCombo = new XCombo(wrapper, comboStyle);
+		imageCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		if (labelProvider == null)
 			this.labelProvider = new LabelProvider();
 		else
@@ -121,15 +133,28 @@ extends XComposite
 		populateCombo();
 	}
 	
-	private int comboStyle = SWT.READ_ONLY;
 	private ILabelProvider labelProvider = null;
 	private List<T> types = null;
+	private XComposite wrapper = null;
+	private Label label = null;
 	private XCombo imageCombo = null;	
+	
+	public void setCaption(String text) {
+		if (label == null)
+			return;
+		
+		if (text == null)
+			text = "";
+		
+		label.setText(text);
+	}
+	
+	public String getTitle() {
+		return label == null ? null : label.getText(); 
+	}
 	
 	protected void populateCombo() 
 	{
-		imageCombo = new XCombo(this, comboStyle);
-		imageCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		for (T type : types) {
 			imageCombo.add(labelProvider.getImage(type), labelProvider.getText(type));
 		}
@@ -232,6 +257,13 @@ extends XComposite
 	public void select(int index) {
 		imageCombo.select(index);
 	}
+	
+	/**
+	 * Convienience method for {@link #setItems(List)}.
+	 */
+	public void setInput(List<T> types) {
+		setItems(types);
+	}
 			
 	public void setItems(List<T> types) {
 		imageCombo.removeAll();
@@ -244,8 +276,8 @@ extends XComposite
 	/**
 	 * @return the backend XCombo widget.
 	 */
-	public XCombo getCombo() {
-		return imageCombo;
-	}
+//	public XCombo getCombo() {
+//		return imageCombo;
+//	}
 	
 }

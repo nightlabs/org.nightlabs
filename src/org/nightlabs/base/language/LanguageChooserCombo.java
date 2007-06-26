@@ -76,7 +76,7 @@ public class LanguageChooserCombo
 		((GridData)getLayoutData()).grabExcessVerticalSpace = false;
 //		((GridData)getLayoutData()).grabExcessHorizontalSpace = grabExcessHorizontalSpace;
 		((GridData)getLayoutData()).grabExcessHorizontalSpace = false;
-		combo = new XCombo(this, SWT.BORDER | SWT.READ_ONLY);
+		combo = new XCombo(this, getBorderStyle() | SWT.READ_ONLY);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(
 				new SelectionAdapter() {

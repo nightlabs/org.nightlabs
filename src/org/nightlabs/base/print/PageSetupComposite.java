@@ -337,7 +337,7 @@ extends XComposite
 	private CComboComposite<IUnit> unitCombo = null;
 	private CComboComposite<IUnit> initUnitCombo(Composite parent) {
 		List<IUnit> units = new ArrayList<IUnit>(UnitRegistryEP.sharedInstance().getUnitRegistry().getGlobalUnits());
-		return new CComboComposite<IUnit>(units, new UnitLabelProvider(), parent, SWT.NONE, SWT.BORDER | SWT.READ_ONLY);
+		return new CComboComposite<IUnit>(units, new UnitLabelProvider(), parent, SWT.NONE, null, getBorderStyle() | SWT.READ_ONLY);
 	}
 		
 	private SelectionListener unitListener = new SelectionListener()
@@ -398,7 +398,7 @@ extends XComposite
 	{
 		List<IPredefinedPage> pages = new ArrayList<IPredefinedPage>(PredefinedPageEP.sharedInstance().getPageRegistry().getPages());
 		return new CComboComposite<IPredefinedPage>(pages, predefinedPageLabelProvider, 
-				parent, SWT.READ_ONLY);
+				parent, SWT.READ_ONLY, null);
 	}
 		
 	private PageFormat getPageFormat(IPredefinedPage page) 

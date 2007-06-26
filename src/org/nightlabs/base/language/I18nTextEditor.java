@@ -122,14 +122,9 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 
 	public I18nTextEditor(Composite parent, LanguageChooser _languageChooser, String caption, boolean createUI)
 	{
-//		super(parent, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER); // changed from Marius' version to mine ;-) Marco.
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		getGridData().grabExcessVerticalSpace = false;
 		getGridData().verticalAlignment = SWT.BEGINNING;
-
-//	 TODO: this is a quickfix for the Formtoolkit Boarderpainter, which paints to the 
-// 	outside of the elements -> there needs to be space in the enclosing composite for the borders
-		getGridLayout().marginHeight = 3;
 
 		if (createUI)
 			createContext(parent, _languageChooser, caption);
@@ -210,7 +205,7 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 	}
 	
 	protected Text createText(Composite parent) {
-		text = new Text(parent, SWT.BORDER); 
+		text = new Text(parent, getBorderStyle()); 
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return text;
 	}

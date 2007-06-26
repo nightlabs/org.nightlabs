@@ -26,12 +26,15 @@ package org.nightlabs.base.editor;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.nightlabs.base.form.NightlabsFormsToolkit;
 
 /**
  * An abstract form editor that allows commiting
@@ -90,4 +93,10 @@ public abstract class CommitableFormEditor extends FormEditor
 		}
 		return formPages.toArray(new IFormPage[formPages.size()]);
 	}
+	
+	@Override
+	protected FormToolkit createToolkit(Display display) {
+		return new NightlabsFormsToolkit(display);
+	}
+	
 }
