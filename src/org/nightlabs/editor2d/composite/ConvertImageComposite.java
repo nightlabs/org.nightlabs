@@ -25,7 +25,6 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.composite;
 
-import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
@@ -39,9 +38,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.media.jai.KernelJAI;
-import javax.media.jai.PlanarImage;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -149,7 +145,7 @@ extends XComposite
 		optionsComp.setLayout(new GridLayout(2, false));
 		
 		Label colorModeLabel = toolkit.createLabel(optionsComp, EditorPlugin.getResourceString("convertImage.colorModel.label"));		
-		colorModelCombo = new CComboComposite<ColorModel>(colorModels, colorModelLabelProvider, optionsComp, SWT.NONE);
+		colorModelCombo = new CComboComposite<ColorModel>(colorModels, colorModelLabelProvider, optionsComp, SWT.NONE, null);
 		colorModelCombo.setLayoutData(new GridData(
 				GridData.HORIZONTAL_ALIGN_CENTER, GridData.VERTICAL_ALIGN_BEGINNING, true, false));
 		colorModelCombo.addSelectionListener(colorModelListener);
