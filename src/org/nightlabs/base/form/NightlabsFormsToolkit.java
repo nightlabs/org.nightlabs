@@ -62,14 +62,16 @@ public class NightlabsFormsToolkit extends AbstractToolkit
 	protected void paintTableBorder(Control control, GC gc, Color color) {
 		Rectangle b = control.getBounds();
 		gc.setForeground(color);
-		gc.drawRectangle(b.x -1, b.y -1, b.width+1, b.height+1);
+		gc.drawRectangle(b.x -2, b.y -2, b.width+3, b.height+3);
+//		gc.drawRectangle(b.x -1, b.y -1, b.width+1, b.height+1);
 	}
 
 	@Override
 	protected void paintTextBorder(Control child, GC gc, Color color) {
 		Rectangle b = child.getBounds();
 		gc.setForeground(color);
-		gc.drawRectangle(b.x -1, b.y -1, b.width+1, b.height+1);
+//		gc.drawRectangle(b.x -1, b.y -1, b.width+1, b.height+1);
+		gc.drawRectangle(b.x -2, b.y -2, b.width+4, b.height+4);
 //		gc.drawRectangle(b.x - 1, b.y - 2, b.width + 1,	b.height + 3);
 	}
 	
@@ -78,7 +80,7 @@ public class NightlabsFormsToolkit extends AbstractToolkit
 		return false;
 	}
 
-	protected static final int minBorderSpace = 2;
+	protected static final int minBorderSpace = 3;
 	
 	/**
 	 * This method ensures that there is a big enough inset to draw the border around.

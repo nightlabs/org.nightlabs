@@ -334,6 +334,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		progressWrapper = new XComposite(wrapper, SWT.NONE);
 		configureProgressWrapper(progressWrapper);		
 		progressMonitorPart = createProgressMonitorPart(progressWrapper);
+		progressWrapper.adaptToToolkit();
 		
 		pageWrapper = toolkit.createForm(wrapper);
 		configurePageWrapper(pageWrapper.getBody());
