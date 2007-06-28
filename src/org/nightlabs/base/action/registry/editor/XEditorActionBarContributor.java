@@ -10,6 +10,8 @@ import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -43,6 +45,14 @@ extends EditorActionBarContributor
 //			}
 			logger.debug("selection changed");
 		}	
+	};
+	
+	private ISelectionChangedListener selectionChangedListener = new ISelectionChangedListener(){
+		public void selectionChanged(SelectionChangedEvent event) {
+			updateSelectionSections(event.getSelection());
+			updateActions();	
+			logger.debug("selection changed");
+		}
 	};
 	
 	public AbstractActionRegistry getActionRegistry() 
@@ -88,7 +98,9 @@ extends EditorActionBarContributor
 			logger.debug("setActiveEditor called");
 		
 		if (activeEditor != null)
-			activeEditor.getSite().getPage().removeSelectionListener(selectionListener);
+//			activeEditor.getSite().getPage().removeSelectionListener(selectionListener);
+			if (activeEditor.getSite().getSelectionProvider() != null)
+				activeEditor.getSite().getSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
 		
 		if (targetEditor == null) {
 			activeEditor = null;
@@ -107,8 +119,13 @@ extends EditorActionBarContributor
 				}
 			}
 		}
-		activeEditor.getSite().getPage().addSelectionListener(selectionListener);
-		updateSelectionSections(activeEditor.getSite().getPage().getSelection());
+//		activeEditor.getSite().getPage().addSelectionListener(selectionListener);
+//		updateSelectionSections(activeEditor.getSite().getPage().getSelection());
+		if (activeEditor.getSite().getSelectionProvider() != null) {
+			activeEditor.getSite().getSelectionProvider().addSelectionChangedListener(selectionChangedListener);
+			updateSelectionSections(activeEditor.getSite().getSelectionProvider().getSelection());			
+		}
+		
 		updateActions();
 		logger.debug("selectionListener added to activeEditor "+getActiveEditor().getEditorSite().getId());
 		
