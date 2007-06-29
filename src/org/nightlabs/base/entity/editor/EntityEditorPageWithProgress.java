@@ -25,6 +25,9 @@
  ******************************************************************************/
 package org.nightlabs.base.entity.editor;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -134,12 +137,25 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 			IEntityEditorPageController controller = getPageController();
 			if (controller != null) {
 				CompoundProgressMonitor compoundMonitor = new CompoundProgressMonitor(progressMonitorPart, monitor);
-				if (controller instanceof EntityEditorPageController)
+				if (controller instanceof EntityEditorPageController) {
 					((EntityEditorPageController)controller).load(compoundMonitor);
+					((EntityEditorPageController)controller).addPropertyChangeListener(new PropertyChangeListener() {
+						public void propertyChange(PropertyChangeEvent arg0) {
+							// TODO: We should not cause reload on every propery change ?!!?
+							asyncCallback();
+						}
+					});
+				}
 				else
 					controller.doLoad(compoundMonitor);
+				
+				controller.addModifyListener(new IEntityEditorPageControllerModifyListener() {
+					public void controllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
+						asyncCallback();
+					}
+				});
 			}
-			asyncCallback();
+			asyncCallback(); // TODO: Maybe chagne this and require the controller to fire change event onLoad() ?!?!
 			return Status.OK_STATUS;
 		}
 	};

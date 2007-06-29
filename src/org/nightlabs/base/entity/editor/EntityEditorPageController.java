@@ -26,6 +26,7 @@
 
 package org.nightlabs.base.entity.editor;
 
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
@@ -35,6 +36,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
@@ -82,6 +84,8 @@ implements IEntityEditorPageController
 	 * Used to put the loadJob in the editor controllers job pool.
 	 */
 	private EntityEditorController editorController;
+	
+	private ListenerList listeners = new ListenerList();
 
 	/**
 	 * The actual background loading job.
@@ -386,5 +390,57 @@ implements IEntityEditorPageController
 	public void editorFocussed() {
 		// does nothing
 	}
+
+	/**
+	 * @deprecated {@link #addModifyListener(IEntityEditorPageControllerModifyListener)} should be used instead.
+	 * 		This should not be used any more, as PropertyChangeSupport check if 
+	 * 		oldValue.equals(newValue) for the notified objects and will not propagete
+	 * 		if this is true. For most JDO, that check their id in equals, this is 
+	 * 		not applicable.
+	 */
+	@Override
+	public synchronized void addPropertyChangeListener(PropertyChangeListener arg0) {
+		super.addPropertyChangeListener(arg0);
+	}
+
+	/**
+	 * @deprecated {@link #removeModifyListener(IEntityEditorPageControllerModifyListener)} should be used instead.
+	 */
+	@Override
+	public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
+		super.removePropertyChangeListener(listener);
+	}
+
+	/**
+	 * Adds a new {@link IEntityEditorPageControllerModifyListener} to this controller.
+	 *  
+	 * @param listener The listener to be added.
+	 */
+	public void addModifyListener(IEntityEditorPageControllerModifyListener listener) {
+		listeners.add(listener);
+	}
+	
+	/**
+	 * Remove the given {@link IEntityEditorPageControllerModifyListener} from this controller.
+	 * 
+	 * @param listener The listener to remove.
+	 */
+	public void removeModifyListener(IEntityEditorPageControllerModifyListener listener) {
+		listeners.remove(listener);
+	}
+	
+	/**
+	 * Use this to notify all listeners of a changed object.
+	 * 
+	 * @param oldObject The old object value.
+	 * @param newObject The new object value.
+	 */
+	protected void fireModifyEvent(Object oldObject, Object newObject) {
+		Object[] list = listeners.getListeners();
+		for (Object listener : list) {
+			((IEntityEditorPageControllerModifyListener) listener).controllerObjectModified(new EntityEditorPageControllerModifyEvent(this, oldObject, newObject));
+		}
+	}
+	
 }
 	

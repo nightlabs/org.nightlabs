@@ -68,6 +68,8 @@ extends IPropertyChangeSupport, IDirtyStateManager
 //	 */
 //	public void setPage(IFormPage page);
 
+	public static final String PROPERTY_CONTROLLER_OBJECT = IEntityEditorPageController.class.getName()+"#controllerObject";
+	
 	/**
 	 * Adds a page to this controller which is associated with it.
 	 * This will be called immediately after the controller is created.
@@ -118,4 +120,18 @@ extends IPropertyChangeSupport, IDirtyStateManager
 	 */
 	public void editorFocussed();
 	
+	
+	/**
+	 * Adds a new {@link IEntityEditorPageControllerModifyListener} to this controller.
+	 *  
+	 * @param listener The listener to be added.
+	 */
+	public void addModifyListener(IEntityEditorPageControllerModifyListener listener);
+	
+	/**
+	 * Remove the given {@link IEntityEditorPageControllerModifyListener} from this controller.
+	 * 
+	 * @param listener The listener to remove.
+	 */
+	public void removeModifyListener(IEntityEditorPageControllerModifyListener listener); 	
 }
