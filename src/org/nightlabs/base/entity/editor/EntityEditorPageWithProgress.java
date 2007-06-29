@@ -130,19 +130,27 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	 * might already run.
 	 * After loading the job will call {@link #asyncCallback()} to notify 
 	 * the page of its end.
+	 * <p>
+	 * Note that this Job also registered listeners to the controller that will
+	 * cause {@link #handleControllerObjectModified(EntityEditorPageControllerModifyEvent)}
+	 * to be invoked, when the listener gets notified.
+	 * </p>
 	 */
 	private Job asyncLoadJob = new Job("Async load") {
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
-			IEntityEditorPageController controller = getPageController();
+			final IEntityEditorPageController controller = getPageController();
 			if (controller != null) {
 				CompoundProgressMonitor compoundMonitor = new CompoundProgressMonitor(progressMonitorPart, monitor);
 				if (controller instanceof EntityEditorPageController) {
 					((EntityEditorPageController)controller).load(compoundMonitor);
 					((EntityEditorPageController)controller).addPropertyChangeListener(new PropertyChangeListener() {
-						public void propertyChange(PropertyChangeEvent arg0) {
-							// TODO: We should not cause reload on every propery change ?!!?
-							asyncCallback();
+						public void propertyChange(PropertyChangeEvent event) {
+							EntityEditorPageControllerModifyEvent modifyEvent = new EntityEditorPageControllerModifyEvent(
+									controller,
+									event.getOldValue(), event.getNewValue()
+							);
+							handleControllerObjectModified(modifyEvent);
 						}
 					});
 				}
@@ -151,7 +159,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 				
 				controller.addModifyListener(new IEntityEditorPageControllerModifyListener() {
 					public void controllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
-						asyncCallback();
+						handleControllerObjectModified(modifyEvent);
 					}
 				});
 			}
@@ -161,12 +169,29 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	};
 
 	/**
+	 * This method is invoked when the {@link IEntityEditorPageController} associated to this page
+	 * notifies that one of its objects has changed. The default implementation will
+	 * invoke {@link #asyncCallback()} on every notification. Subclasses may override this behaviour.
+	 * 
+	 * @param modifyEvent The Event thrown by the associated controller.
+	 */
+	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
+		asyncCallback();
+	}
+	
+	/**
 	 * This method is called <b>on the loading job's thread</b> after 
 	 * the loading was done. It is intended to be used in order
 	 * to fill the page with the data now loaded.
 	 * Remember that gui operations have to be done on the {@link Display} thread.
 	 * Also implementations might want to {@link #switchToContent()} at
 	 * the end of this method.
+	 * <p>
+	 * Note that this method might also called when the {@link IEntityEditorPageController}
+	 * associated to this page notifies a change of one of its controller objects.
+	 * This page adds an {@link IEntityEditorPageControllerModifyListener} to the controller,
+	 * that will invoke {@link #handleControllerObjectModified(EntityEditorPageControllerModifyEvent)}.
+	 * </p>
 	 */
 	protected abstract void asyncCallback();
 	
