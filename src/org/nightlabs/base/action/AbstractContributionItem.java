@@ -69,11 +69,11 @@ extends XContributionItem
 	protected boolean fillMenuBar = true;
 	protected boolean fillComposite = true;
 	
-	protected boolean toolBarFilled = false;
-	protected boolean coolBarFilled = false;
-	protected boolean compositeFilled = false;
+	private boolean toolBarFilled = false;
+	private boolean coolBarFilled = false;
+	private boolean compositeFilled = false;
 	
-	protected String name = "";
+	private String name = "";
 	public String getName() {
 		return name;
 	}			
@@ -131,8 +131,8 @@ extends XContributionItem
 		}
 	}
 
-	public MenuItem menuItem = null;
-	protected MenuItem getMenuItem() {
+	private MenuItem menuItem = null;
+	public MenuItem getMenuItem() {
 		return menuItem;
 	}
 	
@@ -150,6 +150,19 @@ extends XContributionItem
 	protected ToolItem toolItem = null;
 	public ToolItem getToolItem() {
 		return toolItem;
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (control != null)
+			control.dispose();
+		if (coolItem != null)
+			coolItem.dispose();
+		if (toolItem != null)
+			toolItem.dispose();
+		if (menuItem != null)
+			menuItem.dispose();
 	}
 
 }
