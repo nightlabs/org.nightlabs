@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.nightlabs.base.form;
 
 import org.apache.log4j.Logger;
@@ -15,10 +12,13 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Hyperlink;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.nightlabs.base.toolkit.AbstractToolkit;
 
@@ -43,7 +43,7 @@ public class NightlabsFormsToolkit extends AbstractToolkit
 	public NightlabsFormsToolkit(FormColors colors) {
 		super(colors);
 	}
-
+		
 	@Override
 	public void adapt(Composite composite) {
 		composite.setBackground(getColors().getBackground());
@@ -56,6 +56,39 @@ public class NightlabsFormsToolkit extends AbstractToolkit
 		// otherwise all menus set in the lower parts of the tree are overridden
 		if (composite.getMenu() == null)
 			composite.setMenu(composite.getParent().getMenu());
+
+		// handle special case of sections -> set correct Backrounds
+		if (composite instanceof Section) {
+			Section section = (Section) composite;
+			adapt(section, true, true); // add key & mouselistener
+			if ((section.getStyle() & Section.TITLE_BAR) != 0
+					|| (section.getStyle() & Section.SHORT_TITLE_BAR) != 0) {
+				getColors().initializeSectionToolBarColors();
+				section.setTitleBarBackground(getColors().getColor(FormColors.TB_GBG));
+				section.setTitleBarBorderColor(getColors().getColor(FormColors.TB_BORDER));
+				section.setTitleBarGradientBackground(getColors().getColor(FormColors.TB_GBG));
+				section.setTitleBarForeground(getColors().getColor(FormColors.TB_FG));
+			}
+		}
+	}
+	
+	@Override
+	public void adapt(Control control, boolean trackFocus, boolean trackKeyboard) {
+		super.adapt(control, trackFocus, trackKeyboard);
+		
+		if (control.getParent() instanceof Section) {
+			Section section = (Section) control.getParent();
+			if (control instanceof Hyperlink || control instanceof Label) {
+				control.setBackground(section.getTitleBarGradientBackground());
+//					TODO: we need to find a way to set the correct background of the Twisite of a section!
+//				if (control instanceof Twistie) {
+//					Twistie twistie = (Twistie) control;
+//					twistie.setBackground(section.getTitleBarGradientBackground());
+//					twistie.setHoverDecorationColor(getColors().getColor(FormColors.TB_TOGGLE_HOVER));
+//					twistie.setDecorationColor(getColors().getColor(FormColors.TB_TOGGLE));
+//				}
+			}
+		}
 	}
 			
 	@Override
