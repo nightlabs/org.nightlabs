@@ -72,19 +72,21 @@ public abstract class ErrorDialogFactory
 		return true;
 	}
 	
-	/**
-	 * Show an error using the given {@link IErrorDialog} implementation.
-	 * If there is an instance of the given error dialog class already
-	 * registered for re-use, this instance will be used.
-	 * @param dialogClass The error dialog class
-	 * @param errorReport The error report to use
-	 * @return <code>true</code> if the error could successfully be shown - 
-	 * 		<code>false</code> otherwise.
-	 */
-	public static boolean showError(Class<? extends IErrorDialog> dialogClass, ErrorReport errorReport)
-	{
-		return showError(dialogClass, null, null, errorReport.getThrownException(), errorReport.getTriggerException());
-	}
+//	/**
+//	 * Show an error using the given {@link IErrorDialog} implementation.
+//	 * If there is an instance of the given error dialog class already
+//	 * registered for re-use, this instance will be used.
+//	 * @param dialogClass The error dialog class
+//	 * @param errorReport The error report to use
+//	 * @return <code>true</code> if the error could successfully be shown - 
+//	 * 		<code>false</code> otherwise.
+//	 * 
+//	 * @deprecated Use {@link #showError(Class, String, String, Throwable, Throwable)} instead.
+//	 */
+//	public static boolean showError(Class<? extends IErrorDialog> dialogClass, ErrorReport errorReport)
+//	{
+//		return showError(dialogClass, null, null, errorReport.getThrownException(), errorReport.getTriggerException());
+//	}
 	
 	/**
 	 * {@link IErrorDialog} implementations that want to be re-used for

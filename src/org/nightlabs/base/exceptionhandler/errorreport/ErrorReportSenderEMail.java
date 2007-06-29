@@ -70,7 +70,7 @@ public class ErrorReportSenderEMail implements ErrorReportSender
 			for (String recipient : cfMod.getMailTo())
 				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 			
-			msg.setSubject(errorReport.getThrownException().getClass().getName() +  " " + errorReport.getTimeAsString());
+			msg.setSubject(errorReport.getFirstThrowable().getClass().getSimpleName() +  " " + errorReport.getTimeAsString());
 
 			Transport.send(msg);
 			

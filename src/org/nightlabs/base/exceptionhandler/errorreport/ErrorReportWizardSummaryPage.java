@@ -78,26 +78,28 @@ public class ErrorReportWizardSummaryPage extends DynamicPathWizardPage
   {
     ErrorReportWizard wizard = (ErrorReportWizard) getWizard();
     final ErrorReport errorReport = wizard.getErrorReport();
-  
-    StringBuffer reportData = new StringBuffer();
-    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.datetime")); //$NON-NLS-1$
-    reportData.append(ErrorReport.getTimeAsString(errorReport.getTime()));
-    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
-    if(errorReport.getUserComment() != null && errorReport.getUserComment().length() != 0) {
-      reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.usercommentlabel")); //$NON-NLS-1$
-      reportData.append(errorReport.getUserComment());
-      reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
-    }
-    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.stacktracelabel")); //$NON-NLS-1$
-    reportData.append(ErrorReport.getExceptionStackTraceAsString(errorReport.getThrownException()));
-    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
-    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.triggerstacktracelabel")); //$NON-NLS-1$
-    reportData.append(ErrorReport.getExceptionStackTraceAsString(errorReport.getThrownException()));
-    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
-    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.systempropertieslabel")); //$NON-NLS-1$
-    reportData.append(errorReport.getSystemProperties());
-    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
     
-    overviewText.setText(reportData.toString());
+    overviewText.setText(errorReport.toString());
+    
+//    StringBuffer reportData = new StringBuffer();
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.datetime")); //$NON-NLS-1$
+//    reportData.append(ErrorReport.getTimeAsString(errorReport.getTime()));
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
+//    if(errorReport.getUserComment() != null && errorReport.getUserComment().length() != 0) {
+//      reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.usercommentlabel")); //$NON-NLS-1$
+//      reportData.append(errorReport.getUserComment());
+//      reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
+//    }
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.stacktracelabel")); //$NON-NLS-1$
+//    reportData.append(ErrorReport.getExceptionStackTraceAsString(errorReport.getFirstThrowable()));
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.triggerstacktracelabel")); //$NON-NLS-1$
+//    reportData.append(ErrorReport.getExceptionStackTraceAsString(errorReport.getFirstThrowable()));
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.systempropertieslabel")); //$NON-NLS-1$
+//    reportData.append(errorReport.getSystemProperties());
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
+//    
+//    overviewText.setText(reportData.toString());
   }
 }

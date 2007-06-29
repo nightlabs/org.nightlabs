@@ -34,8 +34,11 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.core.runtime.Assert;
 import org.nightlabs.io.DataBuffer;
 
 /**
@@ -45,69 +48,89 @@ import org.nightlabs.io.DataBuffer;
 public class ErrorReport
 implements Serializable
 {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
-	private Throwable thrownException;
-	private Throwable triggerException;
+//	Tobias: replaced by collection of ExceptionPair in order to provide error reports of multiple exceptions.
+//	
 	private String userComment;
 	private Properties systemProperties;
 	private Date time;
-
+	
+	private List<CauseEffectThrowablePair> throwablePairList;
+	
 	/**
 	 * Initialize an empty error report. 
 	 */
-	protected ErrorReport()
+	public ErrorReport(Throwable throwable, Throwable causeThrowable)
 	{
-	}
-
-	/**
-	 * Initialize this error report with a thrown and a trigger exception.
-	 * @param thrownException The exception thrown
-	 * @param triggerException The exception that triggered the error handler
-	 */
-	public ErrorReport(Throwable thrownException, Throwable triggerException)
-	{
-		setThrownException(thrownException);
-		setTriggerException(triggerException);
+		throwablePairList = new LinkedList<CauseEffectThrowablePair>();		
+		addThrowablePair(throwable, causeThrowable);
+		time = new Date();
 		this.systemProperties = System.getProperties();
-		this.time = new Date();
+	}
+	
+	public void addThrowablePair(Throwable throwable, Throwable causeThrowable) {
+		Assert.isNotNull(throwable);
+		Assert.isNotNull(causeThrowable);
+		throwablePairList.add(new CauseEffectThrowablePair(throwable, causeThrowable));
+	}
+	
+	public List<CauseEffectThrowablePair> getThrowablePairList() {
+		return throwablePairList;
+	}
+	
+	public Throwable getFirstThrowable() {
+		return throwablePairList.get(0).getEffectThrowable();
 	}
 
-	/**
-	 * @return The thrownException.
-	 */
-	public Throwable getThrownException()
-	{
-		return thrownException;
-	}
-
-	/**
-	 * @param error The thrownException to set.
-	 */
-	public void setThrownException(Throwable error)
-	{
-		if (error == null)
-			throw new NullPointerException("Parameter thrownException must not be null!");
-		this.thrownException = error;
-	}
-
-	/**
-	 * @return The triggerException.
-	 */
-	public Throwable getTriggerException()
-	{
-		return triggerException;
-	}
-
-	/**
-	 * @param triggerException The triggerException to set.
-	 */
-	public void setTriggerException(Throwable triggerException)
-	{
-		if (triggerException == null)
-			throw new NullPointerException("Parameter triggerException must not be null!");
-		this.triggerException = triggerException;
-	}
+//	/**
+//	 * Initialize this error report with a thrown and a trigger exception.
+//	 * @param thrownException The exception thrown
+//	 * @param triggerException The exception that triggered the error handler
+//	 */
+//	public ErrorReport(Throwable thrownException, Throwable triggerException)
+//	{
+//		setThrownException(thrownException);
+//		setTriggerException(triggerException);
+//		this.systemProperties = System.getProperties();
+//		this.time = new Date();
+//	}
+	
+//	/**
+//	 * @return The thrownException.
+//	 */
+//	public Throwable getThrownException()
+//	{
+//		return thrownException;
+//	}
+//
+//	/**
+//	 * @param error The thrownException to set.
+//	 */
+//	public void setThrownException(Throwable error)
+//	{
+//		if (error == null)
+//			throw new NullPointerException("Parameter thrownException must not be null!");
+//		this.thrownException = error;
+//	}
+//
+//	/**
+//	 * @return The triggerException.
+//	 */
+//	public Throwable getTriggerException()
+//	{
+//		return triggerException;
+//	}
+//
+//	/**
+//	 * @param triggerException The triggerException to set.
+//	 */
+//	public void setTriggerException(Throwable triggerException)
+//	{
+//		if (triggerException == null)
+//			throw new NullPointerException("Parameter triggerException must not be null!");
+//		this.triggerException = triggerException;
+//	}
 
 	/**
 	 * @return Returns the userComment.
@@ -182,33 +205,30 @@ implements Serializable
 	 * Formats the thrownException report into sth. like this:
 	 * 
 	 * ---
+	 * Time:
+	 * 2007-06-27 16:11:56
+	 * 
+	 * 
 	 * User Comment:
 	 * bla bla bla
 	 * 
-	 * Error:
+	 * Thrown exception stack trace(s)
 	 * java.lang.Exception: shfgiushf
 	 *   at xxx
+	 * 
+	 * java.lang.Exception: shfgiushf
+	 *   at xxx
+	 *   
+	 * 
+	 * System properties:
+	 * ...
 	 * ---
 	 *
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString()
 	{
-		StringBuffer props = new StringBuffer();
-		try {
-			DataBuffer db = new DataBuffer(1024);
-			OutputStream out = db.createOutputStream();
-			systemProperties.storeToXML(out, "");
-			out.close();
-			InputStream in = db.createInputStream();
-			InputStreamReader reader = new InputStreamReader(in, "UTF-8");
-			while (reader.ready()) {
-				props.append((char)reader.read());
-			}
-		} catch (Exception x) {
-			props.append("Dumping system properties failed: " + x.getMessage());
-		}
-
+		
 //		StringBuffer props = new StringBuffer();
 //		for (Iterator it = systemProperties.entrySet().iterator(); it.hasNext(); ) {
 //		Map.Entry me = (Map.Entry)it.next();
@@ -218,10 +238,29 @@ implements Serializable
 //		props.append('\n');
 //		}
 
-		return
-		"Time:\n"+ getTimeAsString() +"\n\nUser Comment:\n" + userComment + 
-		"\n\nThrown exception stack trace:\n" + getExceptionStackTraceAsString(thrownException) +
-		"\nSystem Properties:\n" + props.toString();
+		StringBuffer sb = new StringBuffer("Time:\n"+ getTimeAsString() +"\n\nUser Comment:\n" + userComment + "\n\nThrown exception stack trace(s):\n");
+		
+		for (CauseEffectThrowablePair causeEffectThrowablePair : throwablePairList) {
+			sb.append(getExceptionStackTraceAsString(causeEffectThrowablePair.getEffectThrowable()) + "\n");
+		}
+//		"Thrown exception stack trace(s):\n" + getExceptionStackTraceAsString(thrownException) +
+		sb.append("\nSystem Properties:\n");
+		
+		try {
+			DataBuffer db = new DataBuffer(1024);
+			OutputStream out = db.createOutputStream();
+			systemProperties.storeToXML(out, "");
+			out.close();
+			InputStream in = db.createInputStream();
+			InputStreamReader reader = new InputStreamReader(in, "UTF-8");
+			while (reader.ready()) {
+				sb.append((char)reader.read());
+			}
+		} catch (Exception x) {
+			sb.append("Dumping system properties failed: " + x.getMessage());
+		}
+		
+		return sb.toString();
 	}
 
 	public static String getExceptionStackTraceAsString(Throwable exception)

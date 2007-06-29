@@ -53,7 +53,7 @@ import org.nightlabs.base.util.RCPUtil;
  * one dialog. It registers itsself in {@link ErrorDialogFactory} to do so.
  *  
  * @author Marc Klinger - marc[at]nightlabs[dot]de
- * @author Tobias Langner
+ * @author Tobias Langner (tobias[dot]langner[at]nightlabs[dot]de)
  */
 public class DefaultErrorDialog extends MessageDialog implements IErrorDialog 
 {
@@ -137,8 +137,14 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 			showStackTrace(show);
 			break;
 		case SEND_ERROR_REPORT_ID:
-			ErrorItem error = errorTable.getSelectedItem();
-			ErrorReport errorReport = new ErrorReport(error.getThrownException(), error.getTriggerException());
+//			ErrorItem error = errorTable.getSelectedItem();
+			ErrorReport errorReport = null;
+			for (ErrorItem error : errorList) {
+				if (errorReport == null)
+					errorReport = new ErrorReport(error.getThrownException(), error.getTriggerException());
+				else
+					errorReport.addThrowablePair(error.getThrownException(), error.getTriggerException());
+			}
 			ErrorReportWizardDialog dlg = new ErrorReportWizardDialog(errorReport);
 			okPressed();
 			dlg.open();
