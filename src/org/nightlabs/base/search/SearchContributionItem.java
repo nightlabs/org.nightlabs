@@ -105,7 +105,7 @@ extends AbstractContributionItem
 	protected void createText(Composite parent) 
 	{
 		searchText = new Text(parent, SWT.BORDER);
-		searchText.setText("          ");
+//		searchText.setText("          ");
 		searchText.addSelectionListener(buttonSelectionListener);		
 	}
 	
