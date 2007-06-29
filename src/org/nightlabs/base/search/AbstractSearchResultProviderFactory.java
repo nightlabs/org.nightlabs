@@ -74,9 +74,11 @@ implements ISearchResultProviderFactory
 
 	public ISearchResultActionHandler getActionHandler() 
 	{
-		IPerspectiveDescriptor perspectiveDescriptor = 
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getPerspective();
-		ISearchResultActionHandler actionHandler = perspectiveID2ActionHandler.get(perspectiveDescriptor.getId());
+//		IPerspectiveDescriptor perspectiveDescriptor = 
+//			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getPerspective();
+//		ISearchResultActionHandler actionHandler = perspectiveID2ActionHandler.get(perspectiveDescriptor.getId());
+		String perspectiveID = RCPUtil.getActivePerspectiveID();			
+		ISearchResultActionHandler actionHandler = perspectiveID2ActionHandler.get(perspectiveID);
 		if (actionHandler == null) {
 			actionHandler = perspectiveID2ActionHandler.get(WILDCARD_PERSPECTIVE_ID);
 		}

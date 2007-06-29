@@ -35,6 +35,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.CoolBar;
@@ -197,9 +198,9 @@ extends AbstractContributionItem
 		}	
 	};	
 
-	protected Menu createMenu() 
+	protected Menu createMenu(Menu menu) 
 	{
-		Menu menu = new Menu(RCPUtil.getActiveWorkbenchShell(), SWT.POP_UP);
+//		Menu menu = new Menu(RCPUtil.getActiveWorkbenchShell(), SWT.POP_UP);
 		Map<ISearchResultProviderFactory, ISearchResultProvider> factory2Instance = getUseCase().getFactory2Instance();
 		for (Map.Entry<ISearchResultProviderFactory, ISearchResultProvider> entry : factory2Instance.entrySet()) {
 			ISearchResultProviderFactory factory = entry.getKey();
@@ -237,7 +238,7 @@ extends AbstractContributionItem
 	  	toolItem.setWidth(100);			
 	  	
 			toolBar = parent;
-	  	menu = createMenu();
+	  	menu = createMenu(new Menu(RCPUtil.getActiveWorkbenchShell(), SWT.POP_UP));
 	  	final ToolItem searchItem = new ToolItem(parent, SWT.DROP_DOWN);
 	  	searchItem.setImage(SharedImages.getSharedImage(NLBasePlugin.getDefault(), 
 					SearchContributionItem.class));
@@ -341,7 +342,7 @@ extends AbstractContributionItem
 					dispose();
 				}
 			});
-	  	menu = createMenu();
+	  	menu = createMenu(new Menu(RCPUtil.getActiveWorkbenchShell(), SWT.POP_UP));
 	  	
 	  	toolItem = new ToolItem(toolBar, SWT.SEPARATOR);			
 	  	createText(toolBar);
@@ -374,12 +375,13 @@ extends AbstractContributionItem
 	  	coolItem = new CoolItem(coolBar, SWT.SEPARATOR);
 //	  	coolItem.setControl(wrapper);
 	  	coolItem.setControl(toolBar);
-	  	
-//	  	Point size = toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT);	  	
-//	  	Point coolSize = coolItem.computeSize(size.x, size.y);
-//	  	coolItem.setSize(coolSize.x - 10, coolSize.y);
-//	  	coolItem.setMinimumSize(coolSize.x - 10, coolSize.y);
-//	  	coolItem.setPreferredSize(coolSize.x - 10, coolSize.y);	  	
+
+	  	// FIXME: set size for contributionItem leads to strange layout problems when restting perspective
+	  	Point size = toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT);	  	
+	  	Point coolSize = coolItem.computeSize(size.x, size.y);
+	  	coolItem.setSize(coolSize.x - 10, coolSize.y);
+	  	coolItem.setMinimumSize(coolSize.x - 10, coolSize.y);
+	  	coolItem.setPreferredSize(coolSize.x - 10, coolSize.y);	  	
 	  	toolBar.layout(true, true);
 	  	coolBar.layout(true, true);
 	  	
@@ -389,6 +391,13 @@ extends AbstractContributionItem
 		}
 	}
 	
+	@Override
+	public void fill(Menu menu, int index) 
+	{
+//		super.fill(menu, index);
+		createMenu(menu);
+	}
+
 	private CoolItem coolItem = null;
 	private ToolBar toolBar = null;
 	private Menu menu = null;
