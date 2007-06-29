@@ -116,7 +116,7 @@ public class GroupedContentComposite extends XComposite {
 			providerComposites.put(contentProvider, providerComp);
 		}
 		contentStackLayout.topControl = providerComp;
-		contentWrapper.layout();
+		contentWrapper.layout(true, true); // TODO true, true necessary?
 	}
 	
 	public void setGroupTitle(String title) { 
