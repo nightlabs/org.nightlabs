@@ -78,6 +78,7 @@ public class NightlabsFormsToolkit extends AbstractToolkit
 		
 		if (control.getParent() instanceof Section) {
 			Section section = (Section) control.getParent();
+			// Set the colour of the title label of section to the correct value. (Ugly, but works)
 			if (control instanceof Hyperlink || control instanceof Label) {
 				control.setBackground(section.getTitleBarGradientBackground());
 //					TODO: we need to find a way to set the correct background of the Twisite of a section!
