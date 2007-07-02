@@ -53,6 +53,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -539,8 +540,15 @@ void dropDown (boolean drop) {
 	Point listSize = table.computeSize (SWT.DEFAULT, itemHeight, false);
 	// Since the Scrollbar widths are always added (thanks to Windoof compatibility) we need to prune 
 	// of the unnecessary space by ignoring the listSize.y and simply use the calculated height
+//	int scrollbarWidth = 0;
+//	ScrollBar bar;
+//	if (table.getItemCount() <= visibleItemCount) {
+//		bar = table.getVerticalBar();
+//		if (bar != null)
+//			scrollbarWidth = bar.getSize().x;
+//	}
 	table.setBounds (1, 1, Math.max (size.x - 2, listSize.x), itemHeight);
-	
+
 	int index = table.getSelectionIndex ();
 	if (index != -1) table.setTopIndex (index);
 	Display display = getDisplay ();

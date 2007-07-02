@@ -76,7 +76,7 @@ implements ISelectionProvider
 	 * Default set of styles to use when constructing a multi-selection viewer. 
 	 * This is used as default value when constructing an {@link AbstractTableComposite} without viewerStyle
 	 */
-	public static int DEFAULT_STYLE_MULTI_BORDER = SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI;
+	public static int DEFAULT_STYLE_MULTI_BORDER = SWT.FULL_SELECTION | SWT.MULTI;
 	
 	protected TableViewer tableViewer;
 	protected Table table;
@@ -86,7 +86,7 @@ implements ISelectionProvider
 	}
 	
 	public AbstractTableComposite(Composite parent, int style, boolean initTable) {
-		this(parent, style, initTable, DEFAULT_STYLE_MULTI_BORDER);
+		this(parent, style, initTable, DEFAULT_STYLE_MULTI_BORDER | XComposite.getBorderStyle(parent));
 	}
 	
 	public AbstractTableComposite(Composite parent, int style, boolean initTable, int viewerStyle) {

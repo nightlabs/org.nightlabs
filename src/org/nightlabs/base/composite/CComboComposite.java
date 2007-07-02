@@ -268,6 +268,9 @@ extends XComposite
 	public void setItems(List<T> types) {
 		imageCombo.removeAll();
 		this.types = types;
+		if (types == null)
+			return;
+		
 		for (T type : types) {
 			imageCombo.add(labelProvider.getImage(type), labelProvider.getText(type));
 		}

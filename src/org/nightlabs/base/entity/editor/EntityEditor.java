@@ -141,7 +141,7 @@ public class EntityEditor extends CommitableFormEditor
 			Thread.sleep(1000);
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
-					editorDirtyStateChanged();
+					editorDirtyStateChanged();					
 				}
 			});
 		}		
