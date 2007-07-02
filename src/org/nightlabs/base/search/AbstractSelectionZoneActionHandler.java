@@ -46,7 +46,7 @@ extends AbstractSearchResultActionHandler
 	{
 		Collection selectedObjects = getSearchResultProvider().getSelectedObjects();
 		Collection<Class> subjectClassesToClear = new ArrayList<Class>();
-		subjectClassesToClear.add(getSearchResultProvider().getFactory().getResultTypeClass());		
+		subjectClassesToClear.add(getSearchResultProvider().getFactory().getResultTypeClass());
 		if (selectedObjects != null) {
 			SelectionManager.sharedInstance().notify(new NotificationEvent(
 					AbstractSelectionZoneActionHandler.this, 
