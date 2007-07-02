@@ -179,13 +179,6 @@
          point="org.nightlabs.base.cache">
       <cacheFactory class="org.nightlabs.base.cache.DummyCacheFactory"/>
    </extension>
-   <extension
-         point="org.eclipse.ui.views">
-      <view
-            class="org.nightlabs.base.test.TestView"
-            id="org.nightlabs.base.test.TestView"
-            name="org.nightlabs.base.test.TestView"/>
-   </extension>
    
 <!--   
    <extension
