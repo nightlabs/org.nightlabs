@@ -8,7 +8,7 @@
     <ant path="org.nightlabs.connection" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.connection/dist/org.nightlabs.connection_1.0.0.tar.gz"/>
+    <publishes description="..." location="org.nightlabs.connection/dist/org.nightlabs.connection_0.9.0.tar.gz"/>
     <javadoc path="org.nightlabs.connection/src"/>
   </project>
 
