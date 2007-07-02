@@ -392,6 +392,14 @@ extends ActionBarAdvisor
     fileMenu.add(new GroupMarker(IWorkbenchActionConstants.FILE_END));
     menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
     
+//    // Menus form contributionItemSet-ExtensionPoint
+//		try {
+//			ContributionItemSetRegistry.sharedInstance().contributeToMenuBar(menuBar);
+//		} catch (EPProcessorException e) {
+//			logger.error("There occured an error while processing the ContributionItemSetRegistry!", e);
+//			e.printStackTrace();
+//		}
+    
     // Window-Menu
 		windowMenu = new MenuManager(NLBasePlugin.getResourceString("menu.window.label"), 
 				IWorkbenchActionConstants.M_WINDOW);
