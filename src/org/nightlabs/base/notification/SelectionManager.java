@@ -32,8 +32,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.swt.widgets.Display;
-
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.notification.SubjectCarrier;
@@ -156,13 +154,17 @@ public class SelectionManager extends NotificationManager
 			if (event == null)
 				return;
 
-			Display.getDefault().asyncExec(
-					new Runnable() {
-						public void run()
-						{
-							SelectionManager.this.notify(event, listener);
-						}
-					});
+			// Can we call this directly? Does this break any other code? Marco.
+			// Please do not switch it back to asynchronous notification, if it works this way, because
+			// we have now code that relies on the listener being triggered before this method returns: org.nightlabs.jfire.trade.legalentity.view.LegalEntitySelectionComposite#initGUI()
+			SelectionManager.this.notify(event, listener);
+//			Display.getDefault().asyncExec(
+//					new Runnable() {
+//						public void run()
+//						{
+//							SelectionManager.this.notify(event, listener);
+//						}
+//					});
 		} finally {
 			eventsByZoneMutex.releaseLock();
 		}
