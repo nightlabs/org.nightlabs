@@ -53,7 +53,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -468,7 +467,7 @@ void createPopup(TableItem[] items, int selectionIndex) {
 		table = new Table (popup, listStyle);
 		if (font != null) table.setFont (font);
 		if (foreground != null) table.setForeground (foreground);
-		if (background != null) table.setBackground (background);
+//		if (background != null) table.setBackground (background); // always keep the backround of the table white!
 		
 		int [] popupEvents = {SWT.Close, SWT.Paint, SWT.Deactivate};
 		for (int i=0; i<popupEvents.length; i++) popup.addListener (popupEvents [i], listener);
@@ -1365,7 +1364,7 @@ public void setEditable (boolean editable) {
 }
 
 public void setEnabled (boolean enabled) {
-	super.setEnabled(enabled);
+//	super.setEnabled(enabled);
 //	if (popup != null) popup.setVisible (false);
 	if (text != null) text.setEnabled(enabled);
 	if (arrow != null) arrow.setEnabled(enabled);
