@@ -25,9 +25,6 @@
  ******************************************************************************/
 package org.nightlabs.base.entity.editor;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -144,16 +141,12 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 				CompoundProgressMonitor compoundMonitor = new CompoundProgressMonitor(progressMonitorPart, monitor);
 				if (controller instanceof EntityEditorPageController) {
 					((EntityEditorPageController)controller).load(compoundMonitor);
-					((EntityEditorPageController)controller).addPropertyChangeListener(new PropertyChangeListener() {
-						public void propertyChange(PropertyChangeEvent event) {
-							EntityEditorPageControllerModifyEvent modifyEvent = new EntityEditorPageControllerModifyEvent(
-									controller,
-									event.getOldValue(), event.getNewValue()
-							);
+					((EntityEditorPageController)controller).addModifyListener(new IEntityEditorPageControllerModifyListener() {
+						public void controllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
 							handleControllerObjectModified(modifyEvent);
 						}
 					});
-				}
+				} // (controller instanceof EntityEditorPageController)
 				else
 					controller.doLoad(compoundMonitor);
 				

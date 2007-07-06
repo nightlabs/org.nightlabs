@@ -39,6 +39,7 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
@@ -312,7 +313,7 @@ public class EntityEditorController
 		for (Entry<IEntityEditorPageController, Collection<IFormPage>> entry : controllerPages.entrySet()) {
 			IEntityEditorPageController controller = entry.getKey();
 			if (controller.isDirty()) {
-				dirtyPageControllers.add(entry.getKey());
+				dirtyPageControllers.add(controller);
 			}				
 		}
 	}
@@ -337,9 +338,10 @@ public class EntityEditorController
 	 */
 	public void doSave(IProgressMonitor monitor)
 	{
+		monitor.beginTask("Saving Pages...", dirtyPageControllers.size());
 		logger.debug("Calling all page controllers doSave() method."); 
 		for (IEntityEditorPageController dirtyController : dirtyPageControllers) {
-			dirtyController.doSave(monitor);
+			dirtyController.doSave(new SubProgressMonitor(monitor, 1));
 			dirtyController.markUndirty();
 		}
 	}
