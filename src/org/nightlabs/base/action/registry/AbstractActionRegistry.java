@@ -759,10 +759,17 @@ extends AbstractEPProcessor
 
 								if (visible) {
 									++visibleContributionItemCount;
-									if (ad.getAction() != null)
-										((ContributionItem)anchor).getParent().insertAfter(anchor.getId(), ad.getAction());
-									else if (ad.getContributionItem() != null)
-										((ContributionItem)anchor).getParent().insertAfter(anchor.getId(), ad.getContributionItem());
+									if (anchor instanceof MenuManager) {
+										if (ad.getAction() != null)
+											((MenuManager)anchor).add(ad.getAction());
+										else if (ad.getContributionItem() != null)
+											((MenuManager)anchor).add(ad.getContributionItem());
+									} else {
+										if (ad.getAction() != null)
+											((ContributionItem)anchor).getParent().insertAfter(anchor.getId(), ad.getAction());
+										else if (ad.getContributionItem() != null)
+											((ContributionItem)anchor).getParent().insertAfter(anchor.getId(), ad.getContributionItem());
+									}
 								}
 
 								if (firstRun) {
