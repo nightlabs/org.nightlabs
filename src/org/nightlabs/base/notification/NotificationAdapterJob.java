@@ -30,11 +30,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.nightlabs.base.progress.ProgressMonitorWrapper;
+import org.nightlabs.notification.NotificationAdapter;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.progress.ProgressMonitor;
 
 
-public abstract class NotificationAdapterJob implements NotificationListenerJob
+public abstract class NotificationAdapterJob
+extends NotificationAdapter
+implements NotificationListenerJob
 {
 	private String jobName = null;
 
@@ -46,9 +49,9 @@ public abstract class NotificationAdapterJob implements NotificationListenerJob
 	}
 
 	/**
-	 * @see org.nightlabs.base.notification.NotificationListenerJob#getJob(NotificationEvent)
+	 * @see org.nightlabs.base.notification.NotificationListenerJob#createJob(NotificationEvent)
 	 */
-	public Job getJob(NotificationEvent event)
+	public Job createJob(NotificationEvent event)
 	{
 		return null;
 	}

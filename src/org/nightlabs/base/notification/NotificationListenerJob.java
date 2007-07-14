@@ -54,7 +54,7 @@ public interface NotificationListenerJob extends NotificationListener
 	 *		If you return <tt>null</tt>, a new <tt>Job</tt> will be created which will be configured using the other
 	 *		methods.
 	 */
-	Job getJob(NotificationEvent event);
+	Job createJob(NotificationEvent event);
 
 	/**
 	 * This method is called directly before

@@ -68,10 +68,11 @@ extends org.nightlabs.notification.NotificationManager
 	protected void performNotification(String notificationMode, final NotificationListener listener,
 			final NotificationEvent event)
 	{
+		listener.setActiveNotificationEvent(event);
 		if (NotificationListenerJob.class.getName().equals(notificationMode)) {
 			NotificationListenerJob l = (NotificationListenerJob) listener;
 
-			Job job = l.getJob(event);
+			Job job = l.createJob(event);
 			if (job == null) {
 				String jobName = l.getJobName();
 				if (jobName == null)

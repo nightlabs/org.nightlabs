@@ -27,8 +27,7 @@
 package org.nightlabs.base.action.selection;
 
 import org.eclipse.jface.action.Action;
-
-import org.nightlabs.base.notification.NotificationListenerSWTThreadAsync;
+import org.nightlabs.base.notification.NotificationAdapterSWTThreadAsync;
 import org.nightlabs.base.notification.SelectionManager;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
@@ -44,7 +43,7 @@ extends Action
 		SelectionManager.sharedInstance().addNotificationListener(zone, selectionClass, selectionListener);
 	}
 
-	private NotificationListener selectionListener = new NotificationListenerSWTThreadAsync() {
+	private NotificationListener selectionListener = new NotificationAdapterSWTThreadAsync() {
 		public void notify(NotificationEvent notificationEvent) {
 			setEnabled(calculateEnabled(notificationEvent));
 		}
