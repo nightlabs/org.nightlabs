@@ -34,7 +34,6 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -45,6 +44,7 @@ import org.nightlabs.base.composite.Fadeable;
 import org.nightlabs.base.editor.CommitableFormEditor;
 import org.nightlabs.base.entity.EntityEditorRegistry;
 import org.nightlabs.base.job.FadeableCompositeJob;
+import org.nightlabs.base.job.Job;
 import org.nightlabs.base.progress.RCPProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -138,7 +138,7 @@ public class EntityEditor extends CommitableFormEditor
 	private IRunnableWithProgress saveRunnable = new IRunnableWithProgress() {
 		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 			controller.doSave(monitor);
-			Thread.sleep(1000);
+//			Thread.sleep(1000); FIXME: what's this for? (marius)
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					editorDirtyStateChanged();					
@@ -208,9 +208,9 @@ public class EntityEditor extends CommitableFormEditor
 		if (saveJob == null) {
 			saveJob = new Job("Async save") {
 				@Override
-				protected IStatus run(IProgressMonitor monitor) {
+				protected IStatus run(ProgressMonitor monitor) {
 					try {
-						saveRunnable.run(monitor);
+						saveRunnable.run(getProgressMonitor());
 					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}

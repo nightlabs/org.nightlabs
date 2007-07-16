@@ -149,7 +149,7 @@ implements IEntityEditorPageController
 	private boolean loaded = false;
 	
 	/**
-	 * Mutex used to synchronize the background load with
+	 * Mutex used to synchronise the background load with
 	 * other threads that have to wait for its end.
 	 */
 	private Object mutex = new Object();
@@ -170,7 +170,7 @@ implements IEntityEditorPageController
 	private boolean loadJobDone = false;
 	
 	/**
-	 * determines if the controller os dirty or not
+	 * if the controller is dirty or not
 	 */
 	private boolean dirty = false;
 	

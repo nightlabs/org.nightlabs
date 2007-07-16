@@ -44,10 +44,10 @@ import org.nightlabs.util.bean.IPropertyChangeSupport;
  * loading and saving of data to the page controllers (implementations of this interface).</p>
  * 
  * <p>Also some base classes of the entity-editor-framework with extra background-loading 
- * functionality use {@link IEntityEditorPageController}s to have a standardized access to
+ * functionality use {@link IEntityEditorPageController}s to have a standardised access to
  * the data a page needs</p>
  * 
- * <p>The controller extends {@link IPropertyChangeSupport} hence it accepts listners to
+ * <p>The controller extends {@link IPropertyChangeSupport} hence it accepts listeners to
  * property changes. Pages should use this listeners to reflect the changes in their UI.
  * Implementors should try to subclass {@link PropertyChangeSupport} wherever possible.</p>
  * 
@@ -95,7 +95,7 @@ extends IPropertyChangeSupport, IDirtyStateManager
 	/**
 	 * Load the data special to the implementation of a page controller
 	 * and write status to the given monitor. This is very likely to be called
-	 * on a non-gui thread. This Method is invoked asynchroniously by the abstract EntityEditorPageController,
+	 * on a non-gui thread. This Method is invoked asynchronously by the abstract EntityEditorPageController,
 	 * so its better to extend the abstract Controller than to write job management yourself. 
 	 * @param monitor The monitor to write status to.
 	 */

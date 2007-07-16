@@ -90,7 +90,7 @@ extends XComposite
 	
 /**
  * Constructs a new instance of this class given its parent
- * and a style value describing its behavior and appearance.
+ * and a style value describing its behaviour and appearance.
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>SWT</code> which is applicable to instances of this

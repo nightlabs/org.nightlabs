@@ -44,7 +44,7 @@ import org.eclipse.ui.forms.editor.IFormPage;
 public interface IEntityEditorPageFactory {
 	
 	/**
-	 * Create an new IFormPage that will dipslay the part
+	 * Create an new IFormPage that will display the part
 	 * of the entity linked to this entity editor page. 
 	 * For your convenience you might subclass {@link FormPage},
 	 * or any other default implementation. Also take a look
@@ -68,7 +68,7 @@ public interface IEntityEditorPageFactory {
 	 * <p>Also for the page controller there exists a base class with 
 	 * extra functionality concerning background loading of data, see {@link EntityEditorPageController}</p>  
 	 * 
-	 * @param editor The editor for wich a controller should be created
+	 * @param editor The editor for which a controller should be created
 	 * @return A new page controller appropriate to pages created by this factory.
 	 */
 	public IEntityEditorPageController createPageController(EntityEditor editor);

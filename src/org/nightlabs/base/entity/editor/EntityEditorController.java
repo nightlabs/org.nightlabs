@@ -57,9 +57,9 @@ import org.nightlabs.base.entity.editor.EntityEditorPageController.LoadJob;
  * when it needs to be saved. The controller will then delegate to all
  * it's registered {@link IEntityEditorPageController}s.</p>
  * 
- * <p>Addtitionally {@link EntityEditorController} provides a pool of Jobs
+ * <p>Additionally {@link EntityEditorController} provides a pool of Jobs
  * that will be scheduled by the controller taking care that not more than 
- * a configurable number of jobs run simultanously.</p> 
+ * a configurable number of jobs run simultaneously.</p> 
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
@@ -90,14 +90,14 @@ public class EntityEditorController
 	private List<IEntityEditorPageController> dirtyPageControllers = new LinkedList<IEntityEditorPageController>();
 	
 	/**
-	 * Currently the maximum number of simultan jobs is configured with this constant.
+	 * Currently the maximum number of simultaneously running jobs is configured with this constant.
 	 * The current value is 3.
 	 */
 	public static final int MAX_RUNNING_JOB_COUNT = 3;
 	
 	/**
 	 * Map of one job per page controller that could be scheduled in background. 
-	 * The number of allowed simulatanously running jobs can be configured by {@link #MAX_RUNNING_JOB_COUNT}.
+	 * The number of allowed simultaneously running jobs can be configured by {@link #MAX_RUNNING_JOB_COUNT}.
 	 * The jobs will be sorted by the index of the IFormPage associated to the page controller
 	 * given as key.
 	 */
@@ -162,17 +162,22 @@ public class EntityEditorController
 	
 	private IPropertyListener dirtyStateListener = new IPropertyListener(){
 		public void propertyChanged(Object source, int propId) {
-			if (EditorPart.PROP_DIRTY == propId) {				
+			if (EditorPart.PROP_DIRTY == propId) {
+				if (EntityEditorController.this.isSaving()) {
+					EntityEditorController.this.unsetSavingState();
+					return;
+				}
+				
 				if (source instanceof EntityEditor) {
 					EntityEditor editor = (EntityEditor) source;
-					if (editor.isDirty()) {
-						IFormPage page = editor.getActivePageInstance();						
-						IEntityEditorPageController pageController = pageControllers.get(page.getId());
-						if (pageController != null) {
-							logger.debug("pageControler.markDirty() for page "+page.getId());
-							pageController.markDirty();
-						}		
-					}
+//					if (editor.isDirty()) {
+					IFormPage page = editor.getActivePageInstance();						
+					IEntityEditorPageController pageController = pageControllers.get(page.getId());
+					if (pageController != null) {
+						logger.debug("pageControler.markDirty() for page "+page.getId());
+						pageController.markDirty();
+					}		
+//					}
 				}				
 			}
 		}
@@ -330,6 +335,16 @@ public class EntityEditorController
 		return false;
 	}
 	
+	private boolean saving = false;
+	
+	public boolean isSaving() {
+		return saving;
+	}
+	
+	public void unsetSavingState() {
+		this.saving = false;
+	}
+	
 	/**
 	 * Delegates to the {@link IEntityEditorPageController#doSave(IProgressMonitor)}
 	 * method of all known dirty {@link IEntityEditorPageController}s.
@@ -339,7 +354,8 @@ public class EntityEditorController
 	public void doSave(IProgressMonitor monitor)
 	{
 		monitor.beginTask("Saving Pages...", dirtyPageControllers.size());
-		logger.debug("Calling all page controllers doSave() method."); 
+		logger.debug("Calling all page controllers doSave() method.");
+		saving = true;
 		for (IEntityEditorPageController dirtyController : dirtyPageControllers) {
 			dirtyController.doSave(new SubProgressMonitor(monitor, 1));
 			dirtyController.markUndirty();
