@@ -8,7 +8,7 @@
     <ant path="org.nightlabs.keyreader" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.keyreader/dist/org.nightlabs.keyreader_0.9.0.tar.gz"/>
+    <publishes description="..." location="org.nightlabs.keyreader/dist/org.nightlabs.keyreader_0.9.1.tar.gz"/>
     <javadoc path="org.nightlabs.keyreader/src"/>
   </project>
 
