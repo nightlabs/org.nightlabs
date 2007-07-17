@@ -50,7 +50,7 @@ import org.eclipse.swt.widgets.Control;
  * 
  * The labels of the objects are provided by a {@link ILabelProvider}.
  * 
- * @author Tobias Langner <tobias[DOT]langner[AT]nightlabs[DOT]de>
+ * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
  * 
  * @param <T> The type of the elements that should be displayed inside this combo.
  */

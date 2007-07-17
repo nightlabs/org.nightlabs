@@ -44,7 +44,7 @@ import org.nightlabs.base.table.TableLabelProvider;
  * This class is supposed to display a Collection of <code>ErrorItem</code>s
  * using two columns.
  * 
- * @author Tobias Langner
+ * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
  */
 public class ErrorTable extends AbstractTableComposite
 {

@@ -11,7 +11,7 @@ import org.nightlabs.base.extensionpoint.IEPProcessListener;
  * {@link ExceptionHandlerRegistry}s processListener which calls method <code>postProcess</code>
  * after having processed all of its EPs.
  * 
- * @author Tobias Langner <tobias[DOT]langner[AT]gmx[DOT]net>
+ * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
  */
 public class SimpleExceptionHandlerRegistry
 extends AbstractEPProcessor

@@ -53,7 +53,7 @@ import org.nightlabs.base.util.RCPUtil;
  * one dialog. It registers itsself in {@link ErrorDialogFactory} to do so.
  *  
  * @author Marc Klinger - marc[at]nightlabs[dot]de
- * @author Tobias Langner (tobias[dot]langner[at]nightlabs[dot]de)
+ * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
  */
 public class DefaultErrorDialog extends MessageDialog implements IErrorDialog 
 {
