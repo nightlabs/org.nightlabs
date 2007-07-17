@@ -7,7 +7,7 @@
     <ant path="org.nightlabs.jdo" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jdo/dist/org.nightlabs.jdo_0.9.0.tar.gz"/>
+    <publishes description="..." location="org.nightlabs.jdo/dist/org.nightlabs.jdo_0.9.1.tar.gz"/>
     <javadoc path="org.nightlabs.jdo/src"/>
   </project>
 </nightlybuild>
