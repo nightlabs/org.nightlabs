@@ -145,7 +145,9 @@ extends XComposite
 		optionsComp.setLayout(new GridLayout(2, false));
 		
 		Label colorModeLabel = toolkit.createLabel(optionsComp, EditorPlugin.getResourceString("convertImage.colorModel.label"));		
-		colorModelCombo = new CComboComposite<ColorModel>(colorModels, colorModelLabelProvider, optionsComp, SWT.NONE, null);
+		colorModelCombo = new CComboComposite<ColorModel>(optionsComp, SWT.READ_ONLY | getBorderStyle(), 
+				(String)null, colorModelLabelProvider);
+		colorModelCombo.setInput(colorModels);
 		colorModelCombo.setLayoutData(new GridData(
 				GridData.HORIZONTAL_ALIGN_CENTER, GridData.VERTICAL_ALIGN_BEGINNING, true, false));
 		colorModelCombo.addSelectionListener(colorModelListener);
