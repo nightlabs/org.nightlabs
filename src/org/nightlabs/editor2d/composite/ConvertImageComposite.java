@@ -55,7 +55,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.nightlabs.base.composite.CComboComposite;
+import org.nightlabs.base.composite.XComboComposite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.form.XFormToolkit;
 import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
@@ -145,7 +145,7 @@ extends XComposite
 		optionsComp.setLayout(new GridLayout(2, false));
 		
 		Label colorModeLabel = toolkit.createLabel(optionsComp, EditorPlugin.getResourceString("convertImage.colorModel.label"));		
-		colorModelCombo = new CComboComposite<ColorModel>(optionsComp, SWT.READ_ONLY | getBorderStyle(), 
+		colorModelCombo = new XComboComposite<ColorModel>(optionsComp, SWT.READ_ONLY | getBorderStyle(), 
 				(String)null, colorModelLabelProvider);
 		colorModelCombo.setInput(colorModels);
 		colorModelCombo.setLayoutData(new GridData(
@@ -278,7 +278,7 @@ extends XComposite
 	private ColorModel bw = null;
 	private ColorModel grey = null;
 	private ColorModel rgb = null;
-	private CComboComposite<ColorModel> colorModelCombo = null;
+	private XComboComposite<ColorModel> colorModelCombo = null;
 	private List<ColorModel> colorModels = null;
 	protected void initColorModels() 
 	{		
