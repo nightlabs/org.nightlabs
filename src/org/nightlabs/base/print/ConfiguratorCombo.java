@@ -27,7 +27,7 @@
 package org.nightlabs.base.print;
 
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.composite.CComboComposite;
+import org.nightlabs.base.composite.XComboComposite;
 import org.nightlabs.base.print.PrinterConfigurationRegistry.ConfiguratorFactoryEntry;
 import org.nightlabs.base.table.TableLabelProvider;
 
@@ -39,7 +39,7 @@ import org.nightlabs.base.table.TableLabelProvider;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class ConfiguratorCombo extends CComboComposite<ConfiguratorFactoryEntry> {
+public class ConfiguratorCombo extends XComboComposite<ConfiguratorFactoryEntry> {
 
 	private static class LabelProvider extends TableLabelProvider {
 		public String getColumnText(Object arg0, int arg1) {

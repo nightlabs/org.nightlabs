@@ -44,35 +44,35 @@ import org.nightlabs.base.custom.XCombo;
  * @author Marius Heinzmann <marius[AT]NightLabs[DOT]de>
  *
  */
-public class CComboComposite<T> 
+public class XComboComposite<T> 
 	extends AbstractListComposite<T> 
 {
 	
 	/**
 	 * @see AbstractListComposite#AbstractListComposite(Composite, int, boolean)
 	 */
-	public CComboComposite(Composite parent, int comboStyle) {
+	public XComboComposite(Composite parent, int comboStyle) {
 		super(parent, comboStyle, true);
 	}
 	
 	/**
 	 * @see AbstractListComposite#AbstractListComposite(Composite, int, String, boolean)
 	 */
-	public CComboComposite(Composite parent, int comboStyle, String caption) {
+	public XComboComposite(Composite parent, int comboStyle, String caption) {
 		super(parent, comboStyle, caption, true);
 	}
 
 	/**
 	 * @see AbstractListComposite#AbstractListComposite(Composite, int, String, boolean, ILabelProvider)
 	 */
-	public CComboComposite(Composite parent, int comboStyle, String caption, ILabelProvider labelProvider) {
+	public XComboComposite(Composite parent, int comboStyle, String caption, ILabelProvider labelProvider) {
 		super(parent, comboStyle, caption, true, labelProvider);
 	}
 
 	/**
 	 * @see AbstractListComposite#AbstractListComposite(Composite, int, String, boolean, ILabelProvider, LayoutMode)
 	 */
-	public CComboComposite(Composite parent, int comboStyle, String caption, ILabelProvider labelProvider,
+	public XComboComposite(Composite parent, int comboStyle, String caption, ILabelProvider labelProvider,
 			LayoutMode layoutMode) {
 		super(parent, comboStyle, caption, true, labelProvider, layoutMode);
 	}
@@ -80,7 +80,7 @@ public class CComboComposite<T>
 	/**
 	 * @see AbstractListComposite#AbstractListComposite(Composite, int, String, boolean, ILabelProvider, LayoutMode, LayoutDataMode)  
 	 */
-	public CComboComposite(Composite parent, int comboStyle, String caption, ILabelProvider labelProvider,
+	public XComboComposite(Composite parent, int comboStyle, String caption, ILabelProvider labelProvider,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode)	{
 		super(parent, comboStyle, caption, true, labelProvider, layoutMode, layoutDataMode);
 	}
@@ -88,7 +88,7 @@ public class CComboComposite<T>
 	/**
 	 * @see AbstractListComposite#AbstractListComposite(Composite, int, String, boolean, ILabelProvider, LayoutMode, LayoutDataMode, int)
 	 */
-	public CComboComposite(Composite parent, int comboStyle, String caption, 
+	public XComboComposite(Composite parent, int comboStyle, String caption, 
 			ILabelProvider labelProvider, LayoutMode layoutMode, LayoutDataMode layoutDataMode, int compositeStyle)
 	{
 		super(parent, comboStyle, caption, true, labelProvider, layoutMode, layoutDataMode, compositeStyle);

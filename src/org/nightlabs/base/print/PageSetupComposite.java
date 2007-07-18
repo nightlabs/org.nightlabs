@@ -48,7 +48,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.AbstractListComposite;
-import org.nightlabs.base.composite.CComboComposite;
+import org.nightlabs.base.composite.XComboComposite;
 import org.nightlabs.base.composite.DoubleSpinnerComposite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.i18n.UnitRegistryEP;
@@ -341,7 +341,7 @@ extends XComposite
 	private AbstractListComposite<IUnit> initUnitCombo(Composite parent) {
 		List<IUnit> units = new ArrayList<IUnit>(UnitRegistryEP.sharedInstance().getUnitRegistry().getGlobalUnits());
 		AbstractListComposite<IUnit> unitList = 
-		new CComboComposite<IUnit>(parent, getBorderStyle() | SWT.READ_ONLY, (String) null, new UnitLabelProvider());
+		new XComboComposite<IUnit>(parent, getBorderStyle() | SWT.READ_ONLY, (String) null, new UnitLabelProvider());
 		unitList.setInput(units);
 		return unitList;
 	}
@@ -402,7 +402,7 @@ extends XComposite
 	private AbstractListComposite<IPredefinedPage> initPageCombo(Composite parent) 
 	{
 		List<IPredefinedPage> pages = new ArrayList<IPredefinedPage>(PredefinedPageEP.sharedInstance().getPageRegistry().getPages());
-		AbstractListComposite<IPredefinedPage> pageList = new CComboComposite<IPredefinedPage>(
+		AbstractListComposite<IPredefinedPage> pageList = new XComboComposite<IPredefinedPage>(
 				parent, SWT.READ_ONLY | getBorderStyle(), (String) null, predefinedPageLabelProvider);
 		pageList.setInput(pages);
 		

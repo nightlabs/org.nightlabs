@@ -28,7 +28,7 @@ package org.nightlabs.base.print.pref;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.composite.CComboComposite;
+import org.nightlabs.base.composite.XComboComposite;
 import org.nightlabs.base.print.PrinterConfigurationRegistry;
 import org.nightlabs.base.print.PrinterUseCase;
 
@@ -36,7 +36,7 @@ import org.nightlabs.base.print.PrinterUseCase;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class PrinterUseCaseCombo extends CComboComposite<PrinterUseCase> {
+public class PrinterUseCaseCombo extends XComboComposite<PrinterUseCase> {
 
 	/**
 	 * @param types
