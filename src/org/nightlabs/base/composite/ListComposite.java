@@ -23,17 +23,20 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
+
 package org.nightlabs.base.composite;
 
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 
@@ -42,42 +45,62 @@ import org.eclipse.swt.widgets.List;
  * The labels of the objects are provided by a {@link ILabelProvider}.
  * 
  * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
+ * @author Marius Heinzmann <marius[AT]NightLabs[DOT]de>
  * 
  * @param <T> The type of the elements that should be displayed inside this list.
  */
-public class ListComposite<T> extends AbstractListComposite<T> 
+public class ListComposite<T> 
+	extends AbstractListComposite<T> 
 {
+	// Either initialise here, pass false to all superconstructors, create a constructor pyramid for 
+	// this class (smallest constructor calls next bigger one), and call createGUIControl in biggest 
+	// constructor, or do NOT initialise additional fields but only declare them here and initialise  
+	// them in createGUIControl!
 	private List list;
-	private Label label;
 
-//	public ListComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
-//	{
-//		super(parent, style, layoutMode, layoutDataMode);
-//	}
-
-	public ListComposite(Composite parent, int style)
-	{
-		super(parent, style);
+	/*
+	 * see {@link AbstractListComposite#AbstractListComposite(Composite, int)}
+	 */
+	public ListComposite(Composite parent, int style) {
+		super(parent, style, true);
 	}
 
-//	public ListComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
-//	{
-//		super(labelProvider, parent, style, layoutMode, layoutDataMode);
-//	}
-
-	public ListComposite(Composite parent, int style, ILabelProvider labelProvider)
-	{
-		super(parent, style, labelProvider, true, null);
+	/* 
+	 * see {@link AbstractListComposite#AbstractListComposite(Composite, int, String)}
+	 */
+	public ListComposite(Composite parent, int listStyle, String caption) {
+		super(parent, listStyle, caption, true);
 	}
 
-	public ListComposite(Composite parent, ILabelProvider labelProvider, boolean doCreateGuiComposite)
-	{
-		super(parent, labelProvider, doCreateGuiComposite, null);
+	/*
+	 * see {@link AbstractListComposite#AbstractListComposite(Composite, int, String, ILabelProvider)}
+	 */
+	public ListComposite(Composite parent, int listStyle, String caption, ILabelProvider labelProvider) {
+		super(parent, listStyle, caption, true, labelProvider);
 	}
 
-	public ListComposite(Composite parent, int style, ILabelProvider labelProvider, boolean doCreateGuiControl, String caption)
-	{
-		super(parent, style, labelProvider, doCreateGuiControl, caption);
+	/*
+	 * see {@link AbstractListComposite#AbstractListComposite(Composite, int, String, ILabelProvider, LayoutMode)}
+	 */
+	public ListComposite(Composite parent, int listStyle, String caption, ILabelProvider labelProvider,
+			LayoutMode layoutMode) {
+		super(parent, listStyle, caption, true, labelProvider, layoutMode);
+	}
+
+	/*
+	 * see {@link AbstractListComposite#AbstractListComposite(Composite, int, String, ILabelProvider, LayoutMode, LayoutDataMode)}
+	 */
+	public ListComposite(Composite parent, int listStyle, String caption, ILabelProvider labelProvider,
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
+		super(parent, listStyle, caption, true, labelProvider, layoutMode, layoutDataMode);
+	}
+
+	/*
+	 * see {@link AbstractListComposite#AbstractListComposite(Composite, int, String, ILabelProvider, LayoutMode, LayoutDataMode, int)}
+	 */
+	public ListComposite(Composite parent, int listStyle, String caption, ILabelProvider labelProvider, 
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode, int compositeStyle) {
+		super(parent, listStyle, caption, true, labelProvider, layoutMode, layoutDataMode, compositeStyle);
 	}
 
 	@Override
@@ -87,28 +110,35 @@ public class ListComposite<T> extends AbstractListComposite<T>
 	}
 
 	@Override
-	protected Control createGuiControl(Composite parent, int style, String caption)
+	protected void createGuiControl(Composite parent, int widgetStyle, String caption)
 	{
-		style |= getBorderStyle();
+		widgetStyle |= getBorderStyle(); // forces border around List according to the context it is in
+		Composite wrapper = parent;
 		if (caption != null) {
-			XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA, 2);
-			label = new Label(comp, SWT.NONE);
+			// TODO: I keep the two columns, but why do we want it like that? (marius)
+			wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE, 2);
+			label = new Label(wrapper, SWT.NONE);
 			label.setText(caption);
-			list = new List(comp, style | SWT.V_SCROLL | SWT.H_SCROLL);
 		}
-		else {
-			list = new List(parent, style | SWT.V_SCROLL | SWT.H_SCROLL);
-			if (parent.getLayout() instanceof GridLayout)
+		
+		list = new List(wrapper, widgetStyle | SWT.V_SCROLL | SWT.H_SCROLL);
+		list.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		if (wrapper.getLayout() instanceof GridLayout)
 				list.setLayoutData(new GridData(GridData.FILL_BOTH));
-		}
+		
 		list.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				fireSelectionChangedEvent();
+				int[] selectedIndices = list.getSelectionIndices();
+				java.util.List<T> selectedElements = new ArrayList<T>(selectedIndices.length);
+				for (int index : selectedIndices) {
+					selectedElements.add( elements.get(index) );
+				}
+				
+				fireSelectionChangedEvent( new StructuredSelection(selectedElements) );
 			}
 		});
-		return list;
 	}
 	
 	public Label getLabel() {
@@ -174,5 +204,6 @@ public class ListComposite<T> extends AbstractListComposite<T>
 	{
 		int index = getElementIndex(elem);
 		list.setItem(index, labelProvider.getText(elem));
-	}	
+	}
+
 }

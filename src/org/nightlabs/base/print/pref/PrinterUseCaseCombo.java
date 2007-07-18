@@ -41,11 +41,10 @@ public class PrinterUseCaseCombo extends CComboComposite<PrinterUseCase> {
 	/**
 	 * @param types
 	 * @param parent
-	 * @param style
+	 * @param comboStyle
 	 */
-	public PrinterUseCaseCombo(Composite parent, int style) {
-		super(
-				PrinterConfigurationRegistry.sharedInstance().getPrinterUseCases(),
+	public PrinterUseCaseCombo(Composite parent, int comboStyle) {
+		super(parent, comboStyle, (String) null,
 				new LabelProvider() {
 					/* (non-Javadoc)
 					 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
@@ -59,12 +58,10 @@ public class PrinterUseCaseCombo extends CComboComposite<PrinterUseCase> {
 						else
 							return super.getText(element);
 					}
-				},
-				parent, 
-				style,
-				(String)null
+				}
 			);
-		
+
+		setInput( PrinterConfigurationRegistry.sharedInstance().getPrinterUseCases() );
 	}
 
 }

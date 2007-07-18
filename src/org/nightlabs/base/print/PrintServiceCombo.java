@@ -3,11 +3,8 @@
  */
 package org.nightlabs.base.print;
 
-import java.util.ArrayList;
-
 import javax.print.PrintService;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.composite.CComboComposite;
 import org.nightlabs.base.table.TableLabelProvider;
@@ -31,14 +28,9 @@ public class PrintServiceCombo extends CComboComposite<PrintService> {
 	 * @param style
 	 */
 	@SuppressWarnings("unchecked")
-	public PrintServiceCombo(Composite parent, int style) {
-		super(
-				new ArrayList<PrintService>(PrintUtil.lookupPrintServices()), 
-				new LabelProvider(),
-				parent, 
-				style | SWT.READ_ONLY,
-				(String) null
-			);
+	public PrintServiceCombo(Composite parent, int comboStyle) {
+		super(parent, comboStyle, (String) null, new LabelProvider());
+		setInput( PrintUtil.lookupPrintServices() );
 	}	
 	
 }

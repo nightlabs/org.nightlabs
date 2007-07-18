@@ -26,8 +26,6 @@
 
 package org.nightlabs.base.print;
 
-import java.util.ArrayList;
-
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.composite.CComboComposite;
 import org.nightlabs.base.print.PrinterConfigurationRegistry.ConfiguratorFactoryEntry;
@@ -56,13 +54,8 @@ public class ConfiguratorCombo extends CComboComposite<ConfiguratorFactoryEntry>
 	 */
 	@SuppressWarnings("unchecked")
 	public ConfiguratorCombo(Composite parent, int style) {
-		super(
-				new ArrayList<ConfiguratorFactoryEntry>(PrinterConfigurationRegistry.sharedInstance().getPrinterConfiguratorEntries()), 
-				new LabelProvider(),
-				parent, 
-				style,
-				null // caption
-			);
+		super(parent,	style, (String) null, new LabelProvider());
+		setInput(	PrinterConfigurationRegistry.sharedInstance().getPrinterConfiguratorEntries() );
 	}
 
 }

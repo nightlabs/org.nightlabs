@@ -23,184 +23,85 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
+
 package org.nightlabs.base.composite;
 
-import java.util.List;
-
 import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TableItem;
 import org.nightlabs.base.custom.XCombo;
 
 /**
  * @author Daniel.Mazurek at Nightlabs dot de
+ * @author Marius Heinzmann <marius[AT]NightLabs[DOT]de>
  *
  */
 public class CComboComposite<T> 
-extends XComposite 
+	extends AbstractListComposite<T> 
 {
+	
 	/**
-	 * 
-	 * @param types a List of the generic types which should be selected in the combo
-	 * @param parent the parent Composite
-	 * @param style the SWT style flag
+	 * @see AbstractListComposite#AbstractListComposite(Composite, int, boolean)
 	 */
-	public CComboComposite(List<T> types, Composite parent, int style, String caption)
-	{
-		this(types, new LabelProvider(), parent, style, caption);
-	}
-
-	/**
-	 * 
-	 * @param types a List of the generic types which should be selected in the combo
-	 * @param labelProvider the labelProvider
-	 * @param parent the parent Composite
-	 * @param style the SWT style flag
-	 */
-	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, int style, String caption)
-	{
-		this(types, labelProvider, parent, style, caption, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
-	}
-
-	/**
-	 * 
-	 * @param types a List of the generic types which should be selected in the combo
-	 * @param labelProvider the labelProvider
-	 * @param parent the parent Composite
-	 * @param style the SWT style flag
-	 * @param comboStyle the SWT style flag of the combo 
-	 */
-	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, int style, String caption, int comboStyle)
-	{
-		this(types, labelProvider, parent, style, caption, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, comboStyle);
+	public CComboComposite(Composite parent, int comboStyle) {
+		super(parent, comboStyle, true);
 	}
 	
 	/**
-	 * 
-	 * @param types a List of the generic types which should be selected in the combo
-	 * @param labelProvider the labelProvider
-	 * @param parent the parent Composite
-	 * @param style the SWT style flag
-	 * @param layoutMode the layoutMode to set
-	 * @param layoutDataMode the layoutDataMode to set
+	 * @see AbstractListComposite#AbstractListComposite(Composite, int, String, boolean)
 	 */
-	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, 
-			int style, String caption, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
-	{
-		this(types, labelProvider, parent, style, caption, layoutMode, layoutDataMode, XComposite.getBorderStyle(parent) | SWT.READ_ONLY);
+	public CComboComposite(Composite parent, int comboStyle, String caption) {
+		super(parent, comboStyle, caption, true);
 	}
-	
+
 	/**
-	 * 
-	 * @param types a List of the generic types which should be selected in the combo
-	 * @param labelProvider the labelProvider
-	 * @param parent the parent Composite
-	 * @param style the SWT style flag
-	 * @param layoutMode the layoutMode to set
-	 * @param layoutDataMode the layoutDataMode to set
-	 * @param comboStyle the SWT style flag for the combo
+	 * @see AbstractListComposite#AbstractListComposite(Composite, int, String, boolean, ILabelProvider)
 	 */
-	public CComboComposite(List<T> types, ILabelProvider labelProvider, Composite parent, 
-			int style, String text, LayoutMode layoutMode, LayoutDataMode layoutDataMode, int comboStyle)
-	{
-		super(parent, style, layoutMode, layoutDataMode);
-		if (types == null)
-			throw new IllegalArgumentException("param types must not be null!");
-
-		wrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		wrapper.getGridLayout().verticalSpacing = 5;
-		
-		this.types = types;
-		
-		if ( text != null && ! "".equals(text) ) {
-			label = new Label(wrapper, SWT.NONE);
-			setCaption(text);
-		}
-		
-		imageCombo = new XCombo(wrapper, comboStyle);
-		imageCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		if (labelProvider == null)
-			this.labelProvider = new LabelProvider();
-		else
-			this.labelProvider = labelProvider;
-		populateCombo();
-	}
-	
-	private ILabelProvider labelProvider = null;
-	private List<T> types = null;
-	private XComposite wrapper = null;
-	private Label label = null;
-	private XCombo imageCombo = null;	
-	
-	public void setCaption(String text) {
-		if (label == null)
-			return;
-		
-		if (text == null)
-			text = "";
-		
-		label.setText(text);
-	}
-	
-	public String getTitle() {
-		return label == null ? null : label.getText(); 
-	}
-	
-	protected void populateCombo() 
-	{
-		for (T type : types) {
-			imageCombo.add(labelProvider.getImage(type), labelProvider.getText(type));
-		}
-	}
-	
-	public T getSelectedElement() 
-	{
-		int selectionIndex = imageCombo.getSelectionIndex();
-		if (selectionIndex != -1)
-			return types.get(selectionIndex);
-		return null;			
-	}
-	
-	public int getSelectionIndex()
-	{
-		return imageCombo.getSelectionIndex();
-	}
-	
-	public void setSelection(int index)
-	{
-		imageCombo.select(index);
-	}
-	
-	public void setSelection(T element)
-	{
-		int index = types.indexOf(element);
-		if (index == -1)
-			return;
-
-		imageCombo.select(index);
-	}
-	
-	public boolean selectElement(T element) 
-	{
-		int index = types.indexOf(element);
-		if (types.indexOf(element) != -1) {
-			imageCombo.select(index);
-			return true;
-		}								
-		return false;
+	public CComboComposite(Composite parent, int comboStyle, String caption, ILabelProvider labelProvider) {
+		super(parent, comboStyle, caption, true, labelProvider);
 	}
 
-	public List<T> getTypes() {
-		return types;
+	/**
+	 * @see AbstractListComposite#AbstractListComposite(Composite, int, String, boolean, ILabelProvider, LayoutMode)
+	 */
+	public CComboComposite(Composite parent, int comboStyle, String caption, ILabelProvider labelProvider,
+			LayoutMode layoutMode) {
+		super(parent, comboStyle, caption, true, labelProvider, layoutMode);
+	}
+
+	/**
+	 * @see AbstractListComposite#AbstractListComposite(Composite, int, String, boolean, ILabelProvider, LayoutMode, LayoutDataMode)  
+	 */
+	public CComboComposite(Composite parent, int comboStyle, String caption, ILabelProvider labelProvider,
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode)	{
+		super(parent, comboStyle, caption, true, labelProvider, layoutMode, layoutDataMode);
+	}
+
+	/**
+	 * @see AbstractListComposite#AbstractListComposite(Composite, int, String, boolean, ILabelProvider, LayoutMode, LayoutDataMode, int)
+	 */
+	public CComboComposite(Composite parent, int comboStyle, String caption, 
+			ILabelProvider labelProvider, LayoutMode layoutMode, LayoutDataMode layoutDataMode, int compositeStyle)
+	{
+		super(parent, comboStyle, caption, true, labelProvider, layoutMode, layoutDataMode, compositeStyle);
 	}
 	
+//	/**
+//	 * @return the backend XCombo widget.
+//	 */
+//	This shouldn't be needed. All methods of the Combo should be completely hidden! (marius)
+//	public XCombo getCombo() {
+//		return imageCombo;
+//	}
+
 	/**
 	 * @param listener
 	 * @see org.nightlabs.base.custom.XCombo#addModifyListener(org.eclipse.swt.events.ModifyListener)
@@ -233,54 +134,96 @@ extends XComposite
 		imageCombo.removeSelectionListener(listener);
 	}
 
-	/**
-	 * @param index
-	 * @return
-	 * @see org.nightlabs.base.custom.XCombo#getItem(int)
-	 */
-	public TableItem getItem(int index) {
-		return imageCombo.getItem(index);
+	@Override
+	protected void addElementToGui(int index, T element) {
+		imageCombo.add(labelProvider.getImage(element), labelProvider.getText(element));
 	}
 
+	
+	// Either initialise here, pass false to all superconstructors, create a constructor pyramid for 
+	// this class (smallest constructor calls next bigger one), and call createGUIControl in biggest 
+	// constructor, or do NOT initialise additional fields but only declare them here and initialise  
+	// them in createGUIControl!
 	/**
-	 * @return
-	 * @see org.nightlabs.base.custom.XCombo#getItemCount()
+	 * The backend Combo used by this implementation. 
 	 */
-	public int getItemCount() {
-		return imageCombo.getItemCount();
+	private XCombo imageCombo;
+
+	
+	@Override
+	protected void createGuiControl(Composite parent, int widgetStyle, String caption) 
+	{
+		if ( caption != null && ! "".equals(caption) ) {
+			XComposite composite = new XComposite(parent, SWT.NONE, LayoutDataMode.GRID_DATA);
+			label = new Label(composite, SWT.NONE);
+			label.setText(caption);
+			imageCombo = new XCombo(parent, widgetStyle);
+			imageCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		} else {
+			imageCombo = new XCombo(parent, widgetStyle);
+			if ( parent.getLayout() instanceof GridLayout )
+				imageCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		}
+
+		imageCombo.addSelectionListener(new SelectionAdapter() {
+			
+			public void widgetSelected(SelectionEvent e) {
+				StructuredSelection selection = new StructuredSelection(
+						imageCombo.getItem(imageCombo.getSelectionIndex()) );
+				fireSelectionChangedEvent(selection);
+			}
+		
+		});
 	}
 
-	/**
-	 * @param index
-	 * @see org.nightlabs.base.custom.XCombo#select(int)
-	 */
-	public void select(int index) {
+	@Override
+	protected int internal_getSelectionCount() {
+		if (imageCombo.getSelectionIndex() < 0 || imageCombo.getItemCount() < 1)
+			return 0;
+		else
+			return 1;
+	}
+
+	@Override
+	protected int internal_getSelectionIndex() {
+		return imageCombo.getSelectionIndex();
+	}
+
+	@Override
+	protected int[] internal_getSelectionIndices() {
+		return new int[] { imageCombo.getSelectionIndex() };
+	}
+
+	@Override
+	protected void internal_setSelection(int index) {
 		imageCombo.select(index);
 	}
-	
-	/**
-	 * Convienience method for {@link #setItems(List)}.
-	 */
-	public void setInput(List<T> types) {
-		setItems(types);
-	}
-			
-	public void setItems(List<T> types) {
-		imageCombo.removeAll();
-		this.types = types;
-		if (types == null)
-			return;
+
+	@Override
+	protected void internal_setSelection(int[] indices) {
+		if (indices.length > 1 )
+			throw new IllegalArgumentException("Multiple selections are not supported by Combos!");
 		
-		for (T type : types) {
-			imageCombo.add(labelProvider.getImage(type), labelProvider.getText(type));
-		}
+		internal_setSelection(indices[0]);
 	}
 
-	/**
-	 * @return the backend XCombo widget.
-	 */
-//	public XCombo getCombo() {
-//		return imageCombo;
-//	}
-	
+	@Override
+	protected void refreshElement(T elem) {
+		int index = getElementIndex(elem);
+		if (index < 0)
+			return;
+		
+		imageCombo.setItem(index, labelProvider.getImage(elem), labelProvider.getText(elem));
+	}
+
+	@Override
+	protected void removeAllElementsFromGui() {
+		imageCombo.removeAll();
+	}
+
+	@Override
+	protected void removeElementFromGui(int index) {
+		imageCombo.remove(index);
+	}
+
 }

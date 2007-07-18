@@ -28,7 +28,6 @@ package org.nightlabs.base.celleditor;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.composite.CComboComposite;
@@ -71,7 +70,8 @@ extends XCellEditor
 	
 	@Override
 	protected Control createControl(Composite parent) {
-		comboComposite = new CComboComposite<T>(types, labelProvider, parent, SWT.NONE,(String)null, comboStyle);
+		comboComposite = new CComboComposite<T>(parent, comboStyle,(String)null, labelProvider);
+		comboComposite.setInput(types);
 		return comboComposite;
 	}
 

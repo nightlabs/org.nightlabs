@@ -81,8 +81,8 @@ implements IWorkbenchPreferencePage
 		for (Entry<String, PrinterConfiguration> entry : configs.entrySet()) {
 			printerConfigurations.put(entry.getKey(), (PrinterConfiguration)entry.getValue().clone());
 		}
-		if (useCaseCombo.getItemCount() > 0) {
-			useCaseCombo.select(0);
+		if (useCaseCombo.getElements().size() > 0) {
+			useCaseCombo.selectElement( useCaseCombo.getElements().get(0) );
 			updatePrinterConfigurationComposite();
 		}
 		return wrapper;

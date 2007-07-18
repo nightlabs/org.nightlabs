@@ -23,12 +23,15 @@
  *                                                                             *
  *                                                                             *
  ******************************************************************************/
+
 package org.nightlabs.base.composite;
 
 import java.util.List;
 
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -38,31 +41,34 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
+/**
+ * @deprecated use XComboComposite instead TODO: rename CComboComposite -> XComboComposite.
+ * 
+ * @author Marius Heinzmann <marius[AT]nightlabs[DOT]de>
+ * @param <T>
+ */
 public class ComboComposite<T> extends AbstractListComposite<T> {
-	private Label label;
 
+	// Either initialise here, pass false to all superconstructors, create a constructor pyramid for 
+	// this class (smallest constructor calls next bigger one), and call createGUIControl in biggest 
+	// constructor, or do NOT initialise additional fields but only declare them here and initialise  
+	// them in createGUIControl!
 	private Combo combo;
 
-//	public ComboComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
-//		super(parent, style, layoutMode, layoutDataMode);
-//	}
-
-	public ComboComposite(Composite parent, int style)
+	public ComboComposite(Composite parent, int comboStyle)
 	{
-		super(parent, style);
+		super(parent, comboStyle, true);
 	}
 
-	public ComboComposite(Composite parent, int style, List<T> elements) {
-		this(parent, style, elements, (String)null);
+	public ComboComposite(Composite parent, int comboStyle, List<T> elements) {
+		this(parent, comboStyle, elements, (String)null);
 	}
 
-	public ComboComposite(Composite parent, int style, List<T> elements, String caption) {
-		super(parent, style,  new LabelProvider(), false, caption);
-		createGuiControl(this, style, caption);
-		addElements(elements);
+	public ComboComposite(Composite parent, int comboStyle, List<T> elements, String caption) {
+		super(parent, comboStyle, caption, true, new LabelProvider());
+		setInput(elements);
 	}
 
 //	public ComboComposite(Composite parent, int style, ILabelProvider labelProvider, LayoutMode layoutMode,
@@ -74,51 +80,41 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 //		super(labelProvider, parent, style);
 //	}
 
-	public ComboComposite(Composite parent, int style, ILabelProvider labelProvider, String caption) {
-		super(parent, style, labelProvider, false, caption);
-//		this.comboStyle = SWT.READ_ONLY;
-		createGuiControl(this, style, caption);
+	public ComboComposite(Composite parent, int comboStyle, ILabelProvider labelProvider, String caption) {
+		super(parent, comboStyle, caption, true, labelProvider);
 	}
 
-
-//	private int comboStyle = SWT.DROP_DOWN | SWT.READ_ONLY;
-	public ComboComposite(Composite parent, int style, List<T> elements, ILabelProvider labelProvider) {
-		this(parent, style, elements, labelProvider, (String)null);
+	public ComboComposite(Composite parent, int comboStyle, List<T> elements, ILabelProvider labelProvider) {
+		this(parent, comboStyle, elements, labelProvider, (String)null);
 	}
 
 	public ComboComposite(Composite parent, int style, String caption) {
-		super(parent, style,  new LabelProvider(), true, caption);
+		super(parent, style, caption, true, new LabelProvider());
 	}
 
-	public ComboComposite(Composite parent, int style, List<T> elements, ILabelProvider labelProvider, String caption) {
-//		super(labelProvider, parent, SWT.NONE, false);
-		super(parent, labelProvider, false, null);
-//		this.comboStyle = comboStyle;
-		createGuiControl(this, style, caption);
-		addElements(elements);
+	public ComboComposite(Composite parent, int comboStyle, List<T> elements, ILabelProvider labelProvider, String caption) {
+		super(parent, comboStyle, caption, true, labelProvider);
+		setInput(elements);
 	}
 
-	public ComboComposite(Composite parent, int style, ILabelProvider labelProvider) {
-		super(parent, labelProvider, false, null);
-		createGuiControl(this, style, null);
+	public ComboComposite(Composite parent, int comboStyle, ILabelProvider labelProvider) {
+		super(parent, comboStyle, (String) null, true, labelProvider);
 	}
 
 	protected void addElementToGui(int index, T element) {
 		combo.add(labelProvider.getText(element), index);
 	}
 
-	protected Control createGuiControl(Composite parent, int style, String caption) {
-//		this.getGridData().grabExcessVerticalSpace = false;
-		this.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	protected void createGuiControl(Composite parent, int style, String caption) {
 		style |= getBorderStyle();
 		if ((style & SWT.SIMPLE) == 0 && (style & SWT.DROP_DOWN) == 0)
 			style |= SWT.DROP_DOWN;
 		if (caption != null) {
-			XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, 2);
-			comp.getGridData().grabExcessVerticalSpace = false;
-			label = new Label(comp, SWT.NONE);
+			XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE, 2);
+			wrapper.getGridData().grabExcessVerticalSpace = false;
+			label = new Label(wrapper, SWT.NONE);
 			label.setText(caption);
-			combo = new Combo(comp, style);
+			combo = new Combo(wrapper, style);
 			combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		} else {
 			combo = new Combo(parent, style);
@@ -126,14 +122,16 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 				combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			}
 		}
+		
 		combo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				fireSelectionChangedEvent();
+				IStructuredSelection selection = new StructuredSelection(
+						combo.getItem(combo.getSelectionIndex()) );
+				fireSelectionChangedEvent(selection);
 			}
-		});
-		return combo;
+		});		
 	}
 
 	public Label getLabel() {
@@ -179,9 +177,10 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 			return 1;
 	}
 
-	public Combo getCombo() {
-		return combo;
-	}
+//	This should not be needed and should be completely hidden. (marius)
+//	public Combo getCombo() {
+//		return combo;
+//	}
 
 	/**
 	 * @param listener
@@ -237,4 +236,5 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 	{
 		combo.setText(text);
 	}
+
 }

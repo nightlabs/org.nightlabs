@@ -22,16 +22,17 @@
  *     http://www.gnu.org/copyleft/lesser.html                                 *
  *                                                                             *
  ******************************************************************************/
+
 package org.nightlabs.base.composite;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -42,7 +43,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.nightlabs.base.selection.SelectionProvider;
 
 /**
  * This class provides abstract logic for managing a list of objects and displaying them in
@@ -51,12 +53,17 @@ import org.eclipse.swt.widgets.Control;
  * The labels of the objects are provided by a {@link ILabelProvider}.
  * 
  * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
+ * @author Marius Heinzmann <marius[AT]NightLabs[DOT]de>
  * 
  * @param <T> The type of the elements that should be displayed inside this combo.
  */
 public abstract class AbstractListComposite<T> extends XComposite
 implements ISelectionProvider
 {	
+	/**
+	 * The (optional) label, which all subclasses may use as they wish.
+	 */
+	protected Label label = null;
 	/**
 	 * List of the objects that should be managed.
 	 */
@@ -68,71 +75,131 @@ implements ISelectionProvider
 	protected ILabelProvider labelProvider;
 	
 	/**
-	 * Creates a new instance and uses a default LabelProvider and default layout definitions.
-	 * @param parent The parent composite.
-	 * @param style the SWT style flag.	 
+	 * Creates a fully configurable ListComposite. If a subclass defines own members (declares and defines)
+	 * or initialises own members in its own constructors, then this subclass needs to set 
+	 * <code>createGUI = false</code>, otherwise uninitialised members might be accessed in 
+	 * {@link #createGuiControl(Composite, int, String)}!  
+	 * 
+	 * @param parent the Composite to place this one in.
+	 * @param widgetStyle the style of the widget which displays the managed List of elements.
+	 * @param createGUI boolean to indicate whether this class should call 
+	 * 		{@link #createGuiControl(Composite, int, String)} or the subclass will in its own constructors.
 	 */
-	public AbstractListComposite(Composite parent, int style)
+	public AbstractListComposite(Composite parent, int widgetStyle, boolean createGUI)
 	{
-		this(parent, style, new LabelProvider(), true, (String)null);		
+		this(parent, widgetStyle, (String) null, createGUI);		
 	}
 	
-//	/**
-//	 * Creates a new instance using default layout definitions.
-//	 * @param labelProvider The {@link ILabelProvider} that provides the label of the list elements.
-//	 * @param parent The parent composite.
-//	 * @param style the SWT style flag.	 
-//	 */
-//	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style)
-//	{
-//		this(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA);
-//	}
-//
-//	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, boolean doCreateGuiComposite)
-//	{
-//		this(labelProvider, parent, style, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, doCreateGuiComposite, null);
-//	}
-
-//	/**
-//	 * Creates a new instance and uses a default LabelProvider.
-//	 * @param parent The parent composite.
-//	 * @param style the SWT style flag.	 
-//	 * @param layoutMode The {@link LayoutMode} to set.
-//	 * @param layoutDataMode The {@link LayoutDataMode} to set.
-//	 */
-//	public AbstractListComposite(Composite parent, int style, LayoutMode layoutMode,
-//			LayoutDataMode layoutDataMode)
-//	{
-//		this(new LabelProvider(), parent, style, layoutMode, layoutDataMode);
-//	}
-	
-//	/**
-//	 * Creates a new instance.
-//	 * @param labelProvider The {@link ILabelProvider} that provides the label of the managed elements..
-//	 * @param parent The parent composite.
-//	 * @param style the SWT style flag.	 
-//	 * @param layoutMode The {@link LayoutMode} to set.
-//	 * @param layoutDataMode The {@link LayoutDataMode} to set.
-//	 */
-//	public AbstractListComposite(ILabelProvider labelProvider, Composite parent, int style, LayoutMode layoutMode,
-//			LayoutDataMode layoutDataMode)
-//	{
-//		this(labelProvider, parent, style, layoutMode, layoutDataMode, true, null);
-//	}
-	public AbstractListComposite(Composite parent, ILabelProvider labelProvider, boolean doCreateGuiControl, String caption)
-	{
-		this(parent, SWT.NONE, labelProvider, doCreateGuiControl, caption);
+	/**
+	 * Creates a fully configurable ListComposite. If a subclass defines own members (declares and defines)
+	 * or initialises own members in its own constructors, then this subclass needs to set 
+	 * <code>createGUI = false</code>, otherwise uninitialised members might be accessed in 
+	 * {@link #createGuiControl(Composite, int, String)}!  
+	 * 
+	 * @param parent the Composite to place this one in.
+	 * @param widgetStyle the style of the widget which displays the managed List of elements.
+	 * @param caption the String to use as a caption, if none given no caption is created.
+	 * @param createGUI boolean to indicate whether this class should call 
+	 * 		{@link #createGuiControl(Composite, int, String)} or the subclass will in its own constructors.
+	 */
+	public AbstractListComposite(Composite parent, int widgetStyle, String caption, boolean createGUI) {
+		this(parent, widgetStyle, caption, createGUI, new LabelProvider());
 	}
-
-	public AbstractListComposite(Composite parent, int style, ILabelProvider labelProvider, boolean doCreateGuiControl, String caption)
+	
+	/**
+	 * Creates a fully configurable ListComposite. If a subclass defines own members (declares and defines)
+	 * or initialises own members in its own constructors, then this subclass needs to set 
+	 * <code>createGUI = false</code>, otherwise uninitialised members might be accessed in 
+	 * {@link #createGuiControl(Composite, int, String)}!  
+	 * 
+	 * @param parent the Composite to place this one in.
+	 * @param widgetStyle the style of the widget which displays the managed List of elements.
+	 * @param caption the String to use as a caption, if none given no caption is created.
+	 * @param createGUI boolean to indicate whether this class should call 
+	 * 		{@link #createGuiControl(Composite, int, String)} or the subclass will in its own constructors.
+	 * @param labelProvider the {@link ILabelProvider}, which will generate the text as well as image 
+	 * 		labels for the stored elements.
+	 */
+	public AbstractListComposite(Composite parent, int widgetStyle, String caption, boolean createGUI, 
+			ILabelProvider labelProvider) 
 	{
-		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		this(parent, widgetStyle, caption, createGUI, labelProvider, LayoutMode.TIGHT_WRAPPER);
+	}
+	
+	/**
+	 * Creates a fully configurable ListComposite. If a subclass defines own members (declares and defines)
+	 * or initialises own members in its own constructors, then this subclass needs to set 
+	 * <code>createGUI = false</code>, otherwise uninitialised members might be accessed in 
+	 * {@link #createGuiControl(Composite, int, String)}!  
+	 * 
+	 * @param parent the Composite to place this one in.
+	 * @param widgetStyle the style of the widget which displays the managed List of elements.
+	 * @param caption the String to use as a caption, if none given no caption is created.
+	 * @param createGUI boolean to indicate whether this class should call 
+	 * 		{@link #createGuiControl(Composite, int, String)} or the subclass will in its own constructors.
+	 * @param labelProvider the {@link ILabelProvider}, which will generate the text as well as image 
+	 * 		labels for the stored elements.
+	 * @param layoutMode the {@link LayoutMode} to use for this XComposite.
+	 */
+	public AbstractListComposite(Composite parent, int widgetStyle, String caption, boolean createGUI, 
+			ILabelProvider labelProvider,	LayoutMode layoutMode) 
+	{
+		this(parent, widgetStyle, caption, createGUI, labelProvider, layoutMode, LayoutDataMode.GRID_DATA);
+	}
+	
+	/**
+	 * Creates a fully configurable ListComposite. If a subclass defines own members (declares and defines)
+	 * or initialises own members in its own constructors, then this subclass needs to set 
+	 * <code>createGUI = false</code>, otherwise uninitialised members might be accessed in 
+	 * {@link #createGuiControl(Composite, int, String)}!  
+	 * 
+	 * @param parent the Composite to place this one in.
+	 * @param widgetStyle the style of the widget which displays the managed List of elements.
+	 * @param caption the String to use as a caption, if none given no caption is created.
+	 * @param createGUI boolean to indicate whether this class should call 
+	 * 		{@link #createGuiControl(Composite, int, String)} or the subclass will in its own constructors.
+	 * @param labelProvider the {@link ILabelProvider}, which will generate the text as well as image 
+	 * 		labels for the stored elements.
+	 * @param layoutMode the {@link LayoutMode} to use for this XComposite.
+	 * @param layoutDataMode the {@link LayoutDataMode} to use for this XComposite.
+	 */
+	public AbstractListComposite(Composite parent, int widgetStyle, String caption, boolean createGUI, 
+			ILabelProvider labelProvider,	LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
+	{
+		this(parent, widgetStyle, caption, createGUI, labelProvider, layoutMode, layoutDataMode, SWT.NONE);
+	}				
+
+	/**
+	 * Creates a fully configurable ListComposite. If a subclass defines own members (declares and defines)
+	 * or initialises own members in its own constructors, then this subclass needs to set 
+	 * <code>createGUI = false</code>, otherwise uninitialised members might be accessed in 
+	 * {@link #createGuiControl(Composite, int, String)}!  
+	 * 
+	 * @param parent the Composite to place this one in.
+	 * @param widgetStyle the style of the widget which displays the managed List of elements.
+	 * @param caption the String to use as a caption, if none given no caption is created.
+	 * @param createGUI boolean to indicate whether this class should call 
+	 * 		{@link #createGuiControl(Composite, int, String)} or the subclass will in its own constructors.
+	 * @param labelProvider the {@link ILabelProvider}, which will generate the text as well as image 
+	 * 		labels for the stored elements.
+	 * @param layoutMode the {@link LayoutMode} to use for this XComposite.
+	 * @param layoutDataMode the {@link LayoutDataMode} to use for this XComposite.
+	 * @param compositeStyle the style of this composite.
+	 */
+	public AbstractListComposite(Composite parent, int widgetStyle, String caption, boolean createGUI, 
+			ILabelProvider labelProvider, LayoutMode layoutMode, LayoutDataMode layoutDataMode, int compositeStyle)
+	{
+		super(parent, compositeStyle, layoutMode, layoutDataMode);
+		
+		if (labelProvider == null)
+			throw new IllegalArgumentException("labelProvider must not be null!");
+
 		this.labelProvider = labelProvider;
 
 		elements = new LinkedList<T>();
 
-		if (doCreateGuiControl)
-			createGuiControl(this, style, caption);
+		if (createGUI)
+			createGuiControl(this, widgetStyle, caption);
 	}
 
 	public void setLabelProvider(ILabelProvider labelProvider)
@@ -140,7 +207,30 @@ implements ISelectionProvider
 		this.labelProvider = labelProvider;
 	}
 
-	protected abstract Control createGuiControl(Composite parent, int style, String caption);
+	/**
+	 * Subclasses should create the GUI and register an SelectionListener in the widget, which calls
+	 * {@link #fireSelectionChangedEvent(IStructuredSelection)} by implementing this method. <br> 
+	 * 
+	 * <p><b>Important</b>:<br>
+	 * 	Ensure that a SelectionListener is registered within the widget and that it calls
+	 * 	{@link #fireSelectionChangedEvent(IStructuredSelection)}! 
+	 * </p>
+	 *  
+	 * @param widgetStyle the style with which to create the widget representing the List of elements.
+	 * @param caption the text used as a caption if it is not <code>null</code>.
+	 */
+	protected abstract void createGuiControl(Composite parent, int widgetStyle, String caption); 
+	
+	/**
+	 * This is convenience method to retrieve the default widget style.
+	 * It is not intended to be overridden by subclasses!
+	 * 
+	 * @param comp some composite 
+	 * @return SWT.READ_ONLY | XComposite.getBorderStyle(comp)
+	 */
+	public static int getDefaultWidgetStyle(Composite comp) {
+		return SWT.READ_ONLY | XComposite.getBorderStyle(comp);
+	}
 	
 	/**
 	 * Populates the graphical list with the elements provided and labels them using the label provider.
@@ -178,7 +268,8 @@ implements ISelectionProvider
 	protected abstract int[] internal_getSelectionIndices();
 
 	/**
-	 * Selects the element with the given index in the graphical representation of this list.
+	 * Selects the element with the given index in the graphical representation of this list. If 
+	 * <code>index == -1</code> deselect all previously selected elements.
 	 */
 	protected abstract void internal_setSelection(int index);
 
@@ -186,25 +277,46 @@ implements ISelectionProvider
 
 	protected abstract int internal_getSelectionCount();
 
+	/**
+	 * Returns the index of the currently selected element.
+	 * @return the index of the currently selected element.
+	 */
 	public int getSelectionIndex()
 	{
 		return internal_getSelectionIndex();
 	}
 
+	/**
+	 * Returns an array of indices of all selected elements. 
+	 * @return an array of indices of all selected elements.
+	 */
 	public int[] getSelectionIndices()
 	{
 		return internal_getSelectionIndices();
 	}
 
+	/**
+	 * Returns the number of selected elements.
+	 * @return the number of selected elements.
+	 */
 	public int getSelectionCount()
 	{
 		return internal_getSelectionCount();
 	}
 
+	/**
+	 * Sets the selection to the element with the given index. If no such index exists, it does nothing.
+	 * @param index the index of an element, which shall be selected.
+	 */
 	public void setSelection(int index)
 	{
 		internal_setSelection(index);
 	}
+	
+	/**
+	 * Selects all elements corresponding to the given array of indices.
+	 * @param indices an array with all indices of the elements that shall be selected.
+	 */
 	public void setSelection(int[] indices)
 	{
 		internal_setSelection(indices);
@@ -269,6 +381,9 @@ implements ISelectionProvider
 	 */
 	public void setInput(Collection<T> elements)
 	{
+		if (elements == null)
+			elements = Collections.EMPTY_LIST;
+		
 		removeAll();
 		addElements(elements);
 	}
@@ -286,6 +401,10 @@ implements ISelectionProvider
 			return null;
 	}
 
+	/**
+	 * Returns a {@link List} of all selected Elements;
+	 * @return a {@link List} of all selected Elements;
+	 */
 	public List<T> getSelectedElements()
 	{
 		ArrayList<T> selectedElements = new ArrayList<T>(internal_getSelectionCount());
@@ -308,11 +427,32 @@ implements ISelectionProvider
 
 	/**
 	 * Returns the current list of elements.
-	 * 
 	 * @return The current list of elements.
 	 */
 	public List<T> getElements() {
 		return elements;
+	}
+	
+	/**
+	 * Returns the <code>label</code>'s text if any has been created, <code>null</code> otherwise.
+	 * @return the <code>label</code>'s text if any has been created, <code>null</code> otherwise.
+	 */
+	public String getTitle() {
+		return label == null ? null : label.getText(); 
+	}
+
+	/**
+	 * Sets the Caption of the this List if a label has been created.
+	 * @param text the text to set as Caption. If it is <code>null</code> the caption will be cleared.
+	 */
+	public void setCaption(String text) {
+		if (label == null)
+			return;
+		
+		if (text == null)
+			text = "";
+		
+		label.setText(text);
 	}
 	
 	/**
@@ -325,33 +465,30 @@ implements ISelectionProvider
 		return elements.contains(element);
 	}
 	
+	public boolean selectElement(int index) {
+		if (index < -1)
+			return false;
+		
+		internal_setSelection(index);
+		return true;
+	}
+	
 	/**
 	 * Selects the given element in the list.
 	 * 
 	 * @param element The element to be selected.
-	 * @return <code>True</code> if the element to be selected was in the list and <code>false</code> if not.
-	 *		If <code>element</code> is <code>null</code>, this method always returns <code>true</code> and deselects.
+	 * @return <code>True</code> if the element to be selected was in the list and <code>false</code>
+	 *  if not. If <code>element</code> is <code>null</code>, this method always returns 
+	 *  <code>true</code> and deselects	all previously selected elements.
 	 */
 	public boolean selectElement(T element)
 	{
-		if (element == null) {
-			internal_setSelection(-1);
-			return true;
-		}
-		
 		int index = elements.indexOf(element);
-		if (index != -1)
-		{
-			internal_setSelection(index);
-			return true;
-		}
-		else
-			return false;
+		return selectElement(index);
 	}
 	
 	/**
 	 * Refreshes the list.
-	 *
 	 */
 	protected void reset()
 	{
@@ -409,27 +546,37 @@ implements ISelectionProvider
 			refreshElement(elem);
 	}
 
-	protected void fireSelectionChangedEvent()
+	/**
+	 * This method has to be called by the subclass when a {@link SelectionChangedEvent} happened 
+	 * in the widget. The Listener to trigger this method should be registered in 
+	 * {@link #createGuiControl(Composite, int, String)}.
+	 * 
+	 * @param selection the selection containing all selected elements. 
+	 */
+	protected void fireSelectionChangedEvent(IStructuredSelection selection)
 	{
-		if (selectionChangedListeners.isEmpty())
-			return;
-
-		SelectionChangedEvent event = new SelectionChangedEvent(this, getSelection());
-		Object[] listeners = selectionChangedListeners.getListeners();
-		for (Object listener : listeners)
-			((ISelectionChangedListener)listener).selectionChanged(event);
+		selectionProvider.setSelection(selection);
 	}
 
-	private ListenerList selectionChangedListeners = new ListenerList();
+//	/**
+//	 * All subclasses have to register an SelectionChangedListener in the widget and call 
+//	 * {@link #fireSelectionChangedEvent()} when they get notified of selection changes in the widget.
+//	 */
+//	abstract protected void registerSelectionListenerInWidget(); 
+//	
+	/**
+	 * SelectionProvider used to notify {@link ISelectionChangedListener}. 
+	 */
+	private SelectionProvider selectionProvider = new SelectionProvider();
 
 	public void addSelectionChangedListener(ISelectionChangedListener listener)
 	{
-		selectionChangedListeners.add(listener);
+		selectionProvider.addSelectionChangedListener(listener);
 	}
 
 	public void removeSelectionChangedListener(ISelectionChangedListener listener)
 	{
-		selectionChangedListeners.remove(listener);
+		selectionProvider.removeSelectionChangedListener(listener);
 	}
 
 	/**

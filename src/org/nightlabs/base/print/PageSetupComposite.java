@@ -32,7 +32,9 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -45,6 +47,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.composite.AbstractListComposite;
 import org.nightlabs.base.composite.CComboComposite;
 import org.nightlabs.base.composite.DoubleSpinnerComposite;
 import org.nightlabs.base.composite.XComposite;
@@ -85,7 +88,7 @@ extends XComposite
 	
 	private Button orientationHorizontal = null;
 	private Button orientationVertical = null;	
-	private CComboComposite<IPredefinedPage> predefinedPageCombo = null;
+	private AbstractListComposite<IPredefinedPage> predefinedPageCombo = null;
 	private PrintPreviewComposite previewComp = null;
 	
 	protected void init(PageFormat pageFormat) 
@@ -127,7 +130,7 @@ extends XComposite
 		pageGroup.setLayout(new GridLayout());
 		pageGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		predefinedPageCombo = initPageCombo(pageGroup);
-		predefinedPageCombo.addSelectionListener(pageListener);
+		predefinedPageCombo.addSelectionChangedListener(pageListener);
 		predefinedPageCombo.selectElement(new A4Page());
 		
 		// orientation		
@@ -163,7 +166,7 @@ extends XComposite
 		Label unitLabel = new Label(marginGroup, SWT.NONE);
 		unitLabel.setText(NLBasePlugin.getResourceString("composite.printPreview.unit.label"));
 		unitCombo = initUnitCombo(marginGroup);
-		unitCombo.addSelectionListener(unitListener);
+		unitCombo.addSelectionChangedListener(unitListener);
 		unitCombo.selectElement(new MMUnit());
 	
 		Label marginTopLabel = new Label(marginGroup, SWT.NONE);
@@ -334,20 +337,22 @@ extends XComposite
 	public IUnit getCurrentUnit() {
 		return unitCombo.getSelectedElement();
 	}
-	private CComboComposite<IUnit> unitCombo = null;
-	private CComboComposite<IUnit> initUnitCombo(Composite parent) {
+	private AbstractListComposite<IUnit> unitCombo = null;
+	private AbstractListComposite<IUnit> initUnitCombo(Composite parent) {
 		List<IUnit> units = new ArrayList<IUnit>(UnitRegistryEP.sharedInstance().getUnitRegistry().getGlobalUnits());
-		return new CComboComposite<IUnit>(units, new UnitLabelProvider(), parent, SWT.NONE, null, getBorderStyle() | SWT.READ_ONLY);
+		AbstractListComposite<IUnit> unitList = 
+		new CComboComposite<IUnit>(parent, getBorderStyle() | SWT.READ_ONLY, (String) null, new UnitLabelProvider());
+		unitList.setInput(units);
+		return unitList;
 	}
 		
-	private SelectionListener unitListener = new SelectionListener()
-	{	
-		public void widgetSelected(SelectionEvent e) {
+	private ISelectionChangedListener unitListener = new ISelectionChangedListener()
+	{
+		
+		public void selectionChanged(SelectionChangedEvent event) {
 			setSpinnerValues();
-		}	
-		public void widgetDefaultSelected(SelectionEvent e) {
-			
-		}	
+		}
+		
 	};
 	
 	private int spinnerDigits = 3;
@@ -394,11 +399,14 @@ extends XComposite
 		pageFormat.setPaper(paper);		
 	}
 			
-	private CComboComposite<IPredefinedPage> initPageCombo(Composite parent) 
+	private AbstractListComposite<IPredefinedPage> initPageCombo(Composite parent) 
 	{
 		List<IPredefinedPage> pages = new ArrayList<IPredefinedPage>(PredefinedPageEP.sharedInstance().getPageRegistry().getPages());
-		return new CComboComposite<IPredefinedPage>(pages, predefinedPageLabelProvider, 
-				parent, SWT.READ_ONLY, null);
+		AbstractListComposite<IPredefinedPage> pageList = new CComboComposite<IPredefinedPage>(
+				parent, SWT.READ_ONLY | getBorderStyle(), (String) null, predefinedPageLabelProvider);
+		pageList.setInput(pages);
+		
+		return pageList;
 	}
 		
 	private PageFormat getPageFormat(IPredefinedPage page) 
@@ -433,15 +441,13 @@ extends XComposite
 		}		
 	};
 	
-	private SelectionListener pageListener = new SelectionListener()
-	{	
-		public void widgetSelected(SelectionEvent e) {
+	private ISelectionChangedListener pageListener = new ISelectionChangedListener() {
+	
+		public void selectionChanged(SelectionChangedEvent event) {
 			pageFormat = getPageFormat(predefinedPageCombo.getSelectedElement());
 			refresh(pageFormat);
 		}	
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);			
-		}	
+	
 	};
 		
 	private SelectionListener horizontalListener = new SelectionListener()

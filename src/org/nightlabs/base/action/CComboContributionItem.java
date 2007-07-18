@@ -48,7 +48,9 @@ extends XContributionItem
    */
   protected Control createControl(Composite parent) 
   {
-  	comboComposite = new CComboComposite<T>(types, parent, SWT.NONE, (String)null);
+  	comboComposite = new CComboComposite<T>(parent, CComboComposite.getDefaultWidgetStyle(parent), 
+  			(String)null, labelProvider);
+  	comboComposite.setInput(types);
   	return comboComposite;
   }	
   
