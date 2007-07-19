@@ -46,6 +46,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -133,6 +134,7 @@ public XCombo (Composite parent, int style) {
 
 	int arrowStyle = SWT.DOWN | SWT.ARROW;
 	if ((style & SWT.FLAT) != 0) arrowStyle |= SWT.FLAT;
+	
 	arrow = new Button (this, arrowStyle);
 
 	listener = new Listener () {
@@ -444,6 +446,10 @@ public Point computeSize (int wHint, int hHint, boolean changed)
 	gc.dispose();
 	Point textSize = text.computeSize (SWT.DEFAULT, SWT.DEFAULT, changed);
 	Point arrowSize = arrow.computeSize (SWT.DEFAULT, SWT.DEFAULT, changed);
+	
+	// TODO workaround to change the size of the XCombo
+	arrowSize.y -= 5;
+	
 	Point listSize = table.computeSize (wHint, SWT.DEFAULT, changed);
 	int borderWidth = getBorderWidth ();
 
