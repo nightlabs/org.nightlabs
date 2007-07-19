@@ -26,6 +26,11 @@
 
 package org.nightlabs.base.print.pref;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionEvent;
@@ -36,8 +41,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.nightlabs.base.NLBasePlugin;
-import org.nightlabs.base.composite.LabeledComboComposite;
+import org.nightlabs.base.composite.AbstractListComposite;
 import org.nightlabs.base.composite.LabeledText;
+import org.nightlabs.base.composite.XComboComposite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.print.DocumentPrinterDelegateConfig;
 import org.nightlabs.print.DelegatingDocumentPrinterCfMod.ExternalEngineDelegateConfig;
@@ -59,7 +65,7 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 	private XComposite sysCalLEditComposite;
 	private XComposite firstLine;
 	private LabeledText expectedReturnValue;
-	private LabeledComboComposite templates;
+	private AbstractListComposite<String> templates;
 	private LabeledText commandPattern;
 	private LabeledText parameterPattern;
 	
@@ -122,6 +128,16 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 		initGUI();
 	}
 
+	private static final String ACROBAT_WINDOWS = "Acrobat Reader Windows /t";
+	private static final String ACROBAT_WINDOWS_ONLY_DEFAULT = "Acrobat Reader Windows /p/h (Only default printer)";
+	
+	private static final List<String> options;
+	static {
+		 options = new LinkedList<String>();
+		 options.add(ACROBAT_WINDOWS);
+		 options.add(ACROBAT_WINDOWS_ONLY_DEFAULT);
+	}
+	
 	protected void initGUI() {
 		typeWrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		typeGroup = new Group(typeWrapper, SWT.NONE);
@@ -157,28 +173,25 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 		firstLine.getGridData().grabExcessVerticalSpace = false;
 		firstLine.getGridLayout().numColumns = 2;
 		expectedReturnValue = new LabeledText(firstLine, "expected return value");
-		templates = new LabeledComboComposite(firstLine, SWT.BORDER | SWT.READ_ONLY, true);
-		templates.getLabel().setText("templates");
-		templates.getCombo().add("Acrobat Reader Windows /t");
-		templates.getCombo().add("Acrobat Reader Windows /p/h (Only default printer)");
-		templates.getCombo().addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-			public void widgetSelected(SelectionEvent e) {
-				switch (templates.getCombo().getSelectionIndex()) {
-				case 0:
+		templates = new XComboComposite<String>(firstLine, XComboComposite.getDefaultWidgetStyle(firstLine), "templates");
+		for (String option : options) {
+			templates.addElement(option);
+		}
+		
+		templates.addSelectionChangedListener(new ISelectionChangedListener() {
+			public void selectionChanged(SelectionChangedEvent event) {
+				String selected = templates.getSelectedElement();
+				if ( ACROBAT_WINDOWS.equals(selected) ) {
 					expectedReturnValue.setText("1");
 					commandPattern.setText("C:\\Programme\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe");
 					parameterPattern.setText("/t ${FILE} ${$PRINTSERVICE}");
-					break;
-				case 1:
+				} else if ( ACROBAT_WINDOWS_ONLY_DEFAULT.equals(selected) ){
 					expectedReturnValue.setText("1");
 					commandPattern.setText("C:\\Programme\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe");
 					parameterPattern.setText("/h/p ${FILE}");
-					break;
-				default:
+				} 
+				else
 					throw new IllegalStateException("Some bogus was selected");
-				}
 			}
 		});
 		

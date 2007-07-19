@@ -43,6 +43,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.selection.SelectionProvider;
 
@@ -219,7 +220,14 @@ implements ISelectionProvider
 	 * @param widgetStyle the style with which to create the widget representing the List of elements.
 	 * @param caption the text used as a caption if it is not <code>null</code>.
 	 */
-	protected abstract void createGuiControl(Composite parent, int widgetStyle, String caption); 
+	protected abstract void createGuiControl(Composite parent, int widgetStyle, String caption);
+
+  /**
+   * Returns the primary control associated with this viewer.
+   *
+   * @return the SWT control which displays this viewer's content
+   */
+	public abstract Control getControl();
 	
 	/**
 	 * This is convenience method to retrieve the default widget style.
@@ -244,7 +252,7 @@ implements ISelectionProvider
 
 	/**
 	 * The given element is added to the graphical representation of this list.
-	 * @param index TODO
+	 * @param index the index at which to insert the given <code>element</code>.
 	 * @param element The element to be added.
 	 */
 	protected abstract void addElementToGui(int index, T element);

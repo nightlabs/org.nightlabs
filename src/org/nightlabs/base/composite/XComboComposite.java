@@ -36,6 +36,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.custom.XCombo;
 
@@ -224,6 +225,11 @@ public class XComboComposite<T>
 	@Override
 	protected void removeElementFromGui(int index) {
 		imageCombo.remove(index);
+	}
+
+	@Override
+	public Control getControl() {
+		return imageCombo;
 	}
 
 }
