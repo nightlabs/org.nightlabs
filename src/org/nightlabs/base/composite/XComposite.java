@@ -39,12 +39,52 @@ public class XComposite extends Composite
 {
 	private ChildStatusController childStatusController = new ChildStatusController();
 
+	/**
+	 * Enum for different (Grid)Layout types.
+	 */
 	public static enum LayoutMode {
-		NONE, ORDINARY_WRAPPER, TIGHT_WRAPPER, TOP_BOTTOM_WRAPPER, LEFT_RIGHT_WRAPPER, TOTAL_WRAPPER
+		/**
+		 * No layout
+		 */
+		NONE, 
+		/**
+		 * Wrapping with normal indents and spacing
+		 */
+		ORDINARY_WRAPPER,
+		/**
+		 * Wrapping with zero-indents at the margins, but normal spacing within
+		 */
+		TIGHT_WRAPPER,
+		/**
+		 * Wrapping with zero intents at top and bottom, normal spacing
+		 */
+		TOP_BOTTOM_WRAPPER, 
+		/**
+		 * Wrapping with zero intents at left and right, normal spacing
+		 */
+		LEFT_RIGHT_WRAPPER,
+		/**
+		 * Wrapping with zero-indents and spacing
+		 */
+		TOTAL_WRAPPER
 	}
 
+	/**
+	 * Enum for Layout data configurations
+	 */
 	public static enum LayoutDataMode {
-		NONE, GRID_DATA, GRID_DATA_HORIZONTAL
+		/**
+		 * No layout data
+		 */
+		NONE, 
+		/**
+		 * GridData filling both
+		 */
+		GRID_DATA,
+		/**
+		 * GridData filling horizontal
+		 */
+		GRID_DATA_HORIZONTAL
 	}
 
 	/**

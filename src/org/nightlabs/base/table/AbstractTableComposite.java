@@ -53,7 +53,24 @@ import org.nightlabs.base.composite.XComposite;
 
 
 /**
- * An base Composite for all Table composites
+ * A base class for Composites with a Table that takes care of creating a 
+ * TableViewer and placing its control within a layout.
+ * <p>
+ * Additionally this class provides access to typed selections in the table.
+ * </p>
+ * <p>
+ * You would usually extend this class and customize the table
+ * in its methods {@link #createTableColumns(TableViewer, Table)} and {@link #setTableProvider(TableViewer)}
+ * </p>
+ * <p>
+ * The implementations would usually perform the following steps:
+ * <ul>
+ *   <li>Create table-columns (createTableColumns)</li>
+ *   <li>Create table-layout (createTableColumns)</li>
+ *   <li>Assign content-provider (setTableProvider)</li>
+ *   <li>Assign label-provider (setTableProvider)</li>
+ * </ul>
+ * </p>
  *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */
