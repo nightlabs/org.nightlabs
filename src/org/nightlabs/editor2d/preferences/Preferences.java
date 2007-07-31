@@ -29,6 +29,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.unit.DotUnit;
+import org.nightlabs.i18n.unit.PointUnit;
 import org.nightlabs.i18n.unit.resolution.DPIResolutionUnit;
 import org.nightlabs.i18n.unit.resolution.Resolution;
 import org.nightlabs.print.page.A4Page;
@@ -46,7 +47,8 @@ public class Preferences
 
 	public static final String PREF_STANDARD_UNIT_ID = "Standard Unit";
 //	public static final String PREF_STANDARD_UNIT_ID_DEFAULT = MMUnit.UNIT_ID;
-	public static final String PREF_STANDARD_UNIT_ID_DEFAULT = DotUnit.UNIT_ID;	
+//	public static final String PREF_STANDARD_UNIT_ID_DEFAULT = DotUnit.UNIT_ID;	
+	public static final String PREF_STANDARD_UNIT_ID_DEFAULT = PointUnit.UNIT_ID;	
 
 	public static final String PREF_STANDARD_RESOLUTION_UNIT_ID = "Standard Resolution Unit";
 	public static final String PREF_STANDARD_RESOLUTION_UNIT_ID_DEFAULT = DPIResolutionUnit.RESOLUTION_ID;

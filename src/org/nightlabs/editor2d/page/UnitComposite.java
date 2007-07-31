@@ -100,14 +100,8 @@ extends XComposite
 		if (index != -1)
 			combo.select(index);
 	}
-	
-//	protected PageRegistry getPageRegistry() 
-//	{
-//		return PageRegistryEP.sharedInstance().getPageRegistry();
-//	}	
-	
-	protected UnitRegistry getUnitRegistry() 
-	{
+		
+	protected UnitRegistry getUnitRegistry() {
 		return UnitRegistryEP.sharedInstance().getUnitRegistry();
 	}	
 }

@@ -224,7 +224,7 @@ public class EditorUtil
     }    
   }  
     
-  public static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 24);
+  public static final Font DEFAULT_FONT = new Font(null, Font.PLAIN, 24);
     
   public static void zoomToRelativeRect(Rectangle rect, ZoomManager zoomManager) 
   {
