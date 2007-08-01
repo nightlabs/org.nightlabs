@@ -26,15 +26,20 @@
 package org.nightlabs.editor2d.actions;
 
 import java.util.Collection;
+import java.util.List;
 
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.internal.GEFMessages;
+import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.command.DeleteDrawComponentCommand;
 import org.nightlabs.editor2d.impl.LayerImpl;
 
 /**
@@ -113,17 +118,49 @@ extends AbstractEditorSelectionAction
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
 
-	@Override
-	public void run() 
-	{
-		CompoundCommand compound = new CompoundCommand();
-		compound.setLabel(EditorPlugin.getResourceString("command.delete.drawcomponent"));
-		Collection<DrawComponent> selection = getSelection(DrawComponent.class, true);
-		for (DrawComponent dc : selection) {
-			DeleteDrawComponentCommand deleteCmd = new DeleteDrawComponentCommand(dc.getParent(), dc);
-			compound.add(deleteCmd);
-		}
-		execute(compound);
-	}
+//	@Override
+//	public void run() 
+//	{
+//		CompoundCommand compound = new CompoundCommand();
+//		compound.setLabel(EditorPlugin.getResourceString("command.delete.drawcomponent"));
+//		Collection<DrawComponent> selection = getSelection(DrawComponent.class, true);
+//		for (DrawComponent dc : selection) {
+//			DeleteDrawComponentCommand deleteCmd = new DeleteDrawComponentCommand(dc.getParent(), dc);
+//			compound.add(deleteCmd);
+//		}
+//		execute(compound);
+//	}
 
+	/**
+	 * Performs the delete action on the selected objects.
+	 */
+	public void run() {
+		execute(createDeleteCommand(getSelectedObjects()));
+	}
+	
+	/**
+	 * Create a command to remove the selected objects.
+	 * @param objects The objects to be deleted.
+	 * @return The command to remove the selected objects.
+	 */
+	public Command createDeleteCommand(List objects) {
+		if (objects.isEmpty())
+			return null;
+		if (!(objects.get(0) instanceof EditPart))
+			return null;
+
+		GroupRequest deleteReq =
+			new GroupRequest(RequestConstants.REQ_DELETE);
+		deleteReq.setEditParts(objects);
+
+		CompoundCommand compoundCmd = new CompoundCommand(
+			GEFMessages.DeleteAction_ActionDeleteCommandName);
+		for (int i = 0; i < objects.size(); i++) {
+			EditPart object = (EditPart) objects.get(i);
+			Command cmd = object.getCommand(deleteReq);
+			if (cmd != null) compoundCmd.add(cmd);
+		}
+
+		return compoundCmd;
+	}
 }
