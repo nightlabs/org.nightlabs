@@ -67,8 +67,7 @@ implements IPropertySource
 	{
 		this.drawComponent = element;				
 		descriptors = createPropertyDescriptors();
-		nameLangMan = LanguageManager.sharedInstance();	
-		nameLangMan.addPropertyChangeListener(langListener);
+		LanguageManager.sharedInstance().addPropertyChangeListener(langListener);
 	}
 	
 	protected DrawComponent drawComponent;	
@@ -76,14 +75,13 @@ implements IPropertySource
 		return drawComponent;
 	}
 	
-	protected LanguageManager nameLangMan;	
+	public void clean() {
+		LanguageManager.sharedInstance().removePropertyChangeListener(langListener);
+	}
 	
-	protected PropertyChangeListener langListener = new PropertyChangeListener()
-	{	
-		public void propertyChange(PropertyChangeEvent evt) 
-		{
-			if (evt.getPropertyName().equals(LanguageManager.LANGUAGE_CHANGED)) 
-			{
+	private PropertyChangeListener langListener = new PropertyChangeListener() {	
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(LanguageManager.LANGUAGE_CHANGED)) {
 				LanguageCf langCf = (LanguageCf) evt.getNewValue();
 				drawComponent.setLanguageId(langCf.getLanguageID());
 			}
@@ -91,8 +89,7 @@ implements IPropertySource
 	};
 	
 	private IUnit unit = null;
-	public IUnit getUnit() 
-	{
+	public IUnit getUnit() {
 		if (unit == null)
 			unit = UnitRegistryEP.sharedInstance().getUnitRegistry().getUnit(DotUnit.UNIT_ID);
 		return unit;
@@ -109,14 +106,12 @@ implements IPropertySource
 	}
 			
 	// TODO: format value so that only 3 digits after the comma are visible
-	public double getValue(int modelValue, IUnit unit) 
-	{
+	public double getValue(int modelValue, IUnit unit) {
 		return UnitUtil.getUnitValue(modelValue, getDotUnit(), unit);
 	}
 	
 	// TODO: format value so that only 3 digits after the comma are visible	
-	public int getSetValue(double value, IUnit unit) 
-	{
+	public int getSetValue(double value, IUnit unit) {
 		return UnitUtil.getModelValue(value, getDotUnit(), unit);
 	}	
 	

@@ -30,6 +30,7 @@ import java.util.List;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.nightlabs.base.celleditor.CheckboxCellEditor;
+import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.property.CheckboxPropertyDescriptor;
 import org.nightlabs.base.property.ComboBoxPropertyDescriptor;
 import org.nightlabs.base.property.DoublePropertyDescriptor;
@@ -175,7 +176,7 @@ extends DrawComponentPropertySource
 			return getOrientationString(getPageDrawComponent().getOrientation());
 		}
 		else if (id.equals(DrawComponent.PROP_NAME)) {
-			return drawComponent.getI18nText().getText(nameLangMan.getCurrentLanguageID());
+			return drawComponent.getI18nText().getText(LanguageManager.sharedInstance().getCurrentLanguageID());
 		}
 		else if (id.equals(DrawComponent.PROP_WIDTH)) {
 			return new Double(getValue(getPageDrawComponent().getPageBounds().width, getUnit()));

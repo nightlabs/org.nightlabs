@@ -41,6 +41,7 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.figures.DrawComponentFigure;
@@ -66,7 +67,7 @@ implements EditorRequestConstants
 //    drawComponent.getBounds();
   }
   
-  protected Label tooltip = new Label();
+  private Label tooltip = new Label();
   protected Label getTooltip() 
   {
   	tooltip.setText(getTooltipText(getDrawComponent()));
@@ -198,8 +199,13 @@ implements EditorRequestConstants
     	dcf.dispose();
     }
     
-//    if (logger.isDebugEnabled())
-//    	logger.debug("deactivate called");
+    if (getPropertySource() instanceof DrawComponentPropertySource) {
+    	DrawComponentPropertySource dcps = (DrawComponentPropertySource) getPropertySource();
+    	dcps.clean();
+    }
+    
+    if (logger.isDebugEnabled())
+    	logger.debug("deactivate called");
     
     super.deactivate();
   }
@@ -256,18 +262,15 @@ implements EditorRequestConstants
   }
   
   protected IPropertySource propertySource = null;
-  
-  public IPropertySource getPropertySource()
+  public IPropertySource getPropertySource() 
   {
-    if (propertySource == null)
-    {
-      propertySource =
-        new DrawComponentPropertySource(getDrawComponent());
+    if (propertySource == null) {
+      propertySource = new DrawComponentPropertySource(getDrawComponent());
     }
     return propertySource;
   }
   
-  protected PropertyChangeListener listener = new PropertyChangeListener(){	
+  private PropertyChangeListener listener = new PropertyChangeListener(){	
 		public void propertyChange(PropertyChangeEvent evt) {
 			propertyChanged(evt);
 		}	

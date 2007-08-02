@@ -95,6 +95,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -485,6 +487,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 		getGraphicalControl().addControlListener(resizeListener);
 //		getCommandStack().addCommandStackEventListener(commandStackListener);
+		
+		getGraphicalControl().addDisposeListener(disposeListener);
 	}
 
 	// should solve redraw problems when resizing the viewer
@@ -1466,9 +1470,10 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		
 		getGraphicalControl().removeControlListener(resizeListener);
 		
+		// disposes MultiLayerDrawComponent
 		mldc.dispose();
 		mldc = null;
-		
+				
 		if (outlinePage != null)
 			outlinePage.dispose();
 		outlinePage = null;
@@ -1538,4 +1543,10 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	}
 
 	protected abstract Editor2DFactory createModelFactory();		
+	
+	private DisposeListener disposeListener = new DisposeListener(){
+		public void widgetDisposed(DisposeEvent e) {
+			dispose();
+		}
+	};
 }
