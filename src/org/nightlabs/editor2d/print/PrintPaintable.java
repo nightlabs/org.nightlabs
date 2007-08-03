@@ -35,7 +35,6 @@ import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent.LineStyle;
 import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
-import org.nightlabs.editor2d.util.RenderUtil;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

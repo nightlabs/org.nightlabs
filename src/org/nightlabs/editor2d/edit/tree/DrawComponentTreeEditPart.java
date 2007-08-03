@@ -32,17 +32,13 @@ import java.beans.PropertyChangeListener;
 
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
-import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.IDecoratorManager;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.decorators.DecoratorDefinition;
 import org.eclipse.ui.internal.decorators.DecoratorManager;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.decorators.VisibleDecorator;
 import org.nightlabs.editor2d.editpolicy.DrawComponentEditPolicy;
 import org.nightlabs.editor2d.editpolicy.tree.DrawComponentTreeEditPolicy;
 import org.nightlabs.editor2d.model.DrawComponentPropertySource;
@@ -55,7 +51,7 @@ extends AbstractTreeEditPart
     
   /**
    * Creates a new DrawComponentTreeEditPart instance.
-   * @param model
+   * @param drawComponent the {@link DrawComponent}
    */
   public DrawComponentTreeEditPart(DrawComponent drawComponent) {
     super(drawComponent);

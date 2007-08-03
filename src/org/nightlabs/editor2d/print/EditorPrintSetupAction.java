@@ -25,9 +25,6 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.print;
 
-import java.awt.print.PageFormat;
-import java.awt.print.PrinterJob;
-
 import org.apache.log4j.Logger;
 import org.nightlabs.base.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.AbstractEditor;

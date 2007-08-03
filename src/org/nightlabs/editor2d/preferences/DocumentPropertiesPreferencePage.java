@@ -26,7 +26,6 @@
 package org.nightlabs.editor2d.preferences;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -45,11 +44,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.registry.EditorRegistry;
 import org.nightlabs.base.composite.ComboComposite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutDataMode;
@@ -57,7 +54,6 @@ import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.base.i18n.ResolutionUnitEP;
 import org.nightlabs.base.i18n.UnitRegistryEP;
 import org.nightlabs.base.print.page.PredefinedPageEP;
-import org.nightlabs.config.Config;
 import org.nightlabs.editor2d.Editor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.config.DocumentConfigModule;

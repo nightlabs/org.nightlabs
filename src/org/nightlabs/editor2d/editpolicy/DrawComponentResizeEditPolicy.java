@@ -136,9 +136,6 @@ implements EditorRequestConstants
   	return FeedbackUtil.getCustomFeedbackFigure(modelPart);
   }  
   
-  /**
-   * @see org.eclipse.gef.editpolicies.NonResizableEditPolicy#initialFeedbackRectangle()
-   */
   protected Rectangle getInitialFeedbackBounds() 
   {
 //    LOGGER.debug("InitalFeedbackBounds = "+getHostFigure().getBounds());

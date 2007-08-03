@@ -36,11 +36,6 @@ import org.nightlabs.editor2d.actions.EditorCommandConstants;
 public class ZoomPageRetargetAction 
 extends RetargetAction 
 {
-
-	/**
-	 * @param actionID
-	 * @param text
-	 */
 	public ZoomPageRetargetAction() 
 	{
 		super(ZoomPageAction.ID, EditorPlugin.getResourceString("action.zoom.page.label"));

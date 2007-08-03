@@ -239,7 +239,7 @@ public class MinimalBufferFreeformLayer
 	}
 
 	/**
-	 * @see org.nightlabs.editor2d.figures.BufferedFreeformLayer#refresh(org.eclipse.draw2d.Figure)
+	 * @see BufferedFreeformLayer#refresh(IFigure)
 	 */
 	public void refresh(IFigure figure) {
 		for (Iterator iter = getChildren().iterator(); iter.hasNext();) {

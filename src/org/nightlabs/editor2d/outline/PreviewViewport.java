@@ -28,7 +28,6 @@ package org.nightlabs.editor2d.outline;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 
 import org.eclipse.draw2d.Viewport;
 import org.nightlabs.editor2d.util.J2DUtil;

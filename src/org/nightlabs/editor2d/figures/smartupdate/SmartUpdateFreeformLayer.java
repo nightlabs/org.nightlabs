@@ -119,6 +119,8 @@ public class SmartUpdateFreeformLayer
 	 * {@link ISmartUpdateFigure} its {@link ISmartUpdateFigure#paintRegion(Rectangle)}
 	 * method will be invoked instead of the default
 	 * {@link Figure#paint(Graphics)} method.
+	 * 
+	 * @param graphics the graphics to paint on
 	 */
 	public void paint(Graphics graphics) {
 		
@@ -172,7 +174,7 @@ public class SmartUpdateFreeformLayer
 	}
 
 	/**
-	 * @see org.nightlabs.editor2d.figures.BufferedFreeformLayer#refresh(org.eclipse.draw2d.Figure)
+	 * @see BufferedFreeformLayer#refresh(IFigure)
 	 */
 	public void refresh(IFigure figure) {
 		for (Iterator iter = getChildren().iterator(); iter.hasNext();) {

@@ -28,7 +28,6 @@ package org.nightlabs.editor2d.preferences;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.PageDrawComponent;
-import org.nightlabs.editor2d.unit.DotUnit;
 import org.nightlabs.i18n.unit.PointUnit;
 import org.nightlabs.i18n.unit.resolution.DPIResolutionUnit;
 import org.nightlabs.i18n.unit.resolution.Resolution;

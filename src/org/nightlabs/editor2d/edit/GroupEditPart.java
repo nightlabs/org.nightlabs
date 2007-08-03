@@ -26,17 +26,11 @@
 package org.nightlabs.editor2d.edit;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.GroupDrawComponent;
-import org.nightlabs.editor2d.figures.DrawComponentFigure;
 import org.nightlabs.editor2d.model.GroupPropertySource;
 
 /**

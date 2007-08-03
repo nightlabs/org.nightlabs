@@ -338,7 +338,7 @@ public class SmartUpdateFigure
 	}
 
 	/**
-	 * @see org.nightlabs.editor2d.figures.smartupdate.ISmartUpdateFigure#refresh(org.eclipse.draw2d.Figure)
+	 * @see ISmartUpdateFigure#refresh(IFigure)
 	 */
 	public void refresh(IFigure figure) {
 		if (!tilesBuild)

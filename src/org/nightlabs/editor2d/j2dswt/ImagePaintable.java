@@ -27,14 +27,12 @@ package org.nightlabs.editor2d.j2dswt;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Control;
 import org.holongate.j2d.IPaintable;
-import org.nightlabs.editor2d.util.RenderingHintsManager;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

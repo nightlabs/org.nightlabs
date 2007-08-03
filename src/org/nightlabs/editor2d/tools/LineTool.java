@@ -133,7 +133,7 @@ extends EditorCreationTool
    * updateTargetRequest
    * 
    * @see org.eclipse.gef.tools.AbstractTool#handleButtonUp(int)
-   * @see handleButtonDown(int)
+   * @see #handleButtonDown(int)
    */
   protected boolean handleButtonUp(int button) 
   {

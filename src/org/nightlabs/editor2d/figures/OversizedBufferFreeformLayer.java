@@ -306,7 +306,7 @@ implements FreeformFigure, BufferedFreeformLayer
 	}
 
 	/**
-	 * @see BufferedFreeformLayer#refresh(Figure)
+	 * @see BufferedFreeformLayer#refresh(IFigure)
 	 */
 	public void refresh(IFigure figure) {
 		clearBuffer();
@@ -334,12 +334,7 @@ implements FreeformFigure, BufferedFreeformLayer
 	}
 	
 	/**
-	 * Constructs a new OversizedBufferFreeformLayer. The
-	 * root of the given editPart is consulted to 
-	 * retrieve the parent Graphical viewer and
-	 * its Control.
-	 * 
-	 * @param editPart The editPart.
+	 * Constructs a new OversizedBufferFreeformLayer.
 	 */
 	public OversizedBufferFreeformLayer() 
 	{

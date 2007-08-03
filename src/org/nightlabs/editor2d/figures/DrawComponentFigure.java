@@ -38,7 +38,6 @@ import org.eclipse.draw2d.J2DGraphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ZoomListener;
-import org.eclipse.swt.graphics.GC;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
@@ -46,7 +45,6 @@ import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.render.Draw2DRenderContext;
 import org.nightlabs.editor2d.render.RenderContext;
 import org.nightlabs.editor2d.render.Renderer;
-import org.nightlabs.editor2d.render.j2d.J2DRenderContext;
 import org.nightlabs.editor2d.util.J2DUtil;
 import org.nightlabs.editor2d.util.RenderUtil;
 
@@ -148,8 +146,8 @@ implements RendererFigure
    * would return true or if the {@link Figure#containsPoint(int, int)} should be calculated
    * on the basis of the {@link Figure#getBounds()}
    *  
-   * @param accurateContains determine if an accurate hitTesting should be performed or the {@link Figure#getBounds()}
-   * should be used
+   * @param containBounds determine if an accurate hitTesting should be performed or the 
+   * {@link Figure#getBounds()} should be used
    * 
    * @see DrawComponentFigure#isContains()
    * @see DrawComponentFigure#getHitTolerance()

@@ -41,7 +41,6 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.figures.DrawComponentFigure;
@@ -51,8 +50,6 @@ import org.nightlabs.editor2d.request.EditorRequestConstants;
 import org.nightlabs.editor2d.util.EditorUtil;
 import org.nightlabs.editor2d.util.J2DUtil;
 import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
-
-import sun.security.action.GetBooleanAction;
 
 public abstract class AbstractDrawComponentEditPart 
 extends AbstractGraphicalEditPart

@@ -45,7 +45,7 @@ extends DrawComponentTreeEditPart
 			ShapeTreeEditPart.class, "", ImageFormat.gif).createImage();	
 	
 	/**
-	 * @param drawComponent
+	 * @param shapeDrawComponent the {@link ShapeDrawComponent}
 	 */
 	public ShapeTreeEditPart(ShapeDrawComponent shapeDrawComponent) {
 		super(shapeDrawComponent);

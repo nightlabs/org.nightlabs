@@ -169,7 +169,7 @@ extends SelectionAction
 	 * @param clazz the Class to search for
 	 * @param model determines if the search is performed on the selected EditParts or
 	 * the Model of the EditParts
-	 * @see selectionContains(Class clazz, int amount, boolean model)
+	 * @see #selectionContains(Class clazz, int amount, boolean model)
 	 */
 	public boolean selectionContains(Class clazz, boolean model) {
 		return selectionContains(clazz, 1, model);
@@ -437,7 +437,7 @@ extends SelectionAction
 	/**
 	 * selects the EditParts in the GraphicalViewer for the the given List
 	 * of drawComponents  
-	 * @param drawComponents
+	 * @param dc the DrawComponent to selected its EditPart
 	 */
 	public void selectEditPart(DrawComponent dc) 
 	{

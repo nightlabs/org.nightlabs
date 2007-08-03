@@ -27,7 +27,6 @@
 
 package org.nightlabs.editor2d.tools;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.Ellipse;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Point;

@@ -25,8 +25,6 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.composite;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -47,13 +45,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
-import org.holongate.j2d.IPaintable;
 import org.holongate.j2d.J2DCanvas;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.form.XFormToolkit;
 import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.j2dswt.ImagePaintable;
 import org.nightlabs.editor2d.j2dswt.RenderedImagePaintable;
 import org.nightlabs.editor2d.util.ImageUtil;
 
@@ -69,8 +65,10 @@ extends XComposite
 	private static final Logger logger = Logger.getLogger(ConvertImageComposite.class);
 
 	/**
-	 * @param parent
-	 * @param style
+	 * @param originalImage the original {@link BufferedImage}
+	 * @param parent the parent {@link Composite}
+	 * @param style the style flag
+	 * @param toolkitMode the mode for the {@link XFormToolkit}
 	 */
 	public ImagePreviewComposite(BufferedImage originalImage, Composite parent, int style, TOOLKIT_MODE toolkitMode) 
 	{
@@ -81,11 +79,12 @@ extends XComposite
 	}
 
 	/**
-	 * @param parent
-	 * @param style
-	 * @param layoutMode
-	 * @param layoutDataMode
-	 * @param cols
+	 * @param originalImage the original {@link BufferedImage}
+	 * @param parent the parent {@link Composite}
+	 * @param style the style flag
+	 * @param layoutMode the {@link LayoutMode}
+	 * @param layoutDataMode the {@link LayoutDataMode}
+	 * @param toolkitMode the mode for the {@link XFormToolkit}
 	 */
 	public ImagePreviewComposite(BufferedImage originalImage, Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode, TOOLKIT_MODE toolkitMode) 

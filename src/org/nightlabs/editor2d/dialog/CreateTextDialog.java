@@ -49,12 +49,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.base.dialog.CenteredDialog;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.request.TextCreateRequest;
 import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.util.FontUtil;

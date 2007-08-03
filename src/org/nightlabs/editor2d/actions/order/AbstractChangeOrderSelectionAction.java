@@ -100,9 +100,8 @@ extends AbstractEditorSelectionAction
 	protected DrawComponent primarySelected = null;
 	
 	/**
-	 * 
-	 * @return the primary selected DrawComponent
-	 * @see 
+	 * returns the primary selected DrawComponent
+	 * @return the primary selected DrawComponent 
 	 */
 	public DrawComponent getPrimarySelectedDrawComponent() {
 		return primarySelected;
@@ -206,14 +205,19 @@ extends AbstractEditorSelectionAction
 	}
 	
 	/**
+	 * returns the newIndex of the List of DrawComponents in the
+	 * given {@link DrawComponentContainer}
 	 * 
 	 * @return the newIndex of the List of DrawComponents in the
 	 * given {@link DrawComponentContainer}
-	 * @see AbstractChangeOrderSelection#getContainer()
+	 * 
+	 * @see #getContainer()
 	 */
 	public abstract int getNewIndex();
 	
 	/**
+	 * returns the {@link DrawComponentContainer} where the selected {@link DrawComponent}
+	 * should be reordered to
 	 * 
 	 * @return the {@link DrawComponentContainer} where the selected {@link DrawComponent}
 	 * should be reordered to

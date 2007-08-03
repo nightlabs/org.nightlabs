@@ -25,7 +25,6 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.app;
 
-import org.nightlabs.base.app.AbstractApplication;
 import org.nightlabs.base.app.AbstractWorkbenchAdvisor;
 import org.nightlabs.editor2d.EditorPerspective;
 
@@ -40,13 +39,6 @@ extends AbstractWorkbenchAdvisor
 		super();		
 	}
 
-//	/**
-//	 * @see org.nightlabs.base.app.AbstractWorkbenchAdvisor#initApplication()
-//	 */
-//	protected AbstractApplication initApplication() {
-//		return new Editor2DApplication();
-//	}
-
 	/**
 	 * @see org.eclipse.ui.application.WorkbenchAdvisor#getInitialWindowPerspectiveId()
 	 */
@@ -54,9 +46,4 @@ extends AbstractWorkbenchAdvisor
 		return EditorPerspective.ID_PERSPECTIVE;
 	}
 
-//	public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) 
-//	{
-//		return new DefaultActionBuilder(configurer, true, true, true, true, true, true, true, 
-//				false, true, true, true, true, true, true, true, true);
-//	}
 }

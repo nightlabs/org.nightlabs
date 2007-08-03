@@ -44,8 +44,8 @@ extends AbstractEditorAction
 	public static final String ID = ZoomPageAction.class.getName();
 	
 	/**
-	 * @param editor
-	 * @param style
+	 * @param editor the {@link AbstractEditor}
+	 * @param zoomManager the {@link ZoomManager}
 	 */
 	public ZoomPageAction(AbstractEditor editor, ZoomManager zoomManager) 
 	{

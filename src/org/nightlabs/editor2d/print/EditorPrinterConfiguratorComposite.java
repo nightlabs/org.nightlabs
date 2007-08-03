@@ -25,7 +25,6 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.print;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.print.PageSetupComposite;

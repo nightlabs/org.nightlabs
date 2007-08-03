@@ -29,7 +29,6 @@ import java.util.List;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
-import org.nightlabs.base.celleditor.CheckboxCellEditor;
 import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.property.CheckboxPropertyDescriptor;
 import org.nightlabs.base.property.ComboBoxPropertyDescriptor;
@@ -55,9 +54,9 @@ extends DrawComponentPropertySource
 		return (PageDrawComponent) drawComponent;
 	}
 	
-	protected List createPropertyDescriptors() 
+	protected List<IPropertyDescriptor> createPropertyDescriptors() 
 	{
-		List descriptors = getDescriptors();
+		List<IPropertyDescriptor> descriptors = getDescriptors();
 		
 		// Name
 		descriptors.add(createNamePD());			

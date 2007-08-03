@@ -28,8 +28,6 @@
 package org.nightlabs.editor2d.command;
 
 import org.eclipse.gef.commands.Command;
-
-import org.nightlabs.editor2d.Editor2DFactory;
 import org.nightlabs.editor2d.EditorGuide;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EditorRuler;
