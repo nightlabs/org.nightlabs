@@ -1468,7 +1468,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	{
 		super.dispose();
 		
-		getGraphicalControl().removeControlListener(resizeListener);
+		if (getGraphicalControl() != null)
+			getGraphicalControl().removeControlListener(resizeListener);
 		
 		// disposes MultiLayerDrawComponent
 		mldc.dispose();
