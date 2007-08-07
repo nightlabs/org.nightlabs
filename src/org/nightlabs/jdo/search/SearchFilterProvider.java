@@ -32,7 +32,7 @@ import org.nightlabs.jdo.search.SearchFilter;
 
 /**
  * Common interface to handle different scenarios of 
- * searching for persons.
+ * searching entities with the SearchFilter framework.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */

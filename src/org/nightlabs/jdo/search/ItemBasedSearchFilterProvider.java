@@ -29,7 +29,7 @@ package org.nightlabs.jdo.search;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * Default implementation of a ItemBased SearchFilterProvider.
+ * Default implementation of a item-based SearchFilterProvider.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */
