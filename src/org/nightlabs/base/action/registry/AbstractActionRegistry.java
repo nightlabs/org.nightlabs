@@ -1017,8 +1017,9 @@ extends AbstractEPProcessor
 				perspectiveListenerAdded = true;
 				// if there were early contributions, before a perspective listener could be added
 				// also display the necessary items
-				if (earlyContributed) {					
-					perspectiveChange(RCPUtil.getActiveWorkbenchWindow().getActivePage().getPerspective());
+				if (earlyContributed) {
+					if (RCPUtil.getActiveWorkbenchWindow().getActivePage() != null)
+						perspectiveChange(RCPUtil.getActiveWorkbenchWindow().getActivePage().getPerspective());
 				}
 			}
 		}
