@@ -45,7 +45,7 @@ import org.nightlabs.language.LanguageCf;
  * {@link #setEditMode(org.nightlabs.base.language.yo.I18nTextEditorTable.EditMode)}.
  * 
  * Use {@link I18nText#copyFrom(I18nText)} with {@link #getI18nText()} as
- * paramteer to reflect the changes in your {@link I18nText}. You can also call
+ * parameter to reflect the changes in your {@link I18nText}. You can also call
  * {@link #copyToOriginal()} to let that be done for you.
  * 
  * @author Chairat Kongarayawetchakun - Chairat at nightlabs dot de
@@ -365,6 +365,8 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 					for (Object l : listeners)
 						((ModifyListener)l).modifyText(event);
 				}
+
+				fireModificationFinished();
 			}
 		}
 	}
@@ -444,4 +446,32 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 			return es.entrySet().toArray();
 		}
 	}
+	
+	/**
+	 * the {@link ListenerList} which holds added {@link ModificationFinishedListener}s
+	 */
+	private ListenerList modificationFinishedListeners = new ListenerList();
+	
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#addModificationFinishedListener(org.nightlabs.base.language.ModificationFinishedListener)
+	 */
+	public void addModificationFinishedListener(ModificationFinishedListener listener) {
+		modificationFinishedListeners.add(listener);		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#removeModificationFinishedListener(org.nightlabs.base.language.ModificationFinishedListener)
+	 */
+	public void removeModificationFinishedListener(ModificationFinishedListener listener) {
+		modificationFinishedListeners.remove(listener);
+	}
+	
+	private void fireModificationFinished() 
+	{
+		ModificationFinishedEvent event = new ModificationFinishedEvent(this);
+		for (int i=0; i<modificationFinishedListeners.size(); i++) {
+			ModificationFinishedListener listener = (ModificationFinishedListener) modificationFinishedListeners.getListeners()[i];
+			listener.modificationFinished(event);
+		}
+	}	
 }

@@ -50,10 +50,14 @@ extends XPropertyDescriptor
 			List<T> types, ILabelProvider labelProvider) 
 	{
 		super(id, displayName);
-		this.labelProvider = labelProvider;
 		if (types == null)
 			throw new IllegalArgumentException("param types must not be null!");
+		if (labelProvider == null)
+			throw new IllegalArgumentException("param labelProvider must not be null!");
+		
+		this.labelProvider = labelProvider;
 		this.types = types;
+		init();
 	}
 
 	/**
@@ -65,11 +69,18 @@ extends XPropertyDescriptor
 			boolean readOnly, List<T> types, ILabelProvider labelProvider) 
 	{
 		super(id, displayName, readOnly);
-		this.labelProvider = labelProvider;
 		if (types == null)
 			throw new IllegalArgumentException("param types must not be null!");
+		if (labelProvider == null)
+			throw new IllegalArgumentException("param labelProvider must not be null!");
 		
+		this.labelProvider = labelProvider;		
 		this.types = types;		
+		init();
+	}
+	
+	protected void init() {
+		setLabelProvider(labelProvider);
 	}
 	
 	@Override

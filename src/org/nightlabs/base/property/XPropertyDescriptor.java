@@ -26,6 +26,7 @@
 
 package org.nightlabs.base.property;
 
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 /**
@@ -63,4 +64,15 @@ extends PropertyDescriptor
 		this.readOnly = readOnly;
 	}
 	
+//	protected void init() {
+//		setLabelProvider(new LabelProvider() {
+//			@Override
+//			public String getText(Object element) {
+//				if (isReadOnly()) {
+//					
+//				}
+//				return super.getText(element);
+//			}
+//		});
+//	}
 }

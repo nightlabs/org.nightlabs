@@ -26,16 +26,11 @@
 
 package org.nightlabs.base.celleditor;
 
-import org.eclipse.jface.util.Assert;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 
 public class DoubleCellEditor  
-extends XCellEditor
-{
-  protected Text text;
-  
+extends XTextCellEditor
+{  
   public DoubleCellEditor() {
     super();
   }
@@ -52,31 +47,66 @@ extends XCellEditor
     super(parent, style, readOnly);
   }  
   
-  protected Control createControl(Composite parent) {
-    text = new Text(parent, getStyle());
-    return text;
-  }
+	/**
+	 *
+	* returns the string of the text as double or the oldValue if 
+	* the string is no double
+	*
+	* @return the text as double
+	*/
+	protected Object doGetValue() 
+	{
+		if (text.getText().trim().equals(""))
+			return oldValue;
+		Double d = null;
+		try {
+			d = new Double(text.getText());
+		} catch (NumberFormatException e) {
+			return oldValue;
+		}
+		return d;
+	}
 
-  protected Object doGetValue() {
-    String stringVal = text.getText();
-    Double d = new Double(stringVal);
-    return d; 
-  }
-
-  protected void doSetFocus() {
-    if (text != null) {
-      text.selectAll();
-      text.setFocus();
-    }     
-  }
-
-  protected void doSetValue(Object value) 
-  {
-  	checkReadOnly();
-    Assert.isTrue(text != null && (value instanceof Double));
-    Double val = (Double) value;
-    String stringVal = Double.toString(val.doubleValue());
-    text.setText(stringVal);        
-  }
+  private Object oldValue;
+ 
+	@Override
+	protected void doSetValue(Object value) {
+		oldValue = value;
+		if (value instanceof Double) {
+			super.doSetValue(String.valueOf((Double)value));
+		}
+		else if (value instanceof String)
+			super.doSetValue(value);
+	}
+	
+// protected Text text;
+//	
+//  protected Control createControl(Composite parent) {
+//    text = new Text(parent, getStyle());
+//    return text;
+//  }
+//
+//  protected Object doGetValue() {
+//    String stringVal = text.getText();
+//    Double d = new Double(stringVal);
+//    return d; 
+//  }
+//
+//  protected void doSetFocus() {
+//    if (text != null) {
+//      text.selectAll();
+//      text.setFocus();
+//    }     
+//  }
+//
+//  protected void doSetValue(Object value) 
+//  {
+//  	checkReadOnly();
+//    Assert.isTrue(text != null && (value instanceof Double));
+//    Double val = (Double) value;
+//    String stringVal = Double.toString(val.doubleValue());
+//    text.setText(stringVal); 
+//    fireApplyEditorValue();
+//  }
 
 }

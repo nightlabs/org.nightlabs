@@ -25,13 +25,13 @@
  ******************************************************************************/
 package org.nightlabs.base.celleditor;
 
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.base.language.I18nTextEditor;
+import org.nightlabs.base.language.ModificationFinishedEvent;
+import org.nightlabs.base.language.ModificationFinishedListener;
 import org.nightlabs.i18n.I18nText;
+import org.nightlabs.i18n.I18nTextBuffer;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -73,15 +73,21 @@ extends XCellEditor
 	@Override
 	protected Control createControl(Composite parent) {
 		i18nTextEditor = new I18nTextEditor(parent);
-		GridLayout layout = new GridLayout(2, false);
-		layout = XComposite.getLayout(LayoutMode.TIGHT_WRAPPER, layout);
-		i18nTextEditor.setLayout(layout);
+		i18nTextEditor.addModificationFinishedListener(new ModificationFinishedListener(){
+			public void modificationFinished(ModificationFinishedEvent event) {
+				fireApplyEditorValue();
+				deactivate();
+			}
+		});
 		return i18nTextEditor;
 	}
 
 	@Override
 	protected Object doGetValue() {
-		return i18nTextEditor.getI18nText();
+		I18nText copy = new I18nTextBuffer();
+		copy.copyFrom(i18nTextEditor.getI18nText());
+		return copy;
+//		return i18nTextEditor.getI18nText();
 	}
 
 	@Override
@@ -92,7 +98,7 @@ extends XCellEditor
 	@Override
 	protected void doSetValue(Object value) {
 		if (value instanceof I18nText)
-			i18nTextEditor.setI18nText((I18nText)value);
+			i18nTextEditor.setI18nText((I18nText)value);			
 	}
 
 }

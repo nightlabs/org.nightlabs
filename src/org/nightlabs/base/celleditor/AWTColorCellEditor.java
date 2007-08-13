@@ -86,25 +86,46 @@ extends DialogCellEditor
 			boolean force) {
 			if (wHint != SWT.DEFAULT && hHint != SWT.DEFAULT)
 				return new Point(wHint, hHint);
-			Point colorSize = colorLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
-			Point rgbSize = rgbLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
-			return new Point(
-				colorSize.x + GAP + rgbSize.x, 
-				Math.max(colorSize.y, rgbSize.y)); 
+			
+			if (showColor) {
+				Point colorSize = colorLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
+				Point rgbSize = rgbLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
+				return new Point(
+					colorSize.x + GAP + rgbSize.x, 
+					Math.max(colorSize.y, rgbSize.y));				
+			}
+			else {
+				return rgbLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
+			}
 		}
-		public void layout(Composite editor, boolean force) {
-			Rectangle bounds = editor.getClientArea();
-			Point colorSize = colorLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
-			Point rgbSize = rgbLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
-			int ty = (bounds.height - rgbSize.y) / 2;
-			if (ty < 0)
-				ty = 0;
-			colorLabel.setBounds(-1, 0, colorSize.x, colorSize.y);
-			rgbLabel.setBounds(
-				colorSize.x + GAP - 1, 
-				ty, 
-				bounds.width - colorSize.x - GAP, 
-				bounds.height); 
+		public void layout(Composite editor, boolean force) 
+		{
+			if (showColor) {
+				Rectangle bounds = editor.getClientArea();
+				Point colorSize = colorLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
+				Point rgbSize = rgbLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
+				int ty = (bounds.height - rgbSize.y) / 2;
+				if (ty < 0)
+					ty = 0;
+				colorLabel.setBounds(-1, 0, colorSize.x, colorSize.y);
+				rgbLabel.setBounds(
+					colorSize.x + GAP - 1, 
+					ty, 
+					bounds.width - colorSize.x - GAP, 
+					bounds.height); 				
+			}
+			else {
+				Rectangle bounds = editor.getClientArea();
+				Point rgbSize = rgbLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
+				int ty = (bounds.height - rgbSize.y) / 2;
+				if (ty < 0)
+					ty = 0;				
+				rgbLabel.setBounds(
+						GAP - 1, 
+						ty, 
+						bounds.width - GAP, 
+						bounds.height); 								
+			}
 		}
 	}
 	
@@ -132,18 +153,36 @@ extends DialogCellEditor
 		super(parent, style);	  
 	}
 
+	/**
+	 * Creates a new color cell editor parented under the given control.
+	 * The cell editor value is black (<code>RGB(0,0,0)</code>) initially, and has no 
+	 * validator.
+	 *
+	 * @param parent the parent control
+	 * @param style the style bits
+	 * @param showColor determines if the color should be visible in an additional separate label
+	 * 
+	 */
+	public AWTColorCellEditor(Composite parent, int style, boolean showColor) {
+		super(parent, style);	  
+		this.showColor = showColor;
+	}
+	
+	private boolean showColor = false;
+	
 	/* 
 	 * Method declared on DialogCellEditor.
 	 */
 	protected Control createContents(Composite cell) 
 	{
-	  // TODO: remove colorLabel, replaced by AWTColorLabelProvider
 		Color bg = cell.getBackground();
 		composite = new Composite(cell, getStyle());
 		composite.setBackground(bg);
 		composite.setLayout(new ColorCellLayout());
-		colorLabel = new Label(composite, SWT.LEFT);
-		colorLabel.setBackground(bg);
+		if (showColor) {
+			colorLabel = new Label(composite, SWT.LEFT);
+			colorLabel.setBackground(bg);			
+		}
 		rgbLabel = new Label(composite, SWT.LEFT);
 		rgbLabel.setBackground(bg);
 		rgbLabel.setFont(cell.getFont());
@@ -201,9 +240,11 @@ extends DialogCellEditor
 	    value = new java.awt.Color(0,0,0);
 	  }
 	  	  
-	  RGB rgb = ColorUtil.toRGB((java.awt.Color)value);	  
-		image = ImageUtil.createColorImage((java.awt.Color)value);
-		colorLabel.setImage(image);
+	  RGB rgb = ColorUtil.toRGB((java.awt.Color)value);	
+	  if (showColor) {
+			image = ImageUtil.createColorImage((java.awt.Color)value);
+			colorLabel.setImage(image);	  	
+	  }
 	
 		rgbLabel.setText("(" + rgb.red + "," + rgb.green + "," + rgb.blue + ")");//$NON-NLS-4$//$NON-NLS-3$//$NON-NLS-2$//$NON-NLS-1$
 	}

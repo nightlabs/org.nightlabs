@@ -7,7 +7,6 @@ import org.nightlabs.i18n.I18nTextBuffer;
 
 public interface II18nTextEditor
 {
-
 	/**
 	 * Add a {@link ModifyListener} to this editor. The listener
 	 * will get triggered only when the text was actually modified by the user, 
@@ -90,4 +89,15 @@ public interface II18nTextEditor
 	 */
 	void reset();
 
+	/**
+	 * adds a {@link ModificationFinishedListener} to listen when the modification has finished
+	 * @param listener the listener to add
+	 */
+	void addModificationFinishedListener(ModificationFinishedListener listener);
+	
+	/**
+	 * removes a previously added {@link ModificationFinishedListener}
+	 * @param listener the listener to remove
+	 */
+	void removeModificationFinishedListener(ModificationFinishedListener listener);
 }

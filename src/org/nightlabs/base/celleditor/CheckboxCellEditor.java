@@ -33,7 +33,6 @@ import org.eclipse.swt.widgets.Control;
 
 
 public class CheckboxCellEditor  
-//extends CellEditor
 extends XCellEditor
 {
   protected Button checkbox;
@@ -104,6 +103,5 @@ extends XCellEditor
 	  if (value instanceof Boolean)
 	    checkbox.setSelection(((Boolean) value).booleanValue());
 	}
-	
 	
 }

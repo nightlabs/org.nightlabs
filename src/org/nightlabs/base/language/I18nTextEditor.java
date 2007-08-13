@@ -34,6 +34,8 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -197,13 +199,31 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 					return;
 
 				Object[] listeners = modifyListeners.getListeners();
+				if (listeners.length < 1)
+					return;
+
+//				e = Util.cloneSerializable(e);
+//				e.widget = I18nTextEditor.this;
+				// TODO The ModifyEvent which is forwarded to our listeners should be 
+				// a new one where event.widget does *not* point to the internal widget,
+				// but to this wrapping composite-widget.
+				// There should be a util-method in RCPUtil for this kind of event-forwards.
 				for (int i = 0; i < listeners.length; ++i) {
 					((ModifyListener)listeners[i]).modifyText(e);
 				}
 			}
-		});		
+		});
+		
+		text.addSelectionListener(new SelectionListener(){
+			public void widgetSelected(SelectionEvent e) {
+				
+			}
+			public void widgetDefaultSelected(SelectionEvent e) {
+				fireModificationFinished();
+			}
+		});
 	}
-	
+
 	protected Text createText(Composite parent) {
 		text = new Text(parent, getBorderStyle()); 
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -465,4 +485,40 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 	public void reset() {
 		setI18nText(null);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.widgets.Composite#setFocus()
+	 */
+	@Override
+	public boolean setFocus() {
+		return text.setFocus();
+	}
+
+	/**
+	 * the {@link ListenerList} which holds added {@link ModificationFinishedListener}s
+	 */
+	private ListenerList modificationFinishedListeners = new ListenerList();
+	
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#addModificationFinishedListener(org.nightlabs.base.language.ModificationFinishedListener)
+	 */
+	public void addModificationFinishedListener(ModificationFinishedListener listener) {
+		modificationFinishedListeners.add(listener);		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.language.II18nTextEditor#removeModificationFinishedListener(org.nightlabs.base.language.ModificationFinishedListener)
+	 */
+	public void removeModificationFinishedListener(ModificationFinishedListener listener) {
+		modificationFinishedListeners.remove(listener);
+	}
+	
+	private void fireModificationFinished() 
+	{
+		ModificationFinishedEvent event = new ModificationFinishedEvent(this);
+		for (int i=0; i<modificationFinishedListeners.size(); i++) {
+			ModificationFinishedListener listener = (ModificationFinishedListener) modificationFinishedListeners.getListeners()[i];
+			listener.modificationFinished(event);
+		}
+	}	
 }

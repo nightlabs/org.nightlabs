@@ -27,9 +27,10 @@
 package org.nightlabs.base.property;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.swt.SWT;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.celleditor.CheckboxCellEditor;
+import org.nightlabs.base.table.CheckboxCellEditorHelper;
 
 
 public class CheckboxPropertyDescriptor 
@@ -42,7 +43,7 @@ extends XPropertyDescriptor
 	public CheckboxPropertyDescriptor(Object id, String displayName) 
 	{
 		super(id, displayName);
-		setValidator(new BooleanValidator());
+		init();
 	}
 	
 	/**
@@ -53,7 +54,24 @@ extends XPropertyDescriptor
 	public CheckboxPropertyDescriptor(Object id, String displayName, boolean readOnly) 
 	{
 		super(id, displayName, readOnly);
-		setValidator(new BooleanValidator());
+		init();
+	}
+	
+	protected void init() {
+		setLabelProvider(new LabelProvider() {
+			@Override
+			public Image getImage(Object element) {
+				if (element instanceof Boolean) {
+					boolean b = (Boolean) element;
+					return CheckboxCellEditorHelper.getCellEditorImage(b, isReadOnly());
+				}
+				return super.getImage(element);		
+			}
+			@Override
+			public String getText(Object element) {
+				return "";
+			}
+		});
 	}
 	
 	/*
@@ -61,11 +79,66 @@ extends XPropertyDescriptor
 	 */
 	public CellEditor createPropertyEditor(Composite parent) 
 	{
-		CellEditor editor = new CheckboxCellEditor(parent, SWT.NONE, readOnly);
-		if (getValidator() != null)
-			editor.setValidator(getValidator());
+		CellEditor editor = new CheckboxCellEditor(parent);
 		return editor;
+	}	
+	
+	private class CheckboxCellEditor
+	extends org.eclipse.jface.viewers.CheckboxCellEditor 
+	{
+		public CheckboxCellEditor(Composite parent) {
+			super(parent);			
+		}
+		
+		@Override
+		protected void doSetValue(Object value) {
+			if (isReadOnly())
+				return;
+			super.doSetValue(value);
+		}
+
+		@Override
+		public void activate() {
+			if (isReadOnly())
+				return;
+			super.activate();
+		}
 	}
+	
+//	private void init() 
+//	{
+//		setValidator(new BooleanValidator());
+//		setLabelProvider(new LabelProvider() {
+//			@Override
+//			public Image getImage(Object element) {
+//				if (element instanceof Boolean) {
+//					boolean b = (Boolean) element;
+//					if (b)
+//						return SharedImages.getSharedImage(NLBasePlugin.getDefault(), 
+//								CheckboxPropertyDescriptor.class, "True", "15x15", ImageFormat.png);
+//					else
+//						return SharedImages.getSharedImage(NLBasePlugin.getDefault(), 
+//								CheckboxPropertyDescriptor.class, "False", "15x15", ImageFormat.png);					
+//				}
+//				return super.getImage(element);
+//			}
+//			@Override
+//			public String getText(Object element) {
+//				return "";
+//			}
+//		});
+//	}
+//	
+//	/*
+//	 * @see org.eclipse.ui.views.properties.IPropertyDescriptor#createPropertyEditor(org.eclipse.swt.widgets.Composite)
+//	 */
+//	public CellEditor createPropertyEditor(Composite parent) 
+//	{
+//		CellEditor editor = new CheckboxCellEditor(parent, SWT.NONE, readOnly);
+//		if (getValidator() != null)
+//			editor.setValidator(getValidator());
+//		return editor;
+//	}
 
 }
 

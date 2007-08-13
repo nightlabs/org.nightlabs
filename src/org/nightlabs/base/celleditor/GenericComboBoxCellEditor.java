@@ -47,6 +47,10 @@ extends XCellEditor
 	{
 		if (types == null)
 			throw new IllegalArgumentException("param types must not be null!");
+		
+		if (labelProvider == null)
+			throw new IllegalArgumentException("param labelProvider must not be null!");
+		
 		this.types = types;
 		this.labelProvider = labelProvider;
 		create(parent);
@@ -57,6 +61,9 @@ extends XCellEditor
 	{
 		if (types == null)
 			throw new IllegalArgumentException("param types must not be null!");
+		
+		if (labelProvider == null)
+			throw new IllegalArgumentException("param labelProvider must not be null!");
 		
 		this.types = types;
 		this.labelProvider = labelProvider;

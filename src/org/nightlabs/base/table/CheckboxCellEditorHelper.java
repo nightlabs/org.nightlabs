@@ -1,7 +1,9 @@
 package org.nightlabs.base.table;
 
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.resource.SharedImages;
 
@@ -24,10 +26,28 @@ public class CheckboxCellEditorHelper {
 	 */
 	public static Image getCellEditorImage(ICellModifier cellModifier, Object element, String property) {
 		Boolean value = (Boolean)cellModifier.getValue(element, property);
-		if (value)
-			return SharedImages.getSharedImage(NLBasePlugin.getDefault(), CheckboxCellEditorHelper.class, "checked");
-		else
-			return SharedImages.getSharedImage(NLBasePlugin.getDefault(), CheckboxCellEditorHelper.class, "unchecked");
+		return getCellEditorImage(value, false);
 	}
 
+	/**
+	 * returns an checked checkbox image if value if true and an unchecked checkbox image if false
+	 * 
+	 * @param value the value to get the cooresponding image for
+	 * @param disabled determines if the image should be disabled or not
+	 * @return an checked checkbox image if value if true and an unchecked checkbox image if false
+	 * 
+	 */
+	public static Image getCellEditorImage(boolean value, boolean disabled) 
+	{
+		Image image = null;
+		if (value)
+			image = SharedImages.getSharedImage(NLBasePlugin.getDefault(), CheckboxCellEditorHelper.class, "checked");
+		else
+			image = SharedImages.getSharedImage(NLBasePlugin.getDefault(), CheckboxCellEditorHelper.class, "unchecked");
+		
+		if (disabled)
+			image = new Image(Display.getDefault(), image, SWT.IMAGE_DISABLE);
+		
+		return image;
+	}
 }

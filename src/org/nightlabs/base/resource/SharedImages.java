@@ -187,6 +187,20 @@ public class SharedImages
 	}
 
 	/**
+	 * Get the image for the given clazz and suffix under the given plugin. The image will be
+	 * searched based on the NightLabs coding guidelines.
+	 * 
+	 * @param plugin The plugin the image is package in.
+	 * @param clazz The class using the image
+	 * @param suffix The suffix for the image desired
+	 * @param dimension The format of the image given as string in format ("{width}x{height}")
+	 * @param format The extension of the image to be loaded (e.g. "png" or "gif")
+	 */
+	public static Image getSharedImage(Plugin plugin, Class clazz, String suffix, String dimension, ImageFormat format) {
+		return sharedInstance().getImage(plugin, clazz, suffix, dimension, format); 
+	}	
+	
+	/**
 	 * Get the ImageDescriptor for the given clazz and suffix under the given plugin. The image will be
 	 * searched based on the NightLabs coding guidelines.
 	 * 
@@ -294,6 +308,20 @@ public class SharedImages
 		return sharedInstance().getImage(plugin, clazz, null, IMAGE_DIMENSION_DEFAULT.toString(), IMAGE_FORMAT_DEFAULT); 
 	}
 
+	/**
+	 * Get the ImageDescriptor for the given clazz and suffix under the given plugin. The image will be
+	 * searched based on the NightLabs coding guidelines.
+	 * 
+	 * @param plugin The plugin the image is package in.
+	 * @param clazz The class using the image
+	 * @param suffix The suffix for the image desired
+	 * @param dimension The format of the image given as string in format ("{width}x{height}")
+	 * @param format The extension of the image to be loaded (e.g. "png" or "gif")
+	 */
+	public static ImageDescriptor getSharedImageDescriptor(Plugin plugin, Class clazz, String suffix, String imageDimension, ImageFormat imageFormat) {
+		return sharedInstance().getImageDescriptor(plugin, clazz, suffix, imageDimension, imageFormat); 
+	}	
+	
 	protected static final ImageDescriptor FLAG_USA_16x16 = 
 		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "USA");
 
