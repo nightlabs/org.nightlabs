@@ -1304,7 +1304,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			initialzePage();
 
 		mldc.setRenderModeManager(getRenderModeManager());      
-		getMultiLayerDrawComponent().setLanguageId(getLanguageManager().getCurrentLanguageID());
+		getMultiLayerDrawComponent().setLanguageID(getLanguageManager().getCurrentLanguageID());
 		getUnitManager().setCurrentUnit(getMultiLayerDrawComponent().getModelUnit());
 		if (logger.isDebugEnabled()) {
 			long duration = System.currentTimeMillis() - start;
@@ -1312,38 +1312,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		}
 		
 	}
-
-//	protected void initialzePage() 
-//	{
-//		logger.debug("initialize Page!");
-//		mldc = getMultiLayerDrawComponent();
-//		loadAdditional();
-//
-//		String pageID = Preferences.getPreferenceStore().getString(
-//				Preferences.PREF_PREDEFINED_PAGE_ID);
-//		IPredefinedPage defaultPage = getPredefinedPageRegistry().getPage(pageID);
-//		IUnit pageUnit = defaultPage.getUnit();    	
-//		String resolutionUnitID = Preferences.getPreferenceStore().getString(
-//				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID);
-//		IResolutionUnit resUnit = getResolutionUnitRegistry().getResolutionUnit(resolutionUnitID);
-//		Resolution resolution = new ResolutionImpl(resUnit, 
-//				Preferences.getPreferenceStore().getDouble(Preferences.PREF_DOCUMENT_RESOLUTION)); 
-//		
-//		DotUnit dotUnit = (DotUnit) getUnitRegistry().getUnit(DotUnit.UNIT_ID);
-//		if (dotUnit == null) {
-//			dotUnit = new DotUnit(resolution);
-//			getUnitRegistry().addUnit(dotUnit, UnitConstants.UNIT_CONTEXT_EDITOR2D);			
-//		}
-//		else 
-//			dotUnit.setResolution(resolution);    	
-//
-//		String unitID = Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_UNIT_ID);
-//		getUnitManager().setCurrentUnit(getUnitRegistry().getUnit(unitID));
-//		
-//		Rectangle pageBounds = PredefinedPageUtil.getPageBounds(dotUnit, defaultPage);
-//		getMultiLayerDrawComponent().setResolution(resolution);  	  	
-//		getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 			
-//	}	
 	
 	protected void initialzePage() 
 	{

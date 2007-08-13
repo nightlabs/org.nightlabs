@@ -239,10 +239,6 @@ extends AbstractTreeEditPart
 			refreshVisuals();
 			return;			
 		}
-		else if (propertyName.equals(DrawComponent.PROP_LANGUAGE_ID)) {
-			refreshVisuals();
-			return;			
-		}	
 		else if (propertyName.equals(DrawComponent.PROP_VISIBLE)) {
 			notifyLabelDecorator();
 			refreshVisuals();

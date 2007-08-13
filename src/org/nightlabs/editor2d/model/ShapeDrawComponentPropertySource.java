@@ -40,7 +40,7 @@ import org.nightlabs.base.property.SpinnerPropertyDescriptor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent.LineStyle;
-import org.nightlabs.util.Utils;
+import org.nightlabs.util.CollectionUtil;
 
 
 public class ShapeDrawComponentPropertySource 
@@ -56,7 +56,8 @@ extends DrawComponentPropertySource
   {
     super(element);
   }
-    
+   
+  @Override
 	protected List createPropertyDescriptors() 
 	{
 		List descriptors = super.createPropertyDescriptors();
@@ -125,7 +126,7 @@ extends DrawComponentPropertySource
 //		return desc;		
 //	}
 
-	private ILabelProvider lineStyleLabelProvider = new LabelProvider() 
+	private static ILabelProvider lineStyleLabelProvider = new LabelProvider() 
 	{
 		@Override
 		public String getText(Object element) 
@@ -151,7 +152,7 @@ extends DrawComponentPropertySource
 	protected PropertyDescriptor createLineStylePD() 
 	{
 //		List<LineStyle> lineStyles = Utils.enum2List(Enum.valueOf(LineStyle.class, "SOLID")); 
-		List<LineStyle> lineStyles = Utils.enum2List(LineStyle.SOLID);		
+		List<LineStyle> lineStyles = CollectionUtil.enum2List(LineStyle.SOLID);		
 		PropertyDescriptor desc = new GenericComboBoxPropertyDescriptor<LineStyle>(
 				ShapeDrawComponent.PROP_LINE_STYLE,
 				EditorPlugin.getResourceString("property.linestyle.label"), 

@@ -65,7 +65,7 @@ extends Command
 		target.setParent(src.getParent());		
 		target.setFill(src.isFill());
 		target.setFillColor(src.getFillColor());
-		target.setLanguageId(src.getLanguageId());
+//		target.setLanguageId(src.getLanguageId());
 		target.setLineColor(src.getLineColor());
 		target.setLineStyle(src.getLineStyle());
 		target.setLineWidth(src.getLineWidth());

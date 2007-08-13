@@ -38,6 +38,7 @@ import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
+import org.nightlabs.i18n.I18nText;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -175,7 +176,7 @@ extends DrawComponentPropertySource
 			return getOrientationString(getPageDrawComponent().getOrientation());
 		}
 		else if (id.equals(DrawComponent.PROP_NAME)) {
-			return drawComponent.getI18nText().getText(LanguageManager.sharedInstance().getCurrentLanguageID());
+			return drawComponent.getI18nText();
 		}
 		else if (id.equals(DrawComponent.PROP_WIDTH)) {
 			return new Double(getValue(getPageDrawComponent().getPageBounds().width, getUnit()));
@@ -214,7 +215,7 @@ extends DrawComponentPropertySource
 			getPageDrawComponent().setOrientation(newOrientation);
 		}
 		else if (id.equals(DrawComponent.PROP_NAME)) {
-			drawComponent.setName((String)value);
+			drawComponent.setI18nText((I18nText)value);
 		}
 		else if (id.equals(PageDrawComponent.PROP_SHOW_PAGE_BOUNDS)) {
 			getPageDrawComponent().setShowPageBounds((Boolean)value);

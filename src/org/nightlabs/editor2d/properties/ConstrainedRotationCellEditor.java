@@ -27,71 +27,34 @@
 
 package org.nightlabs.editor2d.properties;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.PropertyDescriptor;
-import org.nightlabs.editor2d.DrawComponent;
+import org.nightlabs.base.celleditor.ComboBoxCellEditor;
 
-public class RotationPropertyDescriptor  
-extends PropertyDescriptor
+public class ConstrainedRotationCellEditor 
+extends ComboBoxCellEditor 
 {
-//  public static final String[] defaultRotations = new String[] {"-180", "-90", "-45", "0", "45", "90", "180"};
-//  
-//  public RotationPropertyDescriptor(Object id, String displayName) 
-//  {
-//    super(id, displayName);
-//  }
-
-  public RotationPropertyDescriptor(Object id, String displayName, DrawComponent dc) 
-  {
-    super(id, displayName);
-    this.dc = dc;
+  public ConstrainedRotationCellEditor(Composite parent, String[] items, int style) {
+    super(parent, items, style);
   }
-
-  private DrawComponent dc = null;
   
   /**
-   * The <code>ComboBoxPropertyDescriptor</code> implementation of this 
-   * <code>IPropertyDescriptor</code> method creates and returns a new
-   * <code>ComboBoxCellEditor</code>.
-   * <p>
-   * The editor is configured with the current validator if there is one.
-   * </p>
+   * The <code>ComboBoxCellEditor</code> implementation of
+   * this <code>CellEditor</code> framework method returns
+   * the String of the Selection as double or the oldValue if 
+   * the string is no double
+   *
+   * @return text of the combo as double
    */
-  public CellEditor createPropertyEditor(Composite parent) 
+  protected Object doGetValue() 
   {
-  	CellEditor editor = null;  	
-  	if (dc.getConstrainedRotationValues() == null)
-  		editor = new RotationCellEditor(parent, SWT.NONE);
-  	else {
-  		List<Double> constrainedValues = dc.getConstrainedRotationValues();
-  		editor = new ConstrainedRotationCellEditor(parent, getValuesAsString(constrainedValues), SWT.READ_ONLY);
-  	}
-    if (getValidator() != null)
-      editor.setValidator(getValidator());
-    return editor;
+    if (getComboBox().getText().equals(""))
+      return oldValue;
+    Double d = null;
+    try {
+      d = new Double(getComboBox().getText());
+    } catch (NumberFormatException e) {
+      return oldValue;
+    }
+    return d;
   }    
-  
-  protected String[] getValuesAsString(Collection<Double> values) 
-  {
-  	String[] strings = new String[values.size()];
-  	int counter = 0;
-  	for (Double d : values) {
-			strings[counter] = Double.toString(d);
-			counter++;
-		}
-  	return strings;
-  }
-  
-//  public ILabelProvider getLabelProvider() 
-//  {
-//    if (isLabelProviderSet())
-//      return super.getLabelProvider();
-//    else
-//      return new ComboBoxLabelProvider(defaultRotations);
-//  }  
 }

@@ -67,7 +67,7 @@ implements IPropertySource
 	{
 		this.drawComponent = element;				
 		descriptors = createPropertyDescriptors();
-		LanguageManager.sharedInstance().addPropertyChangeListener(langListener);
+//		LanguageManager.sharedInstance().addPropertyChangeListener(langListener);
 	}
 	
 	protected DrawComponent drawComponent;	
@@ -76,17 +76,17 @@ implements IPropertySource
 	}
 	
 	public void clean() {
-		LanguageManager.sharedInstance().removePropertyChangeListener(langListener);
+//		LanguageManager.sharedInstance().removePropertyChangeListener(langListener);
 	}
 	
-	private PropertyChangeListener langListener = new PropertyChangeListener() {	
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(LanguageManager.LANGUAGE_CHANGED)) {
-				LanguageCf langCf = (LanguageCf) evt.getNewValue();
-				drawComponent.setLanguageId(langCf.getLanguageID());
-			}
-		}	
-	};
+//	private PropertyChangeListener langListener = new PropertyChangeListener() {	
+//		public void propertyChange(PropertyChangeEvent evt) {
+//			if (evt.getPropertyName().equals(LanguageManager.LANGUAGE_CHANGED)) {
+//				LanguageCf langCf = (LanguageCf) evt.getNewValue();
+//				drawComponent.setLanguageId(langCf.getLanguageID());
+//			}
+//		}	
+//	};
 	
 	private IUnit unit = null;
 	public IUnit getUnit() {
@@ -261,9 +261,7 @@ implements IPropertySource
 			return new IPropertyDescriptor[0];
 		
 		List descriptors = getDescriptors();		
-		return (IPropertyDescriptor[])descriptors.toArray( new IPropertyDescriptor[descriptors.size()]);
-//		return (IPropertyDescriptor[])descriptors.toArray( new IPropertyDescriptor[] {} );		
-//		return (IPropertyDescriptor[])descriptors.toArray();		
+		return (IPropertyDescriptor[])descriptors.toArray(new IPropertyDescriptor[descriptors.size()]);
 	}
 	
 	/**
@@ -284,7 +282,8 @@ implements IPropertySource
 			return new Double(getValue(drawComponent.getHeight(), getUnit()));
 		}
 		else if (id.equals(DrawComponent.PROP_ROTATION)) {
-			return new Double(drawComponent.getRotation());
+//			return new Double(drawComponent.getRotation());
+			return new Double(drawComponent.getRotationAbsolute());
 		}		
 		else if (id.equals(DrawComponent.PROP_ROTATION_X)) {
 			return new Integer(drawComponent.getRotationX());
@@ -293,7 +292,6 @@ implements IPropertySource
 			return new Integer(drawComponent.getRotationY());
 		}		
 		else if (id.equals(DrawComponent.PROP_NAME)) {
-//			return drawComponent.getI18nText().getText(nameLangMan.getCurrentLanguageID());
 			return drawComponent.getI18nText();
 		}		
 		else if (id.equals(DrawComponent.PROP_VISIBLE)) {
@@ -352,7 +350,8 @@ implements IPropertySource
 			return;
 		}
 		else if (id.equals(DrawComponent.PROP_ROTATION)) {
-			drawComponent.setRotation(((Double)value).doubleValue());
+//			drawComponent.setRotation(((Double)value).doubleValue());
+			drawComponent.setRotationAbsolute(((Double)value).doubleValue());			
 			return;
 		}		
 		else if (id.equals(DrawComponent.PROP_ROTATION_X)) {
@@ -364,8 +363,7 @@ implements IPropertySource
 			return;
 		}
 		else if (id.equals(DrawComponent.PROP_NAME)) {
-//			drawComponent.setName((I18n)value);
-			drawComponent.getI18nText().copyFrom((I18nText)value);
+			drawComponent.setI18nText((I18nText)value);
 			return;
 		}
 		else if (id.equals(DrawComponent.PROP_VISIBLE)) {
@@ -395,7 +393,7 @@ implements IPropertySource
 	protected PropertyDescriptor createTemplatePD() 
 	{
 		PropertyDescriptor pd = new CheckboxPropertyDescriptor(DrawComponent.PROP_TEMPLATE, 
-				"Template", false);
+				EditorPlugin.getResourceString("property.template.label"), true);
 		return pd;
 	}
 	
