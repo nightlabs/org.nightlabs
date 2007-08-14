@@ -282,8 +282,8 @@ implements IPropertySource
 			return new Double(getValue(drawComponent.getHeight(), getUnit()));
 		}
 		else if (id.equals(DrawComponent.PROP_ROTATION)) {
-//			return new Double(drawComponent.getRotation());
-			return new Double(drawComponent.getRotationAbsolute());
+			return new Double(drawComponent.getRotation());
+//			return new Double(drawComponent.getRotationAbsolute());
 		}		
 		else if (id.equals(DrawComponent.PROP_ROTATION_X)) {
 			return new Integer(drawComponent.getRotationX());
@@ -350,8 +350,8 @@ implements IPropertySource
 			return;
 		}
 		else if (id.equals(DrawComponent.PROP_ROTATION)) {
-//			drawComponent.setRotation(((Double)value).doubleValue());
-			drawComponent.setRotationAbsolute(((Double)value).doubleValue());			
+			drawComponent.setRotation(((Double)value).doubleValue());
+//			drawComponent.setRotationAbsolute(((Double)value).doubleValue());			
 			return;
 		}		
 		else if (id.equals(DrawComponent.PROP_ROTATION_X)) {
