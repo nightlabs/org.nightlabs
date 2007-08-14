@@ -35,18 +35,18 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
-import org.nightlabs.editor2d.model.MultiLayerDrawComponentPropertySource;
+import org.nightlabs.editor2d.RootDrawComponent;
+import org.nightlabs.editor2d.model.RootDrawComponentPropertySource;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
 
 
-public class MultiLayerDrawComponentTreeEditPart 
+public class RootDrawComponentTreeEditPart 
 extends DrawComponentContainerTreeEditPart 
 {  
   /**
    * @param model
    */
-  public MultiLayerDrawComponentTreeEditPart(MultiLayerDrawComponent model, FilterManager filterMan) {
+  public RootDrawComponentTreeEditPart(RootDrawComponent model, FilterManager filterMan) {
     super(model);
     this.filterMan = filterMan;
   }
@@ -56,8 +56,8 @@ extends DrawComponentContainerTreeEditPart
   	return filterMan;
   }
   
-  public MultiLayerDrawComponent getMultiLayerDrawComponent() {
-  	return (MultiLayerDrawComponent) getModel();
+  public RootDrawComponent getRootDrawComponent() {
+  	return (RootDrawComponent) getModel();
   }
   
 //  public Image getImage() {
@@ -71,18 +71,18 @@ extends DrawComponentContainerTreeEditPart
 //  {
 //  	super.createEditPolicies();
 //  	installEditPolicy(EditPolicy.CONTAINER_ROLE, new DrawComponentContainerEditPolicy());
-//  	installEditPolicy(EditPolicy.TREE_CONTAINER_ROLE, new MultiLayerDrawComponentTreeEditPolicy());
+//  	installEditPolicy(EditPolicy.TREE_CONTAINER_ROLE, new RootDrawComponentTreeEditPolicy());
 //  	installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 //  }  
   
   protected List getModelChildren()
   { 
   	if (getFilterMan().isAllFilterSet()) {
-  		return getMultiLayerDrawComponent().getDrawComponents(); 
+  		return getRootDrawComponent().getDrawComponents(); 
   	}
   	else {
       List filterChildren = new ArrayList();
-      filterChildren = getModelChildren(getMultiLayerDrawComponent());
+      filterChildren = getModelChildren(getRootDrawComponent());
       return filterChildren;
   	}
   }	
@@ -113,7 +113,7 @@ extends DrawComponentContainerTreeEditPart
     if (propertySource == null)
     {
       propertySource =
-        new MultiLayerDrawComponentPropertySource(getMultiLayerDrawComponent());
+        new RootDrawComponentPropertySource(getRootDrawComponent());
     }
     return propertySource;
   }    

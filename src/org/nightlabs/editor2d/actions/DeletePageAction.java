@@ -49,7 +49,7 @@ extends AbstractEditorAction
 	@Override
 	protected boolean calculateEnabled() 
 	{
-		if (getMultiLayerDrawComponent().getDrawComponents().size() > 1)
+		if (getRootDrawComponent().getDrawComponents().size() > 1)
 			return true;
 		else
 			return false;
@@ -68,7 +68,7 @@ extends AbstractEditorAction
 	@Override
 	public void run() 
 	{
-		DeletePageCommand cmd = new DeletePageCommand(getMultiLayerDrawComponent(), getMultiLayerDrawComponent().getCurrentPage());
+		DeletePageCommand cmd = new DeletePageCommand(getRootDrawComponent(), getRootDrawComponent().getCurrentPage());
 		execute(cmd);
 	}
 		

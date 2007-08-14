@@ -227,7 +227,7 @@ extends ContextMenuProvider
   	if (getViewer() instanceof AbstractEditor) 
   	{
   		AbstractEditor editor = (AbstractEditor) getViewer();  		
-  		List layers = editor.getMultiLayerDrawComponent().getDrawComponents();
+  		List layers = editor.getRootDrawComponent().getDrawComponents();
   		for (Iterator it = layers.iterator(); it.hasNext(); ) 
   		{
   			Layer l = (Layer) it.next();
@@ -240,7 +240,7 @@ extends ContextMenuProvider
 //  	if (content instanceof AbstractDrawComponentEditPart) 
 //  	{
 //  		AbstractDrawComponentEditPart dcep = (AbstractDrawComponentEditPart) content;
-//  		List layers = dcep.getModelRoot().getMultiLayerDrawComponent().getDrawComponents();
+//  		List layers = dcep.getModelRoot().getRootDrawComponent().getDrawComponents();
 //  		for (Iterator it = layers.iterator(); it.hasNext(); ) {
 //  			IAction action = new SendToLayerAction();
 //  	  	if (action.isEnabled())

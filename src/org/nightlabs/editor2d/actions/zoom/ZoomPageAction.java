@@ -74,7 +74,7 @@ extends AbstractEditorAction
 	@Override
 	public void run() 
 	{
-		Rectangle pageBounds = J2DUtil.toDraw2D(getMultiLayerDrawComponent().getCurrentPage().getPageBounds());
+		Rectangle pageBounds = J2DUtil.toDraw2D(getRootDrawComponent().getCurrentPage().getPageBounds());
 //		zoomManager.zoomTo(pageBounds);
 		EditorUtil.zoomToRelativeRect(pageBounds, zoomManager);		
 	}

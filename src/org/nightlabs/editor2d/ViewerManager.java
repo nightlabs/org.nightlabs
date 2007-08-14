@@ -50,7 +50,7 @@ import org.nightlabs.config.ConfigException;
 import org.nightlabs.editor2d.config.PreferencesConfigModule;
 import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
 import org.nightlabs.editor2d.edit.LayerEditPart;
-import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
+import org.nightlabs.editor2d.edit.RootDrawComponentEditPart;
 import org.nightlabs.editor2d.figures.DrawComponentFigure;
 import org.nightlabs.editor2d.render.RenderConstants;
 import org.nightlabs.editor2d.render.Renderer;
@@ -105,7 +105,7 @@ public class ViewerManager
 		}	
 		public void childAdded(EditPart child, int index) 
 		{
-			// exclude the ModelRoot (MultiLayerDrawComponent) and its Layers (Layer)
+			// exclude the ModelRoot (RootDrawComponent) and its Layers (Layer)
 			excludeListRef.getExcludeList().add(child);
 			for (Iterator it = child.getChildren().iterator(); it.hasNext(); ) {
 				excludeListRef.getExcludeList().add(it.next());
@@ -192,7 +192,7 @@ public class ViewerManager
 //      statusLineMan.setMessage(getMouseCoordinates());      
 //      if (part != null) 
 //      {       	
-//      	if (!(part instanceof MultiLayerDrawComponentEditPart) &&
+//      	if (!(part instanceof RootDrawComponentEditPart) &&
 //      			!(part instanceof LayerEditPart))
 //      	{
 //      		if (!(part instanceof RootEditPart)) 
@@ -392,7 +392,7 @@ public class ViewerManager
   	{
   		public boolean evaluate(EditPart part) 
   		{
-  			if (part instanceof MultiLayerDrawComponentEditPart ||
+  			if (part instanceof RootDrawComponentEditPart ||
   					part instanceof LayerEditPart)
   				return false;
   			

@@ -29,15 +29,14 @@ import java.util.List;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
-import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.property.CheckboxPropertyDescriptor;
 import org.nightlabs.base.property.ComboBoxPropertyDescriptor;
 import org.nightlabs.base.property.DoublePropertyDescriptor;
 import org.nightlabs.base.property.XTextPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 import org.nightlabs.i18n.I18nText;
 
 /**
@@ -142,7 +141,7 @@ extends DrawComponentPropertySource
 		
 	protected PropertyDescriptor createResolutionValuePD() 
 	{
-		PropertyDescriptor desc = new DoublePropertyDescriptor(MultiLayerDrawComponent.PROP_RESOLUTION,
+		PropertyDescriptor desc = new DoublePropertyDescriptor(RootDrawComponent.PROP_RESOLUTION,
 				EditorPlugin.getResourceString("property.resolution.label"), true);
 		desc.setCategory(CATEGORY_RESOLUTION);
 		return desc;
@@ -184,7 +183,7 @@ extends DrawComponentPropertySource
 		else if (id.equals(DrawComponent.PROP_HEIGHT)) {
 			return new Double(getValue(getPageDrawComponent().getPageBounds().height, getUnit()));
 		}		
-		else if (id.equals(MultiLayerDrawComponent.PROP_RESOLUTION)) {
+		else if (id.equals(RootDrawComponent.PROP_RESOLUTION)) {
 			return getPageDrawComponent().getRoot().getResolution().getResolutionX();
 		}
 		else if (id.equals(ID_RESOLUTION_UNIT)) {
@@ -220,7 +219,7 @@ extends DrawComponentPropertySource
 		else if (id.equals(PageDrawComponent.PROP_SHOW_PAGE_BOUNDS)) {
 			getPageDrawComponent().setShowPageBounds((Boolean)value);
 		}		
-//		else if (id.equals(MultiLayerDrawComponent.PROP_RESOLUTION)) 
+//		else if (id.equals(RootDrawComponent.PROP_RESOLUTION)) 
 //		{
 //			double resolution = ((Double)value).doubleValue();
 //			getPageDrawComponent().getRoot().getResolution().setResolutionX(resolution);

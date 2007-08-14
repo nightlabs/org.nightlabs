@@ -67,8 +67,8 @@ import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 import org.nightlabs.editor2d.command.CreateLayerCommand;
 import org.nightlabs.editor2d.command.DeleteLayerCommand;
 import org.nightlabs.editor2d.command.DrawComponentReorderCommand;
@@ -93,7 +93,7 @@ extends ViewPart
   public static final Image LOCK_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Lock");
   public static final Image UNLOCK_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Unlocked");  
       
-  private MultiLayerDrawComponent mldc;
+  private RootDrawComponent root;
   private AbstractEditor editor;
   private Map button2Layer = new HashMap();
   private Button buttonUp;
@@ -138,10 +138,10 @@ extends ViewPart
     if (part instanceof AbstractEditor) 
     {
     	if (!part.equals(editor)) {
-      	removePropertyChangeListener(mldc);
+      	removePropertyChangeListener(root);
         editor = (AbstractEditor) part;
-        mldc = editor.getMultiLayerDrawComponent();
-        addPropertyChangeListener(mldc);          
+        root = editor.getRootDrawComponent();
+        addPropertyChangeListener(root);          
         refresh();              		
     	}
     } 
@@ -149,9 +149,9 @@ extends ViewPart
 	
 	private void clear() 
 	{
-  	removePropertyChangeListener(mldc);
+  	removePropertyChangeListener(root);
     editor = null;
-    mldc = null;
+    root = null;
     deactivateTools(false);
     refresh();		
 	}
@@ -281,7 +281,7 @@ extends ViewPart
 			button2Layer.put(text, l);
 
 			// set bgColor of currentLayer
-			if (l.equals(mldc.getCurrentLayer())) {		
+			if (l.equals(root.getCurrentLayer())) {		
 				text.setBackground(getCurrentLayerColor());				
 			}
 		}
@@ -350,8 +350,8 @@ extends ViewPart
 			if (button2Layer.containsKey(t)) 
 			{
 				Layer currLayer = (Layer) button2Layer.get(t);
-				if (!mldc.getCurrentLayer().equals(currLayer)) {
-					mldc.setCurrentLayer(currLayer);
+				if (!root.getCurrentLayer().equals(currLayer)) {
+					root.setCurrentLayer(currLayer);
 					logger.debug("Layer "+currLayer.getName()+" = CurrentLayer");
 					refresh();				  
 				}
@@ -440,7 +440,7 @@ extends ViewPart
 		public void widgetSelected(SelectionEvent e) 
 		{    
 		  logger.debug("NEW widgetSelected()");
-		  CreateLayerCommand addLayer = new CreateLayerCommand(mldc.getCurrentPage(), editor.getModelFactory());		  
+		  CreateLayerCommand addLayer = new CreateLayerCommand(root.getCurrentPage(), editor.getModelFactory());		  
 		  executeCommand(addLayer);	
 		  refresh();
 		}
@@ -452,8 +452,8 @@ extends ViewPart
 		{    
 		  logger.debug("DELETE widgetSelected()");
 			
-		  Layer currentLayer = mldc.getCurrentLayer();
-		  DeleteLayerCommand layerCommand = new DeleteLayerCommand(mldc.getCurrentPage(), currentLayer);
+		  Layer currentLayer = root.getCurrentLayer();
+		  DeleteLayerCommand layerCommand = new DeleteLayerCommand(root.getCurrentPage(), currentLayer);
 		  executeCommand(layerCommand);		
 		  refresh();
 		}
@@ -461,7 +461,7 @@ extends ViewPart
 
 	protected Layer getCurrentLayer() 
 	{
-		return mldc.getCurrentLayer();
+		return root.getCurrentLayer();
 	}
 	
 	private SelectionListener upListener = new SelectionAdapter() 
@@ -548,9 +548,9 @@ extends ViewPart
 		{						
 			createComposites();
 			button2Layer.clear();			
-			if (mldc != null) {
-				for (int i = mldc.getCurrentPage().getDrawComponents().size()-1; i >= 0; --i) {
-					DrawComponent dc  = (DrawComponent) mldc.getCurrentPage().getDrawComponents().get(i);
+			if (root != null) {
+				for (int i = root.getCurrentPage().getDrawComponents().size()-1; i >= 0; --i) {
+					DrawComponent dc  = (DrawComponent) root.getCurrentPage().getDrawComponents().get(i);
 					if (dc instanceof Layer) {
 					  Layer l = (Layer) dc; 
 					  createLayerEntry(layerComposite, l); 
@@ -558,7 +558,7 @@ extends ViewPart
 					  logger.debug("dc NOT instanceof Layer, but instanceof "+dc.getClass());
 					}
 				}				
-				if (mldc.getCurrentPage().getDrawComponents().size() <= 1)			  
+				if (root.getCurrentPage().getDrawComponents().size() <= 1)			  
 				  deactivateTools(true);			  
 				else 
 				  activateTools();
@@ -574,7 +574,7 @@ extends ViewPart
   {	
 		public void propertyChange(PropertyChangeEvent evt) 
 		{
-			if (evt.getPropertyName().equals(MultiLayerDrawComponent.PROP_CURRENT_PAGE)) 
+			if (evt.getPropertyName().equals(RootDrawComponent.PROP_CURRENT_PAGE)) 
 			{
 				PageDrawComponent oldPage = (PageDrawComponent) evt.getOldValue();
 				oldPage.removePropertyChangeListener(layerListener);
@@ -599,15 +599,15 @@ extends ViewPart
 		}	
 	};
 		
-	private void removePropertyChangeListener(MultiLayerDrawComponent mldc) 
+	private void removePropertyChangeListener(RootDrawComponent root) 
 	{
-		if (mldc != null) {
-	    mldc.removePropertyChangeListener(currentPageListener);
-	    mldc.getCurrentPage().removePropertyChangeListener(layerListener);   			
+		if (root != null) {
+	    root.removePropertyChangeListener(currentPageListener);
+	    root.getCurrentPage().removePropertyChangeListener(layerListener);   			
 		}
 	}
 	
-	private void addPropertyChangeListener(MultiLayerDrawComponent mldc) 
+	private void addPropertyChangeListener(RootDrawComponent mldc) 
 	{
 		if (mldc != null) {
 	    mldc.addPropertyChangeListener(currentPageListener);
@@ -622,7 +622,7 @@ extends ViewPart
     if (getSite().getWorkbenchWindow().getActivePage() != null)
     	getSite().getWorkbenchWindow().getActivePage().removePartListener(partListener);
     getSite().getWorkbenchWindow().removePageListener(pageListener);
-    removePropertyChangeListener(mldc);    
+    removePropertyChangeListener(root);    
     super.dispose();
   }
   
@@ -672,8 +672,8 @@ extends ViewPart
 //  public void childAdded(EditPart child, int index) 
 //  {
 //    if (child instanceof LayerEditPart) {
-//      MultiLayerDrawComponentEditPart parent = (MultiLayerDrawComponentEditPart) child.getParent();
-//      mldc = (MultiLayerDrawComponent) parent.getModel();
+//      RootDrawComponentEditPart parent = (RootDrawComponentEditPart) child.getParent();
+//      root = (RootDrawComponent) parent.getModel();
 //      refresh();
 //    }
 //  }
@@ -684,8 +684,8 @@ extends ViewPart
 //  public void removingChild(EditPart child, int index) 
 //  {
 //    if (child instanceof LayerEditPart) {
-//      MultiLayerDrawComponentEditPart parent = (MultiLayerDrawComponentEditPart) child.getParent();
-//      mldc = (MultiLayerDrawComponent) parent.getModel();
+//      RootDrawComponentEditPart parent = (RootDrawComponentEditPart) child.getParent();
+//      root = (RootDrawComponent) parent.getModel();
 //      refresh();        
 //    }
 //  }

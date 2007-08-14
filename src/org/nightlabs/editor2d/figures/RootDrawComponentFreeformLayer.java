@@ -25,23 +25,76 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.editor2d.model;
+package org.nightlabs.editor2d.figures;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.eclipse.draw2d.FreeformLayer;
+import org.eclipse.draw2d.UpdateListener;
+import org.eclipse.draw2d.UpdateManager;
+import org.eclipse.draw2d.geometry.Rectangle;
 
-public class MultiLayerDrawComponentPropertySource 
-extends DrawComponentPropertySource 
+import org.nightlabs.editor2d.edit.RootDrawComponentEditPart;
+import org.nightlabs.editor2d.util.EditorUtil;
+
+
+public class RootDrawComponentFreeformLayer 
+extends FreeformLayer 
+implements UpdateListener
 {
-	public MultiLayerDrawComponentPropertySource(MultiLayerDrawComponent mldc) {
-		super(mldc);
+  public RootDrawComponentFreeformLayer() {
+    super();    
+  }
+    
+  public void registerOnDeferredUpdateManager(UpdateManager updateManager) {
+    if (updateManager == null)
+      return;
+    updateManager.removeUpdateListener(this);
+    updateManager.addUpdateListener(this);
+  }
+    
+  private RootDrawComponentEditPart rootEditPart;    
+	public void setMldcEditPart(RootDrawComponentEditPart rootEditPart) {
+	  this.rootEditPart = rootEditPart;
 	}
-
-	protected List createPropertyDescriptors() {
-		return EMPTY_LIST;
-	}		
 	
-	public static final List EMPTY_LIST = new ArrayList(0);
-}
+  private Rectangle notifiedDamage;
+  
+  public void notifyPainting(Rectangle damage, Map dirtyRegions) {
+  	if (rootEditPart == null)
+  		return;
+    notifiedDamage = damage;
+    notifiedDamage = EditorUtil.toAbsolute(rootEditPart, damage);
+//    System.out.println("MLDC notify Painting called with "+damage);
+  }
+  
+  public void notifyValidating() {
+  }
+      
+//  public void paint(Graphics graphics) {
+//  	super.paint(graphics);
+//    System.out.println("MLDC paint called with ");
+//    if (notifiedDamage == null) {
+//      super.paint(graphics);
+//      return;
+//    }
+//    
+////    System.out.println("MLDC notifiedDamage != null");
+//    for (Iterator iter = getChildren().iterator(); iter.hasNext();) {
+//      IFigure child = (IFigure) iter.next();
+//      if (child.intersects(notifiedDamage)) {
+//        graphics.pushState();
+//        try {
+//          graphics.setClip(child.getBounds());
+////          System.out.println("MLDC paint child: "+child+" child.getBounds() "+child.getBounds());
+//          child.paint(graphics);
+//          graphics.restoreState();
+//        } finally
+//        {
+//          graphics.popState();
+//        }
+//      }
+//    }
+//    notifiedDamage = null;
+//  }
+ }

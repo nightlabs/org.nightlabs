@@ -36,11 +36,10 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.actions.EditorPartAction;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
-
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.Layer;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 
 public abstract class AbstractEditorAction 
 extends EditorPartAction
@@ -67,19 +66,19 @@ extends EditorPartAction
 	
 	/**
 	 * 
-	 * @return the MultiLayerDrawComponent of the AbstractEditor
-	 * @see org.nightlabs.editor2d.MultiLayerDrawComponent
+	 * @return the RootDrawComponent of the AbstractEditor
+	 * @see org.nightlabs.editor2d.RootDrawComponent
 	 */
-	public MultiLayerDrawComponent getMultiLayerDrawComponent() {
-		return getEditor().getMultiLayerDrawComponent();
+	public RootDrawComponent getRootDrawComponent() {
+		return getEditor().getRootDrawComponent();
 	}	
 	
 	/**
 	 * 
-	 * @return the currentLayer of the MultiLayerDrawComponent
+	 * @return the currentLayer of the RootDrawComponent
 	 */
 	public Layer getCurrentLayer() {
-		return getMultiLayerDrawComponent().getCurrentLayer();
+		return getRootDrawComponent().getCurrentLayer();
 	}
 	
 	/**

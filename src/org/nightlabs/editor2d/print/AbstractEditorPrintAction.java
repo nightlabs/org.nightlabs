@@ -92,7 +92,7 @@ extends AbstractEditorAction
 	}
 	
 	public DrawComponent getDrawComponent() {
-		return getMultiLayerDrawComponent();
+		return getRootDrawComponent();
 	}
 		
 }

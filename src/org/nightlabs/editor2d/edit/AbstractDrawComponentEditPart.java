@@ -114,21 +114,21 @@ implements EditorRequestConstants
     }
     else {
       if (getModelRoot() != null) {
-        getDrawComponent().setRenderModeManager(getModelRoot().getMultiLayerDrawComponent().getRenderModeManager());
+        getDrawComponent().setRenderModeManager(getModelRoot().getRootDrawComponent().getRenderModeManager());
       }
     }  	
   }
   
-  public MultiLayerDrawComponentEditPart getModelRoot() 
+  public RootDrawComponentEditPart getModelRoot() 
   {
-  	if (getRoot() instanceof MultiLayerDrawComponentEditPart) {
-  		return (MultiLayerDrawComponentEditPart) getRoot();
+  	if (getRoot() instanceof RootDrawComponentEditPart) {
+  		return (RootDrawComponentEditPart) getRoot();
   	}
   	else {
   		for (Iterator it = getRoot().getChildren().iterator(); it.hasNext(); ) {
   			Object o = it.next();
-  			if (o instanceof MultiLayerDrawComponentEditPart) {
-  				return (MultiLayerDrawComponentEditPart) o;
+  			if (o instanceof RootDrawComponentEditPart) {
+  				return (RootDrawComponentEditPart) o;
   			}
   		}
   	}
@@ -234,7 +234,7 @@ implements EditorRequestConstants
 
   public void updateRoot(IFigure figure) 
   {
-    MultiLayerDrawComponentEditPart rootEditPart = getModelRoot();
+    RootDrawComponentEditPart rootEditPart = getModelRoot();
     if (rootEditPart != null) {
     	if (rootEditPart.getBufferedFreeformLayer() != null)
     		rootEditPart.getBufferedFreeformLayer().refresh(figure);    	

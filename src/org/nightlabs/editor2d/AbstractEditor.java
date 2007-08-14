@@ -150,7 +150,7 @@ import org.nightlabs.editor2d.actions.shape.ShapeUnionAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomAllAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomPageAction;
 import org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction;
-import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
+import org.nightlabs.editor2d.edit.RootDrawComponentEditPart;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
@@ -208,7 +208,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	}
 
 	public Object getModel() {
-		return getMultiLayerDrawComponent();
+		return getRootDrawComponent();
 	}
 
 	private UnitManager unitManager = null;
@@ -220,19 +220,19 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			Collection<IUnit> units = UnitRegistryEP.sharedInstance().getUnitRegistry().getUnits(
 					UnitConstants.UNIT_CONTEXT_EDITOR2D, true);
 			unitManager = new UnitManager(new HashSet<IUnit>(units), 
-					getMultiLayerDrawComponent().getModelUnit());
+					getRootDrawComponent().getModelUnit());
 		}
 		return unitManager;
 	}
 
-	protected abstract MultiLayerDrawComponent createMultiLayerDrawComponent();    
-	private MultiLayerDrawComponent mldc = null;  
-	public MultiLayerDrawComponent getMultiLayerDrawComponent() 
+	protected abstract RootDrawComponent createRootDrawComponent();    
+	private RootDrawComponent root = null;  
+	public RootDrawComponent getRootDrawComponent() 
 	{
-		if (mldc == null) {
-			mldc = createMultiLayerDrawComponent();
+		if (root == null) {
+			root = createRootDrawComponent();
 		}      
-		return mldc;
+		return root;
 	}
 
 	protected abstract EditPartFactory createEditPartFactory(); 
@@ -345,15 +345,15 @@ extends J2DGraphicalEditorWithFlyoutPalette
 //	J2DRegistry.setHints(hints);    	    	
 //	}
 
-	protected MultiLayerDrawComponent load(IOFilter ioFilter, InputStream input) 
+	protected RootDrawComponent load(IOFilter ioFilter, InputStream input) 
 	{      
 		if (ioFilter != null) 
 		{
 			try 
 			{
-				MultiLayerDrawComponent mldc = (MultiLayerDrawComponent) ioFilter.read(input);
-				mldc.setRenderModeManager(getRenderModeManager());
-				return mldc;        	
+				RootDrawComponent root = (RootDrawComponent) ioFilter.read(input);
+				root.setRenderModeManager(getRenderModeManager());
+				return root;        	
 			} 
 			catch (IOException e) {
 				throw new RuntimeException("There occured an Error while reading with IOFilter "+ioFilter+" from InpuStream "+input, e);
@@ -374,13 +374,13 @@ extends J2DGraphicalEditorWithFlyoutPalette
 					IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
 					progressFilter.addPropertyChangeListener(progressListener);	    			
 					monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), progressFilter.getTotalWork());
-					mldc = load(ioFilter, new FileInputStream(fileInput.getFile()));
+					root = load(ioFilter, new FileInputStream(fileInput.getFile()));
 					progressFilter.removePropertyChangeListener(progressListener);
 					return;
 				}
 				else
 					monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), 2);	    			
-				mldc = load(ioFilter, new FileInputStream(fileInput.getFile()));
+				root = load(ioFilter, new FileInputStream(fileInput.getFile()));
 				return;
 			} catch (FileNotFoundException e) {
 				throw new RuntimeException(e);
@@ -558,8 +558,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		if (type == RenderModeManager.class)
 			return getRenderModeManager();
 
-		if (type == MultiLayerDrawComponent.class)
-			return getMultiLayerDrawComponent();
+		if (type == RootDrawComponent.class)
+			return getRootDrawComponent();
 
 		return super.getAdapter(type);
 	}
@@ -700,7 +700,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		if (getModelRootEditPart() != null) {
 			getModelRootEditPart().setDescriptorManager(getDescriptorManager());
 		} else {
-			logger.debug("DescriptorManager for MultiLayerDrawComponentEditPart not set, because it is null!");
+			logger.debug("DescriptorManager for RootDrawComponentEditPart not set, because it is null!");
 		}
 		viewerManager.setDescriptorManager(getDescriptorManager());
 		
@@ -740,12 +740,12 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 	protected void configureFilterManager() 
 	{
-		Map class2DrawComponents = getMultiLayerDrawComponent().getClass2DrawComponents();
+		Map class2DrawComponents = getRootDrawComponent().getClass2DrawComponents();
 		for (Iterator it = class2DrawComponents.keySet().iterator(); it.hasNext(); ) {
 			Class c = (Class) it.next();
 			getFilterManager().addFilter(c);
 		}
-		getMultiLayerDrawComponent().addPropertyChangeListener(getFilterManager().getTypeListener());    		
+		getRootDrawComponent().addPropertyChangeListener(getFilterManager().getTypeListener());    		
 		getFilterManager().ignoreClass(LayerImpl.class);    	
 	}
 
@@ -1025,37 +1025,37 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	protected void loadProperties() 
 	{
 		// Ruler properties
-		EditorRuler ruler = getMultiLayerDrawComponent().getLeftRuler();
+		EditorRuler ruler = getRootDrawComponent().getLeftRuler();
 		RulerProvider provider = null;
 		if (ruler != null) {
 			provider = new EditorRulerProvider(ruler);
 		}
 		getGraphicalViewer().setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
-		ruler = getMultiLayerDrawComponent().getTopRuler();
+		ruler = getRootDrawComponent().getTopRuler();
 		provider = null;
 		if (ruler != null) {
 			provider = new EditorRulerProvider(ruler);
 		}
 		getGraphicalViewer().setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER, provider);
 		getGraphicalViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, 
-				new Boolean(getMultiLayerDrawComponent().isRulersEnabled()));
+				new Boolean(getRootDrawComponent().isRulersEnabled()));
 
 		// Snap to Geometry property
 		getGraphicalViewer().setProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED, 
-				new Boolean(getMultiLayerDrawComponent().isSnapToGeometry()));
+				new Boolean(getRootDrawComponent().isSnapToGeometry()));
 
 		// Grid properties
 		getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_ENABLED, 
-				new Boolean(getMultiLayerDrawComponent().isGridEnabled()));
+				new Boolean(getRootDrawComponent().isGridEnabled()));
 		// We keep grid visibility and enablement in sync
 		getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE, 
-				new Boolean(getMultiLayerDrawComponent().isGridEnabled()));
+				new Boolean(getRootDrawComponent().isGridEnabled()));
 
 		// Zoom
 		ZoomManager manager = (ZoomManager)getGraphicalViewer()
 		.getProperty(ZoomManager.class.toString());
 		if (manager != null)
-			manager.setZoom(getMultiLayerDrawComponent().getZoom());      	            
+			manager.setZoom(getRootDrawComponent().getZoom());      	            
 	}
 
 	/**
@@ -1071,16 +1071,16 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 	protected void saveProperties() 
 	{
-		getMultiLayerDrawComponent().setRulersEnabled(((Boolean)getGraphicalViewer()
+		getRootDrawComponent().setRulersEnabled(((Boolean)getGraphicalViewer()
 				.getProperty(RulerProvider.PROPERTY_RULER_VISIBILITY)).booleanValue());
-		getMultiLayerDrawComponent().setGridEnabled(((Boolean)getGraphicalViewer()
+		getRootDrawComponent().setGridEnabled(((Boolean)getGraphicalViewer()
 				.getProperty(SnapToGrid.PROPERTY_GRID_ENABLED)).booleanValue());
-		getMultiLayerDrawComponent().setSnapToGeometry(((Boolean)getGraphicalViewer()
+		getRootDrawComponent().setSnapToGeometry(((Boolean)getGraphicalViewer()
 				.getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED)).booleanValue());
 		ZoomManager manager = (ZoomManager)getGraphicalViewer()
 		.getProperty(ZoomManager.class.toString());
 		if (manager != null)
-			getMultiLayerDrawComponent().setZoom(manager.getZoom());
+			getRootDrawComponent().setZoom(manager.getZoom());
 	}
 
 	protected void setSavePreviouslyNeeded(boolean value) {
@@ -1277,7 +1277,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			String fileName = file.getCanonicalPath();
 			logger.info("Save File "+fileName);
 			FileOutputStream fos = new FileOutputStream(fileName);          
-			ioFilter.write(getMultiLayerDrawComponent(), fos);      		
+			ioFilter.write(getRootDrawComponent(), fos);      		
 		} catch (Exception e) {
 //			throw new WriteException(file, "an error occured while writing", e);
 			throw new RuntimeException(e);
@@ -1292,7 +1292,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 		if (input instanceof FileEditorInput) {
 			FileEditorInput fileInput = (FileEditorInput) input; 
-			mldc = getMultiLayerDrawComponent();        
+			root = getRootDrawComponent();        
 			if (!fileInput.isSaved()) {
 				initialzePage();
 			} else {        	
@@ -1303,9 +1303,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		else
 			initialzePage();
 
-		mldc.setRenderModeManager(getRenderModeManager());      
-		getMultiLayerDrawComponent().setLanguageID(getLanguageManager().getCurrentLanguageID());
-		getUnitManager().setCurrentUnit(getMultiLayerDrawComponent().getModelUnit());
+		root.setRenderModeManager(getRenderModeManager());      
+		getRootDrawComponent().setLanguageID(getLanguageManager().getCurrentLanguageID());
+		getUnitManager().setCurrentUnit(getRootDrawComponent().getModelUnit());
 		if (logger.isDebugEnabled()) {
 			long duration = System.currentTimeMillis() - start;
 			logger.debug("setInput() took "+duration+" ms!");
@@ -1316,7 +1316,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	protected void initialzePage() 
 	{
 		logger.debug("initialize Page!");
-		mldc = getMultiLayerDrawComponent();
+		root = getRootDrawComponent();
 		loadAdditional();
 
 //		String pageID = Preferences.getPreferenceStore().getString(
@@ -1352,8 +1352,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		getUnitManager().setCurrentUnit(getUnitRegistry().getUnit(unitID));
 		
 		Rectangle pageBounds = PredefinedPageUtil.getPageBounds(dotUnit, defaultPage);
-		getMultiLayerDrawComponent().setResolution(resolution);  	  	
-		getMultiLayerDrawComponent().getCurrentPage().setPageBounds(pageBounds); 			
+		getRootDrawComponent().setResolution(resolution);  	  	
+		getRootDrawComponent().getCurrentPage().setPageBounds(pageBounds); 			
 	}	
 	
 	protected ResolutionUnitRegistry getResolutionUnitRegistry() {
@@ -1371,7 +1371,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	protected void loadAdditional() {
 		if (!editorSaving) {
 			if (getGraphicalViewer() != null) {
-				getGraphicalViewer().setContents(getMultiLayerDrawComponent());
+				getGraphicalViewer().setContents(getRootDrawComponent());
 				loadProperties();
 			}        
 		}    	
@@ -1390,7 +1390,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 	protected void refreshBuffer() 
 	{
-		MultiLayerDrawComponentEditPart mldcEditPart = getModelRootEditPart();
+		RootDrawComponentEditPart mldcEditPart = getModelRootEditPart();
 		if (mldcEditPart != null) {
 			BufferedFreeformLayer buffer = mldcEditPart.getBufferedFreeformLayer();
 			if (buffer != null) {
@@ -1400,14 +1400,14 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		}
 	}
 
-	private MultiLayerDrawComponentEditPart mldcEditPart = null;
-	protected MultiLayerDrawComponentEditPart getModelRootEditPart() 
+	private RootDrawComponentEditPart mldcEditPart = null;
+	protected RootDrawComponentEditPart getModelRootEditPart() 
 	{
 		if (getRootEditPart().getChildren().size() == 1) {
 			EditPart editPart = (EditPart) getRootEditPart().getChildren().get(0);
 			if (editPart != null) {
-				if (editPart instanceof MultiLayerDrawComponentEditPart) {
-					return mldcEditPart = (MultiLayerDrawComponentEditPart) editPart;
+				if (editPart instanceof RootDrawComponentEditPart) {
+					return mldcEditPart = (RootDrawComponentEditPart) editPart;
 				}
 			}
 		}    		
@@ -1439,9 +1439,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		if (getGraphicalControl() != null)
 			getGraphicalControl().removeControlListener(resizeListener);
 		
-		// disposes MultiLayerDrawComponent
-		mldc.dispose();
-		mldc = null;
+		// disposes RootDrawComponent
+		root.dispose();
+		root = null;
 				
 		if (outlinePage != null)
 			outlinePage.dispose();

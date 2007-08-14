@@ -103,9 +103,9 @@ implements FreeformListener
   	freeformExtent = null;
   	host.fireExtentChanged();
   	if (host.getParent() != null)
-  	  if (host.getParent() instanceof MLDCFreeformLayer) {
+  	  if (host.getParent() instanceof RootDrawComponentFreeformLayer) {
   	    // Do nothing
-//  	    LOGGER.debug("host.getParent() instanceof MLDCFreeformLayer!");
+//  	    LOGGER.debug("host.getParent() instanceof RootDrawComponentFreeformLayer!");
   	  } else {
     		host.getParent().revalidate();
   	  }

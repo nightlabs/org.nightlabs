@@ -51,7 +51,7 @@ extends AbstractEditorAction
 
 	public void run() 
 	{
-		TestDialog dialog = new TestDialog(getShell(), getMultiLayerDrawComponent());
+		TestDialog dialog = new TestDialog(getShell(), getRootDrawComponent());
 		dialog.open();
 	}
 	

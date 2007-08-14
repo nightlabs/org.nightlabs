@@ -58,7 +58,7 @@ import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorGuide;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.command.ChangeGuideCommand;
 import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
@@ -584,7 +584,7 @@ implements EditorRequestConstants
     return container.getRoot().getCurrentLayer();    
   }
 
-  public MultiLayerDrawComponent getModelRoot() 
+  public RootDrawComponent getModelRoot() 
   {
   	if (getHost().getModel() instanceof DrawComponent) {
   		DrawComponent dc = (DrawComponent) getHost().getModel();
@@ -601,7 +601,7 @@ implements EditorRequestConstants
 
 		// TODO: maybe uncomment for Container related things
 //		AddDrawComponentCommand add = new AddDrawComponentCommand();
-//		add.setParent((MultiLayerDrawComponent)getHost().getModel());
+//		add.setParent((RootDrawComponent)getHost().getModel());
 //		add.setChild(part);
 //		add.setLocation(rect);
 //		add.setLabel(EditorPlugin.getResourceString("command_add_command"));

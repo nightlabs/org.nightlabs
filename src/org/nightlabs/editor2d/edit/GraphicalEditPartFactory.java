@@ -29,15 +29,14 @@ package org.nightlabs.editor2d.edit;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
-
 import org.nightlabs.editor2d.EllipseDrawComponent;
 import org.nightlabs.editor2d.GroupDrawComponent;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.LineDrawComponent;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RectangleDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 
@@ -55,8 +54,8 @@ implements EditPartFactory
 	 */
 	public EditPart createEditPart(EditPart context, Object model)
 	{
-    if(model instanceof MultiLayerDrawComponent)
-      return new MultiLayerDrawComponentEditPart((MultiLayerDrawComponent)model);
+    if(model instanceof RootDrawComponent)
+      return new RootDrawComponentEditPart((RootDrawComponent)model);
     
     else if (model instanceof Layer)
       return new LayerEditPart((Layer)model);

@@ -72,7 +72,7 @@ extends PreferencesAction
 	public void run() 
 	{
 		prefConfMod.setShowToolTips(!isChecked());
-		EditPart modelRootEditPart = getEditPart(getMultiLayerDrawComponent());
+		EditPart modelRootEditPart = getEditPart(getRootDrawComponent());
 		updateToolTips(modelRootEditPart);
 	}
 

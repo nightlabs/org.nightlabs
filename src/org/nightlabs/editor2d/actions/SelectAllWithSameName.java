@@ -64,7 +64,7 @@ extends AbstractEditorSelectionAction
 			DrawComponent dc = (DrawComponent) editPart.getModel();
 			String name = dc.getName(); 
 			Class c = dc.getClass();
-			List drawComponents = getMultiLayerDrawComponent().getDrawComponents(c);
+			List drawComponents = getRootDrawComponent().getDrawComponents(c);
 			drawComponentsWithSameName = getDrawComponentsWithSameName(drawComponents, name);
 			if (!drawComponentsWithSameName.isEmpty())
 				return true;				

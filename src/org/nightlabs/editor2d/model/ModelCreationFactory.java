@@ -35,9 +35,9 @@ import org.nightlabs.editor2d.GroupDrawComponent;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.LineDrawComponent;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RectangleDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 
 public class ModelCreationFactory 
@@ -72,8 +72,8 @@ implements IModelCreationFactory
 		else if( targetClass.equals(EllipseDrawComponent.class)) {
 			result = factory.createEllipseDrawComponent();
 		}
-		else if( targetClass.equals(MultiLayerDrawComponent.class)) {
-		  result = factory.createMultiLayerDrawComponent();
+		else if( targetClass.equals(RootDrawComponent.class)) {
+		  result = factory.createRootDrawComponent();
 		}
 		else if( targetClass.equals(EditorGuide.class)) {
 		  result = factory.createEditorGuide();

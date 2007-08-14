@@ -49,9 +49,9 @@ import org.nightlabs.editor2d.GroupDrawComponent;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.LineDrawComponent;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RectangleDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.edit.EllipseEditPart;
@@ -59,7 +59,7 @@ import org.nightlabs.editor2d.edit.GroupEditPart;
 import org.nightlabs.editor2d.edit.ImageEditPart;
 import org.nightlabs.editor2d.edit.LayerEditPart;
 import org.nightlabs.editor2d.edit.LineEditPart;
-import org.nightlabs.editor2d.edit.MultiLayerDrawComponentEditPart;
+import org.nightlabs.editor2d.edit.RootDrawComponentEditPart;
 import org.nightlabs.editor2d.edit.PageEditPart;
 import org.nightlabs.editor2d.edit.RectangleEditPart;
 import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
@@ -99,12 +99,12 @@ extends SelectionAction
 	
 	/**
 	 * 
-	 * @return the MultiLayerDrawComponent of the AbstractEditor
-	 * @see org.nightlabs.editor2d.MultiLayerDrawComponent
+	 * @return the RootDrawComponent of the AbstractEditor
+	 * @see org.nightlabs.editor2d.RootDrawComponent
 	 */
-	public MultiLayerDrawComponent getMultiLayerDrawComponent() 
+	public RootDrawComponent getRootDrawComponent() 
 	{
-		return getEditor().getMultiLayerDrawComponent();
+		return getEditor().getRootDrawComponent();
 	}	
 	
 	/**
@@ -296,14 +296,14 @@ extends SelectionAction
 				defaultEditPartExcludes[0] = RootEditPart.class;							
 				defaultEditPartExcludes[1] = LayerEditPart.class;
 				defaultEditPartExcludes[2] = PageEditPart.class;
-				defaultEditPartExcludes[3] = MultiLayerDrawComponentEditPart.class;				
+				defaultEditPartExcludes[3] = RootDrawComponentEditPart.class;				
 			}
 			return defaultEditPartExcludes;
 		}
 		else {
 			if (defaultModelExcludes == null) {
 				defaultModelExcludes = new Class[3];
-				defaultModelExcludes[0] = MultiLayerDrawComponent.class;
+				defaultModelExcludes[0] = RootDrawComponent.class;
 				defaultModelExcludes[1] = Layer.class;
 				defaultModelExcludes[2] = PageDrawComponent.class;
 			}

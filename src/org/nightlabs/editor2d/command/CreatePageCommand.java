@@ -27,8 +27,8 @@ package org.nightlabs.editor2d.command;
 
 import org.nightlabs.editor2d.Editor2DFactory;
 import org.nightlabs.editor2d.EditorPlugin;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -37,15 +37,15 @@ public class CreatePageCommand
 extends CreateDrawComponentCommand 
 {
 
-	public CreatePageCommand(MultiLayerDrawComponent mldc, Editor2DFactory factory)
+	public CreatePageCommand(RootDrawComponent root, Editor2DFactory factory)
 	{
 		super();
-		if (mldc == null)
-			throw new IllegalArgumentException("Param mldc must not be null!");
+		if (root == null)
+			throw new IllegalArgumentException("Param root must not be null!");
 		if (factory == null)
 			throw new IllegalArgumentException("Param factory must not be null!");	  
 		
-		this.parent = mldc;
+		this.parent = root;
 	  this.factory = factory;
 	  setLabel(EditorPlugin.getResourceString("command.create.layer"));	  
 	}
@@ -55,21 +55,21 @@ extends CreateDrawComponentCommand
 	public void execute() 
 	{
 	  drawComponent = factory.createPageDrawComponent();	  
-    getPage().setParent(getMultiLayerDrawComponent());
-		drawOrderIndex = getMultiLayerDrawComponent().getDrawComponents().indexOf(
-        getMultiLayerDrawComponent().getCurrentPage()) + 1;    
-    getMultiLayerDrawComponent().addDrawComponent(getPage(), drawOrderIndex);
-    getMultiLayerDrawComponent().setCurrentPage(getPage());
+    getPage().setParent(getRootDrawComponent());
+		drawOrderIndex = getRootDrawComponent().getDrawComponents().indexOf(
+        getRootDrawComponent().getCurrentPage()) + 1;    
+    getRootDrawComponent().addDrawComponent(getPage(), drawOrderIndex);
+    getRootDrawComponent().setCurrentPage(getPage());
 	}	
 	
 	public void redo() 
 	{
     super.redo();
-		getMultiLayerDrawComponent().setCurrentPage(getPage());			  		
+		getRootDrawComponent().setCurrentPage(getPage());			  		
 	}	
 			
-	protected MultiLayerDrawComponent getMultiLayerDrawComponent() {
-	  return (MultiLayerDrawComponent) parent;
+	protected RootDrawComponent getRootDrawComponent() {
+	  return (RootDrawComponent) parent;
 	}
   
   protected PageDrawComponent getPage() {

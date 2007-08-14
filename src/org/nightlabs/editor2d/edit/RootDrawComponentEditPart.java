@@ -45,20 +45,20 @@ import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 import org.nightlabs.editor2d.config.PreferencesConfigModule;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
-import org.nightlabs.editor2d.model.MultiLayerDrawComponentPropertySource;
+import org.nightlabs.editor2d.model.RootDrawComponentPropertySource;
 import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
 
-public class MultiLayerDrawComponentEditPart 
+public class RootDrawComponentEditPart 
 extends AbstractDrawComponentContainerEditPart
 {  
-	public MultiLayerDrawComponentEditPart(MultiLayerDrawComponent mldc) 
+	public RootDrawComponentEditPart(RootDrawComponent root) 
 	{
-	  super(mldc);
-	  setModel(mldc);
+	  super(root);
+	  setModel(root);
 	  initConfigModule();
 	}
 
@@ -122,8 +122,8 @@ extends AbstractDrawComponentContainerEditPart
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());		
 	}
 
-	public MultiLayerDrawComponent getMultiLayerDrawComponent() {
-		return (MultiLayerDrawComponent) getModel();
+	public RootDrawComponent getRootDrawComponent() {
+		return (RootDrawComponent) getModel();
 	}
 		
   /** 
@@ -131,7 +131,7 @@ extends AbstractDrawComponentContainerEditPart
    */
   protected List getModelChildren()
   {  
-    return getMultiLayerDrawComponent().getDrawComponents();
+    return getRootDrawComponent().getDrawComponents();
   }	
 	
   /**
@@ -169,7 +169,7 @@ extends AbstractDrawComponentContainerEditPart
     if (propertySource == null)
     {
       propertySource =
-        new MultiLayerDrawComponentPropertySource(getMultiLayerDrawComponent());
+        new RootDrawComponentPropertySource(getRootDrawComponent());
     }
     return propertySource;
   }
@@ -178,7 +178,7 @@ extends AbstractDrawComponentContainerEditPart
 	protected void propertyChanged(PropertyChangeEvent evt) 
 	{
 		String propertyName = evt.getPropertyName();
-		if (propertyName.equals(MultiLayerDrawComponent.PROP_RESOLUTION)) {
+		if (propertyName.equals(RootDrawComponent.PROP_RESOLUTION)) {
 			refresh();
 			return;			
 		}

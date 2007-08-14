@@ -29,15 +29,14 @@ package org.nightlabs.editor2d.actions;
 
 import org.eclipse.gef.ui.actions.EditorPartAction;
 import org.eclipse.ui.IEditorPart;
-
 import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 
 
 public abstract class AbstractRendererModeAction 
 extends EditorPartAction 
 {  
-  protected MultiLayerDrawComponent mldc;
+  protected RootDrawComponent root;
   
   /**
    * @param editor
@@ -56,9 +55,9 @@ extends EditorPartAction
   {
     if (getEditorPart() instanceof AbstractEditor) {
       AbstractEditor editor = ((AbstractEditor)getEditorPart());
-      mldc = editor.getMultiLayerDrawComponent();
-//      mldc.setRenderMode(getRenderMode());
-      mldc.getRenderModeManager().setCurrentRenderMode(getRenderMode());
+      root = editor.getRootDrawComponent();
+//      root.setRenderMode(getRenderMode());
+      root.getRenderModeManager().setCurrentRenderMode(getRenderMode());
       editor.updateViewer();      
     }    
   }

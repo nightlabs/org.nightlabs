@@ -83,26 +83,26 @@ extends AbstractEditorSelectionAction
 				return false;
 		}
 
-		if (selection.contains(getMultiLayerDrawComponent()))
+		if (selection.contains(getRootDrawComponent()))
 			return false;
 
 		return true;
 	}
 
 	protected boolean onlyOnePage() {
-		return !(getMultiLayerDrawComponent().getDrawComponents().size() > 1);
+		return !(getRootDrawComponent().getDrawComponents().size() > 1);
 	}
 
 	protected DrawComponent getOnlyPage() {
-		return getMultiLayerDrawComponent().getDrawComponents().get(0);
+		return getRootDrawComponent().getDrawComponents().get(0);
 	}
 
 	protected boolean onlyOneLayer() {
-		return !(getMultiLayerDrawComponent().getDrawComponents(LayerImpl.class).size() > 1);
+		return !(getRootDrawComponent().getDrawComponents(LayerImpl.class).size() > 1);
 	}
 
 	protected DrawComponent getOnlyLayer() {
-		return getMultiLayerDrawComponent().getDrawComponents(LayerImpl.class).get(0);
+		return getRootDrawComponent().getDrawComponents(LayerImpl.class).get(0);
 	}
 
 	@Override

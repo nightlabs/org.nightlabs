@@ -25,8 +25,8 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.command;
 
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -34,8 +34,8 @@ import org.nightlabs.editor2d.PageDrawComponent;
 public class DeletePageCommand 
 extends DeleteDrawComponentCommand 
 {
-	public DeletePageCommand(MultiLayerDrawComponent mldc, PageDrawComponent page) {
-		super(mldc, page);
+	public DeletePageCommand(RootDrawComponent root, PageDrawComponent page) {
+		super(root, page);
 	}
 	
 	@Override
@@ -56,21 +56,21 @@ extends DeleteDrawComponentCommand
 	public void undo() 
 	{
 		super.undo();
-	  getMultiLayerDrawComponent().setCurrentPage((PageDrawComponent)child);	  
+	  getRootDrawComponent().setCurrentPage((PageDrawComponent)child);	  
 	}	
 	
 	protected void setCurrentPage() 
 	{
     if (index != 0)
-    	getMultiLayerDrawComponent().setCurrentPage((PageDrawComponent) parent.getDrawComponents().get(index-1));
+    	getRootDrawComponent().setCurrentPage((PageDrawComponent) parent.getDrawComponents().get(index-1));
     else if (parent.getDrawComponents().size() == 1)
-    	getMultiLayerDrawComponent().setCurrentPage((PageDrawComponent) parent.getDrawComponents().get(0));
+    	getRootDrawComponent().setCurrentPage((PageDrawComponent) parent.getDrawComponents().get(0));
     else if (index == 0) {
-    	getMultiLayerDrawComponent().setCurrentPage((PageDrawComponent) parent.getDrawComponents().get(index+1));
+    	getRootDrawComponent().setCurrentPage((PageDrawComponent) parent.getDrawComponents().get(index+1));
     }			  	  
 	}	
 	
-	private MultiLayerDrawComponent getMultiLayerDrawComponent() {
-		return (MultiLayerDrawComponent) parent;
+	private RootDrawComponent getRootDrawComponent() {
+		return (RootDrawComponent) parent;
 	}
 }

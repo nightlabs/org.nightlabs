@@ -75,12 +75,11 @@ extends AbstractEditor
 	}
 	
 	/**
-	 * @see org.nightlabs.editor2d.AbstractEditor#createMultiLayerDrawComponent()
+	 * @see org.nightlabs.editor2d.AbstractEditor#createRootDrawComponent()
 	 */    
-	public MultiLayerDrawComponent createMultiLayerDrawComponent() {
-//    MultiLayerDrawComponent mldc = Editor2DFactory.eINSTANCE.createMultiLayerDrawComponent();
-		MultiLayerDrawComponent mldc = getModelFactory().createMultiLayerDrawComponent();		
-    return mldc;
+	public RootDrawComponent createRootDrawComponent() {
+		RootDrawComponent root = getModelFactory().createRootDrawComponent();		
+    return root;
   }
 	
 	/**

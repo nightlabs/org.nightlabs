@@ -49,7 +49,7 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.nightlabs.base.action.XContributionItem;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 import org.nightlabs.i18n.unit.resolution.DPIResolutionUnit;
 import org.nightlabs.i18n.unit.resolution.IResolutionUnit;
 import org.nightlabs.i18n.unit.resolution.Resolution;
@@ -256,7 +256,7 @@ extends XContributionItem
   }  
   
   /*************************** BEGIN resolution recalculation ******************************/    
-  private MultiLayerDrawComponent mldc = null;
+  private RootDrawComponent root = null;
       
   protected IPartListener partListener = new IPartListener() 
   {
@@ -266,9 +266,9 @@ extends XContributionItem
 //				logger.debug("part activated");
 //			}
 				
-			Object mldcAdapter = part.getAdapter(MultiLayerDrawComponent.class);
-			if (mldcAdapter != null && mldcAdapter instanceof MultiLayerDrawComponent) {
-				mldc = (MultiLayerDrawComponent) mldcAdapter;
+			Object rootAdapter = part.getAdapter(RootDrawComponent.class);
+			if (rootAdapter != null && rootAdapter instanceof RootDrawComponent) {
+				root = (RootDrawComponent) rootAdapter;
 			}
 		  Object zoomAdapter = part.getAdapter(ZoomManager.class);
 		  if (zoomAdapter != null && zoomAdapter instanceof ZoomManager) {
@@ -347,23 +347,23 @@ extends XContributionItem
 	
 	protected double getDocumentResolutionX(IResolutionUnit unit) 
   {
-  	if (mldc != null) 
-  		return mldc.getResolution().getResolutionX(unit);
+  	if (root != null) 
+  		return root.getResolution().getResolutionX(unit);
   	return 1.0;
   }
 
 	protected double getDocumentResolutionY(IResolutionUnit unit) 
   {
-  	if (mldc != null) 
-  		return mldc.getResolution().getResolutionY(unit);
+  	if (root != null) 
+  		return root.getResolution().getResolutionY(unit);
   	return 1.0;
   }
   
   public Resolution getDocumentResolution() 
   {
-  	if (mldc != null) {
-//  		logger.debug("DocumentResolution = "+mldc.getResolution().getResolutionX()+" "+mldc.getResolution().getResolutionUnit().getResolutionID());  	  		  		
-  		return mldc.getResolution();
+  	if (root != null) {
+//  		logger.debug("DocumentResolution = "+root.getResolution().getResolutionX()+" "+root.getResolution().getResolutionUnit().getResolutionID());  	  		  		
+  		return root.getResolution();
   	}
   	return new ResolutionImpl();
   }	

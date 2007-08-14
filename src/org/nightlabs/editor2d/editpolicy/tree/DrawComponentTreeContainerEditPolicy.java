@@ -42,8 +42,8 @@ import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 import org.nightlabs.editor2d.command.DrawComponentReorderCommand;
 import org.nightlabs.editor2d.command.OrphanChildCommand;
 
@@ -140,11 +140,11 @@ extends TreeContainerEditPolicy
 		}
 		else if (source.getModel() instanceof PageDrawComponent) 
 		{
-			if (target.getModel() instanceof MultiLayerDrawComponent)
+			if (target.getModel() instanceof RootDrawComponent)
 				return true;						
 			return false;				
 		}
-		else if (target.getModel() instanceof MultiLayerDrawComponent) 
+		else if (target.getModel() instanceof RootDrawComponent) 
 		{
 			if (source.getModel() instanceof PageDrawComponent)
 				return true;						

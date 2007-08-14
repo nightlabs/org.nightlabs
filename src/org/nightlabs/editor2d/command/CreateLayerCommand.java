@@ -30,8 +30,8 @@ package org.nightlabs.editor2d.command;
 import org.nightlabs.editor2d.Editor2DFactory;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 
 
 public class CreateLayerCommand  
@@ -55,21 +55,21 @@ extends CreateDrawComponentCommand
 	public void execute() 
 	{
 	  drawComponent = factory.createLayer();	  
-    getLayer().setParent(getMultiLayerDrawComponent().getCurrentPage());
-		drawOrderIndex = getMultiLayerDrawComponent().getCurrentPage().getDrawComponents().indexOf(
-        getMultiLayerDrawComponent().getCurrentLayer()) + 1;    
-    getMultiLayerDrawComponent().getCurrentPage().addDrawComponent(getLayer(), drawOrderIndex);
-    getMultiLayerDrawComponent().setCurrentLayer(getLayer());
+    getLayer().setParent(getRootDrawComponent().getCurrentPage());
+		drawOrderIndex = getRootDrawComponent().getCurrentPage().getDrawComponents().indexOf(
+        getRootDrawComponent().getCurrentLayer()) + 1;    
+    getRootDrawComponent().getCurrentPage().addDrawComponent(getLayer(), drawOrderIndex);
+    getRootDrawComponent().setCurrentLayer(getLayer());
 	}	
 	
 	public void redo() 
 	{
     super.redo();
-		getMultiLayerDrawComponent().setCurrentLayer(getLayer());			  		
+		getRootDrawComponent().setCurrentLayer(getLayer());			  		
 	}	
 			
-	protected MultiLayerDrawComponent getMultiLayerDrawComponent() {
-	  return (MultiLayerDrawComponent) parent.getRoot();
+	protected RootDrawComponent getRootDrawComponent() {
+	  return (RootDrawComponent) parent.getRoot();
 	}
   
   protected Layer getLayer() {

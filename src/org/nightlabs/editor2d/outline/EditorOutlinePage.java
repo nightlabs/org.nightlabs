@@ -206,13 +206,13 @@ implements IAdaptable
 //    overview = new Canvas(pageBook, SWT.NONE);    
 //    overview = new J2DCanvas(pageBook, SWT.NONE, new J2DSamplePaintable("TestMessage"));    
     overview = new J2DCanvas(pageBook, SWT.NONE, 
-    		new DrawComponentPaintable(editor.getMultiLayerDrawComponent()));
+    		new DrawComponentPaintable(editor.getRootDrawComponent()));
     
 //    RootEditPart rep = editor.getOutlineGraphicalViewer().getRootEditPart();
 //    ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart) rep;
 //    Viewport viewport = ((Viewport)root.getFigure());  
 //    PreviewViewport previewViewport = new PreviewViewport(viewport);
-//    overview = new PreviewComposite(editor.getMultiLayerDrawComponent(), previewViewport, pageBook, SWT.NONE);
+//    overview = new PreviewComposite(editor.getRootDrawComponent(), previewViewport, pageBook, SWT.NONE);
     
     pageBook.showPage(outline);
     configureOutlineViewer();
@@ -248,7 +248,7 @@ implements IAdaptable
   }
 
   protected void initializeOutlineViewer(){
-    setContents(editor.getMultiLayerDrawComponent());
+    setContents(editor.getRootDrawComponent());
     
 //    if (getViewer() instanceof TreeViewer) {
 //    	TreeViewer tv = (TreeViewer) getViewer();
@@ -349,7 +349,7 @@ implements IAdaptable
 		{
 			if (pce.getPropertyName().equals(FilterManager.FILTER_CHANGED)) 
 			{
-				getViewer().setContents(editor.getMultiLayerDrawComponent());
+				getViewer().setContents(editor.getRootDrawComponent());
 			}	
 			else if (pce.getPropertyName().equals(FilterManager.FILTER_ADDED)) 
 			{				
@@ -358,7 +358,7 @@ implements IAdaptable
 					IMenuManager menuMan = getSite().getActionBars().getMenuManager();					
 					Class c = (Class) o;
 					menuMan.add(createFilterAction(c));
-					getViewer().setContents(editor.getMultiLayerDrawComponent());					
+					getViewer().setContents(editor.getRootDrawComponent());					
 				}
 			}
 			else if (pce.getPropertyName().equals(FilterManager.FILTERS_ADDED)) 
@@ -371,7 +371,7 @@ implements IAdaptable
 						Class c = (Class) it.next(); 
 						menuMan.add(createFilterAction(c));						
 					}
-					getViewer().setContents(editor.getMultiLayerDrawComponent());					
+					getViewer().setContents(editor.getRootDrawComponent());					
 				}
 			}			
 		}	

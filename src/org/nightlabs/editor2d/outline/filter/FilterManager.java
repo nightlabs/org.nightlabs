@@ -35,7 +35,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.nightlabs.editor2d.MultiLayerDrawComponent;
+import org.nightlabs.editor2d.RootDrawComponent;
 
 /**
  * Used to set Filters in the Outline Page
@@ -145,7 +145,7 @@ public class FilterManager
 	{	
 		public void propertyChange(PropertyChangeEvent evt) 
 		{
-			if (evt.getPropertyName().equals(MultiLayerDrawComponent.TYPE_ADDED)) {
+			if (evt.getPropertyName().equals(RootDrawComponent.TYPE_ADDED)) {
 				Class c = (Class) evt.getNewValue();
 				addFilter(c);
 			}

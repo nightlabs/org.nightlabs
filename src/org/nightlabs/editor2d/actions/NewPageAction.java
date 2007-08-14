@@ -63,7 +63,7 @@ extends AbstractEditorAction
 
 	@Override
 	public void run() {
-		CreatePageCommand cmd = new CreatePageCommand(getMultiLayerDrawComponent(), getEditor().getModelFactory());
+		CreatePageCommand cmd = new CreatePageCommand(getRootDrawComponent(), getEditor().getModelFactory());
 		execute(cmd);
 	}
 	

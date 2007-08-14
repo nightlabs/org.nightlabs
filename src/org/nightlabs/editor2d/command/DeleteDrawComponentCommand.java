@@ -39,10 +39,10 @@ extends Command
 	/** The DrawComponent to delete */
 	protected DrawComponent child;
 	
-	/** MultiLayerDrawComponent to removed from. */
+	/** parent to remove from. */
 	protected DrawComponentContainer parent;
   
-	/** the DrawComponentsIndex of the DrawComponentContainer */
+	/** the index of the DrawComponentContainer */
 	protected int index;
 	
 	/** True, if child was removed from its parent. */	
