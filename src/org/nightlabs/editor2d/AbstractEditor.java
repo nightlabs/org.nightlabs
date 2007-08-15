@@ -82,6 +82,7 @@ import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
+import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.J2DGraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
@@ -163,7 +164,9 @@ import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintSetupAction;
 import org.nightlabs.editor2d.properties.EditorPropertyPage;
 import org.nightlabs.editor2d.properties.UnitManager;
+import org.nightlabs.editor2d.render.Draw2DRenderContext;
 import org.nightlabs.editor2d.render.RenderModeManager;
+import org.nightlabs.editor2d.render.j2d.J2DRenderContext;
 import org.nightlabs.editor2d.rulers.EditorRulerProvider;
 import org.nightlabs.editor2d.unit.DotUnit;
 import org.nightlabs.editor2d.unit.UnitConstants;
@@ -771,6 +774,12 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 	}
 
+	protected void configureRenderModeManager() 
+	{
+//		getRenderModeManager().setCurrentRenderContextType(J2DRenderContext.RENDER_CONTEXT_TYPE_JAVA2D);		
+//		getRenderModeManager().setCurrentRenderContextType(Draw2DRenderContext.RENDER_CONTEXT_TYPE);
+	}
+	
 	protected EditorActionBarContributor getEditorActionBarContributor() 
 	{
 		if (getEditorSite().getActionBarContributor() != null && 
@@ -1289,7 +1298,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		long start = System.currentTimeMillis();
 		super.setInput(input);
 		renderMan = RendererRegistry.sharedInstance().getRenderModeManager();
-
+		configureRenderModeManager();
+		
 		if (input instanceof FileEditorInput) {
 			FileEditorInput fileInput = (FileEditorInput) input; 
 			root = getRootDrawComponent();        
@@ -1432,15 +1442,16 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	}
 //	**************** END public Methods for EditorOutlinePage **********************  
 
-	public void dispose() 
+	public void disposeEditor() 
 	{
-		super.dispose();
+//		super.dispose();
 		
 		if (getGraphicalControl() != null)
 			getGraphicalControl().removeControlListener(resizeListener);
 		
 		// disposes RootDrawComponent
-		root.dispose();
+		if (root != null)
+			root.dispose();
 		root = null;
 				
 		if (outlinePage != null)
@@ -1515,7 +1526,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	
 	private DisposeListener disposeListener = new DisposeListener(){
 		public void widgetDisposed(DisposeEvent e) {
-			dispose();
+			disposeEditor();
 		}
 	};
 }
