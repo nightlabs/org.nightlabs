@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
-import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.l10n.DateFormatProvider;
 import org.vafada.swtcalendar.SWTCalendar;
 import org.vafada.swtcalendar.SWTCalendarEvent;
@@ -34,9 +34,13 @@ extends Dialog
 	private DateTimeEdit dateTimeEdit;
 	private Calendar calendar;
 	
+	@SuppressWarnings("unused") //$NON-NLS-1$
 	private Spinner hour = null;
+	@SuppressWarnings("unused") //$NON-NLS-1$
 	private Spinner minute = null;
+	@SuppressWarnings("unused") //$NON-NLS-1$
 	private Spinner second = null;
+	@SuppressWarnings("unused") //$NON-NLS-1$
 	private Spinner milliSec = null;
 	
 	public CalendarDateTimeEditLookupDialog(Shell parentShell, DateTimeEdit dateTimeEdit)
@@ -50,7 +54,7 @@ extends Dialog
 	@Override
 	public void create() {
 		super.create();
-		getShell().setText(NLBasePlugin.getResourceString("CalendarDateTimeEditLookupDialog.title"));
+		getShell().setText(Messages.getString("composite.CalendarDateTimeEditLookupDialog.title")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -78,14 +82,14 @@ extends Dialog
 			XComposite timeComp = new XComposite(page, SWT.BORDER);
 			timeComp.getGridLayout().numColumns = 2;
 
-			new Label(timeComp, SWT.NONE).setText(NLBasePlugin.getResourceString("CalendarDateTimeEditLookupDialog.hour.label"));
-			new Label(timeComp, SWT.NONE).setText(NLBasePlugin.getResourceString("CalendarDateTimeEditLookupDialog.minute.label"));
+			new Label(timeComp, SWT.NONE).setText(Messages.getString("composite.CalendarDateTimeEditLookupDialog.hourLabel.text")); //$NON-NLS-1$
+			new Label(timeComp, SWT.NONE).setText(Messages.getString("composite.CalendarDateTimeEditLookupDialog.minuteLabel.text")); //$NON-NLS-1$
 
 			if ((DateFormatProvider.TIME_SEC & dateTimeEdit.getFlags()) == DateFormatProvider.TIME_SEC)
-				new Label(timeComp, SWT.NONE).setText(NLBasePlugin.getResourceString("CalendarDateTimeEditLookupDialog.second.label"));
+				new Label(timeComp, SWT.NONE).setText(Messages.getString("composite.CalendarDateTimeEditLookupDialog.secondLabel.text")); //$NON-NLS-1$
 
 			if ((DateFormatProvider.TIME_MSEC & dateTimeEdit.getFlags()) == DateFormatProvider.TIME_MSEC)
-				new Label(timeComp, SWT.NONE).setText(NLBasePlugin.getResourceString("CalendarDateTimeEditLookupDialog.millisecond.label"));
+				new Label(timeComp, SWT.NONE).setText(Messages.getString("composite.CalendarDateTimeEditLookupDialog.millisecLabel.text")); //$NON-NLS-1$
 
 			hour = createSpinner(timeComp, Calendar.HOUR_OF_DAY);
 			minute = createSpinner(timeComp, Calendar.MINUTE);
@@ -159,7 +163,7 @@ extends Dialog
 	{
 		Spinner spinner = calendarField2Spinner.get(field);
 		if (spinner == null)
-			throw new IllegalStateException("No Spinner registered for field " + field);
+			throw new IllegalStateException("No Spinner registered for field " + field); //$NON-NLS-1$
 
 		return spinner;
 	}

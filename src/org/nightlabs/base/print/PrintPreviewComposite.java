@@ -45,19 +45,17 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.i18n.UnitRegistryEP;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.util.GeomUtil;
 import org.nightlabs.i18n.unit.DefaultScreenUnit;
 import org.nightlabs.i18n.unit.IUnit;
 import org.nightlabs.i18n.unit.MMUnit;
 import org.nightlabs.i18n.unit.UnitUtil;
-import org.nightlabs.util.Utils;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public class PrintPreviewComposite 
 extends XComposite 
@@ -89,7 +87,7 @@ extends XComposite
 	protected void init(PageFormat pf) 
 	{
 		if (pf == null)
-			throw new IllegalArgumentException("Param pageFormat must NOT be null!");
+			throw new IllegalArgumentException("Param pageFormat must NOT be null!"); //$NON-NLS-1$
 		
 		this.pageFormat = pf;
 		initPage(pf);
@@ -201,15 +199,14 @@ extends XComposite
 		canvas.addControlListener(canvasResizeListener);
 		pagePaintListener = initPagePaintListener();
 		canvas.addPaintListener(pagePaintListener);
-		
-		label = new Label(parent, SWT.NONE);
-		GridData labelData = new GridData(GridData.CENTER, GridData.END, true, false);
-		label.setLayoutData(labelData);
-		
+
+		pageFormatLabel = new Label(parent, SWT.NONE);
+		pageFormatLabel.setLayoutData(new GridData(GridData.CENTER, GridData.END, true, false));
+
 		updateCanvas();
 	}
 	
-	private Label label = null;
+	private Label pageFormatLabel = null;
 	
 	private Rectangle pageRectangle = null;
 	protected Rectangle getPageRectangle() {
@@ -303,17 +300,25 @@ extends XComposite
 		canvas.redraw();
 		layout(true);
 	}
-	
+
 	private void setLabelText() 
 	{
-		int numberOfAfterCommaDigits = 2;
-		label.setText(
-				NLBasePlugin.getResourceString("composite.printPreview.width.label") + " = " + 
-				Utils.truncateDouble(getPageWidth(getCurrentUnit()), numberOfAfterCommaDigits) + " " +
-				getCurrentUnit().getUnitSymbol() + ", " +
-				NLBasePlugin.getResourceString("composite.printPreview.height.label") + " = " +
-				Utils.truncateDouble(getPageHeight(getCurrentUnit()), numberOfAfterCommaDigits) + " " + 
-				getCurrentUnit().getUnitSymbol());
+		Double width  = new Double(getPageWidth(getCurrentUnit()));
+		Double height = new Double(getPageHeight(getCurrentUnit()));
+		String unitSymbol = getCurrentUnit().getUnitSymbol();
+
+		pageFormatLabel.setText(
+				String.format(Messages.getString("print.PrintPreviewComposite.pageFormatLabel.text"), //$NON-NLS-1$
+				new Object[] { width, height, unitSymbol })
+		);
+//				String.format("", new Object[] { Util.truncateDouble(getPageWidth(getCurrentUnit()), numberOfAfterCommaDigits) })
+//				NLBasePlugin.getResourceString("composite.printPreview.width.label") + " = " + 
+//				Util.truncateDouble(getPageWidth(getCurrentUnit()), numberOfAfterCommaDigits) + " " +
+//				getCurrentUnit().getUnitSymbol() + ", " +
+//				NLBasePlugin.getResourceString("composite.printPreview.height.label") + " = " +
+//				Util.truncateDouble(getPageHeight(getCurrentUnit()), numberOfAfterCommaDigits) + " " + 
+//				getCurrentUnit().getUnitSymbol()
+//				);
 	}
 	
 	private IUnit defaultUnit = null; 

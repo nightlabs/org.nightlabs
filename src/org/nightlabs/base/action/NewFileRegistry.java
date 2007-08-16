@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.jface.resource.ImageDescriptor;
-
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
@@ -43,9 +42,10 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
 public class NewFileRegistry 
 extends AbstractEPProcessor
 {
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.newfileaction";	
-	public static final String DEFAULT_CATEGORY = "Default category";
-	
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.newfileaction";	 //$NON-NLS-1$
+//	public static final String DEFAULT_CATEGORY = "Default category";
+	public static final String DEFAULT_CATEGORY_ID = "DefaultCategory"; //$NON-NLS-1$
+
 	private static NewFileRegistry sharedInstance;
 	
 	public static NewFileRegistry sharedInstance() {
@@ -84,30 +84,30 @@ extends AbstractEPProcessor
 	public void processElement(IExtension extension, IConfigurationElement element)
 	throws Exception 
 	{
-		if (element.getName().equalsIgnoreCase("action")) 
+		if (element.getName().equalsIgnoreCase("action"))  //$NON-NLS-1$
 		{
-			String className = element.getAttribute("class");
+			String className = element.getAttribute("class"); //$NON-NLS-1$
 			if (!checkString(className))
-				throw new EPProcessorException("Element action has to define attribute class.");
-						
-			String categoryID = element.getAttribute("categoryID");
-			if (!checkString(categoryID) || categoryRegistry.getCategoryName(categoryID) == null)
-				categoryID = DEFAULT_CATEGORY;
-				
-			String fileExtension = element.getAttribute("fileExtension");
-			if (!checkString(fileExtension))
-				throw new EPProcessorException("Element action has to define attribute fileExtension.");
-			
-			String title = element.getAttribute("title");
-			if (!checkString(title))
-				throw new EPProcessorException("Element action has to define attribute title.");
+				throw new EPProcessorException("Element action has to define attribute class."); //$NON-NLS-1$
 
-			String tooltip = element.getAttribute("tooltip");			
-			String iconName = element.getAttribute("icon");
+			String categoryID = element.getAttribute("categoryID"); //$NON-NLS-1$
+			if (!checkString(categoryID) || categoryRegistry.getCategoryName(categoryID) == null)
+				categoryID = DEFAULT_CATEGORY_ID;
+
+			String fileExtension = element.getAttribute("fileExtension"); //$NON-NLS-1$
+			if (!checkString(fileExtension))
+				throw new EPProcessorException("Element action has to define attribute fileExtension."); //$NON-NLS-1$
+
+			String title = element.getAttribute("title"); //$NON-NLS-1$
+			if (!checkString(title))
+				throw new EPProcessorException("Element action has to define attribute title."); //$NON-NLS-1$
+
+			String tooltip = element.getAttribute("tooltip");			 //$NON-NLS-1$
+			String iconName = element.getAttribute("icon"); //$NON-NLS-1$
 							
 			Object o;
 			try {
-				o = element.createExecutableExtension("class");
+				o = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (o instanceof INewFileAction) {
 					INewFileAction action = (INewFileAction) o;
 					action.setFileExtension(fileExtension);
@@ -160,15 +160,15 @@ extends AbstractEPProcessor
 		public void processElement(IExtension extension, IConfigurationElement element) 
 		throws Exception 
 		{
-			if (element.getName().equalsIgnoreCase("category")) 
+			if (element.getName().equalsIgnoreCase("category"))  //$NON-NLS-1$
 			{
-				String id = element.getAttribute("id");
+				String id = element.getAttribute("id"); //$NON-NLS-1$
 				if (!checkString(id))
-					throw new EPProcessorException("Element category has to define attribute id.");
+					throw new EPProcessorException("Element category has to define attribute id."); //$NON-NLS-1$
  				
-				String name = element.getAttribute("name");
+				String name = element.getAttribute("name"); //$NON-NLS-1$
 				if (!checkString(name))
-					throw new EPProcessorException("Element category has to define attribute name.");
+					throw new EPProcessorException("Element category has to define attribute name."); //$NON-NLS-1$
 				
 				categoryID2name.put(id, name);
 			}

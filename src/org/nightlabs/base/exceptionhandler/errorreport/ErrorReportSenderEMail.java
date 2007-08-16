@@ -57,8 +57,8 @@ public class ErrorReportSenderEMail implements ErrorReportSender
 		try {
 			ErrorReportEMailCfMod cfMod = (ErrorReportEMailCfMod) Config.sharedInstance().createConfigModule(ErrorReportEMailCfMod.class);		
 			Properties props = new Properties();
-			props.put("mail.host", cfMod.getSmtpHost());
-			props.put("mail.smtp.localhost", cfMod.getSmtpLocalhost());
+			props.put("mail.host", cfMod.getSmtpHost()); //$NON-NLS-1$
+			props.put("mail.smtp.localhost", cfMod.getSmtpLocalhost()); //$NON-NLS-1$
 
 			Session mailConnection = Session.getInstance(props, null);
 			Message msg = new MimeMessage(mailConnection);
@@ -70,14 +70,14 @@ public class ErrorReportSenderEMail implements ErrorReportSender
 			for (String recipient : cfMod.getMailTo())
 				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 			
-			msg.setSubject(errorReport.getFirstThrowable().getClass().getSimpleName() +  " " + errorReport.getTimeAsString());
+			msg.setSubject(errorReport.getFirstThrowable().getClass().getSimpleName() +  " " + errorReport.getTimeAsString()); //$NON-NLS-1$
 
 			Transport.send(msg);
 			
-			logger.info("Message was sent to "+cfMod.getMailTo().size()+" recipient(s)");
+			logger.info("Message was sent to "+cfMod.getMailTo().size()+" recipient(s)"); //$NON-NLS-1$ //$NON-NLS-2$
 			
 		} catch (Exception e) {
-			logger.fatal("Sending error report by eMail failed.", e);
+			logger.fatal("Sending error report by eMail failed.", e); //$NON-NLS-1$
 		}
 	}
 }

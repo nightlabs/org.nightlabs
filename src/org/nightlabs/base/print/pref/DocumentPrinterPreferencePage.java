@@ -29,7 +29,6 @@ package org.nightlabs.base.print.pref;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -39,7 +38,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.util.RCPUtil;
+import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 import org.nightlabs.print.DelegatingDocumentPrinterCfMod;
@@ -99,8 +98,9 @@ implements IWorkbenchPreferencePage {
 		try {
 			Config.sharedInstance().save();
 		} catch (ConfigException e) {
-			MessageDialog dlg = new MessageDialog(RCPUtil.getActiveWorkbenchShell(), "Saving DocumentPrinter config failed", null, e.getMessage(), 0, new String[]{"OK"}, 0);
-			dlg.open();
+			ExceptionHandlerRegistry.asyncHandleException(e);
+//			MessageDialog dlg = new MessageDialog(RCPUtil.getActiveWorkbenchShell(), "Saving DocumentPrinter config failed", null, e.getMessage(), 0, new String[]{"OK"}, 0);
+//			dlg.open();
 		}
 		return super.performOk();
 	}

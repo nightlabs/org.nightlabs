@@ -86,27 +86,27 @@ public class EntityTreeCategoryViewBinding implements IEntityTreeCategoryViewBin
 	}
 
 	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
-		viewID = config.getAttribute("viewID");
-		if (viewID == null || "".equals(viewID))
-			throw new IllegalArgumentException("Attribute viewID must be defined for a viewBinding.");
+		viewID = config.getAttribute("viewID"); //$NON-NLS-1$
+		if (viewID == null || "".equals(viewID)) //$NON-NLS-1$
+			throw new IllegalArgumentException("Attribute viewID must be defined for a viewBinding."); //$NON-NLS-1$
 		
-		editorID = config.getAttribute("editorID");
-		if (editorID == null || "".equals(editorID))
-			throw new IllegalArgumentException("Attribute editorID must be defined for a viewBinding");
+		editorID = config.getAttribute("editorID"); //$NON-NLS-1$
+		if (editorID == null || "".equals(editorID)) //$NON-NLS-1$
+			throw new IllegalArgumentException("Attribute editorID must be defined for a viewBinding"); //$NON-NLS-1$
 		
-		name = config.getAttribute("name");
-		if (name == null || "".equals(name))
+		name = config.getAttribute("name"); //$NON-NLS-1$
+		if (name == null || "".equals(name)) //$NON-NLS-1$
 			this.name = null;
 		
 		
-		String index = config.getAttribute("indexHint");
+		String index = config.getAttribute("indexHint"); //$NON-NLS-1$
 		try {
 			indexHint = Integer.parseInt(index);
 		} catch (Exception e) {
 			indexHint = Integer.MAX_VALUE / 2;
 		}
 		
-		String iconStr = config.getAttribute("icon");
+		String iconStr = config.getAttribute("icon"); //$NON-NLS-1$
 		if(iconStr != null)
 			image = AbstractUIPlugin.imageDescriptorFromPlugin(config.getDeclaringExtension().getNamespaceIdentifier(), iconStr).createImage();
 		else

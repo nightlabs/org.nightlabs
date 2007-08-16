@@ -123,10 +123,10 @@ extends AbstractEPProcessor
 	private List<ItemDescriptor> menuSortedForContextmenu = null;
 	private List<ItemDescriptor> menuSortedForToolbar = null;
 
-	protected static final String KIND_MENUBAR = "menubar";
-	protected static final String KIND_CONTEXTMENU = "contextmenu";
-	protected static final String KIND_TOOLBAR = "toolbar";
-	protected static final String KIND_COOLBAR = "coolbar";
+	protected static final String KIND_MENUBAR = "menubar"; //$NON-NLS-1$
+	protected static final String KIND_CONTEXTMENU = "contextmenu"; //$NON-NLS-1$
+	protected static final String KIND_TOOLBAR = "toolbar"; //$NON-NLS-1$
+	protected static final String KIND_COOLBAR = "coolbar"; //$NON-NLS-1$
 
 	/**
 	 * This method populates the passed <code>menuManager</code> with all visible
@@ -229,7 +229,7 @@ extends AbstractEPProcessor
 		for (int i = 0; i < coolBarItems.length; ++i) {
 			IContributionItem coolBarItem = coolBarItems[i];
 			coolBarItemMap.put(coolBarItem.getId(), coolBarItem);
-			System.out.println("Having "+coolBarItem.getId()+" in CoolBar");
+			System.out.println("Having "+coolBarItem.getId()+" in CoolBar"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 		ToolBarContributionItem orphanageToolBarContributionItem = getToolBarContributionItem(coolBarItemMap.get(orphanageToolbarID));
@@ -346,7 +346,7 @@ extends AbstractEPProcessor
 				}
 
 				toolBarManager.removeAll();
-				addFlattenedMenu(toolBarManager, tmpSubMenuID + ".separator", tmpSubMenu);
+				addFlattenedMenu(toolBarManager, tmpSubMenuID + ".separator", tmpSubMenu); //$NON-NLS-1$
 			}
 			else {
 				orphanageMenu.add(tmpItem);
@@ -366,7 +366,7 @@ extends AbstractEPProcessor
 			}
 
 			toolBarManager.removeAll();
-			addFlattenedMenu(toolBarManager, orphanageToolbarID + ".separator", orphanageMenu);
+			addFlattenedMenu(toolBarManager, orphanageToolbarID + ".separator", orphanageMenu); //$NON-NLS-1$
 		}
 
 		coolBarManager.update(true);
@@ -392,13 +392,13 @@ extends AbstractEPProcessor
 			if (item instanceof IContributionItem)
 				itemID = ((IContributionItem)item).getId();
 			else
-				itemID = "{unknown}";
+				itemID = "{unknown}"; //$NON-NLS-1$
 
-			throw new IllegalStateException("Item with id=" + itemID + " should be an instance of ToolBarContributionItem or Sub, but is of type " + item.getClass().getName() + "! Item: " + item);
+			throw new IllegalStateException("Item with id=" + itemID + " should be an instance of ToolBarContributionItem or Sub, but is of type " + item.getClass().getName() + "! Item: " + item); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 	}
 
-	private static final String ORPHANAGE_TOOLBAR_ID = "orphanage";
+	private static final String ORPHANAGE_TOOLBAR_ID = "orphanage"; //$NON-NLS-1$
 
 	/**
 	 * @param manager The manager in which to search.
@@ -415,7 +415,7 @@ extends AbstractEPProcessor
 		if (manager instanceof IMenuManager)
 			return ((IMenuManager)manager).findUsingPath(path);
 
-		String[] parts = path.split("/");
+		String[] parts = path.split("/"); //$NON-NLS-1$
 		IContributionManager mgr = manager;
 		for (int i = 0; i < parts.length; ++i) {
 			String id = parts[i];
@@ -448,14 +448,14 @@ extends AbstractEPProcessor
 	protected static void addFlattenedMenu(IContributionManager dest, String parentID, IMenuManager menu)
 	{
 		String id = menu.getId();
-		String sepName = (parentID == null || "".equals(parentID)) ? id : (parentID + '.' + id);
+		String sepName = (parentID == null || "".equals(parentID)) ? id : (parentID + '.' + id); //$NON-NLS-1$
 		dest.add(new Separator(sepName));
 		IContributionItem[] items = menu.getItems();
 		for (int i = 0; i < items.length; ++i) {
 			IContributionItem item = items[i];
 			if (item instanceof IMenuManager) {
 				String itemId = item.getId();
-				String newParentID = (parentID == null || "".equals(parentID)) ? itemId : (parentID + '.' + itemId);
+				String newParentID = (parentID == null || "".equals(parentID)) ? itemId : (parentID + '.' + itemId); //$NON-NLS-1$
 				addFlattenedMenu(dest, newParentID, (IMenuManager)item);
 			}
 			else
@@ -707,7 +707,7 @@ extends AbstractEPProcessor
 			else if (KIND_COOLBAR.equals(kind))
 				menuSorted = menuSortedForToolbar;
 			else
-				throw new IllegalArgumentException("kind \"" + kind + "\" invalid!");
+				throw new IllegalArgumentException("kind \"" + kind + "\" invalid!"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			boolean firstRun = menuSorted == null;
 			LinkedList<ItemDescriptor> menuRaw = null;
@@ -739,7 +739,7 @@ extends AbstractEPProcessor
 							else if (KIND_COOLBAR.equals(kind))
 								path = ad.getToolbarPath();
 							else
-								throw new IllegalArgumentException("kind \"" + kind + "\" invalid!");
+								throw new IllegalArgumentException("kind \"" + kind + "\" invalid!"); //$NON-NLS-1$ //$NON-NLS-2$
 
 							IContributionItem anchor = path == null ? null : findUsingPath(contributionManager, path);
 							if (anchor != null) {
@@ -754,7 +754,7 @@ extends AbstractEPProcessor
 									else if (KIND_COOLBAR.equals(kind))
 										visible = ad.isVisibleInToolbar();
 									else
-										throw new IllegalArgumentException("kind \"" + kind + "\" invalid!");
+										throw new IllegalArgumentException("kind \"" + kind + "\" invalid!"); //$NON-NLS-1$ //$NON-NLS-2$
 								}
 
 								if (visible) {
@@ -831,7 +831,7 @@ extends AbstractEPProcessor
 									subMenu.add(new GroupMarker(groupMarker.getName()));
 								}
 								else
-									throw new IllegalStateException("SubItem of menu is neither a SeparatorDescriptor nor a GroupMarkerDescriptor but " + obj.getClass().getName());
+									throw new IllegalStateException("SubItem of menu is neither a SeparatorDescriptor nor a GroupMarkerDescriptor but " + obj.getClass().getName()); //$NON-NLS-1$
 							}
 
 							if (anchor == null)
@@ -846,28 +846,28 @@ extends AbstractEPProcessor
 						}
 					}
 					else
-						throw new IllegalStateException("Item in menuRaw of type " + item.getClass() + " is an instance of an unknown class!");
+						throw new IllegalStateException("Item in menuRaw of type " + item.getClass() + " is an instance of an unknown class!"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 
 				if (firstRun && (lastMenuRawSize == menuRaw.size())) {
 					if (logger.isDebugEnabled()) {
-						logger.debug("Could not add the following contributions to the menu (kind " + kind + "):");
+						logger.debug("Could not add the following contributions to the menu (kind " + kind + "):"); //$NON-NLS-1$ //$NON-NLS-2$
 						for (Iterator it = menuRaw.iterator(); it.hasNext(); ) {
 							ItemDescriptor item = (ItemDescriptor) it.next();
 							if (item instanceof ActionDescriptor) {
-								logger.debug("    Action with id=" + ((ActionDescriptor)item).getAction().getId());
+								logger.debug("    Action with id=" + ((ActionDescriptor)item).getAction().getId()); //$NON-NLS-1$
 							}
 							else if (item instanceof MenuDescriptor) {
-								logger.debug("    Menu with id=" + ((MenuDescriptor)item).getId());
+								logger.debug("    Menu with id=" + ((MenuDescriptor)item).getId()); //$NON-NLS-1$
 							}
 							else if (item instanceof SeparatorDescriptor) {
-								logger.debug("    Separator with name=" + ((SeparatorDescriptor)item).getName());
+								logger.debug("    Separator with name=" + ((SeparatorDescriptor)item).getName()); //$NON-NLS-1$
 							}
 							else if (item instanceof GroupMarkerDescriptor) {
-								logger.debug("    GroupMarker with name=" + ((GroupMarkerDescriptor)item).getName());
+								logger.debug("    GroupMarker with name=" + ((GroupMarkerDescriptor)item).getName()); //$NON-NLS-1$
 							}
 							else
-								logger.debug("    " + item);
+								logger.debug("    " + item); //$NON-NLS-1$
 						}
 					}
 					break;
@@ -889,7 +889,7 @@ extends AbstractEPProcessor
 				else if (KIND_COOLBAR.equals(kind))
 					menuSortedForToolbar = menuSorted;
 				else
-					throw new IllegalArgumentException("kind \"" + kind + "\" invalid!");
+					throw new IllegalArgumentException("kind \"" + kind + "\" invalid!"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			// flatten the menus if we're contributing to the toolbar (which doesn't understand sub-menus)
@@ -920,7 +920,7 @@ extends AbstractEPProcessor
 	 */
 	protected String getActionElementName()
 	{
-		return "action";
+		return "action"; //$NON-NLS-1$
 	}
 
 	/**
@@ -969,34 +969,34 @@ extends AbstractEPProcessor
 	}
 
 	private String elementNameAction = null;
-	protected static final String ELEMENT_NAME_SEPARATOR = "separator";
-	protected static final String ELEMENT_NAME_GROUP_MARKER = "groupMarker";
-	protected static final String ELEMENT_NAME_MENU = "menu";
+	protected static final String ELEMENT_NAME_SEPARATOR = "separator"; //$NON-NLS-1$
+	protected static final String ELEMENT_NAME_GROUP_MARKER = "groupMarker"; //$NON-NLS-1$
+	protected static final String ELEMENT_NAME_MENU = "menu"; //$NON-NLS-1$
 
-	protected static final String ATTRIBUTE_NAME_SEPARATOR_NAME = "name";
-	protected static final String ATTRIBUTE_NAME_SEPARATOR_PATH = "path";
+	protected static final String ATTRIBUTE_NAME_SEPARATOR_NAME = "name"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_SEPARATOR_PATH = "path"; //$NON-NLS-1$
 
-	protected static final String ATTRIBUTE_NAME_GROUP_MARKER_NAME = "name";
-	protected static final String ATTRIBUTE_NAME_GROUP_MARKER_PATH = "path";
+	protected static final String ATTRIBUTE_NAME_GROUP_MARKER_NAME = "name"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_GROUP_MARKER_PATH = "path"; //$NON-NLS-1$
 
-	protected static final String ATTRIBUTE_NAME_MENU_ID = "id";
-	protected static final String ATTRIBUTE_NAME_MENU_LABEL = "label";
-	protected static final String ATTRIBUTE_NAME_MENU_PATH = "path";
+	protected static final String ATTRIBUTE_NAME_MENU_ID = "id"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_MENU_LABEL = "label"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_MENU_PATH = "path"; //$NON-NLS-1$
 
-	protected static final String ATTRIBUTE_NAME_ACTION_ID = "id";
-	protected static final String ATTRIBUTE_NAME_ACTION_NAME = "name";
-	protected static final String ATTRIBUTE_NAME_ACTION_TOOLTIP = "tooltip";
-	protected static final String ATTRIBUTE_NAME_ACTION_ICON = "icon";
-	protected static final String ATTRIBUTE_NAME_ACTION_DISABLED_ICON = "disabledIcon";
-	protected static final String ATTRIBUTE_NAME_ACTION_HOVER_ICON = "hoverIcon";
-	protected static final String ATTRIBUTE_NAME_ACTION_MENUBAR_PATH = "menubarPath";
-	protected static final String ATTRIBUTE_NAME_ACTION_TOOLBAR_PATH = "toolbarPath";
-	protected static final String ATTRIBUTE_NAME_ACTION_CONTEXTMENU_PATH = "contextmenuPath";
+	protected static final String ATTRIBUTE_NAME_ACTION_ID = "id"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_ACTION_NAME = "name"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_ACTION_TOOLTIP = "tooltip"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_ACTION_ICON = "icon"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_ACTION_DISABLED_ICON = "disabledIcon"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_ACTION_HOVER_ICON = "hoverIcon"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_ACTION_MENUBAR_PATH = "menubarPath"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_ACTION_TOOLBAR_PATH = "toolbarPath"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_ACTION_CONTEXTMENU_PATH = "contextmenuPath"; //$NON-NLS-1$
 	
-	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE = "visible";
-	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_MENUBAR = "visibleInMenubar";
-	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_TOOLBAR = "visibleInToolbar";
-	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_CONTEXTMENU = "visibleInContextmenu";
+	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE = "visible"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_MENUBAR = "visibleInMenubar"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_TOOLBAR = "visibleInToolbar"; //$NON-NLS-1$
+	protected static final String ATTRIBUTE_NAME_ACTION_VISIBLE_IN_CONTEXTMENU = "visibleInContextmenu"; //$NON-NLS-1$
 
 	public synchronized void process()
 	{
@@ -1083,7 +1083,7 @@ extends AbstractEPProcessor
 			String id = element.getAttribute(ATTRIBUTE_NAME_MENU_ID);
 			String label = element.getAttribute(ATTRIBUTE_NAME_MENU_LABEL);
 			String path = element.getAttribute(ATTRIBUTE_NAME_MENU_PATH);
-			if ("".equals(path))
+			if ("".equals(path)) //$NON-NLS-1$
 				path = null;
 
 			MenuDescriptor menuDescriptor = new MenuDescriptor(id, label, path);
@@ -1097,17 +1097,17 @@ extends AbstractEPProcessor
 				if (ELEMENT_NAME_SEPARATOR.equals(child.getName())) {
 					String name = child.getAttribute(ATTRIBUTE_NAME_SEPARATOR_NAME);
 					if (child.getAttribute(ATTRIBUTE_NAME_SEPARATOR_PATH) != null)
-						logger.warn("There is a separator's path specified within a menu. This path will be ignored! You should not specify a path when using a separator inside of a menu! plugin=" + extension.getNamespaceIdentifier()+ " extension-point=" + getExtensionPointID());
+						logger.warn("There is a separator's path specified within a menu. This path will be ignored! You should not specify a path when using a separator inside of a menu! plugin=" + extension.getNamespaceIdentifier()+ " extension-point=" + getExtensionPointID()); //$NON-NLS-1$ //$NON-NLS-2$
 					menuDescriptor.addSubItem(new SeparatorDescriptor(name));
 				}
 				else if (ELEMENT_NAME_GROUP_MARKER.equals(child.getName())) {
 					String name = child.getAttribute(ATTRIBUTE_NAME_GROUP_MARKER_NAME);
 					if (child.getAttribute(ATTRIBUTE_NAME_GROUP_MARKER_PATH) != null)
-						logger.warn("There is a group-marker's path specified within a menu. This path will be ignored! You should not specify a path when using a group-marker inside of a menu! plugin=" + extension.getNamespaceIdentifier()+ " extension-point=" + getExtensionPointID());
+						logger.warn("There is a group-marker's path specified within a menu. This path will be ignored! You should not specify a path when using a group-marker inside of a menu! plugin=" + extension.getNamespaceIdentifier()+ " extension-point=" + getExtensionPointID()); //$NON-NLS-1$ //$NON-NLS-2$
 					menuDescriptor.addSubItem(new GroupMarkerDescriptor(name));
 				}
 				else
-					throw new IllegalArgumentException("childElement.name=\"" + child.getName() + "\" of menu \"" + id + "\" is unknown!");
+					throw new IllegalArgumentException("childElement.name=\"" + child.getName() + "\" of menu \"" + id + "\" is unknown!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 		}
 		else if (elementNameAction.equals(elementName)) {
@@ -1137,15 +1137,15 @@ extends AbstractEPProcessor
 				action.setToolTipText(tooltip);
 				action.setEnabled(false);
 
-				if (icon != null && !"".equals(icon))
+				if (icon != null && !"".equals(icon)) //$NON-NLS-1$
 					action.setImageDescriptor(
 							ImageDescriptor.createFromURL(Platform.getBundle(extension.getNamespace()).getEntry(icon)));
 
-				if (disabledIcon != null && !"".equals(disabledIcon))
+				if (disabledIcon != null && !"".equals(disabledIcon)) //$NON-NLS-1$
 					action.setDisabledImageDescriptor(
 							ImageDescriptor.createFromURL(Platform.getBundle(extension.getNamespace()).getEntry(disabledIcon)));
 
-				if (hoverIcon != null && !"".equals(hoverIcon))
+				if (hoverIcon != null && !"".equals(hoverIcon)) //$NON-NLS-1$
 					action.setHoverImageDescriptor(
 							ImageDescriptor.createFromURL(Platform.getBundle(extension.getNamespace()).getEntry(hoverIcon)));
 
@@ -1159,7 +1159,7 @@ extends AbstractEPProcessor
 //					throw new EPProcessorException("Your IContribution, which you created for the ActionDescriptor defined in extension " + extension.getNamespace() + " with id=" + id + " does have the wrong id (\"" + contributionItem.getId() + "\") set! Check your method " + this.getClass().getName() + ".createActionOrContributionItem(...)!");
 			}
 			else
-				throw new EPProcessorException("Action class defined in extension " + extension.getNamespace() + " with id=" + id + " does neither implement IAction nor IXContributionItem! It must implement ONE of them!");
+				throw new EPProcessorException("Action class defined in extension " + extension.getNamespace() + " with id=" + id + " does neither implement IAction nor IXContributionItem! It must implement ONE of them!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 			ActionDescriptor actionDescriptor = createActionDescriptor();
 			actionDescriptor.init(
@@ -1175,12 +1175,12 @@ extends AbstractEPProcessor
 			menuRaw.add(actionDescriptor);
 		}
 		else
-			throw new IllegalArgumentException("element.name=\"" + elementName + "\" unknown!");
+			throw new IllegalArgumentException("element.name=\"" + elementName + "\" unknown!"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected static boolean parseBooleanAcceptingNull(String s, boolean defaultVal)
 	{
-		return s == null || "".equals(s) ? defaultVal : Boolean.parseBoolean(s);
+		return s == null || "".equals(s) ? defaultVal : Boolean.parseBoolean(s); //$NON-NLS-1$
 	}
 
 	public Collection<ActionDescriptor> getActionDescriptors()
@@ -1193,7 +1193,7 @@ extends AbstractEPProcessor
 		ActionDescriptor descriptor = (ActionDescriptor) actionDescriptorsByID.get(actionID);
 
 		if (throwExceptionIfNotFound && descriptor == null)
-			throw new IllegalArgumentException("No ActionDescriptor known for actionID=" + actionID);
+			throw new IllegalArgumentException("No ActionDescriptor known for actionID=" + actionID); //$NON-NLS-1$
 
 		return descriptor;
 	}
@@ -1223,7 +1223,7 @@ extends AbstractEPProcessor
 		activeExtensionIDs = perspectiveID2ExtensionIDs.get(activePerspectiveID);		
 	}
 	
-	private String activePerspectiveID = "";
+	private String activePerspectiveID = ""; //$NON-NLS-1$
 	protected String getActivePerspectiveID() {
 		return activePerspectiveID;
 	}

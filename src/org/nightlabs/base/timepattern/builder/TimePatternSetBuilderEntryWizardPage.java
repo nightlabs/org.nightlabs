@@ -14,8 +14,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.wizard.DynamicPathWizard;
 import org.nightlabs.base.wizard.WizardHopPage;
 import org.nightlabs.timepattern.TimePatternFormatException;
@@ -33,11 +33,11 @@ public class TimePatternSetBuilderEntryWizardPage extends WizardHopPage {
 	public TimePatternSetBuilderEntryWizardPage() {		
 		super(
 				TimePatternSetBuilderEntryWizardPage.class.getName(), 
-				NLBasePlugin.getResourceString("timepattern.builderWizard.entryPage.name")
+				Messages.getString("timepattern.builder.TimePatternSetBuilderEntryWizardPage.title") //$NON-NLS-1$
 			);
-		setMessage(NLBasePlugin.getResourceString("timepattern.builderWizard.entryPage.message"));
+		setDescription(Messages.getString("timepattern.builder.TimePatternSetBuilderEntryWizardPage.description")); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * @param pageName
 	 */

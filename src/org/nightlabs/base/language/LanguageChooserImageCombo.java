@@ -65,7 +65,7 @@ extends AbstractLanguageChooser
 	{
 		public void widgetSelected(SelectionEvent selectionEvent)
 		{
-			logger.debug("new language: "+getLanguage().getLanguageID());
+			logger.debug("new language: "+getLanguage().getLanguageID()); //$NON-NLS-1$
 			fireLanguageChangeEvent();
 		}
 	};
@@ -74,7 +74,7 @@ extends AbstractLanguageChooser
 	{
 		super(parent, SWT.NONE, true);
 		if (!showImage && !showText)
-			throw new IllegalArgumentException("either showImage or showText must be true!");
+			throw new IllegalArgumentException("either showImage or showText must be true!"); //$NON-NLS-1$
 		
 		combo = new XCombo(this, SWT.BORDER | SWT.READ_ONLY);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -94,13 +94,13 @@ extends AbstractLanguageChooser
 		  	if (showImage && showText)
 		  		combo.add(image, language.getNativeName());
 		  	else if (showImage && !showText)
-		  		combo.add(image, "");
+		  		combo.add(image, ""); //$NON-NLS-1$
 		  	else if (!showImage && showText)
 		  		combo.add(null, language.getNativeName());
 		  }
 
 		  if (languageIdx < 0)
-				throw new IllegalStateException("The user's language \""+userLanguageID+"\" is not registered in the server!");
+				throw new IllegalStateException("The user's language \""+userLanguageID+"\" is not registered in the server!"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			combo.select(languageIdx);
 		} catch (RuntimeException e) {

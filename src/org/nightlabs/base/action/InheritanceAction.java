@@ -29,6 +29,7 @@ import org.eclipse.jface.action.Action;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.InheritanceToggleButton;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.resource.SharedImages;
 
 /**
@@ -43,7 +44,7 @@ extends Action implements IUpdateActionOrContributionItem
 	public InheritanceAction() {
 		super();
 		setId(ID);
-		setToolTipText("Inherit");
+		setToolTipText(Messages.getString("action.InheritanceAction.toolTipText")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				NLBasePlugin.getDefault(), InheritanceToggleButton.class));		
 	}
@@ -71,9 +72,9 @@ extends Action implements IUpdateActionOrContributionItem
 	public void setSelection(boolean selection) {
 		this.selection = selection;
 		if (selection)
-			setImageDescriptor(SharedImages.getSharedImageDescriptor(NLBasePlugin.getDefault(), InheritanceToggleButton.class));
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(NLBasePlugin.getDefault(), InheritanceToggleButton.class, InheritanceToggleButton.IMAGE_SUFFIX_LINKED));
 		else
-			setImageDescriptor(SharedImages.getSharedImageDescriptor(NLBasePlugin.getDefault(), InheritanceToggleButton.class, "Unlink"));		
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(NLBasePlugin.getDefault(), InheritanceToggleButton.class, InheritanceToggleButton.IMAGE_SUFFIX_UNLINKED));
 	}
 
 	/**

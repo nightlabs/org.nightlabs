@@ -69,7 +69,7 @@ extends XPropertyDescriptor
 			}
 			@Override
 			public String getText(Object element) {
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 		});
 	}

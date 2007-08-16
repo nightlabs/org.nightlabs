@@ -46,14 +46,14 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.AbstractListComposite;
-import org.nightlabs.base.composite.XComboComposite;
 import org.nightlabs.base.composite.DoubleSpinnerComposite;
+import org.nightlabs.base.composite.XComboComposite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.i18n.UnitRegistryEP;
 import org.nightlabs.base.labelprovider.UnitLabelProvider;
 import org.nightlabs.base.print.page.PredefinedPageEP;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.i18n.unit.DefaultScreenUnit;
 import org.nightlabs.i18n.unit.IUnit;
 import org.nightlabs.i18n.unit.MMUnit;
@@ -94,7 +94,7 @@ extends XComposite
 	protected void init(PageFormat pageFormat) 
 	{
 		if (pageFormat == null) 
-			throw new IllegalArgumentException("Param pageFormat must not be null!");
+			throw new IllegalArgumentException("Param pageFormat must not be null!"); //$NON-NLS-1$
 		
 		this.pageFormat = pageFormat;
 		initMargins(pageFormat);
@@ -117,7 +117,7 @@ extends XComposite
 		Group previewGroup = new Group(parent, SWT.NONE);
 		previewGroup.setLayout(new GridLayout());
 		previewGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-		previewGroup.setText(NLBasePlugin.getResourceString("composite.pageSetup.group.preview.label"));
+		previewGroup.setText(Messages.getString("print.PageSetupComposite.previewGroup.text")); //$NON-NLS-1$
 		previewComp = initPreviewComposite(previewGroup);
 		
 		Composite detailComp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -125,24 +125,24 @@ extends XComposite
 		detailComp.setLayoutData(detailData);
 		
 		// predefined pages		
-		Group pageGroup = new Group(detailComp, SWT.NONE);
-		pageGroup.setText(NLBasePlugin.getResourceString("composite.pageSetup.predefinedPage.label"));
-		pageGroup.setLayout(new GridLayout());
-		pageGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		predefinedPageCombo = initPageCombo(pageGroup);
+		Group predefinedPageGroup = new Group(detailComp, SWT.NONE);
+		predefinedPageGroup.setText(Messages.getString("print.PageSetupComposite.predefinedPageGroup.text")); //$NON-NLS-1$
+		predefinedPageGroup.setLayout(new GridLayout());
+		predefinedPageGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		predefinedPageCombo = initPageCombo(predefinedPageGroup);
 		predefinedPageCombo.addSelectionChangedListener(pageListener);
 		predefinedPageCombo.selectElement(new A4Page());
 		
 		// orientation		
 		Group orientationGroup = new Group(detailComp, SWT.NONE);
-		orientationGroup.setText(NLBasePlugin.getResourceString("composite.pageSetup.orientation.label"));
+		orientationGroup.setText(Messages.getString("print.PageSetupComposite.orientationGroup.text")); //$NON-NLS-1$
 		orientationGroup.setLayout(new GridLayout());
 		orientationGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 		orientationHorizontal = new Button(orientationGroup, SWT.RADIO);
-		orientationHorizontal.setText(NLBasePlugin.getResourceString("composite.pageSetup.horizontal.label"));
+		orientationHorizontal.setText(Messages.getString("print.PageSetupComposite.orientationHorizontal.text")); //$NON-NLS-1$
 		orientationHorizontal.addSelectionListener(horizontalListener);		
 		orientationVertical = new Button(orientationGroup, SWT.RADIO);
-		orientationVertical.setText(NLBasePlugin.getResourceString("composite.pageSetup.vertical.label"));
+		orientationVertical.setText(Messages.getString("print.PageSetupComposite.orientationVertical.text")); //$NON-NLS-1$
 		orientationVertical.addSelectionListener(verticalListener);
 
 		createMargins(detailComp);
@@ -159,18 +159,18 @@ extends XComposite
 	private void createMargins(Composite parent) 
 	{
 		Group marginGroup = new Group(parent, SWT.NONE);
-		marginGroup.setText(NLBasePlugin.getResourceString("composite.pageSetup.group.margins.label"));
+		marginGroup.setText(Messages.getString("print.PageSetupComposite.marginGroup.text")); //$NON-NLS-1$
 		marginGroup.setLayout(new GridLayout(2, false));				
 		marginGroup.setLayoutData(new GridData(GridData.FILL_BOTH));						
 		
 		Label unitLabel = new Label(marginGroup, SWT.NONE);
-		unitLabel.setText(NLBasePlugin.getResourceString("composite.printPreview.unit.label"));
+		unitLabel.setText(Messages.getString("print.PageSetupComposite.unitLabel.text")); //$NON-NLS-1$
 		unitCombo = initUnitCombo(marginGroup);
 		unitCombo.addSelectionChangedListener(unitListener);
 		unitCombo.selectElement(new MMUnit());
 	
 		Label marginTopLabel = new Label(marginGroup, SWT.NONE);
-		marginTopLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginTop.label"));		
+		marginTopLabel.setText(Messages.getString("print.PageSetupComposite.marginTopLabel.text"));		 //$NON-NLS-1$
 		marginTopSpinner = new DoubleSpinnerComposite(marginGroup, SWT.NONE, SWT.BORDER, 
 				getSpinnerDigits(), 0, getSpinnerMaximum(), getSpinnerIncrement(), 
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
@@ -179,7 +179,7 @@ extends XComposite
 		marginTopSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 		
 		Label marginLeftLabel = new Label(marginGroup, SWT.NONE);
-		marginLeftLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginLeft.label"));		
+		marginLeftLabel.setText(Messages.getString("print.PageSetupComposite.marginLeftLabel.text"));		 //$NON-NLS-1$
 		marginLeftSpinner = new DoubleSpinnerComposite(marginGroup, SWT.NONE, SWT.BORDER, 
 				getSpinnerDigits(), 0, getSpinnerMaximum(), getSpinnerIncrement(), 
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
@@ -188,7 +188,7 @@ extends XComposite
 		marginLeftSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Label marginRightLabel = new Label(marginGroup, SWT.NONE);			
-		marginRightLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginRight.label"));		
+		marginRightLabel.setText(Messages.getString("print.PageSetupComposite.marginRightLabel.text"));		 //$NON-NLS-1$
 		marginRightSpinner = new DoubleSpinnerComposite(marginGroup, SWT.NONE, SWT.BORDER, 
 				getSpinnerDigits(), 0, getSpinnerMaximum(), getSpinnerIncrement(), 
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
@@ -197,7 +197,7 @@ extends XComposite
 		marginRightSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 
 		Label marginBottomLabel = new Label(marginGroup, SWT.NONE);
-		marginBottomLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginBottom.label"));		
+		marginBottomLabel.setText(Messages.getString("print.PageSetupComposite.marginBottomLabel.text"));		 //$NON-NLS-1$
 		marginBottomSpinner = new DoubleSpinnerComposite(marginGroup, SWT.NONE, SWT.BORDER, 
 				getSpinnerDigits(), 0, getSpinnerMaximum(), getSpinnerIncrement(), 
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
@@ -205,65 +205,6 @@ extends XComposite
 		marginBottomSpinner.addSelectionListener(marginListener);		
 		marginBottomSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));				
 	}
-	
-//	private Spinner marginTopSpinner = null;
-//	private Spinner marginBottomSpinner = null;	
-//	private Spinner marginLeftSpinner = null;	
-//	private Spinner marginRightSpinner = null;		
-//	private void createMargins(Composite parent) 
-//	{
-//		// margins
-//		Group marginGroup = new Group(parent, SWT.NONE);
-//		marginGroup.setText(NLBasePlugin.getResourceString("composite.pageSetup.group.margins.label"));
-//		marginGroup.setLayout(new GridLayout(2, false));		
-////	marginGroup.setLayout(new GridLayout());		
-//		marginGroup.setLayoutData(new GridData(GridData.FILL_BOTH));						
-//		
-//		Label unitLabel = new Label(marginGroup, SWT.NONE);
-//		unitLabel.setText(NLBasePlugin.getResourceString("composite.printPreview.unit.label"));
-//		unitCombo = initUnitCombo(marginGroup);
-//		unitCombo.addSelectionListener(unitListener);
-//		unitCombo.selectElement(new MMUnit());
-//	
-//		Label marginTopLabel = new Label(marginGroup, SWT.NONE);
-//		marginTopLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginTop.label"));		
-//		marginTopSpinner = new Spinner(marginGroup, SWT.BORDER);
-//		configureMarginSpinner(marginTopSpinner);
-//		marginTopSpinner.setSelection((int)previewComp.getMarginTop());
-//		marginTopSpinner.addSelectionListener(marginListener);
-////		marginTopSpinner.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));		
-//		marginTopSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
-//		
-////		Composite middleSpinner = new XComposite(marginGroup, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-////		middleSpinner.setLayout(new GridLayout(2, true));
-//
-//		Label marginLeftLabel = new Label(marginGroup, SWT.NONE);
-//		marginLeftLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginLeft.label"));		
-//		marginLeftSpinner = new Spinner(marginGroup, SWT.BORDER);
-//		configureMarginSpinner(marginLeftSpinner);
-//		marginLeftSpinner.setSelection((int)previewComp.getMarginLeft());
-//		marginLeftSpinner.addSelectionListener(marginListener);
-////		marginLeftSpinner.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
-//		marginLeftSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		
-//		Label marginRightLabel = new Label(marginGroup, SWT.NONE);			
-//		marginRightLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginRight.label"));		
-//		marginRightSpinner = new Spinner(marginGroup, SWT.BORDER);
-//		configureMarginSpinner(marginRightSpinner);
-//		marginRightSpinner.setSelection((int)previewComp.getMarginRight());
-//		marginRightSpinner.addSelectionListener(marginListener);
-////		marginRightSpinner.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, true));
-//		marginRightSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
-//
-//		Label marginBottomLabel = new Label(marginGroup, SWT.NONE);
-//		marginBottomLabel.setText(NLBasePlugin.getResourceString("composite.pageSetup.marginBottom.label"));		
-//		marginBottomSpinner = new Spinner(marginGroup, SWT.BORDER);
-//		configureMarginSpinner(marginBottomSpinner);
-//		marginBottomSpinner.setSelection((int)previewComp.getMarginBottom());
-//		marginBottomSpinner.addSelectionListener(marginListener);
-////		marginBottomSpinner.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));		
-//		marginBottomSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));				
-//	}
 
 	// change 1/72 inch value into currentUnit and display it in spinner	
 	private void setSpinnerValue(DoubleSpinnerComposite s, double value) 
@@ -322,7 +263,7 @@ extends XComposite
 			assignMarginValues();	
 			changePageFormat();
 			refresh(pageFormat);
-			logger.debug("margin changed");
+			logger.debug("margin changed"); //$NON-NLS-1$
 		}	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);			

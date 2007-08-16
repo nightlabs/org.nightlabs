@@ -30,27 +30,27 @@ public class TestView
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		i18nTextEditorTable = new I18nTextEditorTable(page);
-		i18nText.setText(Locale.getDefault().getLanguage(), "Test in my language.");
-		i18nText.setText(Locale.FRENCH.getLanguage(), "C'est francais :-)");
+		i18nText.setText(Locale.getDefault().getLanguage(), "Test in my language."); //$NON-NLS-1$
+		i18nText.setText(Locale.FRENCH.getLanguage(), "C'est francais :-)"); //$NON-NLS-1$
 		i18nTextEditorTable.setI18nText(i18nText);
 
 		testButton = new Button(page, SWT.PUSH);
-		testButton.setText("Test");
+		testButton.setText("Test"); //$NON-NLS-1$
 		testButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				StringBuffer sb = new StringBuffer();
 				Logger logger = Logger.getLogger(TestView.class);
-				logger.info("***********************");
-				logger.info("*** " + i18nText.getTexts().size() + " entries in I18nText:");
-				sb.append(i18nText.getTexts().size() + " entries in I18nText:\n");
+				logger.info("***********************"); //$NON-NLS-1$
+				logger.info("*** " + i18nText.getTexts().size() + " entries in I18nText:"); //$NON-NLS-1$ //$NON-NLS-2$
+				sb.append(i18nText.getTexts().size() + " entries in I18nText:\n"); //$NON-NLS-1$
 				for (Map.Entry<String, String> me : i18nText.getTexts()) {
-					logger.info("*** " + me);
-					sb.append("  " + me + '\n');
+					logger.info("*** " + me); //$NON-NLS-1$
+					sb.append("  " + me + '\n'); //$NON-NLS-1$
 				}
-				logger.info("***********************");
-				MessageDialog.openInformation(getSite().getShell(), "Test", sb.toString());
+				logger.info("***********************"); //$NON-NLS-1$
+				MessageDialog.openInformation(getSite().getShell(), "Test", sb.toString()); //$NON-NLS-1$
 			}
 		});
 	}

@@ -43,7 +43,7 @@ import org.nightlabs.base.composite.XComposite;
  * Button area associated to one or more EntityManager.
  *  
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
+ * @deprecated I think, the whole EntityList stuff is deprecated, right? Marco.
  */
 public class EntityManagementButtonArea extends XComposite {
 
@@ -84,7 +84,7 @@ public class EntityManagementButtonArea extends XComposite {
     RowLayout rl = new RowLayout();
     managementArea.setLayout(rl);
     buttonSave = new Button(managementArea,SWT.PUSH);
-    buttonSave.setText("Save");
+    buttonSave.setText("Save"); //$NON-NLS-1$
     buttonSave.setEnabled(false);
     buttonSave.addSelectionListener(
         new SelectionListener() {

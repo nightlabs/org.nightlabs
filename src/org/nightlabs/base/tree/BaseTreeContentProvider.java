@@ -52,7 +52,7 @@ public class BaseTreeContentProvider extends TreeContentProvider {
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {		
 		super.inputChanged(viewer, oldInput, newInput);
 		if ((newInput != null) && (!(newInput instanceof TreeNode)))
-			throw new IllegalArgumentException("Expected input of type "+TreeNode.class.getName()+" but found "+newInput.getClass().getName());
+			throw new IllegalArgumentException("Expected input of type "+TreeNode.class.getName()+" but found "+newInput.getClass().getName()); //$NON-NLS-1$ //$NON-NLS-2$
 		this.input = (TreeNode)newInput;
 	}
 	

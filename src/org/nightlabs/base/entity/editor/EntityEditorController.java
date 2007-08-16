@@ -47,6 +47,7 @@ import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.part.EditorPart;
 import org.nightlabs.base.entity.editor.EntityEditorPageController.LoadJob;
+import org.nightlabs.base.resource.Messages;
 
 /**
  * <p>Controller used by {@link EntityEditor} to hold the
@@ -174,7 +175,7 @@ public class EntityEditorController
 					IFormPage page = editor.getActivePageInstance();						
 					IEntityEditorPageController pageController = pageControllers.get(page.getId());
 					if (pageController != null) {
-						logger.debug("pageControler.markDirty() for page "+page.getId());
+						logger.debug("pageControler.markDirty() for page "+page.getId()); //$NON-NLS-1$
 						pageController.markDirty();
 					}		
 //					}
@@ -334,17 +335,17 @@ public class EntityEditorController
 		}
 		return false;
 	}
-	
+
 	private boolean saving = false;
-	
+
 	public boolean isSaving() {
 		return saving;
 	}
-	
+
 	public void unsetSavingState() {
 		this.saving = false;
 	}
-	
+
 	/**
 	 * Delegates to the {@link IEntityEditorPageController#doSave(IProgressMonitor)}
 	 * method of all known dirty {@link IEntityEditorPageController}s.
@@ -353,8 +354,8 @@ public class EntityEditorController
 	 */
 	public void doSave(IProgressMonitor monitor)
 	{
-		monitor.beginTask("Saving Pages...", dirtyPageControllers.size());
-		logger.debug("Calling all page controllers doSave() method.");
+		monitor.beginTask(Messages.getString("entity.editor.EntityEditorController.doSave.monitor.taskName"), dirtyPageControllers.size()); //$NON-NLS-1$
+		logger.debug("Calling all page controllers doSave() method."); //$NON-NLS-1$
 		saving = true;
 		for (IEntityEditorPageController dirtyController : dirtyPageControllers) {
 			dirtyController.doSave(new SubProgressMonitor(monitor, 1));

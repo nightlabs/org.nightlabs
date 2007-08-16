@@ -51,7 +51,7 @@ import org.nightlabs.language.LanguageCf;
 public class LanguageManager
 implements ILanguageManager
 {		
-	public static final String LANGUAGE_CHANGED = "language changed";
+	public static final String LANGUAGE_CHANGED = "language changed"; //$NON-NLS-1$
 	
 	private static LanguageManager sharedInstance = null;
 	public static LanguageManager sharedInstance()  
@@ -88,7 +88,7 @@ implements ILanguageManager
 	public static String getLanguageID(Locale locale) 
 	{
 		if (locale == null)
-			throw new IllegalArgumentException("Param locale must not be null!");
+			throw new IllegalArgumentException("Param locale must not be null!"); //$NON-NLS-1$
 		
 		return locale.getLanguage();
 	}
@@ -186,7 +186,7 @@ implements ILanguageManager
 
 	private static String getImageRegistryKeyForFlag16x16(String languageID)
 	{
-		return LanguageManager.class.getName() + "-flag-" + languageID + ".16x16";
+		return LanguageManager.class.getName() + "-flag-" + languageID + ".16x16"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public ImageDescriptor getFlag16x16ImageDescriptor(String languageID)
@@ -198,7 +198,7 @@ implements ILanguageManager
 			LanguageCf languageCf = getLanguage(languageID, true);
 			byte[] flagData = languageCf._getFlagIcon16x16();
 
-			InputStream in = flagData != null ? new ByteArrayInputStream(flagData) : LanguageCf.class.getResourceAsStream("resource/Flag-fallback.16x16.png");
+			InputStream in = flagData != null ? new ByteArrayInputStream(flagData) : LanguageCf.class.getResourceAsStream("resource/Flag-fallback.16x16.png"); //$NON-NLS-1$
 			try {
 				ImageData imageData = new ImageData(in);
 				imageDescriptor = ImageDescriptor.createFromImageData(imageData);
@@ -234,7 +234,7 @@ implements ILanguageManager
 		LanguageCf res = (LanguageCf) languageID2LanguageCf.get(languageID);
 
 		if (res == null && throwExceptionIfNotFound)
-			throw new IllegalArgumentException("No language registered for languageID=\"" + languageID + "\"!");
+			throw new IllegalArgumentException("No language registered for languageID=\"" + languageID + "\"!"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		return res;
 	}

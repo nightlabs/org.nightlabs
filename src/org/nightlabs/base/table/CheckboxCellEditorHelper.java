@@ -41,9 +41,9 @@ public class CheckboxCellEditorHelper {
 	{
 		Image image = null;
 		if (value)
-			image = SharedImages.getSharedImage(NLBasePlugin.getDefault(), CheckboxCellEditorHelper.class, "checked");
+			image = SharedImages.getSharedImage(NLBasePlugin.getDefault(), CheckboxCellEditorHelper.class, "checked"); //$NON-NLS-1$
 		else
-			image = SharedImages.getSharedImage(NLBasePlugin.getDefault(), CheckboxCellEditorHelper.class, "unchecked");
+			image = SharedImages.getSharedImage(NLBasePlugin.getDefault(), CheckboxCellEditorHelper.class, "unchecked"); //$NON-NLS-1$
 		
 		if (disabled)
 			image = new Image(Display.getDefault(), image, SWT.IMAGE_DISABLE);

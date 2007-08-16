@@ -66,7 +66,7 @@ public class LabeledTextComposite extends TightWrapperComposite {
 		textControlLData.grabExcessHorizontalSpace = true;
 		textControlLData.horizontalAlignment = GridData.FILL;
 		textControl.setLayoutData(textControlLData);
-		textControl.setText("");
+		textControl.setText(""); //$NON-NLS-1$
 
 		this.layout();
 	}

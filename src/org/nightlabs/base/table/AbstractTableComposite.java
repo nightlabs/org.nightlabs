@@ -169,7 +169,7 @@ implements ISelectionProvider
 	 * of the element types of this table.  
 	 * @return the table viewer's selection
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public Collection<ElementType> getSelectedElements() {
 		ISelection sel = getTableViewer().getSelection();
 		if (sel == null || sel.isEmpty())
@@ -197,7 +197,7 @@ implements ISelectionProvider
 	 * 
 	 * @return The first selected element.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public ElementType getFirstSelectedElement() {
 		return (ElementType) getFirstSelectedElementUnchecked();
 	}
@@ -292,10 +292,10 @@ implements ISelectionProvider
 	 * 
 	 * @return a list of all checked Elements.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public List<ElementType> getCheckedElements() {
 		if ((table.getStyle() & SWT.CHECK) == 0)
-			throw new IllegalStateException("Table is not of type SWT.CHECK, can't return checked Items!");
+			throw new IllegalStateException("Table is not of type SWT.CHECK, can't return checked Items!"); //$NON-NLS-1$
 		List<ElementType> checkedElements = new LinkedList<ElementType>();
 		TableItem[] items = tableViewer.getTable().getItems();
 		for (int i = 0; i < items.length; i++) {

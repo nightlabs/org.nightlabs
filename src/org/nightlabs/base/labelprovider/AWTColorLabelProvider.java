@@ -40,7 +40,7 @@ extends LabelProvider
   {
     super();    
   }
-        
+
   public Image getImage(Object element) 
   {
     if (element instanceof Color)
@@ -54,14 +54,15 @@ extends LabelProvider
     if (element instanceof Color)
     {
       Color color = (Color) element;
-      return new String("("+color.getRed()+","+color.getGreen()+","+color.getBlue()+")");
+      return
+      	"("+color.getRed()+","+ //$NON-NLS-1$ //$NON-NLS-2$
+      	color.getGreen()+","+ //$NON-NLS-1$
+      	color.getBlue()+")"; //$NON-NLS-1$
     }
-    return element == null ? "" : element.toString();//$NON-NLS-1$
+    return element == null ? "" : element.toString(); //$NON-NLS-1$
   }
 
   public void dispose() 
   {
-    
   }
-
 }

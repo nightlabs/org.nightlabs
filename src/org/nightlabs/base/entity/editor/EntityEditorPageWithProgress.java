@@ -47,6 +47,7 @@ import org.nightlabs.base.composite.FadeableComposite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.progress.CompoundProgressMonitor;
 import org.nightlabs.base.progress.SaveProgressMonitorPart;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.toolkit.IToolkit;
 
 /**
@@ -133,7 +134,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	 * to be invoked, when the listener gets notified.
 	 * </p>
 	 */
-	private Job asyncLoadJob = new Job("Async load") {
+	private Job asyncLoadJob = new Job(Messages.getString("entity.editor.EntityEditorPageWithProgress.loadJob.name")) { //$NON-NLS-1$
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			final IEntityEditorPageController controller = getPageController();
@@ -228,7 +229,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		form.setExpandVertical(true);
 		IToolkit toolkit = (IToolkit) getEditor().getToolkit(); // CommitableFormEditor uses NightlabsFormToolkit
 		String formText = getPageFormTitle();		
-		form.setText(formText == null ? "" : formText); 
+		form.setText(formText == null ? "" : formText);  //$NON-NLS-1$
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
 		fillBody(managedForm, toolkit);
 	}

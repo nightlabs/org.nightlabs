@@ -37,7 +37,7 @@ import org.nightlabs.base.NLBasePlugin;
 public class SharedImages
 {
 
-//	// TODO: Flag Icons should come from Server
+//	// TO DO: Flag Icons should come from Server DONE: They do come from there now. Marco.
 //	public static ImageDescriptor getImageDescriptor(String languageID) 
 //	{
 //		if (languageID == null)
@@ -51,32 +51,32 @@ public class SharedImages
 		_8x8 {
 			public String toString()
 			{
-				return "8x8";
+				return "8x8"; //$NON-NLS-1$
 			}
 		},
 		// for button images in Contribution items
 		_12x12 {
 			public String toString()
 			{
-				return "12x12";
+				return "12x12"; //$NON-NLS-1$
 			}
 		},				
 		_16x16 {
 			public String toString()
 			{
-				return "16x16";
+				return "16x16"; //$NON-NLS-1$
 			}
 		},
 		_24x24 {
 			public String toString()
 			{
-				return "24x24";
+				return "24x24"; //$NON-NLS-1$
 			}
 		},
 		_75x70 {
 			public String toString()
 			{
-				return "75x70";
+				return "75x70"; //$NON-NLS-1$
 			}
 		},
 		/**
@@ -85,7 +85,7 @@ public class SharedImages
 		_150x15 {
 			public String toString()
 			{
-				return "150x15";
+				return "150x15"; //$NON-NLS-1$
 			}
 		}
 	}
@@ -98,7 +98,7 @@ public class SharedImages
 	}
 
 	public static final ImageFormat IMAGE_FORMAT_DEFAULT = ImageFormat.png;
-	private static final String IMAGES_FOLDER_NAME = "icons";
+	private static final String IMAGES_FOLDER_NAME = "icons"; //$NON-NLS-1$
 	
 	private Map<String,Image> images = new HashMap<String,Image>();
 	private Map<String,ImageDescriptor> imageDescriptors = new HashMap<String,ImageDescriptor>();
@@ -119,35 +119,35 @@ public class SharedImages
 		String pluginNameSpace = plugin.getBundle().getSymbolicName();
 		String className = clazz.getName();
 		if (!className.contains(pluginNameSpace))
-			throw new IllegalArgumentException("Could not extract image sub path for "+className+" in plugin "+pluginNameSpace);
-		String subPath = className.replace(pluginNameSpace, "");
-		if (subPath.startsWith("."))
-			subPath = subPath.replaceFirst("\\.","");
-		subPath = subPath.replaceAll("\\.", "/");
-		String suffixStr = "-" + suffix;		
-		if ((suffix == null) || ("".equals(suffix)))
-			suffixStr = "";
-		return IMAGES_FOLDER_NAME+"/"+subPath + suffixStr; 
+			throw new IllegalArgumentException("Could not extract image sub path for "+className+" in plugin "+pluginNameSpace); //$NON-NLS-1$ //$NON-NLS-2$
+		String subPath = className.replace(pluginNameSpace, ""); //$NON-NLS-1$
+		if (subPath.startsWith(".")) //$NON-NLS-1$
+			subPath = subPath.replaceFirst("\\.",""); //$NON-NLS-1$ //$NON-NLS-2$
+		subPath = subPath.replaceAll("\\.", "/"); //$NON-NLS-1$ //$NON-NLS-2$
+		String suffixStr = "-" + suffix;		 //$NON-NLS-1$
+		if ((suffix == null) || ("".equals(suffix))) //$NON-NLS-1$
+			suffixStr = ""; //$NON-NLS-1$
+		return IMAGES_FOLDER_NAME+"/"+subPath + suffixStr;  //$NON-NLS-1$
 	}
 
 	/**
 	 * Get the String key for the image with given parameters 
 	 */
 	private String getImageKey(Plugin plugin, Class clazz, String suffix, String dimension, ImageFormat format) {
-		return plugin.getBundle().getSymbolicName() + "/" + getImageSubPath(plugin, clazz, suffix) + "." + dimension + "." + format;
+		return plugin.getBundle().getSymbolicName() + "/" + getImageSubPath(plugin, clazz, suffix) + "." + dimension + "." + format; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	/**
 	 * Get the ImageDescriptor with the given parameters out of the caching Map.  
 	 */
 	private ImageDescriptor getImageDescriptor(Plugin plugin, Class clazz, String _suffix, String dimension, ImageFormat format) {
-		String suffix = (_suffix != null) ? _suffix : "";
+		String suffix = (_suffix != null) ? _suffix : ""; //$NON-NLS-1$
 		String imageKey = getImageKey(plugin, clazz, suffix, dimension, format);
 		ImageDescriptor imageDescriptor = imageDescriptors.get(imageKey);
 		if (imageDescriptor == null) {
 			imageDescriptor = ImageDescriptor.createFromURL(
 					plugin.getBundle().getEntry(
-							getImageSubPath(plugin, clazz, suffix) + "." + dimension + "." + format
+							getImageSubPath(plugin, clazz, suffix) + "." + dimension + "." + format //$NON-NLS-1$ //$NON-NLS-2$
 						)
 				);
 			Image image = imageDescriptor.createImage() ;
@@ -161,11 +161,11 @@ public class SharedImages
 	 * Get the Image with the given parameters out of the caching Map.  
 	 */
 	public Image getImage(Plugin plugin, Class clazz, String _suffix, String dimension, ImageFormat format) {
-		String suffix = (_suffix != null) ? _suffix : "";
+		String suffix = (_suffix != null) ? _suffix : ""; //$NON-NLS-1$
 		String imageKey = getImageKey(plugin, clazz, suffix, dimension, format);
 		Image image = (Image) images.get(imageKey);
 		if (image == null) {
-			ImageDescriptor imageDescriptor = getImageDescriptor(plugin, clazz, _suffix, dimension, format);
+			ImageDescriptor imageDescriptor = getImageDescriptor(plugin, clazz, suffix, dimension, format);
 			image = imageDescriptor.createImage();
 			images.put(imageKey, image);
 		}			
@@ -322,15 +322,15 @@ public class SharedImages
 		return sharedInstance().getImageDescriptor(plugin, clazz, suffix, imageDimension, imageFormat); 
 	}	
 	
-	protected static final ImageDescriptor FLAG_USA_16x16 = 
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "USA");
+//	protected static final ImageDescriptor FLAG_USA_16x16 = 
+//		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "USA"); //$NON-NLS-1$
+//
+//	protected static final ImageDescriptor FLAG_GERMANY_16x16 =
+//		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Germany");		 //$NON-NLS-1$
+//
+//	protected static final ImageDescriptor FLAG_FRANCE_16x16 = 		
+//		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "France"); //$NON-NLS-1$
 
-	protected static final ImageDescriptor FLAG_GERMANY_16x16 =
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Germany");		
-
-	protected static final ImageDescriptor FLAG_FRANCE_16x16 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "France");
-	
 //	protected static Map<String, ImageDescriptor> languageID2ImageDesc;
 //
 //	static {
@@ -341,53 +341,53 @@ public class SharedImages
 //	}
 
 	public static final ImageDescriptor EDIT_16x16 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Edit");
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Edit"); //$NON-NLS-1$
 
 	public static final ImageDescriptor EDIT_24x24 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Edit",
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Edit", //$NON-NLS-1$
 				ImageDimension._24x24);
 
 	public static final ImageDescriptor ADD_16x16 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Create");
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Create"); //$NON-NLS-1$
 	
 	public static final ImageDescriptor DELETE_16x16 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Delete");	
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Delete");	 //$NON-NLS-1$
 	
 	public static final ImageDescriptor DELETE_24x24 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Delete",
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Delete", //$NON-NLS-1$
 				ImageDimension._24x24);
 		
 	public static final ImageDescriptor DISCARD_16x16 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Discard");	
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Discard");	 //$NON-NLS-1$
 
 	public static final ImageDescriptor DISCARD_24x24 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Discard",
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Discard", //$NON-NLS-1$
 				ImageDimension._24x24);	
 		
 	public static final ImageDescriptor PRINT_16x16 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Print");	
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Print");	 //$NON-NLS-1$
 
 	public static final ImageDescriptor PRINT_24x24 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Print",
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Print", //$NON-NLS-1$
 				ImageDimension._24x24);	
 	
 	public static final ImageDescriptor SAVE_16x16 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Save");	
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Save");	 //$NON-NLS-1$
 	
 	public static final ImageDescriptor SAVE_24x24 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Save",
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Save", //$NON-NLS-1$
 				ImageDimension._24x24);		
 	
 	public static final ImageDescriptor SEARCH_16x16 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Search");	
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Search");	 //$NON-NLS-1$
 
 	public static final ImageDescriptor SEARCH_24x24 = 		
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Search",
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Search", //$NON-NLS-1$
 				ImageDimension._24x24);	
 	
 	public static final ImageDescriptor UP_16x16 = 
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Up");
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Up"); //$NON-NLS-1$
 	
 	public static final ImageDescriptor DOWN_16x16 = 
-		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Down");
+		getSharedImageDescriptor(NLBasePlugin.getDefault(), NLBasePlugin.class, "Down"); //$NON-NLS-1$
 }

@@ -51,9 +51,9 @@ extends XPropertyDescriptor
 	{
 		super(id, displayName);
 		if (types == null)
-			throw new IllegalArgumentException("param types must not be null!");
+			throw new IllegalArgumentException("param types must not be null!"); //$NON-NLS-1$
 		if (labelProvider == null)
-			throw new IllegalArgumentException("param labelProvider must not be null!");
+			throw new IllegalArgumentException("param labelProvider must not be null!"); //$NON-NLS-1$
 		
 		this.labelProvider = labelProvider;
 		this.types = types;
@@ -70,9 +70,9 @@ extends XPropertyDescriptor
 	{
 		super(id, displayName, readOnly);
 		if (types == null)
-			throw new IllegalArgumentException("param types must not be null!");
+			throw new IllegalArgumentException("param types must not be null!"); //$NON-NLS-1$
 		if (labelProvider == null)
-			throw new IllegalArgumentException("param labelProvider must not be null!");
+			throw new IllegalArgumentException("param labelProvider must not be null!"); //$NON-NLS-1$
 		
 		this.labelProvider = labelProvider;		
 		this.types = types;		

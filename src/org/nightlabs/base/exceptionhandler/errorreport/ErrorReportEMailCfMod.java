@@ -52,16 +52,21 @@ public class ErrorReportEMailCfMod extends ConfigModule
 	public void init() throws InitException
 	{
 		super.init();
-		if (mailFrom == null)
-			mailFrom = "jfire"+'@'+"nightlabs.org";
+		if (mailFrom == null) {
+			// since our sources are public, we write it this way for spam-protection - should be harder for a bot to read
+			mailFrom = "jfire" + '@' + //$NON-NLS-1$
+					"nightlabs.org"; //$NON-NLS-1$
+		}
 		if (mailTo == null) {
 			mailTo = new CfModList<String>(this);
-			mailTo.add("bugreport"+'@'+"nightlabs.org");
+			mailTo.add(
+					"bugreport" + '@' + //$NON-NLS-1$
+					"nightlabs.org"); //$NON-NLS-1$
 		}
 		if (smtpHost == null)
-			smtpHost = "mail.nightlabs.de";
+			smtpHost = "mail.nightlabs.de"; //$NON-NLS-1$
 		if(smtpLocalhost == null)
-			smtpLocalhost = "www.nightlabs.org";
+			smtpLocalhost = "www.nightlabs.org"; //$NON-NLS-1$
 	}
 
 	/**

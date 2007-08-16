@@ -20,10 +20,10 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
 public class EditorActionBarContributorRegistry 
 extends AbstractEPProcessor 
 {
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.editorActionBarContribution";
-	public static final String ELEMENT_REGISTRY = "editorActionBarContributionRegistry";
-	public static final String ATTRIBUTE_TARGET_EDITOR_ID = "targetEditorID";
-	public static final String ELEMENT_EDITOR_ACTION_BAR_CONTRIBUTION = "editorActionBarContribution";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.editorActionBarContribution"; //$NON-NLS-1$
+	public static final String ELEMENT_REGISTRY = "editorActionBarContributionRegistry"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_TARGET_EDITOR_ID = "targetEditorID"; //$NON-NLS-1$
+	public static final String ELEMENT_EDITOR_ACTION_BAR_CONTRIBUTION = "editorActionBarContribution"; //$NON-NLS-1$
 
 	private Map<String, AbstractActionRegistry> editorID2ActionRegistry = new HashMap<String, AbstractActionRegistry>();
 	
@@ -46,16 +46,16 @@ extends AbstractEPProcessor
 		if (element.getName().equalsIgnoreCase(ELEMENT_REGISTRY)) {
 			String targetEditorID = element.getAttribute(ATTRIBUTE_TARGET_EDITOR_ID);
 			if (!checkString(targetEditorID))
-				throw new EPProcessorException("The attribute targetEditorID must be set!", extension);
-			String className = element.getAttribute("class");
+				throw new EPProcessorException("The attribute targetEditorID must be set!", extension); //$NON-NLS-1$
+			String className = element.getAttribute("class"); //$NON-NLS-1$
 			if (!checkString(className))
 				className = null;			
 			AbstractActionRegistry registry = null;
 			if (className != null)
 				try {
-					registry = (AbstractActionRegistry) element.createExecutableExtension("class");
+					registry = (AbstractActionRegistry) element.createExecutableExtension("class"); //$NON-NLS-1$
 				} catch (CoreException e) {
-					throw new EPProcessorException("Could not instantiate given class "+className, extension, e);
+					throw new EPProcessorException("Could not instantiate given class "+className, extension, e); //$NON-NLS-1$
 				}
 			else
 				registry = new DefaultEditorActionBarContributionRegistry();

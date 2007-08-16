@@ -56,7 +56,7 @@ extends XTextCellEditor
 	*/
 	protected Object doGetValue() 
 	{
-		if (text.getText().trim().equals(""))
+		if (text.getText().trim().equals("")) //$NON-NLS-1$
 			return oldValue;
 		Double d = null;
 		try {

@@ -35,7 +35,6 @@ import org.nightlabs.base.resource.SharedImages.ImageFormat;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public class SearchCompositeImage 
 extends CompositeImageDescriptor 
@@ -51,7 +50,7 @@ extends CompositeImageDescriptor
 	protected void drawCompositeImage(int width, int height) 
 	{		
 		Image searchImage = SharedImages.getSharedImage(NLBasePlugin.getDefault(), 
-				SearchContributionItem.class, "", ImageDimension._16x16, ImageFormat.png);		
+				SearchContributionItem.class, null, ImageDimension._16x16, ImageFormat.png);		
 		drawImage(searchImage.getImageData(), 0, 0);
 		if (image != null) {
 			int imageWidth = image.getBounds().width;

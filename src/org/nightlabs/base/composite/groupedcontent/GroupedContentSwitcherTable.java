@@ -94,7 +94,7 @@ public class GroupedContentSwitcherTable extends AbstractTableComposite {
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof GroupedContentProvider)
 				return ((GroupedContentProvider)element).getGroupTitle();
-			throw new IllegalArgumentException("LabelProvider for GroupedContentSwitcherTable is restricted to GroupedContentProvider elements.");
+			throw new IllegalArgumentException("LabelProvider for GroupedContentSwitcherTable is restricted to GroupedContentProvider elements."); //$NON-NLS-1$
 		}
 	}	
 	

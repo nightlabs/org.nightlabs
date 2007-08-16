@@ -139,7 +139,7 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 		if (label != null)
 			return label;
 		else
-			throw new IllegalStateException("Cannot access the label if its creation hasn't been requested earlier.");
+			throw new IllegalStateException("Cannot access the label if its creation hasn't been requested earlier."); //$NON-NLS-1$
 	}
 
 	protected int internal_getSelectionIndex() {

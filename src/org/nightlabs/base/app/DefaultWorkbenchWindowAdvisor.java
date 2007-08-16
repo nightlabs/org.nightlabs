@@ -60,7 +60,7 @@ extends WorkbenchWindowAdvisor
 		super(configurer);
 		this.applicationName = applicationTitle;
 	}
-	protected String applicationName = "Application";
+	protected String applicationName = "Application"; //$NON-NLS-1$
 
 	public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) {
 		Collection<ActionBarItem> menuBarItems = new HashSet<ActionBarItem>();
@@ -99,7 +99,7 @@ extends WorkbenchWindowAdvisor
 		try {
 			ContributionItemSetRegistry.sharedInstance().checkPerspectiveListenerAdded();
 		} catch (EPProcessorException e) {
-			logger.error("There occured an error getting the ContributionItemSetRegistry", e);
+			logger.error("There occured an error getting the ContributionItemSetRegistry", e); //$NON-NLS-1$
 		}
 	}
 		
@@ -109,7 +109,7 @@ extends WorkbenchWindowAdvisor
 		try {
 			ContributionItemSetRegistry.sharedInstance().checkPerspectiveListenerAdded();
 		} catch (EPProcessorException e) {
-			logger.error("There occured an error getting the ContributionItemSetRegistry", e);
+			logger.error("There occured an error getting the ContributionItemSetRegistry", e); //$NON-NLS-1$
 		}		
 	}	
 }

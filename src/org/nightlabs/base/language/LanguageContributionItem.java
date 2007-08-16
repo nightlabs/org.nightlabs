@@ -28,18 +28,18 @@ package org.nightlabs.base.language;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.action.AbstractContributionItem;
+import org.nightlabs.base.resource.Messages;
 
 public class LanguageContributionItem 
 extends AbstractContributionItem
 {
 	public static final String ID = LanguageContributionItem.class.getName();	
 	private LanguageChooserImageCombo langChooser = null;
-		
+
 	public LanguageContributionItem() 
 	{
-		super(ID, NLBasePlugin.getResourceString("contribution.language.name"));
+		super(ID, Messages.getString("language.LanguageContributionItem.name")); //$NON-NLS-1$
 	}
 
 	protected Control createControl(Composite parent) 

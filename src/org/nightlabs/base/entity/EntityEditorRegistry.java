@@ -59,7 +59,7 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 	/**
 	 * The extension point id this registry is for.
 	 */
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.entityEditor";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.entityEditor"; //$NON-NLS-1$
 
 	/**
 	 * The shared instance
@@ -101,7 +101,7 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 		public void resolve() {
 			IEntityTreeCategory category = categories.get(categoryID);
 			if (category == null)
-				logger.error("A category binding could not be resolved. Bound to "+categoryID);
+				logger.error("A category binding could not be resolved. Bound to "+categoryID); //$NON-NLS-1$
 			binding.setEntityTreeCategory(category);
 		}
 	}
@@ -176,33 +176,33 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 	throws Exception
 	{
 		try {
-			if("category".equalsIgnoreCase(element.getName())) {
+			if("category".equalsIgnoreCase(element.getName())) { //$NON-NLS-1$
 				if(categoriesByViewID == null)
 					categoriesByViewID = new HashMap<String, List<BindingCarrier>>();
 
-				IEntityTreeCategory category = (IEntityTreeCategory)element.createExecutableExtension("class");
+				IEntityTreeCategory category = (IEntityTreeCategory)element.createExecutableExtension("class"); //$NON-NLS-1$
 				
 				categories.put(category.getId(), category);
 
 				IConfigurationElement[] children = element.getChildren();System.out.println(extension.getNamespaceIdentifier());
 				for (IConfigurationElement child : children) {
-					if ("viewBinding".equalsIgnoreCase(child.getName())) {
+					if ("viewBinding".equalsIgnoreCase(child.getName())) { //$NON-NLS-1$
 						processViewBinding(extension, child, category.getId(), category);
 					}
 				}
 			}
-			else if("pageFactory".equalsIgnoreCase(element.getName())) {
-				String editorID = element.getAttribute("editorID");
+			else if("pageFactory".equalsIgnoreCase(element.getName())) { //$NON-NLS-1$
+				String editorID = element.getAttribute("editorID"); //$NON-NLS-1$
 				addPage(editorID, new EntityEditorPageSettings(extension, element));
 			}
-			else if ("viewBinding".equalsIgnoreCase(element.getName())) {
-				String categoryID = element.getAttribute("category");
+			else if ("viewBinding".equalsIgnoreCase(element.getName())) { //$NON-NLS-1$
+				String categoryID = element.getAttribute("category"); //$NON-NLS-1$
 				if (!checkString(categoryID))
-					throw new EPProcessorException("Category attribute must be defined for viewBinding when not wrapped in category-element", extension);
+					throw new EPProcessorException("Category attribute must be defined for viewBinding when not wrapped in category-element", extension); //$NON-NLS-1$
 				processViewBinding(extension, element, categoryID, null);
 			}
 		} catch (CoreException e) {
-			throw new EPProcessorException("processElement failed", extension, e);
+			throw new EPProcessorException("processElement failed", extension, e); //$NON-NLS-1$
 		}
 	}
 	
@@ -212,17 +212,17 @@ public class EntityEditorRegistry extends AbstractEPProcessor
 		) 
 	throws EPProcessorException, CoreException 
 	{
-		String clazz = element.getAttribute("class");
+		String clazz = element.getAttribute("class"); //$NON-NLS-1$
 		IEntityTreeCategoryViewBinding viewBinding = null;
 		if (checkString(clazz)) {
 			// if class defined creat the executable extension
-			viewBinding = (IEntityTreeCategoryViewBinding) element.createExecutableExtension("class");
+			viewBinding = (IEntityTreeCategoryViewBinding) element.createExecutableExtension("class"); //$NON-NLS-1$
 		}
 		else {
 			// if not, instantiate default
 			viewBinding = new EntityTreeCategoryViewBinding();
 			// and let it initialize
-			viewBinding.setInitializationData(element, "class", null);
+			viewBinding.setInitializationData(element, "class", null); //$NON-NLS-1$
 		}
 				
 		List<BindingCarrier> categories = categoriesByViewID.get(viewBinding.getViewID());

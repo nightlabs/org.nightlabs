@@ -25,7 +25,7 @@ public abstract class SelectionListenerAction
 	protected ISelection selection;
 	
 	public SelectionListenerAction(ISelectionProvider selectionProvider) {
-		this(selectionProvider, "");
+		this(selectionProvider, ""); //$NON-NLS-1$
 	}
 	
 	public SelectionListenerAction(ISelectionProvider selectionProvider, String text) {

@@ -46,14 +46,14 @@ public class ThrowableHandler implements IExceptionHandler
 	{
 		try
 		{
-			logger.error("ThrowableHandler handling an error!", thrownException);
+			logger.error("ThrowableHandler handling an error!", thrownException); //$NON-NLS-1$
 			//DefaultErrorDialog dlg = new DefaultErrorDialog(thrownException, triggerException);
 			//DefaultErrorDialog.addError(DefaultErrorDialog.class, null, null, thrownException, triggerException);
 			ErrorDialogFactory.showError(DefaultErrorDialog.class, null, null, thrownException, triggerException);
 			
 		} catch (Throwable error)
 		{
-			logger.fatal("While handling an exception, another one occured!", error);
+			logger.fatal("While handling an exception, another one occured!", error); //$NON-NLS-1$
 		}
 	}
 }

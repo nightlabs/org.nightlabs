@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.l10n.Currency;
 import org.nightlabs.l10n.NumberFormatter;
 
@@ -129,7 +130,7 @@ public class CurrencyEdit extends XComposite
 					parseException = x;
 
 					if (errorDialogEnabled)
-						MessageDialog.openError(getShell(), "Invalid text!", "The text you entered is not a valid number: " + x.getLocalizedMessage());
+						MessageDialog.openError(getShell(), Messages.getString("composite.CurrencyEdit.errorNotANumber.title"), Messages.getString("composite.CurrencyEdit.errorNotANumber.message") + x.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 
 				if (modifyListeners == null)

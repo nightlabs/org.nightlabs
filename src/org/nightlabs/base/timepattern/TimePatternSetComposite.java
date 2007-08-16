@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.table.AbstractTableComposite;
 import org.nightlabs.base.table.TableLabelProvider;
 import org.nightlabs.timepattern.TimePattern;
@@ -40,7 +41,7 @@ implements TimePatternSetEdit
 			this.timePatternSetComposite = timePatternSetComposite;
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked") //$NON-NLS-1$
 		public Object[] getElements(Object inputElement)
 		{
 			TimePatternSet timePatternSet = (TimePatternSet) inputElement;
@@ -87,17 +88,17 @@ implements TimePatternSetEdit
 				case 5:
 					return timePattern.getMinute();
 				default:
-					return "";
+					return ""; //$NON-NLS-1$
 			}
 		}
 	}
 
-	public static final String COLUMN_PROPERTY_YEAR = "year";
-	public static final String COLUMN_PROPERTY_MONTH = "month";
-	public static final String COLUMN_PROPERTY_DAY = "day";
-	public static final String COLUMN_PROPERTY_DAY_OF_WEEK = "dayOfWeek";
-	public static final String COLUMN_PROPERTY_HOUR = "hour";
-	public static final String COLUMN_PROPERTY_MINUTE = "minute";
+	public static final String COLUMN_PROPERTY_YEAR = "year"; //$NON-NLS-1$
+	public static final String COLUMN_PROPERTY_MONTH = "month"; //$NON-NLS-1$
+	public static final String COLUMN_PROPERTY_DAY = "day"; //$NON-NLS-1$
+	public static final String COLUMN_PROPERTY_DAY_OF_WEEK = "dayOfWeek"; //$NON-NLS-1$
+	public static final String COLUMN_PROPERTY_HOUR = "hour"; //$NON-NLS-1$
+	public static final String COLUMN_PROPERTY_MINUTE = "minute"; //$NON-NLS-1$
 
 	public static class TimePatternSetCellModifier
 	implements ICellModifier
@@ -193,22 +194,22 @@ implements TimePatternSetEdit
 		TableColumn tc;
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Year");
+		tc.setText(Messages.getString("timepattern.TimePatternSetComposite.tableColumnYear")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Month");
+		tc.setText(Messages.getString("timepattern.TimePatternSetComposite.tableColumnMonth")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Day");
+		tc.setText(Messages.getString("timepattern.TimePatternSetComposite.tableColumnDay")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("DayOfWeek");
+		tc.setText(Messages.getString("timepattern.TimePatternSetComposite.tableColumnDayOfWeek")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Hour");
+		tc.setText(Messages.getString("timepattern.TimePatternSetComposite.tableColumnHour")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Minute");
+		tc.setText(Messages.getString("timepattern.TimePatternSetComposite.tableColumnMinute")); //$NON-NLS-1$
 
 //		table.setLayout(new WeightedTableLayout(new int[] {10, 10, 10, 10, 10, 10}));
 		TableLayout l = new TableLayout();
@@ -277,7 +278,7 @@ implements TimePatternSetEdit
 	public void setInput(Object input)
 	{
 		if (!(input instanceof TimePatternSet))
-			throw new IllegalArgumentException("input must be an instance of TimePatternSet, but is: " + input);
+			throw new IllegalArgumentException("input must be an instance of TimePatternSet, but is: " + input); //$NON-NLS-1$
 
 		setTimePatternSet((TimePatternSet) input);
 	}

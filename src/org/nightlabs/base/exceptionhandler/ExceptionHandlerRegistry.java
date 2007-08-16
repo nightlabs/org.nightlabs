@@ -94,7 +94,7 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 		{
 //			if (exceptionHandlers.containsKey(targetType))
 //				throw new DuplicateHandlerRegistryException("An exceptionHandler was already defined for "+targetType);
-			logger.debug("An exceptionHandler was already defined for "+targetType+" !");
+			logger.debug("An exceptionHandler was already defined for "+targetType+" !"); //$NON-NLS-1$ //$NON-NLS-2$
 			
 			exceptionHandlers.put(targetType, handler);
 		}
@@ -293,7 +293,7 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 	private boolean handleException(final Thread thread, final Throwable exception, boolean async)
 	{
 		if (mode == Mode.bypass) {
-			logger.error("ExceptionHandlerRegistry bypassing (Mode.bypass) Exception: ", exception);
+			logger.error("ExceptionHandlerRegistry bypassing (Mode.bypass) Exception: ", exception); //$NON-NLS-1$
 			return true;
 		}
 		final ExceptionHandlerSearchResult handlerSearch = sharedInstance().searchHandler(exception);
@@ -305,7 +305,7 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 							handlerSearch.getHandler().handleException(
 									thread,exception, handlerSearch.getTriggerException());
 						} catch(Throwable x) {
-							logger.fatal("Exception occured while handling exception on GUI thread!", x);
+							logger.fatal("Exception occured while handling exception on GUI thread!", x); //$NON-NLS-1$
 						}
 					}
 				};
@@ -316,17 +316,17 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 					Display.getDefault().syncExec(runnable);
 				
 			} catch (Throwable ex) {
-				logger.fatal("Exception occured while handling exception on causing thread!", ex);
+				logger.fatal("Exception occured while handling exception on causing thread!", ex); //$NON-NLS-1$
 		  }
 			return true;
 		}
 		else {
-			logger.fatal("Did not find an ExceptionHandler for this Throwable!", exception);
+			logger.fatal("Did not find an ExceptionHandler for this Throwable!", exception); //$NON-NLS-1$
 			return false;
 		}
 	}
 	
-	public static final String ExtensionPointID = "org.nightlabs.base.exceptionhandler";
+	public static final String ExtensionPointID = "org.nightlabs.base.exceptionhandler"; //$NON-NLS-1$
 	/**
 	 * Processes exceptionHandler extension-point elements.
 	 * For each element one instance of exceptionHandler.class is registered
@@ -337,17 +337,17 @@ public class ExceptionHandlerRegistry extends AbstractEPProcessor {
 	throws Exception
 	{
 		try{
-			if (element.getName().toLowerCase().equals("exceptionhandler")) {
-				String targetType = element.getAttribute("targetType");
+			if (element.getName().toLowerCase().equals("exceptionhandler")) { //$NON-NLS-1$
+				String targetType = element.getAttribute("targetType"); //$NON-NLS-1$
 //				String handlerClassStr = element.getAttribute("class");
-				IExceptionHandler handler = (IExceptionHandler) element.createExecutableExtension("class");
+				IExceptionHandler handler = (IExceptionHandler) element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (!IExceptionHandler.class.isAssignableFrom(handler.getClass()))
-					throw new IllegalArgumentException("Specified class for element exceptionHandler must implement "+IExceptionHandler.class.getName()+". "+handler.getClass().getName()+" does not.");
+					throw new IllegalArgumentException("Specified class for element exceptionHandler must implement "+IExceptionHandler.class.getName()+". "+handler.getClass().getName()+" does not."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				ExceptionHandlerRegistry.sharedInstance().addExceptionHandler(targetType, handler);
 			}
 			else {
 				// wrong element according to schema, probably checked earlier
-				throw new IllegalArgumentException("Element "+element.getName()+" is not supported by extension-point "+ExtensionPointID);
+				throw new IllegalArgumentException("Element "+element.getName()+" is not supported by extension-point "+ExtensionPointID); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}catch(Throwable e){
 			throw new EPProcessorException(e);

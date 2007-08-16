@@ -46,7 +46,7 @@ import org.nightlabs.base.NLBasePlugin;
  */
 public class ExpandableWrapperComposite extends ExpandableComposite {
 
-	private static final String EXPANDED_SUFFIX = ".expanded";
+	private static final String EXPANDED_SUFFIX = ".expanded"; //$NON-NLS-1$
 	
 	private IExpansionListener expansionListener = new IExpansionListener(){
 		public void expansionStateChanging(ExpansionEvent e) {

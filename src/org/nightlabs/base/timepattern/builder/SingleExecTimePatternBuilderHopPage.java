@@ -11,9 +11,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.DateTimeEdit;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.wizard.WizardHopPage;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.timepattern.TimePattern;
@@ -21,19 +21,19 @@ import org.nightlabs.timepattern.TimePatternFormatException;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
+ * @author Marco Schulze - Marco at NightLabs dot de
  */
 public class SingleExecTimePatternBuilderHopPage extends WizardHopPage {
 
 	private PatternExecutionTimeComposite startTimeComposite;
-	private DateTimeEdit dayEdit;
-	
+	private DateTimeEdit executionDateEdit;
+
 	/**
 	 * @param pageName
 	 */
 	public SingleExecTimePatternBuilderHopPage() {
-		super(SingleExecTimePatternBuilderHopPage.class.getName(), NLBasePlugin.getResourceString("timepattern.builderWizard.singleExec.pageName"));
-		setMessage(NLBasePlugin.getResourceString("timepattern.builderWizard.singleExec.message"));
+		super(SingleExecTimePatternBuilderHopPage.class.getName(), Messages.getString("timepattern.builder.SingleExecTimePatternBuilderHopPage.title")); //$NON-NLS-1$
+		setDescription(Messages.getString("timepattern.builder.SingleExecTimePatternBuilderHopPage.description")); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -46,20 +46,22 @@ public class SingleExecTimePatternBuilderHopPage extends WizardHopPage {
 		startTimeComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		(new Label(wrapper, SWT.SEPARATOR | SWT.HORIZONTAL)).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		XComposite dayWrapper = new XComposite(wrapper, SWT.NONE); 
-		dayEdit = new DateTimeEdit(dayWrapper, DateFormatter.FLAGS_DATE_LONG_WEEKDAY, NLBasePlugin.getResourceString("timepattern.builderWizard.singleExec.execDate"));
+		executionDateEdit = new DateTimeEdit(
+				dayWrapper,
+				DateFormatter.FLAGS_DATE_LONG_WEEKDAY,
+				Messages.getString("timepattern.builder.SingleExecTimePatternBuilderHopPage.executionDateEdit.caption")); //$NON-NLS-1$
 		return wrapper;
 	}
-	
+
 	public void configureTimePattern(TimePattern timePattern) 
 	throws TimePatternFormatException 
 	{
 		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(dayEdit.getDate());
-		timePattern.setYear(""+calendar.get(Calendar.YEAR));
-		timePattern.setMonth(""+(calendar.get(Calendar.MONTH)+1));
-		timePattern.setDay(""+calendar.get(Calendar.DAY_OF_MONTH));
-		timePattern.setDayOfWeek(""+(calendar.get(Calendar.DAY_OF_WEEK)-1));
+		calendar.setTime(executionDateEdit.getDate());
+		timePattern.setYear(String.valueOf(calendar.get(Calendar.YEAR)));
+		timePattern.setMonth(String.valueOf(calendar.get(Calendar.MONTH)+1));
+		timePattern.setDay(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+		timePattern.setDayOfWeek(String.valueOf(calendar.get(Calendar.DAY_OF_WEEK)-1));
 		startTimeComposite.configurePattern(timePattern);
 	}
-
 }

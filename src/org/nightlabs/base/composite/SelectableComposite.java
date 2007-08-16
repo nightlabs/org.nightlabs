@@ -75,7 +75,7 @@ public class SelectableComposite extends XComposite {
 				case SWT.MouseMove:
 					break;
 				case SWT.MouseUp:
-					System.out.println("mouse up with x"+event.x+", y"+event.y);
+					System.out.println("mouse up with x"+event.x+", y"+event.y); //$NON-NLS-1$ //$NON-NLS-2$
 					Rectangle rect = getBounds ();
 					if (rect.contains (event.x, event.y)) {
 						setSelected(true);

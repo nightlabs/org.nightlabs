@@ -2,7 +2,7 @@ package org.nightlabs.base.exceptionhandler;
 
 public class SimpleExceptionHandler implements IExceptionHandler
 {
-	private String message = "";
+	private String message = ""; //$NON-NLS-1$
 	public SimpleExceptionHandler(String message)
 	{
 		this.message = message;

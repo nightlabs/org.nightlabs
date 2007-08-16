@@ -49,7 +49,7 @@ extends AbstractActionRegistry
 	throws EPProcessorException
 	{
 		if (initializingSharedInstance)
-			throw new IllegalStateException("Circular call to the method sharedInstance() during initialization!");
+			throw new IllegalStateException("Circular call to the method sharedInstance() during initialization!"); //$NON-NLS-1$
 
 		if (sharedInstance == null) {
 			initializingSharedInstance = true;
@@ -64,11 +64,11 @@ extends AbstractActionRegistry
 		return sharedInstance;
 	}
 	
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.contributionItemSet";
-	public static final String ELEMENT_CONTRIBUTION_ITEM = "contributionItem";
-	public static final String ATTRIBUTE_CLASS = "class";
-	public static final String ATTRIBUTE_ID = "id";
-	public static final String ATTRIBUTE_NAME = "name";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.contributionItemSet"; //$NON-NLS-1$
+	public static final String ELEMENT_CONTRIBUTION_ITEM = "contributionItem"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_CLASS = "class"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_ID = "id"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_NAME = "name"; //$NON-NLS-1$
 	
 	protected ContributionItemSetRegistry() {
 		super();
@@ -82,11 +82,11 @@ extends AbstractActionRegistry
 		{
 			String id = element.getAttribute(ATTRIBUTE_ID);
 			if (checkString(id))
-				logger.error("id is empty!");
+				logger.error("id is empty!"); //$NON-NLS-1$
 			
 			String name = element.getAttribute(ATTRIBUTE_NAME);
 			if (checkString(name))
-				logger.error("name is empty!");
+				logger.error("name is empty!"); //$NON-NLS-1$
 			
 			String className = element.getAttribute(ATTRIBUTE_CLASS);			
 			if (checkString(className)) {
@@ -99,8 +99,8 @@ extends AbstractActionRegistry
 					}
 					return contributionItem;
 				} catch (CoreException e) {
-					logger.error("Could not instantiate Class "+className+"!", e);
-					throw new EPProcessorException("Could not instantiate Class "+className+"!", e);
+					logger.error("Could not instantiate Class "+className+"!", e); //$NON-NLS-1$ //$NON-NLS-2$
+					throw new EPProcessorException("Could not instantiate Class "+className+"!", e); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 		}

@@ -29,7 +29,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.action.registry.AbstractActionRegistry;
-import org.nightlabs.base.action.registry.editor.EditorActionBarContributorRegistry;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 
 /**
@@ -48,7 +47,7 @@ extends AbstractActionRegistry
 	throws EPProcessorException 
 	{
 		try {
-			return element.createExecutableExtension("class");
+			return element.createExecutableExtension("class"); //$NON-NLS-1$
 		} catch (CoreException e) {
 			throw new EPProcessorException(e.getMessage(), extension, e);
 		}

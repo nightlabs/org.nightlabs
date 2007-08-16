@@ -80,7 +80,7 @@ extends TableLayout
 			int weight = this.weights[i];
 			if (weight < 0) {
 				if (getFixedWidth(i) < 0)
-					throw new IllegalArgumentException("weight and fixedWidth for columnIndex="+i+" are both < 0!!!");
+					throw new IllegalArgumentException("weight and fixedWidth for columnIndex="+i+" are both < 0!!!"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 
@@ -88,7 +88,7 @@ extends TableLayout
 			int fixedWidth = this.fixedWidths[i];
 			if (fixedWidth < 0 && this.weights.length > i) {
 				if (this.weights[i] < 0)
-					throw new IllegalArgumentException("weight and fixedWidth for columnIndex="+i+" are both < 0!!!");
+					throw new IllegalArgumentException("weight and fixedWidth for columnIndex="+i+" are both < 0!!!"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}
@@ -131,7 +131,7 @@ extends TableLayout
 		else if (c instanceof Tree)
 			columnCount = ((Tree)c).getColumnCount();
 		else
-			throw new IllegalArgumentException("Composite c is neither a " + Table.class.getName() + " nor a " + Tree.class.getName());
+			throw new IllegalArgumentException("Composite c is neither a " + Table.class.getName() + " nor a " + Tree.class.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 
 		int width = c.getBounds().width;
 		ScrollBar sb = c.getVerticalBar();
@@ -166,7 +166,7 @@ extends TableLayout
 			else if (c instanceof Tree)
 				((Tree)c).getColumn(columnIndex).setWidth(columnWidth);
 			else
-				throw new IllegalArgumentException("Composite c is neither a " + Table.class.getName() + " nor a " + Tree.class.getName());
+				throw new IllegalArgumentException("Composite c is neither a " + Table.class.getName() + " nor a " + Tree.class.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 //		firstTime = false;

@@ -47,20 +47,19 @@ import org.eclipse.core.runtime.Platform;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public class RemoveExtensionRegistry 
 extends AbstractEPProcessor 
 {
 	private static final Logger logger = Logger.getLogger(RemoveExtensionRegistry.class);
 	
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.removeExtension";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.removeExtension"; //$NON-NLS-1$
 
-	public static final String ELEMENT_REMOVE_EXTENSION = "removeExtension";
-	public static final String ATTRIBUTE_EXTENSION_POINT_ID = "extensionPointID";
-	public static final String ATTRIBUTE_ELEMENT_PATH = "elementPath";	
-	public static final String ATTRIBUTE_ATTRIBUTE_NAME = "attributeName";	
-	public static final String ATTRIBUTE_ATTRIBUTE_PATTERN = "attributePattern";
+	public static final String ELEMENT_REMOVE_EXTENSION = "removeExtension"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_EXTENSION_POINT_ID = "extensionPointID"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_ELEMENT_PATH = "elementPath";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_ATTRIBUTE_NAME = "attributeName";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_ATTRIBUTE_PATTERN = "attributePattern"; //$NON-NLS-1$
 	
 	@Override
 	public String getExtensionPointID() {
@@ -75,25 +74,25 @@ extends AbstractEPProcessor
 		{
 			String extensionPointID = element.getAttribute(ATTRIBUTE_EXTENSION_POINT_ID);
 			if (!checkString(extensionPointID)) {
-				logger.error("attribute extensionPoint must not be null nor empty!");
+				logger.error("attribute extensionPoint must not be null nor empty!"); //$NON-NLS-1$
 				return;
 			}
 			
 			String elementPath = element.getAttribute(ATTRIBUTE_ELEMENT_PATH);
 			if (!checkString(elementPath)) {
-				logger.error("attribute elementPath must not be null nor empty!");
+				logger.error("attribute elementPath must not be null nor empty!"); //$NON-NLS-1$
 				return;
 			}				
 			
 			String attributeName = element.getAttribute(ATTRIBUTE_ATTRIBUTE_NAME);
 			if (!checkString(attributeName)) {
-				logger.error("attribute attributeName must not be null nor empty!");
+				logger.error("attribute attributeName must not be null nor empty!"); //$NON-NLS-1$
 				return;
 			}
 			
 			String attributePattern = element.getAttribute(ATTRIBUTE_ATTRIBUTE_PATTERN);
 			if (!checkString(attributePattern)) {
-				logger.error("attribute attributePattern must not be null nor empty!");
+				logger.error("attribute attributePattern must not be null nor empty!"); //$NON-NLS-1$
 				return;
 			}
 			
@@ -188,7 +187,7 @@ extends AbstractEPProcessor
 											removedExtensions.add(ext);											
 										}
 									} catch (Throwable t) {
-										logger.error("There occured an error while trying to remove the IExtension "+ext.getLabel()+" from the ExtensionRegistry");
+										logger.error("There occured an error while trying to remove the IExtension "+ext.getLabel()+" from the ExtensionRegistry"); //$NON-NLS-1$ //$NON-NLS-2$
 										t.printStackTrace();
 									}										
 //									if (element2 instanceof RegistryObject) {
@@ -215,10 +214,10 @@ extends AbstractEPProcessor
 		IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
 	{
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		Field masterTokenField = registry.getClass().getField("masterToken");
+		Field masterTokenField = registry.getClass().getField("masterToken"); //$NON-NLS-1$
 		masterTokenField.setAccessible(true);
 		Object masterToken = masterTokenField.get(registry);
-		Method removeRegistryObjectMethod = registry.getClass().getDeclaredMethod("removeObject", 
+		Method removeRegistryObjectMethod = registry.getClass().getDeclaredMethod("removeObject",  //$NON-NLS-1$
 				new Class[] {RegistryObject.class, Boolean.class, Object.class});
 		removeRegistryObjectMethod.invoke(registry, new Object[] {registryObject, false, masterToken});
 	}
@@ -238,7 +237,7 @@ extends AbstractEPProcessor
 	public static Object getMasterToken(ExtensionRegistry registry) 
 	throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException 
 	{
-		Field masterTokenField = registry.getClass().getDeclaredField("masterToken");
+		Field masterTokenField = registry.getClass().getDeclaredField("masterToken"); //$NON-NLS-1$
 		masterTokenField.setAccessible(true);
 		Object masterToken = masterTokenField.get(registry);
 		return masterToken;
@@ -247,7 +246,7 @@ extends AbstractEPProcessor
 	private void checkElementPath(String elementPath, IConfigurationElement element, 
 			Set<IConfigurationElement> elements, String attributeName, String attributePattern) 
 	{
-		Pattern pattern = Pattern.compile("/");
+		Pattern pattern = Pattern.compile("/"); //$NON-NLS-1$
 		String[] splits = pattern.split(elementPath);
 		String element0 = splits[0];
 		if (element0.equals(elementPath)) {

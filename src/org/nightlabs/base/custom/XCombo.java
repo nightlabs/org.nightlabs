@@ -46,7 +46,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -433,7 +432,7 @@ public Point computeSize (int wHint, int hHint, boolean changed)
 
 	int textWidth = 0;
 	GC gc = new GC (text);
-	int spacer = gc.stringExtent (" ").x;
+	int spacer = gc.stringExtent (" ").x; //$NON-NLS-1$
 	for (int i = 0; i < items.length; i++) {
 		TableItem item = items[i];
 		item.getText();
@@ -1253,7 +1252,7 @@ protected int getTableItemIndex(String text)
 public void removeAll () {
 	checkWidget();
 	imageLabel.setImage(null);
-	text.setText ("");
+	text.setText (""); //$NON-NLS-1$
 	table.removeAll ();
 }
 
@@ -1321,7 +1320,7 @@ public void select (int index) {
 	if (index == -1) {
 		imageLabel.setImage(null);
 		table.deselectAll ();
-		text.setText ("");
+		text.setText (""); //$NON-NLS-1$
 		return;
 	}
 	if (0 <= index && index < table.getItemCount()) {

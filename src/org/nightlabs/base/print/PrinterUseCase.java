@@ -33,7 +33,7 @@ package org.nightlabs.base.print;
  */
 public class PrinterUseCase {
 
-	public static final String DEFAULT_USE_CASE_ID = "PrinterUseCase-Default";
+	public static final String DEFAULT_USE_CASE_ID = "PrinterUseCase-Default"; //$NON-NLS-1$
 	
 	private String id;
 	private String name;

@@ -85,7 +85,7 @@ public abstract class Job extends org.eclipse.core.runtime.jobs.Job {
 	public ProgressMonitorWrapper getProgressMonitorWrapper() {
 		if (progressMonitorWrapper == null) {
 			if (progressMonitor == null)
-				throw new IllegalStateException("getProgressMonitorWrapper must not be called before run(IProgressMonitor) was invoked.");
+				throw new IllegalStateException("getProgressMonitorWrapper must not be called before run(IProgressMonitor) was invoked."); //$NON-NLS-1$
 			progressMonitorWrapper = new ProgressMonitorWrapper(progressMonitor);
 		}
 		return progressMonitorWrapper;
@@ -105,7 +105,7 @@ public abstract class Job extends org.eclipse.core.runtime.jobs.Job {
 	public ProgressMonitorWrapper getSubProgressMonitorWrapper(int subTicks) {
 		if (subProgressMonitorWrapper == null) {
 			if (progressMonitor == null)
-				throw new IllegalStateException("getSubProgressMonitorWrapper must not be called before run(IProgressMonitor) was invoked.");
+				throw new IllegalStateException("getSubProgressMonitorWrapper must not be called before run(IProgressMonitor) was invoked."); //$NON-NLS-1$
 			subProgressMonitor = new SubProgressMonitor(progressMonitor, subTicks);
 			subProgressMonitorWrapper = new ProgressMonitorWrapper(subProgressMonitor);
 		}
@@ -123,7 +123,7 @@ public abstract class Job extends org.eclipse.core.runtime.jobs.Job {
 	 */
 	public IProgressMonitor getProgressMonitor() {
 		if (this.progressMonitor == null)
-			throw new IllegalStateException("getProgressMonitor must not be called before run(IProgressMonitor) was invoked.");
+			throw new IllegalStateException("getProgressMonitor must not be called before run(IProgressMonitor) was invoked."); //$NON-NLS-1$
 		return progressMonitor;
 	}
 }

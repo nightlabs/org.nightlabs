@@ -31,7 +31,7 @@ extends AbstractActionRegistry
 	throws EPProcessorException 
 	{
 		try {
-			return element.createExecutableExtension("class");
+			return element.createExecutableExtension("class"); //$NON-NLS-1$
 		} catch (CoreException e) {
 			throw new EPProcessorException(e.getMessage(), extension, e);
 		}

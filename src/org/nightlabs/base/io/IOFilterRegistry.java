@@ -44,7 +44,7 @@ extends AbstractEPProcessor
 {
 	public static final Logger logger = Logger.getLogger(IOFilterRegistry.class);
 	
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.iofilter";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.iofilter"; //$NON-NLS-1$
 	
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;
@@ -64,13 +64,13 @@ extends AbstractEPProcessor
 		super();
 	}	
 	
-	public static final String ELEMENT_IOFILTER = "ioFilter";
-	public static final String ELEMENT_FILE_EXTENSION = "fileExtension";
-	public static final String ATTRIBUTE_NAME = "name";
-	public static final String ATTRIBUTE_DESCRIPTION = "description";
-	public static final String ATTRIBUTE_CLASS = "class";
-	public static final String ATTRIBUTE_INFORMATION_PROVIDER = "informationProvider";
-	public static final String ATTRIBUTE_FILE_EXTENSION = "fileExtension";
+	public static final String ELEMENT_IOFILTER = "ioFilter"; //$NON-NLS-1$
+	public static final String ELEMENT_FILE_EXTENSION = "fileExtension"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_NAME = "name"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_DESCRIPTION = "description"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_CLASS = "class"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_INFORMATION_PROVIDER = "informationProvider"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_FILE_EXTENSION = "fileExtension"; //$NON-NLS-1$
 	
 	
 	public void processElement(IExtension extension, IConfigurationElement element)
@@ -92,7 +92,7 @@ extends AbstractEPProcessor
 						informationProvider = (IOFilterInformationProvider) object;
 				}
 			} catch (CoreException e) {
-				logger.warn("InformationProvider Class for ioFilter "+name+" could not be instanciated!", e);
+				logger.warn("InformationProvider Class for ioFilter "+name+" could not be instanciated!", e); //$NON-NLS-1$ //$NON-NLS-2$
 			}					
 			
 			IOFilter filter = null;
@@ -117,7 +117,7 @@ extends AbstractEPProcessor
 					
 					IConfigurationElement[] children = element.getChildren(ELEMENT_FILE_EXTENSION);
 					if (children.length == 0) {
-						logger.warn("There is no fileExtension registered for ioFilter "+name+"!");
+						logger.warn("There is no fileExtension registered for ioFilter "+name+"!"); //$NON-NLS-1$ //$NON-NLS-2$
 						return;					
 					}
 						
@@ -143,7 +143,7 @@ extends AbstractEPProcessor
 					ioFilterMan.addIOFilter(filter);									
 				}					 
 			} catch (CoreException e) {
-				logger.warn("ioFilter Class for ioFilter "+name+" could not be instanciated!", e);
+				logger.warn("ioFilter Class for ioFilter "+name+" could not be instanciated!", e); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}

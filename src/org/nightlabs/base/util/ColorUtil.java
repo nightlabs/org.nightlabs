@@ -43,10 +43,10 @@ public class ColorUtil extends org.nightlabs.util.ColorUtil
 
 	public static String rgbToString(RGB rgb)
 	{
-		return "RGBA{"
+		return "RGBA{" //$NON-NLS-1$
 				+ rgb.red + ','
 				+ rgb.green + ','
-				+ rgb.blue + ",255}"; // SWT RGB doesn't know alpha. We set it to 255 even though we could leave it out. 
+				+ rgb.blue + ",255}"; // SWT RGB doesn't know alpha. We set it to 255 even though we could leave it out.  //$NON-NLS-1$
 	}
 
 	public static RGB stringToRGB(String color)
@@ -57,10 +57,10 @@ public class ColorUtil extends org.nightlabs.util.ColorUtil
 
 	public static String swtColorToString(Color color)
 	{
-		return "RGBA{"
+		return "RGBA{" //$NON-NLS-1$
 		+ color.getRed() + ','
 		+ color.getGreen() + ','
-		+ color.getBlue() + ",255}"; // SWT Color doesn't know alpha. We set it to 255 even though we could leave it out.
+		+ color.getBlue() + ",255}"; // SWT Color doesn't know alpha. We set it to 255 even though we could leave it out. //$NON-NLS-1$
 	}
 
 	/**
@@ -112,14 +112,14 @@ public class ColorUtil extends org.nightlabs.util.ColorUtil
 	public static java.awt.Color toAWTColor(RGB rgb) 
 	{
 	  if (rgb == null)
-      throw new IllegalArgumentException("Param rgb must not be null!");
+      throw new IllegalArgumentException("Param rgb must not be null!"); //$NON-NLS-1$
 	  return new java.awt.Color(rgb.red, rgb.green, rgb.blue);
 	}
 	
 	public static RGB toRGB(java.awt.Color c) 
 	{
 	  if(c == null)
-	    throw new IllegalArgumentException("Param c must not be null!");
+	    throw new IllegalArgumentException("Param c must not be null!"); //$NON-NLS-1$
 	    
 	  return new RGB(c.getRed(), c.getGreen(), c.getBlue());
 	}	

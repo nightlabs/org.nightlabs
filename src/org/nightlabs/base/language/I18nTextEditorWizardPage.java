@@ -80,7 +80,7 @@ public class I18nTextEditorWizardPage extends WizardHopPage {
 	
 
 	public void setEditorCaption(String editorCaption) {
-		this.editorCaption = (editorCaption != null) ? this.editorCaption: "";
+		this.editorCaption = (editorCaption != null) ? this.editorCaption: ""; //$NON-NLS-1$
 	}
 	
 	/* (non-Javadoc)

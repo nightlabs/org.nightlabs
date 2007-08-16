@@ -157,7 +157,7 @@ public class DateTimeEdit extends XComposite
 
 //		if ((DateFormatProvider.DATE & flags) != 0) {
 			lookupButton = new Button(this, SWT.NONE);
-			lookupButton.setText("...");
+			lookupButton.setText("..."); //$NON-NLS-1$
 			lookupButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e)
@@ -289,7 +289,7 @@ public class DateTimeEdit extends XComposite
 	public void setDate(Date date)
 	{
 		if (date == null)
-			throw new NullPointerException("date must not be null!");
+			throw new NullPointerException("date must not be null!"); //$NON-NLS-1$
 
 		this.date = date;
 		text.setText(DateFormatter.formatDate(date, flags));

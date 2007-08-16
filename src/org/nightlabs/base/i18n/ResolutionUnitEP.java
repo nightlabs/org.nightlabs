@@ -42,15 +42,15 @@ import org.nightlabs.i18n.unit.resolution.ResolutionUnitRegistry;
 public class ResolutionUnitEP 
 extends AbstractEPProcessor 
 {
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.resolutionUnit";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.resolutionUnit"; //$NON-NLS-1$
 	
-	public static final String ELEMENT_UNIT_CLASS = "resolutionUnitClass";
-	public static final String ATTRIBUTE_CLASS = "class";
+	public static final String ELEMENT_UNIT_CLASS = "resolutionUnitClass"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_CLASS = "class"; //$NON-NLS-1$
 	
-	public static final String ELEMENT_UNIT = "resolutionUnit";
-	public static final String ATTRIBUTE_ID = "id";	
-	public static final String ATTRIBUTE_NAME = "name";	
-	public static final String ATTRIBUTE_UNIT_ID = "unitID";
+	public static final String ELEMENT_UNIT = "resolutionUnit"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_ID = "id";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_NAME = "name";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_UNIT_ID = "unitID"; //$NON-NLS-1$
 	
 	private static ResolutionUnitEP resolutionUnitEP = null;
 	public static ResolutionUnitEP sharedInstance() {
@@ -78,19 +78,19 @@ extends AbstractEPProcessor
 		{
 			String id = element.getAttribute(ATTRIBUTE_ID);
 			if (!checkString(id))
-				throw new IllegalArgumentException("resolutionUnitID must not be null nor empty!");
+				throw new IllegalArgumentException("resolutionUnitID must not be null nor empty!"); //$NON-NLS-1$
 			
 			String name = element.getAttribute(ATTRIBUTE_NAME);
 			if (!checkString(name))
-				throw new IllegalArgumentException("resolutionUnit name must not be null nor empty!");
+				throw new IllegalArgumentException("resolutionUnit name must not be null nor empty!"); //$NON-NLS-1$
  
 			String unitID = element.getAttribute(ATTRIBUTE_UNIT_ID);
 			if (!checkString(unitID))
-				throw new IllegalArgumentException("unitID must not be null nor empty!");
+				throw new IllegalArgumentException("unitID must not be null nor empty!"); //$NON-NLS-1$
 			
 			IUnit unit = getUnitRegistry().getUnit(unitID);
 			if (unit == null)
-				throw new IllegalArgumentException("There is no unit registered with unitID "+unitID);
+				throw new IllegalArgumentException("There is no unit registered with unitID "+unitID); //$NON-NLS-1$
 				
 			IResolutionUnit resUnit = new ResolutionUnit(id, name, unit);
 			getResolutionUnitRegistry().addResolutionUnit(resUnit);

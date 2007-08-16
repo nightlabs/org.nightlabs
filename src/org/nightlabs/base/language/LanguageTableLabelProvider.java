@@ -29,7 +29,6 @@ package org.nightlabs.base.language;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-
 import org.nightlabs.language.LanguageCf;
 
 /**
@@ -69,7 +68,7 @@ public class LanguageTableLabelProvider
 		if (res != null)
 			return res;
 		else
-			return "";
+			return ""; //$NON-NLS-1$
 	}
 
 }

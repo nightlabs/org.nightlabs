@@ -17,7 +17,7 @@ public class SimpleExceptionHandlerRegistry
 extends AbstractEPProcessor
 implements IEPProcessListener
 {
-	public static final String ExtensionPointID = "org.nightlabs.base.simpleExceptionHandler";
+	public static final String ExtensionPointID = "org.nightlabs.base.simpleExceptionHandler"; //$NON-NLS-1$
 	private static SimpleExceptionHandlerRegistry sharedInstance;
 
 	@Override
@@ -31,18 +31,18 @@ implements IEPProcessListener
 	{
 		try
 		{
-			if (element.getName().equals("simpleExceptionHandler"))
+			if (element.getName().equals("simpleExceptionHandler")) //$NON-NLS-1$
 			{
-				String targetType = element.getAttribute("targetType");
-				String message = element.getAttribute("message");
-				message = ( message != null && !message.equals("") ? message : null );
+				String targetType = element.getAttribute("targetType"); //$NON-NLS-1$
+				String message = element.getAttribute("message"); //$NON-NLS-1$
+				message = ( message != null && !message.equals("") ? message : null ); //$NON-NLS-1$
 				IExceptionHandler handler = new SimpleExceptionHandler(message);				
 				ExceptionHandlerRegistry.sharedInstance().addExceptionHandler(targetType, handler);
 			}
 			else
 			{
 				// wrong element according to schema, probably checked earlier
-				throw new IllegalArgumentException("Element "+element.getName()+" is not supported by extension-point "+ExtensionPointID);
+				throw new IllegalArgumentException("Element "+element.getName()+" is not supported by extension-point "+ExtensionPointID); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 		catch(Throwable e)

@@ -27,7 +27,6 @@
 package org.nightlabs.base.app;
 
 import java.beans.PropertyChangeEvent;
-
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +54,6 @@ import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.internal.handlers.ShowKeyAssistHandler;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.action.ContributionItemSetRegistry;
 import org.nightlabs.base.action.INewFileAction;
 import org.nightlabs.base.action.NewFileRegistry;
@@ -63,6 +61,7 @@ import org.nightlabs.base.action.OpenFileAction;
 import org.nightlabs.base.action.ReOpenFileAction;
 import org.nightlabs.base.config.RecentFileCfMod;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 
@@ -181,7 +180,7 @@ extends ActionBarAdvisor
 			keyAssistHandler = new ShowKeyAssistHandler();
 		if (menuBarItems.contains(ActionBarItem.New))
 		{			
-			newMenu = new MenuManager(NLBasePlugin.getResourceString("menu.new.label"), ActionFactory.NEW.getId());
+			newMenu = new MenuManager(Messages.getString("app.DefaultActionBuilder.newMenu.text"), ActionFactory.NEW.getId()); //$NON-NLS-1$
 //			newMenu.add((ActionFactory.NEW.create(window)));
 			newMenu.add(new GroupMarker(ActionFactory.NEW.getId()));			
 		}
@@ -190,7 +189,7 @@ extends ActionBarAdvisor
 		if (menuBarItems.contains(ActionBarItem.RecentFiles))
 		{
 			openAction.addPropertyChangeListener(historyFileListener);
-			recentFilesMenu = new MenuManager(NLBasePlugin.getResourceString("menu.openRecentFiles.label"), NLWorkbenchActionConstants.M_RECENT_FILES);
+			recentFilesMenu = new MenuManager(Messages.getString("app.DefaultActionBuilder.recentFilesMenu.text"), NLWorkbenchActionConstants.M_RECENT_FILES); //$NON-NLS-1$
 			recentFilesMenu.add(new GroupMarker(IWorkbenchActionConstants.HISTORY_GROUP));			
 		}
 		if (menuBarItems.contains(ActionBarItem.Close)) {
@@ -248,7 +247,7 @@ extends ActionBarAdvisor
 				actions.put(ActionBarItem.Intro, introAction);
 			} catch (Exception x) {
 				introAction = null;
-				logger.error("Could not create intro action!", x);
+				logger.error("Could not create intro action!", x); //$NON-NLS-1$
 			}
 		}
 		if (menuBarItems.contains(ActionBarItem.Update)) {
@@ -304,7 +303,7 @@ extends ActionBarAdvisor
 	public void fillMenuBar(IMenuManager menuBar) 
 	{		
 	  // File-Menu
-		fileMenu = new MenuManager(NLBasePlugin.getResourceString("menu.file.label"), 
+		fileMenu = new MenuManager(Messages.getString("app.DefaultActionBuilder.fileMenu.text"),  //$NON-NLS-1$
 				IWorkbenchActionConstants.M_FILE);
 		
 		menuBar.add(fileMenu);
@@ -401,32 +400,32 @@ extends ActionBarAdvisor
 //		}
     
     // Window-Menu
-		windowMenu = new MenuManager(NLBasePlugin.getResourceString("menu.window.label"), 
+		windowMenu = new MenuManager(Messages.getString("app.DefaultActionBuilder.windowMenu.text"),  //$NON-NLS-1$
 				IWorkbenchActionConstants.M_WINDOW);
 		menuBar.add(windowMenu);		
-		
+
 		// Perspective-SubMenu
 		if (menuBarItems.contains(ActionBarItem.Perspectives)) {		
-			MenuManager openPerspectiveMenuMgr = new MenuManager(NLBasePlugin.getResourceString("menu.openPerspective.label"), 
+			MenuManager openPerspectiveMenuMgr = new MenuManager(Messages.getString("app.DefaultActionBuilder.openPerspectiveMenu.text"),  //$NON-NLS-1$
 					NLWorkbenchActionConstants.M_PERSPECTIVES);
 			openPerspectiveMenuMgr.add(openPerspectiveMenu);
 			windowMenu.add(openPerspectiveMenuMgr);					
 		}
-		
+
 		// View-SubMenu
 		if (menuBarItems.contains(ActionBarItem.Views)) {
-			MenuManager showViewMenuMgr = new MenuManager(NLBasePlugin.getResourceString("menu.showView.label"), 
+			MenuManager showViewMenuMgr = new MenuManager(Messages.getString("app.DefaultActionBuilder.showViewMenu.text"),  //$NON-NLS-1$
 					NLWorkbenchActionConstants.M_VIEWS);
 			showViewMenuMgr.add(showViewMenu);
 			windowMenu.add(showViewMenuMgr);		
 			windowMenu.add(new Separator());			
 		}
-		
+
 		if (menuBarItems.contains(ActionBarItem.Preferences))
 			windowMenu.add(preferencesAction);
-		
+
 		// Help-Menu
-		helpMenu = new MenuManager(NLBasePlugin.getResourceString("menu.help.label"), 
+		helpMenu = new MenuManager(Messages.getString("app.DefaultActionBuilder.helpMenu.text"),  //$NON-NLS-1$
 				IWorkbenchActionConstants.M_HELP);
 		menuBar.add(helpMenu);
 //		helpMenu.add(introAction);
@@ -446,7 +445,7 @@ extends ActionBarAdvisor
 		try {
 			ContributionItemSetRegistry.sharedInstance().contributeToMenuBar(menuBar);
 		} catch (EPProcessorException e) {
-			logger.error("There occured an error while processing the ContributionItemSetRegistry!", e);
+			logger.error("There occured an error while processing the ContributionItemSetRegistry!", e); //$NON-NLS-1$
 			e.printStackTrace();
 		}		
 	}
@@ -456,7 +455,7 @@ extends ActionBarAdvisor
 		try {
 			ContributionItemSetRegistry.sharedInstance().contributeToCoolBar(coolBar);
 		} catch (EPProcessorException e) {
-			logger.error("There occured an error while processing the ContributionItemSetRegistry!", e);
+			logger.error("There occured an error while processing the ContributionItemSetRegistry!", e); //$NON-NLS-1$
 			e.printStackTrace();
 		}
 	}
@@ -556,12 +555,12 @@ extends ActionBarAdvisor
 			List actions = (List) categoryID2Actions.get(categoryID);
 			for (Iterator itActions = actions.iterator(); itActions.hasNext(); ) {
 				INewFileAction action = (INewFileAction) itActions.next();			
-				if (categoryID.equals(NewFileRegistry.DEFAULT_CATEGORY)) {
+				if (categoryID.equals(NewFileRegistry.DEFAULT_CATEGORY_ID)) {
 					defaultActions.add(action);
 				}
 				else {
 					String categoryName = newFileRegistry.getCategoryName(categoryID);
-					if (categoryName != null && !categoryName.equals("")) {					
+					if (categoryName != null && !categoryName.equals("")) {					 //$NON-NLS-1$
 						IMenuManager categoryMenu = new MenuManager(categoryName);
 						categoryMenu.add(action);
 						menuMan.add(categoryMenu);

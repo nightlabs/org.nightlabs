@@ -52,7 +52,7 @@ public class TestExceptionAction extends Action implements IWorkbenchWindowActio
 					Thread.sleep(DELAY);
 				}
 				catch(Exception e) { }
-				throw new RuntimeException(new IllegalStateException("Test test1 ..."));
+				throw new RuntimeException(new IllegalStateException("Test test1 ...")); //$NON-NLS-1$
 			}
 		};
 		
@@ -64,7 +64,7 @@ public class TestExceptionAction extends Action implements IWorkbenchWindowActio
 					Thread.sleep(DELAY*2);
 				}
 				catch(Exception e) { }
-				throw new RuntimeException(new IllegalStateException("Test test2 ..."));
+				throw new RuntimeException(new IllegalStateException("Test test2 ...")); //$NON-NLS-1$
 			}
 		};
 		
@@ -76,7 +76,7 @@ public class TestExceptionAction extends Action implements IWorkbenchWindowActio
 					Thread.sleep(DELAY*3);
 				}
 				catch(Exception e) { }
-				throw new OutOfMemoryError("Test test3");
+				throw new OutOfMemoryError("Test test3"); //$NON-NLS-1$
 			}
 		};
 		
@@ -89,7 +89,7 @@ public class TestExceptionAction extends Action implements IWorkbenchWindowActio
 				}
 				catch(Exception e) { }
 //				throw new RuntimeException(new IllegalStateException("Test test3 ..."));
-				throw new OutOfMemoryError("Test test4");
+				throw new OutOfMemoryError("Test test4"); //$NON-NLS-1$
 			}
 		};
 		

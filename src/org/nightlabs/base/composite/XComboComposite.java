@@ -154,7 +154,7 @@ public class XComboComposite<T>
 	@Override
 	protected void createGuiControl(Composite parent, int widgetStyle, String caption) 
 	{
-		if ( caption != null && ! "".equals(caption) ) {
+		if ( caption != null && ! "".equals(caption) ) { //$NON-NLS-1$
 			XComposite composite = new XComposite(parent, SWT.NONE, LayoutDataMode.GRID_DATA);
 			label = new Label(composite, SWT.NONE);
 			label.setText(caption);
@@ -203,7 +203,7 @@ public class XComboComposite<T>
 	@Override
 	protected void internal_setSelection(int[] indices) {
 		if (indices.length > 1 )
-			throw new IllegalArgumentException("Multiple selections are not supported by Combos!");
+			throw new IllegalArgumentException("Multiple selections are not supported by Combos!"); //$NON-NLS-1$
 		
 		internal_setSelection(indices[0]);
 	}

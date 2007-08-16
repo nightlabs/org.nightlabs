@@ -73,7 +73,7 @@ extends XContributionItem
 	private boolean coolBarFilled = false;
 	private boolean compositeFilled = false;
 	
-	private String name = "";
+	private String name = ""; //$NON-NLS-1$
 	public String getName() {
 		return name;
 	}			

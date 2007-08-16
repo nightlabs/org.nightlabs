@@ -91,7 +91,7 @@ public class PartVisibilityTracker {
 		 */
 		public void partActivated(IWorkbenchPartReference partRef) {
 			if (logger.isDebugEnabled())
-				logger.debug("partActivated  partRef: "+partRef.getPartName());
+				logger.debug("partActivated  partRef: "+partRef.getPartName()); //$NON-NLS-1$
 
 			if (getPartStatus(partRef).getStatus() == PART_STATUS_HIDDEN)
 				setPartStatus(partRef, PART_STATUS_VISIBLE);
@@ -104,7 +104,7 @@ public class PartVisibilityTracker {
 		 */
 		public void partBroughtToTop(IWorkbenchPartReference partRef) {
 			if (logger.isDebugEnabled())
-				logger.debug("partBroughtToTop  partRef: "+partRef.getPartName());
+				logger.debug("partBroughtToTop  partRef: "+partRef.getPartName()); //$NON-NLS-1$
 
 			setPartStatus(partRef, PART_STATUS_VISIBLE);
 		}
@@ -114,7 +114,7 @@ public class PartVisibilityTracker {
 		 */
 		public void partClosed(IWorkbenchPartReference partRef) {
 			if (logger.isDebugEnabled())
-				logger.debug("partClosed  partRef: "+partRef.getPartName());
+				logger.debug("partClosed  partRef: "+partRef.getPartName()); //$NON-NLS-1$
 
 			setPartStatus(partRef, PART_STATUS_HIDDEN);
 			getPartStatus(partRef).removeAllListeners();
@@ -125,7 +125,7 @@ public class PartVisibilityTracker {
 		 */
 		public void partDeactivated(IWorkbenchPartReference partRef) {
 			if (logger.isDebugEnabled())
-				logger.debug("partDeactivated  partRef: "+partRef.getPartName());
+				logger.debug("partDeactivated  partRef: "+partRef.getPartName()); //$NON-NLS-1$
 
 			int status = partRef.getPage().isPartVisible(partRef.getPart(false)) ? PART_STATUS_NO_VISIBILITY_CHANGE : PART_STATUS_HIDDEN;
 			if (getPartStatus(partRef).getStatus() == 0 && PART_STATUS_NO_VISIBILITY_CHANGE == status)
@@ -140,7 +140,7 @@ public class PartVisibilityTracker {
 		 */
 		public void partOpened(IWorkbenchPartReference partRef) {
 			if (logger.isDebugEnabled())
-				logger.debug("partOpened  partRef: "+partRef.getPartName());
+				logger.debug("partOpened  partRef: "+partRef.getPartName()); //$NON-NLS-1$
 
 			setPartStatus(partRef, PART_STATUS_VISIBLE);
 		}
@@ -150,7 +150,7 @@ public class PartVisibilityTracker {
 		 */
 		public void partHidden(IWorkbenchPartReference partRef) {
 			if (logger.isDebugEnabled())
-				logger.debug("partHidden  partRef: "+partRef.getPartName());
+				logger.debug("partHidden  partRef: "+partRef.getPartName()); //$NON-NLS-1$
 
 			setPartStatus(partRef, PART_STATUS_HIDDEN);
 		}
@@ -160,7 +160,7 @@ public class PartVisibilityTracker {
 		 */
 		public void partVisible(IWorkbenchPartReference partRef) {
 			if (logger.isDebugEnabled())
-				logger.debug("partVisible  partRef: "+partRef.getId());
+				logger.debug("partVisible  partRef: "+partRef.getId()); //$NON-NLS-1$
 
 			setPartStatus(partRef, PART_STATUS_VISIBLE);
 		}
@@ -170,7 +170,7 @@ public class PartVisibilityTracker {
 		 */
 		public void partInputChanged(IWorkbenchPartReference partRef) {
 			if (logger.isDebugEnabled())
-				logger.debug("partInputChanged  partRef: "+partRef.getPartName());
+				logger.debug("partInputChanged  partRef: "+partRef.getPartName()); //$NON-NLS-1$
 
 			setPartStatus(partRef, PART_STATUS_NO_VISIBILITY_CHANGE);
 		}
@@ -218,7 +218,7 @@ public class PartVisibilityTracker {
 		public Runnable delayedHiddenNotifyer = new Runnable() {
 			public void run() {
 				if (logger.isDebugEnabled())
-					logger.debug("delayedHiddenNotifyer: have visible, set haveDelayedHideStatusChanges to false status: "+status+" part: "+part+" have..."+haveDelayedHideStatusChanges);
+					logger.debug("delayedHiddenNotifyer: have visible, set haveDelayedHideStatusChanges to false status: "+status+" part: "+part+" have..."+haveDelayedHideStatusChanges); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 				if (haveDelayedHideStatusChanges) {
 					status = PART_STATUS_HIDDEN;
@@ -235,7 +235,7 @@ public class PartVisibilityTracker {
 				return;
 
 			if (logger.isDebugEnabled())
-				logger.debug("setStatus: newStatus: "+newStatus+" part: "+part);
+				logger.debug("setStatus: newStatus: "+newStatus+" part: "+part); //$NON-NLS-1$ //$NON-NLS-2$
 
 			if (haveDelayedHideStatusChanges) {
 				if (newStatus == PART_STATUS_VISIBLE) {
@@ -247,14 +247,14 @@ public class PartVisibilityTracker {
 					haveDelayedHideStatusChanges = true;
 
 					if (logger.isDebugEnabled())
-						logger.debug("setStatus: have hidden schedule delayed notification newStatus: "+newStatus+" part: "+part);
+						logger.debug("setStatus: have hidden schedule delayed notification newStatus: "+newStatus+" part: "+part); //$NON-NLS-1$ //$NON-NLS-2$
 
 					Display.getDefault().timerExec(200, delayedHiddenNotifyer);
 				}
 				else {
 
 					if (logger.isDebugEnabled())
-						logger.debug("setStatus: have visible, set haveDelayedHideStatusChanges to false newStatus: "+newStatus+" part: "+part);
+						logger.debug("setStatus: have visible, set haveDelayedHideStatusChanges to false newStatus: "+newStatus+" part: "+part); //$NON-NLS-1$ //$NON-NLS-2$
 
 					haveDelayedHideStatusChanges = false;
 					status = newStatus;
@@ -364,23 +364,23 @@ public class PartVisibilityTracker {
 	 */
 	public void addVisibilityListener(final IWorkbenchPart part, final PartVisibilityListener listener) {
 		if (part == null)
-			throw new IllegalArgumentException("Cannot add listener for null-part. Parameter part must not be null");
+			throw new IllegalArgumentException("Cannot add listener for null-part. Parameter part must not be null"); //$NON-NLS-1$
 		if (listener == null)
-			throw new IllegalArgumentException("Parameter listener must not be null");
+			throw new IllegalArgumentException("Parameter listener must not be null"); //$NON-NLS-1$
 		
 		if (!initialized)
 			initialize();
 		final PartStatus status = getPartStatus(part);
 		if (status == null) {
 			if (logger.isDebugEnabled())
-				logger.warn("addVisibilityListener: Autocreation of PartStatus failed status is null, can not add Listener "+listener);
+				logger.warn("addVisibilityListener: Autocreation of PartStatus failed status is null, can not add Listener "+listener); //$NON-NLS-1$
 
 			return;
 		}
 		status.addListener(listener);
 
 		if (logger.isDebugEnabled())
-			logger.debug("addVisibilityListener: Added PartVisibiltyListener "+listener);
+			logger.debug("addVisibilityListener: Added PartVisibiltyListener "+listener); //$NON-NLS-1$
 
 		if (!initialized)
 			Display.getDefault().asyncExec(new Runnable() {
@@ -388,7 +388,7 @@ public class PartVisibilityTracker {
 					status.asyncInitStatus(PART_STATUS_VISIBLE);
 
 					if (logger.isDebugEnabled())
-						logger.debug("addVisibilityListener: Invoked asyncInitStatus()");
+						logger.debug("addVisibilityListener: Invoked asyncInitStatus()"); //$NON-NLS-1$
 				}
 			});
 	}
@@ -399,7 +399,7 @@ public class PartVisibilityTracker {
 	public void removeVisibilityListener(IWorkbenchPart part, PartVisibilityListener listener) {
 		PartStatus status = getPartStatus(part);
 		if (status == null) {
-			logger.warn("Autocreation of PartStatus failed status is null, can not remove Listener "+listener);
+			logger.warn("Autocreation of PartStatus failed status is null, can not remove Listener "+listener); //$NON-NLS-1$
 			return;
 		}
 		status.removeListener(listener);
@@ -420,7 +420,7 @@ public class PartVisibilityTracker {
 			res = PART_STATUS_HIDDEN;
 
 		if (logger.isDebugEnabled())
-			logger.debug("getPartVisibilityStatus: part=" + part + " status=" + res);
+			logger.debug("getPartVisibilityStatus: part=" + part + " status=" + res); //$NON-NLS-1$ //$NON-NLS-2$
 
 		return res;
 	}
@@ -429,12 +429,12 @@ public class PartVisibilityTracker {
 	public void initialize() {
 		if (initialized) {
 			if (logger.isDebugEnabled())
-				logger.debug("initialize: already initialized. Exiting.");
+				logger.debug("initialize: already initialized. Exiting."); //$NON-NLS-1$
 
 			return;
 		}
 		if (RCPUtil.getActiveWorkbenchPage() == null) {
-			logger.warn("initialize: RCPUtil.getActiveWorkbenchPage() == null! Will defer initialization!");
+			logger.warn("initialize: RCPUtil.getActiveWorkbenchPage() == null! Will defer initialization!"); //$NON-NLS-1$
 			Display.getDefault().asyncExec(new Runnable()
 			{
 				public void run()
@@ -445,7 +445,7 @@ public class PartVisibilityTracker {
 			return;
 		}
 		if (logger.isDebugEnabled())
-			logger.debug("initialize: registering PartListener");
+			logger.debug("initialize: registering PartListener"); //$NON-NLS-1$
 
 		Listener listener = new Listener(this);
 		RCPUtil.getActiveWorkbenchPage().addPartListener(listener);

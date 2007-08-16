@@ -64,16 +64,16 @@ public class EntityEditorPageSettings
 	throws EPProcessorException
 	{
 		try {
-			this.pageFactory = (IEntityEditorPageFactory)cfg.createExecutableExtension("class");
+			this.pageFactory = (IEntityEditorPageFactory)cfg.createExecutableExtension("class"); //$NON-NLS-1$
 		} catch (Exception e) {
-			throw new EPProcessorException("The class attribute was not valid ", extension);
+			throw new EPProcessorException("The class attribute was not valid ", extension); //$NON-NLS-1$
 		}
 		
 //		this.pageClass = cfg.getAttribute("class");		
-		this.editorID = cfg.getAttribute("editorID");
-		if (editorID == null || "".equals(editorID))
-			throw new EPProcessorException("The editorID is not defined.", extension);
-		String indexHintStr = cfg.getAttribute("indexHint");
+		this.editorID = cfg.getAttribute("editorID"); //$NON-NLS-1$
+		if (editorID == null || "".equals(editorID)) //$NON-NLS-1$
+			throw new EPProcessorException("The editorID is not defined.", extension); //$NON-NLS-1$
+		String indexHintStr = cfg.getAttribute("indexHint"); //$NON-NLS-1$
 		if(indexHintStr != null)
 			try {
 				this.indexHint = Integer.parseInt(indexHintStr);

@@ -33,9 +33,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.dialog.CenteredDialog;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.print.PrinterConfiguration;
 import org.nightlabs.print.PrinterConfigurationCfMod;
@@ -69,10 +69,10 @@ public class EditPrinterConfigurationDialog extends CenteredDialog {
 	protected void configureShell(Shell newShell) 
 	{
 		super.configureShell(newShell);		
-		newShell.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.title"));
+		newShell.setText(Messages.getString("print.EditPrinterConfigurationDialog.title")); //$NON-NLS-1$
 		newShell.setSize(400, 525);
 	}
-	
+
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		configurationComposite = new EditPrinterConfigurationComposite(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER, printerUseCaseID);
@@ -80,10 +80,10 @@ public class EditPrinterConfigurationDialog extends CenteredDialog {
 		useConfigOnlyForNextRun = new Button(parent, SWT.CHECK);
 		useConfigOnlyForNextRun.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		useConfigOnlyForNextRun.setSelection(!preSelectionDoStore);
-		useConfigOnlyForNextRun.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.useOnlyForNextRun"));
+		useConfigOnlyForNextRun.setText(Messages.getString("print.EditPrinterConfigurationDialog.useConfigOnlyForNextRun.text")); //$NON-NLS-1$
 		return configurationComposite;
 	}
-	
+
 	@Override
 	protected void okPressed() {
 		printerConfiguration = configurationComposite.getCurrentPrinterConfiguration();

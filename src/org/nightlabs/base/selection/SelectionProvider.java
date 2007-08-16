@@ -38,7 +38,7 @@ implements ISelectionProvider
 				selectedObjects = new ArrayList();
 			break;
 			default:
-				throw new IllegalStateException("Unknown collectionType: " + collectionType);
+				throw new IllegalStateException("Unknown collectionType: " + collectionType); //$NON-NLS-1$
 		}
 	}
 
@@ -54,7 +54,7 @@ implements ISelectionProvider
 	public void beginSelectionChange()
 	{
 		if (selectionChangeDeferredCounter == Integer.MAX_VALUE)
-			throw new IllegalStateException("selectionChangeDeferredCounter has already reached its maximum value!");
+			throw new IllegalStateException("selectionChangeDeferredCounter has already reached its maximum value!"); //$NON-NLS-1$
 
 		++selectionChangeDeferredCounter;
 	}
@@ -62,7 +62,7 @@ implements ISelectionProvider
 	public void endSelectionChange()
 	{
 		if (selectionChangeDeferredCounter == 0)
-			throw new IllegalStateException("endSelectionChange() called without a prior call to beginSelectionChange()!!!");
+			throw new IllegalStateException("endSelectionChange() called without a prior call to beginSelectionChange()!!!"); //$NON-NLS-1$
 
 		--selectionChangeDeferredCounter;		
 
@@ -87,7 +87,7 @@ implements ISelectionProvider
 		return getStructuredSelection();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public void setSelection(ISelection selection)
 	{
 		if (selection == null) { // TODO unfortunately, it is not documented in the ISelectionProvider, whether this method must support null parameters - I simply do it - I hope it doesn't hurt ;-) Marco.
@@ -96,7 +96,7 @@ implements ISelectionProvider
 		}
 
 		if (!(selection instanceof IStructuredSelection))
-			throw new IllegalArgumentException("selection must be an instanceof IStructuredSelection, but is "+(selection == null ? null : selection.getClass().getName())+": " + selection);
+			throw new IllegalArgumentException("selection must be an instanceof IStructuredSelection, but is "+(selection == null ? null : selection.getClass().getName())+": " + selection); //$NON-NLS-1$ //$NON-NLS-2$
 
 		structuredSelection = (IStructuredSelection) selection;
 		selectedObjects.clear();
@@ -118,7 +118,7 @@ implements ISelectionProvider
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	protected void addSelectedObject(Object o)
 	{
 		selectedObjects.add(o);
@@ -126,7 +126,7 @@ implements ISelectionProvider
 		fireSelectionChangedEvent();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	protected void addSelectedObjects(Collection objects)
 	{
 		selectedObjects.addAll(objects);
@@ -166,7 +166,7 @@ implements ISelectionProvider
 		fireSelectionChangedEvent();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	protected void removeSelectedObjects(Collection objects)
 	{
 		selectedObjects.removeAll(objects);
@@ -174,7 +174,7 @@ implements ISelectionProvider
 		fireSelectionChangedEvent();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	protected void setSelection(Collection selectedObjects)
 	{
 		selectedObjects.clear();

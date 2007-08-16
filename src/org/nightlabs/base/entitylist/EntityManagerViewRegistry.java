@@ -43,11 +43,11 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
  * Holds extensions to the entityManagerView extension point.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
+ * @deprecated I think all the EntityList stuff is deprecated. Right? Marco.
  */
 public class EntityManagerViewRegistry extends AbstractEPProcessor {
 	
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.entitymanagerview"; 
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.entitymanagerview"; //$NON-NLS-1$
 
 	/**
 	 * key: String listViewID<br/>
@@ -153,19 +153,19 @@ public class EntityManagerViewRegistry extends AbstractEPProcessor {
 	 */
 	public void processElement(IExtension extension, IConfigurationElement element)
 			throws Exception {
-		if (element.getName().equalsIgnoreCase("entityManagerView")) {
+		if (element.getName().equalsIgnoreCase("entityManagerView")) { //$NON-NLS-1$
 			
-			String entityID = element.getAttribute("entityID");
-			if (entityID == null || "".equals(entityID))
-				throw new EPProcessorException("Element entityManagerView has to define an attribute entityID");
+			String entityID = element.getAttribute("entityID"); //$NON-NLS-1$
+			if (entityID == null || "".equals(entityID)) //$NON-NLS-1$
+				throw new EPProcessorException("Element entityManagerView has to define an attribute entityID"); //$NON-NLS-1$
 				
-			String listViewID = element.getAttribute("listViewID");
-			if (listViewID == null || "".equals(listViewID))
-				throw new EPProcessorException("Element entityManagerView has to define an attribute listViewID");
+			String listViewID = element.getAttribute("listViewID"); //$NON-NLS-1$
+			if (listViewID == null || "".equals(listViewID)) //$NON-NLS-1$
+				throw new EPProcessorException("Element entityManagerView has to define an attribute listViewID"); //$NON-NLS-1$
 
-			String managerViewID = element.getAttribute("managerViewID");
-			if (managerViewID == null || "".equals(managerViewID))
-				throw new EPProcessorException("Element entityManagerView has to define an attribute managerViewID");
+			String managerViewID = element.getAttribute("managerViewID"); //$NON-NLS-1$
+			if (managerViewID == null || "".equals(managerViewID)) //$NON-NLS-1$
+				throw new EPProcessorException("Element entityManagerView has to define an attribute managerViewID"); //$NON-NLS-1$
 
 			
 			/*

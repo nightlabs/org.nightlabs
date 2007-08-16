@@ -48,8 +48,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.print.PrintUtil;
 import org.nightlabs.print.PrinterConfiguration;
 
@@ -134,15 +134,15 @@ public class PrinterConfiguratorComposite extends XComposite {
 	protected void initGUI(Composite parent) 
 	{
 		alwaysAsk = new Button(this, SWT.CHECK);
-		alwaysAsk.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.alwaysAsk"));
+		alwaysAsk.setText(Messages.getString("print.PrinterConfiguratorComposite.alwaysAsk.text")); //$NON-NLS-1$
 		printerGroup = new Group(this, SWT.NONE);
-		printerGroup.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.printerGroup"));
+		printerGroup.setText(Messages.getString("print.PrinterConfiguratorComposite.printerGroup.text")); //$NON-NLS-1$
 		GridLayout gl = new GridLayout();
 		gl.numColumns = 2;
 		printerGroup.setLayout(gl);
 		printerGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		useSysDefaultPrinter = new Button(printerGroup, SWT.CHECK);
-		useSysDefaultPrinter.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.useDefPrinter"));
+		useSysDefaultPrinter.setText(Messages.getString("print.PrinterConfiguratorComposite.useSysDefaultPrinter.text")); //$NON-NLS-1$
 		useSysDefaultPrinter.addSelectionListener(useSysDefaultListener);
 		
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -151,11 +151,11 @@ public class PrinterConfiguratorComposite extends XComposite {
 		printServiceCombo = new PrintServiceCombo(printerGroup, SWT.WRAP);
 		printServiceCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectPrinterButton = new Button(printerGroup, SWT.PUSH);
-		selectPrinterButton.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.choosePrinter"));
+		selectPrinterButton.setText("..."); //$NON-NLS-1$
 		selectPrinterButton.addSelectionListener(selectPrinterListener);
 		
 		pageFormatGroup = new Group(this, SWT.NONE);
-		pageFormatGroup.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.pageFormatGroup"));
+		pageFormatGroup.setText(Messages.getString("print.PrinterConfiguratorComposite.pageFormatGroup.text")); //$NON-NLS-1$
 		GridLayout gl1 = new GridLayout();
 		gl1.numColumns = 2;
 		pageFormatGroup.setLayout(gl1);
@@ -163,7 +163,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 		pageFormatDescription = new Label(pageFormatGroup, SWT.WRAP);
 		pageFormatDescription.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		editPageFormat = new Button(pageFormatGroup, SWT.PUSH);		
-		editPageFormat.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.editPageFormat"));
+		editPageFormat.setText("..."); //$NON-NLS-1$
 		editPageFormat.addSelectionListener(pageFormatListener);
 				
 		addDisposeListener(disposeListener);
@@ -256,8 +256,8 @@ public class PrinterConfiguratorComposite extends XComposite {
 			pageFormatDescription.setText(getPageFormatDescription(printerConfiguration.getPageFormat()));			
 		}
 		if (printerConfiguration == null || printerConfiguration.getPageFormat() == null)
-			pageFormatDescription.setText(NLBasePlugin.getResourceString("dialog.printerConfiguration.default.noPageFormatAssigned"));
-			
+			pageFormatDescription.setText(Messages.getString("print.PrinterConfiguratorComposite.pageFormatDescription_noPageFormatAssigned")); //$NON-NLS-1$
+
 		if (pageFormat != null)
 			pageSetupComposite = initPageSetupComposite(this);
 		
@@ -291,9 +291,9 @@ public class PrinterConfiguratorComposite extends XComposite {
 	
 	private String getPageFormatDescription(PageFormat pageFormat) {
 		if (pageFormat == null)
-			return NLBasePlugin.getResourceString("dialog.printerConfiguration.default.noPageFormatAssigned");
+			return Messages.getString("print.PrinterConfiguratorComposite.pageFormatDescription_noPageFormatAssigned"); //$NON-NLS-1$
 		else
-			return NLBasePlugin.getResourceString("dialog.printerConfiguration.default.customPageFormat");
+			return Messages.getString("print.PrinterConfiguratorComposite.pageFormatDescription_customPageFormat"); //$NON-NLS-1$
 	}
 	
 	public PageFormat getPageFormat() {

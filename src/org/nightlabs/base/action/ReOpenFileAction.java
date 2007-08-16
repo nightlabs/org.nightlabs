@@ -31,9 +31,8 @@ import java.io.File;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PartInitException;
-
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.editor.Editor2PerspectiveRegistry;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.util.RCPUtil;
 
 public class ReOpenFileAction 
@@ -41,21 +40,21 @@ extends Action
 {
 	public static final String ID = ReOpenFileAction.class.getName();
 	private static final Logger logger = Logger.getLogger(ReOpenFileAction.class);
-	
+
 	protected String fileName;
-	
+
 	public ReOpenFileAction(String fileName) 
 	{
 		if (fileName == null)
-			throw new IllegalArgumentException("Param fileName must not be null!");
+			throw new IllegalArgumentException("Param fileName must not be null!"); //$NON-NLS-1$
 		
 		this.fileName = fileName;
 		init();
 	}
-	
+
 	protected void init() 
 	{
-		setId(ID + "-" + fileName + fileName.hashCode());
+		setId(ID + "-" + fileName + fileName.hashCode()); //$NON-NLS-1$
 		setText(fileName);
 		setToolTipText(fileName);
 	}
@@ -63,24 +62,22 @@ extends Action
 	public String getFileName() {
 		return fileName;
 	}
-	
+
 	public void run() 
 	{
-		try 
+		try
 		{
 			File file = new File(fileName);
 			if (file.exists())						 
 				Editor2PerspectiveRegistry.sharedInstance().openFile(file);
-		} 
+		}
 		catch (PartInitException e) 
 		{
+			logger.error("Opening file failed: " + fileName, e);	 //$NON-NLS-1$
 			RCPUtil.showErrorDialog(
-					NLBasePlugin.getResourceString("action.openfile.error.message1")
-					+ " " + fileName + " " + 
-					NLBasePlugin.getResourceString("action.openfile.error.message2")
+					String.format(Messages.getString("action.ReOpenFileAction.errorOpeningFileFailed"), new Object[] { fileName }) //$NON-NLS-1$
 			);
-			logger.error(e);	
 		}
 	}
-		
+
 }

@@ -352,7 +352,7 @@ extends AbstractContributionItem
 	  	searchItem.addListener(SWT.Selection, new Listener(){	
 	  		public void handleEvent(Event event) 
 	  		{
-	  			logger.info("event.detail = "+event.detail);
+	  			logger.info("event.detail = "+event.detail); //$NON-NLS-1$
 	  			if (event.detail == SWT.ARROW) {
 	  				Rectangle rect = searchItem.getBounds();
 	  				Point p = new Point(rect.x, rect.y + rect.height);

@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.language.I18nTextEditor.EditMode;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.table.TableContentProvider;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
@@ -53,7 +54,6 @@ import org.nightlabs.language.LanguageCf;
  */
 public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 {
-	// Marco: constants should be final.
 	private static final String COLUMN_FLAG_NAME     = "Flag"; //$NON-NLS-1$
 	private static final String COLUMN_LANGUAGE_NAME = "Language"; //$NON-NLS-1$
 	private static final String COLUMN_VALUE_NAME    = "Value"; //$NON-NLS-1$
@@ -97,14 +97,13 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 		table.setLayoutData(gd);
 
 		tableViewer = new TableViewer(table);
-//		tableViewer.setUseHashlookup(true); // TODO Marco: Do we need this? Isn't this true by default? Maybe we should simply extend our AbstraceTableComposite and then activate it there, if it makes always sense.
 
 		// set Columns
 		tableViewer.setColumnProperties(COLUMN_NAMES);
 
-		new TableColumn(table, SWT.LEFT).setText("F"); // TODO Externalise: Eclipse Menu => Source => Externalize Strings...
-		new TableColumn(table, SWT.LEFT).setText("Language");
-		new TableColumn(table, SWT.LEFT).setText("Text");
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("language.I18nTextEditorTable.columnFlag.text")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("language.I18nTextEditorTable.columnLanguage.text")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("language.I18nTextEditorTable.columnText.text")); //$NON-NLS-1$
 
 		TableLayout tableLayout = new TableLayout();
 		tableLayout.addColumnData(new ColumnPixelData(24, false));
@@ -240,7 +239,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 			work = buffer;
 			break;
 		default:
-			throw new IllegalArgumentException("Unknown editMode: " + editMode);
+			throw new IllegalArgumentException("Unknown editMode: " + editMode); //$NON-NLS-1$
 		}
 
 		if (work != original && work != null && original != null)
@@ -335,13 +334,13 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 			return COLUMN_VALUE_NAME.equals(property);
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked") //$NON-NLS-1$
 		public Object getValue(Object element, String property)
 		{
 			return ((Map.Entry<String, String>)element).getValue();
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked") //$NON-NLS-1$
 		public void modify(Object element, String property, Object value)
 		{
 			if (COLUMN_VALUE_NAME.equals(property)) {
@@ -376,7 +375,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 	extends LabelProvider
 	implements ITableLabelProvider {
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked") //$NON-NLS-1$
 		public String getColumnText(Object element, int columnIndex) {
 			Map.Entry<String, String> item = (Map.Entry<String, String>)element;
 			switch (columnIndex) {
@@ -394,7 +393,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 		/**
 		 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object, int)
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked") //$NON-NLS-1$
 		public Image getColumnImage(Object element, int columnIndex) {
 			Map.Entry<String, String> item = (Map.Entry<String, String>)element;
 			switch (columnIndex) {
@@ -421,7 +420,7 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 		}
 
 		// Return the i18nText as an array of Objects
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked") //$NON-NLS-1$
 		@Override
 		public Object[] getElements(Object parent) {
 			if (i18nText == null)

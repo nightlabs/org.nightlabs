@@ -46,10 +46,10 @@ extends XCellEditor
 	public GenericComboBoxCellEditor(Composite parent, List<T> types, ILabelProvider labelProvider) 
 	{
 		if (types == null)
-			throw new IllegalArgumentException("param types must not be null!");
+			throw new IllegalArgumentException("param types must not be null!"); //$NON-NLS-1$
 		
 		if (labelProvider == null)
-			throw new IllegalArgumentException("param labelProvider must not be null!");
+			throw new IllegalArgumentException("param labelProvider must not be null!"); //$NON-NLS-1$
 		
 		this.types = types;
 		this.labelProvider = labelProvider;
@@ -60,10 +60,10 @@ extends XCellEditor
 			List<T> types, ILabelProvider labelProvider, int comboStyle) 
 	{
 		if (types == null)
-			throw new IllegalArgumentException("param types must not be null!");
+			throw new IllegalArgumentException("param types must not be null!"); //$NON-NLS-1$
 		
 		if (labelProvider == null)
-			throw new IllegalArgumentException("param labelProvider must not be null!");
+			throw new IllegalArgumentException("param labelProvider must not be null!"); //$NON-NLS-1$
 		
 		this.types = types;
 		this.labelProvider = labelProvider;
@@ -92,7 +92,7 @@ extends XCellEditor
 		comboComposite.setFocus();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	@Override
 	protected void doSetValue(Object value) {
 		comboComposite.selectElement((T) value);

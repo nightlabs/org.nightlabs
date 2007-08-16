@@ -145,7 +145,7 @@ public class TimerText extends XComposite
 	public void addModifyListener(ModifyListener listener)
 	{
 		if (listener == null)
-			throw new NullPointerException("listener");
+			throw new NullPointerException("listener"); //$NON-NLS-1$
 
 		if (modifyListeners == null)
 			modifyListeners = new ListenerList();
@@ -156,7 +156,7 @@ public class TimerText extends XComposite
 	public void removeModifyListener(ModifyListener listener)
 	{
 		if (listener == null)
-			throw new NullPointerException("listener");
+			throw new NullPointerException("listener"); //$NON-NLS-1$
 
 		if (modifyListeners == null)
 			return;
@@ -181,7 +181,7 @@ public class TimerText extends XComposite
 	public void addDelayedModifyListener(ModifyListener listener)
 	{
 		if (listener == null)
-			throw new NullPointerException("listener");
+			throw new NullPointerException("listener"); //$NON-NLS-1$
 
 		synchronized (delayedModifyListenersMutex) {
 			if (delayedModifyListeners == null)
@@ -194,7 +194,7 @@ public class TimerText extends XComposite
 	public void removeDelayedModifyListener(ModifyListener listener)
 	{
 		if (listener == null)
-			throw new NullPointerException("listener");
+			throw new NullPointerException("listener"); //$NON-NLS-1$
 
 		synchronized (delayedModifyListenersMutex) {
 			if (delayedModifyListeners == null)

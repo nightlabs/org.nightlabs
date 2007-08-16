@@ -387,7 +387,7 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 						if(binding != null) {
 							IEditorDescriptor editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry().findEditor(binding.getEditorID());
 							if (editorDescriptor == null) {
-								logger.warn("Could not obtain editorDescriptor to open editor for category "+binding.getName()+" and editorID "+binding.getEditorID());
+								logger.warn("Could not obtain editorDescriptor to open editor for category "+binding.getName()+" and editorID "+binding.getEditorID()); //$NON-NLS-1$ //$NON-NLS-2$
 								return;
 							}
 							try {
@@ -395,12 +395,12 @@ implements IOpenListener, DisposeListener, IEntityTreeCategoryContentConsumer
 								if (page != null)
 									page.openEditor(binding.createEditorInput(element), editorDescriptor.getId());
 								else
-									logger.warn("Could not get active workbench page, no editor was opened.");
+									logger.warn("Could not get active workbench page, no editor was opened."); //$NON-NLS-1$
 							} catch (PartInitException e) {
-								throw new RuntimeException("Opening editor failed", e);
+								throw new RuntimeException("Opening editor failed", e); //$NON-NLS-1$
 							}
 						} else {
-							System.err.println("Unknown entity category for element "+element);
+							logger.warn("Unknown entity category for element "+element); //$NON-NLS-1$
 						}
 					}
 				}

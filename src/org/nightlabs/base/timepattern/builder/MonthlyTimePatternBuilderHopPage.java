@@ -17,8 +17,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.wizard.WizardHopPage;
 import org.nightlabs.timepattern.TimePattern;
 import org.nightlabs.timepattern.TimePatternFormatException;
@@ -30,16 +30,15 @@ import org.nightlabs.timepattern.TimePatternFormatException;
 public class MonthlyTimePatternBuilderHopPage extends WizardHopPage {
 
 	private PatternExecutionTimeComposite startTimeComposite;
-	
+
 	private Group dayWrapper;
 	private SortedSet<Integer> selectedDays = new TreeSet<Integer>();
 	private Group monthWrapper;
 	private SortedSet<Integer> selectedMonths = new TreeSet<Integer>();
-	
-	
+
 	public MonthlyTimePatternBuilderHopPage() {
-		super(MonthlyTimePatternBuilderHopPage.class.getName(), NLBasePlugin.getResourceString("timepattern.builderWizard.monthly.pageName"));
-		setMessage(NLBasePlugin.getResourceString("timepattern.builderWizard.monthly.message"));
+		super(MonthlyTimePatternBuilderHopPage.class.getName(), Messages.getString("timepattern.builder.MonthlyTimePatternBuilderHopPage.title")); //$NON-NLS-1$
+		setDescription(Messages.getString("timepattern.builder.MonthlyTimePatternBuilderHopPage.description")); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -52,7 +51,7 @@ public class MonthlyTimePatternBuilderHopPage extends WizardHopPage {
 		(new Label(wrapper, SWT.SEPARATOR | SWT.HORIZONTAL)).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		XComposite selectionWrapper = new XComposite(wrapper, SWT.NONE);
 		dayWrapper = new Group(selectionWrapper, SWT.NONE);
-		dayWrapper.setText(NLBasePlugin.getResourceString("timepattern.builderWizard.monthly.dayWrapper.title"));
+		dayWrapper.setText(Messages.getString("timepattern.builder.MonthlyTimePatternBuilderHopPage.dayWrapper.text")); //$NON-NLS-1$
 		dayWrapper.setLayout(new GridLayout(11,true));
 		dayWrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		for (int i = 1; i <= 31; i++) {
@@ -62,12 +61,12 @@ public class MonthlyTimePatternBuilderHopPage extends WizardHopPage {
 			dayButton.addSelectionListener(daySelectListner);
 		}
 		monthWrapper = new Group(selectionWrapper, SWT.NONE);
-		monthWrapper.setText(NLBasePlugin.getResourceString("timepattern.builderWizard.monthly.monthWrapper.title"));
+		monthWrapper.setText(Messages.getString("timepattern.builder.MonthlyTimePatternBuilderHopPage.monthWrapper.text")); //$NON-NLS-1$
 		monthWrapper.setLayout(new GridLayout(4,true));
 		monthWrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		for (int i = 1; i <= 12; i++) {
 			Button monthButton = new Button(monthWrapper, SWT.CHECK);
-			monthButton.setText(NLBasePlugin.getResourceString("timepattern.builderWizard.monthly.monthWrapper.month"+i));
+			monthButton.setText(Messages.getString("timepattern.builder.MonthlyTimePatternBuilderHopPage.month" + i + ".text")); //$NON-NLS-1$  //$NON-NLS-2$
 			monthButton.setData(new Integer(i));
 			monthButton.setSelection(true);
 			selectedMonths.add((Integer) monthButton.getData());
@@ -109,17 +108,17 @@ public class MonthlyTimePatternBuilderHopPage extends WizardHopPage {
 	public void configurePattern(TimePattern timePattern) 
 	throws TimePatternFormatException 
 	{
-		timePattern.setYear("*");
+		timePattern.setYear("*"); //$NON-NLS-1$
 		startTimeComposite.configurePattern(timePattern);
 		if (selectedDays.size() == 31)
-			timePattern.setDay("*");
+			timePattern.setDay("*"); //$NON-NLS-1$
 		else
 			timePattern.setDay(getNumSelectionString(selectedDays));
 		
-		timePattern.setDayOfWeek("*");
+		timePattern.setDayOfWeek("*"); //$NON-NLS-1$
 		
 		if (selectedMonths.size() == 12)
-			timePattern.setMonth("*");
+			timePattern.setMonth("*"); //$NON-NLS-1$
 		else
 			timePattern.setMonth(getNumSelectionString(selectedMonths));
 		
@@ -129,7 +128,7 @@ public class MonthlyTimePatternBuilderHopPage extends WizardHopPage {
 		int lastValue = -1;
 		int lastWritten = -1;
 		boolean addInterval = false;
-		String selString = "";
+		String selString = ""; //$NON-NLS-1$
 		for (Iterator it = selected.iterator(); it.hasNext();) {
 			Integer selValue = (Integer) it.next();
 			if ((lastValue+1) == selValue) {
@@ -140,18 +139,18 @@ public class MonthlyTimePatternBuilderHopPage extends WizardHopPage {
 			}
 			if (addInterval) {
 				if (lastWritten <= 0) {
-					selString = "1";
+					selString = "1"; //$NON-NLS-1$
 					if (selValue != 1)
-						selString = selString + "-" + lastValue;
+						selString = selString + "-" + lastValue; //$NON-NLS-1$
 				} 
 				else {
-					selString = selString + "-" + lastValue;
+					selString = selString + "-" + lastValue; //$NON-NLS-1$
 					if (!it.hasNext())
 						break;
 				}
 			}
-			if (!"".equals(selString))
-				selString = selString + ",";
+			if (!"".equals(selString)) //$NON-NLS-1$
+				selString = selString + ","; //$NON-NLS-1$
 			selString = selString + selValue;
 			lastValue = selValue;
 			lastWritten = selValue;

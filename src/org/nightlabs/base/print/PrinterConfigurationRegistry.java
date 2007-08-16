@@ -45,7 +45,7 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
  */
 public class PrinterConfigurationRegistry extends AbstractEPProcessor {
 
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.printerConfiguration";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.printerConfiguration"; //$NON-NLS-1$
 	
 	public static class ConfiguratorFactoryEntry {
 		private String id;
@@ -117,48 +117,48 @@ public class PrinterConfigurationRegistry extends AbstractEPProcessor {
 	public void processElement(IExtension extension, IConfigurationElement element) 
 	throws Exception 
 	{
-		if (element.getName().equalsIgnoreCase("printerConfiguratorFactory"))
+		if (element.getName().equalsIgnoreCase("printerConfiguratorFactory")) //$NON-NLS-1$
 			processConfigurator(extension, element);
-		else if (element.getName().equalsIgnoreCase("printerUseCase"))
+		else if (element.getName().equalsIgnoreCase("printerUseCase")) //$NON-NLS-1$
 			processUseCase(extension, element);
 	}
 	
 	private void processUseCase(IExtension extension, IConfigurationElement element) 
 	throws EPProcessorException 
 	{
-		String id = element.getAttribute("id");
+		String id = element.getAttribute("id"); //$NON-NLS-1$
 		if (!checkString(id))
-			throw new EPProcessorException("The attribute id must be defined for element printerUseCase.", extension);
-		String name = element.getAttribute("name");
+			throw new EPProcessorException("The attribute id must be defined for element printerUseCase.", extension); //$NON-NLS-1$
+		String name = element.getAttribute("name"); //$NON-NLS-1$
 		if (!checkString(name))
-			throw new EPProcessorException("The attribute id must be defined for element printerUseCase.", extension);
-		String description = element.getAttribute("description");
-		String defConfigurator = element.getAttribute("defaultConfigurator");
-		String useOnlyDef = element.getAttribute("useOnlyDefaultConfigurator");
+			throw new EPProcessorException("The attribute id must be defined for element printerUseCase.", extension); //$NON-NLS-1$
+		String description = element.getAttribute("description"); //$NON-NLS-1$
+		String defConfigurator = element.getAttribute("defaultConfigurator"); //$NON-NLS-1$
+		String useOnlyDef = element.getAttribute("useOnlyDefaultConfigurator"); //$NON-NLS-1$
 		PrinterUseCase useCase = new PrinterUseCase();
 		useCase.setId(id);
 		useCase.setName(name);
 		useCase.setDescription(description);
 		useCase.setDefaultConfiguratorID(defConfigurator);
 		printerUseCases.put(id, useCase);
-		if (useOnlyDef != null && !"".equals(useOnlyDef))
+		if (useOnlyDef != null && !"".equals(useOnlyDef)) //$NON-NLS-1$
 			useCase.setUseOnlyDefaultConfigurator(Boolean.parseBoolean(useOnlyDef));
 	} 
 
 	private void processConfigurator(IExtension extension, IConfigurationElement element) 
 	throws EPProcessorException 
 	{
-		String id = element.getAttribute("id");
+		String id = element.getAttribute("id"); //$NON-NLS-1$
 		if (!checkString(id))
-			throw new EPProcessorException("The attribute id must be defined for element printerConfiguratorFactory.", extension);
+			throw new EPProcessorException("The attribute id must be defined for element printerConfiguratorFactory.", extension); //$NON-NLS-1$
 		
-		String name = element.getAttribute("name");
+		String name = element.getAttribute("name"); //$NON-NLS-1$
 		if (!checkString(id))
-			throw new EPProcessorException("The attribute name must be defined for element printerConfiguratorFactory.", extension);
+			throw new EPProcessorException("The attribute name must be defined for element printerConfiguratorFactory.", extension); //$NON-NLS-1$
 		
 		PrinterConfiguratorFactory factory;
 		try {
-			factory = (PrinterConfiguratorFactory)element.createExecutableExtension("class");
+			factory = (PrinterConfiguratorFactory)element.createExecutableExtension("class"); //$NON-NLS-1$
 		} catch (CoreException e) {
 			throw new EPProcessorException(e);
 		}

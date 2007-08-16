@@ -41,17 +41,17 @@ import org.nightlabs.i18n.unit.UnitRegistry;
 public class UnitRegistryEP 
 extends AbstractEPProcessor 
 {
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.unit";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.unit"; //$NON-NLS-1$
 	
-	public static final String ELEMENT_UNIT_CLASS = "unitClass";
-	public static final String ATTRIBUTE_UNIT = "unit";
+	public static final String ELEMENT_UNIT_CLASS = "unitClass"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_UNIT = "unit"; //$NON-NLS-1$
 	
-	public static final String ELEMENT_UNIT = "unit";
-	public static final String ATTRIBUTE_UNIT_ID = "unitID";	
-	public static final String ATTRIBUTE_NAME = "name";	
-	public static final String ATTRIBUTE_FACTOR = "factor";	
-	public static final String ATTRIBUTE_SYMBOL = "symbol";
-	public static final String ATTRIBUTE_CONTEXT = "context";
+	public static final String ELEMENT_UNIT = "unit"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_UNIT_ID = "unitID";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_NAME = "name";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_FACTOR = "factor";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_SYMBOL = "symbol"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_CONTEXT = "context"; //$NON-NLS-1$
 	
 	protected UnitRegistryEP() {
 
@@ -70,25 +70,25 @@ extends AbstractEPProcessor
 		{
 			String unitID = element.getAttribute(ATTRIBUTE_UNIT_ID);
 			if (!checkString(unitID))
-				throw new IllegalArgumentException("unitID must not be null nor empty!");
+				throw new IllegalArgumentException("unitID must not be null nor empty!"); //$NON-NLS-1$
 			
 			String name = element.getAttribute(ATTRIBUTE_NAME);
 			if (!checkString(name))
-				throw new IllegalArgumentException("unit name must not be null nor empty!");
+				throw new IllegalArgumentException("unit name must not be null nor empty!"); //$NON-NLS-1$
  
 			double factor;
 			try {
 				factor = Double.parseDouble(element.getAttribute(ATTRIBUTE_FACTOR));				
 			} catch (NumberFormatException e) {
-				throw new IllegalArgumentException("factor must be a double!");
+				throw new IllegalArgumentException("factor must be a double!"); //$NON-NLS-1$
 			}			
 			
 			String symbol = element.getAttribute(ATTRIBUTE_SYMBOL);
 			if (!checkString(symbol))
-				throw new IllegalArgumentException("unit symbol must not be null nor empty!");
+				throw new IllegalArgumentException("unit symbol must not be null nor empty!"); //$NON-NLS-1$
 			
 			String context = element.getAttribute(ATTRIBUTE_CONTEXT);
-			if (context == null || context.equals(""))
+			if (context == null || context.equals("")) //$NON-NLS-1$
 				context = UnitRegistry.GLOBAL_CONTEXT;
 			
 			IUnit unit = new Unit(unitID, name, symbol, factor);
@@ -97,7 +97,7 @@ extends AbstractEPProcessor
 		if (element.getName().equalsIgnoreCase(ELEMENT_UNIT_CLASS)) 
 		{
 			String context = element.getAttribute(ATTRIBUTE_CONTEXT);
-			if (context == null || context.equals(""))
+			if (context == null || context.equals("")) //$NON-NLS-1$
 				context = UnitRegistry.GLOBAL_CONTEXT;
 			
 			try {

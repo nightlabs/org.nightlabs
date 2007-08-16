@@ -23,8 +23,6 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.nightlabs.base.custom.XCombo;
 
 /**
- * 
- * 
  * @author Marius Heinzmann [marius<at>NightLabs<dot>de]
  */
 public abstract class AbstractToolkit extends FormToolkit
@@ -41,8 +39,8 @@ public abstract class AbstractToolkit extends FormToolkit
 		public void paintControl(PaintEvent event) {
 			Composite parent = (Composite) event.widget;
 			if (drawBorders.getParent() != parent)
-				throw new RuntimeException("This PaintListener is configured to draw a border for: "+drawBorders
-						+" , but is NOT a listener of the parent of that control!");
+				throw new RuntimeException("This PaintListener is configured to draw a border for: "+drawBorders //$NON-NLS-1$
+						+" , but is NOT a listener of the parent of that control!"); //$NON-NLS-1$
 			
 			if (!parent.isVisible() || !drawBorders.isVisible())
 				return;
@@ -67,8 +65,8 @@ public abstract class AbstractToolkit extends FormToolkit
 		public void paintControl(PaintEvent event) {
 			Composite parent = (Composite) event.widget;
 			if (drawBorders.getParent() != parent)
-				throw new RuntimeException("This PaintListener is configured to draw a border for: "+drawBorders
-						+" , but is NOT a listener of the parent of that control!");
+				throw new RuntimeException("This PaintListener is configured to draw a border for: "+drawBorders //$NON-NLS-1$
+						+" , but is NOT a listener of the parent of that control!"); //$NON-NLS-1$
 			
 			if (!parent.isVisible() || !drawBorders.isVisible())
 				return;

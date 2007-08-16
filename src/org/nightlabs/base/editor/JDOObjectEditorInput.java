@@ -86,7 +86,7 @@ public class JDOObjectEditorInput<ID extends ObjectID> implements IEditorInput
 	 */
 	public String getName()
 	{
-		return name == null ? "" : name;
+		return name == null ? "" : name; //$NON-NLS-1$
 	}
 	
 	/**

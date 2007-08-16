@@ -33,14 +33,13 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
-
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 
 public class EditorFileFilterRegistry 
 extends AbstractEPProcessor 
 {
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.editorfilefilter";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.editorfilefilter"; //$NON-NLS-1$
 
 	private List<String> patterns = new ArrayList<String>();
 	
@@ -51,10 +50,10 @@ extends AbstractEPProcessor
 	public void processElement(IExtension extension, IConfigurationElement element) 
 	throws Exception 
 	{
-		if (element.getName().equalsIgnoreCase("editorFileFilter")) {
-			String pattern = element.getAttribute("pattern");
-			if (pattern == null || "".equals(pattern))
-				throw new EPProcessorException("Element editorFileFilter has to define attribute pattern.");
+		if (element.getName().equalsIgnoreCase("editorFileFilter")) { //$NON-NLS-1$
+			String pattern = element.getAttribute("pattern"); //$NON-NLS-1$
+			if (pattern == null || "".equals(pattern)) //$NON-NLS-1$
+				throw new EPProcessorException("Element editorFileFilter has to define attribute pattern."); //$NON-NLS-1$
 			patterns.add(pattern);
 		}
 	}
@@ -66,7 +65,7 @@ extends AbstractEPProcessor
 		checkProcessing();
 		
 		if (globalPattern == null){
-			StringBuffer globalPatternSB = new StringBuffer("^");
+			StringBuffer globalPatternSB = new StringBuffer("^"); //$NON-NLS-1$
 			for (Iterator it = patterns.iterator(); it.hasNext(); ) {
 				globalPatternSB.append('(');
 				globalPatternSB.append(it.next());

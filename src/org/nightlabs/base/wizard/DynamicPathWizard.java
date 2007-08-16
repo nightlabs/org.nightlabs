@@ -266,7 +266,7 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 			if(index == 0)
 				return;
 			else
-				throw new IllegalStateException("Cannot add a wizard page at index " + index + ", it is the first page for this wizard!");
+				throw new IllegalStateException("Cannot add a wizard page at index " + index + ", it is the first page for this wizard!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		IWizardPage page = getFirstPage();
@@ -280,7 +280,7 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 		}
 
 		if (index <= lastReadOnlyIndex)
-			throw new IllegalStateException("Cannot add a wizard page at index " + index + ", because the current page forces all indices <=" + lastReadOnlyIndex + " to be unchangeable!");
+			throw new IllegalStateException("Cannot add a wizard page at index " + index + ", because the current page forces all indices <=" + lastReadOnlyIndex + " to be unchangeable!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	/**
@@ -336,18 +336,18 @@ public abstract class DynamicPathWizard extends Wizard implements IDynamicPathWi
 			return;
 
 		if(getPageCount() == 0 && getDynamicWizardPageCount() == 0) {
-			throw new IllegalStateException("Cannot remove wizard page! Nothing to remove!");
+			throw new IllegalStateException("Cannot remove wizard page! Nothing to remove!"); //$NON-NLS-1$
 		}
 
 		IWizardPage pageToCheck = getFirstPage();
 		while (pageToCheck != null && pageToCheck != currentPage) {
 			if (pageToCheck == page)
-				throw new IllegalStateException("Cannot remove page \"" + page.getName() + "\", because it is part of the path BEFORE the current page! Can only remove pages that are following the current page!");
+				throw new IllegalStateException("Cannot remove page \"" + page.getName() + "\", because it is part of the path BEFORE the current page! Can only remove pages that are following the current page!"); //$NON-NLS-1$ //$NON-NLS-2$
 			pageToCheck = pageToCheck.getNextPage();
 		}
 
 		if (!dynamicWizardPages.contains(page))
-			throw new IllegalStateException("Cannot remove page \"" + page.getName() + "\", because it is not registered as dynamic page! If it is static, you cannot remove it and if it is part of a WizardHop, you must remove it there!");
+			throw new IllegalStateException("Cannot remove page \"" + page.getName() + "\", because it is not registered as dynamic page! If it is static, you cannot remove it and if it is part of a WizardHop, you must remove it there!"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

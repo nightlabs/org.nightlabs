@@ -194,7 +194,7 @@ public class DynamicPathWizardDialog extends WizardDialog
 	{
 		String wizardIdentifier = wizard instanceof IDynamicPathWizard ? ((IDynamicPathWizard)wizard).getIdentifier() : wizard.getClass().getName();
 		if (wizardIdentifier == null)
-			throw new IllegalStateException("identifier is null! Check the class " + wizard.getClass().getName());
+			throw new IllegalStateException("identifier is null! Check the class " + wizard.getClass().getName()); //$NON-NLS-1$
 
 		return wizardIdentifier;
 	}

@@ -24,7 +24,7 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
  */
 public class CacheRegistry extends AbstractEPProcessor {
 
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.cache";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.cache"; //$NON-NLS-1$
 	
 	private static class CacheCarrier {
 		private ICache cache;
@@ -33,10 +33,10 @@ public class CacheRegistry extends AbstractEPProcessor {
 		public ICache getCache() {
 			if (cache == null) {
 				if (cacheFactory == null)
-					throw new IllegalStateException("ICacheFactory was not created using extension-point "+EXTENSION_POINT_ID);
+					throw new IllegalStateException("ICacheFactory was not created using extension-point "+EXTENSION_POINT_ID); //$NON-NLS-1$
 				cache = cacheFactory.createCache();
 				if (cache == null)
-					throw new IllegalStateException("Registered ICacheFactory "+cacheFactory.getClass().getName()+" returned null cache!");
+					throw new IllegalStateException("Registered ICacheFactory "+cacheFactory.getClass().getName()+" returned null cache!"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			return cache; 
 		}
@@ -65,14 +65,14 @@ public class CacheRegistry extends AbstractEPProcessor {
 	public void processElement(IExtension extension, IConfigurationElement element) 
 	throws Exception 
 	{
-		if (element.getName().equalsIgnoreCase("cacheFactory")) {
+		if (element.getName().equalsIgnoreCase("cacheFactory")) { //$NON-NLS-1$
 			try {
 				CacheCarrier carrier = new CacheCarrier();
-				carrier.cacheFactory = (ICacheFactory)element.createExecutableExtension("class");
+				carrier.cacheFactory = (ICacheFactory)element.createExecutableExtension("class"); //$NON-NLS-1$
 				cacheCarriers.put(carrier.cacheFactory.getID(), carrier);
 				lastRegisteredFactoryID = carrier.cacheFactory.getID();
 			} catch (CoreException e) {
-				throw new EPProcessorException("Could not create ICacheFactory ", extension, e);
+				throw new EPProcessorException("Could not create ICacheFactory ", extension, e); //$NON-NLS-1$
 			}
 		}
 	}

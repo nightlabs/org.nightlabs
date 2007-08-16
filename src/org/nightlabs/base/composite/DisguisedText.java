@@ -69,7 +69,7 @@ public class DisguisedText {
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Text text = createText(parent);
-		text.setText("");
+		text.setText(""); //$NON-NLS-1$
 		text.setEditable(true);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 //		gd.grabExcessHorizontalSpace = true;

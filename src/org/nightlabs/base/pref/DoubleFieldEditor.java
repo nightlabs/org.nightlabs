@@ -29,7 +29,7 @@ package org.nightlabs.base.pref;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.resource.Messages;
 
 public class DoubleFieldEditor 
 extends StringFieldEditor 
@@ -68,7 +68,7 @@ extends StringFieldEditor
       init(name, labelText);
       setTextLimit(textLimit);
       setEmptyStringAllowed(false);
-      setErrorMessage(NLBasePlugin.getResourceString("doubleFieldEditor.errorMessage"));
+      setErrorMessage(Messages.getString("pref.DoubleFieldEditor.errorMessage")); //$NON-NLS-1$
       createControl(parent);
   }
 

@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 
@@ -76,7 +77,7 @@ extends org.nightlabs.notification.NotificationManager
 			if (job == null) {
 				String jobName = l.getJobName();
 				if (jobName == null)
-					jobName = "Processing Notification";
+					jobName = Messages.getString("notification.NotificationManager.jobName"); //$NON-NLS-1$
 
 				job = new Job(jobName) {
 					protected IStatus run(IProgressMonitor monitor)

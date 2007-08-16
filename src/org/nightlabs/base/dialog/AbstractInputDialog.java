@@ -29,10 +29,9 @@ package org.nightlabs.base.dialog;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Shell;
-
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.config.DialogCf;
 import org.nightlabs.base.config.DialogCfMod;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.config.Config;
 
 public abstract class AbstractInputDialog 
@@ -47,20 +46,20 @@ extends InputDialog
 	}	
 
 	public AbstractInputDialog(Shell shell, String title, String message) {
-		this(shell, title, message, "", inputValidator);
+		this(shell, title, message, "", inputValidator); //$NON-NLS-1$
 	}	
 		
 	protected static IInputValidator inputValidator = new IInputValidator() 
 	{
     public String isValid(String input) 
     {
-      if(input.trim().equals(""))
-        return NLBasePlugin.getResourceString("dialog.input.message.emptyString");
+      if(input.trim().equals("")) //$NON-NLS-1$
+        return Messages.getString("dialog.AbstractInputDialog.inputValidator.emptyString"); //$NON-NLS-1$
       
       return null;
-    }		
+    }
 	};
-	
+
 	public IInputValidator getInputValidator() {
 		return inputValidator;
 	}

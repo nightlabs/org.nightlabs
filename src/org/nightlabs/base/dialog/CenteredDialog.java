@@ -76,7 +76,7 @@ extends Dialog
 	public boolean close()
 	{
 		if (getShell() == null)
-			logger.error("No shell!", new IllegalStateException("No shell existing!"));
+			logger.error("No shell!", new IllegalStateException("No shell existing!")); //$NON-NLS-1$ //$NON-NLS-2$
 		else {
 			getDialogCfMod().createDialogCf(
 					getDialogIdentifier(),

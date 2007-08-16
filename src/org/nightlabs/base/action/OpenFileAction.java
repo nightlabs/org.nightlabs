@@ -32,6 +32,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -41,10 +42,10 @@ import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IFileEditorMapping;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.config.RecentFileCfMod;
 import org.nightlabs.base.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.editor.EditorFileFilterRegistry;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
@@ -53,7 +54,7 @@ public class OpenFileAction
 extends Action
 {
 	public static final String ID = OpenFileAction.class.getName();
-	public static final String FILTER_ALL = "*";
+	public static final String FILTER_ALL = "*"; //$NON-NLS-1$
 	
 	protected RecentFileCfMod historyConfig;
 		
@@ -73,9 +74,9 @@ extends Action
 	protected void init() 
 	{
 		setId(ID);
-		setText(NLBasePlugin.getResourceString("action.openfile.text"));
-		setToolTipText(NLBasePlugin.getResourceString("action.openfile.tooltip"));
-				
+		setText(Messages.getString("action.OpenFileAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("action.OpenFileAction.toolTipText")); //$NON-NLS-1$
+
 		try {
 			historyConfig = (RecentFileCfMod) Config.sharedInstance().createConfigModule(RecentFileCfMod.class);
 		} catch (ConfigException e) {
@@ -119,16 +120,14 @@ extends Action
 			if (foundEditor)
 				addFileToHistory(fullFileName);				
 		} catch (PartInitException e) {
-			e.printStackTrace();
+			Logger.getLogger(OpenFileAction.class).error("Cannot open file: " + fullFileName, e); //$NON-NLS-1$
 			RCPUtil.showErrorDialog(
-					NLBasePlugin.getResourceString("action.openfile.error.message1")
-					+ " " + fullFileName + " " + 
-					NLBasePlugin.getResourceString("action.openfile.error.message2")
-			);			
-		}		
-	}	
+					String.format(Messages.getString("action.OpenFileAction.errorOpeningFileFailed"), new Object[] { fullFileName }) //$NON-NLS-1$
+			);
+		}
+	}
 	
-	public static final String HISTORY_FILE_ADDED = "history file added";
+	public static final String HISTORY_FILE_ADDED = "history file added"; //$NON-NLS-1$
 	protected void addFileToHistory(String fileName) 
 	{
 		if (getRecentFileNames() != null) 
@@ -176,14 +175,14 @@ extends Action
 	{
 		if (s == null)
 			return false;
-		if (s.equals("") || s.equals(" "))
+		if (s.equals("") || s.equals(" ")) //$NON-NLS-1$ //$NON-NLS-2$
 			return false;
 		
 		return true;
 	}
 	
 	protected String concatExtension(String s) {
-		return "*." + s;
+		return "*." + s; //$NON-NLS-1$
 	}
 		
 	protected boolean useFilterAll = true;

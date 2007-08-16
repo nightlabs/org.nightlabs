@@ -36,7 +36,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-
 import org.nightlabs.base.layout.WeightedTableLayout;
 import org.nightlabs.language.LanguageCf;
 
@@ -73,7 +72,7 @@ public class LanguageChooserList
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event)
 			{
-				logger.debug("new language: "+getLanguage().getLanguageID());
+				logger.debug("new language: "+getLanguage().getLanguageID()); //$NON-NLS-1$
 				fireLanguageChangeEvent();
 			}
 		});
@@ -90,7 +89,7 @@ public class LanguageChooserList
 		t.setLayout(new WeightedTableLayout(new int[] {1}));
 
 		// Add the columns to the table
-		new TableColumn(t, SWT.LEFT).setText("language");
+		new TableColumn(t, SWT.LEFT).setText("language"); //$NON-NLS-1$ // Because the header is not visible, we don't need to localise this String.
 		
 		// must be called AFTER all columns are added
 		viewer.setInput(contentProvider);

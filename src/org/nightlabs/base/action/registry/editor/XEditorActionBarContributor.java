@@ -3,8 +3,6 @@
  */
 package org.nightlabs.base.action.registry.editor;
 
-import java.util.Collection;
-
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
@@ -44,7 +42,7 @@ implements ISelectionChangedListener
 				updateSelectionSections(selection);
 				updateActions();									
 //			}
-			logger.debug("selection changed");
+			logger.debug("selection changed"); //$NON-NLS-1$
 		}	
 	};
 	
@@ -52,7 +50,7 @@ implements ISelectionChangedListener
 		public void selectionChanged(SelectionChangedEvent event) {
 			updateSelectionSections(event.getSelection());
 			updateActions();	
-			logger.debug("selection changed");
+			logger.debug("selection changed"); //$NON-NLS-1$
 		}
 //	};
 	
@@ -78,7 +76,7 @@ implements ISelectionChangedListener
 //					actionDescriptor.setVisible(((IUpdateAction)actionDescriptor.getAction()).calculateVisible());
 					
 					if (logger.isDebugEnabled())
-						logger.debug("enabled = "+enabled+" for action "+actionDescriptor.getAction().getId());
+						logger.debug("enabled = "+enabled+" for action "+actionDescriptor.getAction().getId()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}			
 		}
@@ -100,7 +98,7 @@ implements ISelectionChangedListener
 	public void setActiveEditor(IEditorPart targetEditor) 
 	{
 		if (logger.isDebugEnabled())
-			logger.debug("setActiveEditor called");
+			logger.debug("setActiveEditor called"); //$NON-NLS-1$
 		
 		if (activeEditor != null)
 //			activeEditor.getSite().getPage().removeSelectionListener(selectionListener);
@@ -132,7 +130,7 @@ implements ISelectionChangedListener
 		}
 
 		updateActions();
-		logger.debug("selectionListener added to activeEditor "+getActiveEditor().getEditorSite().getId());
+		logger.debug("selectionListener added to activeEditor "+getActiveEditor().getEditorSite().getId()); //$NON-NLS-1$
 		
 		if (contributedToToolBar && !activeEditor.equals(oldEditorPart))
 			contributeToToolBar(getActionBars().getToolBarManager());

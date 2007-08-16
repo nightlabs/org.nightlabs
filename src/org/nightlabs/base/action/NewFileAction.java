@@ -30,15 +30,17 @@ import java.io.File;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PartInitException;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.editor.Editor2PerspectiveRegistry;
+import org.nightlabs.base.resource.Messages;
+import org.nightlabs.util.IOUtil;
 
 public class NewFileAction 
 extends Action 
 implements INewFileAction
 {
-	public final String ID = NewFileAction.class.getName() + " " + hashCode();
-	
+	public final String ID = NewFileAction.class.getName() + " " + hashCode(); //$NON-NLS-1$
+	// TODO isn't the above ID wrong? Shouldn't the ID be a real static id? And static, too? If it's meant to be subclassed, it should do sth. like this.getClass().getName()
+
 	public NewFileAction() 
 	{
 		super();
@@ -62,18 +64,19 @@ implements INewFileAction
 		return ++fileCount;
 	}
 	
-	protected String defaultFileName = NLBasePlugin.getResourceString("action.new.unnamed");
-	protected String defaultPath = "";
-				
+	protected String defaultFileName = Messages.getString("action.NewFileAction.defaultFileName"); //$NON-NLS-1$
+	protected String defaultPath = ""; //$NON-NLS-1$
+
 	protected String getDefaultPath() 
 	{
-    if (defaultPath.equals("")) {
-    	String tmpDir = System.getProperty("java.io.tmpdir");
-    	defaultPath = tmpDir;
+    if (defaultPath.equals("")) { //$NON-NLS-1$
+//    	String tmpDir = System.getProperty("java.io.tmpdir");
+//    	defaultPath = tmpDir;
+    	defaultPath = IOUtil.getTempDir().getAbsolutePath();
     }
     return defaultPath;
 	}
-	
+
 	public void run() 
 	{		
 		nextFileCount();		
@@ -87,7 +90,7 @@ implements INewFileAction
 		 	
 	protected File createFile(String fileExtension) 
 	{
-		String fileName = defaultFileName + fileCount + "." + fileExtension;
+		String fileName = defaultFileName + fileCount + "." + fileExtension; //$NON-NLS-1$
 		return new File(getDefaultPath(), fileName);		
 	}	
 }

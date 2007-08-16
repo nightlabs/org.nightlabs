@@ -49,9 +49,9 @@ public class LocalTransferManager {
 	
 	public String addObject(Object object) {
 		synchronized (transferObjects) {
-			String key = Integer.toHexString(object.hashCode())+"_"+Long.toHexString(System.currentTimeMillis());
+			String key = Integer.toHexString(object.hashCode())+"_"+Long.toHexString(System.currentTimeMillis()); //$NON-NLS-1$
 			while (transferObjects.containsKey(key))
-				key = Integer.toHexString(object.hashCode())+"_"+Long.toHexString(System.currentTimeMillis());
+				key = Integer.toHexString(object.hashCode())+"_"+Long.toHexString(System.currentTimeMillis()); //$NON-NLS-1$
 			
 			WeakReference<Object> softReference = new WeakReference<Object>(object);
 			
@@ -73,10 +73,10 @@ public class LocalTransferManager {
 			
 			WeakReference softReference = (WeakReference) transferObjects.get(key);
 			if (softReference == null)
-				throw new IllegalArgumentException("Could not find a Object for the given key "+key);
+				throw new IllegalArgumentException("Could not find a Object for the given key "+key); //$NON-NLS-1$
 
 			if (softReference.get() == null)
-				throw new IllegalStateException("No reference to the Object with key "+key+" exists any more the SoftReference was cleared");
+				throw new IllegalStateException("No reference to the Object with key "+key+" exists any more the SoftReference was cleared"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			return softReference.get();
 		}

@@ -57,9 +57,6 @@ import org.eclipse.jface.wizard.IWizardPage;
  */
 public class WizardHop implements IWizardHop
 {
-	/**
-	 * Logger used by this class.
-	 */
 	private static final Logger logger = Logger.getLogger(WizardHop.class);
 	
 	private IWizardHop parentHop;
@@ -144,7 +141,7 @@ public class WizardHop implements IWizardHop
 			exitPage.setWizard(getWizard());
 
 			if (exitPage.getWizardHop() == null)
-				throw new NullPointerException("exitPage.getWizardHop() returns null!");
+				throw new NullPointerException("exitPage.getWizardHop() returns null!"); //$NON-NLS-1$
 
 			exitPage.getWizardHop().setParentHop(this);
 		}
@@ -167,7 +164,7 @@ public class WizardHop implements IWizardHop
 			if (!page.getWizardHop().equals(this)) {
 				// have an other wizard hop for the added page
 				if (page.getWizardHop().getParentHop() != null && !page.getWizardHop().getParentHop().equals(this))
-					logger.warn("Adding a WizardHopPage with an other WizardHop that already has a parent hop that is not the actual hop. Will overwrite the childs parent hop.");
+					logger.warn("Adding a WizardHopPage with an other WizardHop that already has a parent hop that is not the actual hop. Will overwrite the childs parent hop."); //$NON-NLS-1$
 				page.getWizardHop().setParentHop(this);
 			}
 		}
@@ -186,7 +183,7 @@ public class WizardHop implements IWizardHop
 	{
 		int index = hopPages.indexOf(page);
 		if (index < 0)
-			throw new IllegalArgumentException("page is not known to this hop! hop=" + this + " page=" + page);
+			throw new IllegalArgumentException("page is not known to this hop! hop=" + this + " page=" + page); //$NON-NLS-1$ //$NON-NLS-2$
 
 		while (hopPages.size() - 1 > index)
 			hopPages.remove(hopPages.size() - 1);

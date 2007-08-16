@@ -48,7 +48,7 @@ implements IXContributionItem
 	public void setId(String id)
 	{
 		try {
-			Field field = ContributionItem.class.getDeclaredField("id");
+			Field field = ContributionItem.class.getDeclaredField("id"); //$NON-NLS-1$
 			field.setAccessible(true);
 			field.set(this, id);
 		} catch (Exception e) {

@@ -10,8 +10,6 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
 /**
- * 
- * 
  * @author Marius Heinzmann [marius<at>NightLabs<dot>de]
  */
 public interface IToolkit {
@@ -20,10 +18,12 @@ public interface IToolkit {
 	 * Key for the {@link Control#setData(String, Object)} which should be used with {@link #TABLE_BORDER}
 	 * or {@link #TEXT_BORDER} to enforce a border for a certain element.
 	 */
-	public static final String KEY_DRAW_BORDER = "IToolkit.drawBorder";
+	public static final String KEY_DRAW_BORDER = "IToolkit.drawBorder"; //$NON-NLS-1$
+	// TODO the above key should use the fully-qualified classname like the line below! I don't change it, because I have other work to do and don't want to break anything.
+//	public static final String KEY_DRAW_BORDER = IToolkit.class.getName() + ".drawBorder"; //$NON-NLS-1$
 
-	public static final String TABLE_BORDER = "tableBorder";
-	public static final String TEXT_BORDER = "textBorder";
+	public static final String TABLE_BORDER = "tableBorder"; //$NON-NLS-1$
+	public static final String TEXT_BORDER = "textBorder"; //$NON-NLS-1$
 
 
 	/**

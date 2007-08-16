@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.nightlabs.base.exceptionhandler.errorreport.ErrorReport;
 
 /**
  * A class providing static methods for error handling.
@@ -28,7 +27,7 @@ public abstract class ErrorDialogFactory
 	 * The error dialog registry.
 	 */
 	private static Map<Class, IErrorDialog> errorDialogs = null;
-	
+
 	/**
 	 * Get an error dialog instance from the registry.
 	 * @param dialogClass The error dialog class
@@ -44,12 +43,12 @@ public abstract class ErrorDialogFactory
 			try {
 				dialog = (IErrorDialog) dialogClass.newInstance();
 			} catch(Exception e) {
-				logger.fatal("Error occured when trying to instantiate " + dialogClass.getSimpleName() + " with default constructor.", e);
+				logger.fatal("Error occured when trying to instantiate " + dialogClass.getName() + " with default constructor.", e); //$NON-NLS-1$ //$NON-NLS-2$
 			}						
 		}
 		return dialog;
 	}
-	
+
 	/**
 	 * Show an error using the given {@link IErrorDialog} implementation.
 	 * If there is an instance of the given error dialog class already

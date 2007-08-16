@@ -45,6 +45,7 @@ import org.nightlabs.base.entity.EntityEditorRegistry;
 import org.nightlabs.base.job.FadeableCompositeJob;
 import org.nightlabs.base.job.Job;
 import org.nightlabs.base.progress.RCPProgressMonitor;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -193,7 +194,7 @@ public class EntityEditor extends CommitableFormEditor
 		if (active >= 0) {
 			IFormPage page = getFormPages()[active];
 			if (page instanceof Fadeable)
-				saveJob = new FadeableCompositeJob("Async save", ((Fadeable)page), this) {
+				saveJob = new FadeableCompositeJob(Messages.getString("entity.editor.EntityEditor.saveJob.name"), ((Fadeable)page), this) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(ProgressMonitor monitor, Object source) throws Exception {
 						try {
@@ -206,7 +207,7 @@ public class EntityEditor extends CommitableFormEditor
 			};
 		}
 		if (saveJob == null) {
-			saveJob = new Job("Async save") {
+			saveJob = new Job(Messages.getString("entity.editor.EntityEditor.saveJob.name")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor) {
 					try {

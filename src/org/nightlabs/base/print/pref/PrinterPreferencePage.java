@@ -34,8 +34,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -54,9 +54,9 @@ implements IWorkbenchPreferencePage {
 	@Override
 	protected Control createContents(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE);
-		Label label = new Label(wrapper, SWT.WRAP);
-		label.setLayoutData(new GridData());
-		label.setText(NLBasePlugin.getResourceString("preferencePage.printer.headerText"));
+		Label descriptionLabel = new Label(wrapper, SWT.WRAP);
+		descriptionLabel.setLayoutData(new GridData());
+		descriptionLabel.setText(Messages.getString("print.pref.PrinterPreferencePage.descriptionLabel.text")); //$NON-NLS-1$
 		return wrapper;
 	}
 

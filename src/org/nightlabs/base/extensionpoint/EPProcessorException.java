@@ -30,55 +30,35 @@ import org.eclipse.core.runtime.IExtension;
 
 /**
  * Thrown when an error occurs during the processing of an extension-point.
- * 
+ *
  * @author Alexander Bieber
  */
-public class EPProcessorException extends Exception {
-
+public class EPProcessorException
+extends Exception
+{
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
-	public EPProcessorException() {
-		super();
-	}
+	public EPProcessorException() { }
 
-	/**
-	 * @param message
-	 */
 	public EPProcessorException(String message) {
 		super(message);
 	}
 
-	/**
-	 * @param cause
-	 */
 	public EPProcessorException(Throwable cause) {
 		super(cause);
 	}
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
 	public EPProcessorException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
 	public EPProcessorException(String message, IExtension extension) {
-		super(message+" The extension is located in " + extension.getNamespaceIdentifier() + "."); // and has the id "+extension.getExtensionPointUniqueIdentifier());
+		super(message+" The extension is located in " + extension.getNamespaceIdentifier() + "."); //$NON-NLS-1$ //$NON-NLS-2$
+		// and has the id "+extension.getExtensionPointUniqueIdentifier());
 	}
-	
-	/**
-	 * @param message
-	 * @param cause
-	 */
+
 	public EPProcessorException(String message, IExtension extension, Throwable cause) {
-		super(message+" The extension is located in " + extension.getNamespaceIdentifier() + ".", cause); // and has the id "+extension.getExtensionPointUniqueIdentifier());
+		super(message+" The extension is located in " + extension.getNamespaceIdentifier() + ".", cause); //$NON-NLS-1$ //$NON-NLS-2$
+		// and has the id "+extension.getExtensionPointUniqueIdentifier());
 	}
 }

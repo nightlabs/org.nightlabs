@@ -8,9 +8,9 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 public interface NLWorkbenchActionConstants 
 extends IWorkbenchActionConstants 
 {
-	public static final String M_RECENT_FILES = MENU_PREFIX + "recentFiles";
+	public static final String M_RECENT_FILES = MENU_PREFIX + "recentFiles"; //$NON-NLS-1$
 	
-	public static final String M_PERSPECTIVES = MENU_PREFIX + "perspective";
+	public static final String M_PERSPECTIVES = MENU_PREFIX + "perspective"; //$NON-NLS-1$
 	
-	public static final String M_VIEWS = MENU_PREFIX + "view";
+	public static final String M_VIEWS = MENU_PREFIX + "view"; //$NON-NLS-1$
 }

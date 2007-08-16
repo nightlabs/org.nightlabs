@@ -14,13 +14,14 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.base.resource.Messages;
 
 public class CountdownButton
 		extends XComposite
 {
 	private Button button;
 
-	private String text = "OK";
+	private String text = Messages.getString("composite.CountdownButton.defaultText"); //$NON-NLS-1$
 	private int countdownLengthSec;
 	private int countdownRest;
 
@@ -77,8 +78,8 @@ public class CountdownButton
 				fireSelectionEvent();
 			}
 		});
-		setText("OK");
-		timer = new Timer("buttonTimer");
+		setText(Messages.getString("composite.CountdownButton.defaultText")); //$NON-NLS-1$
+		timer = new Timer("buttonTimer"); //$NON-NLS-1$
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e)
 			{
@@ -114,12 +115,12 @@ public class CountdownButton
 		return new Button(this, style);
 	}
 
-	private String textFormat = "%1$s (%2$d)";
+	private String textFormat = Messages.getString("composite.CountdownButton.defaultTextFormat"); //$NON-NLS-1$
 
 	public void setText(String text)
 	{
 		if (text == null)
-			throw new IllegalArgumentException("text must not be null!");
+			throw new IllegalArgumentException("text must not be null!"); //$NON-NLS-1$
 
 		this.text = text;
 		button.setText(String.format(textFormat, new Object[] {text, countdownRest}));

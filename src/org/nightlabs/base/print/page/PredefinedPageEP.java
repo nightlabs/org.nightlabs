@@ -44,17 +44,17 @@ import org.nightlabs.print.page.PredefinedPageRegistry;
 public class PredefinedPageEP 
 extends AbstractEPProcessor 
 {
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.predefinedPage";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.predefinedPage"; //$NON-NLS-1$
 	
-	public static final String ELEMENT_PAGE_CLASS = "pageClass";
-	public static final String ATTRIBUTE_PAGE = "page";
+	public static final String ELEMENT_PAGE_CLASS = "pageClass"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_PAGE = "page"; //$NON-NLS-1$
 	
-	public static final String ELEMENT_PAGE = "page";
-	public static final String ATTRIBUTE_PAGE_ID = "pageID";	
-	public static final String ATTRIBUTE_NAME = "name";	
-	public static final String ATTRIBUTE_WIDTH = "width";	
-	public static final String ATTRIBUTE_HEIGHT = "height";	
-	public static final String ATTRIBUTE_UNIT_ID = "unitID";	
+	public static final String ELEMENT_PAGE = "page"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_PAGE_ID = "pageID";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_NAME = "name";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_WIDTH = "width";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_HEIGHT = "height";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_UNIT_ID = "unitID";	 //$NON-NLS-1$
 	
 	protected PredefinedPageEP() {
 	}
@@ -72,33 +72,33 @@ extends AbstractEPProcessor
 		{
 			String name = element.getAttribute(ATTRIBUTE_NAME);
 			if (!checkString(name))
-				throw new IllegalArgumentException("page name must not be null nor empty!");
+				throw new IllegalArgumentException("page name must not be null nor empty!"); //$NON-NLS-1$
 			
 			String pageID = element.getAttribute(ATTRIBUTE_PAGE_ID);
 			if (!checkString(pageID))
-				throw new IllegalArgumentException("pageID must not be null nor empty!");
+				throw new IllegalArgumentException("pageID must not be null nor empty!"); //$NON-NLS-1$
 				
 			double width;
 			try {
 				width = Double.parseDouble(element.getAttribute(ATTRIBUTE_WIDTH));				
 			} catch (NumberFormatException e) {
-				throw new IllegalArgumentException("width must be a double!");
+				throw new IllegalArgumentException("width must be a double!"); //$NON-NLS-1$
 			}
 
 			double height;
 			try {
 				height = Double.parseDouble(element.getAttribute(ATTRIBUTE_HEIGHT));				
 			} catch (NumberFormatException e) {
-				throw new IllegalArgumentException("height must be a double!");
+				throw new IllegalArgumentException("height must be a double!"); //$NON-NLS-1$
 			}
 			
 			String unitID = element.getAttribute(ATTRIBUTE_UNIT_ID);
 			if (!checkString(unitID))
-				throw new IllegalArgumentException("unitID must not be null nor empty!");
+				throw new IllegalArgumentException("unitID must not be null nor empty!"); //$NON-NLS-1$
 			
 			IUnit unit = getUnitRegistry().getUnit(unitID);
 			if (unit == null)
-				throw new IllegalArgumentException("There exists no unit with the unitID "+unitID);
+				throw new IllegalArgumentException("There exists no unit with the unitID "+unitID); //$NON-NLS-1$
 			
 			IPredefinedPage page = new PredefinedPage(pageID, name, width, height, unit);
 			getPageRegistry().addPredefinedPage(page);							 

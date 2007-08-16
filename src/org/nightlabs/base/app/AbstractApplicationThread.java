@@ -115,13 +115,13 @@ extends Thread
 			try {				
 				preCreateWorkbench();
 			} catch (Throwable t) {
-				logger.warn("Error in preCreateWorkbench()!", t);
+				logger.warn("Error in preCreateWorkbench()!", t); //$NON-NLS-1$
 			}
 			
 			platformResultCode = PlatformUI.createAndRunWorkbench(display, workbenchAdvisor);
 		} catch(Throwable e) {
 			e.printStackTrace();
-			logger.error("run: " + e.getMessage(), e);
+			logger.error("run: " + e.getMessage(), e); //$NON-NLS-1$
 			throw new RuntimeException(e);
 		} finally {
 			synchronized(AbstractApplication.getMutex()) {

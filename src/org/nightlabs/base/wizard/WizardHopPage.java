@@ -91,7 +91,9 @@ implements IWizardHopPage
 			if (getWizard() != null)
 				return getWizard().getNextPage(this);
 			else
-				throw new IllegalStateException("wizardHop AND wizard are not assigned! If this is the entry-page of a WizardHop, no WizardHop has been created in the constructor! Call 'new WizardHop(this);' in the constructor of " + this.getClass().getName()+". If this should be used as normal WizardPage, add it to the wizard.");		
+				throw new IllegalStateException(
+						"wizardHop AND wizard are not assigned! If this is the entry-page of a WizardHop, no WizardHop has been created in the constructor! Call 'new WizardHop(this);' in the constructor of " + //$NON-NLS-1$
+						this.getClass().getName()+". If this should be used as normal WizardPage, add it to the wizard."); //$NON-NLS-1$		
 		}
 	}
 

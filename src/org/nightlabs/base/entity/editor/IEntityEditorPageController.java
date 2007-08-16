@@ -68,7 +68,7 @@ extends IPropertyChangeSupport, IDirtyStateManager
 //	 */
 //	public void setPage(IFormPage page);
 
-	public static final String PROPERTY_CONTROLLER_OBJECT = IEntityEditorPageController.class.getName()+"#controllerObject";
+	public static final String PROPERTY_CONTROLLER_OBJECT = IEntityEditorPageController.class.getName()+"#controllerObject"; //$NON-NLS-1$
 	
 	/**
 	 * Adds a page to this controller which is associated with it.

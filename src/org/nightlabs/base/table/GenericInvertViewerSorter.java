@@ -90,7 +90,7 @@ extends InvertableSorter<Object>
 		}	
 	};
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public int compare(Viewer viewer, Object e1, Object e2, int columnIndex) 
 	{
 		int cat1 = category(e1);

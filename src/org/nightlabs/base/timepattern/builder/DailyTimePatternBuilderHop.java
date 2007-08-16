@@ -3,7 +3,7 @@
  */
 package org.nightlabs.base.timepattern.builder;
 
-import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.wizard.WizardHop;
 import org.nightlabs.timepattern.TimePatternFormatException;
 import org.nightlabs.timepattern.TimePatternSet;
@@ -25,7 +25,7 @@ implements ITimePatternSetBuilderWizardHop
 	}
 
 	public String getHopDescription() {
-		return NLBasePlugin.getResourceString("timepattern.builderWizard.daily.hopDescription");
+		return Messages.getString("timepattern.builder.DailyTimePatternBuilderHop.hopDescription"); //$NON-NLS-1$
 	}
 
 	public void configureTimePatternSet(TimePatternSet timePatternSet) 

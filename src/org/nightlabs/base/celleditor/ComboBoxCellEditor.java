@@ -69,7 +69,7 @@ extends AbstractComboBoxCellEditor
   {
     super(parent, style);
     if (items == null)
-    	throw new IllegalArgumentException("Param items must not be null!");
+    	throw new IllegalArgumentException("Param items must not be null!"); //$NON-NLS-1$
     
     this.items = items;
     this.images = images;

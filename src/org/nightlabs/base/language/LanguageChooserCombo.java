@@ -82,7 +82,7 @@ public class LanguageChooserCombo
 				new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent selectionEvent)
 					{
-						logger.debug("new language: "+getLanguage().getLanguageID());
+						logger.debug("new language: "+getLanguage().getLanguageID()); //$NON-NLS-1$
 						fireLanguageChangeEvent();
 					}
 				});
@@ -105,18 +105,18 @@ public class LanguageChooserCombo
 						combo.add(image, language.getName().getText());
 					break;
 					case iconOnly:
-						combo.add(image, "");
+						combo.add(image, ""); //$NON-NLS-1$
 					break;
 					case textOnly:
 						combo.add(null, language.getName().getText());
 					break;
 					default:
-						throw new IllegalStateException("Invalid mode: " + mode);
+						throw new IllegalStateException("Invalid mode: " + mode); //$NON-NLS-1$
 				}
 		  }
 
 		  if (languageIdx < 0)
-				throw new IllegalStateException("The user's language \""+userLanguageID+"\" is not registered in the server!");
+				throw new IllegalStateException("The user's language \""+userLanguageID+"\" is not registered in the server!"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			combo.select(languageIdx);
 		} catch (RuntimeException e) {

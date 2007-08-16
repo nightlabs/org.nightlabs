@@ -193,7 +193,7 @@ implements ISelectionProvider
 		super(parent, compositeStyle, layoutMode, layoutDataMode);
 		
 		if (labelProvider == null)
-			throw new IllegalArgumentException("labelProvider must not be null!");
+			throw new IllegalArgumentException("labelProvider must not be null!"); //$NON-NLS-1$
 
 		this.labelProvider = labelProvider;
 
@@ -458,7 +458,7 @@ implements ISelectionProvider
 			return;
 		
 		if (text == null)
-			text = "";
+			text = ""; //$NON-NLS-1$
 		
 		label.setText(text);
 	}
@@ -612,7 +612,7 @@ implements ISelectionProvider
 			Object element = it.next();
 			int index = elements.indexOf(element);
 			if (index < 0)
-				throw new IllegalArgumentException("The object in the selection is not known in this list: " + element);
+				throw new IllegalArgumentException("The object in the selection is not known in this list: " + element); //$NON-NLS-1$
 
 			selectionIndices.add(index);
 		}

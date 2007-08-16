@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.exceptionhandler.errorreport.ErrorReport;
 import org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardDialog;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.util.RCPUtil;
 
 /**
@@ -133,7 +134,7 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 		switch(buttonId) {
 		case IDialogConstants.DETAILS_ID:
 			boolean show = ((GridData)stackTraceText.getLayoutData()).heightHint == 0;
-			System.out.println("showing stack trace: "+show);
+			System.out.println("showing stack trace: "+show); //$NON-NLS-1$
 			showStackTrace(show);
 			break;
 		case SEND_ERROR_REPORT_ID:
@@ -158,7 +159,7 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 	{
 		String message = errorItem.getMessage();
 		String exMsg = errorItem.getThrownException().toString();
-		this.message = (message == null || "".equals(message)) ? exMsg : message;
+		this.message = (message == null || "".equals(message)) ? exMsg : message; //$NON-NLS-1$
 		if(messageLabel != null)
 			messageLabel.setText(this.message);
 		if(errorTable != null)
@@ -246,7 +247,7 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 		if(errorTable != null && errorTable.getSelectedItem() != null)
 			stackTraceText.setText(ErrorReport.getExceptionStackTraceAsString(errorTable.getSelectedItem().getThrownException()));
 		else
-			stackTraceText.setText("");
+			stackTraceText.setText(""); //$NON-NLS-1$
 		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL
 				| GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL
 				| GridData.GRAB_VERTICAL);
@@ -262,7 +263,7 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 	protected void createButtonsForButtonBar(Composite parent)
 	{
 		super.createButtonsForButtonBar(parent);
-		createButton(parent, SEND_ERROR_REPORT_ID, "Send error &report", false);
+		createButton(parent, SEND_ERROR_REPORT_ID, Messages.getString("exceptionhandler.DefaultErrorDialog.errorReportButton.text"), false); //$NON-NLS-1$
 		detailsButton = createButton(parent, IDialogConstants.DETAILS_ID, IDialogConstants.SHOW_DETAILS_LABEL, false);
 	}
 }

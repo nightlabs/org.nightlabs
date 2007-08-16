@@ -58,7 +58,7 @@ public class Formular extends XComposite implements ModifyListener, SelectionLis
     if(labelText != null)
     	label.setText(labelText);
     else
-    	label.setText("");
+    	label.setText(""); //$NON-NLS-1$
     Text text = new Text(this, SWT.BORDER | SWT.SINGLE);
     if(value != null)
     	text.setText(value);

@@ -46,6 +46,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.progress.CompoundProgressMonitor;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.util.RCPUtil;
 
 /**
@@ -101,7 +102,7 @@ implements IEntityEditorPageController
 		private boolean loaded = false;
 		
 		public LoadJob(EntityEditorPageController controller) {
-			super("Loading entities ...");
+			super(Messages.getString("entity.editor.EntityEditorPageController.LoadJob.name")); //$NON-NLS-1$
 			this.controller = controller;
 		}
 		
@@ -292,7 +293,7 @@ implements IEntityEditorPageController
 	 * method has fully run and thus the controller is ready for use.</p> 
 	 * 
 	 * <p>If {@link #isLoaded()} returns true this method immeditiately returns.
-	 * If not if will first check if the data already began to load in the 
+	 * If not, it will first check, if the data already began to load in the 
 	 * background. If so, it will 'join' the loading job and wait until its finished.</p>
 	 * 
 	 * <p>If the background job was not created or started yet, the data will
@@ -321,7 +322,7 @@ implements IEntityEditorPageController
 					ProgressMonitorDialog dlg = new ProgressMonitorDialog(null);
 					dlg.run(true, false, new IRunnableWithProgress() {
 						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException	{
-							monitor.beginTask("Loading user data", IProgressMonitor.UNKNOWN);
+							monitor.beginTask(Messages.getString("entity.editor.EntityEditorPageController.load.monitor.taskName"), IProgressMonitor.UNKNOWN); //$NON-NLS-1$
 							doLoad(monitor);
 							monitor.done();
 							setLoaded(true);
@@ -334,11 +335,11 @@ implements IEntityEditorPageController
 				}
 			}
 		} catch (InvocationTargetException e) {
-			logger.error("Loading entity failed", e);
-			throw new RuntimeException("Loading entity failed", e);
+			logger.error("Loading entity failed", e); //$NON-NLS-1$
+			throw new RuntimeException("Loading entity failed", e); //$NON-NLS-1$
 		} catch (InterruptedException e) {
-			logger.error("Loading entity failed", e);
-			throw new RuntimeException("Loading entity failed", e);
+			logger.error("Loading entity failed", e); //$NON-NLS-1$
+			throw new RuntimeException("Loading entity failed", e); //$NON-NLS-1$
 		}
 	}
 	

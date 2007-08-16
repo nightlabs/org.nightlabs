@@ -40,6 +40,7 @@ import java.util.Properties;
 
 import org.eclipse.core.runtime.Assert;
 import org.nightlabs.io.DataBuffer;
+import org.nightlabs.util.IOUtil;
 
 /**
  * @author Simon Lehmann - simon@nightlabs.de
@@ -192,7 +193,7 @@ implements Serializable
 	public void setTime(Date time)
 	{
 		if (time == null)
-			throw new NullPointerException("Parameter time must not be null!");
+			throw new NullPointerException("Parameter time must not be null!"); //$NON-NLS-1$
 		this.time = time;
 	}
 
@@ -238,26 +239,26 @@ implements Serializable
 //		props.append('\n');
 //		}
 
-		StringBuffer sb = new StringBuffer("Time:\n"+ getTimeAsString() +"\n\nUser Comment:\n" + userComment + "\n\nThrown exception stack trace(s):\n");
+		StringBuffer sb = new StringBuffer("Time:\n"+ getTimeAsString() +"\n\nUser Comment:\n" + userComment + "\n\nThrown exception stack trace(s):\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
 		for (CauseEffectThrowablePair causeEffectThrowablePair : throwablePairList) {
-			sb.append(getExceptionStackTraceAsString(causeEffectThrowablePair.getEffectThrowable()) + "\n");
+			sb.append(getExceptionStackTraceAsString(causeEffectThrowablePair.getEffectThrowable()) + "\n"); //$NON-NLS-1$
 		}
 //		"Thrown exception stack trace(s):\n" + getExceptionStackTraceAsString(thrownException) +
-		sb.append("\nSystem Properties:\n");
+		sb.append("\nSystem Properties:\n"); //$NON-NLS-1$
 		
 		try {
 			DataBuffer db = new DataBuffer(1024);
 			OutputStream out = db.createOutputStream();
-			systemProperties.storeToXML(out, "");
+			systemProperties.storeToXML(out, ""); //$NON-NLS-1$
 			out.close();
 			InputStream in = db.createInputStream();
-			InputStreamReader reader = new InputStreamReader(in, "UTF-8");
+			InputStreamReader reader = new InputStreamReader(in, IOUtil.CHARSET_UTF_8);
 			while (reader.ready()) {
 				sb.append((char)reader.read());
 			}
 		} catch (Exception x) {
-			sb.append("Dumping system properties failed: " + x.getMessage());
+			sb.append("Dumping system properties failed: " + x.getMessage()); //$NON-NLS-1$
 		}
 		
 		return sb.toString();
@@ -274,6 +275,6 @@ implements Serializable
 
 	public static String getTimeAsString(Date time)
 	{
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time);
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time); //$NON-NLS-1$
 	}
 }

@@ -39,7 +39,6 @@ import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public class PerspectiveExtensionRegistry 
 extends AbstractEPProcessor 
@@ -61,11 +60,11 @@ extends AbstractEPProcessor
 
 	}
 
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.perspectiveExtension";
-	public static final String ELEMENT_PERSPECTIVE_EXTENSION = "perspectiveExtension";
-	public static final String ATTRIBUTE_TARGET_ID = "targetID";
-	public static final String ELEMENT_CONTRIBUTION_ITEM_SET_ID = "contributionItemSetID";
-	public static final String ATTRIBUTE_ID = "id";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.perspectiveExtension"; //$NON-NLS-1$
+	public static final String ELEMENT_PERSPECTIVE_EXTENSION = "perspectiveExtension"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_TARGET_ID = "targetID"; //$NON-NLS-1$
+	public static final String ELEMENT_CONTRIBUTION_ITEM_SET_ID = "contributionItemSetID"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_ID = "id"; //$NON-NLS-1$
 
 	@Override
 	public String getExtensionPointID() {
@@ -112,7 +111,7 @@ extends AbstractEPProcessor
 					}
 				}				
 			} else {
-				logger.error("targetID is empty!");
+				logger.error("targetID is empty!"); //$NON-NLS-1$
 			}			
 		}
 	}

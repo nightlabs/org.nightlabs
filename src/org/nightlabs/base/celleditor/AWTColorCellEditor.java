@@ -26,6 +26,7 @@
 
 package org.nightlabs.base.celleditor;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -229,7 +230,7 @@ extends DialogCellEditor
 	protected void updateContents(Object value) 
 	{
 	  if (value != null) {
-		  System.out.println("value = instanceof "+value.getClass());	    
+		  Logger.getLogger(AWTColorCellEditor.class).debug("value instanceof "+value.getClass()); //$NON-NLS-1$
 	  }
 
 	  if (value instanceof String) {

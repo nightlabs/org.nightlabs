@@ -162,8 +162,8 @@ public class NightlabsFormsToolkit extends AbstractToolkit
 			if (wrapLayout.bottomMargin < minBorderSpace)				wrapLayout.bottomMargin = minBorderSpace;
 		}
 		else {
-			logger.warn("The encountered layout is unkown, the margins can therefore not be set correctly"+
-					" to be able to draw a flat looking border around the given Control:"+child);
+			logger.warn("The encountered layout is unkown, the margins can therefore not be set correctly"+ //$NON-NLS-1$
+					" to be able to draw a flat looking border around the given Control:"+child); //$NON-NLS-1$
 		}
 	}
 }

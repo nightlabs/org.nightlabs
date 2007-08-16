@@ -73,7 +73,7 @@ public class EditPrinterConfigurationComposite extends XComposite {
 		this.printerUseCaseID = printerUseCaseID;		
 		printerUseCase = PrinterConfigurationRegistry.sharedInstance().getPrinterUseCase(printerUseCaseID);
 		if (printerUseCase == null)
-			throw new RuntimeException("The PrinterUseCase to be edited is not registered: '"+printerUseCaseID+"'!");
+			throw new RuntimeException("The PrinterUseCase to be edited is not registered: '"+printerUseCaseID+"'!"); //$NON-NLS-1$ //$NON-NLS-2$
 		if (_printerConfiguration != null)
 			printerConfiguration = _printerConfiguration;
 		else
@@ -91,7 +91,7 @@ public class EditPrinterConfigurationComposite extends XComposite {
 			factoryEnties = PrinterConfigurationRegistry.sharedInstance().getPrinterConfiguratorEntries();
 		
 		if (factoryEnties.size() <= 0)
-			throw new IllegalStateException("No printerConfiguratorFactory was registered yet.");
+			throw new IllegalStateException("No printerConfiguratorFactory was registered yet."); //$NON-NLS-1$
 		
 		if (factoryEnties.size() > 1) {
 			configuratorCombo = new ConfiguratorCombo(this, SWT.READ_ONLY);
@@ -122,7 +122,7 @@ public class EditPrinterConfigurationComposite extends XComposite {
 			
 			configuratorFactory = PrinterConfigurationRegistry.sharedInstance().getPrinterConfiguratorFactory(selectedConfiguratorFactoryEntry.getId());
 			if (configuratorFactory == null)
-				throw new IllegalStateException("Could not find configuratorFactory for registered printerConfiguration ?!?");
+				throw new IllegalStateException("Could not find configuratorFactory for registered printerConfiguration ?!?"); //$NON-NLS-1$
 			configurator = configuratorFactory.createPrinterConfigurator();
 			configurator.init(printerConfiguration);
 		}

@@ -84,17 +84,17 @@ public class ExpandableAreaDialog extends Dialog {
 	
 	public ExpandableAreaDialog(Shell parent)
 	{
-		this(parent,"","",SWT.RESIZE);
+		this(parent,"","",SWT.RESIZE); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public ExpandableAreaDialog(Shell parent, int style)
 	{
-		this(parent,"","",style);
+		this(parent,"","",style); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public ExpandableAreaDialog(Shell parent, String title)
 	{
-		this(parent,title,"",SWT.RESIZE);
+		this(parent,title,"",SWT.RESIZE); //$NON-NLS-1$
 	}
 
 	public ExpandableAreaDialog(Shell parent, String title, String expandText)
@@ -111,8 +111,8 @@ public class ExpandableAreaDialog extends Dialog {
 		this.expandText = expandText;
 	}	
 	
-	private String dialogTitle = "";
-	private String expandText = "";
+	private String dialogTitle = ""; //$NON-NLS-1$
+	private String expandText = ""; //$NON-NLS-1$
 	
 	/**
 	 * @return Returns the dialogTitle.
@@ -312,7 +312,7 @@ public class ExpandableAreaDialog extends Dialog {
 			)
 		{		
 			if (dialog == null)
-				throw new IllegalArgumentException(this.getClass().getName()+"#createComposite: Parameter dialog can not be null.");
+				throw new IllegalArgumentException(this.getClass().getName()+"#createComposite: Parameter dialog can not be null."); //$NON-NLS-1$
 			this.dialog = dialog;
 			// create the Composite
 			expComp = new Composite(parent,SWT.NONE);

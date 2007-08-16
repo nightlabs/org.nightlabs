@@ -46,7 +46,7 @@ public abstract class OKCancelComposite extends XComposite {
 
 	public OKCancelComposite(Composite parent, int style, String text, String okTxt, String cancelTxt) {
 		super(parent, style, LayoutMode.ORDINARY_WRAPPER);
-		if ((text != null) && (!"".equals(text))) {
+		if ((text != null) && (!"".equals(text))) { //$NON-NLS-1$
 			label = new Label(this, SWT.WRAP);
 			label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_BEGINNING));
 			label.setText(text);

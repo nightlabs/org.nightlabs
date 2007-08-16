@@ -43,9 +43,9 @@ extends AbstractEPProcessor
 {
 	private static final Logger logger = Logger.getLogger(WorkbenchListenerRegistry.class);
 	
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.workbenchListener";
-	public static final String ELEMENT_WORKBENCH_LISTENER = "workbenchListener";
-	public static final String ATTRIBUTE_CLASS = "class";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.workbenchListener"; //$NON-NLS-1$
+	public static final String ELEMENT_WORKBENCH_LISTENER = "workbenchListener"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_CLASS = "class"; //$NON-NLS-1$
 	
 	private static WorkbenchListenerRegistry sharedInstance;
 	public static WorkbenchListenerRegistry sharedInstance() {
@@ -78,7 +78,7 @@ extends AbstractEPProcessor
 					listener = (IWorkbenchListener) element.createExecutableExtension(ATTRIBUTE_CLASS);
 					listeners.add(listener);
 				} catch (CoreException e) {
-					logger.error("Could not create IWorkbenchListener "+className);
+					logger.error("Could not create IWorkbenchListener "+className); //$NON-NLS-1$
 				}
 			}
 		}

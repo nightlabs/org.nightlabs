@@ -369,7 +369,7 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 			work = buffer;
 			break;
 		default:
-			throw new IllegalArgumentException("Unknown editMode: " + editMode);
+			throw new IllegalArgumentException("Unknown editMode: " + editMode); //$NON-NLS-1$
 		}
 
 		if (work != original && work != null && original != null)
@@ -387,7 +387,7 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 	/**
 	 * The orgiginal text of the current language's text after load. 
 	 */
-	private String orgText = "";
+	private String orgText = ""; //$NON-NLS-1$
 
 	/**
 	 * Set to true when loading, so that modify-listeners will not react 
@@ -418,7 +418,7 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 				textLanguage = languageChooser.getLanguage();
 				txt = work.getText(textLanguage.getLanguageID(), false);
 			}
-			if (txt == null) txt = "";
+			if (txt == null) txt = ""; //$NON-NLS-1$
 			text.setText(txt);
 			orgText = txt;
 		} finally {
@@ -443,7 +443,7 @@ public class I18nTextEditor extends XComposite implements II18nTextEditor
 					_setI18nText(new I18nTextBuffer(), null);
 				}
 				else
-					throw new IllegalStateException("work == null, but original != null - how's that possible?!");
+					throw new IllegalStateException("work == null, but original != null - how's that possible?!"); //$NON-NLS-1$
 			}
 
 			if (textLanguage == null)

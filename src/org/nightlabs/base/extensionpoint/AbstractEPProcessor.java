@@ -103,7 +103,7 @@ implements IEPProcessor
 			{
 				IExtensionPoint extensionPoint = registry.getExtensionPoint(getExtensionPointID());
 				if (extensionPoint == null) {
-					throw new IllegalStateException("Unable to resolve extension-point: " + getExtensionPointID());
+					throw new IllegalStateException("Unable to resolve extension-point: " + getExtensionPointID()); //$NON-NLS-1$
 				}	        
 
 				IExtension[] extensions = extensionPoint.getExtensions();
@@ -119,7 +119,7 @@ implements IEPProcessor
 							processElement(extension, element);
 						} catch (Exception e) {
 							// Only log the error and continue
-							logger.error("Error processing extension element. The element is located in an extension in bundle: " + extension.getNamespaceIdentifier(), e);
+							logger.error("Error processing extension element. The element is located in an extension in bundle: " + extension.getNamespaceIdentifier(), e); //$NON-NLS-1$
 						}               
 					}
 				}
@@ -159,7 +159,7 @@ implements IEPProcessor
 				if (throwExceptionIfErrorOccurs)
 					throw new RuntimeException(e);
 				else
-					logger.error("There occured an error during processing extension-point "+getExtensionPointID()+"!", e);					
+					logger.error("There occured an error during processing extension-point "+getExtensionPointID()+"!", e);					 //$NON-NLS-1$ //$NON-NLS-2$
 			}  	  		
 		}
 	}
@@ -172,7 +172,7 @@ implements IEPProcessor
 	 */
 	public static boolean checkString(String s) 
 	{
-		if (s == null || s.trim().equals("") )
+		if (s == null || s.trim().equals("") ) //$NON-NLS-1$
 //			if (s == null || "".equals(s) )
 			return false;
 

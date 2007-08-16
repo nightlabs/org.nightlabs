@@ -44,16 +44,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.LabeledText;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.dialog.CenteredDialog;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.print.DocumentPrinterDelegateConfig;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
  */
 public class EditDocumentPrinterTypeRegsComposite extends XComposite {
 
@@ -130,13 +129,13 @@ public class EditDocumentPrinterTypeRegsComposite extends XComposite {
 		
 		addDelegation = new Button(buttonWrapper, SWT.PUSH);
 		addDelegation.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		addDelegation.setText(NLBasePlugin.getResourceString("preferencePage.documentPrinter.editRegs.addDelegation"));
+		addDelegation.setText(Messages.getString("print.pref.EditDocumentPrinterTypeRegsComposite.addDelegation.text")); //$NON-NLS-1$
 		addDelegation.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
 			public void widgetSelected(SelectionEvent arg0) {
 				String fileExt = openFileExtDlg();
-				if (fileExt != null && !"".equals(fileExt)) {
+				if (fileExt != null && !"".equals(fileExt)) { //$NON-NLS-1$
 					addTypeReg(fileExt);
 					// TODO: Removed, as the SelectionListener does not get notified. Why not? 
 //					fileExtList.setSelection(new String[]{fileExt});
@@ -146,7 +145,7 @@ public class EditDocumentPrinterTypeRegsComposite extends XComposite {
 		
 		removeDelegation = new Button(buttonWrapper, SWT.PUSH);
 		removeDelegation.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		removeDelegation.setText(NLBasePlugin.getResourceString("preferencePage.documentPrinter.editRegs.removeDelegation"));
+		removeDelegation.setText(Messages.getString("print.pref.EditDocumentPrinterTypeRegsComposite.removeDelegation.text")); //$NON-NLS-1$
 		removeDelegation.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
@@ -231,7 +230,7 @@ public class EditDocumentPrinterTypeRegsComposite extends XComposite {
 		@Override
 		protected Control createDialogArea(Composite parent) {
 			XComposite wrapper = new XComposite(parent, SWT.NONE);
-			fileExtText = new LabeledText(wrapper, NLBasePlugin.getResourceString("preferencePage.documentPrinter.editRegs.addDelegation.fileExt"));
+			fileExtText = new LabeledText(wrapper, Messages.getString("print.pref.EditDocumentPrinterTypeRegsComposite.fileExtText.caption")); //$NON-NLS-1$
 			fileExtText.getTextControl().addModifyListener(new ModifyListener(){
 				public void modifyText(ModifyEvent evt) {
 					fileExt = fileExtText.getTextControl().getText();					

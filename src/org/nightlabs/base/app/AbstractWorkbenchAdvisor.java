@@ -63,21 +63,21 @@ extends WorkbenchAdvisor
 			try {
 				AbstractApplication.initializeLogging();
 			} catch (Throwable t) {
-				System.out.println("Could not initialize logging !!!");
+				System.out.println("Could not initialize logging !!!"); //$NON-NLS-1$
 			}  		
 
-			if (classSharing)
-			{
-//				if (isSystemClassLoaderDelegating()) {
-//				LOGGER.debug("Initializing classsharing ...");
-//				ClasssharingPlugin.initializeClassSharing();
-//				LOGGER.debug("Initializing classsharing ... DONE");
-//				}
-//				else
-//				LOGGER.error("classsharing is enabled, but system classloader is NOT an instance of DelegatingClassLoader! Cannot initialize classsharing!");
-			}
-			else
-				logger.debug("classsharing is disabled - NOT initialized.");
+//			if (classSharing)
+//			{
+////				if (isSystemClassLoaderDelegating()) {
+////				LOGGER.debug("Initializing classsharing ...");
+////				ClasssharingPlugin.initializeClassSharing();
+////				LOGGER.debug("Initializing classsharing ... DONE");
+////				}
+////				else
+////				LOGGER.error("classsharing is enabled, but system classloader is NOT an instance of DelegatingClassLoader! Cannot initialize classsharing!");
+//			}
+//			else
+//				logger.debug("classsharing is disabled - NOT initialized."); //$NON-NLS-1$
 
 
 			initConfig();
@@ -87,10 +87,10 @@ extends WorkbenchAdvisor
 		}		
 	}
 
-	protected boolean classSharing = true;
-	public void setClassSharing(boolean classSharing) {
-		this.classSharing = classSharing;
-	}	
+//	protected boolean classSharing = true;
+//	public void setClassSharing(boolean classSharing) {
+//		this.classSharing = classSharing;
+//	}	
 
 //	public static boolean isSystemClassLoaderDelegating() {
 //	return ClassLoader.getSystemClassLoader() instanceof DelegatingClassLoader;
@@ -115,7 +115,7 @@ extends WorkbenchAdvisor
 	throws ConfigException
 	{
 //		initialize the Config
-		Config.createSharedInstance(new File(AbstractApplication.getConfigDir(), "config.xml"), true);		
+		Config.createSharedInstance(new File(AbstractApplication.getConfigDir(), "config.xml"), true);		 //$NON-NLS-1$
 	}	
 
 	/**
@@ -135,7 +135,7 @@ extends WorkbenchAdvisor
 		try {
 			org.nightlabs.config.Config.sharedInstance().save();
 		} catch (ConfigException e) {
-			logger.error("Saving config failed!", e);
+			logger.error("Saving config failed!", e); //$NON-NLS-1$
 		}
 		
 		Set<IWorkbenchListener> listener = WorkbenchListenerRegistry.sharedInstance().getListener();
@@ -209,11 +209,11 @@ extends WorkbenchAdvisor
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
 			String val = i + 1 < args.length ? args[i + 1] : null;
-			if ("--clearWorkspace".equals(arg))
+			if ("--clearWorkspace".equals(arg)) //$NON-NLS-1$
 				doClearWorkspace = Boolean.parseBoolean(val);
 		}
 		if (doClearWorkspace) {
-			logger.info("************ clearing workspace! **************");
+			logger.info("************ clearing workspace! **************"); //$NON-NLS-1$
 			RCPUtil.clearWorkspace(false);
 		}
 	}

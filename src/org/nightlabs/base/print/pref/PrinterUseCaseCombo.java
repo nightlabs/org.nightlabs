@@ -53,7 +53,7 @@ public class PrinterUseCaseCombo extends XComboComposite<PrinterUseCase> {
 					public String getText(Object element) {
 						if (element instanceof PrinterUseCase) {
 							PrinterUseCase useCase = (PrinterUseCase)element;
-							return useCase.getName()+": "+useCase.getDescription();
+							return useCase.getName()+": "+useCase.getDescription(); //$NON-NLS-1$
 						}
 						else
 							return super.getText(element);

@@ -77,9 +77,9 @@ public abstract class EntityTreeCategory implements IEntityTreeCategory
 	 */
 	public void setInitializationData(IConfigurationElement element, String propertyName, Object data) throws CoreException
 	{
-		id = element.getAttribute("id");
-		name = element.getAttribute("name");
-		String iconStr = element.getAttribute("icon");
+		id = element.getAttribute("id"); //$NON-NLS-1$
+		name = element.getAttribute("name"); //$NON-NLS-1$
+		String iconStr = element.getAttribute("icon"); //$NON-NLS-1$
 		if(iconStr != null)
 			icon = AbstractUIPlugin.imageDescriptorFromPlugin(element.getDeclaringExtension().getNamespaceIdentifier(), iconStr).createImage();
 //			icon = ImageDescriptor.createFromURL(BaseAdminPlugin.getDefault().getBundle().getEntry(iconStr)).createImage();

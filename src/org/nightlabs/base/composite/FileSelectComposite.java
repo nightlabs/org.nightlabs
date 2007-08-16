@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.util.RCPUtil;
 
 /**
@@ -69,12 +70,12 @@ public class FileSelectComposite extends XComposite {
 	
 	private Text fileTextControl;
 	private Button browseButton;
-	private String fileText = "";
+	private String fileText = ""; //$NON-NLS-1$
 	
 	private boolean updating = false;
 	
 	private void createContents(String caption) {
-		new Label(this, SWT.NONE).setText((caption != null) ? caption: "");
+		new Label(this, SWT.NONE).setText((caption != null) ? caption: ""); //$NON-NLS-1$
 
 		XComposite fileComp = new XComposite(this, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);		
 		fileComp.getGridLayout().numColumns = 3;
@@ -91,13 +92,13 @@ public class FileSelectComposite extends XComposite {
 		});
 
 		browseButton = new Button(fileComp, SWT.PUSH);
-		browseButton.setText("Browse...");
+		browseButton.setText(Messages.getString("composite.FileSelectComposite.browseButton.text")); //$NON-NLS-1$
 		browseButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e)
 			{
 				FileDialog fileDialog = new FileDialog(RCPUtil.getActiveWorkbenchShell());
-				fileDialog.setFilterExtensions(new String[]{"*.*"});
-				fileDialog.setFilterNames(new String[]{"All files"});
+				fileDialog.setFilterExtensions(new String[]{"*.*"}); //$NON-NLS-1$
+				fileDialog.setFilterNames(new String[]{Messages.getString("composite.FileSelectComposite.filterName_allFiles")}); //$NON-NLS-1$
 				String selectedFile = fileDialog.open();
 				if (selectedFile != null)
 					fileTextControl.setText(selectedFile);

@@ -24,10 +24,10 @@ public class ProgressMonitorWrapper implements ProgressMonitor {
 	
 	public ProgressMonitorWrapper(IProgressMonitor monitor) {
 		if (monitor == null)
-			throw new IllegalArgumentException("The wrapped monitor must not be null.");
+			throw new IllegalArgumentException("The wrapped monitor must not be null."); //$NON-NLS-1$
 		this.monitor = monitor;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.progress.ProgressMonitor#beginTask(java.lang.String, int)
 	 */

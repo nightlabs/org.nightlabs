@@ -64,7 +64,7 @@ public class SelectionManager extends NotificationManager
 	 * }
 	 */
 	private Map<String, Map<Class, NotificationEvent>> eventsByZone = new HashMap<String, Map<Class,NotificationEvent>>();
-	private RWLock eventsByZoneMutex = new RWLock("eventsByZoneMutex");
+	private RWLock eventsByZoneMutex = new RWLock("eventsByZoneMutex"); //$NON-NLS-1$
 
 	protected void registerEvent(NotificationEvent event)
 	{

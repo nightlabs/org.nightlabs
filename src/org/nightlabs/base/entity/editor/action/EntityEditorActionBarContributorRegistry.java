@@ -36,17 +36,16 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public class EntityEditorActionBarContributorRegistry 
 extends AbstractEPProcessor 
 {
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.entityEditorActionBarContribution";
-	public static final String ELEMENT_EDITOR_CONTRIBUTION = "entityEditorActionBarContribution";
-	public static final String ELEMENT_PAGE_CONTRIBUTION = "entityEditorPageContribution";
-	public static final String ATTRIBUTE_TARGET_EDITOR_ID = "targetEditorID";
-	public static final String ELEMENT_EDITOR_ACTION_BAR_CONTRIBUTION = "editorActionBarContribution";
-	public static final String ATTRIBUTE_PAGE_ID = "pageID";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.entityEditorActionBarContribution"; //$NON-NLS-1$
+	public static final String ELEMENT_EDITOR_CONTRIBUTION = "entityEditorActionBarContribution"; //$NON-NLS-1$
+	public static final String ELEMENT_PAGE_CONTRIBUTION = "entityEditorPageContribution"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_TARGET_EDITOR_ID = "targetEditorID"; //$NON-NLS-1$
+	public static final String ELEMENT_EDITOR_ACTION_BAR_CONTRIBUTION = "editorActionBarContribution"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_PAGE_ID = "pageID"; //$NON-NLS-1$
 	
 	protected EntityEditorActionBarContributorRegistry() {
 		super();
@@ -83,13 +82,13 @@ extends AbstractEPProcessor
 		if (element.getName().equalsIgnoreCase(ELEMENT_EDITOR_CONTRIBUTION)) {
 			String targetEditorID = element.getAttribute(ATTRIBUTE_TARGET_EDITOR_ID);
 			if (!checkString(targetEditorID))
-				throw new EPProcessorException("The attribute targetEditorID must be set!", extension);									
+				throw new EPProcessorException("The attribute targetEditorID must be set!", extension); //$NON-NLS-1$
 			IConfigurationElement[] children = element.getChildren();
 			for (IConfigurationElement childElement : children) {
 				if (childElement.getName().equals(ELEMENT_PAGE_CONTRIBUTION)) {
 					String pageID = childElement.getAttribute(ATTRIBUTE_PAGE_ID);
 					if (!checkString(pageID))
-						throw new EPProcessorException("The attribute pageID must be set!", extension);					
+						throw new EPProcessorException("The attribute pageID must be set!", extension); //$NON-NLS-1$
 					Map<String, AbstractActionRegistry> pageID2ActionRegistry = editorID2PageID2ActionRegistry.get(pageID);
 					if (pageID2ActionRegistry == null) {
 						pageID2ActionRegistry = new HashMap<String, AbstractActionRegistry>();

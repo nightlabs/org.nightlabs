@@ -43,7 +43,7 @@ import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlingThreadGroup;
 import org.nightlabs.base.exceptionhandler.SaveRunnableRunner;
 import org.nightlabs.base.extensionpoint.RemoveExtensionRegistry;
-import org.nightlabs.util.Utils;
+import org.nightlabs.util.IOUtil;
 
 /**
  * This is the basis for RCP applications based on the nightlabs base plugin.
@@ -85,7 +85,7 @@ implements IPlatformRunnable
 	 * The system properties hold the name of the application accessible via this key (it's set by {@link #setAppNameSystemProperty()}).
 	 * Use <code>System.getProperty(APPLICATION_SYSTEM_PROPERTY_NAME)</code> to get the application name.
 	 */
-	public static final String APPLICATION_SYSTEM_PROPERTY_NAME = "nightlabs.base.application.name";
+	public static final String APPLICATION_SYSTEM_PROPERTY_NAME = "nightlabs.base.application.name"; //$NON-NLS-1$
 	/**
 	 * This is used to choose the application folder when the application starts.
 	 * After start the system property with this name will point to the applications root folder.
@@ -94,14 +94,14 @@ implements IPlatformRunnable
 	 * starts. It might contain references to system environment variables in the following way:
 	 * $ENV_NAME$, where ENV_NAME is the name of the environment variable.
 	 */
-	public static final String APPLICATION_FOLDER_SYSTEM_PROPERTY_NAME = "nightlabs.base.application.folder";
+	public static final String APPLICATION_FOLDER_SYSTEM_PROPERTY_NAME = "nightlabs.base.application.folder"; //$NON-NLS-1$
 
 	protected static AbstractApplication sharedInstance;
 
 	
 	protected static AbstractApplication sharedInstance() {
 		if (sharedInstance == null)
-			throw new IllegalStateException("No application has been created yet!");
+			throw new IllegalStateException("No application has been created yet!"); //$NON-NLS-1$
 		return sharedInstance;
 	}
 	
@@ -115,48 +115,48 @@ implements IPlatformRunnable
 		sharedInstance = this;
 	}
 
-	private static String applicationName = "AbstractApplication";
+	private static String applicationName = "AbstractApplication"; //$NON-NLS-1$
 	public static String getApplicationName() {
 		return applicationName;
 	}
 
-	private static String rootDir = "";
+	private static String rootDir = ""; //$NON-NLS-1$
 
 	/** 
 	 * @return the root directory, which is the applicationName in the users home directory.
 	 */
 	public static String getRootDir() {
-		if (rootDir.equals("")) {
+		if (rootDir.equals("")) { //$NON-NLS-1$
 			File rootFile = null; 
 			// check system property org.nightlabs.appfolder
 			String initialFolderName = System.getProperty(APPLICATION_FOLDER_SYSTEM_PROPERTY_NAME);
 			if (initialFolderName == null) {
 				// sys property not set, we use the users home dir
-				rootFile = new File(System.getProperty("user.home"), "."+getApplicationName());
+				rootFile = new File(System.getProperty("user.home"), "."+getApplicationName()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			else {
 				// the sys property is set, parse it
 				String resolvedFolderName = initialFolderName;
-				Pattern envRefs = Pattern.compile("\\$((.*?))\\$");
+				Pattern envRefs = Pattern.compile("\\$((.*?))\\$"); //$NON-NLS-1$
 				Matcher matcher = envRefs.matcher(initialFolderName);
 				while (matcher.find()) {
 					String envValue = System.getenv(matcher.group(1));
 					if (envValue == null) {
-						System.err.println("Reference to undefined system environment variable "+matcher.group(1)+" in system property "+APPLICATION_FOLDER_SYSTEM_PROPERTY_NAME);
-						envValue = "";
+						System.err.println("Reference to undefined system environment variable "+matcher.group(1)+" in system property "+APPLICATION_FOLDER_SYSTEM_PROPERTY_NAME); //$NON-NLS-1$ //$NON-NLS-2$
+						envValue = ""; //$NON-NLS-1$
 					}
 					resolvedFolderName = resolvedFolderName.replace(matcher.group(0), envValue);
 //					resolvedFolderName = resolvedFolderName.replaceAll("\\$"+matcher.group(1)+"\\$", envValue);
 				}
-				rootFile = new File(resolvedFolderName, "."+getApplicationName());
+				rootFile = new File(resolvedFolderName, "."+getApplicationName()); //$NON-NLS-1$
 			}
 			if (rootFile.exists() && !rootFile.isDirectory()) {
-				System.err.println("[PANIC] The application's root directory exists, but is NOT a directory: "+rootFile);
-				System.err.println("[PANIC] The application will probably not run correctly!!");
+				System.err.println("[PANIC] The application's root directory exists, but is NOT a directory: "+rootFile); //$NON-NLS-1$
+				System.err.println("[PANIC] The application will probably not run correctly!!"); //$NON-NLS-1$
 			}
 			if (!rootFile.exists() && !rootFile.mkdirs()) {
-				System.err.println("[PANIC] Could not create the application's root directory: "+rootFile);
-				System.err.println("[PANIC] The application will probably not run correctly!!");
+				System.err.println("[PANIC] Could not create the application's root directory: "+rootFile); //$NON-NLS-1$
+				System.err.println("[PANIC] The application will probably not run correctly!!"); //$NON-NLS-1$
 			}
 			rootDir = rootFile.getAbsolutePath();
 			setAppFolderSystemProperty(rootDir);
@@ -164,14 +164,14 @@ implements IPlatformRunnable
 		return rootDir;
 	}
 
-	private static String configDir = "";
+	private static String configDir = ""; //$NON-NLS-1$
 
 	/**
 	 * @return the config directory, which is getRootDir()+"/config".
 	 */
 	public static String getConfigDir() {
-		if (configDir.equals("")){
-			File configFile = new File(getRootDir(),"config");
+		if (configDir.equals("")){ //$NON-NLS-1$
+			File configFile = new File(getRootDir(),"config"); //$NON-NLS-1$
 			configFile.mkdirs();
 			configDir = configFile.getAbsolutePath();
 //			System.out.println("configDir is "+configDir);
@@ -180,18 +180,18 @@ implements IPlatformRunnable
 	}
 
 
-	private static String logDir = "";
+	private static String logDir = ""; //$NON-NLS-1$
 
 	/**
 	 * 
 	 * @return the log directory, which is getRootDir()+"/log"
 	 */
 	public static String getLogDir() {
-		if (logDir.equals("")){
-			File logFile = new File(getRootDir(),"log");
+		if (logDir.equals("")){ //$NON-NLS-1$
+			File logFile = new File(getRootDir(),"log"); //$NON-NLS-1$
 			if (!logFile.exists())
 				if (!logFile.mkdirs())
-					System.out.println("Could not create log directory "+logFile.getAbsolutePath());
+					System.out.println("Could not create log directory "+logFile.getAbsolutePath()); //$NON-NLS-1$
 			logDir = logFile.getAbsolutePath();
 //			System.out.println("logDir is "+logDir);
 		}
@@ -218,7 +218,7 @@ implements IPlatformRunnable
 	}	
 
 //	protected static final String LOG4J_CONFIG_FILE = "log4j.xml"; 
-	protected static final String LOG4J_CONFIG_FILE = "log4j.properties";
+	protected static final String LOG4J_CONFIG_FILE = "log4j.properties"; //$NON-NLS-1$
 
 	/**
 	 * Configures log4j with the file located in {@link #getConfigDir()}+"/log4j.properties"
@@ -231,12 +231,12 @@ implements IPlatformRunnable
 		File logProp = new File(logConfFileName);
 		if (!logProp.exists()){
 			// if not there copy
-			Utils.copyResource(AbstractApplication.class ,LOG4J_CONFIG_FILE, logConfFileName);		        
+			IOUtil.copyResource(AbstractApplication.class ,LOG4J_CONFIG_FILE, logConfFileName);		        
 		}
 		getLogDir();
 		setAppNameSystemProperty();
 		PropertyConfigurator.configure(logConfFileName);
-		logger.info(getApplicationName()+" started.");
+		logger.info(getApplicationName()+" started."); //$NON-NLS-1$
 	}	
 
 	/**
@@ -249,11 +249,11 @@ implements IPlatformRunnable
 		try {
 			System.setProperty(APPLICATION_SYSTEM_PROPERTY_NAME, getApplicationName());    	
 		} catch (SecurityException se) {
-			System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" could not be set, to "+getApplicationName()+" because:");
-			System.out.println("You dont have the permission to set a System Property");
+			System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" could not be set, to "+getApplicationName()+" because:"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			System.out.println("You dont have the permission to set a System Property"); //$NON-NLS-1$
 		} catch (NullPointerException npe) {
-			System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" could not be set, to "+getApplicationName()+" because:");    	
-			System.out.println("applicationName == null");
+			System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" could not be set, to "+getApplicationName()+" because:");    	 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			System.out.println("applicationName == null"); //$NON-NLS-1$
 		}
 //		System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" = "+System.getProperty(APPLICATION_SYSTEM_PROPERTY_NAME));    
 	}
@@ -266,10 +266,10 @@ implements IPlatformRunnable
 		try {
 			System.setProperty(APPLICATION_FOLDER_SYSTEM_PROPERTY_NAME, appFolder);    	
 		} catch (SecurityException se) {
-			System.out.println("System Property "+APPLICATION_FOLDER_SYSTEM_PROPERTY_NAME+" could not be set, to "+appFolder+" because:");
-			System.out.println("You dont have the permission to set a System Property");
+			System.out.println("System Property "+APPLICATION_FOLDER_SYSTEM_PROPERTY_NAME+" could not be set, to "+appFolder+" because:"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			System.out.println("You dont have the permission to set a System Property"); //$NON-NLS-1$
 		} catch (NullPointerException npe) {
-			System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" could not be set, to "+appFolder+" because of a NullPointerException");
+			System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" could not be set, to "+appFolder+" because of a NullPointerException"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			npe.printStackTrace();
 		}
 	}
@@ -294,7 +294,7 @@ implements IPlatformRunnable
 			try {
 				RemoveExtensionRegistry.sharedInstance().removeRegisteredExtensions();				
 			} catch (Throwable t) {
-				logger.error("There occured an error while tyring to remove all registered extensions");
+				logger.error("There occured an error while tyring to remove all registered extensions"); //$NON-NLS-1$
 			}
 			
 			applicationThread.start();
@@ -334,7 +334,7 @@ implements IPlatformRunnable
 	protected ThreadGroup getThreadGroup() 
 	{
 		if (threadGroup == null)
-			threadGroup = new ExceptionHandlingThreadGroup(getApplicationName()+"ThreadGroup");
+			threadGroup = new ExceptionHandlingThreadGroup(getApplicationName()+"ThreadGroup"); //$NON-NLS-1$
 		return threadGroup;
 	}
 

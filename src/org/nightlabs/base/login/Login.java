@@ -73,7 +73,7 @@ extends AbstractEPProcessor
 	private void assertLoginDelegateExists()
 	{
 		if (loginDelegate == null)
-			throw new IllegalStateException("There is no ILoginDelegate registered! Exactly one plugin must contribute an extension to the extension point \"" + getExtensionPointID() + "\"!");
+			throw new IllegalStateException("There is no ILoginDelegate registered! Exactly one plugin must contribute an extension to the extension point \"" + getExtensionPointID() + "\"!"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public synchronized void _login() throws LoginException
@@ -102,7 +102,7 @@ extends AbstractEPProcessor
 
 	@Implement
 	public String getExtensionPointID() {
-		return "org.nightlabs.base.login";
+		return "org.nightlabs.base.login"; //$NON-NLS-1$
 	}
 
 	@Implement
@@ -111,13 +111,13 @@ extends AbstractEPProcessor
 	{
 		ILoginDelegate loginDelegate;
 		try {
-			loginDelegate = (ILoginDelegate) element.createExecutableExtension("class");
+			loginDelegate = (ILoginDelegate) element.createExecutableExtension("class"); //$NON-NLS-1$
 		} catch (Exception e) {
 			throw new EPProcessorException(e.getMessage(), extension, e);
 		}
 
 		if (this.loginDelegate != null)
-			throw new EPProcessorException("More than one plugin provide an extension to \""+getExtensionPointID()+"\": The plugin \"" + contributingPluginId + "\" did already initialize loginDelegate and the plugin \"" + extension.getNamespaceIdentifier() + "\" collides with this previous contribution!", extension);
+			throw new EPProcessorException("More than one plugin provide an extension to \""+getExtensionPointID()+"\": The plugin \"" + contributingPluginId + "\" did already initialize loginDelegate and the plugin \"" + extension.getNamespaceIdentifier() + "\" collides with this previous contribution!", extension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 		this.contributingPluginId = extension.getNamespaceIdentifier();
 		this.loginDelegate = loginDelegate;

@@ -36,8 +36,8 @@ import org.eclipse.ui.IMemento;
 
 public class FileEditorInputFactory implements IElementFactory {
 
-	public static final String CLASSNAME_KEY = "org.nightlabs.base.io.fileeditorinput.classname";
-	public static final String FILENAME_KEY = "org.nightlabs.base.io.fileeditorinput.fileName";
+	public static final String CLASSNAME_KEY = "org.nightlabs.base.io.fileeditorinput.classname"; //$NON-NLS-1$
+	public static final String FILENAME_KEY = "org.nightlabs.base.io.fileeditorinput.fileName"; //$NON-NLS-1$
 	
 	public FileEditorInputFactory() {
 		super();

@@ -46,7 +46,7 @@ implements IEditorInput,
 	public FileEditorInput(File f) 
 	{
 		if (f == null)
-			throw new IllegalArgumentException("Param f must not be null!");
+			throw new IllegalArgumentException("Param f must not be null!"); //$NON-NLS-1$
 		
 		this.file = f;
 	}

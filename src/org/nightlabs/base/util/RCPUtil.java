@@ -67,10 +67,10 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.ChildStatusController;
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.util.Utils;
+import org.nightlabs.base.resource.Messages;
+import org.nightlabs.util.IOUtil;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -121,7 +121,7 @@ public class RCPUtil
 			case SWT.SHIFT:
 				return keyDown_Shift;
 			default:
-				throw new IllegalArgumentException("Unknown key! Use one of the KEY_* constants!");
+				throw new IllegalArgumentException("Unknown key! Use one of the KEY_* constants!"); //$NON-NLS-1$
 		}
 	}
 
@@ -317,7 +317,7 @@ public class RCPUtil
 		IWorkbenchPage page = getActiveWorkbenchPage();
 		return page == null ? null : page.getPerspective().getId();		
 	}
-	
+
 	/**
 	 * opens a ErrorDialog with the given message 
 	 * 
@@ -327,9 +327,9 @@ public class RCPUtil
 	 */
 	public static void showErrorDialog(String message) 
 	{
-		MessageDialog.openError(getActiveWorkbenchShell(), NLBasePlugin.getResourceString("action.openfile.error.title"), message);
+		MessageDialog.openError(getActiveWorkbenchShell(), Messages.getString("util.RCPUtil.showErrorDialog.title"), message); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * opens a MessageBox which asks the user if he want to overwrite the file,
 	 * with the given fileName
@@ -341,10 +341,8 @@ public class RCPUtil
 	{
 		return MessageDialog.openConfirm(
 				getActiveWorkbenchShell(), 
-				NLBasePlugin.getResourceString("action.openfile.confirmoverwrite.title"), 
-				NLBasePlugin.getResourceString("action.openfile.confirmoverwrite.message1")
-				+ " " + fileName + " " +
-				NLBasePlugin.getResourceString("action.openfile.confirmoverwrite.message2")
+				Messages.getString("util.RCPUtil.showConfirmOverwriteDialog.title"), //$NON-NLS-1$
+				String.format(Messages.getString("util.RCPUtil.showConfirmOverwriteDialog.message"), new Object[] { fileName }) //$NON-NLS-1$
 			);
 	}
 	
@@ -552,10 +550,10 @@ public class RCPUtil
 		Composite parent = control.getParent();
 		if (parent != null) 
 		{
-			logger.log(logLevel, "control = "+control);
-			logger.log(logLevel, "control.getLayoutData() = "+control.getLayoutData());			
-			logger.log(logLevel, "parent = "+parent);			
-			logger.log(logLevel, "parent.getLayout() = "+parent.getLayout());			
+			logger.log(logLevel, "control = "+control); //$NON-NLS-1$
+			logger.log(logLevel, "control.getLayoutData() = "+control.getLayoutData());			 //$NON-NLS-1$
+			logger.log(logLevel, "parent = "+parent);			 //$NON-NLS-1$
+			logger.log(logLevel, "parent.getLayout() = "+parent.getLayout());			 //$NON-NLS-1$
 			logControlParents(parent, logger, logLevel);
 		}
 	}  
@@ -639,12 +637,12 @@ public class RCPUtil
 	{
 		if (ask) {
 			boolean ok = MessageDialog.openConfirm(RCPUtil.getActiveWorkbenchShell(), 
-					"Clear Workspace", "Do you really want to clear your workspace?");
+					Messages.getString("util.RCPUtil.clearWorkspace.title"), Messages.getString("util.RCPUtil.clearWorkspace.message")); //$NON-NLS-1$ //$NON-NLS-2$
 			if (!ok)
 				return;
 		}
 		File workspace = Platform.getLocation().toFile();
-		Utils.deleteDirectoryRecursively(workspace);		
+		IOUtil.deleteDirectoryRecursively(workspace);		
 	}
 	
 	/**
@@ -657,7 +655,7 @@ public class RCPUtil
 	 * @param contributionItem The contributionItem to fill the trim with.
 	 * @param prependTo The id of the trim the new trim should be prepended to.
 	 */
-	@SuppressWarnings("restriction")
+	@SuppressWarnings("restriction") //$NON-NLS-1$
 	public static void addContributionItemTrim(
 			Shell shell, 
 			IContributionItem contributionItem, 

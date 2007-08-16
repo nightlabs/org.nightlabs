@@ -61,7 +61,7 @@ public class Editor2PerspectiveRegistry
 extends AbstractEPProcessor 
 {
 	private static final Logger logger = Logger.getLogger(Editor2PerspectiveRegistry.class);
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.editor2perspective";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.editor2perspective"; //$NON-NLS-1$
 	
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;
@@ -95,15 +95,15 @@ extends AbstractEPProcessor
 	public void processElement(IExtension extension, IConfigurationElement element)
 	throws Exception 
 	{
-		if (element.getName().equalsIgnoreCase("registry")) 
+		if (element.getName().equalsIgnoreCase("registry"))  //$NON-NLS-1$
 		{
-			String editorID = element.getAttribute("editorID");
+			String editorID = element.getAttribute("editorID"); //$NON-NLS-1$
 			if (!checkString(editorID))
-				throw new EPProcessorException("Element registry has to define attribute editorID.");
+				throw new EPProcessorException("Element registry has to define attribute editorID."); //$NON-NLS-1$
 			
-			String perspectiveID = element.getAttribute("perspectiveID");
+			String perspectiveID = element.getAttribute("perspectiveID"); //$NON-NLS-1$
 			if (!checkString(perspectiveID))
-				throw new EPProcessorException("Element registry has to define attribute perspectiveID.");
+				throw new EPProcessorException("Element registry has to define attribute perspectiveID."); //$NON-NLS-1$
 			
 //			Set<String> perspectiveIDs = editorID2PerspectiveIDs.get(editorID);
 //			if (perspectiveIDs == null)
@@ -149,7 +149,7 @@ extends AbstractEPProcessor
   throws PartInitException
   {
   	if (file == null)
-			throw new IllegalArgumentException("Param file must not be null!");
+			throw new IllegalArgumentException("Param file must not be null!"); //$NON-NLS-1$
 
   	IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
   	IEditorRegistry editorRegistry = PlatformUI.getWorkbench().getEditorRegistry();  	
@@ -165,7 +165,7 @@ extends AbstractEPProcessor
 						workbench.showPerspective(perspectiveID, 
 						    workbench.getActiveWorkbenchWindow());
 					} catch (WorkbenchException e) {
-						throw new PartInitException("Perspective width ID "+perspectiveID+" could not be opend", e);
+						throw new PartInitException("Perspective width ID "+perspectiveID+" could not be opend", e); //$NON-NLS-1$ //$NON-NLS-2$
 					}	  			  			
 	  		}
 	  	}
@@ -299,7 +299,7 @@ extends AbstractEPProcessor
 			Set<String> editorIDs = perspectiveID2editorIDs.get(perspective.getId());
 			// not editor perspective binding declared, show all hidden editors
 			if (editorIDs == null) {
-				logger.info("No editor perspective bindings declared for perspective "+perspective.getId()+", show all editors and "+hiddenEditorReferences.size()+" hidden editors");
+				logger.info("No editor perspective bindings declared for perspective "+perspective.getId()+", show all editors and "+hiddenEditorReferences.size()+" hidden editors"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				for (IEditorReference editorReference : hiddenEditorReferences) {
 					if (editorReference instanceof WorkbenchPartReference) {
 						WorkbenchPartReference workbenchPartReference = (WorkbenchPartReference) editorReference;
@@ -320,7 +320,7 @@ extends AbstractEPProcessor
 			}
 			// there exists an editor perspective binding for the activated perspective 
 			else {
-				logger.info("There is a editor perspective binding declared for perspective "+perspective.getId()+"!");
+				logger.info("There is a editor perspective binding declared for perspective "+perspective.getId()+"!"); //$NON-NLS-1$ //$NON-NLS-2$
 				// collect all hidden editors and all editors in the current WorkbenchPage
 				Collection<IEditorReference> editorReferences = hiddenEditorReferences;
 				for (int i=0; i<page.getEditorReferences().length; i++) {
@@ -347,7 +347,7 @@ extends AbstractEPProcessor
 								editorControl.getParent().layout(true, true);
 							}
 						}
-						logger.info("visible = "+visible+" for editor "+editorReference.getId());
+						logger.info("visible = "+visible+" for editor "+editorReference.getId()); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				}
 //				page.getWorkbenchWindow().getShell().layout(true, true);				

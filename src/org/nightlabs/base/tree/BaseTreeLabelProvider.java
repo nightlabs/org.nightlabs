@@ -25,7 +25,7 @@ public class BaseTreeLabelProvider extends TableLabelProvider {
 	public String getColumnText(Object element, int columnIndex) {
 		if (element instanceof TreeNode)
 			return ((TreeNode)element).getColumnText(columnIndex);
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 	
 	@Override

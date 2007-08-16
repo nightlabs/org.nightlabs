@@ -26,6 +26,8 @@
 
 package org.nightlabs.base.exceptionhandler;
 
+import org.nightlabs.base.resource.Messages;
+
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -38,6 +40,6 @@ public class OutOfMemoryHandler implements IExceptionHandler {
 	public void handleException(Thread thread, Throwable thrownException, Throwable triggerException) 
 	{
 		//DefaultErrorDialog.addError(OutOfMemoryErrorDialog.class, "Out of memory error", null, thrownException, triggerException);
-		ErrorDialogFactory.showError(OutOfMemoryErrorDialog.class, "Out of memory error", null, thrownException, triggerException);
+		ErrorDialogFactory.showError(OutOfMemoryErrorDialog.class, Messages.getString("exceptionhandler.OutOfMemoryHandler.dialogTitle"), null, thrownException, triggerException); //$NON-NLS-1$
 	}	
 }

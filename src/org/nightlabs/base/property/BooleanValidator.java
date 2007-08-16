@@ -28,7 +28,11 @@ package org.nightlabs.base.property;
 
 import org.eclipse.jface.viewers.ICellEditorValidator;
 
-
+/**
+ * @author Daniel Mazurek
+ *
+ * @deprecated It seems this class is not used anymore, after Daniel has modified the cell editor handling. I didn't delete it yet, because I don't want to break anything, but this class should be deleted soon.
+ */
 public class BooleanValidator 
 implements ICellEditorValidator 
 {
@@ -37,7 +41,7 @@ implements ICellEditorValidator
     if (value instanceof Boolean)
       return null;
     else
-      return "value is not instanceof Boolean!";
+      return "value is not instanceof Boolean!"; //$NON-NLS-1$
   }
 
 }

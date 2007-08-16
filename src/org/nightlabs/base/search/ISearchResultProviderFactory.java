@@ -32,14 +32,13 @@ import org.nightlabs.i18n.I18nText;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public interface ISearchResultProviderFactory
 extends IExecutableExtension
 {
-	public static final String WILDCARD_PERSPECTIVE_ID = "*";
+	public static final String WILDCARD_PERSPECTIVE_ID = "*"; //$NON-NLS-1$
 	public static final int DEFAULT_PRIORITY = -1;
-	
+
 	/**
 	 * returns the ISearchResultProvider
 	 * @return the ISearchResultProvider

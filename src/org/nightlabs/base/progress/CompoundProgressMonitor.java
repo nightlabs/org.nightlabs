@@ -82,7 +82,7 @@ public class CompoundProgressMonitor implements IProgressMonitor {
 				Method method = monitor.getClass().getMethod(methodName, paramTypes);
 				method.invoke(monitor, params);
 			} catch (Exception e) {
-				logger.warn("Could not invoke "+methodName+" on "+monitor, e);
+				logger.warn("Could not invoke "+methodName+" on "+monitor, e); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}
@@ -113,7 +113,7 @@ public class CompoundProgressMonitor implements IProgressMonitor {
 		for (IProgressMonitor monitor : monitors) {
 			monitor.beginTask(name, totalWork);
 		}
-		addInvocation("beginTask", name, totalWork);
+		addInvocation("beginTask", name, totalWork); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -123,7 +123,7 @@ public class CompoundProgressMonitor implements IProgressMonitor {
 		for (IProgressMonitor monitor : monitors) {
 			monitor.done();
 		}
-		addInvocation("done");
+		addInvocation("done"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -133,7 +133,7 @@ public class CompoundProgressMonitor implements IProgressMonitor {
 		for (IProgressMonitor monitor : monitors) {
 			monitor.internalWorked(work);
 		}
-		addInvocation("internalWorked", work);
+		addInvocation("internalWorked", work); //$NON-NLS-1$
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class CompoundProgressMonitor implements IProgressMonitor {
 		for (IProgressMonitor monitor : monitors) {
 			monitor.setCanceled(value);
 		}
-		addInvocation("setCanceled", value);
+		addInvocation("setCanceled", value); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -168,7 +168,7 @@ public class CompoundProgressMonitor implements IProgressMonitor {
 		for (IProgressMonitor monitor : monitors) {
 			monitor.setTaskName(name);
 		}
-		addInvocation("setTaskName", name);
+		addInvocation("setTaskName", name); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -178,7 +178,7 @@ public class CompoundProgressMonitor implements IProgressMonitor {
 		for (IProgressMonitor monitor : monitors) {
 			monitor.subTask(name);
 		}
-		addInvocation("subTask", name);
+		addInvocation("subTask", name); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -188,7 +188,7 @@ public class CompoundProgressMonitor implements IProgressMonitor {
 		for (IProgressMonitor monitor : monitors) {
 			monitor.worked(work);
 		}
-		addInvocation("worked", work);
+		addInvocation("worked", work); //$NON-NLS-1$
 	}
 
 	/**

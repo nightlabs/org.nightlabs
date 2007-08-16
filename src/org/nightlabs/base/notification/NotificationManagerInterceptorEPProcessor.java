@@ -29,7 +29,7 @@ public class NotificationManagerInterceptorEPProcessor extends AbstractEPProcess
 	 */
 	@Override
 	public String getExtensionPointID() {
-		return "org.nightlabs.base.notificationinterceptor";
+		return "org.nightlabs.base.notificationinterceptor"; //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -42,12 +42,12 @@ public class NotificationManagerInterceptorEPProcessor extends AbstractEPProcess
 	) throws Exception 
 	{
 		try {
-			Interceptor interceptor = (Interceptor) element.createExecutableExtension("class");
-			element.getAttribute("name");
+			Interceptor interceptor = (Interceptor) element.createExecutableExtension("class"); //$NON-NLS-1$
+			element.getAttribute("name"); //$NON-NLS-1$
 
 			manager.addInterceptor(interceptor);
 		} catch (Throwable e) {
-			throw new EPProcessorException("Extension to "+getExtensionPointID()+" with class "+element.getAttribute("class")+" has errors!", e);
+			throw new EPProcessorException("Extension to "+getExtensionPointID()+" with class "+element.getAttribute("class")+" has errors!", e); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		}
 	}
 

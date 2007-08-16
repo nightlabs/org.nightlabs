@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.nightlabs.base.layout.WeightedTableLayout;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.table.AbstractTableComposite;
 import org.nightlabs.base.table.TableContentProvider;
 import org.nightlabs.base.table.TableLabelProvider;
@@ -76,7 +77,7 @@ public class ErrorTable extends AbstractTableComposite
 				}
 			}
 			
-			return "";
+			return ""; //$NON-NLS-1$
 		}		
 	}
 
@@ -91,8 +92,8 @@ public class ErrorTable extends AbstractTableComposite
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
-		(new TableColumn(table, SWT.LEFT)).setText("Exception");
-		(new TableColumn(table, SWT.LEFT)).setText("Message");
+		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("exceptionhandler.ErrorTable.tableColumnExceptionClass")); //$NON-NLS-1$
+		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("exceptionhandler.ErrorTable.tableColumnMessage")); //$NON-NLS-1$
 		table.setLayout(new WeightedTableLayout(new int[] {3, 4}));
 	}
 

@@ -33,29 +33,29 @@ public class DNDUtil
 		super();
 	}
 	
-	public static final String DROP_NONE = "DROP_NONE";
-	public static final String DROP_COPY = "DROP_COPY";
-	public static final String DROP_MOVE = "DROP_MOVE";
-	public static final String DROP_LINK = "DROP_LINK";
-	public static final String DROP_TARGET_MOVE = "DROP_TARGET_MOVE";
-	public static final String DROP_DEFAULT = "DROP_DEFAULT";
+	public static final String DROP_NONE = "DROP_NONE"; //$NON-NLS-1$
+	public static final String DROP_COPY = "DROP_COPY"; //$NON-NLS-1$
+	public static final String DROP_MOVE = "DROP_MOVE"; //$NON-NLS-1$
+	public static final String DROP_LINK = "DROP_LINK"; //$NON-NLS-1$
+	public static final String DROP_TARGET_MOVE = "DROP_TARGET_MOVE"; //$NON-NLS-1$
+	public static final String DROP_DEFAULT = "DROP_DEFAULT"; //$NON-NLS-1$
 	
 	public static String getStringForCode(int value) 
 	{
 		StringBuffer sb = new StringBuffer();
 		
 		if (value == 0)
-			sb.append(DROP_NONE + " ");
+			sb.append(DROP_NONE + " "); //$NON-NLS-1$
 		else if (value == (1 << 0))
-			sb.append(DROP_COPY + " ");
+			sb.append(DROP_COPY + " "); //$NON-NLS-1$
 		else if (value == (1 << 1))
-			sb.append(DROP_MOVE + " ");
+			sb.append(DROP_MOVE + " "); //$NON-NLS-1$
 		else if (value == (1 << 2))
-			sb.append(DROP_LINK + " ");
+			sb.append(DROP_LINK + " "); //$NON-NLS-1$
 		else if (value == (1 << 3))
-			sb.append(DROP_TARGET_MOVE + " ");
+			sb.append(DROP_TARGET_MOVE + " "); //$NON-NLS-1$
 		else if (value == (1 << 4))
-			sb.append(DROP_DEFAULT + " ");
+			sb.append(DROP_DEFAULT + " "); //$NON-NLS-1$
 
 		return sb.toString();
 	}

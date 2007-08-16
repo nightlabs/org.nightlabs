@@ -36,7 +36,6 @@ import java.util.Map;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
-
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 
@@ -44,11 +43,11 @@ import org.nightlabs.base.extensionpoint.EPProcessorException;
  * Holds extensions to the entityList extension point.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
+ * @deprecated Since the EntityList is deprecated, I assume, this class is deprecated, too. Marco.
  */
 public class EntityListRegistry extends AbstractEPProcessor {
 
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.entitylist";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.entitylist"; //$NON-NLS-1$
 	
 	private static class ListCarrier implements Comparable {
 		private int priority;
@@ -122,24 +121,24 @@ public class EntityListRegistry extends AbstractEPProcessor {
 	 */
 	public void processElement(IExtension extension, IConfigurationElement element)
 			throws Exception {
-		if (element.getName().equalsIgnoreCase("entityList")) {
-			String id = element.getAttribute("id");
-			if (id == null || "".equals(id))
-				throw new EPProcessorException("Element entityList must define an attribute id.");
-			String viewID = element.getAttribute("viewID");
-			if (viewID == null || "".equals(viewID))
-				throw new EPProcessorException("Element entityList must define an attribute viewID.");
+		if (element.getName().equalsIgnoreCase("entityList")) { //$NON-NLS-1$
+			String id = element.getAttribute("id"); //$NON-NLS-1$
+			if (id == null || "".equals(id)) //$NON-NLS-1$
+				throw new EPProcessorException("Element entityList must define an attribute id."); //$NON-NLS-1$
+			String viewID = element.getAttribute("viewID"); //$NON-NLS-1$
+			if (viewID == null || "".equals(viewID)) //$NON-NLS-1$
+				throw new EPProcessorException("Element entityList must define an attribute viewID."); //$NON-NLS-1$
 			
 			EntityList entityList = null; 
 			try {
-				entityList = (EntityList)element.createExecutableExtension("class");
+				entityList = (EntityList)element.createExecutableExtension("class"); //$NON-NLS-1$
 			} catch (CoreException e) {
 				throw new EPProcessorException(e);
 			}
 			
-			String priorityStr = element.getAttribute("priority");
+			String priorityStr = element.getAttribute("priority"); //$NON-NLS-1$
 			int priority = 500;
-			if (priorityStr != null || !"".equals(priorityStr))
+			if (priorityStr != null || !"".equals(priorityStr)) //$NON-NLS-1$
 				try {
 					priority = Integer.parseInt(priorityStr);
 				} catch (NumberFormatException e) {

@@ -30,7 +30,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
-import org.nightlabs.util.Utils;
+import org.nightlabs.util.Util;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -116,22 +116,22 @@ extends XComposite
 		setIncrement(increment);
 		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
-	
+
 	private double rest;
 	public void setValue(double value) 
 	{
 		double val = changeValue(value);
-		double shortedDouble = (int) Utils.truncateDouble(val, numDigits);		
+		double shortedDouble = (int) Util.truncateDouble(val, numDigits);		
 		rest = (val - shortedDouble) / Math.pow(10, numDigits);		
 		spinner.setSelection((int)shortedDouble);		
 	}
-		
+
 	public double getValue() {
 		return getShortedValue() + rest;
 	}
-	
+
 	public double getShortedValue() {
-		return Utils.getDouble(spinner.getSelection(), numDigits);				
+		return Util.getDouble(spinner.getSelection(), numDigits);				
 	}
 	
 	public void addSelectionListener(SelectionListener listener) {

@@ -40,11 +40,11 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.AbstractListComposite;
 import org.nightlabs.base.composite.LabeledText;
 import org.nightlabs.base.composite.XComboComposite;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.print.DocumentPrinterDelegateConfig;
 import org.nightlabs.print.DelegatingDocumentPrinterCfMod.ExternalEngineDelegateConfig;
 import org.nightlabs.print.DelegatingDocumentPrinterCfMod.SystemCallDelegateConfig;
@@ -62,7 +62,7 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 	
 	private Composite editWrapper;
 	private StackLayout stackLayout;	
-	private XComposite sysCalLEditComposite;
+	private XComposite sysCallEditComposite;
 	private XComposite firstLine;
 	private LabeledText expectedReturnValue;
 	private AbstractListComposite<String> templates;
@@ -128,8 +128,8 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 		initGUI();
 	}
 
-	private static final String ACROBAT_WINDOWS = "Acrobat Reader Windows /t";
-	private static final String ACROBAT_WINDOWS_ONLY_DEFAULT = "Acrobat Reader Windows /p/h (Only default printer)";
+	private static final String ACROBAT_WINDOWS = "Acrobat Reader Windows /t"; //$NON-NLS-1$
+	private static final String ACROBAT_WINDOWS_ONLY_DEFAULT = "Acrobat Reader Windows /p/h (Only default printer)"; //$NON-NLS-1$
 	
 	private static final List<String> options;
 	static {
@@ -142,10 +142,11 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 		typeWrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		typeGroup = new Group(typeWrapper, SWT.NONE);
 		typeGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		typeGroup.setText(NLBasePlugin.getResourceString("preferencePage.documentPrinter.editConfig.configType.header"));
+		typeGroup.setText(Messages.getString("print.pref.EditDocumentPrinterConfigComposite.typeGroup.text")); //$NON-NLS-1$
 		typeGroup.setLayout(new RowLayout(SWT.VERTICAL));
+
 		typeSysCall = new Button(typeGroup, SWT.RADIO);
-		typeSysCall.setText(NLBasePlugin.getResourceString("preferencePage.documentPrinter.editConfig.configType.typeSysCall"));
+		typeSysCall.setText(Messages.getString("print.pref.EditDocumentPrinterConfigComposite.typeSysCall.text")); //$NON-NLS-1$
 		typeSysCall.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
@@ -153,8 +154,10 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 				updateTypeView();
 			}
 		});
+		typeSysCall.setSelection(true);
+
 		typeExtEngine = new Button(typeGroup, SWT.RADIO);
-		typeExtEngine.setText(NLBasePlugin.getResourceString("preferencePage.documentPrinter.editConfig.configType.typeExtEngine"));
+		typeExtEngine.setText(Messages.getString("print.pref.EditDocumentPrinterConfigComposite.typeExtEngine.text")); //$NON-NLS-1$
 		typeExtEngine.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
@@ -162,59 +165,59 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 				updateTypeView();
 			}
 		});
-		
+
 		editWrapper = new Composite(this, SWT.NONE);
 		stackLayout = new StackLayout();
 		editWrapper.setLayout(stackLayout);
 		editWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		sysCalLEditComposite = new XComposite(editWrapper, SWT.NONE);
-		firstLine = new XComposite(sysCalLEditComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+
+		sysCallEditComposite = new XComposite(editWrapper, SWT.NONE);
+		firstLine = new XComposite(sysCallEditComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		firstLine.getGridData().grabExcessVerticalSpace = false;
 		firstLine.getGridLayout().numColumns = 2;
-		expectedReturnValue = new LabeledText(firstLine, "expected return value");
-		templates = new XComboComposite<String>(firstLine, XComboComposite.getDefaultWidgetStyle(firstLine), "templates");
+		expectedReturnValue = new LabeledText(firstLine, Messages.getString("print.pref.EditDocumentPrinterConfigComposite.expectedReturnValue.caption")); //$NON-NLS-1$
+		templates = new XComboComposite<String>(firstLine, XComboComposite.getDefaultWidgetStyle(firstLine), Messages.getString("print.pref.EditDocumentPrinterConfigComposite.templates.caption")); //$NON-NLS-1$
 		for (String option : options) {
 			templates.addElement(option);
 		}
-		
+
 		templates.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				String selected = templates.getSelectedElement();
 				if ( ACROBAT_WINDOWS.equals(selected) ) {
-					expectedReturnValue.setText("1");
-					commandPattern.setText("C:\\Programme\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe");
-					parameterPattern.setText("/t ${FILE} ${$PRINTSERVICE}");
+					expectedReturnValue.setText("1"); //$NON-NLS-1$
+					commandPattern.setText("C:\\Programme\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe"); //$NON-NLS-1$
+					parameterPattern.setText("/t ${FILE} ${$PRINTSERVICE}"); //$NON-NLS-1$
 				} else if ( ACROBAT_WINDOWS_ONLY_DEFAULT.equals(selected) ){
-					expectedReturnValue.setText("1");
-					commandPattern.setText("C:\\Programme\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe");
-					parameterPattern.setText("/h/p ${FILE}");
+					expectedReturnValue.setText("1"); //$NON-NLS-1$
+					commandPattern.setText("C:\\Programme\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe"); //$NON-NLS-1$
+					parameterPattern.setText("/h/p ${FILE}"); //$NON-NLS-1$
 				} 
 				else
-					throw new IllegalStateException("Some bogus was selected");
+					throw new IllegalStateException("Some bogus was selected"); //$NON-NLS-1$
 			}
 		});
-		
-		commandPattern = new LabeledText(sysCalLEditComposite, NLBasePlugin.getResourceString("preferencePage.documentPrinter.editConfig.commandPattern"));
-		parameterPattern = new LabeledText(sysCalLEditComposite, NLBasePlugin.getResourceString("preferencePage.documentPrinter.editConfig.parameterPattern"));
-				
+
+		commandPattern = new LabeledText(sysCallEditComposite, Messages.getString("print.pref.EditDocumentPrinterConfigComposite.commandPattern.caption")); //$NON-NLS-1$
+		parameterPattern = new LabeledText(sysCallEditComposite, Messages.getString("print.pref.EditDocumentPrinterConfigComposite.parameterPattern.caption")); //$NON-NLS-1$
+
 		extEngineEditComposite = new XComposite(editWrapper, SWT.NONE);
-		className = new LabeledText(extEngineEditComposite, NLBasePlugin.getResourceString("preferencePage.documentPrinter.editConfig.className"));
-		stackLayout.topControl = sysCalLEditComposite;
+		className = new LabeledText(extEngineEditComposite, Messages.getString("print.pref.EditDocumentPrinterConfigComposite.className.caption")); //$NON-NLS-1$
+		stackLayout.topControl = sysCallEditComposite;
 	}
-	
+
 	private void clearAll() {
 		typeSysCall.setSelection(false);
 		typeExtEngine.setSelection(false);
-		expectedReturnValue.setText("");
-		commandPattern.getTextControl().setText("");
-		parameterPattern.getTextControl().setText("");
-		className.getTextControl().setText("");
+		expectedReturnValue.setText(""); //$NON-NLS-1$
+		commandPattern.getTextControl().setText(""); //$NON-NLS-1$
+		parameterPattern.getTextControl().setText(""); //$NON-NLS-1$
+		className.getTextControl().setText(""); //$NON-NLS-1$
 	}
 	
 	private void updateTypeView() {
 		if (typeSysCall.getSelection())
-			stackLayout.topControl = sysCalLEditComposite;
+			stackLayout.topControl = sysCallEditComposite;
 		else if (typeExtEngine.getSelection())
 			stackLayout.topControl = extEngineEditComposite;
 		editWrapper.layout(true, true);

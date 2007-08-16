@@ -26,20 +26,22 @@
 
 package org.nightlabs.base;
 
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.ui.plugin.*;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.app.AbstractApplication;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.exceptionhandler.SimpleExceptionHandlerRegistry;
 import org.osgi.framework.BundleContext;
-import java.util.*;
 
 /**
  * The main plugin class to be used in the desktop.
  */
 public class NLBasePlugin extends AbstractUIPlugin 
 {
-	public static final String PLUGIN_ID = "org.nightlabs.base";
+	public static final String PLUGIN_ID = "org.nightlabs.base"; //$NON-NLS-1$
 	
 	//The shared instance.
 	private static NLBasePlugin plugin;
@@ -110,7 +112,7 @@ public class NLBasePlugin extends AbstractUIPlugin
 	public void setApplication(AbstractApplication application)
 	{
 		if (this.application != null && this.application != application)
-			throw new IllegalStateException("Cannot overwrite application! It is already initialized!");
+			throw new IllegalStateException("Cannot overwrite application! It is already initialized!"); //$NON-NLS-1$
 
 		this.application = application;
 	}

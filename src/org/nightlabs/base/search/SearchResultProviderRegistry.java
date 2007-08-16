@@ -46,17 +46,17 @@ extends AbstractEPProcessor
 {
 	private static final Logger logger = Logger.getLogger(SearchResultProviderRegistry.class);
 	
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.searchResultProvider";
-	public static final String ELEMENT_SEARCH_RESULT_PROVIDER_FACTORY = "searchResultProviderFactory";
-	public static final String ELEMENT_SEARCH_RESULT_HANDLER = "searchResultActionHandler";
-	public static final String ATTRIBUTE_CLASS = "class";
-	public static final String ATTRIBUTE_PRIORITY = "priority";
-	public static final String ATTRIBUTE_DECORATOR = "decorator";
-	public static final String ATTRIBUTE_ICON = "icon";
-	public static final String ATTRIBUTE_PERSPECTIVE_ID = "perspectiveID";
-	public static final String ATTRIBUTE_ID = "id";
-	public static final String ATTRIBUTE_NAME = "name";
-	public static final String ATTRIBUTE_SEARCH_RESULT_PROVIDER_FACTORY_ID = "searchResultProviderFactoryID";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.base.searchResultProvider"; //$NON-NLS-1$
+	public static final String ELEMENT_SEARCH_RESULT_PROVIDER_FACTORY = "searchResultProviderFactory"; //$NON-NLS-1$
+	public static final String ELEMENT_SEARCH_RESULT_HANDLER = "searchResultActionHandler"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_CLASS = "class"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_PRIORITY = "priority"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_DECORATOR = "decorator"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_ICON = "icon"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_PERSPECTIVE_ID = "perspectiveID"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_ID = "id"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_NAME = "name"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_SEARCH_RESULT_PROVIDER_FACTORY_ID = "searchResultProviderFactoryID"; //$NON-NLS-1$
 
 	private static SearchResultProviderRegistry sharedInstance;
 	public static SearchResultProviderRegistry sharedInstance() {
@@ -87,7 +87,7 @@ extends AbstractEPProcessor
 					ISearchResultProviderFactory factory = (ISearchResultProviderFactory) element.createExecutableExtension(ATTRIBUTE_CLASS);
 					factories.add(factory);
 				} catch (Exception e) {
-					logger.error("There occured an error during initalizing the class "+element.getAttribute(ATTRIBUTE_CLASS), e);
+					logger.error("There occured an error during initalizing the class "+element.getAttribute(ATTRIBUTE_CLASS), e); //$NON-NLS-1$
 				}				
 			}
 		}
@@ -109,13 +109,13 @@ extends AbstractEPProcessor
 					
 					if (perspectiveID2ActionHandler.get(perspectiveID) != null) {
 							ISearchResultActionHandler oldActionHandler = perspectiveID2ActionHandler.get(perspectiveID);
-							logger.warn("There already exists an actionHandler for the perspectiveID "+perspectiveID+" and the factoryID "+factoryID);
-							logger.warn("actionHandler "+oldActionHandler+" has been replaced by actionHandler "+actionHandler);						
+							logger.warn("There already exists an actionHandler for the perspectiveID "+perspectiveID+" and the factoryID "+factoryID); //$NON-NLS-1$ //$NON-NLS-2$
+							logger.warn("actionHandler "+oldActionHandler+" has been replaced by actionHandler "+actionHandler); //$NON-NLS-1$ //$NON-NLS-2$
 					}
-										
+
 					perspectiveID2ActionHandler.put(perspectiveID, actionHandler);
 				} catch (Exception e) {
-					logger.error("There occured an error during initalizing the class "+element.getAttribute(ATTRIBUTE_CLASS), e);
+					logger.error("There occured an error during initalizing the class "+element.getAttribute(ATTRIBUTE_CLASS), e); //$NON-NLS-1$
 				}				
 			}
 		}		

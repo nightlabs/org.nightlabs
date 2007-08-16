@@ -146,7 +146,7 @@ public class XComposite extends Composite
 				layout.marginBottom = 0;
 				return;				
 			default:
-				throw new IllegalArgumentException("layoutMode = " + layoutMode + " is unknown!");
+				throw new IllegalArgumentException("layoutMode = " + layoutMode + " is unknown!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}		
 	}
 	
@@ -187,7 +187,7 @@ public class XComposite extends Composite
 				c.setLayoutData(gridData2);
 				break;				
 			default:
-				throw new IllegalArgumentException("layoutDataMode = " + layoutDataMode + " is unknown!");
+				throw new IllegalArgumentException("layoutDataMode = " + layoutDataMode + " is unknown!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}	 
 	}
 	

@@ -118,7 +118,7 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	private KeyListener keyListener = new KeyListener() {
 		public void keyPressed(KeyEvent evt) {
 			keySet.add(new Integer(evt.keyCode));
-			System.out.println("Key pressed for CompList : Key Code is: "+evt.keyCode);
+			System.out.println("Key pressed for CompList : Key Code is: "+evt.keyCode); //$NON-NLS-1$
 		}
 		public void keyReleased(KeyEvent evt) {
 			keySet.remove(new Integer(evt.keyCode));
@@ -465,21 +465,21 @@ public class HorizontalMultiColumnCompositeList extends Composite implements ISe
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
 	 */
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
-		throw new UnsupportedOperationException("Not implemented yet. Contact alex[at]nightlabs[dot]de.");		
+		throw new UnsupportedOperationException("Not implemented yet. Contact alex[at]nightlabs[dot]de.");		 //$NON-NLS-1$
 	}
 
 	/**
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#removeSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
 	 */
 	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
-		throw new UnsupportedOperationException("Not implemented yet. Contact alex[at]nightlabs[dot]de.");		
+		throw new UnsupportedOperationException("Not implemented yet. Contact alex[at]nightlabs[dot]de.");		 //$NON-NLS-1$
 	}
 
 	/**
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse.jface.viewers.ISelection)
 	 */
 	public void setSelection(ISelection selection) {
-		throw new UnsupportedOperationException("Not implemented yet. Contact alex[at]nightlabs[dot]de.");
+		throw new UnsupportedOperationException("Not implemented yet. Contact alex[at]nightlabs[dot]de."); //$NON-NLS-1$
 	}
 
 	/**

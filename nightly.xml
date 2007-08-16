@@ -40,7 +40,7 @@
     <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/NightLabsBase.jar"/>
     <provides path="/org.nightlabs.base/lib/NightLabsBase.jar" location="org.nightlabs.base/lib/NightLabsBase.jar"/>
 
-    <publishes description="..." location="org.nightlabs.base/dist/org.nightlabs.base_1.0.3.tar.gz"/>
+    <publishes description="..." location="org.nightlabs.base/dist/org.nightlabs.base_1.0.4.tar.gz"/>
     <javadoc path="org.nightlabs.base/src"/>
   </project>
 </nightlybuild>
