@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
 public class NightLabsConnectionPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.connection";
+	public static final String PLUGIN_ID = "org.nightlabs.connection"; //$NON-NLS-1$
 
 	// The shared instance
 	private static NightLabsConnectionPlugin plugin;

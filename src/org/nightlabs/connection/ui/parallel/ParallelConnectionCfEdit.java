@@ -12,7 +12,7 @@ extends AbstractConnectionCfEdit
 	protected Composite _createConnectionCfEditComposite(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE);
-		new Label(page, SWT.WRAP).setText("Parallel connections are not yet supported! Sorry!");
+		new Label(page, SWT.WRAP).setText("Parallel connections are not yet supported! Sorry!"); //$NON-NLS-1$
 		return page;
 	}
 }

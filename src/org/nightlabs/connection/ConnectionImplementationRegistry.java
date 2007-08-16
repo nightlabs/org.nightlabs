@@ -28,7 +28,7 @@ public class ConnectionImplementationRegistry
 
 	public String getExtensionPointID()
 	{
-		return "org.nightlabs.connection.connectionImplementation";
+		return "org.nightlabs.connection.connectionImplementation"; //$NON-NLS-1$
 	}
 
 	private Map<String, ConnectionImplementation> connectionClassName2ConnectionImplementation = null;
@@ -37,7 +37,7 @@ public class ConnectionImplementationRegistry
 			throws Exception
 	{
 		try {
-			Connection connection = (Connection) element.createExecutableExtension("class");
+			Connection connection = (Connection) element.createExecutableExtension("class"); //$NON-NLS-1$
 			Connection.getConnectionImplementations().add(new ConnectionImplementation(connection));
 		} catch (Exception e) {
 			throw new EPProcessorException(e.getLocalizedMessage(), extension, e);
@@ -72,7 +72,7 @@ public class ConnectionImplementationRegistry
 	{
 		ConnectionImplementation res = _getConnectionClassName2ConnectionImplementation().get(connectionClassName);
 		if (throwExceptionIfNotFound && res == null)
-			throw new IllegalArgumentException("No ConnectionImplementation registered for connectionClassName: " + connectionClassName);
+			throw new IllegalArgumentException("No ConnectionImplementation registered for connectionClassName: " + connectionClassName); //$NON-NLS-1$
 
 		return res;
 	}

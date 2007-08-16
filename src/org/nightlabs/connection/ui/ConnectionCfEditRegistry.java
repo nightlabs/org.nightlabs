@@ -30,7 +30,7 @@ public class ConnectionCfEditRegistry
 
 	public String getExtensionPointID()
 	{
-		return "org.nightlabs.connection.connectionCfEditFactory";
+		return "org.nightlabs.connection.connectionCfEditFactory"; //$NON-NLS-1$
 	}
 
 	private Map<String, ConnectionCfEditFactory> connectionClassName2ConnectionCfEditFactory = new HashMap<String, ConnectionCfEditFactory>();
@@ -39,8 +39,8 @@ public class ConnectionCfEditRegistry
 	throws Exception
 	{
 		try {
-			ConnectionCfEditFactory factory = (ConnectionCfEditFactory) element.createExecutableExtension("class");
-			String connectionClassName = element.getAttribute("connectionClass");
+			ConnectionCfEditFactory factory = (ConnectionCfEditFactory) element.createExecutableExtension("class"); //$NON-NLS-1$
+			String connectionClassName = element.getAttribute("connectionClass"); //$NON-NLS-1$
 			ConnectionImplementation connectionImplementation =
 					ConnectionImplementationRegistry.sharedInstance().getConnectionImplementation(connectionClassName, true);
 			factory.setConnectionImplementation(connectionImplementation);
@@ -55,7 +55,7 @@ public class ConnectionCfEditRegistry
 	{
 		ConnectionCfEditFactory res = connectionClassName2ConnectionCfEditFactory.get(connectionClassName);
 		if (throwExceptionIfNotFound && res == null)
-			throw new IllegalArgumentException("No ConnectionCfEditFactory registered for connection class: " + connectionClassName);
+			throw new IllegalArgumentException("No ConnectionCfEditFactory registered for connection class: " + connectionClassName); //$NON-NLS-1$
 
 		return res;
 	}
