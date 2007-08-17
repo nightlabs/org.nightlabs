@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.jdo - NightLabs Eclipse utilities for JDO                     *
+ * org.nightlabs.jdo.ui - NightLabs Eclipse utilities for JDO                     *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -24,17 +24,19 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jdo.search;
+package org.nightlabs.jdo.ui.search;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.j2ee.InitialContextProvider;
+import org.nightlabs.jdo.search.SearchFilter;
 
 /**
  * SearchFilterProvider providing a changable list of SearchFilterItems
- * for the search. The class has to be instatiated with a {@link org.nightlabs.jdo.search.SearchFilterItemListMutator}
+ * for the search. The class has to be instatiated with a {@link org.nightlabs.jdo.ui.search.SearchFilterItemListMutator}
  * in order to change the item list.
  * <br/>
- * Optionally one can set a {@link org.nightlabs.jdo.search.SearchResultFetcher} to
+ * Optionally one can set a {@link org.nightlabs.jdo.ui.search.SearchResultFetcher} to
  * perform a search when the search button is hit. A SearchResultFetcher has to come
  * along with an InitialContextProvider to allow fetchers access to a j2ee server.
  * <br/>
@@ -93,7 +95,7 @@ public abstract class AbstractItemBasedSearchFilterProvider implements SearchFil
 		);
 	
 	/**
-	 * @see org.nightlabs.jdo.search.SearchFilterProvider#getComposite(org.eclipse.swt.widgets.Composite)
+	 * @see org.nightlabs.jdo.ui.search.SearchFilterProvider#getComposite(org.eclipse.swt.widgets.Composite)
 	 */
 	public Composite createComposite(Composite parent) {
 		providerComposite = createProviderComposite(
@@ -116,7 +118,7 @@ public abstract class AbstractItemBasedSearchFilterProvider implements SearchFil
 	 * When overrided super() should be called, then SearchFilterItems
 	 * can be added or removed to the returned filter.
 	 * 
-	 * @see org.nightlabs.jdo.search.SearchFilterProvider#getSearchFilter()
+	 * @see org.nightlabs.jdo.ui.search.SearchFilterProvider#getSearchFilter()
 	 */
 	public SearchFilter getSearchFilter() {
 		SearchFilter filter = createSearchFilter();

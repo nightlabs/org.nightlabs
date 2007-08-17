@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.jdo - NightLabs Eclipse utilities for JDO                     *
+ * org.nightlabs.jdo.ui - NightLabs Eclipse utilities for JDO                     *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -24,71 +24,39 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jdo;
+package org.nightlabs.jdo.ui.search;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.BundleContext;
+import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.jdo.search.SearchFilter;
 
 /**
- * The main plugin class to be used in the desktop.
+ * Common interface to handle different scenarios of 
+ * searching entities with the SearchFilter framework.
+ * 
+ * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */
-public class JdoPlugin extends AbstractUIPlugin {
-	//The shared instance.
-	private static JdoPlugin plugin;
-//	//Resource bundle.
-//	private ResourceBundle resourceBundle;
-
+public interface SearchFilterProvider {
+	
 	/**
-	 * The constructor.
+	 * Should create and return a GUI-representation of this
+	 * CriteriaBuilder as Composite. 
+	 * 
+	 * @param parent
+	 * @return
 	 */
-	public JdoPlugin() {
-		super();
-		plugin = this;
-//		try {
-//			resourceBundle = ResourceBundle.getBundle("org.nightlabs.jdo.plugin"); //$NON-NLS-1$
-//		} catch (MissingResourceException x) {
-//			resourceBundle = null;
-//		}
-	}
-
+	public Composite createComposite(Composite parent);
+	
 	/**
-	 * This method is called upon plug-in activation
+	 * Should return the Composite created in {@link #createComposite(Composite)}.
+	 * @return
 	 */
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-	}
-
+	public Composite getComposite();
+	
 	/**
-	 * This method is called when the plug-in is stopped
+	 * Return the PersonSearchFilter build up by this
+	 * Criteria builder.
+	 * 
+	 * @return
 	 */
-	public void stop(BundleContext context) throws Exception {
-		super.stop(context);
-	}
-
-	/**
-	 * Returns the shared instance.
-	 */
-	public static JdoPlugin getDefault() {
-		return plugin;
-	}
-
-//	/**
-//	 * Returns the string from the plugin's resource bundle,
-//	 * or 'key' if not found.
-//	 */
-//	public static String getResourceString(String key) {
-//		ResourceBundle bundle = JdoPlugin.getDefault().getResourceBundle();
-//		try {
-//			return (bundle != null) ? bundle.getString(key) : key;
-//		} catch (MissingResourceException e) {
-//			return key;
-//		}
-//	}
-
-//	/**
-//	 * Returns the plugin's resource bundle,
-//	 */
-//	public ResourceBundle getResourceBundle() {
-//		return resourceBundle;
-//	}
+	public SearchFilter getSearchFilter();
 }

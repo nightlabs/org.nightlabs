@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.jdo - NightLabs Eclipse utilities for JDO                     *
+ * org.nightlabs.jdo.ui - NightLabs Eclipse utilities for JDO                     *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -24,27 +24,71 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jdo.search;
+package org.nightlabs.jdo.ui;
 
-
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.BundleContext;
 
 /**
- * Common interface to handle triggerment of searches
- * for persons.
- * 
- * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ * The main plugin class to be used in the desktop.
  */
-public interface SearchResultFetcher {
+public class JdoPlugin extends AbstractUIPlugin {
+	//The shared instance.
+	private static JdoPlugin plugin;
+//	//Resource bundle.
+//	private ResourceBundle resourceBundle;
+
 	/**
-	 * Will be called when a search is triggered.
-	 * The criteriaBuilder will provide a SearchFilter.
-	 * Fetchers have to perform the search themselves
-	 * within this method. With the login passed fetchers 
-	 * can have access to a j2ee server to perform the
-	 * search based on the obtained search filter.
-	 * 
-	 * @param criteriaBuilder
-	 * @param login
+	 * The constructor.
 	 */
-	public void searchTriggered(SearchFilterProvider filterProvider);
+	public JdoPlugin() {
+		super();
+		plugin = this;
+//		try {
+//			resourceBundle = ResourceBundle.getBundle("org.nightlabs.jdo.ui.plugin"); //$NON-NLS-1$
+//		} catch (MissingResourceException x) {
+//			resourceBundle = null;
+//		}
+	}
+
+	/**
+	 * This method is called upon plug-in activation
+	 */
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+	}
+
+	/**
+	 * This method is called when the plug-in is stopped
+	 */
+	public void stop(BundleContext context) throws Exception {
+		super.stop(context);
+	}
+
+	/**
+	 * Returns the shared instance.
+	 */
+	public static JdoPlugin getDefault() {
+		return plugin;
+	}
+
+//	/**
+//	 * Returns the string from the plugin's resource bundle,
+//	 * or 'key' if not found.
+//	 */
+//	public static String getResourceString(String key) {
+//		ResourceBundle bundle = JdoPlugin.getDefault().getResourceBundle();
+//		try {
+//			return (bundle != null) ? bundle.getString(key) : key;
+//		} catch (MissingResourceException e) {
+//			return key;
+//		}
+//	}
+
+//	/**
+//	 * Returns the plugin's resource bundle,
+//	 */
+//	public ResourceBundle getResourceBundle() {
+//		return resourceBundle;
+//	}
 }

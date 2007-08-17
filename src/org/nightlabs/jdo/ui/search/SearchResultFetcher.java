@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.jdo - NightLabs Eclipse utilities for JDO                     *
+ * org.nightlabs.jdo.ui - NightLabs Eclipse utilities for JDO                     *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -24,59 +24,27 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jdo.search;
+package org.nightlabs.jdo.ui.search;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 
-import org.nightlabs.jdo.search.SearchFilterItem;
 
 /**
+ * Common interface to handle triggerment of searches
+ * for persons.
+ * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */
-public abstract class SearchFilterItemEditor {
-	
+public interface SearchResultFetcher {
 	/**
-	 * After the first call this method should always
-	 * return the same control. So from the second call
-	 * the parent parameter should be neglected.
+	 * Will be called when a search is triggered.
+	 * The criteriaBuilder will provide a SearchFilter.
+	 * Fetchers have to perform the search themselves
+	 * within this method. With the login passed fetchers 
+	 * can have access to a j2ee server to perform the
+	 * search based on the obtained search filter.
 	 * 
-	 * @param parent
-	 * @return
+	 * @param criteriaBuilder
+	 * @param login
 	 */
-	public abstract Control getControl(Composite parent);
-	
-	/**
-	 * Should return the SearchFilterItem this 
-	 * editor has build.
-	 * 
-	 * @return
-	 */
-	public abstract SearchFilterItem getSearchFilterItem();
-	
-	/**
-	 * Will be called when the
-	 * editor is closed. It should be
-	 * used for cleanup (removing listeners), 
-	 * not for disposing widgets.
-	 */
-	public abstract void close();
-	
-	/**
-	 * Creates a new instance of the current class.
-	 * 
-	 * @return
-	 */
-	public SearchFilterItemEditor newInstance() {
-		SearchFilterItemEditor newEditor = null;
-		try {
-			newEditor = (SearchFilterItemEditor) this.getClass().newInstance();
-		} catch (Throwable t) {
-			IllegalStateException ill = new IllegalStateException("Could not create new instance of SearchFilterItemEditor "+this); //$NON-NLS-1$
-			ill.initCause(t);
-			throw ill;
-		}
-		return newEditor;
-	}
-	
+	public void searchTriggered(SearchFilterProvider filterProvider);
 }

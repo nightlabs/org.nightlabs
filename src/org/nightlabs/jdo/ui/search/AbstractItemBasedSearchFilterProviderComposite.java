@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.jdo - NightLabs Eclipse utilities for JDO                     *
+ * org.nightlabs.jdo.ui - NightLabs Eclipse utilities for JDO                     *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jdo.search;
+package org.nightlabs.jdo.ui.search;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -35,12 +35,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
-import org.nightlabs.jdo.resource.Messages;
+import org.nightlabs.jdo.search.SearchFilter;
+import org.nightlabs.jdo.ui.resource.Messages;
 
 /**
- * A Composite for manipulating a list of SearchFieldItems ({@link org.nightlabs.jdo.search.SearchFilterItemList})
+ * A Composite for manipulating a list of SearchFieldItems ({@link org.nightlabs.jdo.ui.search.SearchFilterItemList})
  * and choosing their conjunction. <br/>
- * This Composite will accept a {@link org.nightlabs.jdo.search.SearchResultFetcher} to
+ * This Composite will accept a {@link org.nightlabs.jdo.ui.search.SearchResultFetcher} to
  * actually perform a search.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>

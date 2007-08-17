@@ -2,12 +2,12 @@
 <!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.9//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_9.dtd">
 
 <nightlybuild>
-  <project name="org.nightlabs.jdo">
+  <project name="org.nightlabs.jdo.ui">
 	<plugin/>
-    <ant path="org.nightlabs.jdo" file="build-nightlabs.xml" target="deploy"/>
+    <ant path="org.nightlabs.jdo.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jdo/dist/org.nightlabs.jdo_0.9.1.tar.gz"/>
-    <javadoc path="org.nightlabs.jdo/src"/>
+    <publishes description="..." location="org.nightlabs.jdo.ui/dist/org.nightlabs.jdo_0.9.1.tar.gz"/>
+    <javadoc path="org.nightlabs.jdo.ui/src"/>
   </project>
 </nightlybuild>

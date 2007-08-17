@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.jdo - NightLabs Eclipse utilities for JDO                     *
+ * org.nightlabs.jdo.ui - NightLabs Eclipse utilities for JDO                     *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -24,25 +24,39 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jdo.search;
+package org.nightlabs.jdo.ui.search;
 
+import org.eclipse.swt.widgets.Composite;
 
 /**
+ * Default implementation of an ItemBased SearchFilterProviderComposite.
+ * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */
-public interface SearchFilterItemListMutator {
-	
+public class ItemBasedSearchFilterProviderComposite extends
+		AbstractItemBasedSearchFilterProviderComposite {
+
 	/**
-	 * Will be called when a new 
-	 * SearchFilterItemEditor has to be created
-	 * and added to the list.<br/>
-	 * Most implementations will look like:
-	 * <pre>
-	 * 	list.addItemEditor(new MyInheritorOfSearchFilterItemEditor())
-	 * </pre>
-	 * 
-	 * @param list The list the editor should be added
+	 * @param parent
+	 * @param style
+	 * @param searchFilterProvider
+	 * @param listMutator
+	 * @param resultFetcher
+	 * @param login
 	 */
-	public void addItemEditor(SearchFilterItemList list);
-	
+	public ItemBasedSearchFilterProviderComposite(Composite parent, int style,
+			SearchFilterProvider searchFilterProvider,
+			SearchFilterItemListMutator listMutator,
+			SearchResultFetcher resultFetcher) {
+		super(parent, style, searchFilterProvider, listMutator, resultFetcher);
+	}
+
+	/**
+	 * @see org.nightlabs.jdo.ui.search.AbstractItemBasedSearchFilterProviderComposite#createSearchFilterItemList(org.eclipse.swt.widgets.Composite, int)
+	 */
+	public SearchFilterItemList createSearchFilterItemList(Composite parent,
+			int style) {
+		return new SearchFilterItemList(parent, style);
+	}
+
 }

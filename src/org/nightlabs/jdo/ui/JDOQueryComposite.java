@@ -1,4 +1,4 @@
-package org.nightlabs.jdo;
+package org.nightlabs.jdo.ui;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.composite.XComposite;

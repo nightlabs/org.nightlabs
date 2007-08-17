@@ -5,12 +5,12 @@ Bundle-SymbolicName: org.nightlabs.jdo
 Bundle-Version: 0.9.1
 Bundle-ClassPath: org.nightlabs.jdo.jar,
  lib/NightLabsJDO.jar
-Bundle-Activator: org.nightlabs.jdo.JdoPlugin
+Bundle-Activator: org.nightlabs.jdo.ui.JdoPlugin
 Bundle-Vendor: NightLabs.com
 Bundle-Localization: plugin
-Export-Package: org.nightlabs.jdo,
- org.nightlabs.jdo.notification,
- org.nightlabs.jdo.search
+Export-Package: org.nightlabs.jdo.ui,
+ org.nightlabs.jdo.ui.notification,
+ org.nightlabs.jdo.ui.search
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.nightlabs.base,
