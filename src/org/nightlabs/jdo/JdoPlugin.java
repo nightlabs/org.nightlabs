@@ -26,9 +26,8 @@
 
 package org.nightlabs.jdo;
 
-import org.eclipse.ui.plugin.*;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import java.util.*;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -36,20 +35,20 @@ import java.util.*;
 public class JdoPlugin extends AbstractUIPlugin {
 	//The shared instance.
 	private static JdoPlugin plugin;
-	//Resource bundle.
-	private ResourceBundle resourceBundle;
-	
+//	//Resource bundle.
+//	private ResourceBundle resourceBundle;
+
 	/**
 	 * The constructor.
 	 */
 	public JdoPlugin() {
 		super();
 		plugin = this;
-		try {
-			resourceBundle = ResourceBundle.getBundle("org.nightlabs.jdo.plugin");
-		} catch (MissingResourceException x) {
-			resourceBundle = null;
-		}
+//		try {
+//			resourceBundle = ResourceBundle.getBundle("org.nightlabs.jdo.plugin"); //$NON-NLS-1$
+//		} catch (MissingResourceException x) {
+//			resourceBundle = null;
+//		}
 	}
 
 	/**
@@ -73,23 +72,23 @@ public class JdoPlugin extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	/**
-	 * Returns the string from the plugin's resource bundle,
-	 * or 'key' if not found.
-	 */
-	public static String getResourceString(String key) {
-		ResourceBundle bundle = JdoPlugin.getDefault().getResourceBundle();
-		try {
-			return (bundle != null) ? bundle.getString(key) : key;
-		} catch (MissingResourceException e) {
-			return key;
-		}
-	}
+//	/**
+//	 * Returns the string from the plugin's resource bundle,
+//	 * or 'key' if not found.
+//	 */
+//	public static String getResourceString(String key) {
+//		ResourceBundle bundle = JdoPlugin.getDefault().getResourceBundle();
+//		try {
+//			return (bundle != null) ? bundle.getString(key) : key;
+//		} catch (MissingResourceException e) {
+//			return key;
+//		}
+//	}
 
-	/**
-	 * Returns the plugin's resource bundle,
-	 */
-	public ResourceBundle getResourceBundle() {
-		return resourceBundle;
-	}
+//	/**
+//	 * Returns the plugin's resource bundle,
+//	 */
+//	public ResourceBundle getResourceBundle() {
+//		return resourceBundle;
+//	}
 }

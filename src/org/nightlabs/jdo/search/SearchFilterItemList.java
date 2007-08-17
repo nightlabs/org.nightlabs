@@ -97,7 +97,7 @@ public class SearchFilterItemList
 			this.editor = editor;
 			this.itemList = itemList;
 			buttonClose = new Button(this, SWT.FLAT | SWT.NONE);
-			buttonClose.setText("x");
+			buttonClose.setText("x"); //$NON-NLS-1$
 			buttonClose.addSelectionListener(this);
 		}
 
@@ -186,7 +186,7 @@ public class SearchFilterItemList
 		try {
 			itemEditor = (SearchFilterItemEditor) editorClass.newInstance();
 		} catch (Throwable t) {
-			throw new IllegalStateException("Error instatiating new SearchFilterItemEditor from class "+editorClass);
+			throw new IllegalStateException("Error instatiating new SearchFilterItemEditor from class "+editorClass); //$NON-NLS-1$
 		}
 		addItemEditor(itemEditor);		
 	}

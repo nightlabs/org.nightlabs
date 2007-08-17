@@ -35,7 +35,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
-import org.nightlabs.jdo.JdoPlugin;
+import org.nightlabs.jdo.resource.Messages;
 
 /**
  * A Composite for manipulating a list of SearchFieldItems ({@link org.nightlabs.jdo.search.SearchFilterItemList})
@@ -58,8 +58,7 @@ public abstract class AbstractItemBasedSearchFilterProviderComposite extends Com
 	private SearchFilterItemListMutator listMutator;
 	private SearchResultFetcher resultFetcher;
 	private SearchFilterProvider searchFilterProvider;
-	
-	
+
 	/**
 	 * Creates a new ItemBasedSearchFilterProviderComposite,
 	 * wich has a list of SearchFilterItems and provides 
@@ -113,14 +112,14 @@ public abstract class AbstractItemBasedSearchFilterProviderComposite extends Com
 		
 		
 		radioMatchAll = new Button(controlsComposite, SWT.RADIO | SWT.LEFT);
-		radioMatchAll.setText(JdoPlugin.getResourceString("search.conjunction"+SearchFilter.CONJUNCTION_AND));
+		radioMatchAll.setText(Messages.getString("search.AbstractItemBasedSearchFilterProviderComposite.radioMatchAll.text")); //$NON-NLS-1$
 		GridData radioMatchAllLData = new GridData();
 		radioMatchAllLData.grabExcessHorizontalSpace = false;
 		radioMatchAllLData.horizontalAlignment = GridData.FILL;
 		radioMatchAll.setLayoutData(radioMatchAllLData);
 
 		radioMatchAny = new Button(controlsComposite, SWT.RADIO | SWT.LEFT);
-		radioMatchAny.setText(JdoPlugin.getResourceString("search.conjunction"+SearchFilter.CONJUNCTION_OR));
+		radioMatchAny.setText(Messages.getString("search.AbstractItemBasedSearchFilterProviderComposite.radioMatchAny.text")); //$NON-NLS-1$
 		GridData radioMatchAnyLData = new GridData();
 		radioMatchAnyLData.grabExcessHorizontalSpace = false;
 		radioMatchAnyLData.horizontalAlignment = GridData.FILL;
@@ -137,14 +136,14 @@ public abstract class AbstractItemBasedSearchFilterProviderComposite extends Com
 		buttonsComposite.setLayout(buttonsCompositeLayout);
 
 		buttonMore = new Button(buttonsComposite, SWT.PUSH | SWT.CENTER);
-		buttonMore.setText(JdoPlugin.getResourceString("search.ItemBasedFilterProviderComposite.buttons.add"));
+		buttonMore.setText(Messages.getString("search.AbstractItemBasedSearchFilterProviderComposite.buttonMore.text")); //$NON-NLS-1$
 		GridData buttonMoreLData = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		buttonMoreLData.grabExcessHorizontalSpace = true;
 		buttonMore.setLayoutData(buttonMoreLData);
 		buttonMore.addSelectionListener(this);
 
 		buttonSearch = new Button(buttonsComposite, SWT.PUSH | SWT.CENTER);
-		buttonSearch.setText(JdoPlugin.getResourceString("search.ItemBasedFilterProviderComposite.buttons.search"));
+		buttonSearch.setText(Messages.getString("search.AbstractItemBasedSearchFilterProviderComposite.buttonSearch.text")); //$NON-NLS-1$
 		GridData buttonSearchLData = new GridData(GridData.HORIZONTAL_ALIGN_END);
 //		buttonSearchLData.widthHint = 58;
 //		buttonSearchLData.heightHint = 32;

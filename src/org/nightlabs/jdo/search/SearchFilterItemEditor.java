@@ -72,7 +72,7 @@ public abstract class SearchFilterItemEditor {
 		try {
 			newEditor = (SearchFilterItemEditor) this.getClass().newInstance();
 		} catch (Throwable t) {
-			IllegalStateException ill = new IllegalStateException("Could not create new instance of SearchFilterItemEditor "+this);
+			IllegalStateException ill = new IllegalStateException("Could not create new instance of SearchFilterItemEditor "+this); //$NON-NLS-1$
 			ill.initCause(t);
 			throw ill;
 		}
