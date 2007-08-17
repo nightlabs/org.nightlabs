@@ -39,7 +39,7 @@ extends AbstractContributionItem
 
 	public LanguageContributionItem() 
 	{
-		super(ID, Messages.getString("language.LanguageContributionItem.name")); //$NON-NLS-1$
+		super(ID, Messages.getString("org.nightlabs.base.language.LanguageContributionItem.name")); //$NON-NLS-1$
 	}
 
 	protected Control createControl(Composite parent) 

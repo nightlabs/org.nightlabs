@@ -75,7 +75,7 @@ extends Action
 		{
 			logger.error("Opening file failed: " + fileName, e);	 //$NON-NLS-1$
 			RCPUtil.showErrorDialog(
-					String.format(Messages.getString("action.ReOpenFileAction.errorOpeningFileFailed"), new Object[] { fileName }) //$NON-NLS-1$
+					String.format(Messages.getString("org.nightlabs.base.action.ReOpenFileAction.errorOpeningFileFailed"), new Object[] { fileName }) //$NON-NLS-1$
 			);
 		}
 	}

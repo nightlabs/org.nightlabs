@@ -21,7 +21,7 @@ public class CountdownButton
 {
 	private Button button;
 
-	private String text = Messages.getString("composite.CountdownButton.defaultText"); //$NON-NLS-1$
+	private String text = Messages.getString("org.nightlabs.base.composite.CountdownButton.defaultText"); //$NON-NLS-1$
 	private int countdownLengthSec;
 	private int countdownRest;
 
@@ -78,7 +78,7 @@ public class CountdownButton
 				fireSelectionEvent();
 			}
 		});
-		setText(Messages.getString("composite.CountdownButton.defaultText")); //$NON-NLS-1$
+		setText(Messages.getString("org.nightlabs.base.composite.CountdownButton.defaultText")); //$NON-NLS-1$
 		timer = new Timer("buttonTimer"); //$NON-NLS-1$
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e)
@@ -115,7 +115,7 @@ public class CountdownButton
 		return new Button(this, style);
 	}
 
-	private String textFormat = Messages.getString("composite.CountdownButton.defaultTextFormat"); //$NON-NLS-1$
+	private String textFormat = Messages.getString("org.nightlabs.base.composite.CountdownButton.defaultTextFormat"); //$NON-NLS-1$
 
 	public void setText(String text)
 	{

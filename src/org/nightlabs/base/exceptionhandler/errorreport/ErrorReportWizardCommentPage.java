@@ -50,8 +50,8 @@ public class ErrorReportWizardCommentPage extends DynamicPathWizardPage
 	
 	public ErrorReportWizardCommentPage()
 	{
-		super(ErrorReportWizardCommentPage.class.getName(), Messages.getString("exceptionhandler.errorreport.ErrorReportWizardCommentPage.title")); //$NON-NLS-1$
-		setDescription(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardCommentPage.description")); //$NON-NLS-1$
+		super(ErrorReportWizardCommentPage.class.getName(), Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardCommentPage.title")); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardCommentPage.description")); //$NON-NLS-1$
 	}
 
 	/**
@@ -64,9 +64,9 @@ public class ErrorReportWizardCommentPage extends DynamicPathWizardPage
 //    //layout.
 //    page.setLayout(layout);
     Label commentLabel = new Label(page, SWT.NONE);
-    commentLabel.setText(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardCommentPage.commentLabel.text")); //$NON-NLS-1$
+    commentLabel.setText(Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardCommentPage.commentLabel.text")); //$NON-NLS-1$
 		textUserComment = new Text(page, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.WRAP);
-		textUserComment.setToolTipText(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardCommentPage.textUserComment.toolTipText")); //$NON-NLS-1$
+		textUserComment.setToolTipText(Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardCommentPage.textUserComment.toolTipText")); //$NON-NLS-1$
 		textUserComment.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e)
 			{

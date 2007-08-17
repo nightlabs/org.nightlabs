@@ -327,7 +327,7 @@ public class RCPUtil
 	 */
 	public static void showErrorDialog(String message) 
 	{
-		MessageDialog.openError(getActiveWorkbenchShell(), Messages.getString("util.RCPUtil.showErrorDialog.title"), message); //$NON-NLS-1$
+		MessageDialog.openError(getActiveWorkbenchShell(), Messages.getString("org.nightlabs.base.util.RCPUtil.showErrorDialog.title"), message); //$NON-NLS-1$
 	}
 
 	/**
@@ -341,8 +341,8 @@ public class RCPUtil
 	{
 		return MessageDialog.openConfirm(
 				getActiveWorkbenchShell(), 
-				Messages.getString("util.RCPUtil.showConfirmOverwriteDialog.title"), //$NON-NLS-1$
-				String.format(Messages.getString("util.RCPUtil.showConfirmOverwriteDialog.message"), new Object[] { fileName }) //$NON-NLS-1$
+				Messages.getString("org.nightlabs.base.util.RCPUtil.showConfirmOverwriteDialog.title"), //$NON-NLS-1$
+				String.format(Messages.getString("org.nightlabs.base.util.RCPUtil.showConfirmOverwriteDialog.message"), new Object[] { fileName }) //$NON-NLS-1$
 			);
 	}
 	
@@ -637,7 +637,7 @@ public class RCPUtil
 	{
 		if (ask) {
 			boolean ok = MessageDialog.openConfirm(RCPUtil.getActiveWorkbenchShell(), 
-					Messages.getString("util.RCPUtil.clearWorkspace.title"), Messages.getString("util.RCPUtil.clearWorkspace.message")); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("org.nightlabs.base.util.RCPUtil.clearWorkspace.title"), Messages.getString("org.nightlabs.base.util.RCPUtil.clearWorkspace.message")); //$NON-NLS-1$ //$NON-NLS-2$
 			if (!ok)
 				return;
 		}

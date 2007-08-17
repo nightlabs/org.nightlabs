@@ -95,9 +95,9 @@ public class ErrorReportWizard extends DynamicPathWizard
 			logger.fatal("Sending ErrorReport failed!", e); //$NON-NLS-1$
 			MessageDialog.openError(
 					getShell(),
-					Messages.getString("exceptionhandler.errorreport.ErrorReportWizard.sendingErrorReportFailedDialog.title"), //$NON-NLS-1$
+					Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizard.sendingErrorReportFailedDialog.title"), //$NON-NLS-1$
 					String.format(
-							Messages.getString("exceptionhandler.errorreport.ErrorReportWizard.sendingErrorReportFailedDialog.message"), //$NON-NLS-1$
+							Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizard.sendingErrorReportFailedDialog.message"), //$NON-NLS-1$
 							new Object[] {
 									e.getClass().getName(),
 									e.getLocalizedMessage(),

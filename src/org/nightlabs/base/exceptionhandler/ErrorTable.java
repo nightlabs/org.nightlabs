@@ -92,8 +92,8 @@ public class ErrorTable extends AbstractTableComposite
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
-		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("exceptionhandler.ErrorTable.tableColumnExceptionClass")); //$NON-NLS-1$
-		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("exceptionhandler.ErrorTable.tableColumnMessage")); //$NON-NLS-1$
+		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("org.nightlabs.base.exceptionhandler.ErrorTable.tableColumnExceptionClass")); //$NON-NLS-1$
+		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("org.nightlabs.base.exceptionhandler.ErrorTable.tableColumnMessage")); //$NON-NLS-1$
 		table.setLayout(new WeightedTableLayout(new int[] {3, 4}));
 	}
 

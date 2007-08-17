@@ -44,7 +44,7 @@ extends Action implements IUpdateActionOrContributionItem
 	public InheritanceAction() {
 		super();
 		setId(ID);
-		setToolTipText(Messages.getString("action.InheritanceAction.toolTipText")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.base.action.InheritanceAction.toolTipText")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				NLBasePlugin.getDefault(), InheritanceToggleButton.class));		
 	}

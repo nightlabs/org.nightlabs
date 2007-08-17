@@ -74,8 +74,8 @@ extends Action
 	protected void init() 
 	{
 		setId(ID);
-		setText(Messages.getString("action.OpenFileAction.text")); //$NON-NLS-1$
-		setToolTipText(Messages.getString("action.OpenFileAction.toolTipText")); //$NON-NLS-1$
+		setText(Messages.getString("org.nightlabs.base.action.OpenFileAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.base.action.OpenFileAction.toolTipText")); //$NON-NLS-1$
 
 		try {
 			historyConfig = (RecentFileCfMod) Config.sharedInstance().createConfigModule(RecentFileCfMod.class);
@@ -122,7 +122,7 @@ extends Action
 		} catch (PartInitException e) {
 			Logger.getLogger(OpenFileAction.class).error("Cannot open file: " + fullFileName, e); //$NON-NLS-1$
 			RCPUtil.showErrorDialog(
-					String.format(Messages.getString("action.OpenFileAction.errorOpeningFileFailed"), new Object[] { fullFileName }) //$NON-NLS-1$
+					String.format(Messages.getString("org.nightlabs.base.action.OpenFileAction.errorOpeningFileFailed"), new Object[] { fullFileName }) //$NON-NLS-1$
 			);
 		}
 	}

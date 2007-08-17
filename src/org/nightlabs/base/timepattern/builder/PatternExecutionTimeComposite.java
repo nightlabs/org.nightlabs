@@ -33,7 +33,7 @@ public class PatternExecutionTimeComposite extends XComposite {
 		startTimeEdit = new DateTimeEdit(
 				this,
 				DateFormatter.FLAGS_TIME_HMS,
-				Messages.getString("timepattern.builder.PatternExecutionTimeComposite.startTimeEdit.caption") //$NON-NLS-1$
+				Messages.getString("org.nightlabs.base.timepattern.builder.PatternExecutionTimeComposite.startTimeEdit.caption") //$NON-NLS-1$
 			);
 	}
 

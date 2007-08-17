@@ -142,11 +142,11 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 		typeWrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		typeGroup = new Group(typeWrapper, SWT.NONE);
 		typeGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		typeGroup.setText(Messages.getString("print.pref.EditDocumentPrinterConfigComposite.typeGroup.text")); //$NON-NLS-1$
+		typeGroup.setText(Messages.getString("org.nightlabs.base.print.pref.EditDocumentPrinterConfigComposite.typeGroup.text")); //$NON-NLS-1$
 		typeGroup.setLayout(new RowLayout(SWT.VERTICAL));
 
 		typeSysCall = new Button(typeGroup, SWT.RADIO);
-		typeSysCall.setText(Messages.getString("print.pref.EditDocumentPrinterConfigComposite.typeSysCall.text")); //$NON-NLS-1$
+		typeSysCall.setText(Messages.getString("org.nightlabs.base.print.pref.EditDocumentPrinterConfigComposite.typeSysCall.text")); //$NON-NLS-1$
 		typeSysCall.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
@@ -157,7 +157,7 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 		typeSysCall.setSelection(true);
 
 		typeExtEngine = new Button(typeGroup, SWT.RADIO);
-		typeExtEngine.setText(Messages.getString("print.pref.EditDocumentPrinterConfigComposite.typeExtEngine.text")); //$NON-NLS-1$
+		typeExtEngine.setText(Messages.getString("org.nightlabs.base.print.pref.EditDocumentPrinterConfigComposite.typeExtEngine.text")); //$NON-NLS-1$
 		typeExtEngine.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
@@ -175,8 +175,8 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 		firstLine = new XComposite(sysCallEditComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		firstLine.getGridData().grabExcessVerticalSpace = false;
 		firstLine.getGridLayout().numColumns = 2;
-		expectedReturnValue = new LabeledText(firstLine, Messages.getString("print.pref.EditDocumentPrinterConfigComposite.expectedReturnValue.caption")); //$NON-NLS-1$
-		templates = new XComboComposite<String>(firstLine, XComboComposite.getDefaultWidgetStyle(firstLine), Messages.getString("print.pref.EditDocumentPrinterConfigComposite.templates.caption")); //$NON-NLS-1$
+		expectedReturnValue = new LabeledText(firstLine, Messages.getString("org.nightlabs.base.print.pref.EditDocumentPrinterConfigComposite.expectedReturnValue.caption")); //$NON-NLS-1$
+		templates = new XComboComposite<String>(firstLine, XComboComposite.getDefaultWidgetStyle(firstLine), Messages.getString("org.nightlabs.base.print.pref.EditDocumentPrinterConfigComposite.templates.caption")); //$NON-NLS-1$
 		for (String option : options) {
 			templates.addElement(option);
 		}
@@ -198,11 +198,11 @@ public class EditDocumentPrinterConfigComposite extends XComposite {
 			}
 		});
 
-		commandPattern = new LabeledText(sysCallEditComposite, Messages.getString("print.pref.EditDocumentPrinterConfigComposite.commandPattern.caption")); //$NON-NLS-1$
-		parameterPattern = new LabeledText(sysCallEditComposite, Messages.getString("print.pref.EditDocumentPrinterConfigComposite.parameterPattern.caption")); //$NON-NLS-1$
+		commandPattern = new LabeledText(sysCallEditComposite, Messages.getString("org.nightlabs.base.print.pref.EditDocumentPrinterConfigComposite.commandPattern.caption")); //$NON-NLS-1$
+		parameterPattern = new LabeledText(sysCallEditComposite, Messages.getString("org.nightlabs.base.print.pref.EditDocumentPrinterConfigComposite.parameterPattern.caption")); //$NON-NLS-1$
 
 		extEngineEditComposite = new XComposite(editWrapper, SWT.NONE);
-		className = new LabeledText(extEngineEditComposite, Messages.getString("print.pref.EditDocumentPrinterConfigComposite.className.caption")); //$NON-NLS-1$
+		className = new LabeledText(extEngineEditComposite, Messages.getString("org.nightlabs.base.print.pref.EditDocumentPrinterConfigComposite.className.caption")); //$NON-NLS-1$
 		stackLayout.topControl = sysCallEditComposite;
 	}
 

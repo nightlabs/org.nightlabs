@@ -37,8 +37,8 @@ public class MonthlyTimePatternBuilderHopPage extends WizardHopPage {
 	private SortedSet<Integer> selectedMonths = new TreeSet<Integer>();
 
 	public MonthlyTimePatternBuilderHopPage() {
-		super(MonthlyTimePatternBuilderHopPage.class.getName(), Messages.getString("timepattern.builder.MonthlyTimePatternBuilderHopPage.title")); //$NON-NLS-1$
-		setDescription(Messages.getString("timepattern.builder.MonthlyTimePatternBuilderHopPage.description")); //$NON-NLS-1$
+		super(MonthlyTimePatternBuilderHopPage.class.getName(), Messages.getString("org.nightlabs.base.timepattern.builder.MonthlyTimePatternBuilderHopPage.title")); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.base.timepattern.builder.MonthlyTimePatternBuilderHopPage.description")); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -51,7 +51,7 @@ public class MonthlyTimePatternBuilderHopPage extends WizardHopPage {
 		(new Label(wrapper, SWT.SEPARATOR | SWT.HORIZONTAL)).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		XComposite selectionWrapper = new XComposite(wrapper, SWT.NONE);
 		dayWrapper = new Group(selectionWrapper, SWT.NONE);
-		dayWrapper.setText(Messages.getString("timepattern.builder.MonthlyTimePatternBuilderHopPage.dayWrapper.text")); //$NON-NLS-1$
+		dayWrapper.setText(Messages.getString("org.nightlabs.base.timepattern.builder.MonthlyTimePatternBuilderHopPage.dayWrapper.text")); //$NON-NLS-1$
 		dayWrapper.setLayout(new GridLayout(11,true));
 		dayWrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		for (int i = 1; i <= 31; i++) {
@@ -61,12 +61,12 @@ public class MonthlyTimePatternBuilderHopPage extends WizardHopPage {
 			dayButton.addSelectionListener(daySelectListner);
 		}
 		monthWrapper = new Group(selectionWrapper, SWT.NONE);
-		monthWrapper.setText(Messages.getString("timepattern.builder.MonthlyTimePatternBuilderHopPage.monthWrapper.text")); //$NON-NLS-1$
+		monthWrapper.setText(Messages.getString("org.nightlabs.base.timepattern.builder.MonthlyTimePatternBuilderHopPage.monthWrapper.text")); //$NON-NLS-1$
 		monthWrapper.setLayout(new GridLayout(4,true));
 		monthWrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		for (int i = 1; i <= 12; i++) {
 			Button monthButton = new Button(monthWrapper, SWT.CHECK);
-			monthButton.setText(Messages.getString("timepattern.builder.MonthlyTimePatternBuilderHopPage.month" + i + ".text")); //$NON-NLS-1$  //$NON-NLS-2$
+			monthButton.setText(Messages.getString("org.nightlabs.base.timepattern.builder.MonthlyTimePatternBuilderHopPage.month" + i + ".text")); //$NON-NLS-1$  //$NON-NLS-2$
 			monthButton.setData(new Integer(i));
 			monthButton.setSelection(true);
 			selectedMonths.add((Integer) monthButton.getData());

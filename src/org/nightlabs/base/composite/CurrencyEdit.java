@@ -130,7 +130,7 @@ public class CurrencyEdit extends XComposite
 					parseException = x;
 
 					if (errorDialogEnabled)
-						MessageDialog.openError(getShell(), Messages.getString("composite.CurrencyEdit.errorNotANumber.title"), Messages.getString("composite.CurrencyEdit.errorNotANumber.message") + x.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+						MessageDialog.openError(getShell(), Messages.getString("org.nightlabs.base.composite.CurrencyEdit.errorNotANumber.title"), Messages.getString("org.nightlabs.base.composite.CurrencyEdit.errorNotANumber.message") + x.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 
 				if (modifyListeners == null)

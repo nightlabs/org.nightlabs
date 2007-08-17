@@ -308,7 +308,7 @@ extends XComposite
 		String unitSymbol = getCurrentUnit().getUnitSymbol();
 
 		pageFormatLabel.setText(
-				String.format(Messages.getString("print.PrintPreviewComposite.pageFormatLabel.text"), //$NON-NLS-1$
+				String.format(Messages.getString("org.nightlabs.base.print.PrintPreviewComposite.pageFormatLabel.text"), //$NON-NLS-1$
 				new Object[] { width, height, unitSymbol })
 		);
 //				String.format("", new Object[] { Util.truncateDouble(getPageWidth(getCurrentUnit()), numberOfAfterCommaDigits) })

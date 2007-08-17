@@ -31,7 +31,7 @@ extends XComposite
 		getGridData().grabExcessHorizontalSpace = false;
 		getGridData().grabExcessVerticalSpace = false;
 		button = new Button(this, SWT.TOGGLE);
-		button.setToolTipText(Messages.getString("composite.InheritanceToggleButton.toolTipText")); //$NON-NLS-1$
+		button.setToolTipText(Messages.getString("org.nightlabs.base.composite.InheritanceToggleButton.toolTipText")); //$NON-NLS-1$
 		button.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
 				selected = button.getSelection();

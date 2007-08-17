@@ -92,13 +92,13 @@ public class FileSelectComposite extends XComposite {
 		});
 
 		browseButton = new Button(fileComp, SWT.PUSH);
-		browseButton.setText(Messages.getString("composite.FileSelectComposite.browseButton.text")); //$NON-NLS-1$
+		browseButton.setText(Messages.getString("org.nightlabs.base.composite.FileSelectComposite.browseButton.text")); //$NON-NLS-1$
 		browseButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e)
 			{
 				FileDialog fileDialog = new FileDialog(RCPUtil.getActiveWorkbenchShell());
 				fileDialog.setFilterExtensions(new String[]{"*.*"}); //$NON-NLS-1$
-				fileDialog.setFilterNames(new String[]{Messages.getString("composite.FileSelectComposite.filterName_allFiles")}); //$NON-NLS-1$
+				fileDialog.setFilterNames(new String[]{Messages.getString("org.nightlabs.base.composite.FileSelectComposite.filterName_allFiles")}); //$NON-NLS-1$
 				String selectedFile = fileDialog.open();
 				if (selectedFile != null)
 					fileTextControl.setText(selectedFile);

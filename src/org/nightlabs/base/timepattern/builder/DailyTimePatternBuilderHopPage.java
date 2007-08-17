@@ -50,8 +50,10 @@ public class DailyTimePatternBuilderHopPage extends WizardHopPage {
 	 * @param pageName
 	 */
 	public DailyTimePatternBuilderHopPage() {
-		super(DailyTimePatternBuilderHopPage.class.getName(), Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.title")); //$NON-NLS-1$
-		setDescription(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.description")); //$NON-NLS-1$
+		super(
+				DailyTimePatternBuilderHopPage.class.getName(),
+				Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.title")); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.description")); //$NON-NLS-1$
 //		setMessage("Configure the time pattern for a daily execution.");
 	}
 
@@ -92,45 +94,45 @@ public class DailyTimePatternBuilderHopPage extends WizardHopPage {
 		typeWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
 		typeWrapper.setLayout(new GridLayout());
 		typeDaily = new Button(typeWrapper, SWT.RADIO);
-		typeDaily.setText(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.typeDaily.text")); //$NON-NLS-1$
+		typeDaily.setText(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.typeDaily.text")); //$NON-NLS-1$
 		typeDaily.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		typeDaily.addSelectionListener(typeSelectionListener);
 
 		typeChooseDays = new Button(typeWrapper, SWT.RADIO);
-		typeChooseDays.setText(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.typeChooseDays.text")); //$NON-NLS-1$
+		typeChooseDays.setText(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.typeChooseDays.text")); //$NON-NLS-1$
 		typeChooseDays.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		typeChooseDays.addSelectionListener(typeSelectionListener);
 		chooseDaysWrapper = new XComposite(typeWrapper, SWT.NONE);
 		chooseDaysWrapper.getGridData().horizontalIndent = 30;
 		chooseDaysWrapper.setLayout(new RowLayout());
 		chooseSun = new Button(chooseDaysWrapper, SWT.CHECK);
-		chooseSun.setText(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.chooseSun.text")); //$NON-NLS-1$
+		chooseSun.setText(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.chooseSun.text")); //$NON-NLS-1$
 		chooseMon = new Button(chooseDaysWrapper, SWT.CHECK);
-		chooseMon.setText(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.chooseMon.text")); //$NON-NLS-1$
+		chooseMon.setText(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.chooseMon.text")); //$NON-NLS-1$
 		chooseTue = new Button(chooseDaysWrapper, SWT.CHECK);
-		chooseTue.setText(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.chooseTue.text")); //$NON-NLS-1$
+		chooseTue.setText(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.chooseTue.text")); //$NON-NLS-1$
 		chooseWed = new Button(chooseDaysWrapper, SWT.CHECK);
-		chooseWed.setText(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.chooseWed.text")); //$NON-NLS-1$
+		chooseWed.setText(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.chooseWed.text")); //$NON-NLS-1$
 		chooseThu = new Button(chooseDaysWrapper, SWT.CHECK);
-		chooseThu.setText(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.chooseThu.text")); //$NON-NLS-1$
+		chooseThu.setText(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.chooseThu.text")); //$NON-NLS-1$
 		chooseFri = new Button(chooseDaysWrapper, SWT.CHECK);
-		chooseFri.setText(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.chooseFri.text")); //$NON-NLS-1$
+		chooseFri.setText(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.chooseFri.text")); //$NON-NLS-1$
 		chooseSat = new Button(chooseDaysWrapper, SWT.CHECK);
-		chooseSat.setText(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.chooseSat.text")); //$NON-NLS-1$
+		chooseSat.setText(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.chooseSat.text")); //$NON-NLS-1$
 
 		typeEachXDay = new Button(typeWrapper, SWT.RADIO);
-		typeEachXDay.setText(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.typeEachXDays.text")); //$NON-NLS-1$
+		typeEachXDay.setText(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.typeEachXDays.text")); //$NON-NLS-1$
 		typeEachXDay.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		typeEachXDay.addSelectionListener(typeSelectionListener);
 		eachXDayWrapper = new XComposite(typeWrapper, SWT.NONE);
 		eachXDayWrapper.setLayout(new GridLayout(3, false));
 		eachXDayWrapper.getGridData().horizontalIndent = 30;
 		Label eachXDayLabel_beforeSpinner = new Label(eachXDayWrapper, SWT.NONE);
-		eachXDayLabel_beforeSpinner.setText(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.eachXDayLabel_beforeSpinner.text")); //$NON-NLS-1$
+		eachXDayLabel_beforeSpinner.setText(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.eachXDayLabel_beforeSpinner.text")); //$NON-NLS-1$
 		eachXDaySpinner = new Spinner(eachXDayWrapper, SWT.BORDER);
 		eachXDaySpinner.setMaximum(31);
 		Label eachXDayLabel_afterSpinner = new Label(eachXDayWrapper, SWT.NONE);
-		eachXDayLabel_afterSpinner.setText(Messages.getString("timepattern.builder.DailyTimePatternBuilderHopPage.eachXDayLabel_afterSpinner.text")); //$NON-NLS-1$
+		eachXDayLabel_afterSpinner.setText(Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHopPage.eachXDayLabel_afterSpinner.text")); //$NON-NLS-1$
 
 		typeDaily.setSelection(true);
 

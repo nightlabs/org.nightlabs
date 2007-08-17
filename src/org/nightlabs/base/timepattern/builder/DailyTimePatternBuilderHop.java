@@ -25,7 +25,7 @@ implements ITimePatternSetBuilderWizardHop
 	}
 
 	public String getHopDescription() {
-		return Messages.getString("timepattern.builder.DailyTimePatternBuilderHop.hopDescription"); //$NON-NLS-1$
+		return Messages.getString("org.nightlabs.base.timepattern.builder.DailyTimePatternBuilderHop.hopDescription"); //$NON-NLS-1$
 	}
 
 	public void configureTimePatternSet(TimePatternSet timePatternSet) 

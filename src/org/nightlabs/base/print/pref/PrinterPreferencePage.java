@@ -56,7 +56,7 @@ implements IWorkbenchPreferencePage {
 		wrapper = new XComposite(parent, SWT.NONE);
 		Label descriptionLabel = new Label(wrapper, SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
-		descriptionLabel.setText(Messages.getString("print.pref.PrinterPreferencePage.descriptionLabel.text")); //$NON-NLS-1$
+		descriptionLabel.setText(Messages.getString("org.nightlabs.base.print.pref.PrinterPreferencePage.descriptionLabel.text")); //$NON-NLS-1$
 		return wrapper;
 	}
 

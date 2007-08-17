@@ -263,7 +263,7 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 	protected void createButtonsForButtonBar(Composite parent)
 	{
 		super.createButtonsForButtonBar(parent);
-		createButton(parent, SEND_ERROR_REPORT_ID, Messages.getString("exceptionhandler.DefaultErrorDialog.errorReportButton.text"), false); //$NON-NLS-1$
+		createButton(parent, SEND_ERROR_REPORT_ID, Messages.getString("org.nightlabs.base.exceptionhandler.DefaultErrorDialog.errorReportButton.text"), false); //$NON-NLS-1$
 		detailsButton = createButton(parent, IDialogConstants.DETAILS_ID, IDialogConstants.SHOW_DETAILS_LABEL, false);
 	}
 }

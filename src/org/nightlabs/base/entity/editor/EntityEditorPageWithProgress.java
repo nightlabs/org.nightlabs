@@ -134,7 +134,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	 * to be invoked, when the listener gets notified.
 	 * </p>
 	 */
-	private Job asyncLoadJob = new Job(Messages.getString("entity.editor.EntityEditorPageWithProgress.loadJob.name")) { //$NON-NLS-1$
+	private Job asyncLoadJob = new Job(Messages.getString("org.nightlabs.base.entity.editor.EntityEditorPageWithProgress.loadJob.name")) { //$NON-NLS-1$
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			final IEntityEditorPageController controller = getPageController();

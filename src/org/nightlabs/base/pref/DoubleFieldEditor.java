@@ -68,7 +68,7 @@ extends StringFieldEditor
       init(name, labelText);
       setTextLimit(textLimit);
       setEmptyStringAllowed(false);
-      setErrorMessage(Messages.getString("pref.DoubleFieldEditor.errorMessage")); //$NON-NLS-1$
+      setErrorMessage(Messages.getString("org.nightlabs.base.pref.DoubleFieldEditor.errorMessage")); //$NON-NLS-1$
       createControl(parent);
   }
 

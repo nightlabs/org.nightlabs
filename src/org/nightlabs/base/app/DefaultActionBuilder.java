@@ -180,7 +180,7 @@ extends ActionBarAdvisor
 			keyAssistHandler = new ShowKeyAssistHandler();
 		if (menuBarItems.contains(ActionBarItem.New))
 		{			
-			newMenu = new MenuManager(Messages.getString("app.DefaultActionBuilder.newMenu.text"), ActionFactory.NEW.getId()); //$NON-NLS-1$
+			newMenu = new MenuManager(Messages.getString("org.nightlabs.base.app.DefaultActionBuilder.newMenu.text"), ActionFactory.NEW.getId()); //$NON-NLS-1$
 //			newMenu.add((ActionFactory.NEW.create(window)));
 			newMenu.add(new GroupMarker(ActionFactory.NEW.getId()));			
 		}
@@ -189,7 +189,7 @@ extends ActionBarAdvisor
 		if (menuBarItems.contains(ActionBarItem.RecentFiles))
 		{
 			openAction.addPropertyChangeListener(historyFileListener);
-			recentFilesMenu = new MenuManager(Messages.getString("app.DefaultActionBuilder.recentFilesMenu.text"), NLWorkbenchActionConstants.M_RECENT_FILES); //$NON-NLS-1$
+			recentFilesMenu = new MenuManager(Messages.getString("org.nightlabs.base.app.DefaultActionBuilder.recentFilesMenu.text"), NLWorkbenchActionConstants.M_RECENT_FILES); //$NON-NLS-1$
 			recentFilesMenu.add(new GroupMarker(IWorkbenchActionConstants.HISTORY_GROUP));			
 		}
 		if (menuBarItems.contains(ActionBarItem.Close)) {
@@ -303,7 +303,7 @@ extends ActionBarAdvisor
 	public void fillMenuBar(IMenuManager menuBar) 
 	{		
 	  // File-Menu
-		fileMenu = new MenuManager(Messages.getString("app.DefaultActionBuilder.fileMenu.text"),  //$NON-NLS-1$
+		fileMenu = new MenuManager(Messages.getString("org.nightlabs.base.app.DefaultActionBuilder.fileMenu.text"),  //$NON-NLS-1$
 				IWorkbenchActionConstants.M_FILE);
 		
 		menuBar.add(fileMenu);
@@ -400,13 +400,13 @@ extends ActionBarAdvisor
 //		}
     
     // Window-Menu
-		windowMenu = new MenuManager(Messages.getString("app.DefaultActionBuilder.windowMenu.text"),  //$NON-NLS-1$
+		windowMenu = new MenuManager(Messages.getString("org.nightlabs.base.app.DefaultActionBuilder.windowMenu.text"),  //$NON-NLS-1$
 				IWorkbenchActionConstants.M_WINDOW);
 		menuBar.add(windowMenu);		
 
 		// Perspective-SubMenu
 		if (menuBarItems.contains(ActionBarItem.Perspectives)) {		
-			MenuManager openPerspectiveMenuMgr = new MenuManager(Messages.getString("app.DefaultActionBuilder.openPerspectiveMenu.text"),  //$NON-NLS-1$
+			MenuManager openPerspectiveMenuMgr = new MenuManager(Messages.getString("org.nightlabs.base.app.DefaultActionBuilder.openPerspectiveMenu.text"),  //$NON-NLS-1$
 					NLWorkbenchActionConstants.M_PERSPECTIVES);
 			openPerspectiveMenuMgr.add(openPerspectiveMenu);
 			windowMenu.add(openPerspectiveMenuMgr);					
@@ -414,7 +414,7 @@ extends ActionBarAdvisor
 
 		// View-SubMenu
 		if (menuBarItems.contains(ActionBarItem.Views)) {
-			MenuManager showViewMenuMgr = new MenuManager(Messages.getString("app.DefaultActionBuilder.showViewMenu.text"),  //$NON-NLS-1$
+			MenuManager showViewMenuMgr = new MenuManager(Messages.getString("org.nightlabs.base.app.DefaultActionBuilder.showViewMenu.text"),  //$NON-NLS-1$
 					NLWorkbenchActionConstants.M_VIEWS);
 			showViewMenuMgr.add(showViewMenu);
 			windowMenu.add(showViewMenuMgr);		
@@ -425,7 +425,7 @@ extends ActionBarAdvisor
 			windowMenu.add(preferencesAction);
 
 		// Help-Menu
-		helpMenu = new MenuManager(Messages.getString("app.DefaultActionBuilder.helpMenu.text"),  //$NON-NLS-1$
+		helpMenu = new MenuManager(Messages.getString("org.nightlabs.base.app.DefaultActionBuilder.helpMenu.text"),  //$NON-NLS-1$
 				IWorkbenchActionConstants.M_HELP);
 		menuBar.add(helpMenu);
 //		helpMenu.add(introAction);

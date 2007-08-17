@@ -54,7 +54,7 @@ extends InputDialog
     public String isValid(String input) 
     {
       if(input.trim().equals("")) //$NON-NLS-1$
-        return Messages.getString("dialog.AbstractInputDialog.inputValidator.emptyString"); //$NON-NLS-1$
+        return Messages.getString("org.nightlabs.base.dialog.AbstractInputDialog.inputValidator.emptyString"); //$NON-NLS-1$
       
       return null;
     }

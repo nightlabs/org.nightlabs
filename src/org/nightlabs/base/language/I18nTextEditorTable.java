@@ -101,9 +101,9 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 		// set Columns
 		tableViewer.setColumnProperties(COLUMN_NAMES);
 
-		new TableColumn(table, SWT.LEFT).setText(Messages.getString("language.I18nTextEditorTable.columnFlag.text")); //$NON-NLS-1$
-		new TableColumn(table, SWT.LEFT).setText(Messages.getString("language.I18nTextEditorTable.columnLanguage.text")); //$NON-NLS-1$
-		new TableColumn(table, SWT.LEFT).setText(Messages.getString("language.I18nTextEditorTable.columnText.text")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.base.language.I18nTextEditorTable.columnFlag.text")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.base.language.I18nTextEditorTable.columnLanguage.text")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.base.language.I18nTextEditorTable.columnText.text")); //$NON-NLS-1$
 
 		TableLayout tableLayout = new TableLayout();
 		tableLayout.addColumnData(new ColumnPixelData(24, false));

@@ -194,22 +194,22 @@ implements TimePatternSetEdit
 		TableColumn tc;
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("timepattern.TimePatternSetComposite.tableColumnYear")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.base.timepattern.TimePatternSetComposite.tableColumnYear")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("timepattern.TimePatternSetComposite.tableColumnMonth")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.base.timepattern.TimePatternSetComposite.tableColumnMonth")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("timepattern.TimePatternSetComposite.tableColumnDay")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.base.timepattern.TimePatternSetComposite.tableColumnDay")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("timepattern.TimePatternSetComposite.tableColumnDayOfWeek")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.base.timepattern.TimePatternSetComposite.tableColumnDayOfWeek")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("timepattern.TimePatternSetComposite.tableColumnHour")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.base.timepattern.TimePatternSetComposite.tableColumnHour")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("timepattern.TimePatternSetComposite.tableColumnMinute")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.base.timepattern.TimePatternSetComposite.tableColumnMinute")); //$NON-NLS-1$
 
 //		table.setLayout(new WeightedTableLayout(new int[] {10, 10, 10, 10, 10, 10}));
 		TableLayout l = new TableLayout();

@@ -78,9 +78,9 @@ public class DateTimeEditLookupDialog
 			XComposite dateComp = new XComposite(page, SWT.BORDER);
 			dateComp.getGridLayout().numColumns = 3;
 
-			new Label(dateComp, SWT.NONE).setText(Messages.getString("composite.DateTimeEditLookupDialog.yearLabel.text")); //$NON-NLS-1$
-			new Label(dateComp, SWT.NONE).setText(Messages.getString("composite.DateTimeEditLookupDialog.monthLabel.text")); //$NON-NLS-1$
-			new Label(dateComp, SWT.NONE).setText(Messages.getString("composite.DateTimeEditLookupDialog.dayLabel.text")); //$NON-NLS-1$
+			new Label(dateComp, SWT.NONE).setText(Messages.getString("org.nightlabs.base.composite.DateTimeEditLookupDialog.yearLabel.text")); //$NON-NLS-1$
+			new Label(dateComp, SWT.NONE).setText(Messages.getString("org.nightlabs.base.composite.DateTimeEditLookupDialog.monthLabel.text")); //$NON-NLS-1$
+			new Label(dateComp, SWT.NONE).setText(Messages.getString("org.nightlabs.base.composite.DateTimeEditLookupDialog.dayLabel.text")); //$NON-NLS-1$
 
 			year = createSpinner(dateComp, Calendar.YEAR);
 			month = createSpinner(dateComp, Calendar.MONTH);
@@ -93,14 +93,14 @@ public class DateTimeEditLookupDialog
 			XComposite timeComp = new XComposite(page, SWT.BORDER);
 			timeComp.getGridLayout().numColumns = 2;
 
-			new Label(timeComp, SWT.NONE).setText(Messages.getString("composite.DateTimeEditLookupDialog.hourLabel.text")); //$NON-NLS-1$
-			new Label(timeComp, SWT.NONE).setText(Messages.getString("composite.DateTimeEditLookupDialog.minuteLabel.text")); //$NON-NLS-1$
+			new Label(timeComp, SWT.NONE).setText(Messages.getString("org.nightlabs.base.composite.DateTimeEditLookupDialog.hourLabel.text")); //$NON-NLS-1$
+			new Label(timeComp, SWT.NONE).setText(Messages.getString("org.nightlabs.base.composite.DateTimeEditLookupDialog.minuteLabel.text")); //$NON-NLS-1$
 
 			if ((DateFormatProvider.TIME_SEC & dateTimeEdit.getFlags()) == DateFormatProvider.TIME_SEC)
-				new Label(timeComp, SWT.NONE).setText(Messages.getString("composite.DateTimeEditLookupDialog.secondLabel.text")); //$NON-NLS-1$
+				new Label(timeComp, SWT.NONE).setText(Messages.getString("org.nightlabs.base.composite.DateTimeEditLookupDialog.secondLabel.text")); //$NON-NLS-1$
 
 			if ((DateFormatProvider.TIME_MSEC & dateTimeEdit.getFlags()) == DateFormatProvider.TIME_MSEC)
-				new Label(timeComp, SWT.NONE).setText(Messages.getString("composite.DateTimeEditLookupDialog.millisecLabel.text")); //$NON-NLS-1$
+				new Label(timeComp, SWT.NONE).setText(Messages.getString("org.nightlabs.base.composite.DateTimeEditLookupDialog.millisecLabel.text")); //$NON-NLS-1$
 
 			hour = createSpinner(timeComp, Calendar.HOUR_OF_DAY);
 			minute = createSpinner(timeComp, Calendar.MINUTE);

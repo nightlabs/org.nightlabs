@@ -77,7 +77,7 @@ extends org.nightlabs.notification.NotificationManager
 			if (job == null) {
 				String jobName = l.getJobName();
 				if (jobName == null)
-					jobName = Messages.getString("notification.NotificationManager.jobName"); //$NON-NLS-1$
+					jobName = Messages.getString("org.nightlabs.base.notification.NotificationManager.jobName"); //$NON-NLS-1$
 
 				job = new Job(jobName) {
 					protected IStatus run(IProgressMonitor monitor)

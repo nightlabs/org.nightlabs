@@ -48,7 +48,7 @@ public class OutOfMemoryErrorDialog extends DefaultErrorDialog {
 	private Button restartWorkbenchButton;
 	
 	protected void createCustomButtons(Composite parent) {
-		restartWorkbenchButton = createButton(parent, RESTART_WORKBENCH_ID, Messages.getString("exceptionhandler.OutOfMemoryErrorDialog.restartWorkbenchButton.text"), false); //$NON-NLS-1$
+		restartWorkbenchButton = createButton(parent, RESTART_WORKBENCH_ID, Messages.getString("org.nightlabs.base.exceptionhandler.OutOfMemoryErrorDialog.restartWorkbenchButton.text"), false); //$NON-NLS-1$
 		// TODO:
 //		super.createCustomButtons(parent);
 	}

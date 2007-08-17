@@ -129,7 +129,7 @@ public class EditDocumentPrinterTypeRegsComposite extends XComposite {
 		
 		addDelegation = new Button(buttonWrapper, SWT.PUSH);
 		addDelegation.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		addDelegation.setText(Messages.getString("print.pref.EditDocumentPrinterTypeRegsComposite.addDelegation.text")); //$NON-NLS-1$
+		addDelegation.setText(Messages.getString("org.nightlabs.base.print.pref.EditDocumentPrinterTypeRegsComposite.addDelegation.text")); //$NON-NLS-1$
 		addDelegation.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
@@ -145,7 +145,7 @@ public class EditDocumentPrinterTypeRegsComposite extends XComposite {
 		
 		removeDelegation = new Button(buttonWrapper, SWT.PUSH);
 		removeDelegation.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		removeDelegation.setText(Messages.getString("print.pref.EditDocumentPrinterTypeRegsComposite.removeDelegation.text")); //$NON-NLS-1$
+		removeDelegation.setText(Messages.getString("org.nightlabs.base.print.pref.EditDocumentPrinterTypeRegsComposite.removeDelegation.text")); //$NON-NLS-1$
 		removeDelegation.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
@@ -230,7 +230,7 @@ public class EditDocumentPrinterTypeRegsComposite extends XComposite {
 		@Override
 		protected Control createDialogArea(Composite parent) {
 			XComposite wrapper = new XComposite(parent, SWT.NONE);
-			fileExtText = new LabeledText(wrapper, Messages.getString("print.pref.EditDocumentPrinterTypeRegsComposite.fileExtText.caption")); //$NON-NLS-1$
+			fileExtText = new LabeledText(wrapper, Messages.getString("org.nightlabs.base.print.pref.EditDocumentPrinterTypeRegsComposite.fileExtText.caption")); //$NON-NLS-1$
 			fileExtText.getTextControl().addModifyListener(new ModifyListener(){
 				public void modifyText(ModifyEvent evt) {
 					fileExt = fileExtText.getTextControl().getText();					

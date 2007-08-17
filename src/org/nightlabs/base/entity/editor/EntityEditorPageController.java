@@ -102,7 +102,7 @@ implements IEntityEditorPageController
 		private boolean loaded = false;
 		
 		public LoadJob(EntityEditorPageController controller) {
-			super(Messages.getString("entity.editor.EntityEditorPageController.LoadJob.name")); //$NON-NLS-1$
+			super(Messages.getString("org.nightlabs.base.entity.editor.EntityEditorPageController.LoadJob.name")); //$NON-NLS-1$
 			this.controller = controller;
 		}
 		
@@ -322,7 +322,7 @@ implements IEntityEditorPageController
 					ProgressMonitorDialog dlg = new ProgressMonitorDialog(null);
 					dlg.run(true, false, new IRunnableWithProgress() {
 						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException	{
-							monitor.beginTask(Messages.getString("entity.editor.EntityEditorPageController.load.monitor.taskName"), IProgressMonitor.UNKNOWN); //$NON-NLS-1$
+							monitor.beginTask(Messages.getString("org.nightlabs.base.entity.editor.EntityEditorPageController.load.monitor.taskName"), IProgressMonitor.UNKNOWN); //$NON-NLS-1$
 							doLoad(monitor);
 							monitor.done();
 							setLoaded(true);

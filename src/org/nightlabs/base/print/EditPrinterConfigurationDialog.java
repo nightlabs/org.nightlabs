@@ -69,7 +69,7 @@ public class EditPrinterConfigurationDialog extends CenteredDialog {
 	protected void configureShell(Shell newShell) 
 	{
 		super.configureShell(newShell);		
-		newShell.setText(Messages.getString("print.EditPrinterConfigurationDialog.title")); //$NON-NLS-1$
+		newShell.setText(Messages.getString("org.nightlabs.base.print.EditPrinterConfigurationDialog.title")); //$NON-NLS-1$
 		newShell.setSize(400, 525);
 	}
 
@@ -80,7 +80,7 @@ public class EditPrinterConfigurationDialog extends CenteredDialog {
 		useConfigOnlyForNextRun = new Button(parent, SWT.CHECK);
 		useConfigOnlyForNextRun.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		useConfigOnlyForNextRun.setSelection(!preSelectionDoStore);
-		useConfigOnlyForNextRun.setText(Messages.getString("print.EditPrinterConfigurationDialog.useConfigOnlyForNextRun.text")); //$NON-NLS-1$
+		useConfigOnlyForNextRun.setText(Messages.getString("org.nightlabs.base.print.EditPrinterConfigurationDialog.useConfigOnlyForNextRun.text")); //$NON-NLS-1$
 		return configurationComposite;
 	}
 

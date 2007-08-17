@@ -40,6 +40,6 @@ public class OutOfMemoryHandler implements IExceptionHandler {
 	public void handleException(Thread thread, Throwable thrownException, Throwable triggerException) 
 	{
 		//DefaultErrorDialog.addError(OutOfMemoryErrorDialog.class, "Out of memory error", null, thrownException, triggerException);
-		ErrorDialogFactory.showError(OutOfMemoryErrorDialog.class, Messages.getString("exceptionhandler.OutOfMemoryHandler.dialogTitle"), null, thrownException, triggerException); //$NON-NLS-1$
+		ErrorDialogFactory.showError(OutOfMemoryErrorDialog.class, Messages.getString("org.nightlabs.base.exceptionhandler.OutOfMemoryHandler.dialogTitle"), null, thrownException, triggerException); //$NON-NLS-1$
 	}	
 }

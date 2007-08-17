@@ -64,7 +64,7 @@ implements INewFileAction
 		return ++fileCount;
 	}
 	
-	protected String defaultFileName = Messages.getString("action.NewFileAction.defaultFileName"); //$NON-NLS-1$
+	protected String defaultFileName = Messages.getString("org.nightlabs.base.action.NewFileAction.defaultFileName"); //$NON-NLS-1$
 	protected String defaultPath = ""; //$NON-NLS-1$
 
 	protected String getDefaultPath() 

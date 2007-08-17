@@ -42,7 +42,7 @@ public class ErrorReportWizardEntryPage extends DynamicPathWizardPage
 {
 	public ErrorReportWizardEntryPage()
 	{
-		super(ErrorReportWizardEntryPage.class.getName(), Messages.getString("exceptionhandler.errorreport.ErrorReportWizardEntryPage.title")); //$NON-NLS-1$
+		super(ErrorReportWizardEntryPage.class.getName(), Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardEntryPage.title")); //$NON-NLS-1$
 	}
   
 	/**
@@ -50,9 +50,9 @@ public class ErrorReportWizardEntryPage extends DynamicPathWizardPage
 	 */
 	public Control createPageContents(Composite parent)
 	{
-    setDescription(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardEntryPage.description")); //$NON-NLS-1$
+    setDescription(Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardEntryPage.description")); //$NON-NLS-1$
     Label welcomeText = new Label(parent, SWT.WRAP);
-    welcomeText.setText(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardEntryPage.welcomeText.text")); //$NON-NLS-1$
+    welcomeText.setText(Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardEntryPage.welcomeText.text")); //$NON-NLS-1$
 		return welcomeText;
 	}
   

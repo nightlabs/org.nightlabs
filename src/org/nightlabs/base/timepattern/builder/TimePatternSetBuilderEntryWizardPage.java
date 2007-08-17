@@ -33,9 +33,9 @@ public class TimePatternSetBuilderEntryWizardPage extends WizardHopPage {
 	public TimePatternSetBuilderEntryWizardPage() {		
 		super(
 				TimePatternSetBuilderEntryWizardPage.class.getName(), 
-				Messages.getString("timepattern.builder.TimePatternSetBuilderEntryWizardPage.title") //$NON-NLS-1$
+				Messages.getString("org.nightlabs.base.timepattern.builder.TimePatternSetBuilderEntryWizardPage.title") //$NON-NLS-1$
 			);
-		setDescription(Messages.getString("timepattern.builder.TimePatternSetBuilderEntryWizardPage.description")); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.base.timepattern.builder.TimePatternSetBuilderEntryWizardPage.description")); //$NON-NLS-1$
 	}
 
 	/**

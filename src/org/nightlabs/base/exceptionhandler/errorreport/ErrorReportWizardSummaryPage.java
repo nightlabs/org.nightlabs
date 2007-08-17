@@ -47,8 +47,8 @@ public class ErrorReportWizardSummaryPage extends DynamicPathWizardPage
   
 	public ErrorReportWizardSummaryPage()
 	{
-		super(ErrorReportWizardCommentPage.class.getName(), Messages.getString("exceptionhandler.errorreport.ErrorReportWizardSummaryPage.title")); //$NON-NLS-1$
-		setDescription(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardSummaryPage.description")); //$NON-NLS-1$
+		super(ErrorReportWizardCommentPage.class.getName(), Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardSummaryPage.title")); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardSummaryPage.description")); //$NON-NLS-1$
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class ErrorReportWizardSummaryPage extends DynamicPathWizardPage
     page.setLayoutData(new GridData(GridData.FILL_BOTH));
     
     Label overviewLabel = new Label(page, SWT.NONE);
-    overviewLabel.setText(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardSummaryPage.overviewLabel.text")); //$NON-NLS-1$
+    overviewLabel.setText(Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardSummaryPage.overviewLabel.text")); //$NON-NLS-1$
     
     overviewText = new Text(page, SWT.READ_ONLY | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.WRAP);
     overviewText.setLayoutData(new GridData(GridData.FILL_BOTH));    

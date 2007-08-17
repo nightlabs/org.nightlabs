@@ -117,7 +117,7 @@ extends XComposite
 		Group previewGroup = new Group(parent, SWT.NONE);
 		previewGroup.setLayout(new GridLayout());
 		previewGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-		previewGroup.setText(Messages.getString("print.PageSetupComposite.previewGroup.text")); //$NON-NLS-1$
+		previewGroup.setText(Messages.getString("org.nightlabs.base.print.PageSetupComposite.previewGroup.text")); //$NON-NLS-1$
 		previewComp = initPreviewComposite(previewGroup);
 		
 		Composite detailComp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -126,7 +126,7 @@ extends XComposite
 		
 		// predefined pages		
 		Group predefinedPageGroup = new Group(detailComp, SWT.NONE);
-		predefinedPageGroup.setText(Messages.getString("print.PageSetupComposite.predefinedPageGroup.text")); //$NON-NLS-1$
+		predefinedPageGroup.setText(Messages.getString("org.nightlabs.base.print.PageSetupComposite.predefinedPageGroup.text")); //$NON-NLS-1$
 		predefinedPageGroup.setLayout(new GridLayout());
 		predefinedPageGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		predefinedPageCombo = initPageCombo(predefinedPageGroup);
@@ -135,14 +135,14 @@ extends XComposite
 		
 		// orientation		
 		Group orientationGroup = new Group(detailComp, SWT.NONE);
-		orientationGroup.setText(Messages.getString("print.PageSetupComposite.orientationGroup.text")); //$NON-NLS-1$
+		orientationGroup.setText(Messages.getString("org.nightlabs.base.print.PageSetupComposite.orientationGroup.text")); //$NON-NLS-1$
 		orientationGroup.setLayout(new GridLayout());
 		orientationGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 		orientationHorizontal = new Button(orientationGroup, SWT.RADIO);
-		orientationHorizontal.setText(Messages.getString("print.PageSetupComposite.orientationHorizontal.text")); //$NON-NLS-1$
+		orientationHorizontal.setText(Messages.getString("org.nightlabs.base.print.PageSetupComposite.orientationHorizontal.text")); //$NON-NLS-1$
 		orientationHorizontal.addSelectionListener(horizontalListener);		
 		orientationVertical = new Button(orientationGroup, SWT.RADIO);
-		orientationVertical.setText(Messages.getString("print.PageSetupComposite.orientationVertical.text")); //$NON-NLS-1$
+		orientationVertical.setText(Messages.getString("org.nightlabs.base.print.PageSetupComposite.orientationVertical.text")); //$NON-NLS-1$
 		orientationVertical.addSelectionListener(verticalListener);
 
 		createMargins(detailComp);
@@ -159,18 +159,18 @@ extends XComposite
 	private void createMargins(Composite parent) 
 	{
 		Group marginGroup = new Group(parent, SWT.NONE);
-		marginGroup.setText(Messages.getString("print.PageSetupComposite.marginGroup.text")); //$NON-NLS-1$
+		marginGroup.setText(Messages.getString("org.nightlabs.base.print.PageSetupComposite.marginGroup.text")); //$NON-NLS-1$
 		marginGroup.setLayout(new GridLayout(2, false));				
 		marginGroup.setLayoutData(new GridData(GridData.FILL_BOTH));						
 		
 		Label unitLabel = new Label(marginGroup, SWT.NONE);
-		unitLabel.setText(Messages.getString("print.PageSetupComposite.unitLabel.text")); //$NON-NLS-1$
+		unitLabel.setText(Messages.getString("org.nightlabs.base.print.PageSetupComposite.unitLabel.text")); //$NON-NLS-1$
 		unitCombo = initUnitCombo(marginGroup);
 		unitCombo.addSelectionChangedListener(unitListener);
 		unitCombo.selectElement(new MMUnit());
 	
 		Label marginTopLabel = new Label(marginGroup, SWT.NONE);
-		marginTopLabel.setText(Messages.getString("print.PageSetupComposite.marginTopLabel.text"));		 //$NON-NLS-1$
+		marginTopLabel.setText(Messages.getString("org.nightlabs.base.print.PageSetupComposite.marginTopLabel.text"));		 //$NON-NLS-1$
 		marginTopSpinner = new DoubleSpinnerComposite(marginGroup, SWT.NONE, SWT.BORDER, 
 				getSpinnerDigits(), 0, getSpinnerMaximum(), getSpinnerIncrement(), 
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
@@ -179,7 +179,7 @@ extends XComposite
 		marginTopSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 		
 		Label marginLeftLabel = new Label(marginGroup, SWT.NONE);
-		marginLeftLabel.setText(Messages.getString("print.PageSetupComposite.marginLeftLabel.text"));		 //$NON-NLS-1$
+		marginLeftLabel.setText(Messages.getString("org.nightlabs.base.print.PageSetupComposite.marginLeftLabel.text"));		 //$NON-NLS-1$
 		marginLeftSpinner = new DoubleSpinnerComposite(marginGroup, SWT.NONE, SWT.BORDER, 
 				getSpinnerDigits(), 0, getSpinnerMaximum(), getSpinnerIncrement(), 
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
@@ -188,7 +188,7 @@ extends XComposite
 		marginLeftSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Label marginRightLabel = new Label(marginGroup, SWT.NONE);			
-		marginRightLabel.setText(Messages.getString("print.PageSetupComposite.marginRightLabel.text"));		 //$NON-NLS-1$
+		marginRightLabel.setText(Messages.getString("org.nightlabs.base.print.PageSetupComposite.marginRightLabel.text"));		 //$NON-NLS-1$
 		marginRightSpinner = new DoubleSpinnerComposite(marginGroup, SWT.NONE, SWT.BORDER, 
 				getSpinnerDigits(), 0, getSpinnerMaximum(), getSpinnerIncrement(), 
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
@@ -197,7 +197,7 @@ extends XComposite
 		marginRightSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 
 		Label marginBottomLabel = new Label(marginGroup, SWT.NONE);
-		marginBottomLabel.setText(Messages.getString("print.PageSetupComposite.marginBottomLabel.text"));		 //$NON-NLS-1$
+		marginBottomLabel.setText(Messages.getString("org.nightlabs.base.print.PageSetupComposite.marginBottomLabel.text"));		 //$NON-NLS-1$
 		marginBottomSpinner = new DoubleSpinnerComposite(marginGroup, SWT.NONE, SWT.BORDER, 
 				getSpinnerDigits(), 0, getSpinnerMaximum(), getSpinnerIncrement(), 
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);

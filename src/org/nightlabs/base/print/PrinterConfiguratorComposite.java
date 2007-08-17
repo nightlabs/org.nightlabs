@@ -134,15 +134,15 @@ public class PrinterConfiguratorComposite extends XComposite {
 	protected void initGUI(Composite parent) 
 	{
 		alwaysAsk = new Button(this, SWT.CHECK);
-		alwaysAsk.setText(Messages.getString("print.PrinterConfiguratorComposite.alwaysAsk.text")); //$NON-NLS-1$
+		alwaysAsk.setText(Messages.getString("org.nightlabs.base.print.PrinterConfiguratorComposite.alwaysAsk.text")); //$NON-NLS-1$
 		printerGroup = new Group(this, SWT.NONE);
-		printerGroup.setText(Messages.getString("print.PrinterConfiguratorComposite.printerGroup.text")); //$NON-NLS-1$
+		printerGroup.setText(Messages.getString("org.nightlabs.base.print.PrinterConfiguratorComposite.printerGroup.text")); //$NON-NLS-1$
 		GridLayout gl = new GridLayout();
 		gl.numColumns = 2;
 		printerGroup.setLayout(gl);
 		printerGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		useSysDefaultPrinter = new Button(printerGroup, SWT.CHECK);
-		useSysDefaultPrinter.setText(Messages.getString("print.PrinterConfiguratorComposite.useSysDefaultPrinter.text")); //$NON-NLS-1$
+		useSysDefaultPrinter.setText(Messages.getString("org.nightlabs.base.print.PrinterConfiguratorComposite.useSysDefaultPrinter.text")); //$NON-NLS-1$
 		useSysDefaultPrinter.addSelectionListener(useSysDefaultListener);
 		
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -155,7 +155,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 		selectPrinterButton.addSelectionListener(selectPrinterListener);
 		
 		pageFormatGroup = new Group(this, SWT.NONE);
-		pageFormatGroup.setText(Messages.getString("print.PrinterConfiguratorComposite.pageFormatGroup.text")); //$NON-NLS-1$
+		pageFormatGroup.setText(Messages.getString("org.nightlabs.base.print.PrinterConfiguratorComposite.pageFormatGroup.text")); //$NON-NLS-1$
 		GridLayout gl1 = new GridLayout();
 		gl1.numColumns = 2;
 		pageFormatGroup.setLayout(gl1);
@@ -256,7 +256,7 @@ public class PrinterConfiguratorComposite extends XComposite {
 			pageFormatDescription.setText(getPageFormatDescription(printerConfiguration.getPageFormat()));			
 		}
 		if (printerConfiguration == null || printerConfiguration.getPageFormat() == null)
-			pageFormatDescription.setText(Messages.getString("print.PrinterConfiguratorComposite.pageFormatDescription_noPageFormatAssigned")); //$NON-NLS-1$
+			pageFormatDescription.setText(Messages.getString("org.nightlabs.base.print.PrinterConfiguratorComposite.pageFormatDescription_noPageFormatAssigned")); //$NON-NLS-1$
 
 		if (pageFormat != null)
 			pageSetupComposite = initPageSetupComposite(this);
@@ -291,9 +291,9 @@ public class PrinterConfiguratorComposite extends XComposite {
 	
 	private String getPageFormatDescription(PageFormat pageFormat) {
 		if (pageFormat == null)
-			return Messages.getString("print.PrinterConfiguratorComposite.pageFormatDescription_noPageFormatAssigned"); //$NON-NLS-1$
+			return Messages.getString("org.nightlabs.base.print.PrinterConfiguratorComposite.pageFormatDescription_noPageFormatAssigned"); //$NON-NLS-1$
 		else
-			return Messages.getString("print.PrinterConfiguratorComposite.pageFormatDescription_customPageFormat"); //$NON-NLS-1$
+			return Messages.getString("org.nightlabs.base.print.PrinterConfiguratorComposite.pageFormatDescription_customPageFormat"); //$NON-NLS-1$
 	}
 	
 	public PageFormat getPageFormat() {

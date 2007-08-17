@@ -354,7 +354,7 @@ public class EntityEditorController
 	 */
 	public void doSave(IProgressMonitor monitor)
 	{
-		monitor.beginTask(Messages.getString("entity.editor.EntityEditorController.doSave.monitor.taskName"), dirtyPageControllers.size()); //$NON-NLS-1$
+		monitor.beginTask(Messages.getString("org.nightlabs.base.entity.editor.EntityEditorController.doSave.monitor.taskName"), dirtyPageControllers.size()); //$NON-NLS-1$
 		logger.debug("Calling all page controllers doSave() method."); //$NON-NLS-1$
 		saving = true;
 		for (IEntityEditorPageController dirtyController : dirtyPageControllers) {

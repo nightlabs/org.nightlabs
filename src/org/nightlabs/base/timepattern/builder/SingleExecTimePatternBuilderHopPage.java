@@ -32,8 +32,8 @@ public class SingleExecTimePatternBuilderHopPage extends WizardHopPage {
 	 * @param pageName
 	 */
 	public SingleExecTimePatternBuilderHopPage() {
-		super(SingleExecTimePatternBuilderHopPage.class.getName(), Messages.getString("timepattern.builder.SingleExecTimePatternBuilderHopPage.title")); //$NON-NLS-1$
-		setDescription(Messages.getString("timepattern.builder.SingleExecTimePatternBuilderHopPage.description")); //$NON-NLS-1$
+		super(SingleExecTimePatternBuilderHopPage.class.getName(), Messages.getString("org.nightlabs.base.timepattern.builder.SingleExecTimePatternBuilderHopPage.title")); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.base.timepattern.builder.SingleExecTimePatternBuilderHopPage.description")); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -49,7 +49,7 @@ public class SingleExecTimePatternBuilderHopPage extends WizardHopPage {
 		executionDateEdit = new DateTimeEdit(
 				dayWrapper,
 				DateFormatter.FLAGS_DATE_LONG_WEEKDAY,
-				Messages.getString("timepattern.builder.SingleExecTimePatternBuilderHopPage.executionDateEdit.caption")); //$NON-NLS-1$
+				Messages.getString("org.nightlabs.base.timepattern.builder.SingleExecTimePatternBuilderHopPage.executionDateEdit.caption")); //$NON-NLS-1$
 		return wrapper;
 	}
 
