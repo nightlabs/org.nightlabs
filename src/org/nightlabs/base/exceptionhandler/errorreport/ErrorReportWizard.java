@@ -28,10 +28,10 @@ package org.nightlabs.base.exceptionhandler.errorreport;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
-
-import org.nightlabs.base.NLBasePlugin;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.wizard.DynamicPathWizard;
 import org.nightlabs.config.Config;
+import org.nightlabs.util.Util;
 
 /**
  * @author Simon Lehmann - simon@nightlabs.de
@@ -81,26 +81,30 @@ public class ErrorReportWizard extends DynamicPathWizard
 				clazz = Class.forName(cfMod.getErrorReportSenderClass());
 			} catch (Throwable x) {
 				throw new ClassNotFoundException(
-						"Invalid configuration parameter in \"" + ErrorReportSenderCfMod.class + "\": Unable to load class \"" + cfMod.getErrorReportSenderClass() + "\"!", x); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						"Invalid configuration parameter in \"" + ErrorReportSenderCfMod.class + "\": Unable to load class \"" + cfMod.getErrorReportSenderClass() + "\"!", x);  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 			}
 
 			if (!ErrorReportSender.class.isAssignableFrom(clazz))
 				throw new ClassCastException(
-						"Invalid configuration parameter in \"" + ErrorReportSenderCfMod.class + "\": Class \"" + cfMod.getErrorReportSenderClass() + "\" does not implement interface \""+ErrorReportSender.class.getName()+"\"!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						"Invalid configuration parameter in \"" + ErrorReportSenderCfMod.class + "\": Class \"" + cfMod.getErrorReportSenderClass() + "\" does not implement interface \""+ErrorReportSender.class.getName()+"\"!");  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 			ErrorReportSender sender = (ErrorReportSender) clazz.newInstance();
 			sender.sendErrorReport(errorReport);
 			return true;
 		} catch (Throwable e) {
 			logger.fatal("Sending ErrorReport failed!", e); //$NON-NLS-1$
-			new MessageDialog(
+			MessageDialog.openError(
 					getShell(),
-					NLBasePlugin.getResourceString("errorreport.wizard.sendingfailed"), //$NON-NLS-1$
-					null,
-					e.getClass().getName() + ": " + e.getLocalizedMessage(), //$NON-NLS-1$
-					MessageDialog.ERROR,
-					new String[]{NLBasePlugin.getResourceString("errorreport.wizard.ok")}, //$NON-NLS-1$
-					0).open();
+					Messages.getString("exceptionhandler.errorreport.ErrorReportWizard.sendingErrorReportFailedDialog.title"), //$NON-NLS-1$
+					String.format(
+							Messages.getString("exceptionhandler.errorreport.ErrorReportWizard.sendingErrorReportFailedDialog.message"), //$NON-NLS-1$
+							new Object[] {
+									e.getClass().getName(),
+									e.getLocalizedMessage(),
+									Util.getStackTraceAsString(e)
+							}
+					)
+			);
 		}
 		return false;
 	}

@@ -30,11 +30,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.*;
-
-import org.nightlabs.base.NLBasePlugin;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.wizard.DynamicPathWizard;
 import org.nightlabs.base.wizard.DynamicPathWizardPage;
 
@@ -48,8 +50,8 @@ public class ErrorReportWizardCommentPage extends DynamicPathWizardPage
 	
 	public ErrorReportWizardCommentPage()
 	{
-		super(ErrorReportWizardCommentPage.class.getName(), NLBasePlugin.getResourceString("errorreport.commentpage.title")); //$NON-NLS-1$
-		setDescription(NLBasePlugin.getResourceString("errorreport.commentpage.description")); //$NON-NLS-1$
+		super(ErrorReportWizardCommentPage.class.getName(), Messages.getString("exceptionhandler.errorreport.ErrorReportWizardCommentPage.title")); //$NON-NLS-1$
+		setDescription(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardCommentPage.description")); //$NON-NLS-1$
 	}
 
 	/**
@@ -61,10 +63,10 @@ public class ErrorReportWizardCommentPage extends DynamicPathWizardPage
 //    GridLayout layout = new GridLayout();
 //    //layout.
 //    page.setLayout(layout);
-    Label l = new Label(page, SWT.NONE);
-    l.setText(NLBasePlugin.getResourceString("errorreport.commentpage.commentlabel")); //$NON-NLS-1$
+    Label commentLabel = new Label(page, SWT.NONE);
+    commentLabel.setText(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardCommentPage.commentLabel.text")); //$NON-NLS-1$
 		textUserComment = new Text(page, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.WRAP);
-		textUserComment.setToolTipText(NLBasePlugin.getResourceString("errorreport.commentpage.commenttooltip")); //$NON-NLS-1$
+		textUserComment.setToolTipText(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardCommentPage.textUserComment.toolTipText")); //$NON-NLS-1$
 		textUserComment.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e)
 			{

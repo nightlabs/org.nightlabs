@@ -28,9 +28,10 @@ package org.nightlabs.base.exceptionhandler.errorreport;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.*;
-
-import org.nightlabs.base.NLBasePlugin;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.wizard.DynamicPathWizardPage;
 
 /**
@@ -41,7 +42,7 @@ public class ErrorReportWizardEntryPage extends DynamicPathWizardPage
 {
 	public ErrorReportWizardEntryPage()
 	{
-		super(ErrorReportWizardEntryPage.class.getName(), NLBasePlugin.getResourceString("errorreport.entrypage.title")); //$NON-NLS-1$
+		super(ErrorReportWizardEntryPage.class.getName(), Messages.getString("exceptionhandler.errorreport.ErrorReportWizardEntryPage.title")); //$NON-NLS-1$
 	}
   
 	/**
@@ -49,10 +50,10 @@ public class ErrorReportWizardEntryPage extends DynamicPathWizardPage
 	 */
 	public Control createPageContents(Composite parent)
 	{
-    setDescription(NLBasePlugin.getResourceString("errorreport.entrypage.description")); //$NON-NLS-1$
-    Label text = new Label(parent, SWT.WRAP);
-    text.setText(NLBasePlugin.getResourceString("errorreport.entrypage.welcometext")); //$NON-NLS-1$
-		return text;
+    setDescription(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardEntryPage.description")); //$NON-NLS-1$
+    Label welcomeText = new Label(parent, SWT.WRAP);
+    welcomeText.setText(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardEntryPage.welcomeText.text")); //$NON-NLS-1$
+		return welcomeText;
 	}
   
   public void onShow()

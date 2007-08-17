@@ -26,10 +26,6 @@
 
 package org.nightlabs.base;
 
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.app.AbstractApplication;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
@@ -45,8 +41,8 @@ public class NLBasePlugin extends AbstractUIPlugin
 	
 	//The shared instance.
 	private static NLBasePlugin plugin;
-	//Resource bundle.
-	private ResourceBundle resourceBundle;
+//	//Resource bundle.
+//	private ResourceBundle resourceBundle;
 	
 	/**
 	 * The constructor.
@@ -62,11 +58,11 @@ public class NLBasePlugin extends AbstractUIPlugin
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		ExceptionHandlerRegistry.sharedInstance().addProcessListener(SimpleExceptionHandlerRegistry.sharedInstance());
-		try {
-			resourceBundle = Platform.getResourceBundle(getBundle());
-		} catch (MissingResourceException x) {
-			resourceBundle = null;
-		}
+//		try {
+//			resourceBundle = Platform.getResourceBundle(getBundle());
+//		} catch (MissingResourceException x) {
+//			resourceBundle = null;
+//		}
 	}
 
 	/**
@@ -83,25 +79,25 @@ public class NLBasePlugin extends AbstractUIPlugin
 		return plugin;
 	}
 
-	/**
-	 * Returns the string from the plugin's resource bundle,
-	 * or 'key' if not found.
-	 */
-	public static String getResourceString(String key) {
-		ResourceBundle bundle = NLBasePlugin.getDefault().getResourceBundle();
-		try {
-			return (bundle != null) ? bundle.getString(key) : key;
-		} catch (MissingResourceException e) {
-			return key;
-		}
-	}
+//	/**
+//	 * Returns the string from the plugin's resource bundle,
+//	 * or 'key' if not found.
+//	 */
+//	public static String getResourceString(String key) {
+//		ResourceBundle bundle = NLBasePlugin.getDefault().getResourceBundle();
+//		try {
+//			return (bundle != null) ? bundle.getString(key) : key;
+//		} catch (MissingResourceException e) {
+//			return key;
+//		}
+//	}
 
-	/**
-	 * Returns the plugin's resource bundle,
-	 */
-	public ResourceBundle getResourceBundle() {
-		return resourceBundle;
-	}
+//	/**
+//	 * Returns the plugin's resource bundle,
+//	 */
+//	public ResourceBundle getResourceBundle() {
+//		return resourceBundle;
+//	}
 
 	private AbstractApplication application = null;
 

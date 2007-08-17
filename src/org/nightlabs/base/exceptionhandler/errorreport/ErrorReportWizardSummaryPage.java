@@ -32,10 +32,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-
-import org.nightlabs.base.NLBasePlugin;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
+import org.nightlabs.base.resource.Messages;
 import org.nightlabs.base.wizard.DynamicPathWizardPage;
 
 /**
@@ -48,8 +47,8 @@ public class ErrorReportWizardSummaryPage extends DynamicPathWizardPage
   
 	public ErrorReportWizardSummaryPage()
 	{
-		super(ErrorReportWizardCommentPage.class.getName(), NLBasePlugin.getResourceString("errorreport.summarypage.title")); //$NON-NLS-1$
-		setDescription(NLBasePlugin.getResourceString("errorreport.summarypage.description")); //$NON-NLS-1$
+		super(ErrorReportWizardCommentPage.class.getName(), Messages.getString("exceptionhandler.errorreport.ErrorReportWizardSummaryPage.title")); //$NON-NLS-1$
+		setDescription(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardSummaryPage.description")); //$NON-NLS-1$
 	}
 
 	/**
@@ -60,8 +59,8 @@ public class ErrorReportWizardSummaryPage extends DynamicPathWizardPage
     XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
     page.setLayoutData(new GridData(GridData.FILL_BOTH));
     
-    Label label = new Label(page, SWT.NONE);
-    label.setText(NLBasePlugin.getResourceString("errorreport.summarypage.overviewlabel")); //$NON-NLS-1$
+    Label overviewLabel = new Label(page, SWT.NONE);
+    overviewLabel.setText(Messages.getString("exceptionhandler.errorreport.ErrorReportWizardSummaryPage.overviewLabel.text")); //$NON-NLS-1$
     
     overviewText = new Text(page, SWT.READ_ONLY | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.WRAP);
     overviewText.setLayoutData(new GridData(GridData.FILL_BOTH));    
@@ -82,23 +81,23 @@ public class ErrorReportWizardSummaryPage extends DynamicPathWizardPage
     overviewText.setText(errorReport.toString());
     
 //    StringBuffer reportData = new StringBuffer();
-//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.datetime")); //$NON-NLS-1$
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.datetime"));
 //    reportData.append(ErrorReport.getTimeAsString(errorReport.getTime()));
-//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter"));
 //    if(errorReport.getUserComment() != null && errorReport.getUserComment().length() != 0) {
-//      reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.usercommentlabel")); //$NON-NLS-1$
+//      reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.usercommentlabel"));
 //      reportData.append(errorReport.getUserComment());
-//      reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
+//      reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter"));
 //    }
-//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.stacktracelabel")); //$NON-NLS-1$
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.stacktracelabel"));
 //    reportData.append(ErrorReport.getExceptionStackTraceAsString(errorReport.getFirstThrowable()));
-//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
-//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.triggerstacktracelabel")); //$NON-NLS-1$
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter"));
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.triggerstacktracelabel"));
 //    reportData.append(ErrorReport.getExceptionStackTraceAsString(errorReport.getFirstThrowable()));
-//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
-//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.systempropertieslabel")); //$NON-NLS-1$
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter"));
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.systempropertieslabel"));
 //    reportData.append(errorReport.getSystemProperties());
-//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter")); //$NON-NLS-1$
+//    reportData.append(NLBasePlugin.getResourceString("errorreport.summarypage.breakafter"));
 //    
 //    overviewText.setText(reportData.toString());
   }
