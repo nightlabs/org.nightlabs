@@ -34,7 +34,7 @@ import org.nightlabs.util.Util;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
+ * TODO @Daniel please decide whether {@link NumberSpinnerComposite} or this class should be used - IMHO one of them can be thrown away.
  */
 public class DoubleSpinnerComposite 
 extends XComposite 

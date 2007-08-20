@@ -28,11 +28,11 @@ package org.nightlabs.base.composite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
-import org.nightlabs.util.Utils;
+import org.nightlabs.util.Util;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
+ * TODO @Daniel please decide whether {@link DoubleSpinnerComposite} or this class should be used - IMHO one of them can be thrown away.
  */
 public class NumberSpinnerComposite 
 extends XComposite 
@@ -122,7 +122,7 @@ extends XComposite
 	public void setValue(Number value) 
 	{
 		Number val = changeValue(value);
-		Number shortedVal = (int) Utils.truncateDouble(val.doubleValue(), numDigits);		
+		Number shortedVal = (int) Util.truncateDouble(val.doubleValue(), numDigits);		
 		rest = val.doubleValue() - shortedVal.doubleValue();
 		spinner.setSelection(shortedVal.intValue());		
 	}
@@ -130,12 +130,12 @@ extends XComposite
 	public Number getValue() 
 	{
 //		return getShortedValue().doubleValue() + rest.doubleValue();
-		return Utils.getDouble(spinner.getSelection(), numDigits);
+		return Util.getDouble(spinner.getSelection(), numDigits);
 	}
 	
 	public Number getShortedValue() 
 	{
-		Number shortedValue = Utils.getDouble(spinner.getSelection(), numDigits);
+		Number shortedValue = Util.getDouble(spinner.getSelection(), numDigits);
 		return shortedValue;				
 	}	
 }
