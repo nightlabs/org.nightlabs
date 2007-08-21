@@ -33,16 +33,21 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.eclipse.core.runtime.IPlatformRunnable;
+import org.eclipse.equinox.app.IApplication;
+import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.NLBasePlugin;
-import org.nightlabs.base.exceptionhandler.ExceptionHandlingThreadGroup;
+import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.exceptionhandler.SaveRunnableRunner;
 import org.nightlabs.base.extensionpoint.RemoveExtensionRegistry;
+import org.nightlabs.config.Config;
+import org.nightlabs.config.ConfigException;
 import org.nightlabs.util.IOUtil;
 
 /**
@@ -54,27 +59,20 @@ import org.nightlabs.util.IOUtil;
  * Doing so will tell Eclipse to run your application.
  * <p>
  * When implementing your application you will see, that you have to write two
- * methods. One is to provide a name for your application {@link #initApplicationName()},
- * the other should provide a Thread that actually runs the application and the Workbench {@link #initApplicationThread(ThreadGroup)}.
- * {@link AbstractApplication} does not do much in its run method, it rather starts the application
- * thread and waits until it gets notified that the thread ended. What the application does, is 
- * taking care of uncaught Exceptions in all threads created by the application. This
- * is done by using a special ThreadGroup, the {@link ExceptionHandlingThreadGroup}. This
- * is passed to the method that creates the application thread and should be used as its parent group. 
+ * methods. One is to provide a name for your application {@link #initApplicationName()}, 
+ * and the other to return an implementation of {@link AbstractWorkbenchAdvisor} in 
+ * {@link #initWorkbenchAdvisor(Display)}
  * <p>
- * Now after having created an implementation of {@link AbstractApplication}, you need to implement the thread actually
- * running the application where you are obliged to extend {@link AbstractApplicationThread}.
- * This thread runs the actual RCP application and provides a {@link WorkbenchAdvisor} for it.
  * <p>
  * That's basicly all you have to do. For customizations of your application you can use the
  * {@link WorkbenchAdvisor} you provide (You may use {@link AbstractWorkbenchAdvisor} as a basis here)
  * or the {@link WorkbenchWindowAdvisor} that is provided by the workbench advisor.
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- * @author Daniel Mazurek Daniel.Mazurek[AT]NightLabs[DOT]de
+ * @author Daniel Mazurek - Daniel.Mazurek[AT]NightLabs[DOT]de
  */
 public abstract class AbstractApplication 
-implements IPlatformRunnable
+implements IApplication
 {
 	/**
 	 * LOG4J logger used by this class
@@ -98,7 +96,6 @@ implements IPlatformRunnable
 
 	protected static AbstractApplication sharedInstance;
 
-	
 	protected static AbstractApplication sharedInstance() {
 		if (sharedInstance == null)
 			throw new IllegalStateException("No application has been created yet!"); //$NON-NLS-1$
@@ -106,24 +103,34 @@ implements IPlatformRunnable
 	}
 	
 	/**
-	 * Constructs a new Application and {@link #init()}s it.
+	 * Constructs a new Application and 
+	 * sets the static members {@link #sharedInstance} and {@link #applicationName}.
 	 */
 	public AbstractApplication() 
 	{
 		super();
-		init();
+		applicationName = initApplicationName();
 		sharedInstance = this;
 	}
 
 	private static String applicationName = "AbstractApplication"; //$NON-NLS-1$
+	/**
+	 * 
+	 * @return the application name set by {@link #initApplicationName()}
+	 */
 	public static String getApplicationName() {
 		return applicationName;
 	}
 
 	private static String rootDir = ""; //$NON-NLS-1$
 
+	private Display display;
+	
+	private int platformReturnCode = -1;
+
 	/** 
-	 * @return the root directory, which is the applicationName in the users home directory.
+	 * returns the root directory, which is the .{applicationName} in the users home directory.
+	 * @return the root directory, which is the applicationName with an leading dot in the users home directory.
 	 */
 	public static String getRootDir() {
 		if (rootDir.equals("")) { //$NON-NLS-1$
@@ -146,7 +153,6 @@ implements IPlatformRunnable
 						envValue = ""; //$NON-NLS-1$
 					}
 					resolvedFolderName = resolvedFolderName.replace(matcher.group(0), envValue);
-//					resolvedFolderName = resolvedFolderName.replaceAll("\\$"+matcher.group(1)+"\\$", envValue);
 				}
 				rootFile = new File(resolvedFolderName, "."+getApplicationName()); //$NON-NLS-1$
 			}
@@ -167,6 +173,7 @@ implements IPlatformRunnable
 	private static String configDir = ""; //$NON-NLS-1$
 
 	/**
+	 * returns the config directory, which is getRootDir()+"/config".
 	 * @return the config directory, which is getRootDir()+"/config".
 	 */
 	public static String getConfigDir() {
@@ -174,7 +181,6 @@ implements IPlatformRunnable
 			File configFile = new File(getRootDir(),"config"); //$NON-NLS-1$
 			configFile.mkdirs();
 			configDir = configFile.getAbsolutePath();
-//			System.out.println("configDir is "+configDir);
 		}
 		return configDir;
 	}
@@ -183,7 +189,7 @@ implements IPlatformRunnable
 	private static String logDir = ""; //$NON-NLS-1$
 
 	/**
-	 * 
+	 * returns the log directory, which is getRootDir()+"/log"
 	 * @return the log directory, which is getRootDir()+"/log"
 	 */
 	public static String getLogDir() {
@@ -193,38 +199,17 @@ implements IPlatformRunnable
 				if (!logFile.mkdirs())
 					System.out.println("Could not create log directory "+logFile.getAbsolutePath()); //$NON-NLS-1$
 			logDir = logFile.getAbsolutePath();
-//			System.out.println("logDir is "+logDir);
 		}
 		return logDir;
 	}
 
-	/**
-	 */
-	private static Object mutex = new Object();
-	
-	/**
-	 * The mutex is the object the {@link AbstractApplicationThread}
-	 * synchronizes with the {@link AbstractApplication}.
-	 * <p>
-	 * In its {@link #run(Object)} method this application
-	 * creates an application thread {@link #initApplicationThread(ThreadGroup)},
-	 * starts it and then waits for it to notify the application
-	 * via this mutex.
-	 * 
-	 * @return The mutex used to synchronize the application and its thread.
-	 */
-	protected static Object getMutex() {
-		return mutex;
-	}	
-
-//	protected static final String LOG4J_CONFIG_FILE = "log4j.xml"; 
 	protected static final String LOG4J_CONFIG_FILE = "log4j.properties"; //$NON-NLS-1$
 
 	/**
 	 * Configures log4j with the file located in {@link #getConfigDir()}+"/log4j.properties"
 	 * @throws IOException
 	 */
-	protected static void initializeLogging() 
+	protected void initializeLogging() 
 	throws IOException
 	{
 		String logConfFileName = getConfigDir() + File.separatorChar + LOG4J_CONFIG_FILE;		
@@ -255,7 +240,6 @@ implements IPlatformRunnable
 			System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" could not be set, to "+getApplicationName()+" because:");    	 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			System.out.println("applicationName == null"); //$NON-NLS-1$
 		}
-//		System.out.println("System Property "+APPLICATION_SYSTEM_PROPERTY_NAME+" = "+System.getProperty(APPLICATION_SYSTEM_PROPERTY_NAME));    
 	}
 
 	/**
@@ -274,42 +258,86 @@ implements IPlatformRunnable
 		}
 	}
 	
-	
 	/**
-	 * Implements the application frameworks run method, but delegates to the {@link AbstractApplicationThread}.
-	 * <p>
-	 * This method will start the application thread created in {@link #init()} and wait until
-	 * the mutex accessible by {@link #getMutex()} will be notified by this thread.
-	 *  
-	 * @see org.eclipse.core.runtime.IPlatformRunnable#run(java.lang.Object)
+	 * initializes the Exception Handling by setting the DefaultUncaughtExceptionHandler
+	 * @see Thread#setDefaultUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler)
 	 */
-	public Object run(Object args) 
-	throws Exception 
-	{
+	protected void initExceptionHandling() {
+		final Thread.UncaughtExceptionHandler oldDefaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			public void uncaughtException(Thread t, Throwable e) {
+				if (!ExceptionHandlerRegistry.syncHandleException(t, e)) {
+					if (oldDefaultExceptionHandler != null) {
+						oldDefaultExceptionHandler.uncaughtException(t, e);
+					}
+				}
+			}
+		});
+		SafeRunnable.setRunner(new SaveRunnableRunner());
+	}
+
+	/**
+	 * is called when the application starts and does all
+	 * the necessary initialization for the application
+	 * and afterwards creates the workbench
+	 * 
+	 * @see IApplication#start(IApplicationContext)
+	 */
+	@Implement	
+	public Object start(IApplicationContext context) throws Exception {
 		try {
+			initExceptionHandling();
 			NLBasePlugin.getDefault().setApplication(this);
-			this.arguments = (String[]) args;
-			SafeRunnable.setRunner(new SaveRunnableRunner());
+			this.arguments = (String[]) context.getArguments().get(IApplicationContext.APPLICATION_ARGS); 
+			
+			initializeLogging();
+			initConfig();
 			
 			try {
 				RemoveExtensionRegistry.sharedInstance().removeRegisteredExtensions();				
 			} catch (Throwable t) {
 				logger.error("There occured an error while tyring to remove all registered extensions"); //$NON-NLS-1$
 			}
-			
-			applicationThread.start();
-			synchronized (mutex) {
-				mutex.wait();
-			}
 
-			if (applicationThread.getPlatformResultCode() == PlatformUI.RETURN_RESTART) 
-				return IPlatformRunnable.EXIT_RESTART; 
-			else 
-				return IPlatformRunnable.EXIT_OK;
+			preCreateWorkbench();
+			if (platformReturnCode >= 0) {
+				return platformReturnCode;
+			}
+			display = PlatformUI.createDisplay();
+			try {
+				int returnCode = PlatformUI.createAndRunWorkbench(
+						display, initWorkbenchAdvisor(display));
+				if (returnCode == PlatformUI.RETURN_RESTART)
+					return IApplication.EXIT_RESTART;
+				else
+					return IApplication.EXIT_OK;
+			} finally {
+				display.dispose();
+			}			
 		} finally {
 			if (Display.getCurrent() != null)
 				Display.getCurrent().dispose();
 		}
+	}
+	
+	/**
+	 * is called when the application is stopped
+	 * and by default closes the workbench
+	 * 
+	 * @see IApplication#stop()
+	 */
+	@Implement
+	public void stop() {
+		final IWorkbench workbench = PlatformUI.getWorkbench();
+		if (workbench == null)
+			return;
+		final Display display = workbench.getDisplay();
+		display.syncExec(new Runnable() {
+			public void run() {
+				if (!display.isDisposed())
+					workbench.close();
+			}
+		});
 	}
 
 	private String[] arguments = null;
@@ -320,58 +348,53 @@ implements IPlatformRunnable
 	 *
 	 * @return The program arguments as passed to the application.
 	 */
-	public String[] getArguments()
-	{
+	public String[] getArguments() {
 		return arguments;
 	}
 
-	private ExceptionHandlingThreadGroup threadGroup = null;	
 	/**
-	 * Returns and lazyly creates an instance of {@link ExceptionHandlingThreadGroup}.
 	 * 
-	 * @return An instance of {@link ExceptionHandlingThreadGroup}.
+	 * @return the Implementation of the AbstractWorkbenchAdvisor for the
+	 * {@link AbstractApplication}.
+	 * 
+	 * @see AbstractWorkbenchAdvisor
 	 */
-	protected ThreadGroup getThreadGroup() 
-	{
-		if (threadGroup == null)
-			threadGroup = new ExceptionHandlingThreadGroup(getApplicationName()+"ThreadGroup"); //$NON-NLS-1$
-		return threadGroup;
-	}
-
-	private AbstractApplicationThread applicationThread = null;
+	public abstract AbstractWorkbenchAdvisor initWorkbenchAdvisor(Display display);	
 	
 	/**
-	 * Initializes this application by calling
-	 * {@link #initApplicationName()} and
-	 * {@link #initApplicationThread(ThreadGroup)}.
-	 * <p>
-	 * When this method is overridden, make sure super.init() is called.
+	 * Initializes the Config in the ConfigDir of the Application
+	 * @throws ConfigException
 	 */
-	protected void init() 
+	protected void initConfig() 
+	throws ConfigException
 	{
-		applicationName = initApplicationName();
-		applicationThread = initApplicationThread(getThreadGroup());
-	}
-
+		// initialize the Config
+		Config.createSharedInstance(new File(AbstractApplication.getConfigDir(), "config.xml"), true);		 //$NON-NLS-1$
+	}	
+	
 	/**
 	 * Should return the application name for this application.
 	 * This will be used to choose the application folder.
 	 *  
 	 * @return the name of the Application
 	 */
-	public abstract String initApplicationName();
-
+	protected abstract String initApplicationName();
+	
 	/**
-	 * Should return a new implementation of {@link AbstractApplicationThread}
-	 * that is responsible for actually running the application.
-	 * <p>
-	 * This is done to allow the thread implementation to catch more errors
-	 * than the normal application could as the ThreadGroup passed here and
-	 * that should be used as parent for the new thread is an instance of
-	 * {@link ExceptionHandlingThreadGroup}.
+	 * is called before the Workbench is created, inheritans can do custom
+	 * things like e.g. initialization before the workbench is created
+	 * by overriding this method
 	 * 
-	 * @param group the threadGroup The {@link ThreadGroup} to use as group for the new Thread.
-	 * @return the Implementation of AbstractApplicationThread for the Application
+	 * by default this method does nothing
 	 */
-	public abstract AbstractApplicationThread initApplicationThread(ThreadGroup group);
+	protected void preCreateWorkbench() {}
+	
+	/**
+	 * sets the platforms returnCode
+	 * 
+	 * @param platformReturnCode
+	 */
+	protected void setPlatformReturnCode(int platformReturnCode) {
+		this.platformReturnCode = platformReturnCode;
+	}
 }

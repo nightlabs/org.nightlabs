@@ -26,7 +26,6 @@
 
 package org.nightlabs.base.app;
 
-import java.io.File;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -41,11 +40,11 @@ import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 
 /**
- * Baisc {@link WorkbenchAdvisor} that can be used as basis when developing custom applications.
+ * Basic {@link WorkbenchAdvisor} that can be used as basis when developing custom applications.
  * This Advisor initializes Log4J and the NightLabs {@link Config} for you.
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- * @author Daniel Mazurek Daniel.Mazurek[AT]NightLabs[DOT]de
+ * @author Daniel Mazurek - Daniel.Mazurek [AT] NightLabs [DOT] de
  */
 public abstract class AbstractWorkbenchAdvisor 
 extends WorkbenchAdvisor 
@@ -60,41 +59,10 @@ extends WorkbenchAdvisor
 		super();
 		try {
 			application = initApplication();
-			try {
-				AbstractApplication.initializeLogging();
-			} catch (Throwable t) {
-				System.out.println("Could not initialize logging !!!"); //$NON-NLS-1$
-			}  		
-
-//			if (classSharing)
-//			{
-////				if (isSystemClassLoaderDelegating()) {
-////				LOGGER.debug("Initializing classsharing ...");
-////				ClasssharingPlugin.initializeClassSharing();
-////				LOGGER.debug("Initializing classsharing ... DONE");
-////				}
-////				else
-////				LOGGER.error("classsharing is enabled, but system classloader is NOT an instance of DelegatingClassLoader! Cannot initialize classsharing!");
-//			}
-//			else
-//				logger.debug("classsharing is disabled - NOT initialized."); //$NON-NLS-1$
-
-
-			initConfig();
-
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}		
 	}
-
-//	protected boolean classSharing = true;
-//	public void setClassSharing(boolean classSharing) {
-//		this.classSharing = classSharing;
-//	}	
-
-//	public static boolean isSystemClassLoaderDelegating() {
-//	return ClassLoader.getSystemClassLoader() instanceof DelegatingClassLoader;
-//	}	
 
 	/**
 	 * Checks the {@link ExceptionHandlerRegistry} for registered handlers by invoking
@@ -108,18 +76,7 @@ extends WorkbenchAdvisor
 	}  	
 
 	/**
-	 * initialzies the Config in the ConfigDir of the Application
-	 * @throws ConfigException
-	 */
-	protected void initConfig() 
-	throws ConfigException
-	{
-//		initialize the Config
-		Config.createSharedInstance(new File(AbstractApplication.getConfigDir(), "config.xml"), true);		 //$NON-NLS-1$
-	}	
-
-	/**
-	 * Intializes the workbench 
+	 * Initializes the workbench 
 	 */
 	public void initialize(IWorkbenchConfigurer configurer) {
 		super.initialize(configurer);
@@ -129,6 +86,7 @@ extends WorkbenchAdvisor
 	/**
 	 * saves the Config before the Application is shutDown
 	 */
+	@Override
 	public boolean preShutdown() 
 	{
 		boolean superResult = super.preShutdown();
@@ -147,6 +105,13 @@ extends WorkbenchAdvisor
 	}
 
 	protected AbstractApplication application = null;
+	/**
+	 * return the {@link AbstractApplication} associated with this
+	 * AbstractWorkbenchAdvisor
+	 * 
+	 * @return the AbstractApplication associated with this 
+	 * AbstractWorkbenchAdvisor
+	 */
 	public AbstractApplication getApplication() 
 	{
 		if (application == null)
@@ -156,7 +121,7 @@ extends WorkbenchAdvisor
 	}
 
 	/**
-	 * Init the application.
+	 * Initializes the application.
 	 * <p>
 	 * The default implementation returns 
 	 * {@link AbstractApplication#sharedInstance()}
@@ -172,7 +137,7 @@ extends WorkbenchAdvisor
 
 	/**
 	 * creates the DefaultWorkbenchWindowAdvisor by default.
-	 * iy you want to specify your own WorkbenchWindowAdvisor, you have to override
+	 * if you want to specify your own WorkbenchWindowAdvisor, you have to override
 	 * this Method
 	 * 
 	 * @param configurer the IWorkbenchWindowConfigurer
@@ -180,15 +145,6 @@ extends WorkbenchAdvisor
 	 */
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
 		return new DefaultWorkbenchWindowAdvisor(configurer, AbstractApplication.getApplicationName());
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.application.WorkbenchAdvisor#getInitialWindowPerspectiveId()
-	 */
-	@Override
-	public String getInitialWindowPerspectiveId() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -202,6 +158,10 @@ extends WorkbenchAdvisor
 		}
 	}		
 	
+	/**
+	 * checks if the -clearWorkspace programm argument is set and if
+	 * so clears the workspace directory of the application
+	 */
 	protected void checkClearWorkspace() 
 	{
 		String[] args = NLBasePlugin.getDefault().getApplication().getArguments();
