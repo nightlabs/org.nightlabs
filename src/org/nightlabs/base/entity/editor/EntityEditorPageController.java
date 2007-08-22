@@ -26,7 +26,6 @@
 
 package org.nightlabs.base.entity.editor;
 
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
@@ -51,7 +50,7 @@ import org.nightlabs.base.util.RCPUtil;
 
 /**
  * <p>This implementation of {@link IEntityEditorPageController} can be used
- * as controllers for entity editor pages registered by the "pageFactory" element.
+ * as controllers for entity entityEditor pages registered by the "pageFactory" element.
  * This base class allows to schedule a job when the controller is created, so that when the
  * page is shown and needs to access the controller's data it might be
  * already (partially) loaded.</p>
@@ -71,18 +70,13 @@ import org.nightlabs.base.util.RCPUtil;
  *
  */
 public abstract class EntityEditorPageController
-extends PropertyChangeSupport
 implements IEntityEditorPageController 
 {
-
-	/**
-	 * LOG4J logger used by this class
-	 */
 	private static final Logger logger = Logger.getLogger(EntityEditorPageController.class);
 	
 	/**	
-	 * The editor controller this page controller is registered to.
-	 * Used to put the loadJob in the editor controllers job pool.
+	 * The entityEditor controller this page controller is registered to.
+	 * Used to put the loadJob in the entityEditor controllers job pool.
 	 */
 	private EntityEditorController editorController;
 	
@@ -174,7 +168,9 @@ implements IEntityEditorPageController
 	 * if the controller is dirty or not
 	 */
 	private boolean dirty = false;
-	
+
+	private EntityEditor entityEditor;
+
 	/**
 	 * Create a new page controller that
 	 * will not do background loading. 
@@ -190,9 +186,15 @@ implements IEntityEditorPageController
 	 * @param startBackgroundLoading Whether to start the load job instantly.
 	 */
 	public EntityEditorPageController(EntityEditor editor, boolean startBackgroundLoading) {
-		super(editor);
+//		super(entityEditor);
+		this.entityEditor = editor;
 		if (startBackgroundLoading)
 			startLoadJob();
+	}
+
+	public EntityEditor getEntityEditor()
+	{
+		return entityEditor;
 	}
 	
 	/*
@@ -216,8 +218,8 @@ implements IEntityEditorPageController
 	}
 	
 	/**
-	 * Returns the editor controller this page controller is linked to. 
-	 * @return Tthe editor controller this page controller is linked to.
+	 * Returns the entityEditor controller this page controller is linked to. 
+	 * @return Tthe entityEditor controller this page controller is linked to.
 	 */
 	public EntityEditorController getEntityEditorController() {
 		return editorController;
@@ -392,25 +394,23 @@ implements IEntityEditorPageController
 		// does nothing
 	}
 
-	/**
-	 * @deprecated {@link #addModifyListener(IEntityEditorPageControllerModifyListener)} should be used instead.
-	 * 		This should not be used any more, as PropertyChangeSupport check if 
-	 * 		oldValue.equals(newValue) for the notified objects and will not propagete
-	 * 		if this is true. For most JDO, that check their id in equals, this is 
-	 * 		not applicable.
-	 */
-	@Override
-	public synchronized void addPropertyChangeListener(PropertyChangeListener arg0) {
-		super.addPropertyChangeListener(arg0);
-	}
-
-	/**
-	 * @deprecated {@link #removeModifyListener(IEntityEditorPageControllerModifyListener)} should be used instead.
-	 */
-	@Override
-	public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
-		super.removePropertyChangeListener(listener);
-	}
+//	/**
+//	 * @deprecated {@link #addModifyListener(IEntityEditorPageControllerModifyListener)} should be used instead.
+//	 * 		This should not be used any more, as PropertyChangeSupport check if 
+//	 * 		oldValue.equals(newValue) for the notified objects and will not propagete
+//	 * 		if this is true. For most JDO, that check their id in equals, this is 
+//	 * 		not applicable.
+//	 */
+//	public synchronized void addPropertyChangeListener(PropertyChangeListener arg0) {
+//		propertyChangeSupport.addPropertyChangeListener(arg0);
+//	}
+//
+//	/**
+//	 * @deprecated {@link #removeModifyListener(IEntityEditorPageControllerModifyListener)} should be used instead.
+//	 */
+//	public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
+//		propertyChangeSupport.removePropertyChangeListener(listener);
+//	}
 
 	/**
 	 * Adds a new {@link IEntityEditorPageControllerModifyListener} to this controller.

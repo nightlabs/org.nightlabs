@@ -56,8 +56,9 @@ import org.nightlabs.util.bean.IPropertyChangeSupport;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public interface IEntityEditorPageController 
-extends IPropertyChangeSupport, IDirtyStateManager 
+public interface IEntityEditorPageController
+extends IDirtyStateManager
+// extends IPropertyChangeSupport, IDirtyStateManager 
 {
 //	/**
 //	 * Set the page this controller is associated with.
