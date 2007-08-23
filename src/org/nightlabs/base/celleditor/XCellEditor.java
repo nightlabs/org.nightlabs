@@ -65,12 +65,6 @@ implements IReadOnlyCellEditor
 		super(parent, style);
 		setReadOnly(readOnly);
 	}
-	
-	protected void checkReadOnly() 
-	{
-		if (isReadOnly())
-			return;
-	}
 
 	private boolean readOnly = false;
 	public boolean isReadOnly() {

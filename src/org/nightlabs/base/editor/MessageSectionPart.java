@@ -33,13 +33,15 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.nightlabs.base.entity.editor.EntityEditorUtil;
+import org.nightlabs.base.message.IMessageDisplayer;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
 public class MessageSectionPart 
-extends RestorableSectionPart 
+	extends RestorableSectionPart
+	implements IMessageDisplayer
 {
 
 	public MessageSectionPart(IFormPage page, Composite parent, int style, String title) {
@@ -86,4 +88,5 @@ extends RestorableSectionPart
 	public void setMessage(String message, int style) {
 		getManagedForm().getForm().getForm().setMessage(message, style);
 	}
+
 }

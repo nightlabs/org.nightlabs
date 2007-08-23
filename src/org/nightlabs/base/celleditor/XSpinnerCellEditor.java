@@ -90,7 +90,9 @@ extends XCellEditor
 	
 	@Override
 	protected void doSetValue(Object value) {
-		checkReadOnly();
+		if (isReadOnly())
+			return;
+		
 		if (value instanceof Integer)
 			getSpinner().setSelection((Integer)value);
 		if (value instanceof Float)

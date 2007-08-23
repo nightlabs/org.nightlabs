@@ -99,7 +99,9 @@ extends XCellEditor
 	 */
 	protected void doSetValue(Object value) 
 	{
-		checkReadOnly();
+		if (isReadOnly())
+			return;
+		
 	  if (value instanceof Boolean)
 	    checkbox.setSelection(((Boolean) value).booleanValue());
 	}

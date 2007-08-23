@@ -114,7 +114,8 @@ implements ISelectionProvider
 //		GridData gd = new GridData(GridData.FILL_BOTH);
 //		this.setLayoutData(gd);
 		
-		tableViewer = new TableViewer(this, viewerStyle);		
+		tableViewer = new TableViewer(this, viewerStyle);
+		tableViewer.setUseHashlookup(true);
 		GridData tgd = new GridData(GridData.FILL_BOTH);
 		table = tableViewer.getTable(); 
 		table.setHeaderVisible(true);
@@ -157,7 +158,7 @@ implements ISelectionProvider
 	}
 	
 	/**
-	 * Override for initializatioin to be done
+	 * Override for initialisation to be done
 	 * before {@link #createTableColumns(TableViewer, Table)} and {@link #setTableProvider(TableViewer)}.
 	 * Default implementation does nothing.
 	 */

@@ -84,7 +84,9 @@ extends XCellEditor
 
   protected void doSetValue(Object value) 
   {
-  	checkReadOnly();
+		if (isReadOnly())
+			return;
+		
   	Assert.isTrue(text != null && (value instanceof Integer));
   	Integer val = (Integer) value;
   	String stringVal = Integer.toString(val.intValue());
