@@ -45,8 +45,18 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 /**
- * @deprecated use XComboComposite instead TODO: rename CComboComposite -> XComboComposite.
- * 
+ * <code>ComboComposite</code> wraps a native {@link Combo} and provides a high-level viewer-API
+ * for it.
+ * <p>
+ * Instead of this class, you can use an {@link XComboComposite} which supports additional features
+ * like e.g. an icon. Since both extend {@link AbstractListComposite}, the API is the same and
+ * you can easily replace one by another.
+ * </p>
+ *
+ * @deprecated Use {@link XComboComposite} instead: For aethetic reasons, it is recommended to use
+ * the same combo everywhere and the native combo lacks some important features which
+ * <code>XCombo</code> supports.
+ *
  * @author Marius Heinzmann <marius[AT]nightlabs[DOT]de>
  * @param <T>
  */
@@ -107,6 +117,7 @@ public class ComboComposite<T> extends AbstractListComposite<T> {
 	}
 
 	protected void createGuiControl(Composite parent, int style, String caption) {
+		getGridData().grabExcessVerticalSpace = false;
 		style |= getBorderStyle();
 		if ((style & SWT.SIMPLE) == 0 && (style & SWT.DROP_DOWN) == 0)
 			style |= SWT.DROP_DOWN;

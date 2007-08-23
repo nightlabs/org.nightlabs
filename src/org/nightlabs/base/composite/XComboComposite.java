@@ -41,9 +41,17 @@ import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.custom.XCombo;
 
 /**
+ * <code>XComboComposite</code> wraps an {@link XCombo} and provides a high-level viewer-API for it.
+ * An <code>XCombo</code> is a non-native combo-box implementation with supports additional features
+ * like an icon.
+ * <p>
+ * If you don't need the additional features, you might instead use {@link ComboComposite} which
+ * wraps a native {@link org.eclipse.swt.widgets.Combo}. It is, however, recommended to use the
+ * same combo everywhere for aesthetic reasons.
+ * </p>
+ *
  * @author Daniel.Mazurek at Nightlabs dot de
  * @author Marius Heinzmann <marius[AT]NightLabs[DOT]de>
- *
  */
 public class XComboComposite<T> 
 	extends AbstractListComposite<T> 
@@ -61,6 +69,10 @@ public class XComboComposite<T>
 	 */
 	public XComboComposite(Composite parent, int comboStyle, String caption) {
 		super(parent, comboStyle, caption, true);
+	}
+
+	public XComboComposite(Composite parent, int comboStyle, ILabelProvider labelProvider) {
+		super(parent, comboStyle, (String)null, true, labelProvider);
 	}
 
 	/**
@@ -150,10 +162,10 @@ public class XComboComposite<T>
 	 */
 	private XCombo imageCombo;
 
-	
 	@Override
 	protected void createGuiControl(Composite parent, int widgetStyle, String caption) 
 	{
+		getGridData().grabExcessVerticalSpace = false;
 		if ( caption != null && ! "".equals(caption) ) { //$NON-NLS-1$
 			XComposite composite = new XComposite(parent, SWT.NONE, LayoutDataMode.GRID_DATA);
 			label = new Label(composite, SWT.NONE);

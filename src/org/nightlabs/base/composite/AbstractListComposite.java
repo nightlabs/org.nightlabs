@@ -472,15 +472,15 @@ implements ISelectionProvider
 	public boolean contains(T element) {
 		return elements.contains(element);
 	}
-	
-	public boolean selectElement(int index) {
+
+	public boolean selectElementByIndex(int index) {
 		if (index < -1)
 			return false;
 		
 		internal_setSelection(index);
 		return true;
 	}
-	
+
 	/**
 	 * Selects the given element in the list.
 	 * 
@@ -492,7 +492,7 @@ implements ISelectionProvider
 	public boolean selectElement(T element)
 	{
 		int index = elements.indexOf(element);
-		return selectElement(index);
+		return selectElementByIndex(index);
 	}
 	
 	/**
