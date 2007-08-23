@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.connection">
+<schema targetNamespace="org.nightlabs.connection.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.connection" id="connectionImplementation" name="Connection Implementation"/>
+         <meta.schema plugin="org.nightlabs.connection.ui" id="connectionImplementation" name="Connection Implementation"/>
       </appInfo>
       <documentation>
          This extension point serves for populating the list returned by Connection.getConnectionImplementations().

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.connection">
+<schema targetNamespace="org.nightlabs.connection.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.connection" id="connectionCfEditFactory" name="Connection Configuration Edit UI"/>
+         <meta.schema plugin="org.nightlabs.connection.ui" id="connectionCfEditFactory" name="Connection Configuration Edit UI"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
