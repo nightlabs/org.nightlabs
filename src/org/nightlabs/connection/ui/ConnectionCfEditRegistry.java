@@ -9,7 +9,6 @@ import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 import org.nightlabs.connection.ConnectionImplementation;
-import org.nightlabs.connection.ConnectionImplementationRegistry;
 
 public class ConnectionCfEditRegistry
 		extends AbstractEPProcessor
