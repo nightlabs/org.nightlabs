@@ -32,7 +32,7 @@ import org.nightlabs.editor2d.DrawComponent;
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
 public interface Draw2DRenderContext 
-extends RenderContext
+extends RenderContext<Graphics>
 {
 	public static final String RENDER_CONTEXT_TYPE = "Draw2D";
 	void paint(DrawComponent dc, Graphics g);	

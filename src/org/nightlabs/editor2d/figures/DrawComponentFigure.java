@@ -73,18 +73,11 @@ implements RendererFigure
           
   public static void paintDraw2D(Graphics g, DrawComponent dc, Renderer r) 
   {
-		if (r != null && dc != null && g != null) 
-		{				
-			RenderContext rc = r.getRenderContext();
-			if (rc instanceof Draw2DRenderContext) {
-				((Draw2DRenderContext)rc).paint(dc, g);
-			}
-			else {
-				rc = r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE);
-				if (rc != null) {
-					((Draw2DRenderContext) rc).paint(dc, g);
-				}  					
-			}
+		if (r != null && dc != null && g != null) {				
+			RenderContext rc = r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE);
+			if (rc != null) {
+				((Draw2DRenderContext) rc).paint(dc, g);
+			}  					
 		}					
   }
     

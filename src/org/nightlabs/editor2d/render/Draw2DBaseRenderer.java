@@ -57,12 +57,11 @@ implements Draw2DRenderContext
   	if (dc instanceof DrawComponentContainer) {
   		DrawComponentContainer container = (DrawComponentContainer) dc;
   		if (container != null) {
-  			for (Iterator it = container.getDrawComponents().iterator(); it.hasNext(); ) {
-  				DrawComponent d = (DrawComponent) it.next();
+  			for (Iterator<DrawComponent> it = container.getDrawComponents().iterator(); it.hasNext(); ) {
+  				DrawComponent d = it.next();
   				Renderer r = d.getRenderer();
-  				RenderContext rc = r.getRenderContext();
-  				if (rc != null && rc instanceof Draw2DRenderContext) 
-  				{
+  				RenderContext rc = r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE);
+  				if (rc != null && rc instanceof Draw2DRenderContext) {
   					Draw2DRenderContext d2drc = (Draw2DRenderContext) rc; 
   					d2drc.paint(dc, g);
   				}
