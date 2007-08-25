@@ -117,9 +117,12 @@ implements IDynamicPathWizardPage
 	 * This method is called by {@link #updateStatus(String)}. 
 	 * Override to set the message displayed initially and on 
 	 * page completition.
-	 * Default implementation will return an empty string.
-	 * 
+	 * Default implementation will return <code>null</code>.
+	 *
 	 * @return null
+	 *
+	 * @deprecated if you set all messages to <code>null</code>, the description (which can be set via {@link #setDescription(String)})
+	 * will be displayed. Therefore it's not necessary to manage a default message, since the description behaves already this way.
 	 */
 	protected String getDefaultPageMessage() {
 		return null;
