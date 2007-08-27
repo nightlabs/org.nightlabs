@@ -31,7 +31,6 @@ import org.nightlabs.base.app.AbstractApplication;
 import org.nightlabs.base.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.exceptionhandler.SimpleExceptionHandlerRegistry;
 import org.osgi.framework.BundleContext;
-import org.nightlabs.ModuleException;
 
 /**
  * The main plugin class to be used in the desktop.
