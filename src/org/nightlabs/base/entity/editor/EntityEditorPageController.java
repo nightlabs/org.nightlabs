@@ -99,7 +99,7 @@ implements IEntityEditorPageController
 			super(Messages.getString("org.nightlabs.base.entity.editor.EntityEditorPageController.LoadJob.name")); //$NON-NLS-1$
 			this.controller = controller;
 		}
-		
+
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			cMonitor = new CompoundProgressMonitor(monitor);
@@ -131,6 +131,20 @@ implements IEntityEditorPageController
 		public boolean isLoaded() {
 			return loaded;
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * The default implementation in <code>EntityEditorPageController</code> returns
+	 * a composition of the class name and the {@link System#identityHashCode(Object)}.
+	 * Therefore, all instances have different IDs.
+	 * </p>
+	 */
+	@Implement
+	public String getControllerID()
+	{
+		return this.getClass().getName() + '@' + System.identityHashCode(this);
 	}
 	
 //	/**

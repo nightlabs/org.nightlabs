@@ -51,7 +51,7 @@ public interface IEntityEditorPageFactory {
 	 * at {@link EntityEditorPageWithProgress} that provides
 	 * support for loading (large or slow) data within
 	 * asynchronous jobs.
-	 * 
+	 *
 	 * @param formEditor The editor to create the page for.
 	 * @return A new entity editor page.
 	 */
@@ -59,13 +59,22 @@ public interface IEntityEditorPageFactory {
 	
 	/**
 	 * <p>Create a new page controller for the pages of this
-	 * factory. The page controller will be added to the editors
-	 * {@link EntityEditorController}. A {@link IEntityEditorPageFactory}
+	 * factory. The page controller will be added to the editor's
+	 * {@link EntityEditorController}. An {@link IEntityEditorPageFactory}
 	 * might choose to return <code>null</code> here as well, then, however
 	 * the associated editor or the page itself somehow have to handle
 	 * data loading.</p>
-	 * 
-	 * <p>Also for the page controller there exists a base class with 
+	 * <p>
+	 * Additionally, multiple pages can share the same page-controller. Therefore,
+	 * this method can return an already-registered {@link IEntityEditorPageController}
+	 * instead of creating a new one. The page-controller might be obtained from the editor's
+	 * <code>EntityEditorController</code>
+	 * (for example via {@link EntityEditorController#getPageControllerByControllerID(String)} or
+	 * {@link EntityEditorController#getPageControllers(Class)}).
+	 * Use {@link EntityEditor#getController()} to get the <code>EntityEditorController</code> from the given
+	 * editor.
+	 * </p>
+	 * <p>Also for the page-controller there exists a base class with 
 	 * extra functionality concerning background loading of data, see {@link EntityEditorPageController}</p>  
 	 * 
 	 * @param editor The editor for which a controller should be created

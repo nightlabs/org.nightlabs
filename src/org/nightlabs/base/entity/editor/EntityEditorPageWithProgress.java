@@ -202,7 +202,7 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 	 * @return The page controller for this page.
 	 */
 	public IEntityEditorPageController getPageController() {
-		return ((EntityEditor)getEditor()).getPageController(this);
+		return ((EntityEditor)getEditor()).getController().getPageController(this);
 	}
 	
 	/**

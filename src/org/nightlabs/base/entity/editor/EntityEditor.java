@@ -235,45 +235,45 @@ public class EntityEditor extends CommitableFormEditor
 		return controller;
 	}
 	
-	/**
-	 * Convenience method to obtain the page controller for the given page.
-	 * 
-	 * Note that page controllers should not be accessed from their associated
-	 * pages in their constructor, as the controller registration
-	 * will be initialized immediately after the page was created. 
-	 * 
-	 * @param page The page to search the page controller for.
-	 * @return The page controller for the given page, or <code>null</code> if none found
-	 */
-	public IEntityEditorPageController getPageController(IFormPage page) {
-		return getController().getPageController(page);
-	}
-
-	/**
-	 * Returns a collection of all pageControllers associated with this'
-	 * editor {@link EntityEditorController}.
-	 * 
-	 * @return All page controllers.
-	 */
-	public Collection<IEntityEditorPageController> getPageControllers() {
-		return getController().getPageControllers().values();
-	}
-	
-	/**
-	 * returns the associated instance of the given IEntityEditorPageController class or null if not contained
-	 * 
-	 * @param clazz the IEntityEditorPageController class you want to get the associated instance for
-	 * @return the associated instance of the given IEntityEditorPageController class or null if not contained
-	 */
-	public IEntityEditorPageController getPageController(Class clazz) 
-	{
-		for (Map.Entry<String, IEntityEditorPageController> entry : getController().getPageControllers().entrySet()) {
-			if (entry.getValue().getClass().equals(clazz)) {
-				return entry.getValue();
-			}
-		}
-		return null;
-	}	
+//	/**
+//	 * Convenience method to obtain the page controller for the given page.
+//	 * 
+//	 * Note that page controllers should not be accessed from their associated
+//	 * pages in their constructor, as the controller registration
+//	 * will be initialized immediately after the page was created. 
+//	 * 
+//	 * @param page The page to search the page controller for.
+//	 * @return The page controller for the given page, or <code>null</code> if none found
+//	 */
+//	public IEntityEditorPageController getPageController(IFormPage page) {
+//		return getController().getPageController(page);
+//	}
+//
+//	/**
+//	 * Returns a collection of all pageControllers associated with this'
+//	 * editor {@link EntityEditorController}.
+//	 * 
+//	 * @return All page controllers.
+//	 */
+//	public Collection<IEntityEditorPageController> getPageControllers() {
+//		return getController().getPageControllers();
+//	}
+//
+//	/**
+//	 * returns the associated instance of the given IEntityEditorPageController class or null if not contained
+//	 * 
+//	 * @param clazz the IEntityEditorPageController class you want to get the associated instance for
+//	 * @return the associated instance of the given IEntityEditorPageController class or null if not contained
+//	 */
+//	public IEntityEditorPageController getPageController(Class clazz)
+//	{
+//		for (Map.Entry<String, IEntityEditorPageController> entry : getController().getPageID2pageController().entrySet()) {
+//			if (entry.getValue().getClass().equals(clazz)) {
+//				return entry.getValue();
+//			}
+//		}
+//		return null;
+//	}
 
 	/**
 	 * {@inheritDoc}

@@ -27,6 +27,7 @@
 package org.nightlabs.base.entity.editor;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -80,13 +80,29 @@ public class EntityEditorController
 	 * Map to hold the page controllers for the pages of this controller
 	 * editor. All work of this controller (load save get) will be delegated
 	 * to the page controllers. The key of the controllers is the pageID of
-	 * the pageFactory registered by extension-point. 
+	 * the pageFactory registered by extension-point.
+	 * <p>
+	 * key: String pageID<br/>
+	 * value: IEntityEditorPageController controller
+	 * </p>
 	 */
-	private Map<String, IEntityEditorPageController> pageControllers = new HashMap<String, IEntityEditorPageController>();	
+	private Map<String, IEntityEditorPageController> pageID2pageController = new HashMap<String, IEntityEditorPageController>();
+
 	/**
-	 * Reverse lookup map for {@link #pageControllers}.
+	 * Map to hold the controllers organized by their IDs.
+	 * <p>
+	 * key: String pageControllerID (as returned by {@link IEntityEditorPageController#getControllerID()})<br/>
+	 * value: IEntityEditorPageController controller
+	 * </p>
 	 */
-	private Map<IEntityEditorPageController, Collection<IFormPage>> controllerPages = new HashMap<IEntityEditorPageController, Collection<IFormPage>>();
+	private Map<String, IEntityEditorPageController> controllerID2pageController = new HashMap<String, IEntityEditorPageController>();
+
+	private Map<Class<?>, Set<IEntityEditorPageController>> class2pageControllers = new HashMap<Class<?>, Set<IEntityEditorPageController>>();
+
+//	/**
+//	 * Reverse lookup map for {@link #pageID2pageController}.
+//	 */
+//	private Map<IEntityEditorPageController, Collection<IFormPage>> controllerPages = new HashMap<IEntityEditorPageController, Collection<IFormPage>>();
 	
 	private List<IEntityEditorPageController> dirtyPageControllers = new LinkedList<IEntityEditorPageController>();
 	
@@ -105,8 +121,8 @@ public class EntityEditorController
 	private Map<IEntityEditorPageController, Job> loadJobPool = new TreeMap<IEntityEditorPageController, Job>(
 			new Comparator<IEntityEditorPageController>() {
 				public int compare(IEntityEditorPageController o1, IEntityEditorPageController o2) {
-					Collection<IFormPage> pages1 = getPages(o1);
-					Collection<IFormPage> pages2 = getPages(o2);
+					Collection<IFormPage> pages1 = o1.getPages();
+					Collection<IFormPage> pages2 = o2.getPages();
 					IFormPage page1 = pages1 == null ? null : pages1.iterator().next();
 					IFormPage page2 = pages2 == null ? null : pages2.iterator().next();
 					if (page1 == null || page2 == null)
@@ -132,6 +148,7 @@ public class EntityEditorController
 	public EntityEditorController(EntityEditor editor)
 	{
 		this.editor = editor;
+		this.editor.addPropertyListener(dirtyStateListener);
 	}
 
 	/**
@@ -148,19 +165,42 @@ public class EntityEditorController
 		if (pageController == null || page == null)
 			return;
 		pageController.addPage(page);
-		editor.addPropertyListener(dirtyStateListener);
+//		editor.addPropertyListener(dirtyStateListener);
 //		page.addPropertyListener(dirtyStateListener);
-		
+
 		pageController.setEntityEditorController(this);
-		pageControllers.put(page.getId(), pageController);
-		Collection<IFormPage> controllerPageCollection = controllerPages.get(pageController);
-		if (controllerPageCollection == null) {
-			controllerPageCollection = new HashSet<IFormPage>();
-			controllerPages.put(pageController, controllerPageCollection);
-		}
-		controllerPageCollection.add(page);
+		pageID2pageController.put(page.getId(), pageController);
+		controllerID2pageController.put(pageController.getControllerID(), pageController);
+
+		addPageControllerToClassMap(pageController.getClass(), pageController);
+
+//		Collection<IFormPage> controllerPageCollection = controllerPages.get(pageController);
+//		if (controllerPageCollection == null) {
+//			controllerPageCollection = new HashSet<IFormPage>();
+//			controllerPages.put(pageController, controllerPageCollection);
+//		}
+//		controllerPageCollection.add(page);
 	}
-	
+
+	private void addPageControllerToClassMap(Class<?> clazz, IEntityEditorPageController pageController)
+	{
+		while (clazz != null) {
+			Set<IEntityEditorPageController> controllers = class2pageControllers.get(clazz);
+			if (controllers == null) {
+				controllers = new HashSet<IEntityEditorPageController>();
+				class2pageControllers.put(clazz, controllers);
+			}
+			controllers.add(pageController);
+
+			Class<?>[] interfaces = clazz.getInterfaces();
+			for (Class<?> interfaze : interfaces) {
+				addPageControllerToClassMap(interfaze, pageController);
+			}
+
+			clazz = clazz.getSuperclass();
+		}
+	}
+
 	private IPropertyListener dirtyStateListener = new IPropertyListener(){
 		public void propertyChanged(Object source, int propId) {
 			if (EditorPart.PROP_DIRTY == propId) {
@@ -173,7 +213,7 @@ public class EntityEditorController
 					EntityEditor editor = (EntityEditor) source;
 //					if (editor.isDirty()) {
 					IFormPage page = editor.getActivePageInstance();						
-					IEntityEditorPageController pageController = pageControllers.get(page.getId());
+					IEntityEditorPageController pageController = pageID2pageController.get(page.getId());
 					if (pageController != null) {
 						logger.debug("pageControler.markDirty() for page "+page.getId()); //$NON-NLS-1$
 						pageController.markDirty();
@@ -193,28 +233,53 @@ public class EntityEditorController
 	 * @return The page controller registered to the given page or <code>null</code> if none found.
 	 */
 	public IEntityEditorPageController getPageController(IFormPage page) {
-		return pageControllers.get(page.getId());
-	}
-	
-	/**
-	 * Return the pages the given controller is linked to.
-	 * 
-	 * @param pageController The page controller to search a page for.
-	 * @return The pages the given controller is linked to.
-	 */
-	protected Collection<IFormPage> getPages(IEntityEditorPageController pageController) {
-		return controllerPages.get(pageController);
+		return pageID2pageController.get(page.getId());
 	}
 
 	/**
-	 * Returns the current pageControllers for this editorControllers.
-	 * 
-	 * @return The current pageControllers for this editorControllers.
+	 * @param pageID The id of the page for which a controller is desired.
+	 * @return The page controller registered to the specified page or <code>null</code> if none found.
 	 */
-	protected Map<String, IEntityEditorPageController> getPageControllers() {
-		return pageControllers;
+	public IEntityEditorPageController getPageControllerByPageID(String pageID) {
+		return pageID2pageController.get(pageID);
 	}
-	
+	/**
+	 * @param controllerID The id of the controller. 
+	 * @return
+	 */
+	public IEntityEditorPageController getPageControllerByControllerID(String controllerID) {
+		return controllerID2pageController.get(controllerID);
+	}
+
+//	/**
+//	 * Return the pages the given controller is linked to.
+//	 * 
+//	 * @param pageController The page controller to search a page for.
+//	 * @return The pages the given controller is linked to.
+//	 */
+//	protected Collection<IFormPage> getPages(IEntityEditorPageController pageController) {
+//		return controllerPages.get(pageController);
+//	}
+
+	/**
+	 * Returns a collection of all pageControllers associated with this'
+	 * editor {@link EntityEditorController}.
+	 * 
+	 * @return All page controllers.
+	 */
+	public Collection<IEntityEditorPageController> getPageControllers() {
+		return controllerID2pageController.values();
+	}
+
+//	/**
+//	 * Returns the current pageID2pageController for this editorControllers.
+//	 * 
+//	 * @return The current pageID2pageController for this editorControllers.
+//	 */
+//	protected Map<String, IEntityEditorPageController> getPageID2pageController() {
+//		return pageID2pageController;
+//	}
+
 	/**
 	 * Adds a new job to the pool, that might be scheduled instantly or 
 	 * some time later, depending on the numer of already running jobs.
@@ -316,20 +381,22 @@ public class EntityEditorController
 	public void populateDirtyPageControllers() 
 	{
 		this.dirtyPageControllers.clear();
-		for (Entry<IEntityEditorPageController, Collection<IFormPage>> entry : controllerPages.entrySet()) {
-			IEntityEditorPageController controller = entry.getKey();
+//		for (Entry<IEntityEditorPageController, Collection<IFormPage>> entry : controllerPages.entrySet()) {
+//			IEntityEditorPageController controller = entry.getKey();
+		for (IEntityEditorPageController controller : getPageControllers()) {
 			if (controller.isDirty()) {
 				dirtyPageControllers.add(controller);
-			}				
+			}			
 		}
 	}
-	
+
 	/**
 	 * @return <code>true</code> if at least one of the {@link IEntityEditorPageController}s associated
 	 * with this controller is dirty, <code>false</code> otherwise.
 	 */
 	public boolean hasDirtyPageControllers() {
-		for (IEntityEditorPageController controller : controllerPages.keySet()) {
+//		for (IEntityEditorPageController controller : controllerPages.keySet()) {
+		for (IEntityEditorPageController controller : getPageControllers()) {
 			if (controller.isDirty())
 				return true;
 		}
@@ -369,8 +436,9 @@ public class EntityEditorController
 	 *
 	 */
 	public void editorFocussed() {
-		for (IEntityEditorPageController controller : controllerPages.keySet()) {
-			controller.dispose();
+//		for (IEntityEditorPageController controller : controllerPages.keySet()) {
+		for (IEntityEditorPageController controller : getPageControllers()) {
+			controller.editorFocussed();
 		}
 	}
 	
@@ -379,9 +447,32 @@ public class EntityEditorController
 	 * calls {@link IEntityEditorPageController#editorFocussed()}.
 	 */
 	public void dispose() {
-		for (IEntityEditorPageController controller : controllerPages.keySet()) {
-			controller.editorFocussed();
+//		for (IEntityEditorPageController controller : controllerPages.keySet()) {
+		for (IEntityEditorPageController controller : getPageControllers()) {
+			controller.dispose();
 		}
 	}
-	
+
+	/**
+	 * Get those {@link IEntityEditorPageController}s that are instances of a given class
+	 * or implement a given interface. This method takes subclasses into account as well
+	 * as the complete interface hierarchy.
+	 * <p>
+	 * For the resulting instances, the condition <code>entityPageController instanceof clazz</code>
+	 * is always true.
+	 * </p>
+	 *
+	 * @param clazz A class or interface.
+	 * @return a <code>Set</code> of <code>IEntityEditorPageController</code> holding those
+	 *		instances that either implement or are instances of the given class/interface or a subclass
+	 *		of it. Never returns <code>null</code>.
+	 */
+	public Set<IEntityEditorPageController> getPageControllers(Class<?> clazz)
+	{
+		Set<IEntityEditorPageController> res = class2pageControllers.get(clazz);
+		if (res != null)
+			return res;
+
+		return Collections.emptySet();
+	}
 }
