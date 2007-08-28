@@ -35,6 +35,9 @@ import org.nightlabs.base.table.TableContentProvider;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.language.LanguageCf;
+import org.nightlabs.util.Util;
+
+import sun.rmi.runtime.NewThreadAction;
 
 /**
  * Editor Table Composite for {@link I18nText}s. This will provide (or use) a
@@ -347,7 +350,11 @@ public class I18nTextEditorTable extends XComposite implements II18nTextEditor
 				TableItem tableItem = (TableItem) element;
 				Map.Entry<String, String> mapEntry = (Entry<String, String>) tableItem.getData();
 				String languageID = mapEntry.getKey();
+				String oldText = mapEntry.getValue();
 				String newText = (String) value;
+				if (Util.equals(oldText, newText))
+					return;
+
 				work.setText(languageID, newText);
 				tableItem.setText(COLUMN_VALUE_INDEX, newText);
 				mapEntry.setValue(newText);
