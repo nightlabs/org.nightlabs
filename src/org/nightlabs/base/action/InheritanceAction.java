@@ -46,7 +46,7 @@ extends Action implements IUpdateActionOrContributionItem
 		setId(ID);
 		setToolTipText(Messages.getString("org.nightlabs.base.action.InheritanceAction.toolTipText")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
-				NLBasePlugin.getDefault(), InheritanceToggleButton.class));		
+				NLBasePlugin.getDefault(), InheritanceToggleButton.class, InheritanceToggleButton.IMAGE_SUFFIX_UNLINKED));
 	}
 
 	/**
