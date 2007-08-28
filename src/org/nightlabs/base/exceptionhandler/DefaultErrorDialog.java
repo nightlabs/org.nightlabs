@@ -161,7 +161,7 @@ public class DefaultErrorDialog extends MessageDialog implements IErrorDialog
 		String exMsg = errorItem.getThrownException().toString();
 		this.message = (message == null || "".equals(message)) ? exMsg : message; //$NON-NLS-1$
 		if(messageLabel != null)
-			messageLabel.setText(this.message);
+			messageLabel.setText(this.message.replace("&", "&&")); //$NON-NLS-1$ //$NON-NLS-2$
 		if(errorTable != null)
 			errorTable.setSelectedItem(errorItem);
 		if(stackTraceText != null)
