@@ -27,14 +27,13 @@
 package org.nightlabs.base.entity.editor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -138,13 +137,11 @@ public class EntityEditor extends CommitableFormEditor
 	private IRunnableWithProgress saveRunnable = new IRunnableWithProgress() {
 		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 			controller.doSave(monitor);
-//			TODO: This is already called by the page itself, but still the page is marked dirty... 
-//			Thread.sleep(1000); FIXME: what's this for? (marius)
-//			Display.getDefault().asyncExec(new Runnable() {
-//				public void run() {
-//					editorDirtyStateChanged();					
-//				}
-//			});
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					editorDirtyStateChanged();
+				}
+			});
 		}		
 	};
 

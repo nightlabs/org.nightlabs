@@ -139,25 +139,32 @@ public abstract class EntityEditorPageWithProgress extends FormPage implements F
 		protected IStatus run(IProgressMonitor monitor) {
 			final IEntityEditorPageController controller = getPageController();
 			if (controller != null) {
-				CompoundProgressMonitor compoundMonitor = new CompoundProgressMonitor(progressMonitorPart, monitor);
-				if (controller instanceof EntityEditorPageController) {
-					((EntityEditorPageController)controller).load(compoundMonitor);
-					((EntityEditorPageController)controller).addModifyListener(new IEntityEditorPageControllerModifyListener() {
-						public void controllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
-							handleControllerObjectModified(modifyEvent);
-						}
-					});
-				} // (controller instanceof EntityEditorPageController)
-				else
-					controller.doLoad(compoundMonitor);
-				
 				controller.addModifyListener(new IEntityEditorPageControllerModifyListener() {
 					public void controllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
 						handleControllerObjectModified(modifyEvent);
 					}
 				});
+
+				CompoundProgressMonitor compoundMonitor = new CompoundProgressMonitor(progressMonitorPart, monitor);
+				if (controller instanceof EntityEditorPageController) {
+					((EntityEditorPageController)controller).load(compoundMonitor);
+//					((EntityEditorPageController)controller).addModifyListener(new IEntityEditorPageControllerModifyListener() {
+//						public void controllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
+//							handleControllerObjectModified(modifyEvent);
+//						}
+//					});
+				} // (controller instanceof EntityEditorPageController)
+				else
+					controller.doLoad(compoundMonitor);
+
+//				controller.addModifyListener(new IEntityEditorPageControllerModifyListener() {
+//					public void controllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
+//						handleControllerObjectModified(modifyEvent);
+//					}
+//				});
 			}
 			asyncCallback(); // TODO: Maybe chagne this and require the controller to fire change event onLoad() ?!?!
+			// TODO maybe call switchToContent() here?!?!
 			return Status.OK_STATUS;
 		}
 	};

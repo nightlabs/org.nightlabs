@@ -428,13 +428,17 @@ implements IEntityEditorPageController
 
 	/**
 	 * Adds a new {@link IEntityEditorPageControllerModifyListener} to this controller.
-	 *  
+	 * This will immediately cause the listener to be triggered with the last event - in case there is one.
+	 *
 	 * @param listener The listener to be added.
 	 */
 	public void addModifyListener(IEntityEditorPageControllerModifyListener listener) {
 		listeners.add(listener);
+		EntityEditorPageControllerModifyEvent lastModifyEvent = this.lastModifyEvent;
+		if (lastModifyEvent != null)
+			listener.controllerObjectModified(lastModifyEvent);
 	}
-	
+
 	/**
 	 * Remove the given {@link IEntityEditorPageControllerModifyListener} from this controller.
 	 * 
@@ -443,17 +447,23 @@ implements IEntityEditorPageController
 	public void removeModifyListener(IEntityEditorPageControllerModifyListener listener) {
 		listeners.remove(listener);
 	}
-	
+
+	private volatile EntityEditorPageControllerModifyEvent lastModifyEvent = null;
+
 	/**
 	 * Use this to notify all listeners of a changed object.
 	 * 
 	 * @param oldObject The old object value.
 	 * @param newObject The new object value.
 	 */
-	protected void fireModifyEvent(Object oldObject, Object newObject) {
+	protected void fireModifyEvent(Object oldObject, Object newObject)
+	{
+		EntityEditorPageControllerModifyEvent lastModifyEvent = new EntityEditorPageControllerModifyEvent(this, oldObject, newObject);
+		this.lastModifyEvent = lastModifyEvent;
+
 		Object[] list = listeners.getListeners();
 		for (Object listener : list) {
-			((IEntityEditorPageControllerModifyListener) listener).controllerObjectModified(new EntityEditorPageControllerModifyEvent(this, oldObject, newObject));
+			((IEntityEditorPageControllerModifyListener) listener).controllerObjectModified(lastModifyEvent);
 		}
 	}
 	
