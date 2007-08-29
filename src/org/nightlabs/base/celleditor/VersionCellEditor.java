@@ -1,6 +1,6 @@
 package org.nightlabs.base.celleditor;
 
-import org.eclipse.jface.util.Assert;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -45,22 +45,22 @@ public class VersionCellEditor
 		setValidator(new VersionValidator());
 	}
 
-	protected Text cellWidget;
+	protected Text text;
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.CellEditor#createControl(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
 	protected Control createControl(Composite parent) {
-		cellWidget = new Text(parent, getStyle());
-		return cellWidget;
+		text = new Text(parent, getStyle());
+		return text;
 	}
 
 	protected class VersionValidator implements ICellEditorValidator {
 
 		public String isValid(Object value) {
-			if (value instanceof Version)
-				return null;
+//			if (value instanceof Version)
+//				return null;
 			
 			final String versionString = (String) value;
 			try {
@@ -77,13 +77,14 @@ public class VersionCellEditor
 	 * @see org.eclipse.jface.viewers.CellEditor#doGetValue()
 	 */
 	@Override
-	protected Version doGetValue() {
-		try {
-			return new Version(cellWidget.getText());
-		} catch (MalformedVersionException e) {
-			throw new RuntimeException("The stored String representation of a Version is invalid! "+ //$NON-NLS-1$
-					"This should never happen since its validity is checked on change!",e); //$NON-NLS-1$
-		}
+	protected Object doGetValue() {
+		return text.getText();
+//		try {
+//			return new Version(text.getText());
+//		} catch (MalformedVersionException e) {
+//			throw new RuntimeException("The stored String representation of a Version is invalid! "+
+//					"This should never happen since its validity is checked on change!",e);
+//		}
 	}
 
 	/* (non-Javadoc)
@@ -91,9 +92,9 @@ public class VersionCellEditor
 	 */
 	@Override
 	protected void doSetFocus() {
-  	if (cellWidget != null) {
-  		cellWidget.selectAll();
-  		cellWidget.setFocus();
+  	if (text != null) {
+  		text.selectAll();
+  		text.setFocus();
   	}    
 	}
 
@@ -105,9 +106,9 @@ public class VersionCellEditor
 		if (isReadOnly())
 			return;
 		
-  	Assert.isTrue(cellWidget != null && (value instanceof Version));
+  	Assert.isTrue(text != null && (value instanceof Version));
 		final Version version = (Version) value;
-		cellWidget.setText(version.toString());
+		text.setText(version.toString());
 	}
 
 }

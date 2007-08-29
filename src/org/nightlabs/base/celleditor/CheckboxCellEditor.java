@@ -71,7 +71,7 @@ extends XCellEditor
 	 */
 	protected Control createControl(Composite parent) 
 	{
-	   checkbox = new Button(parent, SWT.CHECK);
+	   checkbox = new Button(parent, getStyle() | SWT.CHECK);
 	   return checkbox;
 	}
 	
