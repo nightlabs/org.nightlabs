@@ -69,7 +69,8 @@ extends IDirtyStateManager
 //	 */
 //	public void setPage(IFormPage page);
 
-	public static final String PROPERTY_CONTROLLER_OBJECT = IEntityEditorPageController.class.getName()+"#controllerObject"; //$NON-NLS-1$
+// seems not be needed. commented it out. Marco. 2007-08-29
+//	public static final String PROPERTY_CONTROLLER_OBJECT = IEntityEditorPageController.class.getName()+"#controllerObject"; //$NON-NLS-1$
 
 	/**
 	 * Get the identifier of the controller.
