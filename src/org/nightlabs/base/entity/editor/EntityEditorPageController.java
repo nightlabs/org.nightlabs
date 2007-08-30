@@ -108,6 +108,7 @@ implements IEntityEditorPageController
 				controller.setLoaded(true);
 				this.loaded = true;
 			} catch (Throwable t) {
+				logger.error("LoadJob failed!", t);
 				// Workaround as we can not get a grip of exceptions within jobs
 				this.loadException = t;
 				controller.setLoaded(false);

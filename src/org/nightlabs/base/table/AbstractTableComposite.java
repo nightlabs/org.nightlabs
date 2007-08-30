@@ -249,23 +249,24 @@ implements ISelectionProvider
 
 	/**
 	 * Sets the selection to the given list of elements.
-	 * TODO: No need for this method?
 	 *  
 	 * @param elements The elements to select.
 	 */
 	public void setSelectedElements(List<ElementType> elements) {
-		TableItem[] items = tableViewer.getTable().getItems();
-		List<Integer> selIndexes = new ArrayList<Integer>();
-		for (int i = 0; i < items.length; i++) {
-			if (elements.contains(items[i].getData()))
-				selIndexes.add(i);
-		}
-		int[] selection = new int[selIndexes.size()];
-		for (int i = 0; i < selection.length; i++) {
-			selection[i] = selIndexes.get(i);
-		}
-		tableViewer.getTable().setSelection(new int[] {});
-		tableViewer.getTable().select(selection);
+		tableViewer.setSelection(new StructuredSelection(elements));
+
+//		TableItem[] items = tableViewer.getTable().getItems();
+//		List<Integer> selIndexes = new ArrayList<Integer>();
+//		for (int i = 0; i < items.length; i++) {
+//			if (elements.contains(items[i].getData()))
+//				selIndexes.add(i);
+//		}
+//		int[] selection = new int[selIndexes.size()];
+//		for (int i = 0; i < selection.length; i++) {
+//			selection[i] = selIndexes.get(i);
+//		}
+//		tableViewer.getTable().setSelection(new int[] {});
+//		tableViewer.getTable().select(selection);
 	}
 
 	/**
