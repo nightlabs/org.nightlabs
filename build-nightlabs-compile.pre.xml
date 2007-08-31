@@ -3,6 +3,7 @@
 	    <mkdir dir="${project.dir}/${lib.dir}"/>
 
 		<copy file="../NightLabsBase/dist/NightLabsBase.jar" todir="${project.dir}/${lib.dir}" failonerror="true" verbose="true"/>
+		<copy file="../deploy/jboss/server/default/lib/log4j.jar" todir="${project.dir}/${lib.dir}" failonerror="true" verbose="true"/>
 <!--
 		<copy file="../NightLabsBase/dist/NightLabsBase.jar" todir="${project.dir}/${lib.dir}" failonerror="false" verbose="true"/>
 		<jarlib-resolve property="NightLabsBase.library" failonerror="true" checkextension="false">

@@ -9,6 +9,7 @@
 
     <!-- For the build-nightlabs-compile.pre.xml to work, NightLabsBase must be built before. -->
     <requires path="/NightLabsBase"/>
+    <requires path="LOG4J"/> <!-- is provided by project JBOSS -->
 
 <!--
     <requires path="lib/NightLabsBase.jar"/>
@@ -30,7 +31,7 @@
     <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/commons-beanutils.jar"/>
     <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/commons-logging.jar"/>
 -->
-    <provides path="org.nightlabs.base" location="lib/log4j/jars/log4j-1.2.8.jar"/>
+<!--    <provides path="org.nightlabs.base" location="lib/log4j/jars/log4j-1.2.8.jar"/> -->
     <provides path="org.nightlabs.base" location="lib/xerces/jars/xercesImpl-2.6.2.jar"/>
     <provides path="org.nightlabs.base" location="org.nightlabs.base/lib/commons-beanutils.jar"/>
     <provides path="org.nightlabs.base" location="lib/commons-logging/jars/commons-logging-1.0.4.jar"/>
