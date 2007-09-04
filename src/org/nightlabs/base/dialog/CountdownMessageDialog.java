@@ -65,6 +65,8 @@ public class CountdownMessageDialog extends MessageDialog
 		this.timeLeft = disappearTimeInSeconds;
 	}
 	
+	protected static final int DEFAULT_DISAPPEAR_TIME = 10;
+	
 	private int timeLeft; 
 	private Button defaultButton;
 	private String originalButtonText;
@@ -279,5 +281,82 @@ public class CountdownMessageDialog extends MessageDialog
       // default
       dialog.open();
       return;
+  }
+
+
+  /**
+   * Convenience method to open a simple confirm (OK/Cancel) dialog.
+   * 
+   * @param parent
+   *            the parent shell of the dialog, or <code>null</code> if none
+   * @param title
+   *            the dialog's title, or <code>null</code> if none
+   * @param message
+   *            the message
+   * @return <code>true</code> if the user presses the OK button,
+   *         <code>false</code> otherwise
+   */
+  public static boolean openConfirm(Shell parent, String title, String message) {
+  	return openConfirm(parent, title, message, DEFAULT_DISAPPEAR_TIME);
+  }
+
+  /**
+   * Convenience method to open a standard error dialog.
+   * 
+   * @param parent
+   *            the parent shell of the dialog, or <code>null</code> if none
+   * @param title
+   *            the dialog's title, or <code>null</code> if none
+   * @param message
+   *            the message
+   */
+  public static void openError(Shell parent, String title, String message) {
+  	openError(parent, title, message, DEFAULT_DISAPPEAR_TIME);
+  }
+
+  /**
+   * Convenience method to open a standard information dialog.
+   * 
+   * @param parent
+   *            the parent shell of the dialog, or <code>null</code> if none
+   * @param title
+   *            the dialog's title, or <code>null</code> if none
+   * @param message
+   *            the message
+   */
+  public static void openInformation(Shell parent, String title,
+          String message) {
+  	openInformation(parent, title, message, DEFAULT_DISAPPEAR_TIME);
+  }
+
+  /**
+   * Convenience method to open a simple Yes/No question dialog.
+   * 
+   * @param parent
+   *            the parent shell of the dialog, or <code>null</code> if none
+   * @param title
+   *            the dialog's title, or <code>null</code> if none
+   * @param message
+   *            the message
+   * @return <code>true</code> if the user presses the OK button,
+   *         <code>false</code> otherwise
+   */
+  public static boolean openQuestion(Shell parent, String title,
+          String message) {
+  	return openQuestion(parent, title, message, DEFAULT_DISAPPEAR_TIME);
+  }
+
+  /**
+   * Convenience method to open a standard warning dialog.
+   * 
+   * @param parent
+   *            the parent shell of the dialog, or <code>null</code> if none
+   * @param title
+   *            the dialog's title, or <code>null</code> if none
+   * @param message
+   *            the message
+   */
+  public static void openWarning(Shell parent, String title, String message) {
+  	openWarning(parent, title, message, DEFAULT_DISAPPEAR_TIME);
   }
 }
