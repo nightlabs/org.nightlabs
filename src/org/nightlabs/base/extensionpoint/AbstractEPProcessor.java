@@ -37,7 +37,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
 /**
- * Used for parsing extensions to a certian extension-point.
+ * Used for parsing extensions to a certain extension-point.
  * <p>
  * Calling {@link #process()} will cause {@link #processElement(IExtension, IConfigurationElement)}
  * to be called for every extension defined to the point returned by {@link #getExtensionPointID()}.
@@ -92,7 +92,7 @@ implements IEPProcessor
 		return processing;
 	}
 
-	public synchronized void process(){
+	public synchronized void process() {
 		processing = true;
 		try {
 			for(IEPProcessListener listener : processListeners)
@@ -154,8 +154,7 @@ implements IEPProcessor
 		if (!isProcessed()) {
 			try {
 				process();
-			} 
-			catch (Throwable e) {
+			} catch (Throwable e) {
 				if (throwExceptionIfErrorOccurs)
 					throw new RuntimeException(e);
 				else
@@ -173,7 +172,6 @@ implements IEPProcessor
 	public static boolean checkString(String s) 
 	{
 		if (s == null || s.trim().equals("") ) //$NON-NLS-1$
-//			if (s == null || "".equals(s) )
 			return false;
 
 		return true;
