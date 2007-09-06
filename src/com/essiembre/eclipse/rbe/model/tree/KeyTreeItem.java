@@ -20,7 +20,6 @@
  */
 package com.essiembre.eclipse.rbe.model.tree;
 
-import java.util.Arrays;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -160,49 +159,4 @@ public class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisitable {
 	public void accept(IKeyTreeVisitor visitor, Object passAlongArgument) {
 		visitor.visitKeyTreeItem(this, passAlongArgument);
 	}
-	
-//	public KeyTreeItem getParentItem() {
-//		Object parent = getParent();
-//		if (parent instanceof KeyTreeItem)
-//			return (KeyTreeItem) getParent();
-//		else
-//			return null;
-//	}
-//	
-//	public KeyTreeItem getNextLeaf() {
-//		return getNextLeaf(this);
-//	}
-//	
-//	private KeyTreeItem getNextLeaf(KeyTreeItem lastItem) {
-//		if (isLeaf() && lastItem == null)	// down
-//				return this;
-//			
-//		if (!isLeaf() && lastItem == null) // down
-//			return getChildren().first().getNextLeaf(null);
-//
-//		// up (lastItem != null)
-//		KeyTreeItem nextChild = lastItem.getNextSibbling();		
-//		if (nextChild == null) {
-//			KeyTreeItem parent = getParentItem();
-//			if (parent == null)
-//				return null;
-//			else
-//				return getParentItem().getNextLeaf(this);
-//		} else
-//			return nextChild.getNextLeaf(null);
-//	}
-//	
-//	private KeyTreeItem getNextSibbling() {
-//		KeyTreeItem parent = (KeyTreeItem) this.getParent();
-//		KeyTreeItem[] children = parent.getChildren().toArray(new KeyTreeItem[parent.getChildren().size()]);
-//		int index = Arrays.binarySearch(children, this, null);
-//		
-//		if (index < children.length-1)
-//			return children[++index];
-//		else
-//			return null;
-//	}
-	
-	
-	
 }

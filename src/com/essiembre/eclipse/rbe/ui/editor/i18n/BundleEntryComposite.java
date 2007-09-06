@@ -435,7 +435,10 @@ public class BundleEntryComposite extends Composite {
 				if (event.character == SWT.TAB && !RBEPreferences.getFieldTabInserts()) {
 					event.doit = true;
 					event.detail = SWT.TRAVERSE_NONE;
-					page.focusNextBundleEntryComposite();
+					if (event.stateMask == 0)
+						page.focusNextBundleEntryComposite();
+					else if (event.stateMask == SWT.SHIFT)
+						page.focusPreviousBundleEntryComposite();
 				} else if (event.keyCode == SWT.ARROW_DOWN && event.stateMask == SWT.CTRL) {
 					event.doit = true;
 					event.detail = SWT.TRAVERSE_NONE;
