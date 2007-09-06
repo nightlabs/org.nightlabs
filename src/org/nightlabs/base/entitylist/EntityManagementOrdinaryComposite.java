@@ -35,8 +35,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.composite.XComposite;
 
 /**
+ * @deprecated
  * @author Niklas Schiffler <nick@nightlabs.de>
- *
  */
 public abstract class EntityManagementOrdinaryComposite
 extends XComposite

@@ -30,8 +30,8 @@ import java.rmi.RemoteException;
 import org.nightlabs.ModuleException;
 
 /**
+ * @deprecated
  * @author Niklas Schiffler <nick@nightlabs.de>
- *
  */
 public interface EntityManager 
 {

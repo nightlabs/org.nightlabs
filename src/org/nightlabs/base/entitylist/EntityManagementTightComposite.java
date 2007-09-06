@@ -38,7 +38,9 @@ import org.nightlabs.base.composite.XComposite;
  * @author Niklas Schiffler <nick@nightlabs.de>
  *
  */
-public abstract class EntityManagementTightComposite extends XComposite implements EntityManager
+public abstract class EntityManagementTightComposite 
+extends XComposite 
+implements EntityManager
 {
 	protected Set dataChangedListeners;
 
