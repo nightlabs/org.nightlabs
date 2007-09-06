@@ -26,22 +26,22 @@ package com.essiembre.eclipse.rbe.model;
  * @version $Author: essiembre $ $Revision: 1.1 $ $Date: 2005/06/13 01:43:29 $
  */
 public class DeltaEvent {
-    
-    /** Object acted upon. */
+	
+	/** Object acted upon. */
 	protected Object actedUpon;
 
-    /**
-     * Constructor.
-     * @param receiver object acted upon
-     */
+	/**
+	 * Constructor.
+	 * @param receiver object acted upon
+	 */
 	public DeltaEvent(Object receiver) {
 		actedUpon = receiver;
 	}
 	
-    /**
-     * Gets the object acted upon.
-     * @return object acted upon
-     */
+	/**
+	 * Gets the object acted upon.
+	 * @return object acted upon
+	 */
 	public Object receiver() {
 		return actedUpon;
 	}

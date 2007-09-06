@@ -71,16 +71,16 @@ public class ResourceBundleOutline extends ContentOutlinePage {
 	private ToggleAction            filterincomplete   ;
 	private ToggleAction            flataction         ;
 	private ToggleAction            hierarchicalaction ;
-    private boolean                 hierarchical       ;
-    private TreeViewerContributor   contributor        ;
-    
-    
-    /**
-     * Initialises this outline while using the mediator which provides
-     * all necessary informations.
-     * 
-     * @param mediator   The mediator which comes with all necessary informations.
-     */
+	private boolean                 hierarchical       ;
+	private TreeViewerContributor   contributor        ;
+	
+	
+	/**
+	 * Initialises this outline while using the mediator which provides
+	 * all necessary informations.
+	 * 
+	 * @param mediator   The mediator which comes with all necessary informations.
+	 */
 	public ResourceBundleOutline(KeyTree keytree) {
 		super();
 		tree              = keytree;
@@ -98,14 +98,14 @@ public class ResourceBundleOutline extends ContentOutlinePage {
 		getTreeViewer().setLabelProvider(new KeyTreeLabelProvider());
 		getTreeViewer().setUseHashlookup(true);
 		getTreeViewer().setInput(tree);
-        if (RBEPreferences.getKeyTreeExpanded()) {
-            getTreeViewer().expandAll();
-        }
+		if (RBEPreferences.getKeyTreeExpanded()) {
+			getTreeViewer().expandAll();
+		}
 		contributor = new TreeViewerContributor(tree, getTreeViewer());
 		contributor.createControl(parent);
-        LocalBehaviour localbehaviour = new LocalBehaviour();
-        getTreeViewer().addSelectionChangedListener(localbehaviour);
-        getTreeViewer().getTree().addMouseListener(localbehaviour);
+		LocalBehaviour localbehaviour = new LocalBehaviour();
+		getTreeViewer().addSelectionChangedListener(localbehaviour);
+		getTreeViewer().getTree().addMouseListener(localbehaviour);
 	}
 
 	
@@ -118,33 +118,33 @@ public class ResourceBundleOutline extends ContentOutlinePage {
 	}
 	
 	
-    /**
-     * Gets the selected key tree item.
-     * @return key tree item
-     */
-    public KeyTreeItem getTreeSelection() {
-        IStructuredSelection selection = (IStructuredSelection) getTreeViewer().getSelection();
-        return((KeyTreeItem) selection.getFirstElement());
-    }
+	/**
+	 * Gets the selected key tree item.
+	 * @return key tree item
+	 */
+	public KeyTreeItem getTreeSelection() {
+		IStructuredSelection selection = (IStructuredSelection) getTreeViewer().getSelection();
+		return((KeyTreeItem) selection.getFirstElement());
+	}
 	
 	
-    /**
-     * Gets selected key.
-     * @return selected key
-     */
-    private String getSelectedKey() {
-        String      key  = null;
-        KeyTreeItem item = getTreeSelection();
-        if(item != null) {
-            key = item.getId();
-        }
-        return(key);
-    }
+	/**
+	 * Gets selected key.
+	 * @return selected key
+	 */
+	private String getSelectedKey() {
+		String      key  = null;
+		KeyTreeItem item = getTreeSelection();
+		if(item != null) {
+			key = item.getId();
+		}
+		return(key);
+	}
 	
 
-    /**
-     * {@inheritDoc}
-     */
+	/**
+	 * {@inheritDoc}
+	 */
 	public void setActionBars(IActionBars actionbars) {
 		super.setActionBars(actionbars);
 		filterincomplete   = new ToggleAction(UIUtils.IMAGE_INCOMPLETE_ENTRIES);
@@ -206,65 +206,65 @@ public class ResourceBundleOutline extends ContentOutlinePage {
 		
 	} /* ENDCLASS */
 	
-    
-    /**
-     * Implementation of custom behaviour.
-     */
+	
+	/**
+	 * Implementation of custom behaviour.
+	 */
 	private class LocalBehaviour extends MouseAdapter implements IDeltaListener            , 
-	                                                             ISelectionChangedListener {
+																 ISelectionChangedListener {
 
 		
 		/**
 		 * {@inheritDoc}
 		 */
-        public void selectionChanged(SelectionChangedEvent event) {
-        	String selected = getSelectedKey();
-        	if(selected != null) {
-        		tree.selectKey(selected);
-        	}
-        }
+		public void selectionChanged(SelectionChangedEvent event) {
+			String selected = getSelectedKey();
+			if(selected != null) {
+				tree.selectKey(selected);
+			}
+		}
 
-        /**
-         * {@inheritDoc}
-         */
+		/**
+		 * {@inheritDoc}
+		 */
 		public void add(DeltaEvent event) {
 		}
 
-        /**
-         * {@inheritDoc}
-         */
+		/**
+		 * {@inheritDoc}
+		 */
 		public void remove(DeltaEvent event) {
 		}
 
-        /**
-         * {@inheritDoc}
-         */
+		/**
+		 * {@inheritDoc}
+		 */
 		public void modify(DeltaEvent event) {
 		}
 
-        /**
-         * {@inheritDoc}
-         */
+		/**
+		 * {@inheritDoc}
+		 */
 		public void select(DeltaEvent event) {
 			KeyTreeItem item = (KeyTreeItem) event.receiver();
 			if(item != null) {
 				getTreeViewer().setSelection(new StructuredSelection(item));
 			}
 		}
-        
+		
 		/**
 		 * {@inheritDoc}
 		 */
-        public void mouseDoubleClick(MouseEvent event) {
-            Object element = getSelection();
-            if (getTreeViewer().isExpandable(element)) {
-                if (getTreeViewer().getExpandedState(element)) {
-                	getTreeViewer().collapseToLevel(element, 1);
-                } else {
-                	getTreeViewer().expandToLevel(element, 1);
-                }
-            }
-        }
+		public void mouseDoubleClick(MouseEvent event) {
+			Object element = getSelection();
+			if (getTreeViewer().isExpandable(element)) {
+				if (getTreeViewer().getExpandedState(element)) {
+					getTreeViewer().collapseToLevel(element, 1);
+				} else {
+					getTreeViewer().expandToLevel(element, 1);
+				}
+			}
+		}
 
 	} /* ENDCLASS */
 

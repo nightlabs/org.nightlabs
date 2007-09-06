@@ -81,12 +81,12 @@ public class TreeViewerContributor {
 	
 	/** the component which displays the tree.                */
 	private TreeViewer         treeviewer;
-    
+	
 	private Separator          separator;
-    
+	
 	/** actions for the context menu.                           */
 	private Action[]           actions;
-    
+	
 	/** the updater which is used for structural information. */
 	private KeyTreeUpdater     structuralupdater;
 	
@@ -94,24 +94,24 @@ public class TreeViewerContributor {
 	private int                mode;
 
 	/** some cursors to indicate progress                     */
-    private Cursor             waitcursor;
-    private Cursor             defaultcursor;
-    
+	private Cursor             waitcursor;
+	private Cursor             defaultcursor;
 	
-    /**
-     * Initializes this contributor using the supplied model structure
-     * and the viewer which is used to access the model.
-     * 
-     * @param keytree   Out tree model.
-     * @param viewer    The viewer used to display the supplied model.
-     */
+	
+	/**
+	 * Initializes this contributor using the supplied model structure
+	 * and the viewer which is used to access the model.
+	 * 
+	 * @param keytree   Out tree model.
+	 * @param viewer    The viewer used to display the supplied model.
+	 */
 	public TreeViewerContributor(KeyTree keytree, TreeViewer viewer) {
 		tree              = keytree;
 		treeviewer        = viewer;
 		actions           = new Action[MENU_COUNT];
 		mode              = KT_HIERARCHICAL;
-        waitcursor        = UIUtils.createCursor(SWT.CURSOR_WAIT);
-        defaultcursor     = UIUtils.createCursor(SWT.CURSOR_ARROW);
+		waitcursor        = UIUtils.createCursor(SWT.CURSOR_WAIT);
+		defaultcursor     = UIUtils.createCursor(SWT.CURSOR_ARROW);
 		if(RBEPreferences.getKeyTreeHierarchical()) {
 			structuralupdater = new GroupedKeyTreeUpdater(RBEPreferences.getKeyGroupSeparator());
 		} else {
@@ -128,68 +128,68 @@ public class TreeViewerContributor {
 		};
 		actions[MENU_NEW].setText(RBEPlugin.getString("key.new")); //$NON-NLS-1$
 		
-        actions[MENU_RENAME] = new Action () {
+		actions[MENU_RENAME] = new Action () {
 			@Override
 			public void run() {
-                renameKeyOrGroup();
+				renameKeyOrGroup();
 			}
 		};
-        actions[MENU_RENAME].setText(RBEPlugin.getString("key.rename")); //$NON-NLS-1$
-        
-        actions[MENU_DELETE] = new Action () {
+		actions[MENU_RENAME].setText(RBEPlugin.getString("key.rename")); //$NON-NLS-1$
+		
+		actions[MENU_DELETE] = new Action () {
 			@Override
 			public void run() {
 				deleteKeyOrGroup();
 			}
 		};
-        actions[MENU_DELETE].setText(RBEPlugin.getString("key.delete")); //$NON-NLS-1$
-        
-        actions[MENU_COPY] = new Action () {
+		actions[MENU_DELETE].setText(RBEPlugin.getString("key.delete")); //$NON-NLS-1$
+		
+		actions[MENU_COPY] = new Action () {
 			@Override
 			public void run() {
 				copyKeyOrGroup();
 			}
 		};
-        actions[MENU_COPY].setText(RBEPlugin.getString("key.duplicate")); //$NON-NLS-1$
-        
-        actions[MENU_COMMENT] = new Action () {
+		actions[MENU_COPY].setText(RBEPlugin.getString("key.duplicate")); //$NON-NLS-1$
+		
+		actions[MENU_COMMENT] = new Action () {
 			@Override
 			public void run() {
 				commentKey();
 			}
 		};
-        actions[MENU_COMMENT].setText(RBEPlugin.getString("key.comment")); //$NON-NLS-1$
-        
-        actions[MENU_UNCOMMENT] = new Action () {
+		actions[MENU_COMMENT].setText(RBEPlugin.getString("key.comment")); //$NON-NLS-1$
+		
+		actions[MENU_UNCOMMENT] = new Action () {
 			@Override
 			public void run() {
 				uncommentKey();
 			}
 		};
-        actions[MENU_UNCOMMENT].setText(
-                RBEPlugin.getString("key.uncomment")); //$NON-NLS-1$
-        
-        separator = new Separator();
-      
-        actions[MENU_EXPAND] = new Action () {
+		actions[MENU_UNCOMMENT].setText(
+				RBEPlugin.getString("key.uncomment")); //$NON-NLS-1$
+		
+		separator = new Separator();
+	  
+		actions[MENU_EXPAND] = new Action () {
 			@Override
 			public void run() {
 				treeviewer.expandAll();
 			}
 		};
-        actions[MENU_EXPAND].setText(RBEPlugin.getString("key.expandAll")); //$NON-NLS-1$
-        
-        actions[MENU_COLLAPSE] = new Action () {
+		actions[MENU_EXPAND].setText(RBEPlugin.getString("key.expandAll")); //$NON-NLS-1$
+		
+		actions[MENU_COLLAPSE] = new Action () {
 			@Override
 			public void run() {
-        		treeviewer.collapseAll();
+				treeviewer.collapseAll();
 			}
 		};
-        actions[MENU_COLLAPSE].setText(RBEPlugin.getString("key.collapseAll")); //$NON-NLS-1$
+		actions[MENU_COLLAPSE].setText(RBEPlugin.getString("key.collapseAll")); //$NON-NLS-1$
 	}
 	
 	private void fillMenu(IMenuManager manager) {
-	    KeyTreeItem selectedItem = getSelection();
+		KeyTreeItem selectedItem = getSelection();
 		manager.add(actions[MENU_NEW]);
 		manager.add(actions[MENU_RENAME]);
 		actions[MENU_RENAME].setEnabled(selectedItem != null);
@@ -214,87 +214,87 @@ public class TreeViewerContributor {
 	 */
 	public void createControl(Composite parent) {
 		buildActions();
-        MenuManager menuManager = new MenuManager();
-        menuManager.setRemoveAllWhenShown(true);
-        menuManager.addMenuListener(new IMenuListener() {
+		MenuManager menuManager = new MenuManager();
+		menuManager.setRemoveAllWhenShown(true);
+		menuManager.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
 				fillMenu(manager);
 			}
-        });
-        
-        treeviewer.getTree().setMenu(menuManager.createContextMenu(parent));
+		});
+		
+		treeviewer.getTree().setMenu(menuManager.createContextMenu(parent));
 		
 	}
 	
 
-    /**
-     * Gets the selected key tree item.
-     * @return key tree item
-     */
-    public KeyTreeItem getSelection() {
-        IStructuredSelection selection = (IStructuredSelection) treeviewer.getSelection();
-        return (KeyTreeItem) selection.getFirstElement();
-    }
+	/**
+	 * Gets the selected key tree item.
+	 * @return key tree item
+	 */
+	public KeyTreeItem getSelection() {
+		IStructuredSelection selection = (IStructuredSelection) treeviewer.getSelection();
+		return (KeyTreeItem) selection.getFirstElement();
+	}
 	
 
 	/**
 	 * Creates a new key in case it isn't existing yet.
 	 */
 	protected void newKey() {
-	    KeyTreeItem selectedItem = getSelection();
-	    String key = selectedItem != null ? selectedItem.getId() : "";
-	    String msgHead = RBEPlugin.getString("dialog.new.head"); //$NON-NLS-1$
-	    String msgBody = RBEPlugin.getString("dialog.new.body", key); //$NON-NLS-1$
-	    InputDialog dialog = new InputDialog(getShell(), msgHead, msgBody, key, null);
-	    dialog.open();
-	    if (dialog.getReturnCode() == Window.OK ) {
-	        String newKey = dialog.getValue();
-	        BundleGroup bundleGroup = tree.getBundleGroup();
-	        if (!bundleGroup.containsKey(newKey)) {
-            	bundleGroup.addKey(newKey);
-	        }
-	    }
+		KeyTreeItem selectedItem = getSelection();
+		String key = selectedItem != null ? selectedItem.getId() : "";
+		String msgHead = RBEPlugin.getString("dialog.new.head"); //$NON-NLS-1$
+		String msgBody = RBEPlugin.getString("dialog.new.body", key); //$NON-NLS-1$
+		InputDialog dialog = new InputDialog(getShell(), msgHead, msgBody, key, null);
+		dialog.open();
+		if (dialog.getReturnCode() == Window.OK ) {
+			String newKey = dialog.getValue();
+			BundleGroup bundleGroup = tree.getBundleGroup();
+			if (!bundleGroup.containsKey(newKey)) {
+				bundleGroup.addKey(newKey);
+			}
+		}
 	}
-    
-    
+	
+	
 	/**
 	 * Renames a key or group of key.
 	 */
 	protected void renameKeyOrGroup() {
-	    KeyTreeItem selectedItem = getSelection();
-	    String key = selectedItem.getId();
-	    String msgHead = null;
-	    String msgBody = null;
-	    if (selectedItem.getChildren().size() == 0) {
-	        msgHead = RBEPlugin.getString(
-	                "dialog.rename.head.single"); //$NON-NLS-1$
-	        msgBody = RBEPlugin.getString(
-	                "dialog.rename.body.single", key); //$NON-NLS-1$
-	    } else {
-	        msgHead = RBEPlugin.getString(
-	                "dialog.rename.head.multiple"); //$NON-NLS-1$
-	        msgBody = RBEPlugin.getString(
-	                "dialog.rename.body.multiple", //$NON-NLS-1$
-	                selectedItem.getName());
-	    }
-	    // Rename single item
-	    InputDialog dialog = new InputDialog(getShell(), msgHead, msgBody, key, null);
-	    dialog.open();
-	    if (dialog.getReturnCode() == Window.OK ) {
-	        String newKey = dialog.getValue();
-	        BundleGroup bundleGroup = tree.getBundleGroup();
-	        Collection items = new ArrayList();
-	        items.add(selectedItem);
-	        items.addAll(selectedItem.getNestedChildren());
-	        for (Iterator iter = items.iterator(); iter.hasNext();) {
-	            KeyTreeItem item = (KeyTreeItem) iter.next();
-	            String oldItemKey = item.getId();
-	            if (oldItemKey.startsWith(key)) {
-	                String newItemKey = newKey + oldItemKey.substring(key.length());
-	                bundleGroup.renameKey(oldItemKey, newItemKey);
-	            }
-	        }
-	    }
+		KeyTreeItem selectedItem = getSelection();
+		String key = selectedItem.getId();
+		String msgHead = null;
+		String msgBody = null;
+		if (selectedItem.getChildren().size() == 0) {
+			msgHead = RBEPlugin.getString(
+					"dialog.rename.head.single"); //$NON-NLS-1$
+			msgBody = RBEPlugin.getString(
+					"dialog.rename.body.single", key); //$NON-NLS-1$
+		} else {
+			msgHead = RBEPlugin.getString(
+					"dialog.rename.head.multiple"); //$NON-NLS-1$
+			msgBody = RBEPlugin.getString(
+					"dialog.rename.body.multiple", //$NON-NLS-1$
+					selectedItem.getName());
+		}
+		// Rename single item
+		InputDialog dialog = new InputDialog(getShell(), msgHead, msgBody, key, null);
+		dialog.open();
+		if (dialog.getReturnCode() == Window.OK ) {
+			String newKey = dialog.getValue();
+			BundleGroup bundleGroup = tree.getBundleGroup();
+			Collection items = new ArrayList();
+			items.add(selectedItem);
+			items.addAll(selectedItem.getNestedChildren());
+			for (Iterator iter = items.iterator(); iter.hasNext();) {
+				KeyTreeItem item = (KeyTreeItem) iter.next();
+				String oldItemKey = item.getId();
+				if (oldItemKey.startsWith(key)) {
+					String newItemKey = newKey + oldItemKey.substring(key.length());
+					bundleGroup.renameKey(oldItemKey, newItemKey);
+				}
+			}
+		}
 	}
 
 
@@ -302,15 +302,15 @@ public class TreeViewerContributor {
 	 * Uncomments a key or group of key.
 	 */
 	protected void uncommentKey() {
-	    KeyTreeItem selectedItem = getSelection();
-	    BundleGroup bundleGroup = tree.getBundleGroup();
-	    Collection items = new ArrayList();
-	    items.add(selectedItem);
-	    items.addAll(selectedItem.getNestedChildren());
-	    for (Iterator iter = items.iterator(); iter.hasNext();) {
-	        KeyTreeItem item = (KeyTreeItem) iter.next();
-	        bundleGroup.uncommentKey(item.getId());
-	    }
+		KeyTreeItem selectedItem = getSelection();
+		BundleGroup bundleGroup = tree.getBundleGroup();
+		Collection items = new ArrayList();
+		items.add(selectedItem);
+		items.addAll(selectedItem.getNestedChildren());
+		for (Iterator iter = items.iterator(); iter.hasNext();) {
+			KeyTreeItem item = (KeyTreeItem) iter.next();
+			bundleGroup.uncommentKey(item.getId());
+		}
 	}
 
 
@@ -318,35 +318,35 @@ public class TreeViewerContributor {
 	 * Deletes a key or group of key.
 	 */
 	protected void deleteKeyOrGroup() {
-	    KeyTreeItem selectedItem = getSelection();
-	    String key = selectedItem.getId();
-	    String msgHead = null;
-	    String msgBody = null;
-	    if (selectedItem.getChildren().size() == 0) {
-	        msgHead = RBEPlugin.getString(
-	                "dialog.delete.head.single"); //$NON-NLS-1$
-	        msgBody = RBEPlugin.getString(
-	                "dialog.delete.body.single", key); //$NON-NLS-1$
-	    } else {
-	        msgHead = RBEPlugin.getString(
-	                "dialog.delete.head.multiple"); //$NON-NLS-1$
-	        msgBody = RBEPlugin.getString(
-	                "dialog.delete.body.multiple", //$NON-NLS-1$ 
-	                selectedItem.getName());
-	    }
-	    MessageBox msgBox = new MessageBox(getShell(), SWT.ICON_QUESTION|SWT.OK|SWT.CANCEL);
-	    msgBox.setMessage(msgBody);
-	    msgBox.setText(msgHead);
-	    if (msgBox.open() == SWT.OK) {
-	        BundleGroup bundleGroup = tree.getBundleGroup();
-	        Collection items = new ArrayList();
-	        items.add(selectedItem);
-	        items.addAll(selectedItem.getNestedChildren());
-	        for (Iterator iter = items.iterator(); iter.hasNext();) {
-	            KeyTreeItem item = (KeyTreeItem) iter.next();
-	            bundleGroup.removeKey(item.getId());
-	        }
-	    }
+		KeyTreeItem selectedItem = getSelection();
+		String key = selectedItem.getId();
+		String msgHead = null;
+		String msgBody = null;
+		if (selectedItem.getChildren().size() == 0) {
+			msgHead = RBEPlugin.getString(
+					"dialog.delete.head.single"); //$NON-NLS-1$
+			msgBody = RBEPlugin.getString(
+					"dialog.delete.body.single", key); //$NON-NLS-1$
+		} else {
+			msgHead = RBEPlugin.getString(
+					"dialog.delete.head.multiple"); //$NON-NLS-1$
+			msgBody = RBEPlugin.getString(
+					"dialog.delete.body.multiple", //$NON-NLS-1$ 
+					selectedItem.getName());
+		}
+		MessageBox msgBox = new MessageBox(getShell(), SWT.ICON_QUESTION|SWT.OK|SWT.CANCEL);
+		msgBox.setMessage(msgBody);
+		msgBox.setText(msgHead);
+		if (msgBox.open() == SWT.OK) {
+			BundleGroup bundleGroup = tree.getBundleGroup();
+			Collection items = new ArrayList();
+			items.add(selectedItem);
+			items.addAll(selectedItem.getNestedChildren());
+			for (Iterator iter = items.iterator(); iter.hasNext();) {
+				KeyTreeItem item = (KeyTreeItem) iter.next();
+				bundleGroup.removeKey(item.getId());
+			}
+		}
 	}
 
 
@@ -354,16 +354,16 @@ public class TreeViewerContributor {
 	 * Comments a key or group of key.
 	 */
 	protected void commentKey() {
-	    KeyTreeItem selectedItem = getSelection();
-	    BundleGroup bundleGroup = tree.getBundleGroup();
-	    Collection items = new ArrayList();
-	    items.add(selectedItem);
-	    items.addAll(selectedItem.getNestedChildren());
-	    for (Iterator iter = items.iterator(); iter.hasNext();) {
-	        KeyTreeItem item = (KeyTreeItem) iter.next();
-	        bundleGroup.commentKey(item.getId());
-	    }
-	    
+		KeyTreeItem selectedItem = getSelection();
+		BundleGroup bundleGroup = tree.getBundleGroup();
+		Collection items = new ArrayList();
+		items.add(selectedItem);
+		items.addAll(selectedItem.getNestedChildren());
+		for (Iterator iter = items.iterator(); iter.hasNext();) {
+			KeyTreeItem item = (KeyTreeItem) iter.next();
+			bundleGroup.commentKey(item.getId());
+		}
+		
 	}
 
 
@@ -371,41 +371,41 @@ public class TreeViewerContributor {
 	 * Copies a key or group of key.
 	 */
 	protected void copyKeyOrGroup() {
-	    KeyTreeItem selectedItem = getSelection();
-	    String key = selectedItem.getId();
-	    String msgHead = null;
-	    String msgBody = null;
-	    if (selectedItem.getChildren().size() == 0) {
-	        msgHead = RBEPlugin.getString(
-	                "dialog.duplicate.head.single"); //$NON-NLS-1$
-	        msgBody = RBEPlugin.getString(
-	                "dialog.duplicate.body.single", key); //$NON-NLS-1$
-	    } else {
-	        msgHead = RBEPlugin.getString(
-	                "dialog.duplicate.head.multiple"); //$NON-NLS-1$
-	        msgBody = RBEPlugin.getString(
-	                "dialog.duplicate.body.multiple", //$NON-NLS-1$ 
-	                selectedItem.getName());
-	    }
-	    // Rename single item
-	    InputDialog dialog = new InputDialog(getShell(), msgHead, msgBody, key, null);
-	    dialog.open();
-	    if (dialog.getReturnCode() == Window.OK ) {
-	        String newKey = dialog.getValue();
-	        BundleGroup bundleGroup = tree.getBundleGroup();
-	        Collection items = new ArrayList();
-	        items.add(selectedItem);
-	        items.addAll(selectedItem.getNestedChildren());
-	        for (Iterator iter = items.iterator(); iter.hasNext();) {
-	            KeyTreeItem item = (KeyTreeItem) iter.next();
-	            String origItemKey = item.getId();
-	            if (origItemKey.startsWith(key)) {
-	                String newItemKey = 
-	                        newKey + origItemKey.substring(key.length());
-	                bundleGroup.copyKey(origItemKey, newItemKey);
-	            }
-	        }
-	    }
+		KeyTreeItem selectedItem = getSelection();
+		String key = selectedItem.getId();
+		String msgHead = null;
+		String msgBody = null;
+		if (selectedItem.getChildren().size() == 0) {
+			msgHead = RBEPlugin.getString(
+					"dialog.duplicate.head.single"); //$NON-NLS-1$
+			msgBody = RBEPlugin.getString(
+					"dialog.duplicate.body.single", key); //$NON-NLS-1$
+		} else {
+			msgHead = RBEPlugin.getString(
+					"dialog.duplicate.head.multiple"); //$NON-NLS-1$
+			msgBody = RBEPlugin.getString(
+					"dialog.duplicate.body.multiple", //$NON-NLS-1$ 
+					selectedItem.getName());
+		}
+		// Rename single item
+		InputDialog dialog = new InputDialog(getShell(), msgHead, msgBody, key, null);
+		dialog.open();
+		if (dialog.getReturnCode() == Window.OK ) {
+			String newKey = dialog.getValue();
+			BundleGroup bundleGroup = tree.getBundleGroup();
+			Collection items = new ArrayList();
+			items.add(selectedItem);
+			items.addAll(selectedItem.getNestedChildren());
+			for (Iterator iter = items.iterator(); iter.hasNext();) {
+				KeyTreeItem item = (KeyTreeItem) iter.next();
+				String origItemKey = item.getId();
+				if (origItemKey.startsWith(key)) {
+					String newItemKey = 
+							newKey + origItemKey.substring(key.length());
+					bundleGroup.copyKey(origItemKey, newItemKey);
+				}
+			}
+		}
 	}
 	
 
@@ -433,17 +433,17 @@ public class TreeViewerContributor {
 				tree.setUpdater(
 					new IncompletionUpdater(tree.getBundleGroup(), structuralupdater)
 				);
-	            mode = mode | KT_INCOMPLETE;
+				mode = mode | KT_INCOMPLETE;
 			} else {
 				// disabled, so we can reuse the structural updater
 				tree.setUpdater(structuralupdater);
 				mode = mode & (~KT_INCOMPLETE);
 			}
-            if(structuralupdater instanceof GroupedKeyTreeUpdater) {
+			if(structuralupdater instanceof GroupedKeyTreeUpdater) {
 				if(RBEPreferences.getKeyTreeExpanded()) {
-	                treeviewer.expandAll();
-	            }			
-            }
+					treeviewer.expandAll();
+				}			
+			}
 		} else if(action == KT_FLAT) {
 			structuralupdater = new FlatKeyTreeUpdater(); 
 			if((mode & KT_INCOMPLETE) != 0) {
@@ -465,12 +465,12 @@ public class TreeViewerContributor {
 			} else {
 				tree.setUpdater(structuralupdater);
 			}
-            if(RBEPreferences.getKeyTreeExpanded()) {
-                treeviewer.expandAll();
-            }			
-            mode = mode | KT_HIERARCHICAL;
+			if(RBEPreferences.getKeyTreeExpanded()) {
+				treeviewer.expandAll();
+			}			
+			mode = mode | KT_HIERARCHICAL;
 		}
-        treeviewer.getTree().setCursor(defaultcursor);
+		treeviewer.getTree().setCursor(defaultcursor);
 	}
 	
 

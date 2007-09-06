@@ -63,144 +63,144 @@ import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
  * be able to open it.
  */
 public class ResourceBundleWizard extends Wizard implements INewWizard {
-    private ResourceBundleNewWizardPage page;
-    private ISelection selection;
+	private ResourceBundleNewWizardPage page;
+	private ISelection selection;
 
-    /**
-     * Constructor for ResourceBundleWizard.
-     */
-    public ResourceBundleWizard() {
-        super();
-        setNeedsProgressMonitor(true);
-    }
-    
-    /**
-     * Adding the page to the wizard.
-     */
+	/**
+	 * Constructor for ResourceBundleWizard.
+	 */
+	public ResourceBundleWizard() {
+		super();
+		setNeedsProgressMonitor(true);
+	}
+	
+	/**
+	 * Adding the page to the wizard.
+	 */
 
-    public void addPages() {
-        page = new ResourceBundleNewWizardPage(selection);
-        addPage(page);
-    }
+	public void addPages() {
+		page = new ResourceBundleNewWizardPage(selection);
+		addPage(page);
+	}
 
-    /**
-     * This method is called when 'Finish' button is pressed in
-     * the wizard. We will create an operation and run it
-     * using wizard as execution context.
-     */
-    public boolean performFinish() {
-        final String containerName = page.getContainerName();
-        final String baseName = page.getFileName();
-        final String[] locales = page.getLocaleStrings();
-        IRunnableWithProgress op = new IRunnableWithProgress() {
-            public void run(IProgressMonitor monitor) throws InvocationTargetException {
-                try {
-                    monitor.worked(1);
-                    monitor.setTaskName(RBEPlugin.getString(
-                            "editor.wiz.creating")); //$NON-NLS-1$
-                    IFile file = null;
-                    for (int i = 0; i <  locales.length; i++) {
-                        String fileName = baseName;
-                        if (locales[i].equals(
-                                ResourceBundleNewWizardPage.DEFAULT_LOCALE)) {
-                            fileName += ".properties"; //$NON-NLS-1$
-                        } else {
-                            fileName += "_" + locales[i] //$NON-NLS-1$
-                                     + ".properties"; //$NON-NLS-1$
-                        }
-                        file = createFile(containerName, fileName, monitor);
-                    }
-                    final IFile lastFile = file;
-                    getShell().getDisplay().asyncExec(new Runnable() {
-                        public void run() {
-                            IWorkbenchPage wbPage = PlatformUI.getWorkbench()
-                                    .getActiveWorkbenchWindow().getActivePage();
-                            try {
-                                IDE.openEditor(wbPage, lastFile, true);
-                            } catch (PartInitException e) {
-                            }
-                        }
-                    });
-                    monitor.worked(1);
-                } catch (CoreException e) {
-                    throw new InvocationTargetException(e);
-                } finally {
-                    monitor.done();
-                }
-            }
-        };
-        try {
-            getContainer().run(true, false, op);
-        } catch (InterruptedException e) {
-            return false;
-        } catch (InvocationTargetException e) {
-            Throwable realException = e.getTargetException();
-            MessageDialog.openError(getShell(), 
-                    "Error", realException.getMessage()); //$NON-NLS-1$
-            return false;
-        }
-        return true;
-    }
-    
-    /*
-     * The worker method. It will find the container, create the
-     * file if missing or just replace its contents, and open
-     * the editor on the newly created file.
-     */
-    /*default*/ IFile createFile(
-            String containerName,
-            String fileName,
-            IProgressMonitor monitor)
-            throws CoreException {
-        
-        monitor.beginTask(RBEPlugin.getString(
-                "editor.wiz.creating") + fileName, 2); //$NON-NLS-1$
-        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-        IResource resource = root.findMember(new Path(containerName));
-        if (!resource.exists() || !(resource instanceof IContainer)) {
-            throwCoreException("Container \"" + containerName  //$NON-NLS-1$
-                    + "\" does not exist."); //$NON-NLS-1$
-        }
-        IContainer container = (IContainer) resource;
-        final IFile file = container.getFile(new Path(fileName));
-        try {
-            InputStream stream = openContentStream();
-            if (file.exists()) {
-                file.setContents(stream, true, true, monitor);
-            } else {
-                file.create(stream, true, monitor);
-            }
-            stream.close();
-        } catch (IOException e) {
-        }
-        return file;
-    }
-    
-    /*
-     * We will initialize file contents with a sample text.
-     */
-    private InputStream openContentStream() {
-        String contents = ""; //$NON-NLS-1$
-        if (RBEPreferences.getShowGenerator()) {
-            contents = PropertiesGenerator.GENERATED_BY;
-        }
-        return new ByteArrayInputStream(contents.getBytes());
-    }
+	/**
+	 * This method is called when 'Finish' button is pressed in
+	 * the wizard. We will create an operation and run it
+	 * using wizard as execution context.
+	 */
+	public boolean performFinish() {
+		final String containerName = page.getContainerName();
+		final String baseName = page.getFileName();
+		final String[] locales = page.getLocaleStrings();
+		IRunnableWithProgress op = new IRunnableWithProgress() {
+			public void run(IProgressMonitor monitor) throws InvocationTargetException {
+				try {
+					monitor.worked(1);
+					monitor.setTaskName(RBEPlugin.getString(
+							"editor.wiz.creating")); //$NON-NLS-1$
+					IFile file = null;
+					for (int i = 0; i <  locales.length; i++) {
+						String fileName = baseName;
+						if (locales[i].equals(
+								ResourceBundleNewWizardPage.DEFAULT_LOCALE)) {
+							fileName += ".properties"; //$NON-NLS-1$
+						} else {
+							fileName += "_" + locales[i] //$NON-NLS-1$
+									 + ".properties"; //$NON-NLS-1$
+						}
+						file = createFile(containerName, fileName, monitor);
+					}
+					final IFile lastFile = file;
+					getShell().getDisplay().asyncExec(new Runnable() {
+						public void run() {
+							IWorkbenchPage wbPage = PlatformUI.getWorkbench()
+									.getActiveWorkbenchWindow().getActivePage();
+							try {
+								IDE.openEditor(wbPage, lastFile, true);
+							} catch (PartInitException e) {
+							}
+						}
+					});
+					monitor.worked(1);
+				} catch (CoreException e) {
+					throw new InvocationTargetException(e);
+				} finally {
+					monitor.done();
+				}
+			}
+		};
+		try {
+			getContainer().run(true, false, op);
+		} catch (InterruptedException e) {
+			return false;
+		} catch (InvocationTargetException e) {
+			Throwable realException = e.getTargetException();
+			MessageDialog.openError(getShell(), 
+					"Error", realException.getMessage()); //$NON-NLS-1$
+			return false;
+		}
+		return true;
+	}
+	
+	/*
+	 * The worker method. It will find the container, create the
+	 * file if missing or just replace its contents, and open
+	 * the editor on the newly created file.
+	 */
+	/*default*/ IFile createFile(
+			String containerName,
+			String fileName,
+			IProgressMonitor monitor)
+			throws CoreException {
+		
+		monitor.beginTask(RBEPlugin.getString(
+				"editor.wiz.creating") + fileName, 2); //$NON-NLS-1$
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IResource resource = root.findMember(new Path(containerName));
+		if (!resource.exists() || !(resource instanceof IContainer)) {
+			throwCoreException("Container \"" + containerName  //$NON-NLS-1$
+					+ "\" does not exist."); //$NON-NLS-1$
+		}
+		IContainer container = (IContainer) resource;
+		final IFile file = container.getFile(new Path(fileName));
+		try {
+			InputStream stream = openContentStream();
+			if (file.exists()) {
+				file.setContents(stream, true, true, monitor);
+			} else {
+				file.create(stream, true, monitor);
+			}
+			stream.close();
+		} catch (IOException e) {
+		}
+		return file;
+	}
+	
+	/*
+	 * We will initialize file contents with a sample text.
+	 */
+	private InputStream openContentStream() {
+		String contents = ""; //$NON-NLS-1$
+		if (RBEPreferences.getShowGenerator()) {
+			contents = PropertiesGenerator.GENERATED_BY;
+		}
+		return new ByteArrayInputStream(contents.getBytes());
+	}
 
-    private void throwCoreException(String message) throws CoreException {
-        IStatus status = new Status(IStatus.ERROR, 
-                "com.essiembre.eclipse.i18n.resourcebundle",  //$NON-NLS-1$
-                IStatus.OK, message, null);
-        throw new CoreException(status);
-    }
+	private void throwCoreException(String message) throws CoreException {
+		IStatus status = new Status(IStatus.ERROR, 
+				"com.essiembre.eclipse.i18n.resourcebundle",  //$NON-NLS-1$
+				IStatus.OK, message, null);
+		throw new CoreException(status);
+	}
 
-    /**
-     * We will accept the selection in the workbench to see if
-     * we can initialize from it.
-     * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
-     */
-    public void init(
-            IWorkbench workbench, IStructuredSelection structSelection) {
-        this.selection = structSelection;
-    }
+	/**
+	 * We will accept the selection in the workbench to see if
+	 * we can initialize from it.
+	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
+	 */
+	public void init(
+			IWorkbench workbench, IStructuredSelection structSelection) {
+		this.selection = structSelection;
+	}
 }

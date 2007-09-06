@@ -36,11 +36,11 @@ import java.util.*;
  */
 public class RBEPlugin extends AbstractUIPlugin {
 
-    /** Plugin unique id. */
-    public static final String ID = 
-            "com.essiembre.eclipse.i18n.resourcebundle"; //$NON-NLS-1$
-    
-    //The shared instance.
+	/** Plugin unique id. */
+	public static final String ID = 
+			"com.essiembre.eclipse.i18n.resourcebundle"; //$NON-NLS-1$
+	
+	//The shared instance.
 	private static RBEPlugin plugin;
 	//Resource bundle.
 	private ResourceBundle resourceBundle;
@@ -52,22 +52,22 @@ public class RBEPlugin extends AbstractUIPlugin {
 		super();
 		plugin = this;
 	}
-    
+	
 	/**
 	 * This method is called upon plug-in activation
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-        try {
-            URL messagesUrl = 
-                    find(new Path("$nl$/messages.properties")); //$NON-NLS-1$
-            if(messagesUrl != null) {
-                resourceBundle = new PropertyResourceBundle(
-                        messagesUrl.openStream());
-            }
-        } catch (IOException x) {
-            resourceBundle = null;
-        }
+		try {
+			URL messagesUrl = 
+					find(new Path("$nl$/messages.properties")); //$NON-NLS-1$
+			if(messagesUrl != null) {
+				resourceBundle = new PropertyResourceBundle(
+						messagesUrl.openStream());
+			}
+		} catch (IOException x) {
+			resourceBundle = null;
+		}
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class RBEPlugin extends AbstractUIPlugin {
 
 	/**
 	 * Returns the shared instance.
-     * @return this plugin
+	 * @return this plugin
 	 */
 	public static RBEPlugin getDefault() {
 		return plugin;
@@ -88,12 +88,12 @@ public class RBEPlugin extends AbstractUIPlugin {
 	/**
 	 * Returns the string from the plugin's resource bundle,
 	 * or 'key' if not found.
-     * @param key the key for which to fetch a localized text
-     * @return localized string corresponding to key
+	 * @param key the key for which to fetch a localized text
+	 * @return localized string corresponding to key
 	 */
 	public static String getString(String key) {
 		ResourceBundle bundle = 
-                RBEPlugin.getDefault().getResourceBundle();
+				RBEPlugin.getDefault().getResourceBundle();
 		try {
 			return (bundle != null) ? bundle.getString(key) : key;
 		} catch (MissingResourceException e) {
@@ -101,67 +101,67 @@ public class RBEPlugin extends AbstractUIPlugin {
 		}
 	}
 
-    /**
-     * Returns the string from the plugin's resource bundle,
-     * or 'key' if not found.
-     * @param key the key for which to fetch a localized text
-     * @param arg1 runtime argument to replace in key value 
-     * @return localized string corresponding to key
-     */
-    public static String getString(String key, String arg1) {
-        return MessageFormat.format(getString(key), new String[]{arg1});
-    }
-    /**
-     * Returns the string from the plugin's resource bundle,
-     * or 'key' if not found.
-     * @param key the key for which to fetch a localized text
-     * @param arg1 runtime first argument to replace in key value
-     * @param arg2 runtime second argument to replace in key value
-     * @return localized string corresponding to key
-     */
-    public static String getString(String key, String arg1, String arg2) {
-        return MessageFormat.format(
-                getString(key), new String[]{arg1, arg2});
-    }
-    /**
-     * Returns the string from the plugin's resource bundle,
-     * or 'key' if not found.
-     * @param key the key for which to fetch a localized text
-     * @param arg1 runtime argument to replace in key value 
-     * @param arg2 runtime second argument to replace in key value
-     * @param arg3 runtime third argument to replace in key value
-     * @return localized string corresponding to key
-     */
-    public static String getString(
-            String key, String arg1, String arg2, String arg3) {
-        return MessageFormat.format(
-                getString(key), new String[]{arg1, arg2, arg3});
-    }
-    
+	/**
+	 * Returns the string from the plugin's resource bundle,
+	 * or 'key' if not found.
+	 * @param key the key for which to fetch a localized text
+	 * @param arg1 runtime argument to replace in key value 
+	 * @return localized string corresponding to key
+	 */
+	public static String getString(String key, String arg1) {
+		return MessageFormat.format(getString(key), new String[]{arg1});
+	}
+	/**
+	 * Returns the string from the plugin's resource bundle,
+	 * or 'key' if not found.
+	 * @param key the key for which to fetch a localized text
+	 * @param arg1 runtime first argument to replace in key value
+	 * @param arg2 runtime second argument to replace in key value
+	 * @return localized string corresponding to key
+	 */
+	public static String getString(String key, String arg1, String arg2) {
+		return MessageFormat.format(
+				getString(key), new String[]{arg1, arg2});
+	}
+	/**
+	 * Returns the string from the plugin's resource bundle,
+	 * or 'key' if not found.
+	 * @param key the key for which to fetch a localized text
+	 * @param arg1 runtime argument to replace in key value 
+	 * @param arg2 runtime second argument to replace in key value
+	 * @param arg3 runtime third argument to replace in key value
+	 * @return localized string corresponding to key
+	 */
+	public static String getString(
+			String key, String arg1, String arg2, String arg3) {
+		return MessageFormat.format(
+				getString(key), new String[]{arg1, arg2, arg3});
+	}
+	
 	/**
 	 * Returns the plugin's resource bundle.
-     * @return resource bundle
+	 * @return resource bundle
 	 */
 	protected ResourceBundle getResourceBundle() {
 		return resourceBundle;
 	}
-    
-    /**
-     * Gets an image descriptor.
-     * @param name image name
-     * @return image descriptor
-     */
-    public static ImageDescriptor getImageDescriptor(String name) {
-        String iconPath = "icons/"; //$NON-NLS-1$
-        try {
-            URL installURL = RBEPlugin.getDefault().getBundle().getEntry(
-                    "/"); //$NON-NLS-1$
-            URL url = new URL(installURL, iconPath + name);
-            return ImageDescriptor.createFromURL(url);
-        } catch (MalformedURLException e) {
-            // should not happen
-            return ImageDescriptor.getMissingImageDescriptor();
-        }
-    }
-    
+	
+	/**
+	 * Gets an image descriptor.
+	 * @param name image name
+	 * @return image descriptor
+	 */
+	public static ImageDescriptor getImageDescriptor(String name) {
+		String iconPath = "icons/"; //$NON-NLS-1$
+		try {
+			URL installURL = RBEPlugin.getDefault().getBundle().getEntry(
+					"/"); //$NON-NLS-1$
+			URL url = new URL(installURL, iconPath + name);
+			return ImageDescriptor.createFromURL(url);
+		} catch (MalformedURLException e) {
+			// should not happen
+			return ImageDescriptor.getMissingImageDescriptor();
+		}
+	}
+	
 }

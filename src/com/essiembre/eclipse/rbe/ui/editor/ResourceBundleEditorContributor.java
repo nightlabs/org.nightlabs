@@ -49,20 +49,20 @@ public class ResourceBundleEditorContributor extends MultiPageEditorActionBarCon
 	}
 	/**
 	 * Returns the action registed with the given text editor.
-     * @param editor eclipse text editor
-     * @param actionID action id
+	 * @param editor eclipse text editor
+	 * @param actionID action id
 	 * @return IAction or null if editor is null.
 	 */
 	protected IAction getAction(ITextEditor editor, String actionID) {
 		return (editor == null ? null : editor.getAction(actionID));
 	}
 
-    /**
+	/**
 	 * @see MultiPageEditorActionBarContributor
-     *         #setActivePage(org.eclipse.ui.IEditorPart)
+	 *         #setActivePage(org.eclipse.ui.IEditorPart)
 	 */
 	public void setActivePage(IEditorPart part) {
-        if (activeEditorPart == part)
+		if (activeEditorPart == part)
 			return;
 
 		activeEditorPart = part;
@@ -71,7 +71,7 @@ public class ResourceBundleEditorContributor extends MultiPageEditorActionBarCon
 		if (actionBars != null) {
 
 			ITextEditor editor = (part instanceof ITextEditor) 
-                               ? (ITextEditor) part : null;
+							   ? (ITextEditor) part : null;
 
 			actionBars.setGlobalActionHandler(
 				ActionFactory.DELETE.getId(),
@@ -118,17 +118,17 @@ public class ResourceBundleEditorContributor extends MultiPageEditorActionBarCon
 	}
 	/**
 	 * @see org.eclipse.ui.part.EditorActionBarContributor
-     *         #contributeToMenu(org.eclipse.jface.action.IMenuManager)
+	 *         #contributeToMenu(org.eclipse.jface.action.IMenuManager)
 	 */
-    public void contributeToMenu(IMenuManager manager) {
+	public void contributeToMenu(IMenuManager manager) {
 //		IMenuManager menu = new MenuManager("Editor &Menu");
 //		manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, menu);
 //		menu.add(sampleAction);
 	}
-    /**
-     * @see org.eclipse.ui.part.EditorActionBarContributor
-     *         #contributeToToolBar(org.eclipse.jface.action.IToolBarManager)
-     */
+	/**
+	 * @see org.eclipse.ui.part.EditorActionBarContributor
+	 *         #contributeToToolBar(org.eclipse.jface.action.IToolBarManager)
+	 */
 	public void contributeToToolBar(IToolBarManager manager) {
 //		manager.add(new Separator());
 //		manager.add(sampleAction);

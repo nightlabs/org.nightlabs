@@ -26,24 +26,24 @@ package com.essiembre.eclipse.rbe.model;
  * @version $Author: costamojan $ $Revision: 1.2 $ $Date: 2006/05/12 20:42:05 $
  */
 public interface IDeltaListener {
-    /**
-     * Adds an "add" event to this listener.
-     * @param event "add" event
-     */
+	/**
+	 * Adds an "add" event to this listener.
+	 * @param event "add" event
+	 */
 	public void add(DeltaEvent event);
-    /**
-     * Adds an "remove" event to this listener.
-     * @param event "remove" event
-     */
+	/**
+	 * Adds an "remove" event to this listener.
+	 * @param event "remove" event
+	 */
 	public void remove(DeltaEvent event);
-    /**
-     * Adds an "modify" event to this listener.
-     * @param event "modify" event
-     */
-    public void modify(DeltaEvent event);
-    /**
-     * Adds a "select" event to this listener.
-     * @param event "select" event
-     */
-    public void select(DeltaEvent event);
+	/**
+	 * Adds an "modify" event to this listener.
+	 * @param event "modify" event
+	 */
+	public void modify(DeltaEvent event);
+	/**
+	 * Adds a "select" event to this listener.
+	 * @param event "select" event
+	 */
+	public void select(DeltaEvent event);
 }

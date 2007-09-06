@@ -30,11 +30,11 @@ package com.essiembre.eclipse.rbe.model.utils;
  * @version $Author: essiembre $ $Revision: 1.2 $ $Date: 2005/07/30 22:10:55 $
  */
 public interface ProximityAnalyzer {
-    /**
-     * Analyses two objects and return the proximity level.
-     * @param obj1 first object to analyse
-     * @param obj2 second object to analyse
-     * @return proximity level
-     */
-    double analyse(Object obj1, Object obj2);
+	/**
+	 * Analyses two objects and return the proximity level.
+	 * @param obj1 first object to analyse
+	 * @param obj2 second object to analyse
+	 * @return proximity level
+	 */
+	double analyse(Object obj1, Object obj2);
 }

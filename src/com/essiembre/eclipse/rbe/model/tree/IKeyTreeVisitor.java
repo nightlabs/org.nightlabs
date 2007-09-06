@@ -27,16 +27,16 @@ package com.essiembre.eclipse.rbe.model.tree;
  * @version $Author: essiembre $ $Revision: 1.2 $ $Date: 2005/07/30 22:10:55 $
  */
 public interface IKeyTreeVisitor {
-    /**
-     * Visits a key tree.
-     * @param keyTree key tree to visit
-     * @param passAlongArgument an optional argument
-     */
+	/**
+	 * Visits a key tree.
+	 * @param keyTree key tree to visit
+	 * @param passAlongArgument an optional argument
+	 */
 	public void visitKeyTree(KeyTree keyTree, Object passAlongArgument);
-    /**
-     * Visits a key tree item.
-     * @param item key tree item to visit
-     * @param passAlongArgument an optional argument
-     */
+	/**
+	 * Visits a key tree item.
+	 * @param item key tree item to visit
+	 * @param passAlongArgument an optional argument
+	 */
 	public void visitKeyTreeItem(KeyTreeItem item, Object passAlongArgument);
 }

@@ -38,69 +38,69 @@ import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
  */
 public class SimilarValuesVisitor extends BundleVisitorAdapter {
 
-    /** Holder for bundle entries having similars values. */
-    private final Collection similars = new ArrayList();
+	/** Holder for bundle entries having similars values. */
+	private final Collection similars = new ArrayList();
 
-    /** Proximity analyzer used to find similarities. */
-    private ProximityAnalyzer analyzer = WordCountAnalyzer.getInstance();
-    
-    /**
-     * Constructor.
-     */
-    public SimilarValuesVisitor() {
-        super();
-    }
+	/** Proximity analyzer used to find similarities. */
+	private ProximityAnalyzer analyzer = WordCountAnalyzer.getInstance();
+	
+	/**
+	 * Constructor.
+	 */
+	public SimilarValuesVisitor() {
+		super();
+	}
 
-    /**
-     * @see com.essiembre.eclipse.rbe.model.bundle.IBundleVisitor
-     *         #visitBundleEntry(
-     *                 com.essiembre.eclipse.rbe.model.bundle.BundleEntry,
-     *                 java.lang.Object)
-     */
-    public void visitBundleEntry(BundleEntry entry, Object passAlongArgument) {
-        
-        BundleEntry entryToMatch = (BundleEntry) passAlongArgument;
-        if (entry != entryToMatch
-                && entry != null && entryToMatch != null
-                && entry.getValue().length() > 0
-                && analyzer.analyse(
-                        entry.getValue().toLowerCase(), 
-                        entryToMatch.getValue().toLowerCase())
-                        >= RBEPreferences.getReportSimilarValuesPrecision()) {
-            similars.add(entry);
-        }
-    }
-    
-    
-    
-    /**
-     * Gets the proximity analyzer.
-     * @return Returns the proximity analyzer.
-     */
-    public ProximityAnalyzer getProximityAnalyzer() {
-        return analyzer;
-    }
-    /**
-     * Sets the proximity analyzer.
-     * @param analyzer proximity analyzer
-     */
-    public void setProximityAnalyzer(ProximityAnalyzer analyzer) {
-        this.analyzer = analyzer;
-    }
-    
-    /**
-     * Gets a collection of similar <code>BundleEntry</code> instance.
-     * @return bundle entries with similar values
-     */
-    public Collection getSimilars() {
-        return similars;
-    }
-    
-    /**
-     * Clears the list of duplicate values.
-     */
-    public void clear() {
-        similars.clear();
-    }
-    
+	/**
+	 * @see com.essiembre.eclipse.rbe.model.bundle.IBundleVisitor
+	 *         #visitBundleEntry(
+	 *                 com.essiembre.eclipse.rbe.model.bundle.BundleEntry,
+	 *                 java.lang.Object)
+	 */
+	public void visitBundleEntry(BundleEntry entry, Object passAlongArgument) {
+		
+		BundleEntry entryToMatch = (BundleEntry) passAlongArgument;
+		if (entry != entryToMatch
+				&& entry != null && entryToMatch != null
+				&& entry.getValue().length() > 0
+				&& analyzer.analyse(
+						entry.getValue().toLowerCase(), 
+						entryToMatch.getValue().toLowerCase())
+						>= RBEPreferences.getReportSimilarValuesPrecision()) {
+			similars.add(entry);
+		}
+	}
+	
+	
+	
+	/**
+	 * Gets the proximity analyzer.
+	 * @return Returns the proximity analyzer.
+	 */
+	public ProximityAnalyzer getProximityAnalyzer() {
+		return analyzer;
+	}
+	/**
+	 * Sets the proximity analyzer.
+	 * @param analyzer proximity analyzer
+	 */
+	public void setProximityAnalyzer(ProximityAnalyzer analyzer) {
+		this.analyzer = analyzer;
+	}
+	
+	/**
+	 * Gets a collection of similar <code>BundleEntry</code> instance.
+	 * @return bundle entries with similar values
+	 */
+	public Collection getSimilars() {
+		return similars;
+	}
+	
+	/**
+	 * Clears the list of duplicate values.
+	 */
+	public void clear() {
+		similars.clear();
+	}
+	
 }

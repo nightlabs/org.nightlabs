@@ -33,64 +33,64 @@ import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;
  */
 public class GroupedKeyTreeUpdater extends KeyTreeUpdater {
 
-    /** Key group separator. */
-    private String separator;
-    
-    /**
-     * Constructor.
-     * @param keyGroupSeparator key group separator
-     */
-    public GroupedKeyTreeUpdater(String keyGroupSeparator) {
-        super();
-        this.separator = keyGroupSeparator;
-    }
-    
-    /**
-     * @see com.essiembre.eclipse.rbe.model.tree.updater.KeyTreeUpdater#addKey(
-     *         com.essiembre.eclipse.rbe.model.tree.KeyTree, java.lang.String)
-     */
-    public void addKey(KeyTree keyTree, String key) {
-        Map keyCache = keyTree.getKeyItemsCache();
-        if (!keyCache.containsKey(key)) {
-            StringBuffer idBuf = new StringBuffer();
-            Object parent = keyTree;
-            for (StringTokenizer tokens = new StringTokenizer(key, separator);
-                    tokens.hasMoreTokens();) {
-                String name = tokens.nextToken();
-                if (!(parent instanceof KeyTree)) {
-                    idBuf.append(separator);
-                }
-                idBuf.append(name);
-                String id = idBuf.toString();
-                if (!keyCache.containsKey(id)) {
-                    KeyTreeItem item = new KeyTreeItem(keyTree, id, name);
-                    item.setParent(parent);
-                    if (parent instanceof KeyTree) {
-                        keyTree.getRootKeyItems().add(item);
-                    } else {
-                        ((KeyTreeItem) parent).addChildren(item);
-                    }
-                    keyCache.put(id, item);
-                    parent = item;
-                } else {
-                    parent = keyCache.get(id);
-                }
-            }
-        }
-    }
+	/** Key group separator. */
+	private String separator;
+	
+	/**
+	 * Constructor.
+	 * @param keyGroupSeparator key group separator
+	 */
+	public GroupedKeyTreeUpdater(String keyGroupSeparator) {
+		super();
+		this.separator = keyGroupSeparator;
+	}
+	
+	/**
+	 * @see com.essiembre.eclipse.rbe.model.tree.updater.KeyTreeUpdater#addKey(
+	 *         com.essiembre.eclipse.rbe.model.tree.KeyTree, java.lang.String)
+	 */
+	public void addKey(KeyTree keyTree, String key) {
+		Map keyCache = keyTree.getKeyItemsCache();
+		if (!keyCache.containsKey(key)) {
+			StringBuffer idBuf = new StringBuffer();
+			Object parent = keyTree;
+			for (StringTokenizer tokens = new StringTokenizer(key, separator);
+					tokens.hasMoreTokens();) {
+				String name = tokens.nextToken();
+				if (!(parent instanceof KeyTree)) {
+					idBuf.append(separator);
+				}
+				idBuf.append(name);
+				String id = idBuf.toString();
+				if (!keyCache.containsKey(id)) {
+					KeyTreeItem item = new KeyTreeItem(keyTree, id, name);
+					item.setParent(parent);
+					if (parent instanceof KeyTree) {
+						keyTree.getRootKeyItems().add(item);
+					} else {
+						((KeyTreeItem) parent).addChildren(item);
+					}
+					keyCache.put(id, item);
+					parent = item;
+				} else {
+					parent = keyCache.get(id);
+				}
+			}
+		}
+	}
 
-    /**
-     * Gets the key group separator.
-     * @return key group separator.
-     */
-    public String getSeparator() {
-        return separator;
-    }
-    /**
-     * Sets the key group separator.
-     * @param separator key group separator
-     */
-    public void setSeparator(String separator) {
-        this.separator = separator;
-    }
+	/**
+	 * Gets the key group separator.
+	 * @return key group separator.
+	 */
+	public String getSeparator() {
+		return separator;
+	}
+	/**
+	 * Sets the key group separator.
+	 * @param separator key group separator
+	 */
+	public void setSeparator(String separator) {
+		this.separator = separator;
+	}
 }
