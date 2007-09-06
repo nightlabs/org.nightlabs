@@ -43,9 +43,9 @@ import com.essiembre.eclipse.rbe.model.tree.updater.KeyTreeUpdater;
 public class KeyTree extends Model implements IKeyTreeVisitable {
 
 	/** Caching of key tree items (key=ID; value=KeyTreeItem). **/
-	private final Map keyItemsCache = new TreeMap();
+	private final Map<String, KeyTreeItem> keyItemsCache = new TreeMap<String, KeyTreeItem>();
 	/** Items found at root level. */
-	private final Set rootKeyItems = new TreeSet();
+	private final Set<KeyTreeItem> rootKeyItems = new TreeSet<KeyTreeItem>();
 	/** Updater responsible for tree changes. */
 	private KeyTreeUpdater updater;
 	/** Bundle group used to build the tree. */
@@ -184,6 +184,22 @@ public class KeyTree extends Model implements IKeyTreeVisitable {
 			selectedKey = key;
 			fireSelect(item);
 		}
+	}
+	public void selectNextKey() {
+		String currentKey = getSelectedKey();
+		boolean takeNext = false;
+		String nextKey = null;
+		for (String key : keyItemsCache.keySet()) {
+			if (takeNext) {
+				nextKey = key;
+				break;
+			}
+			if (key.equals(currentKey))
+				takeNext = true;
+		}
+		
+		if (nextKey != null)
+			selectKey(nextKey);			
 	}
 	/**
 	 * Gets the key tree updater.

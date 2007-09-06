@@ -22,8 +22,10 @@ package com.essiembre.eclipse.rbe.ui.editor.i18n;
 
 import java.awt.ComponentOrientation;
 import java.awt.GraphicsEnvironment;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 
@@ -74,6 +76,7 @@ public class BundleEntryComposite extends Composite {
 
 	/*default*/ final ResourceManager resourceManager;
 	/*default*/ final Locale locale;
+	/*default*/ final I18nPage page;
 	private final Font boldFont;
 	private final Font smallFont;
 
@@ -88,6 +91,19 @@ public class BundleEntryComposite extends Composite {
 
 	/*default*/ DuplicateValuesVisitor duplVisitor;
 	/*default*/ SimilarValuesVisitor similarVisitor;
+	
+	FocusListener internalFocusListener = new FocusListener() {
+		public void focusGained(FocusEvent e) {
+			e.widget = BundleEntryComposite.this;
+			for (FocusListener listener : focusListeners)
+				listener.focusGained(e);
+		}
+		public void focusLost(FocusEvent e) {
+			e.widget = BundleEntryComposite.this;
+			for (FocusListener listener : focusListeners)
+				listener.focusLost(e);
+		}
+	};
 
 
 	/**
@@ -99,11 +115,13 @@ public class BundleEntryComposite extends Composite {
 	public BundleEntryComposite(
 			final Composite parent, 
 			final ResourceManager resourceManager, 
-			final Locale locale) {
+			final Locale locale,
+			final I18nPage page) {
 
 		super(parent, SWT.NONE);
 		this.resourceManager = resourceManager;
 		this.locale = locale;
+		this.page = page;
 
 		this.boldFont = UIUtils.createFont(this, SWT.BOLD, 0);
 		this.smallFont = UIUtils.createFont(SWT.NONE, -1);
@@ -121,8 +139,6 @@ public class BundleEntryComposite extends Composite {
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 80;
 		setLayoutData(gd);
-
-
 	}
 
 	/**
@@ -380,6 +396,13 @@ public class BundleEntryComposite extends Composite {
 		});
 		gotoButton.setLayoutData(gridData);
 	}
+	
+	private Collection<FocusListener> focusListeners = new LinkedList<FocusListener>();	
+	@Override
+	public void addFocusListener(FocusListener listener) {
+		if (!focusListeners.contains(listener))
+			focusListeners.add(listener);
+	}
 	/**
 	 * Creates the text row.
 	 */
@@ -409,11 +432,19 @@ public class BundleEntryComposite extends Composite {
 		//TODO add a preference property listener and add/remove this listener
 		textBox.addTraverseListener(new TraverseListener() {
 			public void keyTraversed(TraverseEvent event) {
-				if (event.character == SWT.TAB) {
-					if (!RBEPreferences.getFieldTabInserts()) {
-						event.doit = true;
-					}            			
-				}
+				if (event.character == SWT.TAB && !RBEPreferences.getFieldTabInserts()) {
+					event.doit = true;
+					event.detail = SWT.TRAVERSE_NONE;
+					page.focusNextBundleEntryComposite();
+				} else if (event.keyCode == SWT.ARROW_DOWN && event.stateMask == SWT.CTRL) {
+					event.doit = true;
+					event.detail = SWT.TRAVERSE_NONE;
+					page.selectNextTreeEntry();
+				} else if (event.keyCode == SWT.ARROW_UP && event.stateMask == SWT.CTRL) {
+					event.doit = true;
+					event.detail = SWT.TRAVERSE_NONE;
+					page.selectPreviousTreeEntry();
+				} 
 
 			}
 		});
@@ -451,6 +482,8 @@ public class BundleEntryComposite extends Composite {
 			}
 
 		});
+		
+		textBox.addFocusListener(internalFocusListener);
 	}
 
 
@@ -489,7 +522,10 @@ public class BundleEntryComposite extends Composite {
 		}
 	}
 
-
+	public void focusTextBox() {
+		textBox.setFocus();
+		textBox.setSelection(textBox.getText().length());
+	}
 
 	/** Additions by Eric FETTWEIS */
 	/*private void autoDetectRequiredFont(String value) {
@@ -535,7 +571,7 @@ public class BundleEntryComposite extends Composite {
 			swtFontCache.put(name, font);
 		}
 		return font;
-	}
+	}	
 	/**
 	 * Gets the name of the font which will be the best to display a String.
 	 * All installed fonts are searched. If a font can display the entire string, then it is retuned immediately.

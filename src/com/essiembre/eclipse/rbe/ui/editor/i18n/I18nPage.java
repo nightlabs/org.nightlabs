@@ -23,6 +23,7 @@ package com.essiembre.eclipse.rbe.ui.editor.i18n;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -57,7 +58,7 @@ public class I18nPage extends ScrolledComposite {
 
 	private final ResourceManager resourceMediator;
 	private final KeyTreeComposite keysComposite;
-	private final Collection entryComposites = new ArrayList(); 
+	private final List<BundleEntryComposite> entryComposites = new ArrayList<BundleEntryComposite>(); 
 	private final LocalBehaviour localBehaviour = new LocalBehaviour();
 	private final ScrolledComposite editingComposite;
 	
@@ -149,10 +150,52 @@ public class I18nPage extends ScrolledComposite {
 				iter.hasNext();) {
 			Locale locale = (Locale) iter.next();
 			BundleEntryComposite entryComposite = new BundleEntryComposite(
-					rightComposite, resourceMediator, locale);
+					rightComposite, resourceMediator, locale, this);
 			entryComposite.addFocusListener(localBehaviour);
 			entryComposites.add(entryComposite);
 		}
+	}
+	
+	public void focusBundleEntryComposite(Locale locale) {
+		for (BundleEntryComposite bec : entryComposites) {
+			if (bec.getLocale().equals(locale)) {
+				bec.focusTextBox();
+				return;
+			}
+		}
+	}
+	
+	public void focusNextBundleEntryComposite() {
+		int index = entryComposites.indexOf(activeEntry);
+		if (index < entryComposites.size()-1)
+			index++;
+		
+		entryComposites.get(index).focusTextBox();
+	}
+	
+	
+	public void selectNextTreeEntry() {
+//		resourceMediator.getKeyTree().selectNextKey();
+//		KeyTreeItem nextItem = keysComposite.getNextKeyTreeItem();		
+//		if (nextItem != null)
+//			resourceMediator.getKeyTree().selectKey(nextItem.getId());
+		String nextKey = resourceMediator.getBundleGroup().getNextKey(getSelectedKey());
+		if (nextKey == null)
+			return;
+
+		Locale currentLocale = activeEntry.getLocale();
+		resourceMediator.getKeyTree().selectKey(nextKey);
+		focusBundleEntryComposite(currentLocale);
+	}
+	
+	public void selectPreviousTreeEntry() {
+		String prevKey = resourceMediator.getBundleGroup().getPreviousKey(getSelectedKey());
+		if (prevKey == null)
+			return;
+		
+		Locale currentLocale = activeEntry.getLocale();
+		resourceMediator.getKeyTree().selectKey(prevKey);
+		focusBundleEntryComposite(currentLocale);
 	}
 	
 
@@ -265,5 +308,4 @@ public class I18nPage extends ScrolledComposite {
 		}
 		
 	} /* ENDCLASS */
-	
 }
