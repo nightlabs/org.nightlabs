@@ -183,6 +183,7 @@ public class I18nPage extends ScrolledComposite {
 //		KeyTreeItem nextItem = keysComposite.getNextKeyTreeItem();		
 //		if (nextItem != null)
 //			resourceMediator.getKeyTree().selectKey(nextItem.getId());
+		activeEntry.updateBundleOnChanges();
 		String nextKey = resourceMediator.getBundleGroup().getNextKey(getSelectedKey());
 		if (nextKey == null)
 			return;
@@ -193,6 +194,7 @@ public class I18nPage extends ScrolledComposite {
 	}
 	
 	public void selectPreviousTreeEntry() {
+		activeEntry.updateBundleOnChanges();
 		String prevKey = resourceMediator.getBundleGroup().getPreviousKey(getSelectedKey());
 		if (prevKey == null)
 			return;
