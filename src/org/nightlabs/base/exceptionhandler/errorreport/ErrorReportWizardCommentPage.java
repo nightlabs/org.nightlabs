@@ -63,7 +63,8 @@ public class ErrorReportWizardCommentPage extends DynamicPathWizardPage
 //    GridLayout layout = new GridLayout();
 //    //layout.
 //    page.setLayout(layout);
-    Label commentLabel = new Label(page, SWT.NONE);
+    Label commentLabel = new Label(page, SWT.WRAP);
+    commentLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
     commentLabel.setText(Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardCommentPage.commentLabel.text")); //$NON-NLS-1$
 		textUserComment = new Text(page, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.WRAP);
 		textUserComment.setToolTipText(Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardCommentPage.textUserComment.toolTipText")); //$NON-NLS-1$

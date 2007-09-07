@@ -59,7 +59,8 @@ public class ErrorReportWizardSummaryPage extends DynamicPathWizardPage
     XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
     page.setLayoutData(new GridData(GridData.FILL_BOTH));
     
-    Label overviewLabel = new Label(page, SWT.NONE);
+    Label overviewLabel = new Label(page, SWT.WRAP);
+    overviewLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
     overviewLabel.setText(Messages.getString("org.nightlabs.base.exceptionhandler.errorreport.ErrorReportWizardSummaryPage.overviewLabel.text")); //$NON-NLS-1$
     
     overviewText = new Text(page, SWT.READ_ONLY | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.WRAP);
