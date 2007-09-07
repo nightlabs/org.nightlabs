@@ -540,7 +540,7 @@ public class BundleEntryComposite extends Composite {
 
 	public void focusTextBox() {
 		textBox.setFocus();
-		textBox.setSelection(textBox.getText().length());
+		textBox.setSelection(0, textBox.getText().length());
 	}
 
 	/** Additions by Eric FETTWEIS */
