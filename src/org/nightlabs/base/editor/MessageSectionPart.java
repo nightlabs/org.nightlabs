@@ -40,10 +40,9 @@ import org.nightlabs.base.message.IMessageDisplayer;
  *
  */
 public class MessageSectionPart 
-	extends RestorableSectionPart
-	implements IMessageDisplayer
+extends RestorableSectionPart
+implements IMessageDisplayer
 {
-
 	public MessageSectionPart(IFormPage page, Composite parent, int style, String title) {
 		super(parent, page.getEditor().getToolkit(), style);
 		FormToolkit toolkit = page.getEditor().getToolkit();
@@ -54,12 +53,7 @@ public class MessageSectionPart
 		section.setLayoutData(new GridData(GridData.FILL_BOTH));
 		container = EntityEditorUtil.createCompositeClient(toolkit, section, 1);
 		((GridLayout)container.getLayout()).numColumns = 1;		
-		container.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-//		messageLabel = new Label(container, SWT.NONE);
-//		messageLabel.setText(" ");
-//		messageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		getManagedForm().getForm().setText(arg0)
+		container.setLayoutData(new GridData(GridData.FILL_BOTH));		
 	}
 
 	private Composite container;
@@ -67,7 +61,6 @@ public class MessageSectionPart
 		return container;
 	}
 	
-//	private Label messageLabel;
 	/**
 	 * sets the message to display
 	 * @param message the message to set
