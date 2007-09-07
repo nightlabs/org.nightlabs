@@ -199,7 +199,8 @@ public class ResourceBundleEditor extends MultiPageEditorPart
 		resourceMediator.save(monitor);
 		
 		keyTree.setUpdater(keyTree.getUpdater());
-		keyTree.selectKey(key);
+		if (key != null)
+			keyTree.selectKey(key);
 	}
 	
 	/**

@@ -439,15 +439,28 @@ public class BundleEntryComposite extends Composite {
 						page.focusNextBundleEntryComposite();
 					else if (event.stateMask == SWT.SHIFT)
 						page.focusPreviousBundleEntryComposite();
-				} else if (event.keyCode == SWT.ARROW_DOWN && event.stateMask == SWT.CTRL) {
-					event.doit = true;
-					event.detail = SWT.TRAVERSE_NONE;
-					page.selectNextTreeEntry();
-				} else if (event.keyCode == SWT.ARROW_UP && event.stateMask == SWT.CTRL) {
-					event.doit = true;
-					event.detail = SWT.TRAVERSE_NONE;
-					page.selectPreviousTreeEntry();
-				} 
+				} else if (event.character == SWT.CR) {
+					if (event.stateMask == SWT.CTRL) {
+						event.doit = false;						
+					} else if (event.stateMask == 0) {
+						event.doit = true;
+						event.detail = SWT.TRAVERSE_NONE;
+						page.selectNextTreeEntry();
+					} else if (event.stateMask == SWT.SHIFT) {
+						event.doit = true;
+						event.detail = SWT.TRAVERSE_NONE;
+						page.selectPreviousTreeEntry();
+					}
+				}
+//				} else if (event.keyCode == SWT.ARROW_DOWN && event.stateMask == SWT.CTRL) {
+//					event.doit = true;
+//					event.detail = SWT.TRAVERSE_NONE;
+//					page.selectNextTreeEntry();
+//				} else if (event.keyCode == SWT.ARROW_UP && event.stateMask == SWT.CTRL) {
+//					event.doit = true;
+//					event.detail = SWT.TRAVERSE_NONE;
+//					page.selectPreviousTreeEntry();
+//				} 
 
 			}
 		});

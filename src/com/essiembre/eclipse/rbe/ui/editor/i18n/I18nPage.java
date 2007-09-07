@@ -21,7 +21,6 @@
 package com.essiembre.eclipse.rbe.ui.editor.i18n;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -158,7 +157,7 @@ public class I18nPage extends ScrolledComposite {
 	
 	public void focusBundleEntryComposite(Locale locale) {
 		for (BundleEntryComposite bec : entryComposites) {
-			if ((bec.getLocale() == null) && (locale == null) || (locale != null && bec.getLocale().equals(locale))) {
+			if ((bec.getLocale() == null) && (locale == null) || (locale != null && locale.equals(bec.getLocale()))) {
 				bec.focusTextBox();
 				return;
 			}
@@ -179,10 +178,6 @@ public class I18nPage extends ScrolledComposite {
 	
 	
 	public void selectNextTreeEntry() {
-//		resourceMediator.getKeyTree().selectNextKey();
-//		KeyTreeItem nextItem = keysComposite.getNextKeyTreeItem();		
-//		if (nextItem != null)
-//			resourceMediator.getKeyTree().selectKey(nextItem.getId());
 		activeEntry.updateBundleOnChanges();
 		String nextKey = resourceMediator.getBundleGroup().getNextKey(getSelectedKey());
 		if (nextKey == null)
