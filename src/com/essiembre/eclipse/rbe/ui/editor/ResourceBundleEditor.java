@@ -21,7 +21,11 @@
 package com.essiembre.eclipse.rbe.ui.editor;
 
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -37,9 +41,12 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.part.Page;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
@@ -138,6 +145,8 @@ public class ResourceBundleEditor extends MultiPageEditorPart
 						UIUtils.getImage(UIUtils.IMAGE_PROPERTIES_FILE));
 			}
 			outline = new ResourceBundleOutline(resourceMediator.getKeyTree());
+			
+			
 		} catch (PartInitException e) {
 			ErrorDialog.openError(getSite().getShell(), 
 				"Error creating text editor page.", //$NON-NLS-1$
@@ -257,14 +266,34 @@ public class ResourceBundleEditor extends MultiPageEditorPart
 		}
 	}
 	
+	private SourceEditor lastEditor;
+	
 	/**
 	 * Calculates the contents of page GUI page when it is activated.
 	 */
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
-		if (newPageIndex == 0) {
+		if (newPageIndex == 0) {  // switched to first page
 			resourceMediator.reloadProperties();
 			i18nPage.refreshTextBoxes();
+			
+			if (lastEditor != null) {
+				KeyTree keyTree = resourceMediator.getKeyTree();
+				String currentKey = lastEditor.getCurrentKey();
+				if (currentKey != null)
+					keyTree.selectKey(currentKey);
+			}
+			lastEditor = null; // reset lastEditor
+			return;
+		}		
+		if (newPageIndex == getPageCount()-1) // switched to last page
+			return;
+		
+		int editorIndex = newPageIndex - 1; // adjust because first page is tree page		
+		if (editorIndex >= 0 && editorIndex < resourceMediator.getSourceEditors().length) {
+			lastEditor = resourceMediator.getSourceEditors()[editorIndex];
+			String selectedKey = resourceMediator.getKeyTree().getSelectedKey();
+			lastEditor.selectLine(selectedKey);
 		}
 	}
 

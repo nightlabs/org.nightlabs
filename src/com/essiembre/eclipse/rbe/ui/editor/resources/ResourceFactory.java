@@ -119,7 +119,7 @@ public abstract class ResourceFactory {
 			} catch (Exception e) {
 				// Use default editor otherwise
 				textEditor = new TextEditor();
-			}
+			}			
 			textEditor.init(site, newEditorInput);
 		}
 		if (textEditor != null) {
