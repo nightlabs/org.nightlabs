@@ -121,7 +121,7 @@ public class SourceEditor {
 		return ((TextEditor) editor).isEditorInputReadOnly();
 	}
 	
-	public void selectLine(String key) {
+	public void selectKey(String key) {
 		if (key != null) {				
 			ITextEditor textEditor = getEditor();
 			String editorContent = getContent();
@@ -129,8 +129,7 @@ public class SourceEditor {
 			Matcher matcher = pattern.matcher(editorContent);
 			if (matcher.find()) {
 				int start = matcher.start();
-				int end = matcher.end();
-				textEditor.selectAndReveal(start, end-start);
+				textEditor.selectAndReveal(start, 0);
 			}
 		}
 	}
@@ -143,7 +142,7 @@ public class SourceEditor {
 			String content = getContent();
 			int start = 0, end = 0;
 			
-			// You don't have to understand this
+			// Extract the bounds of the line containing the selection
 			for (start = selectionStart; start > 0 && content.charAt(start-1) != '\n'; start--);
 			for (end = start; end < content.length()-1 && content.charAt(end+1) != '=' && content.charAt(end+1) != '\n'; end++);
 			

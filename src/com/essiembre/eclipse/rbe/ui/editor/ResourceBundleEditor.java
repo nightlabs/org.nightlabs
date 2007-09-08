@@ -273,27 +273,29 @@ public class ResourceBundleEditor extends MultiPageEditorPart
 	 */
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
+		KeyTree keyTree = resourceMediator.getKeyTree();
+		
+		if (lastEditor != null) {
+			String lastEditorKey = lastEditor.getCurrentKey();
+			if (lastEditorKey != null)
+				keyTree.selectKey(lastEditor.getCurrentKey());
+		}
+		
 		if (newPageIndex == 0) {  // switched to first page
 			resourceMediator.reloadProperties();
 			i18nPage.refreshTextBoxes();
-			
-			if (lastEditor != null) {
-				KeyTree keyTree = resourceMediator.getKeyTree();
-				String currentKey = lastEditor.getCurrentKey();
-				if (currentKey != null)
-					keyTree.selectKey(currentKey);
-			}
 			lastEditor = null; // reset lastEditor
 			return;
-		}		
+		}
+		
 		if (newPageIndex == getPageCount()-1) // switched to last page
 			return;
 		
 		int editorIndex = newPageIndex - 1; // adjust because first page is tree page		
 		if (editorIndex >= 0 && editorIndex < resourceMediator.getSourceEditors().length) {
 			lastEditor = resourceMediator.getSourceEditors()[editorIndex];
-			String selectedKey = resourceMediator.getKeyTree().getSelectedKey();
-			lastEditor.selectLine(selectedKey);
+			if (keyTree.getSelectedKey() != null)
+				lastEditor.selectKey(keyTree.getSelectedKey());
 		}
 	}
 
