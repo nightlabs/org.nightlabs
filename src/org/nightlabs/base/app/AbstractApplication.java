@@ -62,7 +62,7 @@ import org.nightlabs.util.IOUtil;
  * methods. One is to provide a name for your application {@link #initApplicationName()}, 
  * and the other to return an implementation of {@link AbstractWorkbenchAdvisor} in 
  * {@link #initWorkbenchAdvisor(Display)}
- * <p>
+ * </p>
  * <p>
  * That's basicly all you have to do. For customizations of your application you can use the
  * {@link WorkbenchAdvisor} you provide (You may use {@link AbstractWorkbenchAdvisor} as a basis here)
@@ -207,7 +207,7 @@ implements IApplication
 
 	/**
 	 * Configures log4j with the file located in {@link #getConfigDir()}+"/log4j.properties"
-	 * @throws IOException
+	 * @throws IOException If copying the config-file fails. 
 	 */
 	protected void initializeLogging() 
 	throws IOException
@@ -259,7 +259,10 @@ implements IApplication
 	}
 	
 	/**
-	 * initializes the Exception Handling by setting the DefaultUncaughtExceptionHandler
+	 * Initializes the Exception Handling by setting the DefaultUncaughtExceptionHandler
+	 * to the {@link ExceptionHandlerRegistry} and setting the Platform {@link SafeRunnable}
+	 * to {@link SaveRunnableRunner}.
+	 * 
 	 * @see Thread#setDefaultUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler)
 	 */
 	protected void initExceptionHandling() {
@@ -277,9 +280,9 @@ implements IApplication
 	}
 
 	/**
-	 * is called when the application starts and does all
+	 * Is called when the application starts and does all
 	 * the necessary initialization for the application
-	 * and afterwards creates the workbench
+	 * and afterwards creates the Workbench.
 	 * 
 	 * @see IApplication#start(IApplicationContext)
 	 */
@@ -363,7 +366,7 @@ implements IApplication
 	
 	/**
 	 * Initializes the Config in the ConfigDir of the Application
-	 * @throws ConfigException
+	 * @throws ConfigException If creating the Configs shared instance fails. 
 	 */
 	protected void initConfig() 
 	throws ConfigException
@@ -381,18 +384,18 @@ implements IApplication
 	protected abstract String initApplicationName();
 	
 	/**
-	 * is called before the Workbench is created, inheritans can do custom
-	 * things like e.g. initialization before the workbench is created
-	 * by overriding this method
-	 * 
-	 * by default this method does nothing
+	 * Is called before the Workbench is created, subclasses may override and
+	 * do custom things like initialization before the Workbench is created.
+	 * <p>
+	 * This implementation does nothing.
+	 * </p>
 	 */
 	protected void preCreateWorkbench() {}
 	
 	/**
-	 * sets the platforms returnCode
+	 * Sets the platforms returnCode
 	 * 
-	 * @param platformReturnCode
+	 * @param platformReturnCode The return code to set.
 	 */
 	protected void setPlatformReturnCode(int platformReturnCode) {
 		this.platformReturnCode = platformReturnCode;
