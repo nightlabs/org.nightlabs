@@ -447,7 +447,7 @@ public Point computeSize (int wHint, int hHint, boolean changed)
 	Point arrowSize = arrow.computeSize (SWT.DEFAULT, SWT.DEFAULT, changed);
 	
 	// TODO workaround to change the size of the XCombo
-	arrowSize.y -= 5;
+//	arrowSize.y -= 5;
 	
 	Point listSize = table.computeSize (wHint, SWT.DEFAULT, changed);
 	int borderWidth = getBorderWidth ();
