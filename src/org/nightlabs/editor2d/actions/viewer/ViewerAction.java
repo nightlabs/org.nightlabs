@@ -29,8 +29,8 @@ package org.nightlabs.editor2d.actions.viewer;
 
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.actions.AbstractEditorAction;
-import org.nightlabs.editor2d.viewer.TestDialog;
 
+// TODO is this class still needed? If not, please remove it.
 public class ViewerAction 
 extends AbstractEditorAction 
 {
@@ -51,8 +51,9 @@ extends AbstractEditorAction
 
 	public void run() 
 	{
-		TestDialog dialog = new TestDialog(getShell(), getRootDrawComponent());
-		dialog.open();
+// @Daniel: I commented this code out, because TestDialog seems to be deleted... Did you forget to remove this class, too?
+//		TestDialog dialog = new TestDialog(getShell(), getRootDrawComponent());
+//		dialog.open();
 	}
 	
 }
