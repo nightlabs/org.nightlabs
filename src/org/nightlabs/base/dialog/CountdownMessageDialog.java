@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.nightlabs.base.resource.Messages;
 
 /**
  * A dialog for showing messages to the user that disappears
@@ -120,7 +121,7 @@ public class CountdownMessageDialog extends MessageDialog
 
 	protected void showTimeHint(int timeLeft)
 	{
-		defaultButton.setText(String.format("%s (%d)", originalButtonText, timeLeft));
+		defaultButton.setText(String.format(Messages.getString("org.nightlabs.base.dialog.CountdownMessageDialogdefaultButton.text"), originalButtonText, timeLeft)); //$NON-NLS-1$
 	}
 	
 	/* (non-Javadoc)

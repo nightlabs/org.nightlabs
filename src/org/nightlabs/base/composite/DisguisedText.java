@@ -49,8 +49,8 @@ public class DisguisedText {
 	 * @param parent
 	 */
 	public static Text createText(Composite parent) {
-		Text text = new Text(parent, SWT.NONE);
-		text.setBackground(parent.getBackground());
+		Text text = new Text(parent, XComposite.getBorderStyle(parent));
+//		text.setBackground(parent.getBackground());
 		return text;
 	}
 	

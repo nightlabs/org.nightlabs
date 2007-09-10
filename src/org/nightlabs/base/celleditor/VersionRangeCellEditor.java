@@ -109,7 +109,7 @@ public class VersionRangeCellEditor
 	protected void keyReleaseOccured(KeyEvent keyEvent) {
 		if (keyEvent.character == '\u001b') { // Escape character
 			fireCancelEditor();
-		} else if (getErrorMessage() == null || "".equals(getErrorMessage())) {
+		} else if (getErrorMessage() == null || "".equals(getErrorMessage())) { //$NON-NLS-1$
 			super.keyReleaseOccured(keyEvent);
 		}
 	}
@@ -140,8 +140,8 @@ public class VersionRangeCellEditor
 			return new VersionRangeEndPoint(new Version(text.getText()), checkBox.getSelection(), 
 					location);
 		} catch (MalformedVersionException e) {
-			throw new RuntimeException("The stored String representation of a Version is invalid! "+
-					"This should never happen since its validity is checked on change!",e);
+			throw new RuntimeException("The stored String representation of a Version is invalid! "+ //$NON-NLS-1$
+					"This should never happen since its validity is checked on change!",e); //$NON-NLS-1$
 		}
 	}
 

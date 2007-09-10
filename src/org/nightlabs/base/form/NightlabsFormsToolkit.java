@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.FormColors;
+import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
@@ -64,10 +65,15 @@ public class NightlabsFormsToolkit extends AbstractToolkit
 			if ((section.getStyle() & Section.TITLE_BAR) != 0
 					|| (section.getStyle() & Section.SHORT_TITLE_BAR) != 0) {
 				getColors().initializeSectionToolBarColors();
-				section.setTitleBarBackground(getColors().getColor(FormColors.TB_GBG));
-				section.setTitleBarBorderColor(getColors().getColor(FormColors.TB_BORDER));
-				section.setTitleBarGradientBackground(getColors().getColor(FormColors.TB_GBG));
-				section.setTitleBarForeground(getColors().getColor(FormColors.TB_FG));
+				section.setTitleBarBackground(getColors().getColor(IFormColors.TB_BG));
+				section.setTitleBarBorderColor(getColors()
+						.getColor(IFormColors.TB_BORDER));
+				section.setTitleBarForeground(getColors()
+						.getColor(IFormColors.TB_TOGGLE));
+//				section.setTitleBarBackground(getColors().getColor(IFormColors.TB_GBG));
+//				section.setTitleBarBorderColor(getColors().getColor(IFormColors.TB_BORDER));
+//				section.setTitleBarGradientBackground(getColors().getColor(IFormColors.TB_GBG));
+//				section.setTitleBarForeground(getColors().getColor(IFormColors.TB_FG));
 			}
 		}
 	}
