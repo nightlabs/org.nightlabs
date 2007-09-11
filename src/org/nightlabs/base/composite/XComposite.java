@@ -215,6 +215,22 @@ public class XComposite extends Composite
 	{
 		this(parent, style, layoutMode, LayoutDataMode.GRID_DATA);
 	}
+	
+	/**
+	 * Calls {@link #XComposite(Composite, int, LayoutMode, LayoutDataMode)}
+	 * with <code>layoutDataMode = </code> {@link LayoutDataMode#GRID_DATA}
+	 * 
+	 * @param parent the parent Composite
+	 * @param style the SWT style flag
+	 * @param layoutMode the layoutMode to set
+	 * @param cols the number of columns this Gridlayout shall have.
+	 * 
+	 * @see LayoutMode
+	 * @see LayoutDataMode
+	 */
+	public XComposite(Composite parent, int style, LayoutMode layoutMode, int cols) {
+		this(parent, style, layoutMode, LayoutDataMode.GRID_DATA, cols);
+	}
 
 	/**
 	 * Calls {@link #XComposite(Composite, int, LayoutMode, LayoutDataMode)}
