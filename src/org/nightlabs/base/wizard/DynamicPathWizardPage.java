@@ -37,23 +37,26 @@ import org.eclipse.swt.widgets.Control;
  * {@link #createPageContents(Composite)}.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
+ * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
 public abstract class DynamicPathWizardPage
 extends WizardPage
 implements IDynamicPathWizardPage
 {
-
+	protected Control contents;
+	
 	/**
-	 * @param pageName
+	 * Create a new DynamicPathWizardPage.
+	 * @param pageName The identifier used for the page
 	 */
 	public DynamicPathWizardPage(String pageName) {
 		super(pageName);
 	}
 
 	/**
-	 * @param pageName
-	 * @param title
+	 * Create a new DynamicPathWizardPage.
+	 * @param pageName The identifier used for the page
+	 * @param title The title for the page
 	 */
 	public DynamicPathWizardPage(String pageName, String title) {
 		super(pageName);
@@ -61,17 +64,16 @@ implements IDynamicPathWizardPage
 	}
 
 	/**
-	 * @param pageName
-	 * @param title
-	 * @param titleImage
+	 * Create a new DynamicPathWizardPage.
+	 * @param pageName The identifier used for the page
+	 * @param title The title for the page
+	 * @param titleImage The title image for the page
 	 */
 	public DynamicPathWizardPage(String pageName, String title,
 			ImageDescriptor titleImage) {
 		super(pageName, title, titleImage);
 	}
 	
-	protected Control contents;
-
 	/**
 	 * Overidden to prevent NullPointerExceptions.
 	 * 

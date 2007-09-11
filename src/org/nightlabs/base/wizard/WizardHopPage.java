@@ -32,14 +32,19 @@ import org.eclipse.jface.wizard.IWizardPage;
 
 
 /**
+ * A wizard page to be used within a wizard hop.
+ * @see IWizardHop
  * @author Marco Schulze - marco at nightlabs dot de
+ * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
 public abstract class WizardHopPage extends DynamicPathWizardPage
 implements IWizardHopPage
 {
-
+	private IWizardHop wizardHop;
+	
 	/**
-	 * @param pageName
+	 * Create a new WizardHopPage.
+	 * @param pageName The identifier used for the page
 	 */
 	public WizardHopPage(String pageName)
 	{
@@ -47,8 +52,9 @@ implements IWizardHopPage
 	}
 
 	/**
-	 * @param pageName
-	 * @param title
+	 * Create a new WizardHopPage.
+	 * @param pageName The identifier used for the page
+	 * @param title The title for the page
 	 */
 	public WizardHopPage(String pageName, String title)
 	{
@@ -56,22 +62,27 @@ implements IWizardHopPage
 	}
 
 	/**
-	 * @param pageName
-	 * @param title
-	 * @param titleImage
+	 * Create a new WizardHopPage.
+	 * @param pageName The identifier used for the page
+	 * @param title The title for the page
+	 * @param titleImage The title image for the page
 	 */
 	public WizardHopPage(String pageName, String title, ImageDescriptor titleImage)
 	{
 		super(pageName, title, titleImage);
 	}
 	
-	private IWizardHop wizardHop;
-
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.wizard.IWizardHopPage#setWizardHop(org.nightlabs.base.wizard.IWizardHop)
+	 */
 	public void setWizardHop(IWizardHop wizardHop)
 	{
 		this.wizardHop = wizardHop;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.wizard.IWizardHopPage#getWizardHop()
+	 */
 	public IWizardHop getWizardHop()
 	{
 		return wizardHop;
@@ -106,6 +117,9 @@ implements IWizardHopPage
 //	}
 
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.WizardPage#setWizard(org.eclipse.jface.wizard.IWizard)
+	 */
 	@Override
 	public void setWizard(IWizard newWizard) {
 		super.setWizard(newWizard);
