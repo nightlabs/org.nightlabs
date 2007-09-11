@@ -47,6 +47,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -60,8 +61,10 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
+import org.nightlabs.base.form.NightlabsFormsToolkit;
 import org.nightlabs.base.form.XFormToolkit;
 import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.toolkit.IToolkit;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
@@ -72,6 +75,7 @@ import org.nightlabs.editor2d.RootDrawComponent;
 import org.nightlabs.editor2d.command.CreateLayerCommand;
 import org.nightlabs.editor2d.command.DeleteLayerCommand;
 import org.nightlabs.editor2d.command.DrawComponentReorderCommand;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.util.OrderUtil;
 
 public class LayerView 
@@ -86,16 +90,16 @@ extends ViewPart
   
   public static final Image DELETE_ICON = SharedImages.DELETE_16x16.createImage();  
   public static final Image NEW_ICON = SharedImages.ADD_16x16.createImage();
-  public static final Image EYE_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Eye");    
-  public static final Image EYE_INVISIBLE_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Eye-Invisible");  
-  public static final Image UP_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Up");
-  public static final Image DOWN_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Down");
-  public static final Image LOCK_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Lock");
-  public static final Image UNLOCK_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Unlocked");  
+  public static final Image EYE_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Eye");     //$NON-NLS-1$
+  public static final Image EYE_INVISIBLE_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Eye-Invisible");   //$NON-NLS-1$
+  public static final Image UP_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Up"); //$NON-NLS-1$
+  public static final Image DOWN_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Down"); //$NON-NLS-1$
+  public static final Image LOCK_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Lock"); //$NON-NLS-1$
+  public static final Image UNLOCK_ICON = SharedImages.getSharedImage(EditorPlugin.getDefault(), LayerView.class, "Unlocked");   //$NON-NLS-1$
       
   private RootDrawComponent root;
   private AbstractEditor editor;
-  private Map button2Layer = new HashMap();
+  private Map<Control, Layer> button2Layer = new HashMap<Control, Layer>();
   private Button buttonUp;
   private Button buttonDown;
   private Button buttonNew;
@@ -121,12 +125,9 @@ extends ViewPart
   {
     public void selectionChanged(IWorkbenchPart part, ISelection selection) 
     {
-//    	if (logger.isDebugEnabled())
-//    		logger.debug("selectionChanged()");
-    	
       if (part instanceof AbstractEditor) {
       	start(part);
-      }    
+      }
       else if (!(getSite().getPage().getActiveEditor() instanceof AbstractEditor)) {
       	clear();
       }    
@@ -165,8 +166,12 @@ extends ViewPart
     	getSite().getWorkbenchWindow().addPageListener(pageListener);
 	}
 	
-	private XFormToolkit toolkit = null;
-	protected XFormToolkit getToolkit() {
+//	private XFormToolkit toolkit = null;
+//	protected XFormToolkit getToolkit() {
+//		return toolkit;
+//	}
+	private NightlabsFormsToolkit toolkit = null;
+	protected NightlabsFormsToolkit getToolkit() {
 		return toolkit;
 	}
 	
@@ -207,9 +212,10 @@ extends ViewPart
     parent.setLayout(XComposite.getLayout(LayoutMode.ORDINARY_WRAPPER));    
     parent.setLayoutData(new GridData(GridData.FILL_BOTH));    
     
-		toolkit = new XFormToolkit(parent.getDisplay());
+		toolkit = new NightlabsFormsToolkit(parent.getDisplay());    
+//		toolkit = new XFormToolkit(parent.getDisplay());
 //		toolkit.setCurrentMode(TOOLKIT_MODE.COMPOSITE);				
-		parent.setBackground(getToolkit().getBackground());
+//		parent.setBackground(getToolkit().getBackground());
 				
 		form = getForm();
 		createComposites();
@@ -234,20 +240,18 @@ extends ViewPart
 			parentComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			
 			// create Visible-Button
-			Button buttonVisible = getToolkit().createButton(parentComposite, "", buttonStyle);			
+			Button buttonVisible = getToolkit().createButton(parentComposite, "", buttonStyle);			 //$NON-NLS-1$
 			buttonVisible.setSelection(!l.isVisible());
 			if (l.isVisible()) {
 				buttonVisible.setImage(EYE_ICON);				
-				buttonVisible.setToolTipText(EditorPlugin.getResourceString("layerView.buttonVisible.tooltip.invisible"));				
+				buttonVisible.setToolTipText(Messages.getString("org.nightlabs.editor2d.views.LayerView.button.invisible.tooltip"));				 //$NON-NLS-1$
 			}
 			else {
 				buttonVisible.setImage(EYE_INVISIBLE_ICON);
-				buttonVisible.setToolTipText(EditorPlugin.getResourceString("layerView.buttonVisible.tooltip.visible"));				
+				buttonVisible.setToolTipText(Messages.getString("org.nightlabs.editor2d.views.LayerView.button.visible.tooltip"));				 //$NON-NLS-1$
 			}			
 			buttonVisible.setLayoutData(new GridData(GridData.BEGINNING));
-			
 			buttonVisible.addSelectionListener(visibleListener);		
-//			buttonVisible.addDisposeListener(visibleDisposeListener);
 			
 //			// create Editable-Button
 //			Button buttonEditble = getToolkit().createButton(parentComposite, EditorPlugin.getResourceString("layerView.buttonLocked.text"), buttonStyle);		
@@ -263,17 +267,15 @@ extends ViewPart
 //			}					
 //			buttonEditble.setLayoutData(new GridData(GridData.CENTER));		
 //			buttonEditble.addSelectionListener(editableListener);		
-//			buttonEditble.addDisposeListener(editableDisposeListener);
 			
 			// create Name-Text		
-			Text text = getToolkit().createText(parentComposite, EditorPlugin.getResourceString("layerView.layer.name"));
+			Text text = getToolkit().createText(parentComposite, Messages.getString("org.nightlabs.editor2d.views.LayerView.text.layerName.default")); //$NON-NLS-1$
 			if (l.getName() != null)
 				text.setText(l.getName());		
 			text.setEditable(true);
 			text.setLayoutData(new GridData(GridData.FILL_BOTH));		  								
 			text.addSelectionListener(textListener);
 			text.addFocusListener(focusListener);
-//			text.addDisposeListener(textDisposeListener);
 			
 			// add newLayer to button2Layer
 			button2Layer.put(buttonVisible, l);
@@ -294,44 +296,36 @@ extends ViewPart
 		Composite toolsComposite = getToolkit().createComposite(parent);		
 		toolsComposite.setLayout(new GridLayout(5, false));
 		toolsComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		toolsComposite.setBackground(getToolkit().getBackground());
+//		toolsComposite.setBackground(getToolkit().getBackground());
 		
 		// spacer Label 
-		Label spacerLabel = getToolkit().createLabel(toolsComposite, "");
+		Label spacerLabel = getToolkit().createLabel(toolsComposite, ""); //$NON-NLS-1$
 		spacerLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 				
 		// create Buttons		
-		buttonUp = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonUp.text"), 
+		buttonUp = getToolkit().createButton(toolsComposite, Messages.getString("org.nightlabs.editor2d.views.LayerView.button.up.text"),  //$NON-NLS-1$
 				buttonStyle);		
 //		buttonUp.setImage(UP_ICON);
-		buttonUp.setToolTipText(EditorPlugin.getResourceString("layerView.buttonUp.tooltip"));
+		buttonUp.setToolTipText(Messages.getString("org.nightlabs.editor2d.views.LayerView.button.up.tooltip")); //$NON-NLS-1$
 		buttonUp.addSelectionListener(upListener);
-//		buttonUp.addDisposeListener(upDisposeListener);
-//		buttonUp.setBackground(getToolButtonColor());
 		
-		buttonDown = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonDown.text"), 
+		buttonDown = getToolkit().createButton(toolsComposite, Messages.getString("org.nightlabs.editor2d.views.LayerView.button.down.text"),  //$NON-NLS-1$
 				buttonStyle);
 //		buttonDown.setImage(DOWN_ICON);
-		buttonDown.setToolTipText(EditorPlugin.getResourceString("layerView.buttonDown.tooltip"));
+		buttonDown.setToolTipText(Messages.getString("org.nightlabs.editor2d.views.LayerView.button.down.tooltip")); //$NON-NLS-1$
 		buttonDown.addSelectionListener(downListener);
-//		buttonDown.addDisposeListener(downDisposeListener);
-//		buttonDown.setBackground(getToolButtonColor());	
 		
-		buttonNew = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonNew.text"), 
+		buttonNew = getToolkit().createButton(toolsComposite, Messages.getString("org.nightlabs.editor2d.views.LayerView.button.new.text"),  //$NON-NLS-1$
 				buttonStyle);
 //		buttonNew.setImage(NEW_ICON);
-		buttonNew.setToolTipText(EditorPlugin.getResourceString("layerView.buttonNew.tooltip"));		
+		buttonNew.setToolTipText(Messages.getString("org.nightlabs.editor2d.views.LayerView.button.new.tooltip"));		 //$NON-NLS-1$
 		buttonNew.addSelectionListener(newListener);
-//		buttonNew.addDisposeListener(newDisposeListener);
-//		buttonNew.setBackground(getToolButtonColor());		
 		
-		buttonDelete = getToolkit().createButton(toolsComposite, EditorPlugin.getResourceString("layerView.buttonDelete.text"), 
+		buttonDelete = getToolkit().createButton(toolsComposite, Messages.getString("org.nightlabs.editor2d.views.LayerView.button.delete.text"),  //$NON-NLS-1$
 				buttonStyle);
 //		buttonDelete.setImage(DELETE_ICON);
-		buttonDelete.setToolTipText(EditorPlugin.getResourceString("layerView.buttonDelete.tooltip"));				
+		buttonDelete.setToolTipText(Messages.getString("org.nightlabs.editor2d.views.LayerView.button.delete.tooltip"));				 //$NON-NLS-1$
 		buttonDelete.addSelectionListener(deleteListener);				
-//		buttonDelete.addDisposeListener(deleteDisposeListener);
-//		buttonDelete.setBackground(getToolButtonColor());		
 	}
 	
   /* (non-Javadoc)
@@ -352,11 +346,11 @@ extends ViewPart
 				Layer currLayer = (Layer) button2Layer.get(t);
 				if (!root.getCurrentLayer().equals(currLayer)) {
 					root.setCurrentLayer(currLayer);
-					logger.debug("Layer "+currLayer.getName()+" = CurrentLayer");
+					logger.debug("Layer "+currLayer.getName()+" = CurrentLayer"); //$NON-NLS-1$ //$NON-NLS-2$
 					refresh();				  
 				}
 			} else {
-			  throw new IllegalStateException("There is no such Layer registered!");
+			  throw new IllegalStateException("There is no such Layer registered!"); //$NON-NLS-1$
 			}      
     }
   }; 
@@ -369,7 +363,6 @@ extends ViewPart
       {
         Text text = (Text) e.getSource();
         String layerName = text.getText();
-        logger.debug("New LayerName = "+layerName);
         Layer l = (Layer) button2Layer.get(text);
         l.setName(layerName);        
       }		  
@@ -380,7 +373,7 @@ extends ViewPart
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-			logger.debug("VISIBLE widgetSelected()");
+			logger.debug("VISIBLE widgetSelected()"); //$NON-NLS-1$
 			
 			Button b = (Button) e.getSource();
 			if (button2Layer.containsKey(b)) {
@@ -388,16 +381,16 @@ extends ViewPart
 				if (!b.getSelection()) {
 					l.setVisible(true);
 					b.setImage(EYE_ICON);
-					b.setToolTipText(EditorPlugin.getResourceString("layerView.buttonVisible.tooltip.invisible"));
+					b.setToolTipText(Messages.getString("org.nightlabs.editor2d.views.LayerView.button.invisible.tooltip")); //$NON-NLS-1$
 				} else {
 					l.setVisible(false);
 					b.setImage(EYE_INVISIBLE_ICON);
-					b.setToolTipText(EditorPlugin.getResourceString("layerView.buttonVisible.tooltip.visible"));
+					b.setToolTipText(Messages.getString("org.nightlabs.editor2d.views.LayerView.button.visible.tooltip")); //$NON-NLS-1$
 				}				
 				updateViewer();
 			}
 			else {
-				throw new IllegalStateException("There is no such Layer registered!");
+				throw new IllegalStateException("There is no such Layer registered!"); //$NON-NLS-1$
 			}			
 		}
 	};  
@@ -406,24 +399,24 @@ extends ViewPart
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-		  logger.debug("EDITABLE widgetSelected()");
+		  logger.debug("EDITABLE widgetSelected()"); //$NON-NLS-1$
 			
 			Button b = (Button) e.getSource();
 			if (button2Layer.containsKey(b)) {
 				Layer l = (Layer) button2Layer.get(b);
 				if (b.getSelection()) {
 					l.setEditable(true);
-					b.setToolTipText(EditorPlugin.getResourceString("layerView.buttonLocked.tooltip.locked"));
+					b.setToolTipText(Messages.getString("org.nightlabs.editor2d.views.LayerView.button.lock.tooltip")); //$NON-NLS-1$
 					b.setImage(UNLOCK_ICON);					
 				} else {
 					l.setEditable(false);
-					b.setToolTipText(EditorPlugin.getResourceString("layerView.buttonLocked.tooltip.unlocked"));
+					b.setToolTipText(Messages.getString("org.nightlabs.editor2d.views.LayerView.button.unlock.tooltip")); //$NON-NLS-1$
 					b.setImage(LOCK_ICON);
 				}
 				updateViewer();
 			}
 			else {
-				throw new IllegalStateException("There is no such Layer registered!");
+				throw new IllegalStateException("There is no such Layer registered!"); //$NON-NLS-1$
 			}			
 		}
 	};  
@@ -439,7 +432,7 @@ extends ViewPart
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-		  logger.debug("NEW widgetSelected()");
+		  logger.debug("NEW widgetSelected()"); //$NON-NLS-1$
 		  CreateLayerCommand addLayer = new CreateLayerCommand(root.getCurrentPage(), editor.getModelFactory());		  
 		  executeCommand(addLayer);	
 		  refresh();
@@ -450,10 +443,10 @@ extends ViewPart
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-		  logger.debug("DELETE widgetSelected()");
-			
+		  logger.debug("DELETE widgetSelected()"); //$NON-NLS-1$
 		  Layer currentLayer = root.getCurrentLayer();
-		  DeleteLayerCommand layerCommand = new DeleteLayerCommand(root.getCurrentPage(), currentLayer);
+		  DeleteLayerCommand layerCommand = new DeleteLayerCommand(
+		  		root.getCurrentPage(), currentLayer);
 		  executeCommand(layerCommand);		
 		  refresh();
 		}
@@ -468,7 +461,7 @@ extends ViewPart
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-		  logger.debug("UP widgetSelected()");
+		  logger.debug("UP widgetSelected()"); //$NON-NLS-1$
 		  int oldIndex = OrderUtil.indexOf(getCurrentLayer());
 		  int lastIndex = OrderUtil.getLastIndex(getCurrentLayer().getParent());
 		  int newIndex = oldIndex + 1;
@@ -486,7 +479,7 @@ extends ViewPart
 	{ 
 		public void widgetSelected(SelectionEvent e) 
 		{    
-		  logger.debug("DOWN widgetSelected()"); 
+		  logger.debug("DOWN widgetSelected()");  //$NON-NLS-1$
 		  int oldIndex = OrderUtil.indexOf(getCurrentLayer());
 		  int firstIndex = 0;
 		  int newIndex = oldIndex - 1;
@@ -555,7 +548,7 @@ extends ViewPart
 					  Layer l = (Layer) dc; 
 					  createLayerEntry(layerComposite, l); 
 					} else {
-					  logger.debug("dc NOT instanceof Layer, but instanceof "+dc.getClass());
+					  logger.debug("dc NOT instanceof Layer, but instanceof "+dc.getClass()); //$NON-NLS-1$
 					}
 				}				
 				if (root.getCurrentPage().getDrawComponents().size() <= 1)			  
@@ -567,7 +560,7 @@ extends ViewPart
 			}				  
 		}
 		else
-			logger.debug("layerComposite == null or isDisposed()");
+			logger.debug("layerComposite == null or isDisposed()"); //$NON-NLS-1$
 	}  
     
   private PropertyChangeListener currentPageListener = new PropertyChangeListener()
@@ -593,7 +586,7 @@ extends ViewPart
 					(evt.getPropertyName().equals(DrawComponentContainer.CHILD_ADDED) ||
 					evt.getPropertyName().equals(DrawComponentContainer.CHILD_REMOVED)) ) 
 			{
-				logger.debug("layer listener");
+				logger.debug("layer listener"); //$NON-NLS-1$
 				refresh();
 			}
 		}	
@@ -689,56 +682,5 @@ extends ViewPart
 //      refresh();        
 //    }
 //  }
-//};
-  
-//  private DisposeListener visibleDisposeListener = new DisposeListener() {	
-//		public void widgetDisposed(DisposeEvent e) {
-//			Button b = (Button) e.getSource();
-//			b.removeSelectionListener(visibleListener);
-//		}	
-//	};
-//
-//	private DisposeListener editableDisposeListener = new DisposeListener() {	
-//		public void widgetDisposed(DisposeEvent e) {
-//			Button b = (Button) e.getSource();
-//			b.removeSelectionListener(editableListener);
-//		}	
-//	};
-//
-//	private DisposeListener textDisposeListener = new DisposeListener() {	
-//		public void widgetDisposed(DisposeEvent e) {
-//			Text t = (Text) e.getSource();
-//			t.removeSelectionListener(textListener);
-//			t.removeFocusListener(focusListener);
-//		}	
-//	};
-//	
-//	private DisposeListener upDisposeListener = new DisposeListener() {	
-//		public void widgetDisposed(DisposeEvent e) {
-//			Button b = (Button) e.getSource();
-//			b.removeSelectionListener(upListener);
-//		}	
-//	};
-//	
-//	private DisposeListener downDisposeListener = new DisposeListener() {	
-//		public void widgetDisposed(DisposeEvent e) {
-//			Button b = (Button) e.getSource();
-//			b.removeSelectionListener(downListener);
-//		}	
-//	};
-//	
-//	private DisposeListener newDisposeListener = new DisposeListener() {	
-//		public void widgetDisposed(DisposeEvent e) {
-//			Button b = (Button) e.getSource();
-//			b.removeSelectionListener(newListener);
-//		}	
-//	};		
-//
-//	private DisposeListener deleteDisposeListener = new DisposeListener() {	
-//		public void widgetDisposed(DisposeEvent e) {
-//			Button b = (Button) e.getSource();
-//			b.removeSelectionListener(newListener);
-//		}	
-//	};		
-	
+//};	
 }

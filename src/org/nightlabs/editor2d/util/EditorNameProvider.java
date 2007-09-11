@@ -27,7 +27,6 @@
 
 package org.nightlabs.editor2d.util;
 
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EllipseDrawComponent;
 import org.nightlabs.editor2d.GroupDrawComponent;
 import org.nightlabs.editor2d.ImageDrawComponent;
@@ -36,6 +35,7 @@ import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RectangleDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.outline.filter.NameProvider;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class EditorNameProvider
 implements NameProvider
@@ -54,27 +54,27 @@ implements NameProvider
 //			return EditorPlugin.getResourceString("model.shapeDrawComponent.name");
 //		}
 		if (ImageDrawComponent.class.isAssignableFrom(c)) {
-			return EditorPlugin.getResourceString("model.imageDrawComponent.name");
+			return Messages.getString("org.nightlabs.editor2d.util.EditorNameProvider.image"); //$NON-NLS-1$
 		}
 		else if (RectangleDrawComponent.class.isAssignableFrom(c)) {
-			return EditorPlugin.getResourceString("model.rectangleDrawComponent.name");
+			return Messages.getString("org.nightlabs.editor2d.util.EditorNameProvider.rectangle"); //$NON-NLS-1$
 		}
 		else if (EllipseDrawComponent.class.isAssignableFrom(c)) {
-			return EditorPlugin.getResourceString("model.ellipseDrawComponent.name");
+			return Messages.getString("org.nightlabs.editor2d.util.EditorNameProvider.ellipse"); //$NON-NLS-1$
 		}		
 		else if (LineDrawComponent.class.isAssignableFrom(c)) {
-			return EditorPlugin.getResourceString("model.lineDrawComponent.name");
+			return Messages.getString("org.nightlabs.editor2d.util.EditorNameProvider.line"); //$NON-NLS-1$
 		}
 		else if (TextDrawComponent.class.isAssignableFrom(c)) {
-			return EditorPlugin.getResourceString("model.textDrawComponent.name");
+			return Messages.getString("org.nightlabs.editor2d.util.EditorNameProvider.text"); //$NON-NLS-1$
 		}
 		else if (PageDrawComponent.class.isAssignableFrom(c)) {
-			return EditorPlugin.getResourceString("model.pageDrawComponent.name");
+			return Messages.getString("org.nightlabs.editor2d.util.EditorNameProvider.page"); //$NON-NLS-1$
 		}		
 		else if (GroupDrawComponent.class.isAssignableFrom(c)) {
-			return EditorPlugin.getResourceString("model.groupDrawComponent.name");
+			return Messages.getString("org.nightlabs.editor2d.util.EditorNameProvider.group"); //$NON-NLS-1$
 		}				
 		
-		return EditorPlugin.getResourceString("model.drawComponent.name");
+		return Messages.getString("org.nightlabs.editor2d.util.EditorNameProvider.object"); //$NON-NLS-1$
 	}
 }

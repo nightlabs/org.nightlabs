@@ -25,6 +25,7 @@ import org.nightlabs.editor2d.EditorActionBarContributor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
 import org.nightlabs.editor2d.render.RenderModeManager;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.viewer.action.RenderModeContributionItem;
 import org.nightlabs.i18n.unit.resolution.DPIResolutionUnit;
 
@@ -39,8 +40,7 @@ extends Composite
 	 * @param dc the drawComponent to display
 	 * 	 
 	 */
-	public PreviewComposite(Composite parent, int style, DrawComponent dc) 
-	{
+	public PreviewComposite(Composite parent, int style, DrawComponent dc) {
 		this(parent, style, dc, true, true, true, null);
 	}
 
@@ -53,7 +53,8 @@ extends Composite
 	 * @param renderModeMan a optional RenderModeMan to fill the renderModeCombo,
 	 * if renderModeMan is null, the renderModeMan of the drawComponent is taken 
 	 */
-	public PreviewComposite(Composite parent, int style, DrawComponent dc, RenderModeManager renderModeMan) 
+	public PreviewComposite(Composite parent, int style, DrawComponent dc, 
+			RenderModeManager renderModeMan) 
 	{
 		this(parent, style, dc, true, true, true, renderModeMan);
 	}
@@ -75,10 +76,7 @@ extends Composite
 	{
 		super(parent, style);				
 		this.drawComponent = dc;
-		if (renderModeMan != null)
-			this.renderModeMan = renderModeMan;
-		else 
-			this.renderModeMan = drawComponent.getRenderModeManager();
+		this.renderModeMan = renderModeMan != null ? renderModeMan : drawComponent.getRenderModeManager(); 
 		this.resizeCanvas = resizeCanvas;		
 		this.zoomButtons = zoomButtons;
 		this.renderModes = renderModes;
@@ -143,7 +141,7 @@ extends Composite
 		if (zoomButtons) {
 			Group group = new Group(parent, SWT.NONE);
 			group.setLayoutData(new GridData(GridData.FILL_BOTH));
-			group.setText(EditorPlugin.getResourceString("preview.group.title"));
+			group.setText(Messages.getString("org.nightlabs.editor2d.composite.PreviewComposite.group.preview.text")); //$NON-NLS-1$
 			group.setLayout(new GridLayout(1, true));
 			
 			Composite buttonBar = new XComposite(group, SWT.NONE);
@@ -154,13 +152,13 @@ extends Composite
 			beginComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			zoomInButton = new Button(buttonBar, SWT.PUSH);
 			zoomInButton.setImage(SharedImages.getSharedImage(EditorPlugin.getDefault(), 
-					EditorActionBarContributor.class, "ZoomIn"));			
+					EditorActionBarContributor.class, "ZoomIn"));			 //$NON-NLS-1$
 			zoomInButton.addSelectionListener(zoomListener);
 			zoomLabel = new Label(buttonBar, SWT.NONE);
 			updateZoomLabel();
 			zoomOutButton = new Button(buttonBar, SWT.PUSH);
 			zoomOutButton.setImage(SharedImages.getSharedImage(EditorPlugin.getDefault(), 
-					EditorActionBarContributor.class, "ZoomOut"));			
+					EditorActionBarContributor.class, "ZoomOut"));			 //$NON-NLS-1$
 			zoomOutButton.addSelectionListener(zoomListener);
 			
 			if (renderModes) {
@@ -217,9 +215,8 @@ extends Composite
 	};
 	
 	protected void updateZoomLabel() {
-//		double z = Math.floor(zoom * 100);
 		double z = Math.floor(zoom * 100) / getResolutionFactor();		
-		zoomLabel.setText(z + "%");
+		zoomLabel.setText(z + "%"); //$NON-NLS-1$
 	}	
 	
 	public void updateCanvas() 
@@ -234,5 +231,4 @@ extends Composite
 	public void applyZoom(double zoomFactor) {
 		canvas.getPaintableManager().setScale(zoomFactor);
 	}
-	
 }

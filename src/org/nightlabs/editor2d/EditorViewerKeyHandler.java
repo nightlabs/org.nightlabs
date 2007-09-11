@@ -78,7 +78,7 @@ extends GraphicalViewerKeyHandler
 		getViewer().getControl().addDisposeListener(disposeListener);		
 	}
 	
-	protected QuickOptionsConfigModule confMod = null;
+	private QuickOptionsConfigModule confMod = null;
 	protected QuickOptionsConfigModule getConfigModule() 
 	{
 		if (confMod == null)
@@ -101,8 +101,8 @@ extends GraphicalViewerKeyHandler
 		return getViewer().getEditDomain().getCommandStack();
 	}
 		
-	protected List selectedObjects = null;
-	protected List getSelectedObjects() 
+	private List<Object> selectedObjects = null;
+	protected List<Object> getSelectedObjects() 
 	{
 		if (selectedObjects == null)
 			selectedObjects = Collections.EMPTY_LIST;
@@ -110,7 +110,7 @@ extends GraphicalViewerKeyHandler
 		return selectedObjects;
 	}
 	
-	protected ISelectionChangedListener selectionListener = new ISelectionChangedListener()
+	private ISelectionChangedListener selectionListener = new ISelectionChangedListener()
 	{	
 		public void selectionChanged(SelectionChangedEvent event) 
 		{
@@ -129,7 +129,7 @@ extends GraphicalViewerKeyHandler
 		}	
 	};
 	
-	protected DisposeListener disposeListener = new DisposeListener()
+	private DisposeListener disposeListener = new DisposeListener()
 	{	
 		public void widgetDisposed(DisposeEvent e) 
 		{
@@ -216,7 +216,7 @@ extends GraphicalViewerKeyHandler
 			getCommandStack().execute(compoundCmd);
 		}
 		
-		logger.debug("Translate Command executed");		
+		logger.debug("Translate Command executed");		 //$NON-NLS-1$
 	}	
 	
 	/**

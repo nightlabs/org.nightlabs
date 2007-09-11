@@ -40,12 +40,12 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RootDrawComponent;
 import org.nightlabs.editor2d.command.DrawComponentReorderCommand;
 import org.nightlabs.editor2d.command.OrphanChildCommand;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class DrawComponentTreeContainerEditPolicy 
@@ -56,10 +56,10 @@ extends TreeContainerEditPolicy
 	protected Command getAddCommand(ChangeBoundsRequest request)
 	{
 		if (logger.isDebugEnabled())
-			logger.debug("getAddCommand()");
+			logger.debug("getAddCommand()"); //$NON-NLS-1$
 		
 		CompoundCommand command = new CompoundCommand();
-		command.setLabel("Add Children in Tree");//$NON-NLS-1$
+		command.setLabel("Add Children in Tree"); //$NON-NLS-1$
 		List editparts = request.getEditParts();
 		int index = findIndexOfTreeItemAt(request.getLocation());
 				
@@ -67,7 +67,7 @@ extends TreeContainerEditPolicy
 		{
 		  EditPart child = (EditPart)editparts.get(i);
 		  boolean mayAdd = mayAdd(child, getHost());
-		  logger.debug("mayAdd = "+mayAdd);
+		  logger.debug("mayAdd = "+mayAdd); //$NON-NLS-1$
 			if(!mayAdd)
 			  command.add(UnexecutableCommand.INSTANCE);
 			else 
@@ -75,7 +75,7 @@ extends TreeContainerEditPolicy
 				if (index == -1)
 					index = 0;
 				
-				logger.debug("index = "+index);
+				logger.debug("index = "+index); //$NON-NLS-1$
 				command.add(new DrawComponentReorderCommand(
 						(DrawComponent)child.getModel(), 
 						(DrawComponentContainer)getHost().getModel(), 
@@ -88,14 +88,14 @@ extends TreeContainerEditPolicy
 	protected Command getCreateCommand(CreateRequest request)
 	{
 		if (logger.isDebugEnabled())
-			logger.debug("getCreateCommand()");		
+			logger.debug("getCreateCommand()");		 //$NON-NLS-1$
 		return null;
 	}
 
 	protected Command getMoveChildrenCommand(ChangeBoundsRequest request)
 	{
 		if (logger.isDebugEnabled())
-			logger.debug("getMoveChildrenCommand()");
+			logger.debug("getMoveChildrenCommand()"); //$NON-NLS-1$
 		
 		CompoundCommand command = new CompoundCommand();
 		List editparts = request.getEditParts();
@@ -113,7 +113,7 @@ extends TreeContainerEditPolicy
 			} else if(oldIndex <= tempIndex) {
 			  tempIndex--;
 			}
-			logger.debug("index = "+tempIndex);
+			logger.debug("index = "+tempIndex); //$NON-NLS-1$
 			if (tempIndex != -1) 
 			{
 				command.add(new DrawComponentReorderCommand(
@@ -126,7 +126,7 @@ extends TreeContainerEditPolicy
 			  return command;				
 			}				
 		}
-		command.setLabel(EditorPlugin.getResourceString("command.moveChildren.text"));
+		command.setLabel(Messages.getString("org.nightlabs.editor2d.editpolicy.treeDrawComponentTreeContainerEditPolicy.command.label.moveChildren")); //$NON-NLS-1$
 		return command;
 	}
 
@@ -165,11 +165,11 @@ extends TreeContainerEditPolicy
 	protected Command getOrphanChildrenCommand(GroupRequest request) 
 	{
 		if (logger.isDebugEnabled())
-			logger.debug("getOrphanChildrenCommand()");
+			logger.debug("getOrphanChildrenCommand()"); //$NON-NLS-1$
 		
 		List<EditPart> parts = request.getEditParts();
 		CompoundCommand result = 
-			new CompoundCommand(EditorPlugin.getResourceString("command.orphanChildren.text"));
+			new CompoundCommand(Messages.getString("org.nightlabs.editor2d.editpolicy.treeDrawComponentTreeContainerEditPolicy.command.label.orphan.children")); //$NON-NLS-1$
 		for (int i = 0; i < parts.size(); i++) {
 			DrawComponent child = (DrawComponent)((EditPart)parts.get(i)).getModel();
 			OrphanChildCommand orphan = new OrphanChildCommand(child);  		
@@ -177,13 +177,5 @@ extends TreeContainerEditPolicy
 		}		
 		return result.unwrap();
 	}
-
-//	@Override
-//	public Command getCommand(Request req) 
-//	{
-//		if (req.getType().equals(REQ_ORPHAN_CHILDREN))
-//			return getOrphanChildrenCommand((GroupRequest)req);		
-//		return super.getCommand(req);
-//	}
 		
 }

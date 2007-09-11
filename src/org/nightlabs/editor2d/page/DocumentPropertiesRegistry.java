@@ -44,17 +44,17 @@ import org.osgi.framework.Bundle;
 public class DocumentPropertiesRegistry 
 extends AbstractEPProcessor 
 {
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.editor2d.documentProperties";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.editor2d.documentProperties"; //$NON-NLS-1$
 	
-	public static final String ELEMENT_DOCUMENT_PROPERTIES = "documentProperties";
-	public static final String ATTRIBUTE_EDITOR_CLASS = "editorClass";
-	public static final String ATTRIBUTE_EDITOR_ID = "editorID";	
-	public static final String ATTRIBUTE_PREDEFINED_PAGE = "predefinedPageID";
-	public static final String ATTRIBUTE_RESOLUTION_UNIT = "resolutionUnit";
-	public static final String ATTRIBUTE_RESOLUTION = "resolution";
-	public static final String ATTRIBUTE_ORIENTATION = "orientation";
-	public static final String ATTRIBUTE_ORIENTATION_HORIZONTAL = "horizontal";
-	public static final String ATTRIBUTE_ORIENTATION_VERTICAL = "vertical";
+	public static final String ELEMENT_DOCUMENT_PROPERTIES = "documentProperties"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_EDITOR_CLASS = "editorClass"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_EDITOR_ID = "editorID";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_PREDEFINED_PAGE = "predefinedPageID"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_RESOLUTION_UNIT = "resolutionUnit"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_RESOLUTION = "resolution"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_ORIENTATION = "orientation"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_ORIENTATION_HORIZONTAL = "horizontal"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_ORIENTATION_VERTICAL = "vertical"; //$NON-NLS-1$
 
 	private static DocumentPropertiesRegistry sharedInstance;
 	public static DocumentPropertiesRegistry sharedInstance() {
@@ -86,10 +86,6 @@ extends AbstractEPProcessor
 			Class editorClass = null;
 			if (checkString(editorClassName)) {
 				try {
-//					Object editor = element.createExecutableExtension(ATTRIBUTE_EDITOR_CLASS);
-//					editorClass = editor.getClass();
-
-//				editorClass = extension.getDeclaringPluginDescriptor().getPlugin().getBundle().loadClass(editorClassName);					
 					Bundle bundle = Platform.getBundle(extension.getNamespaceIdentifier());
 					if (bundle != null)
 						editorClass = bundle.loadClass(editorClassName);
@@ -98,15 +94,6 @@ extends AbstractEPProcessor
 				}				
 			}
 			
-//			String pageString = element.getAttribute(ATTRIBUTE_PREDEFINED_PAGE);
-//			IPredefinedPage page = null;
-//			if (checkString(pageString)) {
-//				try {
-//					page = (IPredefinedPage) element.createExecutableExtension(ATTRIBUTE_PREDEFINED_PAGE);
-//				} catch (CoreException e) {
-//					throw new RuntimeException(e);
-//				}
-//			}
 			String pageID = element.getAttribute(ATTRIBUTE_PREDEFINED_PAGE);
 			IPredefinedPage page = null;
 			if (checkString(pageID)) {

@@ -51,16 +51,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.composite.XComboComposite;
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.form.XFormToolkit;
-import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
+import org.nightlabs.base.form.NightlabsFormsToolkit;
 import org.nightlabs.base.util.RCPUtil;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.image.BWDitheringColorConvertDelegate;
 import org.nightlabs.editor2d.image.BlackWhiteColorConvertDelegate;
 import org.nightlabs.editor2d.image.GrayscaleColorConvertDelegate;
@@ -68,6 +67,7 @@ import org.nightlabs.editor2d.image.RGBColorConvertDelegate;
 import org.nightlabs.editor2d.image.RenderModeConstants;
 import org.nightlabs.editor2d.image.RenderModeMetaData;
 import org.nightlabs.editor2d.render.RenderConstants;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.util.ImageUtil;
 
 /**
@@ -86,10 +86,10 @@ extends XComposite
 	 * @param style
 	 */
 	public ConvertImageComposite(Composite parent, int style, 
-			BufferedImage bi, TOOLKIT_MODE toolkitMode) 
+			BufferedImage bi) 
 	{
 		super(parent, style);
-		init(bi, toolkitMode);
+		init(bi);
 	}
 
 	/**
@@ -100,14 +100,14 @@ extends XComposite
 	 */
 	public ConvertImageComposite(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode, 
-			BufferedImage bi, TOOLKIT_MODE toolkitMode) 
+			BufferedImage bi) 
 	{
 		super(parent, style, layoutMode, layoutDataMode);
-		init(bi, toolkitMode);		
+		init(bi);		
 	}
 	
 	private long start = 0;
-	protected void init(BufferedImage bi, TOOLKIT_MODE toolkitMode) 
+	protected void init(BufferedImage bi) 
 	{ 
 		start = System.currentTimeMillis();
 		originalImage = bi;
@@ -117,8 +117,9 @@ extends XComposite
 		addDisposeListener(disposeListener);
 	}
 		
-	private XFormToolkit toolkit = null;
-	private TOOLKIT_MODE toolkitMode = TOOLKIT_MODE.COMPOSITE;
+	private NightlabsFormsToolkit toolkit = null;	
+//	private XFormToolkit toolkit = null;
+//	private TOOLKIT_MODE toolkitMode = TOOLKIT_MODE.COMPOSITE;
 	
 	private BufferedImage originalImage = null;
 	public BufferedImage getOriginalImage() {
@@ -134,36 +135,39 @@ extends XComposite
 	private Button ditherButton = null;
 	protected void createComposite(Composite parent) 
 	{
-		toolkit = new XFormToolkit(Display.getCurrent());
-		toolkit.setCurrentMode(toolkitMode);
-				
-		previewComp = new ImagePreviewComposite(originalImage, parent, SWT.NONE, TOOLKIT_MODE.COMPOSITE);
+//		toolkit = new XFormToolkit(Display.getCurrent());
+//		toolkit.setCurrentMode(toolkitMode);
+		toolkit = new NightlabsFormsToolkit(Display.getCurrent());				
+		previewComp = new ImagePreviewComposite(originalImage, parent, SWT.NONE);
 			
-		Composite optionsComp = toolkit.createXComposite(parent, SWT.NONE, 
+//		Composite optionsComp = toolkit.createXComposite(parent, SWT.NONE, 
+		Composite optionsComp = new XComposite(parent, SWT.NONE,
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		optionsComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		optionsComp.setLayout(new GridLayout(2, false));
 		
-		Label colorModeLabel = toolkit.createLabel(optionsComp, EditorPlugin.getResourceString("convertImage.colorModel.label"));		
-		colorModelCombo = new XComboComposite<ColorModel>(optionsComp, SWT.READ_ONLY | getBorderStyle(), 
+		Label colorModeLabel = toolkit.createLabel(optionsComp, Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.label.colorModel"));		 //$NON-NLS-1$
+		colorModelCombo = new XComboComposite<ColorModel>(optionsComp, 
+				SWT.READ_ONLY | getBorderStyle(), 
 				(String)null, colorModelLabelProvider);
 		colorModelCombo.setInput(colorModels);
 		colorModelCombo.setLayoutData(new GridData(
 				GridData.HORIZONTAL_ALIGN_CENTER, GridData.VERTICAL_ALIGN_BEGINNING, true, false));
 		colorModelCombo.addSelectionListener(colorModelListener);
 
-		Label imageScaleLabel = toolkit.createLabel(optionsComp, EditorPlugin.getResourceString("convertImage.fitImage.label"));
-		fitImageButton = toolkit.createButton(optionsComp, "", SWT.CHECK);
+		Label imageScaleLabel = toolkit.createLabel(optionsComp, Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.label.fitImage")); //$NON-NLS-1$
+		fitImageButton = toolkit.createButton(optionsComp, "", SWT.CHECK); //$NON-NLS-1$
 		fitImageButton.setSelection(fitImage);
 		fitImageButton.addSelectionListener(fitImageListener);
 
 		Label ditherLabel = toolkit.createLabel(optionsComp, 
-				EditorPlugin.getResourceString("convertImage.ditherButton.label"));
-		ditherButton = toolkit.createButton(optionsComp, "", SWT.CHECK);
+				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.label.ditheringMode")); //$NON-NLS-1$
+		ditherButton = toolkit.createButton(optionsComp, "", SWT.CHECK); //$NON-NLS-1$
 		ditherButton.setSelection(dithering);
 		ditherButton.addSelectionListener(ditherButtonListener);
 		
-		detailParent = toolkit.createXComposite(parent, SWT.NONE, 
+//		detailParent = toolkit.createXComposite(parent, SWT.NONE, 
+		detailParent = new XComposite(parent, SWT.NONE,
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		detailParent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
@@ -173,7 +177,7 @@ extends XComposite
 		previewComp.repaintCanvas();
 		
 		long end = System.currentTimeMillis() - start;
-		logger.debug("init took "+end+" ms!");
+		logger.debug("init took "+end+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 			
 	private boolean dithering = true;
@@ -191,8 +195,8 @@ extends XComposite
 	private Composite detailComp = null;
 	private Composite detailParent = null;
 		
-	public static String DITHER_MODE_QUALITY = "errordiffusion"; 
-	public static String DITHER_MODE_SPEED = "ordereddither";
+	public static String DITHER_MODE_QUALITY = "errordiffusion";  //$NON-NLS-1$
+	public static String DITHER_MODE_SPEED = "ordereddither"; //$NON-NLS-1$
 	private String ditherMode = DITHER_MODE_QUALITY;
 
 //	private KernelJAI ditherAlgorithm = KernelJAI.ERROR_FILTER_FLOYD_STEINBERG;	
@@ -204,23 +208,25 @@ extends XComposite
 	protected Composite createDitherDetail(Composite parent) 
 	{		
 		ExpandableComposite ec = toolkit.createExpandableComposite(parent, SWT.NONE);
-		ec.setText(EditorPlugin.getResourceString("convertImage.ditherOptions.label"));
+		ec.setText(Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.text.ditheringOptions")); //$NON-NLS-1$
 		detailComp = ec;				
 		detailComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
 		detailComp.setLayout(new GridLayout());		
 		
-		Composite comp = toolkit.createGroup(detailComp, SWT.NONE, "");
+//		Composite comp = toolkit.createGroup(detailComp, SWT.NONE, ""); //$NON-NLS-1$
+		Group comp = new Group(detailComp, SWT.NONE);
+		comp.setText(""); //$NON-NLS-1$
 		comp.setLayout(new GridLayout());
 		comp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		buttonFilterFloydSteinberg = toolkit.createButton(comp,
-				EditorPlugin.getResourceString("convertImage.ditherMode.floydSteinberg.label"), SWT.RADIO);
+				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.floydSteinberg"), SWT.RADIO); //$NON-NLS-1$
 		buttonFilterJarvis = toolkit.createButton(comp,
-				EditorPlugin.getResourceString("convertImage.ditherMode.jarvis.label"), SWT.RADIO);
+				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.jarvis"), SWT.RADIO); //$NON-NLS-1$
 		buttonFilterStucki = toolkit.createButton(comp,
-				EditorPlugin.getResourceString("convertImage.ditherMode.stucki.label"), SWT.RADIO);
+				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.stucki"), SWT.RADIO); //$NON-NLS-1$
 		buttonDitherMask441 = toolkit.createButton(comp, 
-				EditorPlugin.getResourceString("convertImage.ditherMode.441.label"), SWT.RADIO);
+				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.matrix441"), SWT.RADIO); //$NON-NLS-1$
 		
 		buttonFilterFloydSteinberg.setSelection(true);
 		
@@ -269,7 +275,7 @@ extends XComposite
 //				ditherAlgorithm = BWDitheringColorConvertDelegate.DITHER_ALGORITHM_441;				
 			} 
 			else {
-				throw new IllegalArgumentException("e.getSource() is an unknown object");
+				throw new IllegalArgumentException("e.getSource() is an unknown object"); //$NON-NLS-1$
 			}
 			refresh();
 		}	
@@ -306,11 +312,11 @@ extends XComposite
 			if (element != null && element instanceof ColorModel) 
 			{
 				if (element.equals(bw))
-					return EditorPlugin.getResourceString("convertImage.colorModel.blackwhite");
+					return Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.mode.blackwhite"); //$NON-NLS-1$
 				if (element.equals(grey))
-					return EditorPlugin.getResourceString("convertImage.colorModel.grayscale");
+					return Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.mode.grayscale"); //$NON-NLS-1$
 				if (element.equals(rgb))
-					return EditorPlugin.getResourceString("convertImage.colorModel.rgb");				
+					return Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.mode.rgb");				 //$NON-NLS-1$
 			}
 			return super.getText(element);
 		}		
@@ -371,7 +377,7 @@ extends XComposite
 	
 	protected void refresh() 
 	{		
-		logger.debug("refresh!");
+		logger.debug("refresh!"); //$NON-NLS-1$
 		long start = System.currentTimeMillis();
 				
 		if (colorModel == bw) {			
@@ -387,7 +393,7 @@ extends XComposite
 		previewComp.setConvertImage(convertImage);		
 		
 		long end = System.currentTimeMillis() - start;
-		logger.debug("refresh took "+end+" ms!");
+		logger.debug("refresh took "+end+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 	}		
 				
 	private RenderedImage colorConvertJDK(BufferedImage original, ColorModel colorModel) 
@@ -407,7 +413,7 @@ extends XComposite
 		try {
 			RenderedImage img = renderModeMetaData.getRendererDelegate().render(renderMode, null, original, renderModeMetaData);
 			long end = System.currentTimeMillis() - startTime;
-			logger.debug("Color Convert took "+end+" ms!");
+			logger.debug("Color Convert took "+end+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 			return img;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -460,7 +466,7 @@ extends XComposite
 			RenderedImage img = convertBlackWhiteWithDithering(originalImage);
 			if (img != null) {
 				convertImage = convertToBufferedImage(img);
-				logger.debug("Dithering worked!");				
+				logger.debug("Dithering worked!");				 //$NON-NLS-1$
 			}
 		} catch (Exception e) {
 			convertImage = convertBlackWhiteWithoutDithering(originalImage);
@@ -469,7 +475,7 @@ extends XComposite
 		
 	private BufferedImage convertBlackWhiteWithoutDithering(BufferedImage img) 
 	{
-		logger.debug("Dithering skipped!");					
+		logger.debug("Dithering skipped!");					 //$NON-NLS-1$
 		return convertToBufferedImage(colorConvertJDK(img, bw));		
 	}
 		
@@ -495,7 +501,7 @@ extends XComposite
 		try {
 			RenderedImage img = renderModeMetaData.getRendererDelegate().render(renderMode, null, src, renderModeMetaData);
 			long end = System.currentTimeMillis() - startTime;
-			logger.debug("Dithering took "+end+" ms!");
+			logger.debug("Dithering took "+end+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 			return img;
 		} catch (Exception e) {
 			throw new RuntimeException(e);

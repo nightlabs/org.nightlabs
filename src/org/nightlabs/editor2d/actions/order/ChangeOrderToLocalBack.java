@@ -27,8 +27,8 @@ package org.nightlabs.editor2d.actions.order;
 
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * changes the order of the selected Objects to the back
@@ -57,8 +57,8 @@ extends AbstractChangeOrderSelectionAction
 
 	public void init() 
 	{
-		setText(EditorPlugin.getResourceString("action.changeOrderToLocalBack.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.changeOrderToLocalBack.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.order.ChangeOrderToLocalBack.tooltip")); //$NON-NLS-1$
 		setId(ID);
 		setActionDefinitionId(EditorCommandConstants.ORDER_TO_LOCAL_BACK_ID);
 	}	
@@ -82,5 +82,4 @@ extends AbstractChangeOrderSelectionAction
 	{
 		return primarySelected.getParent();		 		
 	}
-			
 }

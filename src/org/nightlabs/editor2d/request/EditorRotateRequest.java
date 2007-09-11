@@ -30,10 +30,10 @@ package org.nightlabs.editor2d.request;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.requests.SelectionRequest;
 
 public class EditorRotateRequest 
-//extends GroupRequest
 extends SelectionRequest
 implements EditorRequestConstants,
            EditorLocationRequest,
@@ -61,11 +61,11 @@ implements EditorRequestConstants,
     this.rotation = rotation;
   }
   
-  private List parts;
-  public List getEditParts() {
+  private List<EditPart> parts;
+  public List<EditPart> getEditParts() {
     return parts;
   }
-  public void setEditParts(List list) {
+  public void setEditParts(List<EditPart> list) {
     parts = list;
   }  
   
@@ -93,14 +93,6 @@ implements EditorRequestConstants,
     this.constrainedRotation = constrainedRotation;
   }
   
-//  private SortedSet<Double> constrainedValues = null;
-//	public SortedSet<Double> getConstrainedValues() {
-//		return constrainedValues;
-//	}
-//	public void setConstrainedValues(SortedSet<Double> constrainedValues) {
-//		this.constrainedValues = constrainedValues;
-//	}
-
   private List<Double> constrainedValues = null;
 	public List<Double> getConstrainedValues() {
 		return constrainedValues;
@@ -108,5 +100,4 @@ implements EditorRequestConstants,
 	public void setConstrainedValues(List<Double> constrainedValues) {
 		this.constrainedValues = constrainedValues;
 	}
-  
 }

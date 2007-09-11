@@ -35,6 +35,7 @@ import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -43,13 +44,6 @@ public class VisibleDecorator
 extends LabelProvider 
 implements ILightweightLabelDecorator 
 {
-	public VisibleDecorator() {
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ILightweightLabelDecorator#decorate(java.lang.Object, org.eclipse.jface.viewers.IDecoration)
-	 */
 	public void decorate(Object element, IDecoration decoration) 
 	{
 		if(element instanceof DrawComponentTreeEditPart) 
@@ -59,20 +53,14 @@ implements ILightweightLabelDecorator
 			if (!dc.isVisible()) {
 				ImageDescriptor invisibleImage = SharedImages.getSharedImageDescriptor(
 						EditorPlugin.getDefault(), 
-						VisibleCompositeImage.class, "", ImageDimension._8x8, ImageFormat.gif);
+						VisibleCompositeImage.class, "", ImageDimension._8x8, ImageFormat.gif); //$NON-NLS-1$
 				
 				decoration.addOverlay(invisibleImage);
-				decoration.addSuffix(" [invisible]");				
+				decoration.addSuffix(" ["+Messages.getString("org.nightlabs.editor2d.decorators.VisibleDecorator.invisible")+"]");				 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 			if (dc.isTemplate()) {
-//				ImageDescriptor invisibleImage = SharedImages.getSharedImageDescriptor(
-//						EditorPlugin.getDefault(), 
-//						VisibleCompositeImage.class, "", ImageDimension._8x8, ImageFormat.gif);
-//				decoration.addOverlay(invisibleImage);
-				decoration.addSuffix(" [template]");				
+				decoration.addSuffix(" ["+Messages.getString("org.nightlabs.editor2d.decorators.VisibleDecorator.template")+"]");				 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
-			
 		}
 	}
-	
 }

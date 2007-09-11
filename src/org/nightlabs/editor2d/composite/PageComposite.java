@@ -42,12 +42,11 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.form.XFormToolkit;
-import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
+import org.nightlabs.base.form.NightlabsFormsToolkit;
 import org.nightlabs.base.i18n.ResolutionUnitEP;
 import org.nightlabs.base.i18n.UnitRegistryEP;
 import org.nightlabs.base.print.page.PredefinedPageEP;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.unit.UnitConstants;
 import org.nightlabs.i18n.unit.IUnit;
 import org.nightlabs.i18n.unit.MMUnit;
@@ -67,15 +66,13 @@ import org.nightlabs.print.page.PredefinedPageRegistry;
 public class PageComposite 
 extends XComposite 
 {
-
 	/**
 	 * @param parent
 	 * @param style
 	 */
-	public PageComposite(Composite parent, int style, TOOLKIT_MODE toolkitMode) 
+	public PageComposite(Composite parent, int style) 
 	{
 		super(parent, style);
-		this.toolkitMode = toolkitMode;
 		createComposite(this);
 	}
 
@@ -86,15 +83,13 @@ extends XComposite
 	 * @param layoutDataMode
 	 */
 	public PageComposite(Composite parent, int style, LayoutMode layoutMode,
-			LayoutDataMode layoutDataMode, TOOLKIT_MODE toolkitMode) 
+			LayoutDataMode layoutDataMode) 
 	{
 		super(parent, style, layoutMode, layoutDataMode);
-		this.toolkitMode = toolkitMode;
 		createComposite(this);		
 	}
 
-	private TOOLKIT_MODE toolkitMode;
-	private XFormToolkit toolkit = null;
+	private NightlabsFormsToolkit toolkit = null;
 	private Combo pageSelectCombo = null;
 	private Combo unitsCombo = null;
 	private Combo resolutionUnitsCombo = null;
@@ -104,51 +99,50 @@ extends XComposite
 		
 	protected void createComposite(Composite parent) 
 	{
-		toolkit = new XFormToolkit(Display.getCurrent());
-		toolkit.setCurrentMode(toolkitMode);
+		toolkit = new NightlabsFormsToolkit(Display.getCurrent());
 		
-		Group comp = toolkit.createGroup(parent, SWT.NONE, 
-				EditorPlugin.getResourceString("page.group.page.title"));
+		Group comp = new Group(parent, SWT.NONE);
+		comp.setText(Messages.getString("org.nightlabs.editor2d.composite.PageComposite.page.group.text"));		 //$NON-NLS-1$
 		comp.setLayout(new GridLayout(2, false));
 		comp.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		// Predefined Page Sizes
 		Label pageSelectLabel = toolkit.createLabel(comp, 
-				EditorPlugin.getResourceString("page.pageSelect.text"));
-		pageSelectCombo = toolkit.createCombo(comp, SWT.BORDER);
+				Messages.getString("org.nightlabs.editor2d.composite.PageComposite.label.predefinedSizes")); //$NON-NLS-1$
+		pageSelectCombo = new Combo(comp, SWT.BORDER);
 		pageSelectCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		// Measurement Units
 		Label unitsLabel = toolkit.createLabel(comp, 
-				EditorPlugin.getResourceString("page.units.text"));
-		unitsCombo = toolkit.createCombo(comp, SWT.BORDER);
+				Messages.getString("org.nightlabs.editor2d.composite.PageComposite.label.units")); //$NON-NLS-1$
+		unitsCombo = new Combo(comp, SWT.BORDER);
 		unitsCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		int textStyle = SWT.BORDER;
 		
 		// Width
 		Label pageWidthLabel = toolkit.createLabel(comp, 
-				EditorPlugin.getResourceString("page.pageWidth.text"));
-		pageWidthText = toolkit.createText(comp, "", textStyle);
+				Messages.getString("org.nightlabs.editor2d.composite.PageComposite.label.width")); //$NON-NLS-1$
+		pageWidthText = toolkit.createText(comp, "", textStyle); //$NON-NLS-1$
 		pageWidthText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		// Height
 		Label pageHeightLabel = toolkit.createLabel(comp, 
-				EditorPlugin.getResourceString("page.pageHeight.text"));
-		pageHeightText = toolkit.createText(comp, "", textStyle);
+				Messages.getString("org.nightlabs.editor2d.composite.PageComposite.label.height")); //$NON-NLS-1$
+		pageHeightText = toolkit.createText(comp, "", textStyle); //$NON-NLS-1$
 		pageHeightText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		// Resolution
 		Label resolutionLabel = toolkit.createLabel(comp, 
-				EditorPlugin.getResourceString("page.resolution.text"));
-		Composite c = toolkit.createXComposite(comp, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
+				Messages.getString("org.nightlabs.editor2d.composite.PageComposite.label.resolution")); //$NON-NLS-1$
+		Composite c = new XComposite(comp, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 		c.setLayout(new GridLayout(2, false));
 		c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		// TODO: make it possible to determine resolutionX and resolutionY
-		resolutionText = toolkit.createText(c, "", textStyle);
+		resolutionText = toolkit.createText(c, "", textStyle); //$NON-NLS-1$
 		resolutionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		resolutionUnitsCombo = toolkit.createCombo(c, SWT.BORDER);
+		resolutionUnitsCombo = new Combo(c, SWT.BORDER);
 				
 		init();
 	}
@@ -159,7 +153,7 @@ extends XComposite
 		populateUnitsCombo(UnitRegistryEP.sharedInstance().getUnitRegistry());
 		populateResolutionUnits(ResolutionUnitEP.sharedInstance().getResolutionUnitRegistry());
 		
-		resolutionText.setText(""+getResolution().getResolutionX());
+		resolutionText.setText(String.valueOf(getResolution().getResolutionX()));
 		addListener();
 	}
 	
@@ -183,8 +177,8 @@ extends XComposite
 			IPredefinedPage page = pages.get(pageSelectCombo.getSelectionIndex());
 			
 			if (page.getUnit().getFactor() == unit.getFactor()) {
-				pageHeightText.setText(""+page.getPageHeight());
-				pageWidthText.setText(""+page.getPageWidth());				
+				pageHeightText.setText(String.valueOf(page.getPageHeight()));
+				pageWidthText.setText(String.valueOf(page.getPageWidth()));
 			}
 			else {
 				setPageHeight(getPageHeight(), page.getUnit());
@@ -246,7 +240,7 @@ extends XComposite
 		public void widgetSelected(SelectionEvent e) {
 			IResolutionUnit unit = resolutionUnits.get(resolutionUnitsCombo.getSelectionIndex());
 			resolution.setResolutionUnit(unit);
-			resolutionText.setText(""+resolution.getResolutionX());
+			resolutionText.setText(String.valueOf(resolution.getResolutionX()));
 		}	
 	};	
 
@@ -258,7 +252,7 @@ extends XComposite
 		public void widgetSelected(SelectionEvent e) {
 			IResolutionUnit unit = resolutionUnits.get(resolutionUnitsCombo.getSelectionIndex());
 			resolution.setResolutionUnit(unit);
-			resolutionText.setText(""+resolution.getResolutionX());
+			resolutionText.setText(String.valueOf(resolution.getResolutionX()));
 		}	
 	};	
 	
@@ -280,8 +274,8 @@ extends XComposite
 		
 		if (pages.size() > 0) {
 			IPredefinedPage page = pages.get(pageSelectCombo.getSelectionIndex());
-			pageWidthText.setText(""+page.getPageWidth());
-			pageHeightText.setText(""+page.getPageHeight());					
+			pageWidthText.setText(String.valueOf(page.getPageWidth()));
+			pageHeightText.setText(String.valueOf(page.getPageHeight()));
 		}
 	}
 	
@@ -294,11 +288,6 @@ extends XComposite
 			unitsCombo.add(unit.getName().getText(Locale.getDefault().getLanguage()));
 		}
 		unitsCombo.select(0);
-//		if (registry.getUnitIDs().contains(MMUnit.UNIT_ID)) {
-//			unitsCombo.select(units.indexOf(registry.getUnit(MMUnit.UNIT_ID)));			
-//		} else if (units.size() > 0) {
-//			unitsCombo.select(0);
-//		}
 	}
 		
 	private List<IResolutionUnit> resolutionUnits = null;
@@ -342,7 +331,7 @@ extends XComposite
 			double oldFactor = this.unit.getFactor();
 			pageWidth = (pageWidth * unit.getFactor()) / oldFactor;			
 		}
-		pageWidthText.setText(""+pageWidth);
+		pageWidthText.setText(String.valueOf(pageWidth));
 	}
 	
 	private double pageHeight = 297;
@@ -366,7 +355,7 @@ extends XComposite
 			double oldFactor = this.unit.getFactor();
 			pageHeight = (pageHeight * unit.getFactor()) / oldFactor;						
 		}
-		pageHeightText.setText(""+pageHeight);
+		pageHeightText.setText(String.valueOf(pageHeight));
 	}
 	
 	private IUnit unit = new MMUnit();
@@ -374,8 +363,4 @@ extends XComposite
 		return unit;
 	}
 	
-//	public PageSize getPageSize() 
-//	{
-//		return new PageSize(getPageWidth(), getPageHeight(), getUnit(), getResolution());
-//	}
 }

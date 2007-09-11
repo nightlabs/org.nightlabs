@@ -29,6 +29,7 @@ import org.eclipse.ui.actions.RetargetAction;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -38,9 +39,10 @@ extends RetargetAction
 {
 	public ZoomPageRetargetAction() 
 	{
-		super(ZoomPageAction.ID, EditorPlugin.getResourceString("action.zoom.page.label"));
-		setToolTipText(EditorPlugin.getResourceString("action.zoom.page.tooltip"));
-		setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomPageAction.class));
+		super(ZoomPageAction.ID, Messages.getString("org.nightlabs.editor2d.actions.zoom.ZoomPageRetargetAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.zoom.ZoomPageRetargetAction.tooltip")); //$NON-NLS-1$
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(
+				EditorPlugin.getDefault(), ZoomPageAction.class));
 		setActionDefinitionId(EditorCommandConstants.ZOOM_PAGE_ID);
 	}
 }

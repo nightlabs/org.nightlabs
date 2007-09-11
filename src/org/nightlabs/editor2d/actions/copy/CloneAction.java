@@ -34,10 +34,10 @@ import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
 import org.nightlabs.editor2d.command.CloneDrawComponentCommand;
 import org.nightlabs.editor2d.config.QuickOptionsConfigModule;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -64,8 +64,8 @@ extends AbstractEditorSelectionAction
 
   protected void init() 
   {
-  	setText(EditorPlugin.getResourceString("action.clone.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.clone.tooltip"));
+  	setText(Messages.getString("org.nightlabs.editor2d.actions.copy.CloneAction.text")); //$NON-NLS-1$
+  	setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.copy.CloneAction.tooltip")); //$NON-NLS-1$
   	setId(ID);
 //  	setImageDescriptor(ImageDescriptor.createFromFile(EditorPlugin.class,"icons/editShape16.gif"));
   	initConfigModule();
@@ -102,7 +102,6 @@ extends AbstractEditorSelectionAction
 	 */
 	public void run() 
 	{
-//		List<DrawComponent> dcs = getSelection(DrawComponent.class, true);
 		Collection<DrawComponent> dcs = getSelection(DrawComponent.class, true);		
 		CompoundCommand cmd = new CompoundCommand();
 		for (Iterator<DrawComponent> it = dcs.iterator(); it.hasNext(); ) 

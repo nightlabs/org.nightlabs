@@ -27,9 +27,9 @@
 
 package org.nightlabs.editor2d.command;
 
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.request.TextCreateRequest;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class CreateTextCommand  
 extends AbstractCreateTextCommand
@@ -38,7 +38,7 @@ extends AbstractCreateTextCommand
   public CreateTextCommand(TextCreateRequest request) 
   {
     super(request);  
-    setLabel(EditorPlugin.getResourceString("command.create.text"));
+    setLabel(Messages.getString("org.nightlabs.editor2d.command.CreateTextCommand.label")); //$NON-NLS-1$
     this.request = request; 
   }
   
@@ -53,18 +53,4 @@ extends AbstractCreateTextCommand
 				request.getText(), request.getFontName(), request.getFontSize(), 
 				request.getFontStyle(), x, y, parent);		 
 	}
-	
-//  public void execute() 
-//  {
-//    int x = getBounds().x;
-//    int y = getBounds().y;
-//    Editor2DFactory factory = request.getModelCreationFactory().getFactory();
-//    drawComponent = factory.createTextDrawComponent(request.getText(), request.getFontName(), request.getFontSize(), 
-//    		request.getFontStyle(), x, y, parent);
-//    getTextDrawComponent().setName(request.getText());
-//    parent.addDrawComponent(drawComponent);
-//		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);    
-//  }
-
-  
 }

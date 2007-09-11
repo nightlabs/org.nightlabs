@@ -30,6 +30,7 @@ package org.nightlabs.editor2d.request;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.requests.SelectionRequest;
 
 
@@ -50,11 +51,11 @@ extends SelectionRequest
     this.rotationCenter = rotationCenter;
   }
   
-  protected List parts;
-  public List getEditParts() {
+  protected List<EditPart> parts;
+  public List<EditPart> getEditParts() {
     return parts;
   }
-  public void setEditParts(List list) {
+  public void setEditParts(List<EditPart> list) {
     parts = list;
   }  
   

@@ -40,6 +40,7 @@ import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.base.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.model.IModelCreationFactory;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.tools.EditorSelectionToolEntry;
 import org.nightlabs.editor2d.tools.EllipseToolEntry;
 import org.nightlabs.editor2d.tools.ImageToolEntry;
@@ -64,11 +65,11 @@ public abstract class AbstractPaletteFactory
   /** Default palette size. */
   protected static final int DEFAULT_PALETTE_SIZE = 125;
   /** Preference ID used to persist the palette location. */
-  protected static final String PALETTE_DOCK_LOCATION = "PaletteFactory.Location";
+  protected static final String PALETTE_DOCK_LOCATION = "PaletteFactory.Location"; //$NON-NLS-1$
   /** Preference ID used to persist the palette size. */
-  protected static final String PALETTE_SIZE = "PaletteFactory.Size";
+  protected static final String PALETTE_SIZE = "PaletteFactory.Size"; //$NON-NLS-1$
   /** Preference ID used to persist the flyout palette's state. */
-  protected static final String PALETTE_STATE = "PaletteFactory.State";
+  protected static final String PALETTE_STATE = "PaletteFactory.State"; //$NON-NLS-1$
   
 //  public abstract CreationFactory getCreationFactory(Class targetClass);
   public abstract IModelCreationFactory getCreationFactory(Class targetClass);  
@@ -117,7 +118,7 @@ public abstract class AbstractPaletteFactory
  
  protected PaletteContainer createShapesDrawer() 
  {
-  PaletteDrawer componentsDrawer = new PaletteDrawer(EditorPlugin.getResourceString("palette.group.shapes"));
+  PaletteDrawer componentsDrawer = new PaletteDrawer(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.category.shapes")); //$NON-NLS-1$
 
   // add Rectangle Tool
   ToolEntry component = createRectangleToolEntry();
@@ -157,7 +158,7 @@ public abstract class AbstractPaletteFactory
  
  protected PaletteContainer createToolsGroup(PaletteRoot palette) 
  {
-  PaletteGroup toolGroup = new PaletteGroup(EditorPlugin.getResourceString("palette.group.tools"));
+  PaletteGroup toolGroup = new PaletteGroup(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.category.tools")); //$NON-NLS-1$
 
   // Add a selection tool to the group
   ToolEntry tool = createEditorSelectionToolEntry();
@@ -189,10 +190,10 @@ public abstract class AbstractPaletteFactory
  protected ToolEntry createZoomToolEntry() 
  {
 	 return new ZoomToolEntry(
-			 EditorPlugin.getResourceString("palette.zoom.label"),
-		   EditorPlugin.getResourceString("palette.zoom.shortdesc"),
-		   SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Zoom"),    
-		   SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Zoom",
+			 EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.tool.zoom.label")), //$NON-NLS-1$
+		   EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.tool.zoom.description")), //$NON-NLS-1$
+		   SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Zoom"),     //$NON-NLS-1$
+		   SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Zoom", //$NON-NLS-1$
 		  		 ImageDimension._24x24, ImageFormat.png)
 	 );	 
  }
@@ -200,12 +201,12 @@ public abstract class AbstractPaletteFactory
  protected ToolEntry createRectangleToolEntry() 
  {
 	 return new RectangleToolEntry (
-	    EditorPlugin.getResourceString("palette.rectangle.label"),
-	    EditorPlugin.getResourceString("palette.rectangle.shortdesc"), 
+	    EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.tool.rectangle.label")), //$NON-NLS-1$
+	    EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.tool.rectangle.description")),  //$NON-NLS-1$
 	    RectangleDrawComponent.class,
 	    getCreationFactory(RectangleDrawComponent.class), 
-	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Rectangle"),    
-	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Rectangle",
+	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Rectangle"),     //$NON-NLS-1$
+	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Rectangle", //$NON-NLS-1$
 	    		ImageDimension._24x24, ImageFormat.png)
 	  );	 
  }
@@ -213,12 +214,12 @@ public abstract class AbstractPaletteFactory
  protected ToolEntry createEllipseToolEntry() 
  {
 	 return new EllipseToolEntry (
-	    EditorPlugin.getResourceString("palette.ellipse.label"),
-	    EditorPlugin.getResourceString("palette.ellipse.shortdesc"), 
+	    EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.tool.ellipse.label")), //$NON-NLS-1$
+	    EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.tool.ellipse.description")),  //$NON-NLS-1$
 	    EllipseDrawComponent.class,
 	    getCreationFactory(EllipseDrawComponent.class), 
-	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Ellipse"),        
-	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Ellipse",
+	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Ellipse"),         //$NON-NLS-1$
+	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Ellipse", //$NON-NLS-1$
 	    		ImageDimension._24x24, ImageFormat.png)
 	  );	 
  	}
@@ -227,12 +228,12 @@ public abstract class AbstractPaletteFactory
  	{
  		return new LineToolEntry
  	  (
- 	    EditorPlugin.getResourceString("palette.line.label"),
- 	    EditorPlugin.getResourceString("palette.line.shortdesc"), 
+ 	    EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.tool.line.label")), //$NON-NLS-1$
+ 	    EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.tool.line.description")),  //$NON-NLS-1$
  	    LineDrawComponent.class,
  	    getCreationFactory(LineDrawComponent.class), 
- 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Line"),    
- 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Line",
+ 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Line"),     //$NON-NLS-1$
+ 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Line", //$NON-NLS-1$
  	    		ImageDimension._24x24, ImageFormat.png)    
  	  ); 		
  	}
@@ -241,12 +242,12 @@ public abstract class AbstractPaletteFactory
  	{
  		return new TextToolEntry
  	  (
- 	    EditorPlugin.getResourceString("palette.text.label"),
- 	    EditorPlugin.getResourceString("palette.text.shortdesc"), 
+ 	    EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.tool.text.label")), //$NON-NLS-1$
+ 	    EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.tool.text.description")),  //$NON-NLS-1$
  	    TextDrawComponent.class,
  	    getCreationFactory(TextDrawComponent.class), 
- 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Text"),    
- 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Text",
+ 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Text"),     //$NON-NLS-1$
+ 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Text", //$NON-NLS-1$
  	    		ImageDimension._24x24, ImageFormat.png)    
  	  ); 		
  	}
@@ -255,12 +256,12 @@ public abstract class AbstractPaletteFactory
  	{
  		return new ImageToolEntry
  	  (
- 	    EditorPlugin.getResourceString("palette.image.label"),
- 	    EditorPlugin.getResourceString("palette.image.shortdesc"), 
+ 	    EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.tool.image.label")), //$NON-NLS-1$
+ 	    EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.AbstractPaletteFactory.tool.image.description")),  //$NON-NLS-1$
  	    ImageDrawComponent.class,
  	    getCreationFactory(ImageDrawComponent.class), 
- 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Image"),    
- 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Image",
+ 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Image"),     //$NON-NLS-1$
+ 	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), AbstractPaletteFactory.class, "Image", //$NON-NLS-1$
  	    		ImageDimension._24x24, ImageFormat.png)        
  	  ); 		
  	}

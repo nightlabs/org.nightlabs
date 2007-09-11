@@ -39,7 +39,6 @@ import org.nightlabs.editor2d.DrawComponent;
 public class EditorPageSetupComposite 
 extends PageSetupComposite 
 {
-
 	/**
 	 * @param pageFormat
 	 * @param parent
@@ -50,7 +49,7 @@ extends PageSetupComposite
 	{
 		super(pageFormat, parent, style);
 		if (dc == null)
-			throw new IllegalArgumentException("Param dc must not be null!");
+			throw new IllegalArgumentException("Param dc must not be null!"); //$NON-NLS-1$
 		this.dc = dc;
 		super.init(pageFormat);
 	}
@@ -67,7 +66,7 @@ extends PageSetupComposite
 	{
 		super(pageFormat, parent, style, layoutMode, layoutDataMode);
 		if (dc == null)
-			throw new IllegalArgumentException("Param dc must not be null!");
+			throw new IllegalArgumentException("Param dc must not be null!"); //$NON-NLS-1$
 		
 		this.dc = dc;
 		super.init(pageFormat);
@@ -82,7 +81,5 @@ extends PageSetupComposite
 
 	@Override
 	protected void init(PageFormat pageFormat) {
-		
 	}	
-	
 }

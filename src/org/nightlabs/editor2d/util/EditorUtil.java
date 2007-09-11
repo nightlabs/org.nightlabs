@@ -194,7 +194,7 @@ public class EditorUtil
   public static void selectEditParts(List editParts) 
   { 
     if (editParts == null)
-      throw new IllegalArgumentException("Param editParts must not be null!");
+      throw new IllegalArgumentException("Param editParts must not be null!"); //$NON-NLS-1$
     
     EditPartViewer viewer = null;
     if (!editParts.isEmpty()) {
@@ -214,7 +214,7 @@ public class EditorUtil
   public static void selectEditPart(EditPart editPart) 
   { 
     if (editPart == null)
-      throw new IllegalArgumentException("Param editPart must not be null!");
+      throw new IllegalArgumentException("Param editPart must not be null!"); //$NON-NLS-1$
     
     EditPartViewer viewer = editPart.getViewer();        
     if (viewer != null) {
@@ -229,10 +229,10 @@ public class EditorUtil
   public static void zoomToRelativeRect(Rectangle rect, ZoomManager zoomManager) 
   {
   	if (rect == null)
-			throw new IllegalArgumentException("Param rect must not be null!");
+			throw new IllegalArgumentException("Param rect must not be null!"); //$NON-NLS-1$
   	
   	if (zoomManager == null)
-			throw new IllegalArgumentException("Param zoomManager must not be null!");
+			throw new IllegalArgumentException("Param zoomManager must not be null!"); //$NON-NLS-1$
   	
     Rectangle relativeZoomRectangle = rect.getCopy();    
     Rectangle clientArea = zoomManager.getViewport().getClientArea();    
@@ -301,22 +301,5 @@ public class EditorUtil
     zoomManager.getViewport().setViewLocation((int)newX, (int)newY);    
     zoomManager.getViewport().getUpdateManager().performUpdate(); 
   }
-  
-//  public static Comparator idComparator = new Comparator()
-//  {	
-//		public int compare(Object arg0, Object arg1) 
-//		{
-//			if (arg0 instanceof DrawComponent && arg1 instanceof DrawComponent) 
-//			{
-//				DrawComponent dc1 = (DrawComponent) arg0; 
-//				DrawComponent dc2 = (DrawComponent) arg1;
-//				if (dc1.getId() < dc2.getId())
-//					return -1;
-//				if (dc1.getId() > dc2.getId())
-//					return 1;				
-//			}
-//			return 0;
-//		}	
-//	};  
    
 }

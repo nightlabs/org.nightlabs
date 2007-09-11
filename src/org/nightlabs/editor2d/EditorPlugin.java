@@ -53,8 +53,6 @@ extends AbstractUIPlugin
 	//Resource bundle.
 	private static ResourceBundle resourceBundle;
 	
-	public static String PLUGIN_ID = "org.nightlabs.editor2d";
-	
 	/**
 	 * The constructor.
 	 */

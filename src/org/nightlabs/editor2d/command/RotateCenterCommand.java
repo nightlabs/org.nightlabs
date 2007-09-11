@@ -34,17 +34,16 @@ import java.util.Map;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.request.EditorRotateCenterRequest;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.util.EditorUtil;
 
 
 public class RotateCenterCommand 
 extends Command 
 {
-  protected Map dc2RotationCenter;
+  protected Map<DrawComponent, Point> dc2RotationCenter;
   protected EditorRotateCenterRequest request;
   
   protected Point rotationCenter;    
@@ -68,15 +67,15 @@ extends Command
     super();
     this.request = request;
     this.multiple = request.isMultiple();
-    setLabel(EditorPlugin.getResourceString("command.rotate.center"));
+    setLabel(Messages.getString("org.nightlabs.editor2d.command.RotateCenterCommand.label")); //$NON-NLS-1$
   }
 
   public void execute() 
   {
-    dc2RotationCenter = new HashMap(request.getEditParts().size());
-    for (Iterator it = request.getEditParts().iterator(); it.hasNext(); ) 
+    dc2RotationCenter = new HashMap<DrawComponent, Point>(request.getEditParts().size());
+    for (Iterator<EditPart> it = request.getEditParts().iterator(); it.hasNext(); ) 
     {
-      EditPart editPart = (EditPart) it.next();
+      EditPart editPart = it.next();
       DrawComponent dc = (DrawComponent) editPart.getModel();
       Point oldRotationCenter = new Point(dc.getRotationX(), dc.getRotationY());
       dc2RotationCenter.put(dc, oldRotationCenter);
@@ -93,9 +92,9 @@ extends Command
   
   public void redo() 
   {
-    for (Iterator it = dc2RotationCenter.keySet().iterator(); it.hasNext(); ) 
+    for (Iterator<DrawComponent> it = dc2RotationCenter.keySet().iterator(); it.hasNext(); ) 
     {
-      DrawComponent dc = (DrawComponent) it.next();
+      DrawComponent dc = it.next();
       if (isMultiple()) {
         dc.setTmpRotationX(rotationCenter.x);
         dc.setTmpRotationY(rotationCenter.y);
@@ -109,9 +108,9 @@ extends Command
   
   public void undo() 
   {
-    for (Iterator it = dc2RotationCenter.keySet().iterator(); it.hasNext(); ) 
+    for (Iterator<DrawComponent> it = dc2RotationCenter.keySet().iterator(); it.hasNext(); ) 
     {
-      DrawComponent dc = (DrawComponent) it.next();
+      DrawComponent dc = it.next();
       Point oldRotationCenter = (Point) dc2RotationCenter.get(dc);
       if (isMultiple()) {
         dc.setTmpRotationX(DrawComponent.ROTATION_X_DEFAULT);

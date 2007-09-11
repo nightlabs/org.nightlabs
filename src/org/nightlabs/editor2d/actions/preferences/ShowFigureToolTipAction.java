@@ -29,9 +29,9 @@ import java.util.Iterator;
 
 import org.eclipse.gef.EditPart;
 import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
 import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -59,8 +59,8 @@ extends PreferencesAction
 	protected void init() 
 	{
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.showFigureToolTip.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.showFigureToolTip.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.preferences.ShowFigureToolTipAction.tooltip")); //$NON-NLS-1$
 		setActionDefinitionId(EditorCommandConstants.SHOW_FIGURE_TOOLTIPS_ID);
 	}
 	
@@ -88,5 +88,4 @@ extends PreferencesAction
 			updateToolTips(child);
 		}
 	}
-	
 }

@@ -59,7 +59,6 @@ implements EditorRequestConstants
 	
   public AbstractDrawComponentEditPart(DrawComponent drawComponent) {
     setModel(drawComponent);   
-        
 //    drawComponent.clearBounds();
 //    drawComponent.getBounds();
   }
@@ -202,7 +201,7 @@ implements EditorRequestConstants
     }
     
     if (logger.isDebugEnabled())
-    	logger.debug("deactivate called");
+    	logger.debug("deactivate called"); //$NON-NLS-1$
     
     super.deactivate();
   }
@@ -388,7 +387,7 @@ implements EditorRequestConstants
 					DrawComponentFigure dcFigure = (DrawComponentFigure) figure;
 					dcFigure.setContains(contains);
 					dcFigure.setVisible(contains);
-					logger.info("DrawComponentFigure found and set contains to "+contains);
+					logger.info("DrawComponentFigure found and set contains to "+contains); //$NON-NLS-1$
 				}					
 			}
 		}			

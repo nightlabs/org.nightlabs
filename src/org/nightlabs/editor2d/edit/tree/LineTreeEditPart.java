@@ -43,7 +43,7 @@ extends DrawComponentTreeEditPart
 //	public static Image LINE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
 //			AbstractPaletteFactory.class, "Line").createImage();	
 	public static Image LINE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			AbstractPaletteFactory.class, "Line", ImageFormat.gif).createImage();	
+			AbstractPaletteFactory.class, "Line", ImageFormat.gif).createImage();	 //$NON-NLS-1$
 	
   public LineTreeEditPart(LineDrawComponent drawComponent) {
     super(drawComponent);
@@ -68,15 +68,5 @@ extends DrawComponentTreeEditPart
         new ShapeDrawComponentPropertySource(getLineDrawComponent());
     }
     return propertySource;
-  }   
-  
-//	protected void propertyChanged(PropertyChangeEvent evt) 
-//	{
-//		super.propertyChanged(evt);
-//		String propertyName = evt.getPropertyName();
-//		if (propertyName.equals(LineDrawComponent.PROP_CONNECT)) {
-//			LOGGER.debug(propertyName +" changed!");
-//			refreshVisuals();			
-//		}
-//	}  
+  }
 }

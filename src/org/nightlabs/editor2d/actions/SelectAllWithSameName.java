@@ -33,28 +33,25 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
-
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class SelectAllWithSameName 
 extends AbstractEditorSelectionAction
 {
 	public static final String ID = SelectAllWithSameName.class.getName(); 
 	
-	public SelectAllWithSameName(AbstractEditor editor, int style) 
-	{
+	public SelectAllWithSameName(AbstractEditor editor, int style) {
 		super(editor, style);
 	}
 
-	public SelectAllWithSameName(AbstractEditor editor) 
-	{
+	public SelectAllWithSameName(AbstractEditor editor) {
 		super(editor);
 	}
 
 	protected EditPart editPart = null;
-	protected List drawComponentsWithSameName = null;
+	protected List<DrawComponent> drawComponentsWithSameName = null;
 	
 	protected boolean calculateEnabled() 
 	{
@@ -64,7 +61,7 @@ extends AbstractEditorSelectionAction
 			DrawComponent dc = (DrawComponent) editPart.getModel();
 			String name = dc.getName(); 
 			Class c = dc.getClass();
-			List drawComponents = getRootDrawComponent().getDrawComponents(c);
+			List<DrawComponent> drawComponents = getRootDrawComponent().getDrawComponents(c);
 			drawComponentsWithSameName = getDrawComponentsWithSameName(drawComponents, name);
 			if (!drawComponentsWithSameName.isEmpty())
 				return true;				
@@ -72,12 +69,12 @@ extends AbstractEditorSelectionAction
 		return false;
 	}
 
-	public List getDrawComponentsWithSameName(Collection drawComponents, String name) 
+	public List<DrawComponent> getDrawComponentsWithSameName(Collection<DrawComponent> drawComponents, String name) 
 	{
-		List drawComponentsWithSameName = new ArrayList();
-		for (Iterator it = drawComponents.iterator(); it.hasNext(); ) 
+		List<DrawComponent> drawComponentsWithSameName = new ArrayList<DrawComponent>();
+		for (Iterator<DrawComponent> it = drawComponents.iterator(); it.hasNext(); ) 
 		{
-			DrawComponent dc = (DrawComponent) it.next();
+			DrawComponent dc = it.next();
 			String dcName = dc.getName();
 			if (dcName.equals(name))
 				drawComponentsWithSameName.add(dc);
@@ -85,16 +82,14 @@ extends AbstractEditorSelectionAction
 		return drawComponentsWithSameName;		
 	}
 
-	public void run() 
-	{
+	public void run() {
 		selectEditParts(drawComponentsWithSameName);
 	}
 
 	protected void init() 
 	{
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.selectAllWithSameName.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.selectAllWithSameName.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.SelectAllWithSameName.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.SelectAllWithSameName.tooltip")); //$NON-NLS-1$
 	}
-		
 }

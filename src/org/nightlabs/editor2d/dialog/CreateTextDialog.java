@@ -27,8 +27,6 @@
 
 package org.nightlabs.editor2d.dialog;
 
-
-
 import java.awt.Font;
 
 import org.apache.log4j.Logger;
@@ -82,14 +80,14 @@ extends CenteredDialog
   
   protected Control createDialogArea(Composite parent) 
   {
-    getShell().setText(Messages.getString("dialog.CreateTextDialog.createText")); //$NON-NLS-1$
+    getShell().setText(Messages.getString("org.nightlabs.editor2d.dialog.CreateTextDialog.title")); //$NON-NLS-1$
     
     dialogComp = new XComposite(parent, SWT.NONE);    
     dialogComp.setLayout(new GridLayout(2, false));    
     
     // name
     Label nameLabel = new Label(dialogComp, SWT.NONE);
-    nameLabel.setText(Messages.getString("dialog.CreateTextDialog.name"));     //$NON-NLS-1$
+    nameLabel.setText(Messages.getString("org.nightlabs.editor2d.dialog.CreateTextDialog.name")); //$NON-NLS-1$
     text = new Text(dialogComp, SWT.BORDER);
     text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
     text.addModifyListener(new ModifyListener(){
@@ -100,20 +98,20 @@ extends CenteredDialog
     
     // font
     Label fontLabel = new Label(dialogComp, SWT.NONE);
-    fontLabel.setText(Messages.getString("dialog.CreateTextDialog.font")); //$NON-NLS-1$
+    fontLabel.setText(Messages.getString("org.nightlabs.editor2d.dialog.CreateTextDialog.font")); //$NON-NLS-1$
     Composite detailComp = new XComposite(dialogComp, SWT.NONE, 
     		LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 4);    
     
     createFontCombo(detailComp);
     createSizeCombo(detailComp);
     boldButton = new Button(detailComp, SWT.TOGGLE);
-    boldButton.setText(Messages.getString("dialog.CreateTextDialog.bold")); //$NON-NLS-1$
+    boldButton.setText(Messages.getString("org.nightlabs.editor2d.dialog.CreateTextDialog.bold")); //$NON-NLS-1$
     italicButton = new Button(detailComp, SWT.TOGGLE);
-    italicButton.setText(Messages.getString("dialog.CreateTextDialog.italic")); //$NON-NLS-1$
+    italicButton.setText(Messages.getString("org.nightlabs.editor2d.dialog.CreateTextDialog.italic")); //$NON-NLS-1$
     
     // preview
     Label previewLabel = new Label(dialogComp, SWT.NONE);
-    previewLabel.setText(Messages.getString("dialog.CreateTextDialog.preview")); //$NON-NLS-1$
+    previewLabel.setText(Messages.getString("org.nightlabs.editor2d.dialog.CreateTextDialog.preview")); //$NON-NLS-1$
     previewText = new Text(dialogComp, SWT.READ_ONLY | SWT.BORDER | SWT.WRAP);    
     previewText.setText(previewString);
     previewText.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -147,7 +145,7 @@ extends CenteredDialog
 		}
 	};
   
-	private String previewString = Messages.getString("dialog.CreateTextDialog.previewString"); //$NON-NLS-1$
+	private String previewString = Messages.getString("org.nightlabs.editor2d.dialog.CreateTextDialog.previewString"); //$NON-NLS-1$
   protected void updatePreview() 
   {
   	checkEmptyString();
@@ -179,7 +177,6 @@ extends CenteredDialog
   }
   
   protected Font getDefaultFont() {
-//  	return FontUtil.getDefaultFont();
   	FontData[] fontDatas = Display.getDefault().getSystemFont().getFontData();
   	FontData fontData = fontDatas[0];
   	return new Font(fontData.getName(), fontData.getStyle(), fontData.getHeight());
@@ -267,5 +264,4 @@ extends CenteredDialog
 		getButton(Dialog.OK).setEnabled(false);
 		return ctrl;
 	}
-  
 }

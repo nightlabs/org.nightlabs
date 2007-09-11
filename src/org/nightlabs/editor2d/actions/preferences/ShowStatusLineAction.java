@@ -26,8 +26,8 @@
 package org.nightlabs.editor2d.actions.preferences;
 
 import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -55,18 +55,16 @@ extends PreferencesAction
 	protected void init() 
 	{
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.showStatusLine.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.showStatusLine.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.preferences.ShowStatusLineAction.tooltip")); //$NON-NLS-1$
 		setActionDefinitionId(EditorCommandConstants.SHOW_STATUSLINE_ID);
 	}	
 	
-	public boolean isChecked() 
-	{
+	public boolean isChecked() {
 		return prefConfMod.isShowStatusLine();
 	}
 
-	public void run() 
-	{
+	public void run() {
 		prefConfMod.setShowStatusLine(!isChecked());
 	}	
 }

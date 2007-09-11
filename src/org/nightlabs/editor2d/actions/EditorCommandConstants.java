@@ -30,17 +30,17 @@ package org.nightlabs.editor2d.actions;
  */
 public class EditorCommandConstants 
 {
-	public static final String CATEGORY_EDITOR2D_ID = "org.nightlabs.editor2d";
+	public static final String CATEGORY_EDITOR2D_ID = "org.nightlabs.editor2d"; //$NON-NLS-1$
 	
-	public static final String EDIT_SHAPE_ID = "org.nightlabs.editor2d.editShape";
-	public static final String ROTATE_ID = "org.nightlabs.editor2d.rotate";
-	public static final String ORDER_ONE_UP_ID = "org.nightlabs.editor2d.orderOneUp";	
-	public static final String ORDER_ONE_DOWN_ID = "org.nightlabs.editor2d.orderOneDown";
-	public static final String ORDER_TO_LOCAL_BACK_ID = "org.nightlabs.editor2d.orderToLocalBack";
-	public static final String ORDER_TO_LOCAL_FRONT_ID = "org.nightlabs.editor2d.orderToLocalFront";
-	public static final String SHOW_FIGURE_TOOLTIPS_ID = "org.nightlabs.editor2d.showFigureToolTip";
-	public static final String SHOW_STATUSLINE_ID = "org.nightlabs.editor2d.showStatusLine";
-	public static final String ZOOM_SELECTION_ID = "org.nightlabs.editor2d.zoomSelection";
-	public static final String ZOOM_ALL_ID = "org.nightlabs.editor2d.zoomAll";	
-	public static final String ZOOM_PAGE_ID = "org.nightlabs.editor2d.zoomPage";
+	public static final String EDIT_SHAPE_ID = "org.nightlabs.editor2d.editShape"; //$NON-NLS-1$
+	public static final String ROTATE_ID = "org.nightlabs.editor2d.rotate"; //$NON-NLS-1$
+	public static final String ORDER_ONE_UP_ID = "org.nightlabs.editor2d.orderOneUp";	 //$NON-NLS-1$
+	public static final String ORDER_ONE_DOWN_ID = "org.nightlabs.editor2d.orderOneDown"; //$NON-NLS-1$
+	public static final String ORDER_TO_LOCAL_BACK_ID = "org.nightlabs.editor2d.orderToLocalBack"; //$NON-NLS-1$
+	public static final String ORDER_TO_LOCAL_FRONT_ID = "org.nightlabs.editor2d.orderToLocalFront"; //$NON-NLS-1$
+	public static final String SHOW_FIGURE_TOOLTIPS_ID = "org.nightlabs.editor2d.showFigureToolTip"; //$NON-NLS-1$
+	public static final String SHOW_STATUSLINE_ID = "org.nightlabs.editor2d.showStatusLine"; //$NON-NLS-1$
+	public static final String ZOOM_SELECTION_ID = "org.nightlabs.editor2d.zoomSelection"; //$NON-NLS-1$
+	public static final String ZOOM_ALL_ID = "org.nightlabs.editor2d.zoomAll";	 //$NON-NLS-1$
+	public static final String ZOOM_PAGE_ID = "org.nightlabs.editor2d.zoomPage"; //$NON-NLS-1$
 }

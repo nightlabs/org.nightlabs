@@ -29,9 +29,9 @@ package org.nightlabs.editor2d.actions;
 
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EditorStateManager;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class RotateAction 
@@ -39,16 +39,15 @@ extends SelectionAction
 implements EditorRequestConstants
 {
   public static final String ID = RotateAction.class.getName();
-  public RotateAction(IWorkbenchPart part) 
-  {
+  public RotateAction(IWorkbenchPart part) {
     super(part);
   }
 
   protected void init() 
   {
   	super.init();
-  	setText(EditorPlugin.getResourceString("action.rotate.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.rotate.tooltip"));
+  	setText(Messages.getString("org.nightlabs.editor2d.actions.RotateAction.text")); //$NON-NLS-1$
+  	setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.RotateAction.tooltip")); //$NON-NLS-1$
   	setId(ID);
   	setActionDefinitionId(EditorCommandConstants.ROTATE_ID);  
 //  	setAccelerator(SWT.CTRL | 'R');
@@ -68,5 +67,4 @@ implements EditorRequestConstants
   	  EditorStateManager.setRotateMode(getSelectedObjects());
   	}    
   }
-  
 }

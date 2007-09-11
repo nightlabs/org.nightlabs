@@ -47,7 +47,7 @@ extends ComboBoxCellEditor
    */
   protected Object doGetValue() 
   {
-    if (getComboBox().getText().equals(""))
+    if (getComboBox().getText().equals("")) //$NON-NLS-1$
       return oldValue;
     Double d = null;
     try {

@@ -49,7 +49,6 @@ import org.nightlabs.editor2d.util.feedback.FeedbackUtil;
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
 public class EditorRotateEditPolicy
-//extends EditorConstrainedEditPolicy
 extends EditorFeedbackPolicy
 {
 	/**
@@ -57,10 +56,6 @@ extends EditorFeedbackPolicy
 	 */
 	private static final Logger logger = Logger.getLogger(EditorRotateEditPolicy.class);
 	
-	public EditorRotateEditPolicy() {
-
-	}
-
 	// TODO: find out why this Method is never triggered
   public Command getCommand(Request request) 
   {    
@@ -70,7 +65,8 @@ extends EditorFeedbackPolicy
     if (request instanceof EditorRotateCenterRequest)
       return getRotateCenterCommand((EditorRotateCenterRequest)request);
     
-    logger.debug("getCommand(Request = "+request+")");
+    if (logger.isDebugEnabled())
+    	logger.debug("getCommand(Request = "+request+")"); //$NON-NLS-1$ //$NON-NLS-2$
     
   	return super.getCommand(request);
   }  
@@ -80,8 +76,9 @@ extends EditorFeedbackPolicy
     RotateCenterCommand cmd = new RotateCenterCommand(request);
     Point rotationCenter = request.getRotationCenter().getCopy();
     rotationCenter = EditorUtil.toAbsolute(getHost(), rotationCenter.x, rotationCenter.y);
-    cmd.setRotationCenter(rotationCenter);    
-    logger.debug("cmd.rotationCenter = "+rotationCenter);
+    cmd.setRotationCenter(rotationCenter);  
+    if (logger.isDebugEnabled())
+    	logger.debug("cmd.rotationCenter = "+rotationCenter); //$NON-NLS-1$
     return cmd;
   }
   
@@ -90,7 +87,8 @@ extends EditorFeedbackPolicy
     RotateCommand cmd = new RotateCommand(request);
     double rotation = request.getRotation();
     cmd.setRotation(rotation);
-    logger.debug("getRotateCommand().rotation = "+rotation);
+    if (logger.isDebugEnabled())
+    	logger.debug("getRotateCommand().rotation = "+rotation); //$NON-NLS-1$
     return cmd;
   }  
 	
@@ -136,8 +134,6 @@ extends EditorFeedbackPolicy
     rotatedShape.transform(at);
     rotationFeedback.setGeneralShape(rotatedShape);
     getFeedbackLayer().repaint();
-    
-//    LOGGER.debug("rotation = "+rotation);
   }  
   
   protected Rectangle rotateCenterBounds;
@@ -151,7 +147,8 @@ extends EditorFeedbackPolicy
     feedback.setLocation(feedbackLocation);
     feedback.repaint();
     
-    logger.debug("feedBack.location = "+feedback.getBounds());
+    if (logger.isDebugEnabled())
+    	logger.debug("feedBack.location = "+feedback.getBounds()); //$NON-NLS-1$
   }
   
   protected IFigure createEditRotateCenterFeedback(EditorRotateCenterRequest request) 

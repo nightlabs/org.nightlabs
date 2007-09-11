@@ -42,7 +42,7 @@ extends DrawComponentContainerTreeEditPart
 //	public static Image PAGE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
 //			PageTreeEditPart.class).createImage();	
 	public static Image PAGE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			PageTreeEditPart.class, "", ImageFormat.gif).createImage();	
+			PageTreeEditPart.class, "", ImageFormat.gif).createImage();	 //$NON-NLS-1$
 	
 	/**
 	 * @param model the PageDrawComponent to initialze this PageTreeEditPart with 
@@ -71,13 +71,5 @@ extends DrawComponentContainerTreeEditPart
       propertySource = new PagePropertySource(getPageDrawComponent());
     }
     return propertySource;
-  }  
-	
-//  /**
-//   * Creates and installs pertinent EditPolicies.
-//   */
-//  protected void createEditPolicies() 
-//  {  	
-//  	super.createEditPolicies();
-//  }	
+  }
 }

@@ -117,7 +117,7 @@ extends XContributionItem
 				combo.setItems(getZoomManager().getZoomLevelsAsText());
 			}
 			String zoom = getZoomManager().getZoomAsText();
-			logger.debug("zoomText = "+zoom);
+			logger.debug("zoomText = "+zoom); //$NON-NLS-1$
 			int index = combo.indexOf(zoom);
 			if (index != -1)
 				combo.select(index);
@@ -141,16 +141,16 @@ extends XContributionItem
   	return zoomManager;
   }
   
-  protected ZoomListener zoomListener = new ZoomListener()
+  private ZoomListener zoomListener = new ZoomListener()
   {	
 		public void zoomChanged(double zoom) 
 		{
-	  	logger.debug("zoom = "+zoom);			
+	  	logger.debug("zoom = "+zoom);			 //$NON-NLS-1$
 			refresh(false);
 		}	
 	};
 		
-  protected SelectionListener comboSelectionListener = new SelectionListener() 
+  private SelectionListener comboSelectionListener = new SelectionListener() 
   {
 		public void widgetSelected(SelectionEvent e) 
 		{
@@ -170,7 +170,7 @@ extends XContributionItem
 		}
 	};
   
-	protected FocusListener comboFocusListener = new FocusListener() 
+	private FocusListener comboFocusListener = new FocusListener() 
 	{
 		public void focusGained(FocusEvent e) {
 			// do nothing
@@ -258,14 +258,10 @@ extends XContributionItem
   /*************************** BEGIN resolution recalculation ******************************/    
   private RootDrawComponent root = null;
       
-  protected IPartListener partListener = new IPartListener() 
+  private IPartListener partListener = new IPartListener() 
   {
 		public void partActivated(IWorkbenchPart part) 
 		{
-//			if (logger.isDebugEnabled()) {
-//				logger.debug("part activated");
-//			}
-				
 			Object rootAdapter = part.getAdapter(RootDrawComponent.class);
 			if (rootAdapter != null && rootAdapter instanceof RootDrawComponent) {
 				root = (RootDrawComponent) rootAdapter;

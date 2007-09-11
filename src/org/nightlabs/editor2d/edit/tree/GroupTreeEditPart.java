@@ -42,7 +42,7 @@ extends DrawComponentContainerTreeEditPart
 //	public static Image GROUP_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
 //			GroupTreeEditPart.class).createImage();	
 	public static Image GROUP_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			GroupTreeEditPart.class, "", ImageFormat.gif).createImage();	
+			GroupTreeEditPart.class, "", ImageFormat.gif).createImage();	 //$NON-NLS-1$
 
 	public GroupTreeEditPart(GroupDrawComponent model) {
 		super(model);
@@ -68,5 +68,4 @@ extends DrawComponentContainerTreeEditPart
     }
     return propertySource;
   } 	
-	
 }

@@ -29,21 +29,13 @@ package org.nightlabs.editor2d.edit;
 
 import java.beans.PropertyChangeEvent;
 
-import org.apache.log4j.Logger;
 import org.eclipse.ui.views.properties.IPropertySource;
-
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.model.ImagePropertySource;
 
 public class ImageEditPart 
-//extends AbstractDrawComponentEditPart 
 extends DrawComponentEditPart
 {
-	/**
-	 * LOG4J logger used by this class
-	 */
-	private static final Logger logger = Logger.getLogger(ImageEditPart.class);
-  
   public ImageEditPart(ImageDrawComponent drawComponent) {
     super(drawComponent);
   }
@@ -55,10 +47,8 @@ extends DrawComponentEditPart
   @Override  
   public IPropertySource getPropertySource()
   {
-    if (propertySource == null) 
-    {
-      propertySource =
-        new ImagePropertySource(getImageDrawComponent());
+    if (propertySource == null) {
+      propertySource = new ImagePropertySource(getImageDrawComponent());
     }
     return propertySource;
   }
@@ -69,26 +59,7 @@ extends DrawComponentEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(ImageDrawComponent.PROP_IMAGE)) {
-			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}
-	}    
-  
-//  protected ImageFigure getImageFigure() {
-//    return (ImageFigure) getFigure();
-//  }
-//  
-//  protected IFigure createFigure() 
-//  {
-//    BufferedImage image = getImageDrawComponent().getImage();    
-//    ImageFigure imageFigure = new ImageFigure(image);                
-//    return imageFigure;
-//  }
-//    
-//  protected void refreshVisuals() 
-//  {
-//    getImageFigure().setBufferedImage(getImageDrawComponent().getImage());
-//    super.refreshVisuals();
-//  }
-  
+	}      
 }

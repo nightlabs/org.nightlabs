@@ -27,10 +27,10 @@
 
 package org.nightlabs.editor2d.command;
 
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.LineDrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class CreateShapeCommand  
@@ -44,7 +44,7 @@ extends CreateDrawComponentCommand
 	public CreateShapeCommand() 
 	{
 		super();		
-		setLabel(EditorPlugin.getResourceString("command.create.shape")); 	  
+		setLabel(Messages.getString("org.nightlabs.editor2d.command.CreateShapeCommand.label")); 	   //$NON-NLS-1$
 	}
 		
 	public void execute() 

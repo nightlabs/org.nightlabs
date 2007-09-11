@@ -27,9 +27,9 @@ package org.nightlabs.editor2d.command.shape;
 
 import java.awt.geom.Area;
 
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -37,11 +37,10 @@ import org.nightlabs.editor2d.j2d.GeneralShape;
 public class ShapeSubtractCommand 
 extends AbstractBooleanOperationCommand 
 {
-
 	public ShapeSubtractCommand(ShapeDrawComponent primary, ShapeDrawComponent secondary) 
 	{
 		super(primary, secondary);
-		setLabel(EditorPlugin.getResourceString("command.shapeSubtract.text"));
+		setLabel(Messages.getString("org.nightlabs.editor2d.command.shape.ShapeSubtractCommand.label")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -50,5 +49,4 @@ extends AbstractBooleanOperationCommand
 		area1.subtract(area2);
 		return new GeneralShape(area1);
 	}
-
 }

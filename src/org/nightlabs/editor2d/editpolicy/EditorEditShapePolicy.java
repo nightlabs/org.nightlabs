@@ -32,11 +32,11 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.command.shape.EditShapeCommand;
 import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
 import org.nightlabs.editor2d.request.EditorEditShapeRequest;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.util.J2DUtil;
 import org.nightlabs.editor2d.util.feedback.FeedbackUtil;
 
@@ -51,17 +51,13 @@ extends EditorFeedbackPolicy
 	 */
 	private static final Logger logger = Logger.getLogger(EditorEditShapePolicy.class);
 	
-	public EditorEditShapePolicy() {
-
-	}
-
 	// TODO: find out why this Method is never triggered	
 	public Command getCommand(Request request) 
   {    
   	if (REQ_EDIT_SHAPE.equals(request.getType()))
   		return getEditShapeCommand((EditorEditShapeRequest)request);
     
-    logger.debug("getCommand(Request = "+request+")");
+    logger.debug("getCommand(Request = "+request+")"); //$NON-NLS-1$ //$NON-NLS-2$
     
   	return super.getCommand(request);
   }  
@@ -84,7 +80,7 @@ extends EditorFeedbackPolicy
     	ShapeDrawComponent sdc = sdcEP.getShapeDrawComponent();
     	editShapeCommand.setShapeDrawComponent(sdc);
     	editShapeCommand.setPathSegmentIndex(request.getPathSegmentIndex());
-    	editShapeCommand.setLabel(EditorPlugin.getResourceString("command.edit.shape"));      
+    	editShapeCommand.setLabel(Messages.getString("org.nightlabs.editor2d.editpolicy.EditorEditShapePolicy.command.label.editShape"));       //$NON-NLS-1$
     }
 //  	Point modelPoint = getConstraintPointFor(request.getLocation());
     Point modelPoint = getConstraintFor(request.getLocation());    
@@ -166,5 +162,4 @@ extends EditorFeedbackPolicy
 	public EditPart getTargetEditPart(Request request) {
 		return getHost();		
 	}  
-	
 }

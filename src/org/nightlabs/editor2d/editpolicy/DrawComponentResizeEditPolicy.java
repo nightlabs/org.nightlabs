@@ -61,6 +61,7 @@ import org.nightlabs.editor2d.request.EditorEditShapeRequest;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
 import org.nightlabs.editor2d.request.EditorRotateCenterRequest;
 import org.nightlabs.editor2d.request.EditorRotateRequest;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.util.EditorUtil;
 import org.nightlabs.editor2d.util.J2DUtil;
 import org.nightlabs.editor2d.util.feedback.FeedbackUtil;
@@ -389,7 +390,7 @@ implements EditorRequestConstants
     feedback.setLocation(feedbackLocation);
     feedback.repaint();
     
-    logger.debug("feedBack.location = "+feedback.getBounds());
+    logger.debug("feedBack.location = "+feedback.getBounds()); //$NON-NLS-1$
   }
   
   protected IFigure createEditRotateCenterFeedback(EditorRotateCenterRequest request) 
@@ -458,13 +459,9 @@ implements EditorRequestConstants
     double rotationTmp = EditorUtil.calcRotation(location, rotationCenter);    
     double rotation = - (rotationTmp - rotationOffset);
     
-//    LOGGER.debug("unconstrained rotation = "+rotation);
-    
     // if the rotation request is constrained get the closest value
-    if (request.isConstrainedRotation()) 
-    {
+    if (request.isConstrainedRotation()) {
     	rotation = getClosestValue(request.getConstrainedValues(), rotation);    	
-//    	LOGGER.debug("constrained rotation = "+rotation);    	
     }
       	
     request.setRotation(rotation);
@@ -476,8 +473,6 @@ implements EditorRequestConstants
     rotatedShape.transform(at);
     rotationFeedback.setGeneralShape(rotatedShape);
     getFeedbackLayer().repaint();
-    
-//    LOGGER.debug("rotation = "+rotation);    
   }  
   
   protected double getClosestValue(List<Double> values, double rotation) 
@@ -705,7 +700,7 @@ implements EditorRequestConstants
   protected Label getFeedbackTextFigure()
   {
   	if (feedbackLabel == null)
-  		feedbackLabel = createFeedbackTextFigure("");
+  		feedbackLabel = createFeedbackTextFigure(""); //$NON-NLS-1$
   	return feedbackLabel;
   }
   
@@ -758,23 +753,23 @@ implements EditorRequestConstants
   	if (sizeDelta.equals(EMPTY_DIMENSION)) {  	
     	Point absoluteLocation = EditorUtil.toAbsolute(getHost(), feedbackBounds.x, feedbackBounds.y);
   		
-    	String x = "X";
-    	String y = "Y";
-    	sb.append(x+" ");
+    	String x = Messages.getString("org.nightlabs.editor2d.editpolicy.DrawComponentResizeEditPolicy.x"); //$NON-NLS-1$
+    	String y = Messages.getString("org.nightlabs.editor2d.editpolicy.DrawComponentResizeEditPolicy.y"); //$NON-NLS-1$
+    	sb.append(x+" "); //$NON-NLS-1$
     	sb.append(absoluteLocation.x);
-    	sb.append(", ");
-    	sb.append(y+" ");
+    	sb.append(", "); //$NON-NLS-1$
+    	sb.append(y+" "); //$NON-NLS-1$
     	sb.append(absoluteLocation.y);    	  		
   	}
   	else {
     	Point absoluteSize = EditorUtil.toAbsolute(getHost(), feedbackBounds.width, feedbackBounds.height);
     	
-    	String width = "W";
-    	String height = "H";
-    	sb.append(width+" ");
+    	String width = Messages.getString("org.nightlabs.editor2d.editpolicy.DrawComponentResizeEditPolicy.shortWidth"); //$NON-NLS-1$
+    	String height = Messages.getString("org.nightlabs.editor2d.editpolicy.DrawComponentResizeEditPolicy.shortHeight"); //$NON-NLS-1$
+    	sb.append(width+" "); //$NON-NLS-1$
     	sb.append(absoluteSize.x);
-    	sb.append(", ");
-    	sb.append(height+" ");
+    	sb.append(", "); //$NON-NLS-1$
+    	sb.append(height+" "); //$NON-NLS-1$
     	sb.append(absoluteSize.y);    	  		   		
   	}
   	return sb.toString();  	

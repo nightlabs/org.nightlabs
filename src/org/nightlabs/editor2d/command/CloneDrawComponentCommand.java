@@ -30,7 +30,7 @@ import java.awt.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -38,16 +38,14 @@ import org.nightlabs.editor2d.EditorPlugin;
 public class CloneDrawComponentCommand 
 extends Command 
 {
-
-	/**
-	 * 
+	/** 
 	 * @param source the DrawComponent to clone
 	 * @param parent the DrawComponentContainer to which the clone should be added
 	 */
 	public CloneDrawComponentCommand(DrawComponent source, DrawComponentContainer parent) 
 	{
 		super();
-		setLabel(EditorPlugin.getResourceString("command.clone.text")); 		
+		setLabel(Messages.getString("org.nightlabs.editor2d.command.CloneDrawComponentCommand.label")); 		 //$NON-NLS-1$
 		this.drawComponent = source;
 		this.parent = parent;
 	}
@@ -77,7 +75,7 @@ extends Command
 	{
 		if (cloneName == null) {
 			if (drawComponent != null) {
-				cloneName = drawComponent.getName() + " " + getCopyString();
+				cloneName = drawComponent.getName() + " " + getCopyString(); //$NON-NLS-1$
 			} else {
 				cloneName = getCopyString();
 			}
@@ -114,17 +112,6 @@ extends Command
 	
 	protected DrawComponent clone = null;	
 	
-//	public void execute() 
-//	{
-//		clone = (DrawComponent) drawComponent.clone();
-//		clone.setName(getCloneName());
-//		clone.setBounds(getCloneBounds());
-//		if (!parent.equals(clone.getParent())) {
-//			clone.getParent().removeDrawComponent(clone);
-//			parent.addDrawComponent(clone);
-//		}
-//	}
-
 	public void execute() 
 	{
 		clone = (DrawComponent) drawComponent.clone(getParent());
@@ -144,7 +131,6 @@ extends Command
 			
 	protected String getCopyString() 
 	{
-		return "("+EditorPlugin.getResourceString("action.clone.text")+")";
+		return "("+Messages.getString("org.nightlabs.editor2d.command.CloneDrawComponentCommand.copyText")+")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
-
 }

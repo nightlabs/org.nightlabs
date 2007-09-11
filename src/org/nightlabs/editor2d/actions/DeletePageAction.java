@@ -29,6 +29,7 @@ import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.command.DeletePageCommand;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -60,8 +61,8 @@ extends AbstractEditorAction
 	{
 		super.init();
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.deletePage.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.deletePage.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.DeletePageAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.DeletePageAction.tooltip")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), DeletePageAction.class));
 	}
 
@@ -71,5 +72,4 @@ extends AbstractEditorAction
 		DeletePageCommand cmd = new DeletePageCommand(getRootDrawComponent(), getRootDrawComponent().getCurrentPage());
 		execute(cmd);
 	}
-		
 }

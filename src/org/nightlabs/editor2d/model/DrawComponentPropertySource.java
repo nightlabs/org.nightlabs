@@ -27,8 +27,6 @@
 
 package org.nightlabs.editor2d.model;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,7 +38,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.nightlabs.base.i18n.UnitRegistryEP;
-import org.nightlabs.base.language.LanguageManager;
 import org.nightlabs.base.property.CheckboxPropertyDescriptor;
 import org.nightlabs.base.property.DoublePropertyDescriptor;
 import org.nightlabs.base.property.IntPropertyDescriptor;
@@ -48,26 +45,25 @@ import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.properties.NamePropertyDescriptor;
 import org.nightlabs.editor2d.properties.RotationPropertyDescriptor;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.unit.DotUnit;
 import org.nightlabs.editor2d.util.UnitUtil;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.unit.IUnit;
-import org.nightlabs.language.LanguageCf;
 
 public class DrawComponentPropertySource 
 implements IPropertySource
 {	
 	private static final Logger logger = Logger.getLogger(DrawComponentPropertySource.class);
 	
-	public static final String CATEGORY_NAME = EditorPlugin.getResourceString("property.category.name");
-	public static final String CATEGORY_GEOM = EditorPlugin.getResourceString("property.category.geom");		
-	public static final String CATEGORY_ROTATION = EditorPlugin.getResourceString("property.category.rotation");
+	public static final String CATEGORY_NAME = EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.category.name")); //$NON-NLS-1$
+	public static final String CATEGORY_GEOM = EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.category.geometry"));		 //$NON-NLS-1$
+	public static final String CATEGORY_ROTATION = EditorPlugin.getResourceString(Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.category.rotation")); //$NON-NLS-1$
 	
 	public DrawComponentPropertySource(DrawComponent element) 
 	{
 		this.drawComponent = element;				
 		descriptors = createPropertyDescriptors();
-//		LanguageManager.sharedInstance().addPropertyChangeListener(langListener);
 	}
 	
 	protected DrawComponent drawComponent;	
@@ -76,17 +72,7 @@ implements IPropertySource
 	}
 	
 	public void clean() {
-//		LanguageManager.sharedInstance().removePropertyChangeListener(langListener);
 	}
-	
-//	private PropertyChangeListener langListener = new PropertyChangeListener() {	
-//		public void propertyChange(PropertyChangeEvent evt) {
-//			if (evt.getPropertyName().equals(LanguageManager.LANGUAGE_CHANGED)) {
-//				LanguageCf langCf = (LanguageCf) evt.getNewValue();
-//				drawComponent.setLanguageId(langCf.getLanguageID());
-//			}
-//		}	
-//	};
 	
 	private IUnit unit = null;
 	public IUnit getUnit() {
@@ -178,7 +164,7 @@ implements IPropertySource
 			}
 			
 			if (logger.isDebugEnabled())
-				logger.debug(properties.size()+" extension point properties registered for "+getDrawComponent().getClass());
+				logger.debug(properties.size()+" extension point properties registered for "+getDrawComponent().getClass()); //$NON-NLS-1$
 			
 			return descriptors;
 		}
@@ -192,7 +178,7 @@ implements IPropertySource
 	{
 		PropertyDescriptor desc = new NamePropertyDescriptor(drawComponent,
 				DrawComponent.PROP_NAME,
-				EditorPlugin.getResourceString("property.name.label"));		
+				Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.name"));		 //$NON-NLS-1$
 		desc.setCategory(CATEGORY_NAME);
 		return desc;
 	}
@@ -200,7 +186,7 @@ implements IPropertySource
 	protected PropertyDescriptor createXPD() 
 	{
 		PropertyDescriptor desc = new DoublePropertyDescriptor(DrawComponent.PROP_X,
-				EditorPlugin.getResourceString("property.x.label"));
+				Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.x")); //$NON-NLS-1$
 		desc.setCategory(CATEGORY_GEOM);
 		return desc;
 	}
@@ -208,7 +194,7 @@ implements IPropertySource
 	protected PropertyDescriptor createYPD() 
 	{
 		PropertyDescriptor desc = new DoublePropertyDescriptor(DrawComponent.PROP_Y,
-				EditorPlugin.getResourceString("property.y.label"));
+				Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.y")); //$NON-NLS-1$
 		desc.setCategory(CATEGORY_GEOM);
 		return desc;
 	}
@@ -216,7 +202,7 @@ implements IPropertySource
 	protected PropertyDescriptor createWidthPD() 
 	{
 		PropertyDescriptor desc = new DoublePropertyDescriptor(DrawComponent.PROP_WIDTH,
-				EditorPlugin.getResourceString("property.width.label"));
+				Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.width")); //$NON-NLS-1$
 		desc.setCategory(CATEGORY_GEOM);
 		return desc;
 	}
@@ -224,7 +210,7 @@ implements IPropertySource
 	protected PropertyDescriptor createHeightPD() 
 	{
 		PropertyDescriptor desc = new DoublePropertyDescriptor(DrawComponent.PROP_HEIGHT,
-				EditorPlugin.getResourceString("property.height.label"));
+				Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.height")); //$NON-NLS-1$
 		desc.setCategory(CATEGORY_GEOM);
 		return desc;
 	}
@@ -232,7 +218,7 @@ implements IPropertySource
 	protected PropertyDescriptor createRotationPD() 
 	{
 		PropertyDescriptor desc = new RotationPropertyDescriptor(DrawComponent.PROP_ROTATION,
-				EditorPlugin.getResourceString("property.rotation.label"), drawComponent);
+				Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.rotation"), drawComponent); //$NON-NLS-1$
 		desc.setCategory(CATEGORY_ROTATION);		
 		return desc;
 	}
@@ -240,7 +226,7 @@ implements IPropertySource
 	protected PropertyDescriptor createRotationXPD() 
 	{
 		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_ROTATION_X,
-				EditorPlugin.getResourceString("property.rotationx.label"), 
+				Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.rotationX"),  //$NON-NLS-1$
 				!drawComponent.isChangedRotationCenterAllowed());
 		desc.setCategory(CATEGORY_ROTATION);		
 		return desc;
@@ -249,7 +235,7 @@ implements IPropertySource
 	protected PropertyDescriptor createRotationYPD() 
 	{
 		PropertyDescriptor desc = new IntPropertyDescriptor(DrawComponent.PROP_ROTATION_Y,
-				EditorPlugin.getResourceString("property.rotationy.label"),
+				Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.rotationY"), //$NON-NLS-1$
 				!drawComponent.isChangedRotationCenterAllowed());
 		desc.setCategory(CATEGORY_ROTATION);		
 		return desc;
@@ -260,7 +246,7 @@ implements IPropertySource
 		if (drawComponent == null)
 			return new IPropertyDescriptor[0];
 		
-		List descriptors = getDescriptors();		
+		List<IPropertyDescriptor> descriptors = getDescriptors();		
 		return (IPropertyDescriptor[])descriptors.toArray(new IPropertyDescriptor[descriptors.size()]);
 	}
 	
@@ -386,16 +372,15 @@ implements IPropertySource
 	protected PropertyDescriptor createVisiblePD() 
 	{
 		PropertyDescriptor pd = new CheckboxPropertyDescriptor(DrawComponent.PROP_VISIBLE, 
-				EditorPlugin.getResourceString("property.visible.label"), false);
+				Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.visible"), false); //$NON-NLS-1$
 		return pd;
 	}
 	
 	protected PropertyDescriptor createTemplatePD() 
 	{
 		PropertyDescriptor pd = new CheckboxPropertyDescriptor(DrawComponent.PROP_TEMPLATE, 
-				EditorPlugin.getResourceString("property.template.label"), true);
+				Messages.getString("org.nightlabs.editor2d.model.DrawComponentPropertySource.template"), true); //$NON-NLS-1$
 		return pd;
 	}
-	
 }
 

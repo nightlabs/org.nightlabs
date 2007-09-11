@@ -28,8 +28,7 @@
 package org.nightlabs.editor2d.model;
 
 import org.eclipse.jface.viewers.ICellEditorValidator;
-
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class NumberCellEditorValidator
 implements ICellEditorValidator
@@ -47,7 +46,7 @@ implements ICellEditorValidator
 			new Integer((String)value);
 			return null;
 		} catch (NumberFormatException exc) {
-			return EditorPlugin.getResourceString("property.error.notanumber");
+			return Messages.getString("org.nightlabs.editor2d.model.NumberCellEditorValidator.error.notANumber"); //$NON-NLS-1$
 		}
 	}
 }

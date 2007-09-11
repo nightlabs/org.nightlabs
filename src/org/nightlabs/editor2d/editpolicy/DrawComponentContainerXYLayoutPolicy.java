@@ -86,6 +86,7 @@ import org.nightlabs.editor2d.request.EditorShearRequest;
 import org.nightlabs.editor2d.request.ImageCreateRequest;
 import org.nightlabs.editor2d.request.LineCreateRequest;
 import org.nightlabs.editor2d.request.TextCreateRequest;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.util.EditorUtil;
 import org.nightlabs.editor2d.util.J2DUtil;
 import org.nightlabs.editor2d.util.feedback.FeedbackUtil;
@@ -100,8 +101,6 @@ implements EditorRequestConstants
 	private static final Logger logger = Logger.getLogger(DrawComponentContainerXYLayoutPolicy.class);
   
   public DrawComponentContainerXYLayoutPolicy(XYLayout layout) {
-//    super();
-//    setXyLayout(layout);
   	this(layout, true, true, true);
   }  
 
@@ -418,7 +417,7 @@ implements EditorRequestConstants
     Point rotationCenter = request.getRotationCenter().getCopy();
     rotationCenter = EditorUtil.toAbsolute(getHost(), rotationCenter.x, rotationCenter.y);
     cmd.setRotationCenter(rotationCenter);    
-    logger.debug("cmd.rotationCenter = "+rotationCenter);
+    logger.debug("cmd.rotationCenter = "+rotationCenter); //$NON-NLS-1$
     return cmd;
   }
   
@@ -474,7 +473,7 @@ implements EditorRequestConstants
     	ShapeDrawComponent sdc = sdcEP.getShapeDrawComponent();
     	editShapeCommand.setShapeDrawComponent(sdc);
     	editShapeCommand.setPathSegmentIndex(request.getPathSegmentIndex());
-    	editShapeCommand.setLabel(EditorPlugin.getResourceString("command.edit.shape"));      
+    	editShapeCommand.setLabel(Messages.getString("org.nightlabs.editor2d.editpolicy.DrawComponentContainerXYLayoutPolicy.command.label.editShape"));       //$NON-NLS-1$
     }
   	Point modelPoint = getConstraintPointFor(request.getLocation());
   	editShapeCommand.setLocation(modelPoint); 
@@ -610,8 +609,7 @@ implements EditorRequestConstants
 		SetConstraintCommand setConstraint = new SetConstraintCommand();
 		setConstraint.setBounds(J2DUtil.toAWTRectangle(rect));
 		setConstraint.setPart(part);
-		setConstraint.setLabel(EditorPlugin.getResourceString("command.add.drawComponent"));
-		setConstraint.setDebugLabel("MLDC_XYEP setConstraint");//$NON-NLS-1$
+		setConstraint.setLabel(Messages.getString("org.nightlabs.editor2d.editpolicy.DrawComponentContainerXYLayoutPolicy.command.label.addObject")); //$NON-NLS-1$
 		
 //		Command cmd = add.chain(setConstraint);
 		Command cmd = setConstraint;
@@ -712,7 +710,7 @@ implements EditorRequestConstants
 	 */
 	protected IFigure createSizeOnDropFeedback(CreateRequest createRequest) 
 	{	  
-	  logger.debug("createSizeOnDropFeedback!");
+	  logger.debug("createSizeOnDropFeedback!"); //$NON-NLS-1$
 	  
 	  if (createRequest instanceof EditorCreateShapeRequest) 
 	  {
@@ -726,7 +724,7 @@ implements EditorRequestConstants
 //************************* BEGIN Text Feedback ******************************
 	protected void eraseSizeOnDropFeedback(Request request) 
 	{
-		logger.debug("eraseSizeOnDropFeedback!");
+		logger.debug("eraseSizeOnDropFeedback!"); //$NON-NLS-1$
 		
 		super.eraseSizeOnDropFeedback(request);								
 		if (showFeedbackText) {
@@ -752,7 +750,7 @@ implements EditorRequestConstants
   protected Label getFeedbackTextFigure()
   {
   	if (feedbackText == null)
-  		feedbackText = createFeedbackTextFigure("");
+  		feedbackText = createFeedbackTextFigure(""); //$NON-NLS-1$
   	return feedbackText;
   }
   
@@ -796,13 +794,13 @@ implements EditorRequestConstants
   	Point relativeSize = new Point(request.getSize().width, request.getSize().height);
   	Point absoluteSize = EditorUtil.toAbsolute(getHost(), relativeSize.x, relativeSize.y);
   	  	
-  	String width = "W";
-  	String height = "H";
+  	String width = Messages.getString("org.nightlabs.editor2d.editpolicy.DrawComponentContainerXYLayoutPolicy.label.shortWidth"); //$NON-NLS-1$
+  	String height = Messages.getString("org.nightlabs.editor2d.editpolicy.DrawComponentContainerXYLayoutPolicy.label.shortHeight"); //$NON-NLS-1$
   	StringBuffer sb = new StringBuffer();
-  	sb.append(width+" ");
+  	sb.append(width+" "); //$NON-NLS-1$
   	sb.append(absoluteSize.x);
-  	sb.append(", ");
-  	sb.append(height+" ");
+  	sb.append(", "); //$NON-NLS-1$
+  	sb.append(height+" "); //$NON-NLS-1$
   	sb.append(absoluteSize.y);
   	return sb.toString();
   }

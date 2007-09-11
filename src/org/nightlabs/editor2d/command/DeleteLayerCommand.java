@@ -27,20 +27,19 @@
 
 package org.nightlabs.editor2d.command;
 
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RootDrawComponent;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class DeleteLayerCommand  
 extends DeleteDrawComponentCommand
 {
-
 	public DeleteLayerCommand(PageDrawComponent page, Layer layer)	
 	{
 		super(page, layer);
-		setLabel(EditorPlugin.getResourceString("command.delete.layer"));
+		setLabel(Messages.getString("org.nightlabs.editor2d.command.DeleteLayerCommand.label")); //$NON-NLS-1$
 	}	
 		
 	@Override

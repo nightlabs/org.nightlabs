@@ -27,8 +27,8 @@ package org.nightlabs.editor2d.actions.order;
 
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -60,15 +60,14 @@ extends AbstractChangeOrderSelectionAction
 	public void init() 
 	{
 		setText(layer.getName());
-		setToolTipText(EditorPlugin.getResourceString("action.sendToLayer.tooltip"));
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.order.SendToLayerAction.tooltip")); //$NON-NLS-1$
 		setId(ID+layer.getId());
 	}
 	
 	/**
 	 * @return the index of the primary selected DrawComponent
 	 */
-	public int getNewIndex() 
-	{		
+	public int getNewIndex() {		
 		return indexOf(primarySelected);
 	}
 
@@ -78,5 +77,4 @@ extends AbstractChangeOrderSelectionAction
 	public DrawComponentContainer getContainer() {
 		return layer;
 	}
-
 }

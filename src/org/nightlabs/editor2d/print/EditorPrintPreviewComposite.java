@@ -82,7 +82,7 @@ extends PrintPreviewComposite
 	private void init(DrawComponent dc) 
 	{
 		if (dc == null)
-			throw new IllegalArgumentException("Param dc must NOT be null!");
+			throw new IllegalArgumentException("Param dc must NOT be null!"); //$NON-NLS-1$
 		
 		this.dc = dc;
 		
@@ -162,17 +162,17 @@ extends PrintPreviewComposite
 		scale = scale * getResolutionScale();
 		
 		if (logger.isDebugEnabled()) {
-			logger.debug("marginBounds = " + getImageablePageRectangle());
-			logger.debug("pageRectangle = " + getPageRectangle());			
-			logger.debug("dcBounds (72DPI) = " + getDrawComponentBounds());			
-			logger.debug("canvasBounds = " + getCanvasBounds());
-			logger.debug("margins2DCScale = "+margins2DCScale);
-			logger.debug("page2DCScale = "+getPage2DCBoundsScale());			
-			logger.debug("canvas2PageScale = "+canvas2PageScale);
-			logger.debug("ratio = "+ratio);			
-			logger.debug("scale = "+scale);			
-			logger.debug("resolutionScale = "+getResolutionScale());
-			logger.debug("");			
+			logger.debug("marginBounds = " + getImageablePageRectangle()); //$NON-NLS-1$
+			logger.debug("pageRectangle = " + getPageRectangle());			 //$NON-NLS-1$
+			logger.debug("dcBounds (72DPI) = " + getDrawComponentBounds());			 //$NON-NLS-1$
+			logger.debug("canvasBounds = " + getCanvasBounds()); //$NON-NLS-1$
+			logger.debug("margins2DCScale = "+margins2DCScale); //$NON-NLS-1$
+			logger.debug("page2DCScale = "+getPage2DCBoundsScale());			 //$NON-NLS-1$
+			logger.debug("canvas2PageScale = "+canvas2PageScale); //$NON-NLS-1$
+			logger.debug("ratio = "+ratio);			 //$NON-NLS-1$
+			logger.debug("scale = "+scale);			 //$NON-NLS-1$
+			logger.debug("resolutionScale = "+getResolutionScale()); //$NON-NLS-1$
+			logger.debug("");			 //$NON-NLS-1$
 		}				
 		return scale;
 	}
@@ -245,10 +245,10 @@ extends PrintPreviewComposite
 		getJ2DCanvas().repaint();
 		
 		if (logger.isDebugEnabled()) {
-			logger.debug("original DCBounds = "+getOriginalDCBounds());
-			logger.debug("paintPageRect = "+getPaintedPageRectangle());
-			logger.debug("paintMarginsRect = "+getPaintedMarginBounds());			
-			logger.debug("margin2PageRatio = "+getMargins2PageScale());			
+			logger.debug("original DCBounds = "+getOriginalDCBounds()); //$NON-NLS-1$
+			logger.debug("paintPageRect = "+getPaintedPageRectangle()); //$NON-NLS-1$
+			logger.debug("paintMarginsRect = "+getPaintedMarginBounds());			 //$NON-NLS-1$
+			logger.debug("margin2PageRatio = "+getMargins2PageScale());			 //$NON-NLS-1$
 		}
 	}
  		

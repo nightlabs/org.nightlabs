@@ -29,6 +29,7 @@ package org.nightlabs.editor2d.print;
 import java.awt.print.PageFormat;
 
 import org.apache.log4j.Logger;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * @author Daniel.Mazurek <at> NightLabs <dot> de
@@ -36,7 +37,6 @@ import org.apache.log4j.Logger;
  */
 public class PrintUtil 
 {
-	
 	/**
 	 * LOG4J logger used by this class
 	 */
@@ -46,7 +46,7 @@ public class PrintUtil
 	 * Use case string for prints of Editor 2D graphics
 	 * TODO: Daniel, you might want to move this somewhere else?
 	 */
-	public static final String PRINTER_USE_CASE_EDITOR_2D = "PrinterUseCase-Editor2D";	
+	public static final String PRINTER_USE_CASE_EDITOR_2D = "PrinterUseCase-Editor2D";	 //$NON-NLS-1$
 	
 	public PrintUtil() {
 		super();
@@ -54,14 +54,16 @@ public class PrintUtil
 
 	public static void logPageFormat(PageFormat pf) 
 	{
-		logger.debug("PageFormat Width = "+pf.getWidth());
-		logger.debug("PageFormat Height = "+pf.getHeight());		
-		logger.debug("PageFormat ImageableX = "+pf.getImageableX());
-		logger.debug("PageFormat ImageableY = "+pf.getImageableY());
-		logger.debug("PageFormat ImageableWidth = "+pf.getImageableWidth());
-		logger.debug("PageFormat ImageableHeight = "+pf.getImageableHeight());
-		logger.debug("PageFormat Orientation = "+getOrientationAsString(pf.getOrientation()));	
-		logger.debug("");
+		if (logger.isDebugEnabled()) {
+			logger.debug("PageFormat Width = "+pf.getWidth()); //$NON-NLS-1$
+			logger.debug("PageFormat Height = "+pf.getHeight());		 //$NON-NLS-1$
+			logger.debug("PageFormat ImageableX = "+pf.getImageableX()); //$NON-NLS-1$
+			logger.debug("PageFormat ImageableY = "+pf.getImageableY()); //$NON-NLS-1$
+			logger.debug("PageFormat ImageableWidth = "+pf.getImageableWidth()); //$NON-NLS-1$
+			logger.debug("PageFormat ImageableHeight = "+pf.getImageableHeight()); //$NON-NLS-1$
+			logger.debug("PageFormat Orientation = "+getOrientationAsString(pf.getOrientation()));	 //$NON-NLS-1$
+			logger.debug("");			 //$NON-NLS-1$
+		}
 	}
 	
 	protected static String getOrientationAsString(int orientation) 
@@ -69,13 +71,13 @@ public class PrintUtil
 		switch (orientation) 
 		{
 			case(PageFormat.LANDSCAPE):
-				return "Landscape";
+				return Messages.getString("org.nightlabs.editor2d.print.PrintUtil.landscape"); //$NON-NLS-1$
 			case(PageFormat.PORTRAIT):
-				return "Portrait";
+				return Messages.getString("org.nightlabs.editor2d.print.PrintUtil.portrait"); //$NON-NLS-1$
 			case(PageFormat.REVERSE_LANDSCAPE):
-				return "Reverse Landscape";						
+				return Messages.getString("org.nightlabs.editor2d.print.PrintUtil.reverseLandscape");						 //$NON-NLS-1$
 		}
-		return "No valid orientation";
+		return Messages.getString("org.nightlabs.editor2d.print.PrintUtil.noValidOrientation"); //$NON-NLS-1$
 	}	
 	
 //	public static void prepareGraphics(Graphics2D g2d, DrawComponent dc, PageFormat pageFormat) 

@@ -61,6 +61,7 @@ import org.nightlabs.base.dialog.CenteredDialog;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.util.GeomUtil;
 
 /**
@@ -86,7 +87,7 @@ extends CenteredDialog
 	protected void configureShell(Shell newShell) 
 	{
 		super.configureShell(newShell);		
-		newShell.setText(EditorPlugin.getResourceString("dialog.print.title"));
+		newShell.setText(Messages.getString("org.nightlabs.editor2d.print.J2DPrintDialog.title")); //$NON-NLS-1$
 		newShell.setSize(350, 325);		
 	}	
 	
@@ -195,7 +196,7 @@ extends CenteredDialog
 		
 //		// Fit		
 //		Group fitGroup = new Group(prefComp, SWT.NONE);
-//		fitGroup.setText(EditorPlugin.getResourceString("dialog.print.detailGroup.title"));
+//		fitGroup.setText("Details");
 //		fitGroup.setLayout(new GridLayout(1, true));				
 //		GridData fitData = new GridData();
 //		fitData.verticalAlignment = SWT.BEGINNING;
@@ -203,20 +204,20 @@ extends CenteredDialog
 //		fitGroup.setLayoutData(fitData);
 //		
 //		fitPage = new Button(fitGroup, SWT.RADIO);
-//		fitPage.setText(EditorPlugin.getResourceString("dialog.print.buttonFitPage.text"));
+//		fitPage.setText("Fit Page");
 //		fitPage.addSelectionListener(fitPageSelectionListener);
 //
 //		fitWidth = new Button(fitGroup, SWT.RADIO);
-//		fitWidth.setText(EditorPlugin.getResourceString("dialog.print.buttonFitWidth.text"));
+//		fitWidth.setText("Fit Width");
 //		fitWidth.addSelectionListener(fitWidthSelectionListener);
 //
 //		fitHeight = new Button(fitGroup, SWT.RADIO);
-//		fitHeight.setText(EditorPlugin.getResourceString("dialog.print.buttonFitHeight.text"));
+//		fitHeight.setText("Fit Height");
 //		fitHeight.addSelectionListener(fitHeightSelectionListener);
 
 		// Alignement
 		Group alignmentGroup = new Group(prefComp, SWT.NONE);
-		alignmentGroup.setText(EditorPlugin.getResourceString("dialog.print.alignmentGroup.text"));
+		alignmentGroup.setText(Messages.getString("org.nightlabs.editor2d.print.J2DPrintDialog.group.alignment")); //$NON-NLS-1$
 		alignmentGroup.setLayout(new GridLayout(1, true));
 		GridData alignData = new GridData();
 //		alignData.verticalAlignment = SWT.CENTER;		
@@ -225,9 +226,9 @@ extends CenteredDialog
 		alignmentGroup.setLayoutData(alignData);
 		
 		alignHorizontal = new Button(alignmentGroup, SWT.RADIO);
-		alignHorizontal.setText(EditorPlugin.getResourceString("dialog.print.buttonAlignHorizontal.text"));
+		alignHorizontal.setText(Messages.getString("org.nightlabs.editor2d.print.J2DPrintDialog.button.horizontal")); //$NON-NLS-1$
 		alignVertical = new Button(alignmentGroup, SWT.RADIO);
-		alignVertical.setText(EditorPlugin.getResourceString("dialog.print.buttonAlignVertical.text"));		
+		alignVertical.setText(Messages.getString("org.nightlabs.editor2d.print.J2DPrintDialog.button.vertical"));		 //$NON-NLS-1$
 		
 		if (pageFormat.getOrientation() == PageFormat.LANDSCAPE) {
 			alignHorizontal.setSelection(true);
@@ -244,17 +245,17 @@ extends CenteredDialog
 		// Margins
 		Group marginsGroup = new Group(prefComp, SWT.NONE);
 		marginsGroup.setLayout(new GridLayout(1, true));
-		marginsGroup.setText(EditorPlugin.getResourceString("dialog.print.marginsGroup.text"));
+		marginsGroup.setText(Messages.getString("org.nightlabs.editor2d.print.J2DPrintDialog.group.margins")); //$NON-NLS-1$
 		marginsGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		createMarginsEntry(marginsGroup, SWT.TOP, 
-				EditorPlugin.getResourceString("dialog.print.labelMarginTop.text"), marginTop);
+				Messages.getString("org.nightlabs.editor2d.print.J2DPrintDialog.label.top"), marginTop); //$NON-NLS-1$
 		createMarginsEntry(marginsGroup, SWT.BOTTOM, 
-				EditorPlugin.getResourceString("dialog.print.labelMarginBottom.text"), marginBottom);
+				Messages.getString("org.nightlabs.editor2d.print.J2DPrintDialog.label.bottom"), marginBottom); //$NON-NLS-1$
 		createMarginsEntry(marginsGroup, SWT.LEFT, 
-				EditorPlugin.getResourceString("dialog.print.labelMarginLeft.text"), marginLeft);
+				Messages.getString("org.nightlabs.editor2d.print.J2DPrintDialog.label.left"), marginLeft); //$NON-NLS-1$
 		createMarginsEntry(marginsGroup, SWT.RIGHT, 
-				EditorPlugin.getResourceString("dialog.print.labelMarginRight.text"), marginRight);		
+				Messages.getString("org.nightlabs.editor2d.print.J2DPrintDialog.label.right"), marginRight);		 //$NON-NLS-1$
 				
 		// Preview 
 		Composite canvasComp = new XComposite(comp, SWT.BORDER);
@@ -363,7 +364,7 @@ extends CenteredDialog
 				
 	protected void refresh() 
 	{		
-		logger.debug("refresh");
+		logger.debug("refresh"); //$NON-NLS-1$
 		
 		switch (align) {
 			case(HORIZONTAL_ALIGNMENT):
@@ -388,14 +389,14 @@ extends CenteredDialog
 		translateCanvas();
 		
 		if (logger.isDebugEnabled()) {
-			logger.debug("canvasBounds = " + canvasBounds);			
-			logger.debug("dcBounds = " + dcBounds);
-			logger.debug("shrinkedCanvasBounds = " + shrinkedCanvasBounds);
-			logger.debug("imageablePageRectangle = " + imageablePageRectangle);
-			logger.debug("scale = "+scale);
-			logger.debug("translateX = "+translateX);		
-			logger.debug("translateY = "+translateY);
-			logger.debug("");			
+			logger.debug("canvasBounds = " + canvasBounds);			 //$NON-NLS-1$
+			logger.debug("dcBounds = " + dcBounds); //$NON-NLS-1$
+			logger.debug("shrinkedCanvasBounds = " + shrinkedCanvasBounds); //$NON-NLS-1$
+			logger.debug("imageablePageRectangle = " + imageablePageRectangle); //$NON-NLS-1$
+			logger.debug("scale = "+scale); //$NON-NLS-1$
+			logger.debug("translateX = "+translateX);		 //$NON-NLS-1$
+			logger.debug("translateY = "+translateY); //$NON-NLS-1$
+			logger.debug("");			 //$NON-NLS-1$
 		}				
 		
 		setCanvasZoom(scale);		
@@ -404,9 +405,9 @@ extends CenteredDialog
 	
 	protected Rectangle getBounds() 
 	{
-		logger.debug("dcBounds = " + drawComponent.getBounds());
+		logger.debug("dcBounds = " + drawComponent.getBounds()); //$NON-NLS-1$
 		drawComponent.clearBounds();
-		logger.debug("dcBounds after clean = " + drawComponent.getBounds());				
+		logger.debug("dcBounds after clean = " + drawComponent.getBounds());				 //$NON-NLS-1$
 		return drawComponent.getBounds();
 	}
 	
@@ -443,7 +444,6 @@ extends CenteredDialog
 			
 	protected void init() 
 	{
-//	paintable = new PrintPaintable(drawComponent, pageFormat);
 		paintable = new DrawComponentPaintable(drawComponent);		
 		initPage(pageFormat);		
 	}

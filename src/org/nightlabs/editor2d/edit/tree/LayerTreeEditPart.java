@@ -43,7 +43,7 @@ extends DrawComponentContainerTreeEditPart
 //	public static Image LAYER_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
 //			LayerView.class).createImage();	
 	public static Image LAYER_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			LayerView.class, "", ImageFormat.gif).createImage();	
+			LayerView.class, "", ImageFormat.gif).createImage();	 //$NON-NLS-1$
 	
 //	@Override  
 //  protected Image getImage() {
@@ -82,5 +82,4 @@ extends DrawComponentContainerTreeEditPart
     // support dragging of layers   	
   	super.createEditPolicies();
   }
-  
 }

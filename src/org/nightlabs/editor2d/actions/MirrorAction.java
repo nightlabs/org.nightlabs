@@ -32,7 +32,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.command.CreateDrawComponentCommand;
 
 /**
@@ -60,8 +59,8 @@ extends AbstractEditorSelectionAction
 
   protected void init() 
   {
-  	setText(EditorPlugin.getResourceString("action.mirror.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.mirror.tooltip"));
+  	setText("Mirror");
+  	setToolTipText("Mirrors the current selected objects");
   	setId(ID);
   } 		
 	
@@ -74,7 +73,6 @@ extends AbstractEditorSelectionAction
 
 	public void run() 
 	{
-//		List<DrawComponent> dcs = getSelection(DrawComponent.class, true);
 		Collection<DrawComponent> dcs = getSelection(DrawComponent.class, true);		
 		Command cmd = new CompoundCommand();
 		for (Iterator<DrawComponent> it = dcs.iterator(); it.hasNext(); ) {
@@ -94,6 +92,6 @@ extends AbstractEditorSelectionAction
 	
 	protected String getCopyString() 
 	{
-		return " ("+EditorPlugin.getResourceString("action.copy.text")+")";
+		return " ("+"Copy"+")";
 	}
 }

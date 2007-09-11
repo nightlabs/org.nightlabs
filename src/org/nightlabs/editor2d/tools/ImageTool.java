@@ -41,22 +41,20 @@ import org.eclipse.gef.tools.CreationTool;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.command.CreateImageCommand;
 import org.nightlabs.editor2d.dialog.ConvertImageDialog;
 import org.nightlabs.editor2d.image.RenderModeMetaData;
 import org.nightlabs.editor2d.model.IModelCreationFactory;
 import org.nightlabs.editor2d.request.ImageCreateRequest;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class ImageTool 
 extends CreationTool 
 {
-//  public ImageTool(CreationFactory aFactory) {
   public ImageTool(IModelCreationFactory aFactory) {	
     this(aFactory, false);
   }
 
-//  public ImageTool(CreationFactory aFactory, boolean colorConversion) 
   public ImageTool(IModelCreationFactory aFactory, boolean colorConversion)  
   {
     super(aFactory);
@@ -81,7 +79,9 @@ extends CreationTool
   }
   
   // TODO should come from ImageIO
-  protected static final String[] fileExtensions = new String[] {"*.jpg", "*.png", "*.gif", "*.bmp", "*.pcx"};
+  protected static final String[] fileExtensions = 
+  	new String[] {"*.jpg", "*.png", "*.gif", "*.bmp", "*.pcx"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+  
   public String[] getFileExtensions() {
   	return fileExtensions;
   }
@@ -97,7 +97,7 @@ extends CreationTool
   {
     FileDialog dialog = new FileDialog(getShell());
     dialog.setFilterExtensions(getFileExtensions());
-    dialog.setText(EditorPlugin.getResourceString("dialog.choose.image"));
+    dialog.setText(Messages.getString("org.nightlabs.editor2d.tools.ImageTool.dialog.text.chooseImage")); //$NON-NLS-1$
     dialog.open();
     return dialog;
   }
@@ -105,7 +105,7 @@ extends CreationTool
   protected boolean handleButtonDown(int button) 
   {    
   	FileDialog dialog = openFileDialog();  	  	
-    if (!dialog.getFileName().equals("")) 
+    if (!dialog.getFileName().equals(""))  //$NON-NLS-1$
     {
       String fullPathName = dialog.getFilterPath() + File.separator + dialog.getFileName();
       String fileName = dialog.getFileName();
@@ -121,10 +121,10 @@ extends CreationTool
 		      		doCreation(fullPathName, fileName);		      		
 		      	}											
 					} else {
-						throw new RuntimeException("Image "+fullPathName+" could not be loaded");
+						throw new RuntimeException(Messages.getString("org.nightlabs.editor2d.tools.ImageTool.error.text.part1")+fullPathName+Messages.getString("org.nightlabs.editor2d.tools.ImageTool.error.text.part2")); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				} catch (IOException e) {
-					throw new RuntimeException("Image "+fullPathName+" could not be loaded", e);
+					throw new RuntimeException(Messages.getString("org.nightlabs.editor2d.tools.ImageTool.error.text.part1")+fullPathName+Messages.getString("org.nightlabs.editor2d.tools.ImageTool.error.text.part2"), e); //$NON-NLS-1$ //$NON-NLS-2$
 				}      
 			}
       else {
@@ -144,5 +144,4 @@ extends CreationTool
   }
     
   protected List<RenderModeMetaData> renderModeMetaDatas = new LinkedList<RenderModeMetaData>();
-  
 }

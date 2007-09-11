@@ -28,10 +28,9 @@
 package org.nightlabs.editor2d.command;
 
 import org.eclipse.gef.commands.Command;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class DeleteDrawComponentCommand 
 extends Command
@@ -57,9 +56,9 @@ extends Command
 	public DeleteDrawComponentCommand(DrawComponentContainer parent, DrawComponent child) 	
 	{
 		if (parent == null || child == null) {
-			throw new IllegalArgumentException("Neither param parent not param child may be null!");
+			throw new IllegalArgumentException("Neither param parent not param child may be null!"); //$NON-NLS-1$
 		}
-		setLabel(EditorPlugin.getResourceString("command.delete.drawcomponent"));
+		setLabel(Messages.getString("org.nightlabs.editor2d.command,DeleteDrawComponentCommand.label")); //$NON-NLS-1$
 		this.parent = parent;
 		this.child = child;
 	}	
@@ -72,7 +71,7 @@ extends Command
 	{
 	  index = parent.getDrawComponents().indexOf(child);
 	  if (index == -1)
-	  	throw new IllegalStateException("DrawComponent "+child.getId()+" is not contained in DrawComponentContainer "+parent.getId());
+	  	throw new IllegalStateException("DrawComponent "+child.getId()+" is not contained in DrawComponentContainer "+parent.getId()); //$NON-NLS-1$ //$NON-NLS-2$
     parent.removeDrawComponent(child);	  
     wasRemoved = true;
 	}
@@ -87,5 +86,4 @@ extends Command
 	{	  
     parent.addDrawComponent(child, index);    
 	}
-	
 }

@@ -36,23 +36,23 @@ import org.nightlabs.i18n.unit.IUnit;
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
 public class UnitManager 
-{	
-//	public UnitManager() {
-//		super();
-//		getUnits();
-//		getCurrentUnit();
-//	}
-	
+{		
+  public static final String PROP_CURRENT_UNIT_CHANGED = "currentUnit changed"; //$NON-NLS-1$
+  public static final String PROP_UNIT_ADDED = "Unit added";   //$NON-NLS-1$
+
+	private Set<IUnit> units = null;
+  private IUnit currentUnit = null;
+  private PropertyChangeSupport pcs = null;
+  
 	public UnitManager(Set<IUnit> units, IUnit currentUnit) 
 	{
 		if (units == null || units.isEmpty())
-			throw new IllegalArgumentException("Param units must not be null nor empty!");
+			throw new IllegalArgumentException("Param units must not be null nor empty!"); //$NON-NLS-1$
 		
 		setUnits(units);
 		setCurrentUnit(currentUnit);
 	}
 				
-	private Set<IUnit> units = null;
 	public Set<IUnit> getUnits() {
 		return units;
 	}	
@@ -60,7 +60,6 @@ public class UnitManager
 		this.units = units;
 	}
 		
-  protected IUnit currentUnit = null;
   public IUnit getCurrentUnit() 
   {
   	if (currentUnit == null)   		
@@ -69,19 +68,10 @@ public class UnitManager
   	return currentUnit;
   }
   
-//  public void setCurrentUnit(IUnit unit) 
-//  {
-//  	if (!getUnits().contains(unit))
-//  		throw new IllegalArgumentException("Param unit is not contained in getUnits()!");
-//  	
-//  	IUnit oldUnit = currentUnit;
-//  	this.currentUnit = unit;
-//  	getPropertyChangeSupport().firePropertyChange(PROP_CURRENT_UNIT_CHANGED, oldUnit, currentUnit);
-//  }
   public void setCurrentUnit(IUnit unit) 
   {
   	if (unit == null)
-  		throw new IllegalArgumentException("Param unit must not be null!");
+  		throw new IllegalArgumentException("Param unit must not be null!"); //$NON-NLS-1$
   	
   	if (!getUnits().contains(unit)) 
   	{
@@ -102,11 +92,7 @@ public class UnitManager
 				setCurrentUnit(unit);
 		}
   }
-  
-  public static final String PROP_CURRENT_UNIT_CHANGED = "currentUnit changed";
-  public static final String PROP_UNIT_ADDED = "Unit added";  
-  
-  private PropertyChangeSupport pcs = null;
+    
   protected PropertyChangeSupport getPropertyChangeSupport() {
   	if (pcs == null)
   		pcs = new PropertyChangeSupport(this);
@@ -120,5 +106,4 @@ public class UnitManager
   public void removePropertyChangeListener(PropertyChangeListener pcl) {    	
   	getPropertyChangeSupport().removePropertyChangeListener(pcl);
   }
-  
 }

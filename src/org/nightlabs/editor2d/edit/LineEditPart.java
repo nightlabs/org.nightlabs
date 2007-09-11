@@ -34,13 +34,7 @@ import org.nightlabs.editor2d.LineDrawComponent;
 
 public class LineEditPart 
 extends ShapeDrawComponentEditPart 
-{
-	/**
-	 * LOG4J logger used by this class
-	 */
-	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
-			.getLogger(LineEditPart.class);
-	
+{	
   /**
    * @param drawComponent
    */
@@ -57,9 +51,7 @@ extends ShapeDrawComponentEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(LineDrawComponent.PROP_CONNECT)) {
-			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}
 	}
-	
 }

@@ -41,12 +41,6 @@ import org.nightlabs.editor2d.model.LayerPropertySource;
 public class LayerEditPart 
 extends AbstractDrawComponentContainerEditPart
 {    
-	/**
-	 * LOG4J logger used by this class
-	 */
-	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
-			.getLogger(LayerEditPart.class);
-	
   /**
    * @param layer the Layer for the LayerEditPart
    * @see org.nightlabs.editor2d.Layer
@@ -90,7 +84,6 @@ extends AbstractDrawComponentContainerEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(Layer.PROP_VISIBLE)) {
-			logger.debug(propertyName +" changed!");
 			refreshChildren();
 			return;
 		}
@@ -104,5 +97,4 @@ extends AbstractDrawComponentContainerEditPart
     }
     return propertySource;
   } 
-  
 }

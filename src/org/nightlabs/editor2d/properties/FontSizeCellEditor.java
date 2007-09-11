@@ -29,22 +29,16 @@ package org.nightlabs.editor2d.properties;
 
 
 import org.eclipse.swt.widgets.Composite;
-
 import org.nightlabs.base.celleditor.ComboBoxCellEditor;
 import org.nightlabs.util.FontUtil;
 
 public class FontSizeCellEditor 
 extends ComboBoxCellEditor 
 {
-
   public FontSizeCellEditor(Composite parent) {
     super(parent, FontUtil.getFontSizes());
   }
-
-//  protected Object doGetValue() 
-//  {      	
-//    return new Integer(items[comboBox.getSelectionIndex()]); 
-//  }   
+ 
   protected Object doGetValue() 
   {      	
     return new Integer(items[getComboBox().getSelectionIndex()]); 
@@ -52,7 +46,7 @@ extends ComboBoxCellEditor
   
   protected void doSetValue(Object value) 
   {
-    String string = "";
+    String string = ""; //$NON-NLS-1$
     
     if (value instanceof String) {
       string = (String) value;
@@ -68,7 +62,6 @@ extends ComboBoxCellEditor
         break;
       }          
     }
-    
   }
   
 }

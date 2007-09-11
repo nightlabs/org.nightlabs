@@ -28,23 +28,18 @@
 package org.nightlabs.editor2d.command;
 
 import org.eclipse.gef.commands.Command;
-
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class SetConstraintCommand 
 extends Command
 {
-	private static final String Command_Label_Location = EditorPlugin.getResourceString("command.change.location");
-	private static final String Command_Label_Resize = EditorPlugin.getResourceString("command.resize");
-
 	private DrawComponent part;
 	private java.awt.Rectangle oldBounds;
 	private java.awt.Rectangle newBounds;
 
 	public void execute() 
 	{
-//	  oldBounds = new java.awt.Rectangle(part.getX(), part.getY(), part.getWidth(), part.getHeight());
 	  oldBounds = new java.awt.Rectangle(part.getBounds());  
 	  part.setBounds(newBounds);	  
 	}
@@ -53,28 +48,24 @@ extends Command
 	{
 	  if ((oldBounds.getWidth() == newBounds.getWidth()) && 
 	      (oldBounds.getHeight() == newBounds.getHeight()))
-	    return Command_Label_Location;
+	    return Messages.getString("org.nightlabs.editor2d.command.SetConstraintCommand.label.changeLocation"); //$NON-NLS-1$
 	  
-		return Command_Label_Resize;
+		return Messages.getString("org.nightlabs.editor2d.command.SetConstraintCommand.label.resize"); //$NON-NLS-1$
 	}	
 	
-	public void redo() 
-	{
+	public void redo() {
 	  part.setBounds(newBounds);
 	}
 		
-	public void setPart(DrawComponent part) 
-	{
+	public void setPart(DrawComponent part) {
 		this.part = part;
 	}
 		
-	public void undo() 
-	{
+	public void undo() {
 	  part.setBounds(oldBounds);
 	}
 	
-	public void setBounds(java.awt.Rectangle bounds) 
-	{
+	public void setBounds(java.awt.Rectangle bounds) {
 	  newBounds = bounds;
 	}
 }

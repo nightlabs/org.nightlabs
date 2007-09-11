@@ -30,8 +30,8 @@ package org.nightlabs.editor2d.figures;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -51,7 +51,6 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Control;
 import org.holongate.j2d.J2DRegistry;
-
 import org.nightlabs.editor2d.util.EditorUtil;
 
 /**
@@ -117,7 +116,7 @@ implements FreeformFigure, BufferedFreeformLayer
 	/**
 	 * To be able to paint children even if not an instance of RendererFigure
 	 */
-	private List nonDCFChildren = new LinkedList();
+	private List nonDCFChildren = new ArrayList();
 	
 	private boolean debug = false;
 	
@@ -147,7 +146,6 @@ implements FreeformFigure, BufferedFreeformLayer
 					Math.min(4, (childBound.height / realSizeBounds.y)+addY)
 				);
 		}
-//		LOGGER.debug("Calculated buffer factors: "+result);
 		return result;
 	}
 	
@@ -213,11 +211,7 @@ implements FreeformFigure, BufferedFreeformLayer
 					}				
 				}
 				if (debug) {
-					logger.debug("buffer created in "+(System.currentTimeMillis()-time)+" ms");
-//					LOGGER.debug("currentZoom = " + currentZoom);
-//					LOGGER.debug("absoluteBufferTranslation = "+ absoluteBufferTranslation);
-//					LOGGER.debug("offsetTranslation = " + offsetTranslation);
-//					LOGGER.debug("");
+					logger.debug("buffer created in "+(System.currentTimeMillis()-time)+" ms"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			finally {
@@ -283,7 +277,7 @@ implements FreeformFigure, BufferedFreeformLayer
 			super.paint(graphics);
 		}
 		if (debug)
-			logger.debug("painted in "+(System.currentTimeMillis()-time));
+			logger.debug("painted in "+(System.currentTimeMillis()-time)); //$NON-NLS-1$
 	}
 			
 	protected void clearBuffer() 
@@ -295,7 +289,7 @@ implements FreeformFigure, BufferedFreeformLayer
 		bufferedImage = null;
 		childBounds = null;
 		if (debug)
-			logger.debug("buffer cleared()");
+			logger.debug("buffer cleared()"); //$NON-NLS-1$
 	}
 		
 	/**
@@ -436,7 +430,7 @@ implements FreeformFigure, BufferedFreeformLayer
 	{
 		clearBuffer();		
 		if (logger.isDebugEnabled())
-			logger.debug("dispose");
+			logger.debug("dispose"); //$NON-NLS-1$
 	}
 		
 	private DisposeListener viewerControlDisposeListener = new DisposeListener(){	

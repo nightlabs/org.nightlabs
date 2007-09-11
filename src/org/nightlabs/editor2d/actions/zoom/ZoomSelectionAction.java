@@ -40,42 +40,36 @@ import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
 import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.util.EditorUtil;
 
 
 public class ZoomSelectionAction  
 extends AbstractEditorSelectionAction
 {
-  public static final String ID = ZoomSelectionAction.class.getName();
+  public static final String ID = ZoomSelectionAction.class.getName();  
+  private final Rectangle EMPTY_RECTANGLE = new Rectangle();
   
-  protected final Rectangle EMPTY_RECTANGLE = new Rectangle();  
-  /**
-   * @param part
-   */
   public ZoomSelectionAction(AbstractEditor part) {
     super(part); 
   }
 
   protected void init() 
   {
-  	setText(EditorPlugin.getResourceString("action.zoom.selection.label"));
-  	setToolTipText(EditorPlugin.getResourceString("action.zoom.selection.tooltip"));
+  	setText(Messages.getString("org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction.text")); //$NON-NLS-1$
+  	setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.zoom.ZoomSelectionAction.tooltip")); //$NON-NLS-1$
   	setId(ID);  	
-  	setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomSelectionAction.class));
+  	setImageDescriptor(SharedImages.getSharedImageDescriptor(
+  			EditorPlugin.getDefault(), ZoomSelectionAction.class));
   	setActionDefinitionId(EditorCommandConstants.ZOOM_SELECTION_ID);
   } 
       
-  /* (non-Javadoc)
-   * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#calculateEnabled()
-   */
+  @Override
   protected boolean calculateEnabled() 
   {
-//  	List selectedObjects = getDefaultSelection(false);
   	Collection selectedObjects = getDefaultSelection(false);  	
-    if (!selectedObjects.isEmpty()) 
-    {
-    	for (Iterator it = selectedObjects.iterator(); it.hasNext(); ) 
-    	{
+    if (!selectedObjects.isEmpty()) {
+    	for (Iterator it = selectedObjects.iterator(); it.hasNext(); ) {
     		Object o = it.next();
     		if (o instanceof GraphicalEditPart) {
     			GraphicalEditPart editPart = (GraphicalEditPart) o;
@@ -93,8 +87,7 @@ extends AbstractEditorSelectionAction
   {
     Rectangle totalBounds = null;
     GraphicalEditPart editPart = null;
-    for (Iterator it = getSelectedObjects().iterator(); it.hasNext(); ) 
-    {
+    for (Iterator it = getSelectedObjects().iterator(); it.hasNext(); ) {
       Object o = it.next();
       if (o instanceof GraphicalEditPart) {
       	editPart = (GraphicalEditPart) o;

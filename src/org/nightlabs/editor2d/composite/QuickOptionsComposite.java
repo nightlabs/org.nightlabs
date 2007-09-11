@@ -48,11 +48,13 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.form.NightlabsFormsToolkit;
 import org.nightlabs.base.form.XFormToolkit;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.config.QuickOptionsConfigModule;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -60,7 +62,6 @@ import org.nightlabs.editor2d.config.QuickOptionsConfigModule;
 public class QuickOptionsComposite 
 extends XComposite 
 {
-	
 	/**
 	 * @param parent
 	 * @param style
@@ -102,7 +103,7 @@ extends XComposite
 		setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 	
-	protected QuickOptionsConfigModule confMod = null;
+	private QuickOptionsConfigModule confMod = null;
 	protected QuickOptionsConfigModule getConfigModule() 
 	{
 		if (confMod == null)
@@ -120,27 +121,13 @@ extends XComposite
 		} 
 	}
 	
-//	protected void createComposite(Composite parent) 
-//	{
-//		Group cloneGroup = new Group(parent, SWT.NONE);
-//		cloneGroup.setText(EditorPlugin.getResourceString("quickOptionsView.group.clone.name"));
-//		cloneGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		cloneGroup.setLayout(new GridLayout());
-//		createEntry(cloneGroup, EditorPlugin.getResourceString("quickOptions.distanceCloneX.label"), CLONE_X);
-//		createEntry(cloneGroup, EditorPlugin.getResourceString("quickOptions.distanceCloneY.label"), CLONE_Y);
-//		
-//		Group moveGroup = new Group(parent, SWT.NONE);
-//		moveGroup.setText(EditorPlugin.getResourceString("quickOptionsView.group.move.name"));
-//		moveGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		moveGroup.setLayout(new GridLayout());
-//		createEntry(moveGroup, EditorPlugin.getResourceString("quickOptions.distanceMoveX.label"), MOVE_X);
-//		createEntry(moveGroup, EditorPlugin.getResourceString("quickOptions.distanceMoveY.label"), MOVE_Y);
-//	}
-	private FormToolkit toolkit = null;
+//	private FormToolkit toolkit = null;
+	private NightlabsFormsToolkit toolkit = null;
 	private ScrolledForm form = null;	
 	protected void createComposite(Composite parent) 
 	{
-		toolkit = new XFormToolkit(parent.getDisplay());
+//		toolkit = new XFormToolkit(parent.getDisplay());
+		toolkit = new NightlabsFormsToolkit(parent.getDisplay());
 		form = toolkit.createScrolledForm(parent);
 		TableWrapLayout layout = new TableWrapLayout();
 		form.getBody().setLayout(layout);		
@@ -157,12 +144,12 @@ extends XComposite
 				form.reflow(true);
 		  }
 		});		
-		sectionDuplicate.setText(EditorPlugin.getResourceString("quickOptions.section.clone.text"));
-		sectionDuplicate.setDescription(EditorPlugin.getResourceString("quickOptions.section.clone.description"));
+		sectionDuplicate.setText(Messages.getString("org.nightlabs.editor2d.composite.QuickOptionsComposite.section.duplicate.text")); //$NON-NLS-1$
+		sectionDuplicate.setDescription(Messages.getString("org.nightlabs.editor2d.composite.QuickOptionsComposite.section.duplicate.description")); //$NON-NLS-1$
 		Composite sectionClientDuplicate = toolkit.createComposite(sectionDuplicate);	
 		sectionClientDuplicate.setLayout(new GridLayout(2, false));				
-		createEntry(sectionClientDuplicate, EditorPlugin.getResourceString("quickOptions.distanceCloneX.label"), CLONE_X);
-		createEntry(sectionClientDuplicate, EditorPlugin.getResourceString("quickOptions.distanceCloneY.label"), CLONE_Y);
+		createEntry(sectionClientDuplicate, Messages.getString("org.nightlabs.editor2d.composite.QuickOptionsComposite.label.distanceX"), CLONE_X); //$NON-NLS-1$
+		createEntry(sectionClientDuplicate, Messages.getString("org.nightlabs.editor2d.composite.QuickOptionsComposite.label.distanceY"), CLONE_Y); //$NON-NLS-1$
 		sectionDuplicate.setClient(sectionClientDuplicate);
 		
 		Section sectionMove = toolkit.createSection(form.getBody(), 
@@ -176,41 +163,21 @@ extends XComposite
 				form.reflow(true);
 		  }
 		});		
-		sectionMove.setText(EditorPlugin.getResourceString("quickOptions.section.move.text"));
-		sectionMove.setDescription(EditorPlugin.getResourceString("quickOptions.section.move.description"));
+		sectionMove.setText(Messages.getString("org.nightlabs.editor2d.composite.QuickOptionsComposite.section.move.text")); //$NON-NLS-1$
+		sectionMove.setDescription(Messages.getString("org.nightlabs.editor2d.composite.QuickOptionsComposite.section.move.description")); //$NON-NLS-1$
 		Composite sectionClientMove = toolkit.createComposite(sectionMove);
 		sectionClientMove.setLayout(new GridLayout(2, false));				
-		createEntry(sectionClientMove, EditorPlugin.getResourceString("quickOptions.distanceMoveX.label"), MOVE_X);
-		createEntry(sectionClientMove, EditorPlugin.getResourceString("quickOptions.distanceMoveY.label"), MOVE_Y);
+		createEntry(sectionClientMove, Messages.getString("org.nightlabs.editor2d.composite.QuickOptionsComposite.label.distanceX"), MOVE_X); //$NON-NLS-1$
+		createEntry(sectionClientMove, Messages.getString("org.nightlabs.editor2d.composite.QuickOptionsComposite.label.distanceY"), MOVE_Y); //$NON-NLS-1$
 		sectionMove.setClient(sectionClientMove);
 	}
 	
-	protected static final int CLONE_X = 1; 
-	protected static final int CLONE_Y = 2;
-	protected static final int MOVE_X = 3;
-	protected static final int MOVE_Y = 4;
+	private static final int CLONE_X = 1; 
+	private static final int CLONE_Y = 2;
+	private static final int MOVE_X = 3;
+	private static final int MOVE_Y = 4;	
+	private Map<Spinner, Integer> spinner2Identifier = new HashMap<Spinner, Integer>();
 	
-	protected Map<Spinner, Integer> spinner2Identifier = new HashMap<Spinner, Integer>();
-	
-//	protected void createEntry(Composite parent, String labelText, int identifier) 
-//	{
-//		XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-//		GridLayout layout = new GridLayout(2, true);
-//		comp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		
-//		Label l = new Label(comp, SWT.NONE);
-//		l.setText(labelText);
-//		Spinner spinner = new Spinner(comp, SWT.BORDER);
-//		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
-//		
-//		spinner.setSelection(getValue(identifier));		
-//		
-//		spinner.addSelectionListener(textListener);
-//		spinner.addFocusListener(focusListener);
-//		spinner.addDisposeListener(disposeListener);
-//		
-//		spinner2Identifier.put(spinner, new Integer(identifier));
-//	}
 	protected void createEntry(Composite parent, String labelText, int identifier) 
 	{
 		toolkit.paintBordersFor(parent);
@@ -227,7 +194,7 @@ extends XComposite
 		spinner2Identifier.put(spinner, new Integer(identifier));		
 	}	
 	
-	protected SelectionListener textListener = new SelectionListener()
+	private SelectionListener textListener = new SelectionListener()
 	{	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -276,7 +243,7 @@ extends XComposite
 		return 0;
 	}
 	
-	protected FocusListener focusListener = new FocusListener()
+	private FocusListener focusListener = new FocusListener()
 	{	
 		public void focusLost(FocusEvent e) 
 		{
@@ -290,7 +257,7 @@ extends XComposite
 		}	
 	};
 	
-	protected DisposeListener disposeListener = new DisposeListener()
+	private DisposeListener disposeListener = new DisposeListener()
 	{	
 		public void widgetDisposed(DisposeEvent e) 
 		{

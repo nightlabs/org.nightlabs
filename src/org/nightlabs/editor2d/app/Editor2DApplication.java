@@ -28,7 +28,7 @@ package org.nightlabs.editor2d.app;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.app.AbstractApplication;
 import org.nightlabs.base.app.AbstractWorkbenchAdvisor;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -36,20 +36,12 @@ import org.nightlabs.editor2d.EditorPlugin;
 public class Editor2DApplication 
 extends AbstractApplication 
 {
-	public Editor2DApplication() {
-		super();
-	}
-
-	/** 
-	 * @see org.nightlabs.base.app.AbstractApplication#initApplicationName()
-	 */
 	public String initApplicationName() {
-		return EditorPlugin.getResourceString("application.name");
+		return Messages.getString("org.nightlabs.editor2d.app.Editor2DApplication.name"); //$NON-NLS-1$
 	}
 
 	@Override
 	public AbstractWorkbenchAdvisor initWorkbenchAdvisor(Display display) {
 		return new Editor2DWorkbenchAdvisor();
 	}
-
 }

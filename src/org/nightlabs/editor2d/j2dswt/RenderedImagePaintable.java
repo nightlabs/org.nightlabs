@@ -64,14 +64,14 @@ implements IPaintable
 	public void paint(Control control, Graphics2D g2d) 
 	{
 		if (image == null) {
-			logger.debug("image = null!");
+			logger.debug("image = null!"); //$NON-NLS-1$
 			return;			
 		}
 		
 		long start = System.currentTimeMillis();
 		g2d.drawRenderedImage(image, null);
 		long end = System.currentTimeMillis() - start;		
-		logger.debug("paint took "+end+" ms!");
+		logger.debug("paint took "+end+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -87,5 +87,4 @@ implements IPaintable
 	public Rectangle2D getBounds(Control control) {
 		return new Rectangle2D.Double(0,0,image.getWidth(),image.getHeight());
 	}
-
 }

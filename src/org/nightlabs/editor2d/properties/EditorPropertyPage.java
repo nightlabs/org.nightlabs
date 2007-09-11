@@ -101,7 +101,7 @@ extends PropertySheetPage
 	{	
 		public void widgetSelected(SelectionEvent e) 
 		{
-			logger.debug("unit changed!");
+			logger.debug("unit changed!"); //$NON-NLS-1$
 			if (selection != null) {
 				for (int i = 0; i < selection.length; i++) {
 					setUnit(selection[i]);					
@@ -129,7 +129,6 @@ extends PropertySheetPage
 				DrawComponentPropertySource dcps = (DrawComponentPropertySource) ps;
 				IUnit currentUnit = getUnitManager().getCurrentUnit();
 				dcps.setUnit(currentUnit);
-//				LOGGER.debug("set currentUnit "+currentUnit+" for DrawComponentPropertySource "+dcps);    					    			
 			}			
 		}
 	}

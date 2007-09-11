@@ -32,10 +32,10 @@ import java.util.Map;
 import org.eclipse.gef.commands.Command;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.GroupDrawComponent;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.impl.GroupDrawComponentImpl;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -43,13 +43,12 @@ import org.nightlabs.editor2d.impl.GroupDrawComponentImpl;
 public class GroupCommand 
 extends Command 
 {
-
 	public GroupCommand(Collection<DrawComponent> drawComponents) 
 	{
 		if (drawComponents == null)
-			throw new IllegalArgumentException("Param drawComponents must not be null!");
+			throw new IllegalArgumentException("Param drawComponents must not be null!"); //$NON-NLS-1$
 		
-		setLabel(EditorPlugin.getResourceString("command.group"));
+		setLabel(Messages.getString("org.nightlabs.editor2d.command.GroupCommand.label")); //$NON-NLS-1$
 		this.drawComponents = drawComponents;
 	}
 

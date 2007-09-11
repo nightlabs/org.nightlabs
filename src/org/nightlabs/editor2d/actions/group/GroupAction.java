@@ -29,9 +29,9 @@ import java.util.Collection;
 
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
 import org.nightlabs.editor2d.command.GroupCommand;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -60,8 +60,8 @@ extends AbstractEditorSelectionAction
 	protected void init() 
 	{
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.group.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.group.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.group.GroupAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.group.GroupAction.tooltip")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -72,12 +72,10 @@ extends AbstractEditorSelectionAction
 	@Override
 	public void run() 
 	{
-//		List<DrawComponent> selection = getSelection(getDefaultIncludes(true), true);
 		Collection<DrawComponent> selection = getSelection(getDefaultIncludes(true), true);		
 		GroupCommand cmd = new GroupCommand(selection);
 		execute(cmd);
 		if (cmd.getGroup() != null)
 			selectEditPart(cmd.getGroup());
 	}
-	
 }

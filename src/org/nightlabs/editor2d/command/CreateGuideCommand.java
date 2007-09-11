@@ -29,9 +29,9 @@ package org.nightlabs.editor2d.command;
 
 import org.eclipse.gef.commands.Command;
 import org.nightlabs.editor2d.EditorGuide;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EditorRuler;
 import org.nightlabs.editor2d.impl.EditorGuideImpl;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class CreateGuideCommand 
 extends Command 
@@ -42,7 +42,7 @@ extends Command
 
   public CreateGuideCommand(EditorRuler parent, int position) 
   {
-  	super(EditorPlugin.getResourceString("command.create.guide"));
+  	super(Messages.getString("org.nightlabs.editor2d.command.CreateGuideCommand.label")); //$NON-NLS-1$
   	this.parent = parent;
   	this.position = position;
   }
@@ -50,7 +50,7 @@ extends Command
 //  private Editor2DFactory factory = null;
 //  public CreateGuideCommand(EditorRuler parent, int position, Editor2DFactory factory) 
 //  {
-//  	super(EditorPlugin.getResourceString("command.create.guide"));
+//  	super("Create guide");
 //  	this.parent = parent;
 //  	this.position = position;
 //  	this.factory = factory;
@@ -74,5 +74,4 @@ extends Command
   public void undo() {
     parent.removeGuide(guide);
   }
-
 }

@@ -31,6 +31,7 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class ZoomAllAction 
@@ -44,10 +45,10 @@ extends ZoomAction
    */
   public ZoomAllAction(ZoomManager zoomManager) 
   {
-  	super(EditorPlugin.getResourceString("action.zoom.all.label"),
+  	super(Messages.getString("org.nightlabs.editor2d.actions.zoom.ZoomAllAction.text"), //$NON-NLS-1$
   	    SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomAllAction.class),
   	    zoomManager);  	
-  	setToolTipText(EditorPlugin.getResourceString("action.zoom.all.tooltip"));
+  	setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.zoom.ZoomAllAction.tooltip")); //$NON-NLS-1$
   	setId(ID);
   	setActionDefinitionId(EditorCommandConstants.ZOOM_ALL_ID);
   }
@@ -65,5 +66,4 @@ extends ZoomAction
   public void zoomChanged(double zoom) {
     setEnabled(true);
   }
-
 }

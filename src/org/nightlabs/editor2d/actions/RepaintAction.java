@@ -28,6 +28,7 @@ package org.nightlabs.editor2d.actions;
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -55,22 +56,19 @@ extends AbstractEditorAction
 	/**
 	 * @see org.nightlabs.editor2d.actions.AbstractEditorAction#calculateEnabled()
 	 */
-	protected boolean calculateEnabled() 
-	{
+	protected boolean calculateEnabled() {
 		return true;
 	}
 
 	protected void init() 
 	{
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.repaint.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.repaint.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.RepaintAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.RepaintAction.tooltip")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), RepaintAction.class));
 	}
 
-	public void run() 
-	{
+	public void run() {
 		getEditor().updateViewer();
 	}
-		
 }

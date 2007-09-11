@@ -53,11 +53,11 @@ implements IPerspectiveFactory
     String editorArea = layout.getEditorArea();
     layout.addView(IPageLayout.ID_EDITOR_AREA, IPageLayout.TOP, IPageLayout.RATIO_MAX, editorArea);
     
-    IFolderLayout rightTop = layout.createFolder("rightTop", IPageLayout.RIGHT, 0.75f, editorArea);
+    IFolderLayout rightTop = layout.createFolder("rightTop", IPageLayout.RIGHT, 0.75f, editorArea); //$NON-NLS-1$
     rightTop.addView(IPageLayout.ID_PROP_SHEET);
-    IFolderLayout rightMiddle = layout.createFolder("rightMiddle", IPageLayout.BOTTOM, 0.33f, "rightTop");
+    IFolderLayout rightMiddle = layout.createFolder("rightMiddle", IPageLayout.BOTTOM, 0.33f, "rightTop"); //$NON-NLS-1$ //$NON-NLS-2$
     rightMiddle.addView(IPageLayout.ID_OUTLINE);    
-    IFolderLayout rightBottom = layout.createFolder("rightBottom", IPageLayout.BOTTOM, 0.5f, "rightMiddle");
+    IFolderLayout rightBottom = layout.createFolder("rightBottom", IPageLayout.BOTTOM, 0.5f, "rightMiddle"); //$NON-NLS-1$ //$NON-NLS-2$
     rightBottom.addView(LayerView.ID_VIEW);
     rightBottom.addView(QuickOptionsView.ID);
                

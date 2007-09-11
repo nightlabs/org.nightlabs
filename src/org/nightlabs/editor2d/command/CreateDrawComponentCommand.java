@@ -31,7 +31,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.util.J2DUtil;
 
 public class CreateDrawComponentCommand 
@@ -48,13 +48,13 @@ extends Command
 	
 	public CreateDrawComponentCommand() 
 	{
-	  super(EditorPlugin.getResourceString("command.create.drawcomponent"));	  
+	  super(Messages.getString("org.nightlabs.editor2d.command.CreateDrawComponentCommand.label"));	   //$NON-NLS-1$
 	}
 
 	public CreateDrawComponentCommand(DrawComponent dc, DrawComponentContainer parent, int index) 
 	{
 	  super();
-	  setLabel(EditorPlugin.getResourceString("command.create.drawcomponent"));
+	  setLabel(Messages.getString("org.nightlabs.editor2d.command.CreateDrawComponentCommand.label")); //$NON-NLS-1$
 	  this.drawComponent = dc;
 	  this.parent = parent;
 	  this.drawOrderIndex = index;

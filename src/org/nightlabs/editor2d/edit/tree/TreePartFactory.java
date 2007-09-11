@@ -48,7 +48,7 @@ implements EditPartFactory
 	public TreePartFactory(FilterManager filterMan) 
 	{
 		if (filterMan == null)
-			throw new IllegalArgumentException("Param filterMan must not be null!");
+			throw new IllegalArgumentException("Param filterMan must not be null!"); //$NON-NLS-1$
 		
 		this.filterMan = filterMan;
 	}

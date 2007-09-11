@@ -82,7 +82,6 @@ import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
-import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.J2DGraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
@@ -164,9 +163,8 @@ import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintSetupAction;
 import org.nightlabs.editor2d.properties.EditorPropertyPage;
 import org.nightlabs.editor2d.properties.UnitManager;
-import org.nightlabs.editor2d.render.Draw2DRenderContext;
 import org.nightlabs.editor2d.render.RenderModeManager;
-import org.nightlabs.editor2d.render.j2d.J2DRenderContext;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.rulers.EditorRulerProvider;
 import org.nightlabs.editor2d.unit.DotUnit;
 import org.nightlabs.editor2d.unit.UnitConstants;
@@ -321,7 +319,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	public AbstractEditor() 
 	{
 		init();
-//		setEditDomain(new DefaultEditDomain(this));            
 		filterMan = new FilterManager(getFilterNameProvider()); 
 //		initJ2DRegistry();
 	}
@@ -359,7 +356,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 				return root;        	
 			} 
 			catch (IOException e) {
-				throw new RuntimeException("There occured an Error while reading with IOFilter "+ioFilter+" from InpuStream "+input, e);
+				throw new RuntimeException("There occured an Error while reading with IOFilter "+ioFilter+" from InpuStream "+input, e); //$NON-NLS-1$ //$NON-NLS-2$
 			}          
 		}
 		return null;
@@ -376,13 +373,13 @@ extends J2DGraphicalEditorWithFlyoutPalette
 				{	    			
 					IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
 					progressFilter.addPropertyChangeListener(progressListener);	    			
-					monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), progressFilter.getTotalWork());
+					monitor.beginTask(Messages.getString("org.nightlabs.editor2d.AbstractEditor.job.text") + " " + fileInput.getName(), progressFilter.getTotalWork()); //$NON-NLS-1$ //$NON-NLS-2$
 					root = load(ioFilter, new FileInputStream(fileInput.getFile()));
 					progressFilter.removePropertyChangeListener(progressListener);
 					return;
 				}
 				else
-					monitor.beginTask(EditorPlugin.getResourceString("resource.load") +" "+ fileInput.getName(), 2);	    			
+					monitor.beginTask(Messages.getString("org.nightlabs.editor2d.AbstractEditor.job.text") + " "+ fileInput.getName(), 2);	    			 //$NON-NLS-1$ //$NON-NLS-2$
 				root = load(ioFilter, new FileInputStream(fileInput.getFile()));
 				return;
 			} catch (FileNotFoundException e) {
@@ -445,7 +442,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		super.configureGraphicalViewer();
 		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer)getGraphicalViewer();
 
-		List zoomLevels = new ArrayList(3);
+		List<String> zoomLevels = new ArrayList<String>(3);
 		zoomLevels.add(ZoomManager.FIT_ALL);
 		zoomLevels.add(ZoomManager.FIT_WIDTH);
 		zoomLevels.add(ZoomManager.FIT_HEIGHT);
@@ -498,7 +495,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	private ControlListener resizeListener = new ControlAdapter(){		
 		public void controlResized(ControlEvent e) {
 			updateViewer();
-			logger.debug("Control resized!");
+			logger.debug("Control resized!"); //$NON-NLS-1$
 		}		
 	};
 			
@@ -595,16 +592,17 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 			File file = input.getFile();
 			String inputName = input.getName();
-			logger.debug("inputName = "+inputName);
+			logger.debug("inputName = "+inputName); //$NON-NLS-1$
 
 			if (file.exists() 
-					|| org.eclipse.jface.dialogs.MessageDialogWithToggle.openConfirm(getSite().getShell(),
-							EditorPlugin.getResourceString("resource.create.file"),
-							EditorPlugin.getResourceString("resource.fileNotExists.1")
-							+ " "
+					|| org.eclipse.jface.dialogs.MessageDialogWithToggle.openConfirm(
+							getSite().getShell(),
+							Messages.getString("org.nightlabs.editor2d.AbstractEditor.errorDialog.title"), //$NON-NLS-1$
+							Messages.getString("org.nightlabs.editor2d.AbstractEditor.errorDialog.message.part1") //$NON-NLS-1$
+							+ " " //$NON-NLS-1$
 							+ file.getName() 
-							+ " "
-							+ EditorPlugin.getResourceString("resource.fileNotExists.2")))
+							+ " " //$NON-NLS-1$
+							+ Messages.getString("org.nightlabs.editor2d.AbstractEditor.errorDialog.message.part2"))) //$NON-NLS-1$
 			{
 				editorSaving = true;
 				saveProperties();
@@ -703,7 +701,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		if (getModelRootEditPart() != null) {
 			getModelRootEditPart().setDescriptorManager(getDescriptorManager());
 		} else {
-			logger.debug("DescriptorManager for RootDrawComponentEditPart not set, because it is null!");
+			logger.debug("DescriptorManager for RootDrawComponentEditPart not set, because it is null!"); //$NON-NLS-1$
 		}
 		viewerManager.setDescriptorManager(getDescriptorManager());
 		
@@ -716,7 +714,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	private void zoomAll() {
 		if (getZoomManager() != null) {
 			getZoomManager().setZoomAsText(ZoomManager.FIT_ALL);
-			logger.info("zoomAll");
+			logger.info("zoomAll"); //$NON-NLS-1$
 		} 
 		else {
 			Display.getDefault().timerExec(2000, new Runnable(){			
@@ -724,8 +722,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 					zoomAll();
 				}			
 			});
-			logger.info("ZoomAll does not worked, zoomManager == null");
-			logger.info("started Timer");
+			logger.info("ZoomAll does not worked, zoomManager == null"); //$NON-NLS-1$
+			logger.info("started Timer"); //$NON-NLS-1$
 		}		
 	}
 		
@@ -939,10 +937,10 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		registry.registerAction(action);
 		getPropertyActions().add(action.getId());
 
-		// Repaint Action
-		action = new RepaintAction(this);
-		registry.registerAction(action);
-		getPropertyActions().add(action.getId());
+//		// Repaint Action
+//		action = new RepaintAction(this);
+//		registry.registerAction(action);
+//		getPropertyActions().add(action.getId());
 
 //		// Test Viewer Action
 //		action = new ViewerAction(this);
@@ -1015,7 +1013,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
 		if (logger.isDebugEnabled()) {
 			long duration = System.currentTimeMillis() - start;
-			logger.debug("createGraphicalViewer took "+duration+" ms!");
+			logger.debug("createGraphicalViewer took "+duration+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}  
 
@@ -1187,7 +1185,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 					url = f.toURL();
 					ip.setURL(url);	
 					if (logger.isDebugEnabled())
-						logger.debug("url = "+url);
+						logger.debug("url = "+url); //$NON-NLS-1$
 						
 					if (ip instanceof IOFilterUIInformationProvider) 
 					{
@@ -1209,8 +1207,8 @@ extends J2DGraphicalEditorWithFlyoutPalette
 						}
 					}										
 				} catch (MalformedURLException e) {
-					logger.warn("fileInput.getFile() "+f+" could not be transformed into ULR", e);
-					logger.warn("prepartion of IOFilterInformationProvider for IOFilter "+ioFilter.getName().getText(Locale.getDefault().getLanguage()) +" failed!");
+					logger.warn("fileInput.getFile() "+f+" could not be transformed into ULR", e); //$NON-NLS-1$ //$NON-NLS-2$
+					logger.warn("prepartion of IOFilterInformationProvider for IOFilter "+ioFilter.getName().getText(Locale.getDefault().getLanguage()) +" failed!"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 		}		
@@ -1264,13 +1262,13 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			try {
 				if (ioFilter instanceof IOFilterWithProgress) {      		
 					IOFilterWithProgress progressFilter = (IOFilterWithProgress) ioFilter;
-					progressMonitor.beginTask(EditorPlugin.getResourceString("resource.save") +" "+ file.getName(), progressFilter.getTotalWork());      		
+					progressMonitor.beginTask(Messages.getString("org.nightlabs.editor2d.AbstractEditor.job.name") + " " + file.getName(), progressFilter.getTotalWork()); //$NON-NLS-1$ //$NON-NLS-2$
 					progressFilter.addPropertyChangeListener(progressListener);      		
 					saveFile(file, progressFilter, progressMonitor);
 					progressFilter.removePropertyChangeListener(progressListener); 
 				}
 				else {
-					progressMonitor.beginTask(EditorPlugin.getResourceString("resource.save") +" "+ file.getName(), 2);      		
+					progressMonitor.beginTask(Messages.getString("org.nightlabs.editor2d.AbstractEditor.job.name") + " " + file.getName(), 2); //$NON-NLS-1$ //$NON-NLS-2$
 					saveFile(file, ioFilter, progressMonitor);      		
 				}      		
 			} finally {
@@ -1284,7 +1282,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	{
 		try {        	
 			String fileName = file.getCanonicalPath();
-			logger.info("Save File "+fileName);
+			logger.info("Save File "+fileName); //$NON-NLS-1$
 			FileOutputStream fos = new FileOutputStream(fileName);          
 			ioFilter.write(getRootDrawComponent(), fos);      		
 		} catch (Exception e) {
@@ -1318,14 +1316,14 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		getUnitManager().setCurrentUnit(getRootDrawComponent().getModelUnit());
 		if (logger.isDebugEnabled()) {
 			long duration = System.currentTimeMillis() - start;
-			logger.debug("setInput() took "+duration+" ms!");
+			logger.debug("setInput() took "+duration+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 	}
 	
 	protected void initialzePage() 
 	{
-		logger.debug("initialize Page!");
+		logger.debug("initialize Page!"); //$NON-NLS-1$
 		root = getRootDrawComponent();
 		loadAdditional();
 
@@ -1395,7 +1393,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	{
 		refreshBuffer();    	
 		getGraphicalViewer().getControl().redraw();
-		logger.debug("updateViewer!");
+		logger.debug("updateViewer!"); //$NON-NLS-1$
 	}
 
 	protected void refreshBuffer() 
@@ -1492,25 +1490,30 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		long startTime = System.currentTimeMillis();
 
 		double mb = 1024 * 1024;
-		logger.debug("Max Memory BEFORE GC   = "+(maxMemory / mb)+" MB");
-		logger.debug("Total Memory BEFORE GC = "+(totalMemory / mb)+" MB");
-		logger.debug("Used Memory BEFORE GC  = "+(usedMemory / mb)+" MB");
-		logger.debug("Free Memory BEFORE GC  = "+(freeMemory / mb)+" MB");    
-		logger.debug("GC Begin!");
+		if (logger.isDebugEnabled()) {
+			logger.debug("Max Memory BEFORE GC   = "+(maxMemory / mb)+" MB"); //$NON-NLS-1$ //$NON-NLS-2$
+			logger.debug("Total Memory BEFORE GC = "+(totalMemory / mb)+" MB"); //$NON-NLS-1$ //$NON-NLS-2$
+			logger.debug("Used Memory BEFORE GC  = "+(usedMemory / mb)+" MB"); //$NON-NLS-1$ //$NON-NLS-2$
+			logger.debug("Free Memory BEFORE GC  = "+(freeMemory / mb)+" MB");     //$NON-NLS-1$ //$NON-NLS-2$
+			logger.debug("GC Begin!");			 //$NON-NLS-1$
+		}
 
 		runTime.gc();
 		long newTime = System.currentTimeMillis() - startTime;
 		
-		logger.debug("GC took "+newTime+" ms");
+		if (logger.isDebugEnabled())
+			logger.debug("GC took "+newTime+" ms"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		freeMemory = runTime.freeMemory();
 		totalMemory = runTime.totalMemory();
 		usedMemory = totalMemory - freeMemory;
 		
-		logger.debug("Total Memory AFTER GC = "+(totalMemory / mb)+" MB");
-		logger.debug("Used Memory AFTER GC  = "+(usedMemory / mb)+" MB");
-		logger.debug("Free Memory AFTER GC  = "+(freeMemory / mb)+" MB");    
-		logger.debug("");  	
+		if (logger.isDebugEnabled()) {
+			logger.debug("Total Memory AFTER GC = "+(totalMemory / mb)+" MB"); //$NON-NLS-1$ //$NON-NLS-2$
+			logger.debug("Used Memory AFTER GC  = "+(usedMemory / mb)+" MB"); //$NON-NLS-1$ //$NON-NLS-2$
+			logger.debug("Free Memory AFTER GC  = "+(freeMemory / mb)+" MB");     //$NON-NLS-1$ //$NON-NLS-2$
+			logger.debug("");  				 //$NON-NLS-1$
+		}
 	}	
 
 	private Editor2DFactory factory = null;

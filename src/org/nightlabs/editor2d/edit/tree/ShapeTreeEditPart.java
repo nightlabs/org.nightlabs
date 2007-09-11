@@ -42,7 +42,7 @@ extends DrawComponentTreeEditPart
 //	public static Image SHAPE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
 //			ShapeTreeEditPart.class).createImage();	
 	public static Image SHAPE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			ShapeTreeEditPart.class, "", ImageFormat.gif).createImage();	
+			ShapeTreeEditPart.class, "", ImageFormat.gif).createImage();	 //$NON-NLS-1$
 	
 	/**
 	 * @param shapeDrawComponent the {@link ShapeDrawComponent}

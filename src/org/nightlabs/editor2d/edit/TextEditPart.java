@@ -29,6 +29,7 @@ package org.nightlabs.editor2d.edit;
 
 import java.beans.PropertyChangeEvent;
 
+import org.apache.log4j.Logger;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import org.nightlabs.editor2d.TextDrawComponent;
@@ -40,8 +41,7 @@ extends ShapeDrawComponentEditPart
 	/**
 	 * LOG4J logger used by this class
 	 */
-	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
-			.getLogger(TextEditPart.class);
+	private static final Logger logger = Logger.getLogger(TextEditPart.class);
 	
   public TextEditPart(TextDrawComponent text) {
     super(text);
@@ -56,32 +56,32 @@ extends ShapeDrawComponentEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(TextDrawComponent.PROP_FONT)) {
-			logger.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!"); //$NON-NLS-1$
 			refreshVisuals();	
 			return;
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_FONT_NAME)) {
-			logger.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!"); //$NON-NLS-1$
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_FONT_SIZE)) {
-			logger.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!"); //$NON-NLS-1$
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_TEXT)) {
-			logger.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!"); //$NON-NLS-1$
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_BOLD)) {
-			logger.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!"); //$NON-NLS-1$
 			refreshVisuals();
 			return;			
 		}
 		else if (propertyName.equals(TextDrawComponent.PROP_ITALIC)) {
-			logger.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!"); //$NON-NLS-1$
 			refreshVisuals();
 			return;			
 		}		
@@ -119,5 +119,4 @@ extends ShapeDrawComponentEditPart
 //  {
 //    return (TextFigure) getFigure();
 //  }
- 
 }

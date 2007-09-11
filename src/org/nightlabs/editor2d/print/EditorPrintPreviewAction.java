@@ -27,7 +27,7 @@ package org.nightlabs.editor2d.print;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -55,8 +55,8 @@ extends AbstractEditorPrintAction
 	protected void init() 
 	{
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.printPreview.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.printPreview.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.print.EditorPrintPreviewAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.print.EditorPrintPreviewAction.tooltip")); //$NON-NLS-1$
 	}
 			
 	public void run() 
@@ -72,6 +72,7 @@ extends AbstractEditorPrintAction
 		EditorPrintPreviewDialog printDialog = new EditorPrintPreviewDialog(getDrawComponent(), getShell());		
 		if (printDialog.open() == Dialog.CANCEL)
 			return;
+		
 //		awtPrinter.getPrinterJob().setPrintable(
 //				getPrintable(PrintConstant.FIT_PAGE), 
 //				printDialog.getPageFormat()
@@ -82,5 +83,4 @@ extends AbstractEditorPrintAction
 //			throw new RuntimeException(pe);
 //		}			
 	}
-	
 }

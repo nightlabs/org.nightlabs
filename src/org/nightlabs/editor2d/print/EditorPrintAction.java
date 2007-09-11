@@ -31,8 +31,8 @@ import java.awt.print.PrinterJob;
 import org.apache.log4j.Logger;
 import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.print.DrawComponentPrintable.PrintConstant;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.print.AWTPrinter;
 
 /**
@@ -61,8 +61,8 @@ extends AbstractEditorPrintAction
 	 */
 	protected void init() 
 	{
-		setText(EditorPlugin.getResourceString("action.print.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.print.tooltip"));		
+		setText(Messages.getString("org.nightlabs.editor2d.print.EditorPrintAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.print.EditorPrintAction.tooltip"));		 //$NON-NLS-1$
 		setId(ID);
 		setActionDefinitionId(ID);
 	}
@@ -81,7 +81,7 @@ extends AbstractEditorPrintAction
 			else
 				pf = printJob.defaultPage();
 			
-			logger.debug("PageFormat in EditorPrintAction");
+			logger.debug("PageFormat in EditorPrintAction"); //$NON-NLS-1$
 			PrintUtil.logPageFormat(pf);
 		}
 

@@ -29,11 +29,10 @@ package org.nightlabs.editor2d.actions;
 
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
-
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EditorStateManager;
 import org.nightlabs.editor2d.edit.ShapeDrawComponentEditPart;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class EditShapeAction 
@@ -55,8 +54,8 @@ implements EditorRequestConstants
   protected void init() 
   {
   	super.init();
-  	setText(EditorPlugin.getResourceString("action.editshape.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.editshape.tooltip"));
+  	setText(Messages.getString("org.nightlabs.editor2d.actions.EditShapeAction.text")); //$NON-NLS-1$
+  	setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.EditShapeAction.tooltip")); //$NON-NLS-1$
   	setId(ID);
   	setActionDefinitionId(EditorCommandConstants.EDIT_SHAPE_ID);
 //  	setImageDescriptor(ImageDescriptor.createFromFile(EditorPlugin.class,"icons/editShape16.gif"));
@@ -67,7 +66,6 @@ implements EditorRequestConstants
    */
   public void run() 
   {
-//    EditorStateManager.setCurrentState(EditorStateManager.STATE_EDIT_SHAPE);
   	if (getSelectedObjects().size() == 1 && (getSelectedObjects().get(0) instanceof ShapeDrawComponentEditPart)) 
   	{    		
   		ShapeDrawComponentEditPart sdcEP = (ShapeDrawComponentEditPart) getSelectedObjects().get(0); 

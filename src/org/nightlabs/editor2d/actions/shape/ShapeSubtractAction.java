@@ -26,10 +26,10 @@
 package org.nightlabs.editor2d.actions.shape;
 
 import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.command.shape.AbstractBooleanOperationCommand;
 import org.nightlabs.editor2d.command.shape.ShapeSubtractCommand;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -58,8 +58,7 @@ extends AbstractBooleanOperationAction
 	protected void init() 
 	{
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.shapeSubtract.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.shapeSubtract.tooltip"));		
+		setText(Messages.getString("org.nightlabs.editor2d.actions.shape.ShapeSubtractAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.shape.ShapeSubtractAction.tooltip"));		 //$NON-NLS-1$
 	}
-
 }

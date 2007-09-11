@@ -29,10 +29,9 @@ package org.nightlabs.editor2d.actions;
 
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
-
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EditorStateManager;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class NormalSelectionAction 
@@ -40,12 +39,7 @@ extends SelectionAction
 implements EditorRequestConstants
 {
   public static final String ID = NormalSelectionAction.class.getName();
-  
-//  private Request selectionRequest = new EditorEditShapeRequest(REQ_SELECTION);  
-//  public Request getSelectionRequest() {
-//    return selectionRequest;
-//  }
-  
+    
   /**
    * @param part
    */
@@ -53,23 +47,12 @@ implements EditorRequestConstants
     super(part);
   }
 
-  /* (non-Javadoc)
-   * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#calculateEnabled()
-   */
   protected boolean calculateEnabled() 
   {
     if (EditorStateManager.getCurrentState() != EditorStateManager.STATE_NORMAL_SELECTION) {
       return true;
     }
     return false;
-//  	if (getSelectedObjects().size() == 1 && (getSelectedObjects().get(0) instanceof ShapeDrawComponentEditPart)) 
-//  	{
-//  	  ShapeDrawComponentEditPart part = (ShapeDrawComponentEditPart)getSelectedObjects().get(0);
-//  		boolean understands = part.understandsRequest(getSelectionRequest()); 
-//  		if (understands && EditorStateManager.getCurrentState() == EditorStateManager.STATE_EDIT_SHAPE);
-//  			return true;
-//  	}
-//  	return false;    
   }
   
   /**
@@ -78,18 +61,16 @@ implements EditorRequestConstants
   protected void init() 
   {
   	super.init();
-  	setText(EditorPlugin.getResourceString("action.normalselection.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.normalselection.tooltip"));
+  	setText(Messages.getString("org.nightlabs.editor2d.actions.NormalSelectionAction.text")); //$NON-NLS-1$
+  	setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.NormalSelectionAction.tooltip")); //$NON-NLS-1$
   	setId(ID);  	
 //  	setImageDescriptor(SharedImages.DESC_SELECTION_TOOL_16);
   }  
     
   public void run() 
   {
-//	EditorStateManager.setCurrentState(EditorStateManager.STATE_NORMAL_SELECTION);
   	if (!getSelectedObjects().isEmpty()) {
   		EditorStateManager.setNormalSelectionMode(getSelectedObjects());
   	}
   }
-  	
 }

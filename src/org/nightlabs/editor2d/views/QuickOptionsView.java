@@ -47,11 +47,11 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.ViewPart;
-import org.nightlabs.base.form.XFormToolkit;
+import org.nightlabs.base.form.NightlabsFormsToolkit;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.config.QuickOptionsConfigModule;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -61,18 +61,13 @@ extends ViewPart
 {
 	public static final String ID = QuickOptionsView.class.getName(); 
 	
-	public QuickOptionsView() 
-	{
-		super();
-	}
-
 	protected void init() 
 	{
-		setPartName(EditorPlugin.getResourceString("quickOptionsView.name"));
+		setPartName(Messages.getString("org.nightlabs.editor2d.views.QuickOptionsView.name")); //$NON-NLS-1$
 		initConfigModule();
 	}
 	
-	protected QuickOptionsConfigModule confMod = null;
+	private QuickOptionsConfigModule confMod = null;
 	protected QuickOptionsConfigModule getConfigModule() 
 	{
 		if (confMod == null)
@@ -90,12 +85,14 @@ extends ViewPart
 		} 
 	}	
 	
-	private XFormToolkit toolkit = null;
+//	private XFormToolkit toolkit = null;
+	private NightlabsFormsToolkit toolkit = null;
 	private ScrolledForm form = null;	
 	
 	public void createPartControl(Composite parent) 
 	{
-		toolkit = new XFormToolkit(parent.getDisplay());
+		toolkit = new NightlabsFormsToolkit(parent.getDisplay());		
+//		toolkit = new XFormToolkit(parent.getDisplay());
 //		toolkit.setCurrentMode(TOOLKIT_MODE.COMPOSITE);
 		
 		form = toolkit.createScrolledForm(parent);
@@ -115,12 +112,12 @@ extends ViewPart
 				form.reflow(true);
 		  }
 		});		
-		sectionDuplicate.setText(EditorPlugin.getResourceString("quickOptions.section.clone.text"));
-		sectionDuplicate.setDescription(EditorPlugin.getResourceString("quickOptions.section.clone.description"));
+		sectionDuplicate.setText(Messages.getString("org.nightlabs.editor2d.views.QuickOptionsView.section.duplicate.text")); //$NON-NLS-1$
+		sectionDuplicate.setDescription(Messages.getString("org.nightlabs.editor2d.views.QuickOptionsView.section.duplicate.description")); //$NON-NLS-1$
 		Composite sectionClientDuplicate = toolkit.createComposite(sectionDuplicate);	
 		sectionClientDuplicate.setLayout(new GridLayout(2, false));				
-		createEntry(sectionClientDuplicate, EditorPlugin.getResourceString("quickOptions.distanceCloneX.label"), CLONE_X);
-		createEntry(sectionClientDuplicate, EditorPlugin.getResourceString("quickOptions.distanceCloneY.label"), CLONE_Y);
+		createEntry(sectionClientDuplicate, Messages.getString("org.nightlabs.editor2d.views.QuickOptionsView.label.distanceX"), CLONE_X); //$NON-NLS-1$
+		createEntry(sectionClientDuplicate, Messages.getString("org.nightlabs.editor2d.views.QuickOptionsView.label.distanceY"), CLONE_Y); //$NON-NLS-1$
 		sectionDuplicate.setClient(sectionClientDuplicate);
 		
 		Section sectionMove = toolkit.createSection(form.getBody(), 
@@ -134,26 +131,27 @@ extends ViewPart
 				form.reflow(true);
 		  }
 		});		
-		sectionMove.setText(EditorPlugin.getResourceString("quickOptions.section.move.text"));
-		sectionMove.setDescription(EditorPlugin.getResourceString("quickOptions.section.move.description"));
+		sectionMove.setText(Messages.getString("org.nightlabs.editor2d.views.QuickOptionsView.section.move.text")); //$NON-NLS-1$
+		sectionMove.setDescription(Messages.getString("org.nightlabs.editor2d.views.QuickOptionsView.section.move.description")); //$NON-NLS-1$
 		Composite sectionClientMove = toolkit.createComposite(sectionMove);
 		sectionClientMove.setLayout(new GridLayout(2, false));				
-		createEntry(sectionClientMove, EditorPlugin.getResourceString("quickOptions.distanceMoveX.label"), MOVE_X);
-		createEntry(sectionClientMove, EditorPlugin.getResourceString("quickOptions.distanceMoveY.label"), MOVE_Y);
+		createEntry(sectionClientMove, Messages.getString("org.nightlabs.editor2d.views.QuickOptionsView.label.distanceX"), MOVE_X); //$NON-NLS-1$
+		createEntry(sectionClientMove, Messages.getString("org.nightlabs.editor2d.views.QuickOptionsView.label.distanceY"), MOVE_Y); //$NON-NLS-1$
 		sectionMove.setClient(sectionClientMove);
 	}
 
-	protected static final int CLONE_X = 1; 
-	protected static final int CLONE_Y = 2;
-	protected static final int MOVE_X = 3;
-	protected static final int MOVE_Y = 4;	
+	private static final int CLONE_X = 1; 
+	private static final int CLONE_Y = 2;
+	private static final int MOVE_X = 3;
+	private static final int MOVE_Y = 4;	
 	
 	protected void createEntry(Composite parent, String labelText, int identifier) 
 	{
 		toolkit.paintBordersFor(parent);
 		
 		Label l = toolkit.createLabel(parent, labelText);		
-		Spinner spinner = toolkit.createSpinner(parent, SWT.NONE);
+//		Spinner spinner = toolkit.createSpinner(parent, SWT.NONE);
+		Spinner spinner = new Spinner(parent, SWT.BORDER);
 		
 //		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 		spinner.setSelection(getValue(identifier));				
@@ -169,9 +167,9 @@ extends ViewPart
 		form.setFocus();
 	}
 
-	protected Map<Spinner, Integer> spinner2Identifier = new HashMap<Spinner, Integer>();
+	private Map<Spinner, Integer> spinner2Identifier = new HashMap<Spinner, Integer>();
 	
-	protected SelectionListener textListener = new SelectionListener()
+	private SelectionListener textListener = new SelectionListener()
 	{	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -220,7 +218,7 @@ extends ViewPart
 		return 0;
 	}
 	
-	protected FocusListener focusListener = new FocusListener()
+	private FocusListener focusListener = new FocusListener()
 	{	
 		public void focusLost(FocusEvent e) 
 		{
@@ -230,11 +228,10 @@ extends ViewPart
 //			setValue(identifier, value);			
 		}	
 		public void focusGained(FocusEvent e) {
-			
 		}	
 	};
 	
-	protected DisposeListener disposeListener = new DisposeListener()
+	private DisposeListener disposeListener = new DisposeListener()
 	{	
 		public void widgetDisposed(DisposeEvent e) 
 		{
@@ -243,5 +240,4 @@ extends ViewPart
 			t.removeFocusListener(focusListener);
 		}	
 	};
-	
 }

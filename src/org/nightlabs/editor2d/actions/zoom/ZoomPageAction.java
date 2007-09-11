@@ -32,6 +32,7 @@ import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.AbstractEditorAction;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.util.EditorUtil;
 import org.nightlabs.editor2d.util.J2DUtil;
 
@@ -52,10 +53,11 @@ extends AbstractEditorAction
 		super(editor);
 		this.zoomManager = zoomManager;
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.zoom.page.label"));
-		setToolTipText(EditorPlugin.getResourceString("action.zoom.page.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.zoom.ZoomPageAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.zoom.ZoomPageAction.tooltip")); //$NON-NLS-1$
 		setActionDefinitionId(EditorCommandConstants.ZOOM_PAGE_ID);
-		setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomPageAction.class));
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(
+				EditorPlugin.getDefault(), ZoomPageAction.class));
 	}
 
 	private ZoomManager zoomManager = null;
@@ -74,9 +76,8 @@ extends AbstractEditorAction
 	@Override
 	public void run() 
 	{
-		Rectangle pageBounds = J2DUtil.toDraw2D(getRootDrawComponent().getCurrentPage().getPageBounds());
-//		zoomManager.zoomTo(pageBounds);
+		Rectangle pageBounds = J2DUtil.toDraw2D(
+				getRootDrawComponent().getCurrentPage().getPageBounds());
 		EditorUtil.zoomToRelativeRect(pageBounds, zoomManager);		
 	}
-	
 }

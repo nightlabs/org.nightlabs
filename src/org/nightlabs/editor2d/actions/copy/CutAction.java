@@ -31,10 +31,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
 import org.nightlabs.editor2d.actions.EditorActionConstants;
 import org.nightlabs.editor2d.command.CutDrawComponentCommand;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -62,28 +62,12 @@ extends AbstractEditorSelectionAction
 	public void init() 
 	{
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.cut.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.cut.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.copy.CutAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.copy.CutAction.tooltip")); //$NON-NLS-1$
 		setActionDefinitionId(ID);
 		setAccelerator(SWT.CTRL | 'X');
 	}
 	
-//  /**
-//	 * @return true, if objects are selected, except the RootEditPart or LayerEditParts
-//	 */
-//	protected boolean calculateEnabled() 
-//	{
-//		boolean enabled = !getDefaultSelection(true).isEmpty();
-//		LOGGER.debug("calculateEnbaled = "+enabled);
-//		LOGGER.debug("getDefaultSelection(true) = ");
-//		for (Iterator iter = getDefaultSelection(true).iterator(); iter.hasNext();) {
-//			DrawComponent element = (DrawComponent) iter.next();
-//			LOGGER.debug("selected element = "+element);
-//		}
-//		LOGGER.debug("");		
-//		return enabled;
-//	}
-
   /**
 	 * @return true, if objects are selected, except the RootEditPart or LayerEditParts
 	 */
@@ -94,11 +78,9 @@ extends AbstractEditorSelectionAction
 	
 	public void run() 
 	{
-//		List<DrawComponent> dcs = getSelection(DrawComponent.class, true);
 		Collection<DrawComponent> dcs = getSelection(DrawComponent.class, true);		
 		CutDrawComponentCommand cutCmd = new CutDrawComponentCommand(dcs);
 		execute(cutCmd);
 		firePropertyChange(EditorActionConstants.PROP_COPY_TO_CLIPBOARD, null, dcs);
 	}
-	
 }

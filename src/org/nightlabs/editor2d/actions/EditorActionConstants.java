@@ -30,11 +30,6 @@ package org.nightlabs.editor2d.actions;
  */
 public class EditorActionConstants 
 {
-	public static final String PROP_COPY_TO_CLIPBOARD = "Added Content to Clipboard";	
+	public static final String PROP_COPY_TO_CLIPBOARD = "Added Content to Clipboard";	 //$NON-NLS-1$
 	public static final Object EMPTY_CLIPBOARD_CONTENT = new Object();
-	
-	public EditorActionConstants() {
-		super();
-	}
-
 }

@@ -42,7 +42,7 @@ extends DrawComponentTreeEditPart
 //	public static Image IMAGE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
 //			AbstractPaletteFactory.class, "Image").createImage();	
 	public static Image IMAGE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			AbstractPaletteFactory.class, "Image", ImageFormat.gif).createImage();	
+			AbstractPaletteFactory.class, "Image", ImageFormat.gif).createImage();	 //$NON-NLS-1$
 	
   public ImageTreeEditPart(ImageDrawComponent drawComponent) {
     super(drawComponent);

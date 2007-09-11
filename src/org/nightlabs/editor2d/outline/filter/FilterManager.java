@@ -42,16 +42,16 @@ import org.nightlabs.editor2d.RootDrawComponent;
  */
 public class FilterManager 
 {
-  public static final String FILTER_CHANGED = "Filter changed";
-  public static final String FILTER_ADDED = "Filter added";
-  public static final String FILTERS_ADDED = "Filters added";
+  public static final String FILTER_CHANGED = "Filter changed"; //$NON-NLS-1$
+  public static final String FILTER_ADDED = "Filter added"; //$NON-NLS-1$
+  public static final String FILTERS_ADDED = "Filters added"; //$NON-NLS-1$
 	    
   public String getTypeName(Class c) {
   	return nameProvider.getTypeName(c);
   }
   
-  protected List filters;
-  protected List allFilters;
+  protected List<Class> filters;
+  protected List<Class> allFilters;
   protected NameProvider nameProvider = null;  
   public FilterManager(NameProvider nameProvider) 
   {
@@ -62,7 +62,7 @@ public class FilterManager
   public void addFilter(Class clazz) 
   {
   	if (clazz == null)
-			throw new IllegalArgumentException("Param clazz must not be null!");
+			throw new IllegalArgumentException("Param clazz must not be null!"); //$NON-NLS-1$
   	
     getFilters().add(clazz);
     getAllFilters().add(clazz);
@@ -74,7 +74,7 @@ public class FilterManager
   public void addFilters(Collection classes) 
   {
   	if (classes == null)
-			throw new IllegalArgumentException("Param classes must not be null!");
+			throw new IllegalArgumentException("Param classes must not be null!"); //$NON-NLS-1$
   	
     getFilters().addAll(classes);
     getAllFilters().addAll(classes); 
@@ -83,18 +83,18 @@ public class FilterManager
     pcs.firePropertyChange(FILTERS_ADDED, null, classes);    
   }
   
-  public List getFilters() 
+  public List<Class> getFilters() 
   {
     if (filters == null)
-      filters = new ArrayList();
+      filters = new ArrayList<Class>();
     
     return filters;
   }
   
-  public List getAllFilters() 
+  public List<Class> getAllFilters() 
   {
     if (allFilters == null)
-      allFilters = new ArrayList();
+      allFilters = new ArrayList<Class>();
     
     return allFilters;
   }
@@ -102,17 +102,17 @@ public class FilterManager
   public void setFilter(Class clazz) 
   {
   	if (clazz == null)
-			throw new IllegalArgumentException("Param clazz must not be null!");
+			throw new IllegalArgumentException("Param clazz must not be null!"); //$NON-NLS-1$
   	
     getFilters().clear();
     getFilters().add(clazz);
     pcs.firePropertyChange(FILTER_CHANGED, null, getFilters());
   }
   
-  public void setFilter(Collection classes) 
+  public void setFilter(Collection<Class> classes) 
   {
   	if (classes == null)
-			throw new IllegalArgumentException("Param classes must not be null!");
+			throw new IllegalArgumentException("Param classes must not be null!"); //$NON-NLS-1$
   	
     getFilters().clear();
     getFilters().addAll(classes);
@@ -156,7 +156,7 @@ public class FilterManager
 		return newTypeListener;
 	}
 	
-	protected List ignoreClasses = new ArrayList();
+	protected List<Class> ignoreClasses = new ArrayList<Class>();
 	public void ignoreClass(Class c) 
 	{
 		ignoreClasses.add(c);
@@ -165,8 +165,8 @@ public class FilterManager
 	
 	protected void checkIgnore() 
 	{
-		for (Iterator it = ignoreClasses.iterator(); it.hasNext(); ) {
-			Class c = (Class) it.next();
+		for (Iterator<Class> it = ignoreClasses.iterator(); it.hasNext(); ) {
+			Class c = it.next();
 			if (getAllFilters().contains(c)) {				
 				getAllFilters().remove(c);
 				if (getFilters().contains(c))

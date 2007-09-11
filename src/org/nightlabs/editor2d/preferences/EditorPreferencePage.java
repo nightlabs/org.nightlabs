@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -42,12 +42,11 @@ public class EditorPreferencePage
 extends PreferencePage 
 implements IWorkbenchPreferencePage
 {
-
 	@Override
 	protected Control createContents(Composite parent) 
 	{
 		Label l = new Label(parent, SWT.NONE);
-		l.setText(EditorPlugin.getResourceString("preferences.label.welcome"));
+		l.setText(Messages.getString("org.nightlabs.editor2d.preferences.EditorPreferencePage.label.title")); //$NON-NLS-1$
 		l.setLayoutData(new GridData(GridData.FILL_BOTH));
 		return l;
 	}

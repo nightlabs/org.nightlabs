@@ -27,18 +27,18 @@ package org.nightlabs.editor2d.model;
 
 import java.util.List;
 
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.nightlabs.base.property.IntPropertyDescriptor;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.GroupDrawComponent;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
 public class GroupPropertySource 
-extends DrawComponentPropertySource {
-	
-
+extends DrawComponentPropertySource 
+{
 	/**
 	 * @param element
 	 */
@@ -50,22 +50,22 @@ extends DrawComponentPropertySource {
 		return (GroupDrawComponent) drawComponent;
 	}
 	
-	protected List createPropertyDescriptors() 
+	protected List<IPropertyDescriptor> createPropertyDescriptors() 
 	{
 		super.createPropertyDescriptors();
 		
-		List descriptors = getDescriptors();
+		List<IPropertyDescriptor> descriptors = getDescriptors();
 		// Group Amount
 		descriptors.add(createGroupAmountPropertyDescriptor());
 		
 		return descriptors;
 	}	
 	
-	private static final String GROUP_AMOUNT_ID = "groupAmount";
+	private static final String GROUP_AMOUNT_ID = "groupAmount"; //$NON-NLS-1$
 	protected PropertyDescriptor createGroupAmountPropertyDescriptor() 
 	{
 		return new IntPropertyDescriptor(GROUP_AMOUNT_ID, 
-				EditorPlugin.getResourceString("property.groupAmount.label"), true);
+				Messages.getString("org.nightlabs.editor2d.model.GroupPropertySource.label.groupedElements"), true); //$NON-NLS-1$
 	}
 
 	@Override
@@ -76,5 +76,4 @@ extends DrawComponentPropertySource {
 		
 		return super.getPropertyValue(id);
 	}
-		
 }

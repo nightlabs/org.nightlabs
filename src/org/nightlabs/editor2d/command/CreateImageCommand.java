@@ -34,9 +34,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.image.RenderModeMetaData;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class CreateImageCommand 
 extends CreateDrawComponentCommand 
@@ -44,7 +44,7 @@ extends CreateDrawComponentCommand
   public CreateImageCommand() 
   {
     super();
-    setLabel(EditorPlugin.getResourceString("command.create.image"));  
+    setLabel(Messages.getString("org.nightlabs.editor2d.command.CreateImageCommand.label"));   //$NON-NLS-1$
   }
   
   public ImageDrawComponent getImageDrawComponent() {
@@ -80,7 +80,6 @@ extends CreateDrawComponentCommand
     catch (FileNotFoundException e) {
     	throw new RuntimeException(e);    
     }
-//  	super.execute();    
   }  
     
 }

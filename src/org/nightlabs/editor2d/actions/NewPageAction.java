@@ -29,6 +29,7 @@ import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.command.CreatePageCommand;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -51,9 +52,10 @@ extends AbstractEditorAction
 	{
 		super.init();
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.newPage.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.newPage.tooltip"));
-		setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), NewPageAction.class));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.NewPageAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.NewPageAction.tooltip")); //$NON-NLS-1$
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(
+				EditorPlugin.getDefault(), NewPageAction.class));
 	}
 
 	@Override
@@ -63,8 +65,8 @@ extends AbstractEditorAction
 
 	@Override
 	public void run() {
-		CreatePageCommand cmd = new CreatePageCommand(getRootDrawComponent(), getEditor().getModelFactory());
+		CreatePageCommand cmd = new CreatePageCommand(getRootDrawComponent(), 
+				getEditor().getModelFactory());
 		execute(cmd);
 	}
-	
 }

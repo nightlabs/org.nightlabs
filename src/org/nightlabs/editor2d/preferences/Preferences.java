@@ -38,24 +38,19 @@ import org.nightlabs.print.page.A4Page;
  */
 public class Preferences 
 {
-	public static final String PREF_DOCUMENT_RESOLUTION = "Document Resolution";
+	public static final String PREF_DOCUMENT_RESOLUTION = "Document Resolution"; //$NON-NLS-1$
 	public static final int PREF_DOCUMENT_RESOLUTION_DEFAULT = Resolution.DEFAULT_RESOLUTION_DPI;
 	
-//	public static final String PREF_IMAGE_RESOLUTION = "Image Resolution";
-//	public static final int PREF_IMAGE_RESOLUTION_DEFAULT = 300;
-
-	public static final String PREF_STANDARD_UNIT_ID = "Standard Unit";
-//	public static final String PREF_STANDARD_UNIT_ID_DEFAULT = MMUnit.UNIT_ID;
-//	public static final String PREF_STANDARD_UNIT_ID_DEFAULT = DotUnit.UNIT_ID;	
+	public static final String PREF_STANDARD_UNIT_ID = "Standard Unit"; //$NON-NLS-1$
 	public static final String PREF_STANDARD_UNIT_ID_DEFAULT = PointUnit.UNIT_ID;	
 
-	public static final String PREF_STANDARD_RESOLUTION_UNIT_ID = "Standard Resolution Unit";
+	public static final String PREF_STANDARD_RESOLUTION_UNIT_ID = "Standard Resolution Unit"; //$NON-NLS-1$
 	public static final String PREF_STANDARD_RESOLUTION_UNIT_ID_DEFAULT = DPIResolutionUnit.RESOLUTION_ID;
 
-	public static final String PREF_PREDEFINED_PAGE_ID = "Predefined Page";
+	public static final String PREF_PREDEFINED_PAGE_ID = "Predefined Page"; //$NON-NLS-1$
 	public static final String PREF_PREDEFINED_PAGE_ID_DEFAULT = A4Page.PAGE_ID;
 
-	public static final String PREF_PAGE_ORIENTATION_ID = "Page Orientation";
+	public static final String PREF_PAGE_ORIENTATION_ID = "Page Orientation"; //$NON-NLS-1$
 	public static final int PREF_PAGE_ORIENTATION_ID_DEFAULT = PageDrawComponent.ORIENTATION_VERTICAL;
 	
   protected static void initializeDefaults(IPreferenceStore ps) 
@@ -63,10 +58,6 @@ public class Preferences
   	ps.setDefault(
   			Preferences.PREF_DOCUMENT_RESOLUTION, 
   			Preferences.PREF_DOCUMENT_RESOLUTION_DEFAULT);
-
-//  	ps.setDefault(
-//  			Preferences.PREF_IMAGE_RESOLUTION,
-//  			Preferences.PREF_IMAGE_RESOLUTION_DEFAULT);
   	
   	ps.setDefault(
   			Preferences.PREF_STANDARD_UNIT_ID,

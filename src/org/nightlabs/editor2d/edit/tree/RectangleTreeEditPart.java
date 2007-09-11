@@ -43,7 +43,7 @@ extends DrawComponentTreeEditPart
 //	public static Image RECTANGLE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
 //			AbstractPaletteFactory.class, "Rectangle").createImage();	
 	public static Image RECTANGLE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			AbstractPaletteFactory.class, "Rectangle", ImageFormat.gif).createImage();	
+			AbstractPaletteFactory.class, "Rectangle", ImageFormat.gif).createImage();	 //$NON-NLS-1$
 	  
   public RectangleTreeEditPart(RectangleDrawComponent model) {
     super(model);

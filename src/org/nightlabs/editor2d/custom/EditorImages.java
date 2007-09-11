@@ -36,16 +36,6 @@ import org.nightlabs.editor2d.EditorPlugin;
 
 public class EditorImages 
 {
-  public EditorImages() 
-  {
-    super();
-  }
-
-//  private static ImageDescriptor createDescriptor(String filename) 
-//  {
-//    return ImageDescriptor.createFromFile(EditorPlugin.class, filename);
-//  }
-  
   public static final ImageDescriptor ROTATE_NW_16;
   public static final ImageDescriptor ROTATE_SW_16;
   public static final ImageDescriptor ROTATE_NE_16;
@@ -53,18 +43,14 @@ public class EditorImages
      
   static 
   {
-//    ROTATE_NW_16 = createDescriptor("icons/rotateNW16.gif"); //$NON-NLS-1$
-//    ROTATE_NE_16 = createDescriptor("icons/rotateNE16.gif"); //$NON-NLS-2$
-//    ROTATE_SE_16 = createDescriptor("icons/rotateSE16.gif"); //$NON-NLS-3$
-//    ROTATE_SW_16 = createDescriptor("icons/rotateSW16.gif"); //$NON-NLS-4$
     ROTATE_NW_16 = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-    		EditorImages.class, "RotateNW");
+    		EditorImages.class, "RotateNW"); //$NON-NLS-1$
     ROTATE_NE_16 = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-    		EditorImages.class, "RotateNE");
+    		EditorImages.class, "RotateNE"); //$NON-NLS-1$
     ROTATE_SE_16 = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-    		EditorImages.class, "RotateSE");
+    		EditorImages.class, "RotateSE"); //$NON-NLS-1$
     ROTATE_SW_16 = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-    		EditorImages.class, "RotateSW");  	
+    		EditorImages.class, "RotateSW");  	 //$NON-NLS-1$
   }
   
   /**
@@ -77,14 +63,6 @@ public class EditorImages
   {
     switch (direction) 
     {
-//      case PositionConstants.NORTH :
-//        return SHEAR_HORIZONTAL_16.createImage();
-//      case PositionConstants.SOUTH:
-//        return SHEAR_HORIZONTAL_16.createImage();
-//      case PositionConstants.EAST :
-//        return SHEAR_VERTICAL_16.createImage();
-//      case PositionConstants.WEST:
-//        return SHEAR_VERTICAL_16.createImage();
       case PositionConstants.SOUTH_EAST:
         return ROTATE_SE_16.createImage();
       case PositionConstants.SOUTH_WEST:

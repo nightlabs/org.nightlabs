@@ -55,7 +55,6 @@ extends AbstractTreeEditPart
    */
   public DrawComponentTreeEditPart(DrawComponent drawComponent) {
     super(drawComponent);
-//    this.image = getOutlineImage();
   } 
   
   public Object getAdapter(Class key)
@@ -251,16 +250,7 @@ extends AbstractTreeEditPart
 			return;
 		}
 	}  
-		
-//	protected void notifyLabelDecorator() 
-//	{
-//		String DECORATOR_ID = "org.nightlabs.editor2d.decorators.VisibleDecorator";		
-//		DecoratorManager decoratorManager = (DecoratorManager) PlatformUI.getWorkbench().getDecoratorManager();	  
-//	  if (decoratorManager.getEnabled(DECORATOR_ID)) {
-//	  	decoratorManager.labelProviderChanged(new LabelProviderChangedEvent(decoratorManager, this));
-//	  }
-//	}
-	
+			
 	protected void notifyLabelDecorator() 
 	{		
 		// TODO: create static instance which can cache the decorator definitions which match, to avoid iterate each time

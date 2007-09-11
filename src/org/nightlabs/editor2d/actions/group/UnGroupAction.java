@@ -33,6 +33,7 @@ import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.GroupDrawComponent;
 import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
 import org.nightlabs.editor2d.command.UnGroupCommand;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -61,23 +62,21 @@ extends AbstractEditorSelectionAction
 	protected void init() 
 	{
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.ungroup.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.ungroup.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.group.UnGroupAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.group.UnGroupAction.tooltip")); //$NON-NLS-1$
 	}
 
 	/**
 	 * @see org.nightlabs.editor2d.actions.AbstractEditorSelectionAction#calculateEnabled()
 	 */
 	@Override
-	protected boolean calculateEnabled() 
-	{
+	protected boolean calculateEnabled() {
 		return selectionContains(GroupDrawComponent.class, true);
 	}
 
 	@Override
 	public void run() 
 	{
-//		List<GroupDrawComponent> selection = getSelection(GroupDrawComponent.class, true);		
 		Collection<GroupDrawComponent> selection = getSelection(GroupDrawComponent.class, true);		
 		CompoundCommand cmd = new CompoundCommand();
 		for (GroupDrawComponent group : selection) {
@@ -86,5 +85,4 @@ extends AbstractEditorSelectionAction
 		}
 		execute(cmd);
 	}
-
 }

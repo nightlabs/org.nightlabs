@@ -33,8 +33,8 @@ import org.eclipse.gef.EditPolicy;
 public interface EditorEditPolicy 
 extends EditPolicy 
 {
-	String SNAP_FEEDBACK_ROLE = "Snap Feedback";	
-	String CREATE_ROLE = "Create";	
-	String ROTATE_ROLE = "Rotate";
-	String EDIT_SHAPE_ROLE = "Edit Shape";
+	String SNAP_FEEDBACK_ROLE = "Snap Feedback";	 //$NON-NLS-1$
+	String CREATE_ROLE = "Create";	 //$NON-NLS-1$
+	String ROTATE_ROLE = "Rotate"; //$NON-NLS-1$
+	String EDIT_SHAPE_ROLE = "Edit Shape"; //$NON-NLS-1$
 }

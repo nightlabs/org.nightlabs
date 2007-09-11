@@ -47,10 +47,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.holongate.j2d.J2DCanvas;
 import org.nightlabs.base.composite.XComposite;
+import org.nightlabs.base.form.NightlabsFormsToolkit;
 import org.nightlabs.base.form.XFormToolkit;
-import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.j2dswt.RenderedImagePaintable;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.util.ImageUtil;
 
 /**
@@ -70,11 +70,11 @@ extends XComposite
 	 * @param style the style flag
 	 * @param toolkitMode the mode for the {@link XFormToolkit}
 	 */
-	public ImagePreviewComposite(BufferedImage originalImage, Composite parent, int style, TOOLKIT_MODE toolkitMode) 
+	public ImagePreviewComposite(BufferedImage originalImage, Composite parent, 
+			int style) 
 	{
 		super(parent, style);
 		this.originalImage = originalImage;
-		this.toolkitMode = toolkitMode;
 		createComposite(this);
 	}
 
@@ -87,17 +87,15 @@ extends XComposite
 	 * @param toolkitMode the mode for the {@link XFormToolkit}
 	 */
 	public ImagePreviewComposite(BufferedImage originalImage, Composite parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode, TOOLKIT_MODE toolkitMode) 
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
 	{
 		super(parent, style, layoutMode, layoutDataMode);
 		this.originalImage = originalImage;
 		convertImage = ImageUtil.cloneImage(originalImage);		
-		this.toolkitMode = toolkitMode;
 		createComposite(this);
 	}
 
-	private TOOLKIT_MODE toolkitMode = TOOLKIT_MODE.COMPOSITE;	
-	private XFormToolkit toolkit = null;
+	private NightlabsFormsToolkit toolkit = null;
 	private BufferedImage originalImage = null;
 	public BufferedImage getOriginalImage() {
 		return originalImage;
@@ -118,20 +116,18 @@ extends XComposite
 	private J2DCanvas convertCanvas = null;	
 	private RenderedImagePaintable originalPaintable = null;
 	private RenderedImagePaintable convertPaintable = null;
-//	private ImagePaintable originalPaintable = null;
-//	private ImagePaintable convertPaintable = null;	
 	
 	protected void createComposite(Composite parent) 
 	{
-		toolkit = new XFormToolkit(Display.getCurrent());
-		toolkit.setCurrentMode(toolkitMode);
+		toolkit = new NightlabsFormsToolkit(Display.getCurrent());
 		
 		Composite comp = toolkit.createComposite(parent, SWT.NONE);
 		comp.setLayout(new GridLayout(2, true));
 		comp.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		Group originalGroup = toolkit.createGroup(comp, SWT.NONE, 
-				EditorPlugin.getResourceString("convertImage.group.originalImage"));
+		Group originalGroup = new Group(comp, SWT.NONE);
+		originalGroup.setText(Messages.getString("org.nightlabs.editor2d.composite.ImagePreviewComposite.group.originalImage.text")); //$NON-NLS-1$
+		
 		originalGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 		originalGroup.setLayout(new GridLayout());
 		originalSC = new ScrolledComposite(originalGroup, SWT.H_SCROLL | SWT.V_SCROLL);
@@ -140,14 +136,13 @@ extends XComposite
 		originalSC.setLayoutData(new GridData(GridData.FILL_BOTH));
 		originalSC.setLayout(new GridLayout());
 		originalPaintable = new RenderedImagePaintable(originalImage);		
-//		originalPaintable = new ImagePaintable(originalImage);
 		originalCanvas = new J2DCanvas(originalSC, originalPaintable);
 		originalCanvas.setLayoutData(new GridData(GridData.FILL_BOTH));
 		originalSC.setContent(originalCanvas);
 		originalSC.setMinSize(originalCanvas.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		
-		Group convertGroup = toolkit.createGroup(comp, SWT.NONE, 
-				EditorPlugin.getResourceString("convertImage.group.convertImage"));
+		Group convertGroup = new Group(comp, SWT.NONE);
+		convertGroup.setText(Messages.getString("org.nightlabs.editor2d.composite.ImagePreviewComposite.group.convertedImage.text")); //$NON-NLS-1$
 		convertGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 		convertGroup.setLayout(new GridLayout());
 		convertSC = new ScrolledComposite(convertGroup, SWT.H_SCROLL | SWT.V_SCROLL);
@@ -156,7 +151,6 @@ extends XComposite
 		convertSC.setLayoutData(new GridData(GridData.FILL_BOTH));
 		convertSC.setLayout(new GridLayout());		
 		convertPaintable = new RenderedImagePaintable(convertImage);		
-//		convertPaintable = new ImagePaintable(convertImage);
 		convertCanvas = new J2DCanvas(convertSC, convertPaintable);
 		convertCanvas.setLayoutData(new GridData(GridData.FILL_BOTH));
 		convertSC.setContent(convertCanvas);
@@ -228,14 +222,12 @@ extends XComposite
 				scale = tmpScale; 				
 			
 			rescaleOp = null;
-			logger.debug("Canvas resized!");
+			logger.debug("Canvas resized!"); //$NON-NLS-1$
 			
 			rescaleImages();
 		}	
 	};	
 	
-//	private Image originalScale = null;
-//	private Image convertScale = null;
 	private BufferedImage originalScale = null;
 	private BufferedImage convertScale = null;
 	
@@ -259,8 +251,8 @@ extends XComposite
 			final int scaledWidth = (int) ((float)originalImage.getWidth() * scale);
 			final int scaledHeight = (int) ((float)originalImage.getHeight() * scale);	
 			if (logger.isDebugEnabled()) {
-				logger.debug("scaledWidth = "+scaledWidth);
-				logger.debug("scaledHeight = "+scaledHeight);
+				logger.debug("scaledWidth = "+scaledWidth); //$NON-NLS-1$
+				logger.debug("scaledHeight = "+scaledHeight); //$NON-NLS-1$
 			}
 			originalScale = scaleImage(originalImage, scaledWidth, scaledHeight);
 			originalPaintable.setImage(originalScale);
@@ -274,35 +266,14 @@ extends XComposite
 		
 		if (logger.isDebugEnabled()) {
 			long end = System.currentTimeMillis() - start;
-			logger.debug("rescaleImages took "+end+" ms!");			
+			logger.debug("rescaleImages took "+end+" ms!");			 //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		repaintCanvas();		
 	}
 	
-//	private int scaleHint = Image.SCALE_DEFAULT;	
-//	protected Image scaleImage(BufferedImage img, int width, int height) 
-//	{
-//		return img.getScaledInstance(width, height, scaleHint);
-//	}
-	
-//	protected BufferedImage scaleImage(BufferedImage img, int width, int height) 
-//	{
-//		long start = System.currentTimeMillis();
-//		int type = BufferedImage.TYPE_INT_ARGB; 
-//		BufferedImage bi = new BufferedImage(width, height, type);		
-//		Graphics2D g2d = bi.createGraphics();
-//		g2d.drawImage(img, 0, 0, width, height, null);
-//		g2d.dispose();
-//		if (logger.isDebugEnabled()) {
-//			long end = System.currentTimeMillis() - start;
-//			logger.debug("scaleImage took "+end+" ms!");
-//		}
-//		return bi;
-//	}
-
 	protected BufferedImage scaleImage(BufferedImage img, int width, int height) 
 	{
-		logger.debug("scale = "+scale);
+		logger.debug("scale = "+scale); //$NON-NLS-1$
 		if (rescaleOp == null)
 			rescaleOp = createRescaleOp(scale);
 		
@@ -315,7 +286,7 @@ extends XComposite
 	{
 		AffineTransform at = new AffineTransform();
 		at.scale(scale, scale);
-		logger.debug("image scale factor = "+scale);
+		logger.debug("image scale factor = "+scale); //$NON-NLS-1$
 		return new AffineTransformOp(at, scaleInterpolationType);		
 	}
 		

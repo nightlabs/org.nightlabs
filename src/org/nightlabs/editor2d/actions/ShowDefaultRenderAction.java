@@ -28,9 +28,8 @@
 package org.nightlabs.editor2d.actions;
 
 import org.eclipse.ui.IEditorPart;
-
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.render.RenderConstants;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class ShowDefaultRenderAction 
@@ -44,14 +43,13 @@ extends AbstractRendererModeAction
 
   public void init() 
   {
-    setText(EditorPlugin.getResourceString("action.showDefaultRender.text"));
-    setToolTipText(EditorPlugin.getResourceString("action.showDefaultRender.tooltip"));
+    setText(Messages.getString("org.nightlabs.editor2d.actions.ShowDefaultRenderAction.text")); //$NON-NLS-1$
+    setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.ShowDefaultRenderAction.tooltip")); //$NON-NLS-1$
     setId(ID);
 //    setImageDescriptor(ImageDescriptor.createFromFile(EditorPlugin.class, "icons/sun16.gif"));
   } 
     
-  public String getRenderMode() 
-  {
+  public String getRenderMode() {
     return RenderConstants.DEFAULT_MODE;
   }
 }

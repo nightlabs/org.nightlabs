@@ -28,7 +28,7 @@ package org.nightlabs.editor2d.command;
 import org.eclipse.gef.commands.Command;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -36,17 +36,16 @@ import org.nightlabs.editor2d.EditorPlugin;
 public class OrphanChildCommand 
 extends Command 
 {
-
-	public OrphanChildCommand(DrawComponent child) 
-	{
-		super();
-		setLabel(EditorPlugin.getResourceString("command.orphanChildren.text"));
-		this.child = child;
-	}
-
 	private DrawComponent child = null;
 	private DrawComponentContainer parent = null;	
 	private int index = -1;
+	
+	public OrphanChildCommand(DrawComponent child) 
+	{
+		super();
+		setLabel(Messages.getString("org.nightlabs.editor2d.command.OrphanChildCommand.label")); //$NON-NLS-1$
+		this.child = child;
+	}
 	
 	@Override
 	public void execute() 
@@ -67,5 +66,4 @@ extends Command
 	{
 		parent.addDrawComponent(child, index);
 	}
-	
 }

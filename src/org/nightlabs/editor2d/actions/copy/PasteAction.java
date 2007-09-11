@@ -33,10 +33,10 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.AbstractEditorAction;
 import org.nightlabs.editor2d.actions.EditorActionConstants;
 import org.nightlabs.editor2d.command.CloneDrawComponentCommand;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -47,6 +47,11 @@ extends AbstractEditorAction
 //	public static final String ID = PasteAction.class.getName();
 	public static final String ID = ActionFactory.PASTE.getId();	
 	
+	protected boolean enabled = false;  	
+	private boolean copy = false;
+	private boolean cut = false;	
+	private Collection<DrawComponent> clipBoardContent = null;
+		
 	/**
 	 * @param part
 	 */
@@ -64,31 +69,24 @@ extends AbstractEditorAction
 
   protected void init() 
   {
-  	setText(EditorPlugin.getResourceString("action.paste.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.paste.tooltip"));
+  	setText(Messages.getString("org.nightlabs.editor2d.actions.copy.PasteAction.text")); //$NON-NLS-1$
+  	setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.copy.PasteAction.tooltip")); //$NON-NLS-1$
   	setId(ID);
 //  	setActionDefinitionId(ID);
-  	setActionDefinitionId("org.eclipse.ui.edit.paste");  	
+  	setActionDefinitionId("org.eclipse.ui.edit.paste");  	 //$NON-NLS-1$
 //  	setAccelerator(SWT.CTRL | 'P');
   } 
-	
-	protected boolean enabled = false;  
+		
 	protected boolean calculateEnabled() {
 		return enabled;
-	}
+	}	
 	
-	protected boolean copy = false;
-	protected boolean cut = false;
-	
-	protected Collection clipBoardContent = null;	
 	public void run() 
 	{
 		CompoundCommand cmd = new CompoundCommand();
-		if (clipBoardContent != null) 
-		{
-			for (Iterator it = clipBoardContent.iterator(); it.hasNext(); ) 
-			{
-				DrawComponent dc = (DrawComponent) it.next();
+		if (clipBoardContent != null) {
+			for (Iterator<DrawComponent> it = clipBoardContent.iterator(); it.hasNext(); ) {
+				DrawComponent dc = it.next();
 				CloneDrawComponentCommand cloneCmd = new CloneDrawComponentCommand(dc, getCurrentLayer());
 				if (copy)
 					cloneCmd.setCloneName(dc.getName() + getCopyString());
@@ -100,50 +98,39 @@ extends AbstractEditorAction
 		}
 	}
 			
-	public IPropertyChangeListener copyListener = new IPropertyChangeListener()
-	{	
-		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) 
-		{
-			if (event.getProperty().equals(EditorActionConstants.PROP_COPY_TO_CLIPBOARD)) 
-			{
+	public IPropertyChangeListener copyListener = new IPropertyChangeListener() {	
+		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+			if (event.getProperty().equals(EditorActionConstants.PROP_COPY_TO_CLIPBOARD)) {
 				copy = true;
 				cut = false;
 				Object content = event.getNewValue();
-				if (!content.equals(EditorActionConstants.EMPTY_CLIPBOARD_CONTENT)) 
-				{
+				if (!content.equals(EditorActionConstants.EMPTY_CLIPBOARD_CONTENT)) {
 					enabled = true;
-					if (content instanceof Collection) 
-					{
-						clipBoardContent = (Collection) content;
+					if (content instanceof Collection) {
+						clipBoardContent = (Collection<DrawComponent>) content;
 					}
 				}
 			}			
 		}	
 	};
 				
-	public IPropertyChangeListener cutListener = new IPropertyChangeListener()
-	{	
-		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) 
-		{
-			if (event.getProperty().equals(EditorActionConstants.PROP_COPY_TO_CLIPBOARD)) 
-			{
+	public IPropertyChangeListener cutListener = new IPropertyChangeListener() {	
+		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+			if (event.getProperty().equals(EditorActionConstants.PROP_COPY_TO_CLIPBOARD)) {
 				cut = true;
 				copy = false;
 				Object content = event.getNewValue();
-				if (!content.equals(EditorActionConstants.EMPTY_CLIPBOARD_CONTENT)) 
-				{
+				if (!content.equals(EditorActionConstants.EMPTY_CLIPBOARD_CONTENT)) {
 					enabled = true;
-					if (content instanceof Collection) 
-					{
-						clipBoardContent = (Collection) content;
+					if (content instanceof Collection) {
+						clipBoardContent = (Collection<DrawComponent>) content;
 					}
 				}
 			}			
 		}	
 	};	
 	
-	protected String getCopyString() 
-	{
-		return " ("+EditorPlugin.getResourceString("action.copy.text")+")";
+	protected String getCopyString() {
+		return " ("+Messages.getString("org.nightlabs.editor2d.actions.copy.PasteAction.copy.text")+")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}	
 }

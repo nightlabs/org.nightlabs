@@ -29,6 +29,7 @@ package org.nightlabs.editor2d.edit.tree;
 
 import java.beans.PropertyChangeEvent;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.base.resource.SharedImages;
@@ -44,13 +45,12 @@ extends DrawComponentTreeEditPart
 	/**
 	 * LOG4J logger used by this class
 	 */
-	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
-			.getLogger(TextTreeEditPart.class);
+	private static final Logger logger = Logger.getLogger(TextTreeEditPart.class);
 	
 //	public static final Image TEXT_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
 //			AbstractPaletteFactory.class, "Text").createImage();		
 	public static final Image TEXT_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			AbstractPaletteFactory.class, "Text", ImageFormat.gif).createImage();  
+			AbstractPaletteFactory.class, "Text", ImageFormat.gif).createImage();   //$NON-NLS-1$
 	
   public TextTreeEditPart(TextDrawComponent drawComponent) {
     super(drawComponent);
@@ -72,7 +72,7 @@ extends DrawComponentTreeEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(TextDrawComponent.PROP_FONT)) {
-			logger.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!"); //$NON-NLS-1$
 			refreshVisuals();			
 		}
 //		else if (propertyName.equals(TextDrawComponent.PROP_FONT_NAME)) {
@@ -84,7 +84,7 @@ extends DrawComponentTreeEditPart
 //			refreshVisuals();			
 //		}
 		else if (propertyName.equals(TextDrawComponent.PROP_TEXT)) {
-			logger.debug(propertyName +" changed!");
+			logger.debug(propertyName +" changed!"); //$NON-NLS-1$
 			refreshVisuals();			
 		}
 //		else if (propertyName.equals(TextDrawComponent.PROP_BOLD)) {

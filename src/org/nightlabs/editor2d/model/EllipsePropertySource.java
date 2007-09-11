@@ -29,9 +29,10 @@ package org.nightlabs.editor2d.model;
 
 import java.util.List;
 
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.nightlabs.base.property.IntPropertyDescriptor;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EllipseDrawComponent;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class EllipsePropertySource 
 extends ShapeDrawComponentPropertySource 
@@ -44,15 +45,15 @@ extends ShapeDrawComponentPropertySource
 		return (EllipseDrawComponent) drawComponent;
 	}
 	
-	protected List createPropertyDescriptors() 
+	protected List<IPropertyDescriptor> createPropertyDescriptors() 
 	{
-		List descriptors = super.createPropertyDescriptors();
+		List<IPropertyDescriptor> descriptors = super.createPropertyDescriptors();
 		// Start Angle
 		descriptors.add(new IntPropertyDescriptor(EllipseDrawComponent.PROP_START_ANGLE,
-				EditorPlugin.getResourceString("property.startangle.label")));
+				Messages.getString("org.nightlabs.editor2d.model.EllipsePropertySource.startAngle"))); //$NON-NLS-1$
 		// End Angle
 		descriptors.add(new IntPropertyDescriptor(EllipseDrawComponent.PROP_END_ANGLE,
-				EditorPlugin.getResourceString("property.endangle.label")));
+				Messages.getString("org.nightlabs.editor2d.model.EllipsePropertySource.endAngle"))); //$NON-NLS-1$
 		
 		return descriptors;
 	}	

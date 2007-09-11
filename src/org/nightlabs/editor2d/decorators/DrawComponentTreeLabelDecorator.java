@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -37,7 +38,6 @@ import org.nightlabs.editor2d.edit.tree.DrawComponentTreeEditPart;
 public class DrawComponentTreeLabelDecorator 
 implements ILabelDecorator 
 {
-
 	public Image decorateImage(Image image, Object element) 
 	{
 		if (element instanceof DrawComponentTreeEditPart) {
@@ -56,30 +56,25 @@ implements ILabelDecorator
 			DrawComponentTreeEditPart dctep = (DrawComponentTreeEditPart) element;
 			DrawComponent dc = dctep.getDrawComponent();
 			if (!dc.isVisible()) {
-				return text + "[invisible]";
+				return text + "["+Messages.getString("org.nightlabs.editor2d.decorators.DrawComponentTreeLabelDecorator.textAddition.invisible")+"]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}			
 		}		
 		return null;
 	}
 
 	public void addListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void dispose() {
-		// TODO Auto-generated method stub
 
 	}
 
 	public boolean isLabelProperty(Object element, String property) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public void removeListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
 
 	}
-
 }

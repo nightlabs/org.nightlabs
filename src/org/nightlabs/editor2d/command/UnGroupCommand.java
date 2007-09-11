@@ -31,8 +31,8 @@ import java.util.Collection;
 import org.eclipse.gef.commands.Command;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.GroupDrawComponent;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -40,13 +40,12 @@ import org.nightlabs.editor2d.GroupDrawComponent;
 public class UnGroupCommand 
 extends Command 
 {
-
 	public UnGroupCommand(GroupDrawComponent group) 
 	{
 		if (group == null)
-			throw new IllegalArgumentException("Param group must not be null!");
+			throw new IllegalArgumentException("Param group must not be null!"); //$NON-NLS-1$
 		
-		setLabel(EditorPlugin.getResourceString("command.ungroup"));
+		setLabel(Messages.getString("org.nightlabs.editor2d.command.UnGroupCommand.label")); //$NON-NLS-1$
 		this.group = group;
 	}
 
@@ -79,5 +78,4 @@ extends Command
 		group.addDrawComponents(groupedDcs);
 		groupParent.addDrawComponent(group);
 	}
-		
 }

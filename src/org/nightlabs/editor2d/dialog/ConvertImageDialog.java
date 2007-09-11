@@ -32,9 +32,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.dialog.CenteredDialog;
-import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.composite.ConvertImageComposite;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -42,7 +41,6 @@ import org.nightlabs.editor2d.composite.ConvertImageComposite;
 public class ConvertImageDialog 
 extends CenteredDialog 
 {
-
 	/**
 	 * @param parentShell
 	 */
@@ -56,7 +54,7 @@ extends CenteredDialog
 	public void create() 
 	{
 		super.create();
-		getShell().setText(EditorPlugin.getResourceString("dialog.convertImage.title"));
+		getShell().setText(Messages.getString("org.nightlabs.editor2d.dialog.ConvertImageDialog.text")); //$NON-NLS-1$
 		getShell().setSize(500, 500);
 	}	
 		
@@ -72,8 +70,6 @@ extends CenteredDialog
 	 */
 	protected Control createDialogArea(Composite parent) 
 	{
-		convertImageComp = new ConvertImageComposite(parent, SWT.NONE, image, TOOLKIT_MODE.COMPOSITE);
-		return convertImageComp;
+		return new ConvertImageComposite(parent, SWT.NONE, image);
 	}
-	
 }

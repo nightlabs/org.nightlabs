@@ -31,10 +31,9 @@ import java.util.Iterator;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorGuide;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class MoveGuideCommand 
 extends Command 
@@ -43,7 +42,7 @@ extends Command
   private EditorGuide guide;
   	
   public MoveGuideCommand(EditorGuide guide, int positionDelta) {
-  	super(EditorPlugin.getResourceString("command.move.guide"));
+  	super(Messages.getString("org.nightlabs.editor2d.command.MoveGuideCommand.label")); //$NON-NLS-1$
   	this.guide = guide;
   	pDelta = positionDelta;
   }
@@ -51,40 +50,34 @@ extends Command
   public void execute() 
   {
   	guide.setPosition(guide.getPosition() + pDelta);
-  	Iterator iter = guide.getMap().keySet().iterator();
+  	Iterator<DrawComponent> iter = guide.getMap().keySet().iterator();
   	while (iter.hasNext()) {
-  		DrawComponent part = (DrawComponent)iter.next();
-  		Point location = new Point(part.getX(), part.getY()).getCopy();  		
-//  		Point location = part.getLocation().getCopy();
-//  		Point location = new Point(part.getX(), part.getY());
-  		
+  		DrawComponent part = iter.next();
+  		Point location = new Point(part.getX(), part.getY()).getCopy();  		  		
   		if (guide.isHorizontal()) {
   			location.y += pDelta;
   		} else {
   			location.x += pDelta;
   		}
-//  		part.setLocation(location);
   		part.setX(location.x);
   		part.setY(location.y);
   	}
   }
 
-  public void undo() {
+  public void undo() 
+  {
   	guide.setPosition(guide.getPosition() - pDelta);
-  	Iterator iter = guide.getMap().keySet().iterator();
+  	Iterator<DrawComponent> iter = guide.getMap().keySet().iterator();
   	while (iter.hasNext()) {
-  	  DrawComponent part = (DrawComponent)iter.next();
-//		Point location = part.getLocation().getCopy();
+  	  DrawComponent part = iter.next();
   		Point location = new Point(part.getX(), part.getY());
   		if (guide.isHorizontal()) {
   			location.y -= pDelta;
   		} else {
   			location.x -= pDelta;
   		}
-//		part.setLocation(location);
   		part.setX(location.x);
   		part.setY(location.y);
   	}
   }
-  
 }

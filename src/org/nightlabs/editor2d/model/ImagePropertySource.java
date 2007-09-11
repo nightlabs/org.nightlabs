@@ -29,21 +29,22 @@ package org.nightlabs.editor2d.model;
 
 import java.util.List;
 
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.nightlabs.base.property.DoublePropertyDescriptor;
 import org.nightlabs.base.property.IntPropertyDescriptor;
 import org.nightlabs.base.property.XTextPropertyDescriptor;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.image.RenderModeMetaData;
 import org.nightlabs.editor2d.properties.ImageColorConversionPropertyDescriptor;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.i18n.unit.resolution.DPIResolutionUnit;
 import org.nightlabs.i18n.unit.resolution.IResolutionUnit;
 
 public class ImagePropertySource 
 extends DrawComponentPropertySource
 {
-	public static final String CATEGORY_IMAGE = EditorPlugin.getResourceString("property.category.image");
+	public static final String CATEGORY_IMAGE = Messages.getString("org.nightlabs.editor2d.model.ImagePropertySource.category.image"); //$NON-NLS-1$
 	
 	public ImagePropertySource(ImageDrawComponent element) {
 		super(element);
@@ -53,11 +54,11 @@ extends DrawComponentPropertySource
 		return (ImageDrawComponent) drawComponent;
 	}
 
-	protected List createPropertyDescriptors() 
+	protected List<IPropertyDescriptor> createPropertyDescriptors() 
 	{
 		super.createPropertyDescriptors();
 		
-		List descriptors = getDescriptors();
+		List<IPropertyDescriptor> descriptors = getDescriptors();
 		// Bit Per Pixel
 		descriptors.add(createBitsPerPixelPD());
 		// Resolution
@@ -81,9 +82,6 @@ extends DrawComponentPropertySource
 		else if (id.equals(ImageDrawComponent.PROP_RESOLUTION)) {
 			return getResolutionInDPI(getImageDrawComponent());
 		}
-		else if (id.equals(ImageDrawComponent.PROP_ORIGINAL_FILE_NAME)) {
-			return getImageDrawComponent().getOriginalImageFileName();
-		}		
 		return super.getPropertyValue(id);
 	}	
 			
@@ -116,21 +114,11 @@ extends DrawComponentPropertySource
 			return new Double(dpiResolution);
 		}
 	}
-	
-	protected PropertyDescriptor createFileNamePD() 
-	{
-		PropertyDescriptor pd = new XTextPropertyDescriptor(
-				ImageDrawComponent.PROP_ORIGINAL_FILE_NAME, 
-				EditorPlugin.getResourceString("property.originalImageFileName.label"), 
-				true);
-		pd.setCategory(CATEGORY_NAME);
-		return pd;
-	}
-	
+		
 	protected PropertyDescriptor createBitsPerPixelPD() 
 	{
 		PropertyDescriptor pd = new IntPropertyDescriptor(ImageDrawComponent.PROP_BITS_PER_PIXEL, 
-				EditorPlugin.getResourceString("property.bitsPerPixel.label"), true);
+				Messages.getString("org.nightlabs.editor2d.model.ImagePropertySource.label.bitsPerPixel"), true); //$NON-NLS-1$
 		pd.setCategory(CATEGORY_IMAGE);
 		return pd;
 	}
@@ -138,7 +126,7 @@ extends DrawComponentPropertySource
 	protected PropertyDescriptor createResolutionPD() 
 	{
 		PropertyDescriptor pd = new DoublePropertyDescriptor(ImageDrawComponent.PROP_RESOLUTION, 
-				EditorPlugin.getResourceString("property.resolution.label"), true);
+				Messages.getString("org.nightlabs.editor2d.model.ImagePropertySource.label.resolution"), true); //$NON-NLS-1$
 		pd.setCategory(CATEGORY_IMAGE);
 		return pd;		
 	}
@@ -147,7 +135,7 @@ extends DrawComponentPropertySource
 	{
 		PropertyDescriptor pd = new ImageColorConversionPropertyDescriptor(getImageDrawComponent(), 
 				ImageDrawComponent.PROP_RENDER_MODE_META_DATA, 
-				EditorPlugin.getResourceString("property.colorConversion.label"));
+				Messages.getString("org.nightlabs.editor2d.model.ImagePropertySource.label.ColorConversion")); //$NON-NLS-1$
 		pd.setCategory(CATEGORY_IMAGE);		
 		return pd;
 	}
@@ -155,9 +143,8 @@ extends DrawComponentPropertySource
 	protected PropertyDescriptor createOriginalFileNamePD()
 	{
 		PropertyDescriptor pd = new XTextPropertyDescriptor(ImageDrawComponent.PROP_ORIGINAL_FILE_NAME, 
-				EditorPlugin.getResourceString("property.originalFileName.label"), true);
+				Messages.getString("org.nightlabs.editor2d.model.ImagePropertySource.label.originalFileName"), true); //$NON-NLS-1$
 		pd.setCategory(CATEGORY_IMAGE);		
 		return pd;
 	}
-	
 }

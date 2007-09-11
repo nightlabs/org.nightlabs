@@ -32,15 +32,14 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.internal.GEFMessages;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.impl.LayerImpl;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -109,27 +108,13 @@ extends AbstractEditorSelectionAction
 	protected void init() 
 	{
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.delete.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.delete.tooltip"));
-		setActionDefinitionId("org.eclipse.ui.edit.delete");		
-//		ISharedImages sharedImages = getWorkbenchPart().getSite().getPage().getWorkbenchWindow().getWorkbench().getSharedImages();		
+		setText(Messages.getString("org.nightlabs.editor2d.actions.DeleteAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.DeleteAction.tooltip")); //$NON-NLS-1$
+		setActionDefinitionId("org.eclipse.ui.edit.delete");		 //$NON-NLS-1$
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();		
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
-
-//	@Override
-//	public void run() 
-//	{
-//		CompoundCommand compound = new CompoundCommand();
-//		compound.setLabel(EditorPlugin.getResourceString("command.delete.drawcomponent"));
-//		Collection<DrawComponent> selection = getSelection(DrawComponent.class, true);
-//		for (DrawComponent dc : selection) {
-//			DeleteDrawComponentCommand deleteCmd = new DeleteDrawComponentCommand(dc.getParent(), dc);
-//			compound.add(deleteCmd);
-//		}
-//		execute(compound);
-//	}
 
 	/**
 	 * Performs the delete action on the selected objects.
@@ -154,7 +139,7 @@ extends AbstractEditorSelectionAction
 		deleteReq.setEditParts(objects);
 
 		CompoundCommand compoundCmd = new CompoundCommand(
-			GEFMessages.DeleteAction_ActionDeleteCommandName);
+			Messages.getString("org.nightlabs.editor2d.actions.DeleteAction.label")); //$NON-NLS-1$
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart object = (EditPart) objects.get(i);
 			Command cmd = object.getCommand(deleteReq);

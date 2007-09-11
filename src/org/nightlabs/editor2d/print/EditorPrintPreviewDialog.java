@@ -47,7 +47,7 @@ extends CenteredDialog
 	private PrinterUseCase printerUseCase;
 	private PrinterConfiguration printerConfiguration;
 	
-	public static final String PRINTER_USECASE_EDITOR2D = "PrinterUseCase-Editor2D";
+	public static final String PRINTER_USECASE_EDITOR2D = "PrinterUseCase-Editor2D"; //$NON-NLS-1$
 			
 	/**
 	 * @param parentShell
@@ -56,13 +56,13 @@ extends CenteredDialog
 	{
 		super(parentShell);
 		if (dc == null)
-			throw new IllegalArgumentException("Param dc must not be null!");
+			throw new IllegalArgumentException("Param dc must not be null!"); //$NON-NLS-1$
 		
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 		this.dc = dc;		
 		printerUseCase = PrinterConfigurationRegistry.sharedInstance().getPrinterUseCase(PRINTER_USECASE_EDITOR2D);
 		if (printerUseCase == null)
-			throw new RuntimeException("The PrinterUseCase to be edited is not registered: "+PRINTER_USECASE_EDITOR2D);
+			throw new RuntimeException("The PrinterUseCase to be edited is not registered: "+PRINTER_USECASE_EDITOR2D); //$NON-NLS-1$
 		printerConfiguration = PrinterConfigurationCfMod.getPrinterConfiguration(PRINTER_USECASE_EDITOR2D);		
 	}
 

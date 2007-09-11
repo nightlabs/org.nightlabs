@@ -27,9 +27,9 @@ package org.nightlabs.editor2d.command.shape;
 
 import java.awt.geom.Area;
 
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -37,11 +37,10 @@ import org.nightlabs.editor2d.j2d.GeneralShape;
 public class ShapeUnionCommand 
 extends AbstractBooleanOperationCommand 
 {
-
 	public ShapeUnionCommand(ShapeDrawComponent primary, ShapeDrawComponent secondary) 
 	{
 		super(primary, secondary);
-		setLabel(EditorPlugin.getResourceString("command.shapeUnion.text"));
+		setLabel(Messages.getString("org.nightlabs.editor2d.command.shape.ShapeUnionCommand.label")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -50,5 +49,4 @@ extends AbstractBooleanOperationCommand
 		area1.add(area2);
 		return new GeneralShape(area1);
 	}
-		
 }

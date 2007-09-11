@@ -31,9 +31,9 @@ import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.ui.actions.ActionFactory;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.AbstractEditorSelectionAction;
 import org.nightlabs.editor2d.actions.EditorActionConstants;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -61,12 +61,10 @@ extends AbstractEditorSelectionAction
 
   protected void init() 
   {
-  	setText(EditorPlugin.getResourceString("action.copy.text"));
-  	setToolTipText(EditorPlugin.getResourceString("action.copy.tooltip"));
+  	setText(Messages.getString("org.nightlabs.editor2d.actions.copy.CopyAction.text")); //$NON-NLS-1$
+  	setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.copy.CopyAction.tooltip")); //$NON-NLS-1$
   	setId(ID);
-//  	setActionDefinitionId(ID);
-  	setActionDefinitionId("org.eclipse.ui.edit.copy");  	
-//  	setAccelerator(SWT.CTRL | 'C');
+  	setActionDefinitionId("org.eclipse.ui.edit.copy");  	 //$NON-NLS-1$
   } 
 	
 	/**
@@ -82,12 +80,10 @@ extends AbstractEditorSelectionAction
 	 */
 	public void run() 
 	{
-//		List<DrawComponent> dcs = getSelection(DrawComponent.class, true);
 		Collection<DrawComponent> dcs = getSelection(DrawComponent.class, true);		
 		Clipboard clipboard = Clipboard.getDefault();
 		Object oldContent = clipboard.getContents();
 		clipboard.setContents(dcs);
 		firePropertyChange(EditorActionConstants.PROP_COPY_TO_CLIPBOARD, oldContent, dcs);
 	}	
-					
 }

@@ -62,7 +62,7 @@ implements IPaintable
 	public void paint(Control arg0, Graphics2D g2d) 
 	{
 		if (image == null) {
-			logger.debug("image = null!");
+			logger.debug("image = null!"); //$NON-NLS-1$
 			return;			
 		}
 
@@ -73,7 +73,7 @@ implements IPaintable
 		long start = System.currentTimeMillis();
 		g2d.drawImage(image, 0, 0, null);
 		long end = System.currentTimeMillis() - start;		
-		logger.debug("paint took "+end+" ms!");
+		logger.debug("paint took "+end+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void redraw(Control arg0, GC arg1) {

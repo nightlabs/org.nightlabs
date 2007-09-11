@@ -29,22 +29,17 @@ package org.nightlabs.editor2d.properties;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
+import org.nightlabs.base.util.ImageUtil;
 
 public class LineStyleLabelProvider 
 extends LabelProvider 
 {
-
-  public LineStyleLabelProvider() 
-  {
-    super();
-  }
-
   public Image getImage(Object element) 
   {
     if (element instanceof Integer) 
     {
       int lineStyle = ((Integer)element).intValue();
-      return org.nightlabs.base.util.ImageUtil.createLineStyleImage(lineStyle);
+      return ImageUtil.createLineStyleImage(lineStyle);
     }
     return super.getImage(element);
   }
@@ -54,9 +49,8 @@ extends LabelProvider
     if (element instanceof Integer) 
     {
       int lineStyle = ((Integer)element).intValue();
-      return "";
+      return ""; //$NON-NLS-1$
     }
     return super.getText(element);
   }
-  
 }

@@ -29,6 +29,7 @@ package org.nightlabs.editor2d.edit.tree;
 
 import java.beans.PropertyChangeEvent;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.base.resource.SharedImages;
@@ -45,13 +46,10 @@ extends DrawComponentTreeEditPart
 	/**
 	 * LOG4J logger used by this class
 	 */
-	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger
-			.getLogger(EllipseTreeEditPart.class);
+	private static final Logger logger = Logger.getLogger(EllipseTreeEditPart.class);
 	
-//	public static Image ELLIPSE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-//			AbstractPaletteFactory.class, "Ellipse").createImage();	
 	public static Image ELLIPSE_ICON = SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-			AbstractPaletteFactory.class, "Ellipse", ImageFormat.gif).createImage();	
+			AbstractPaletteFactory.class, "Ellipse", ImageFormat.gif).createImage();	 //$NON-NLS-1$
   
   public EllipseTreeEditPart(EllipseDrawComponent model) {
     super(model);
@@ -64,7 +62,6 @@ extends DrawComponentTreeEditPart
     return ELLIPSE_ICON;
   }
 
-  
   public IPropertySource getPropertySource()
   {
     if (propertySource == null)
@@ -84,11 +81,9 @@ extends DrawComponentTreeEditPart
 		super.propertyChanged(evt);
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(EllipseDrawComponent.PROP_END_ANGLE)) {
-			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}
 		else if (propertyName.equals(EllipseDrawComponent.PROP_START_ANGLE)) {
-			logger.debug(propertyName +" changed!");
 			refreshVisuals();			
 		}		
 	}  

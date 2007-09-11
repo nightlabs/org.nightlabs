@@ -30,9 +30,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.dialog.CenteredDialog;
-import org.nightlabs.base.form.XFormToolkit.TOOLKIT_MODE;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.composite.PageComposite;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -40,7 +39,6 @@ import org.nightlabs.editor2d.composite.PageComposite;
 public class CreatePageDialog 
 extends CenteredDialog 
 {
-
 	public CreatePageDialog(Shell parentShell) {
 		super(parentShell);
 		setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MIN | SWT.MAX);
@@ -54,15 +52,14 @@ extends CenteredDialog
 	@Override
 	protected Control createDialogArea(Composite parent) 
 	{
-		pageComp = new PageComposite(parent, SWT.NONE, TOOLKIT_MODE.COMPOSITE); 
-		return pageComp;
+		return new PageComposite(parent, SWT.NONE); 
 	}
 
 	@Override
 	public void create() 
 	{
 		super.create();
-		getShell().setText(EditorPlugin.getResourceString("dialog.createPage.title"));
+		getShell().setText(Messages.getString("org.nightlabs.editor2d.dialog.CreatePageDialog.title")); //$NON-NLS-1$
 		getShell().setSize(250, 250);
 	}
 		

@@ -61,6 +61,4 @@ extends DialogCellEditor
   {
     super.updateContents(value);
   }
-  
-  
 }

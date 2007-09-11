@@ -66,7 +66,7 @@ extends Draw2DBaseRenderer
     g.setLineStyle(convertLineStyle(sdc.getLineStyle()));
     g.drawPath(path);  
     
-    logger.debug("shape painted!");
+    logger.debug("shape painted!"); //$NON-NLS-1$
 	}
 	
 	protected Path convertShape(Shape s) 

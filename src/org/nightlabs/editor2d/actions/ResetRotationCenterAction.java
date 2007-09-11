@@ -28,19 +28,16 @@
 package org.nightlabs.editor2d.actions;
 
 import java.util.Iterator;
-import java.util.Map;
 
 import org.eclipse.gef.EditPart;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.edit.AbstractDrawComponentEditPart;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
-import org.nightlabs.editor2d.request.EditorRotateCenterRequest;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class ResetRotationCenterAction 
-//extends SelectionAction
 extends AbstractEditorSelectionAction
 implements EditorRequestConstants
 {
@@ -50,12 +47,6 @@ implements EditorRequestConstants
     super(part);
   }
 
-  protected EditorRotateCenterRequest request = new EditorRotateCenterRequest();
-  protected Map dc2RotationCenter;
-  
-  /* (non-Javadoc)
-   * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#calculateEnabled()
-   */
   protected boolean calculateEnabled() 
   {
     for (Iterator it = getSelectedObjects().iterator(); it.hasNext(); ) {
@@ -96,8 +87,8 @@ implements EditorRequestConstants
   
   protected void init() 
   {
-  	setText(EditorPlugin.getResourceString("action.resetrotationcenter.label"));
-  	setToolTipText(EditorPlugin.getResourceString("action.resetrotationcenter.tooltip"));
+  	setText(Messages.getString("org.nightlabs.editor2d.actions.ResetRotationCenterAction.text")); //$NON-NLS-1$
+  	setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.ResetRotationCenterAction.tooltip")); //$NON-NLS-1$
   	setId(ID);
 //  	setImageDescriptor(ImageDescriptor.createFromFile(EditorPlugin.class,"icons/editShape16.gif"));
   }   

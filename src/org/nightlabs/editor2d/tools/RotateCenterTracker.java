@@ -72,7 +72,7 @@ extends AbstractDragTracker
   protected void updateSourceRequest() 
   {
     getEditorRotateCenterRequest().setRotationCenter(getLocation());
-    logger.debug("rotationCenter = "+getLocation());
+    logger.debug("rotationCenter = "+getLocation()); //$NON-NLS-1$
   }
   
   protected EditorRotateCenterRequest getEditorRotateCenterRequest() 
@@ -83,7 +83,5 @@ extends AbstractDragTracker
   // Override to avoid the single selection of the EditPart whiches handle has been selected
 	protected void performSelection() 
 	{
-		
 	}   
-    
 }

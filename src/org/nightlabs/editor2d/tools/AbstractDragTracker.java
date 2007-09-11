@@ -165,27 +165,12 @@ implements EditorRequestConstants
   
   protected String getDebugName() 
   {
-    return "Debug "+getCommandName();
+    return "Debug "+getCommandName(); //$NON-NLS-1$
   }   
   
   protected abstract Request createSourceRequest();
   protected abstract void updateSourceRequest();   
   protected abstract String getCommandName();
-//  protected abstract Cursor getDefaultCursor(); 
-  
-//	protected Point getRealLocation() 
-//	{
-//	  Point p = getLocation();
-//	  Point realLocation;
-//	  
-//	  ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getCurrentViewer();
-//	  FigureCanvas canvas = (FigureCanvas) viewer.getControl();
-//	  Viewport viewport = canvas.getViewport();
-//	  Point viewLocation = viewport.getViewLocation();
-//	  realLocation = p.getTranslated(viewLocation);
-//	                  
-//	  return realLocation;
-//	}  
 
   protected void performSelection() 
   {

@@ -52,8 +52,8 @@ import org.nightlabs.editor2d.figures.RendererFigure;
  *
  */
 public class SmartUpdateFigure 
-	extends Figure
-	implements ISmartUpdateFigure
+extends Figure
+implements ISmartUpdateFigure
 {
 	/**
 	 * Inner tile class. 
@@ -62,7 +62,7 @@ public class SmartUpdateFigure
 		
 		private Rectangle bounds;
 		private String key;
-		private List figures = new LinkedList();
+		private List<IFigure> figures = new ArrayList<IFigure>();
 		
 		public Tile(Rectangle bounds) {
 			this.bounds = bounds;
@@ -168,7 +168,7 @@ public class SmartUpdateFigure
 	}
 	
 	public static String getTileKey(int x, int y) {
-		return "("+x+","+y+")";
+		return "("+x+","+y+")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	/**

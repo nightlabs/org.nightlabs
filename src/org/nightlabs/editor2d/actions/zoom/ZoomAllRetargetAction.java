@@ -31,21 +31,20 @@ import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
 import org.nightlabs.editor2d.actions.EditorRetargetAction;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class ZoomAllRetargetAction 
 extends EditorRetargetAction 
 {
-
   /**
    * Constructor for ZoomInRetargetAction
    */
   public ZoomAllRetargetAction() 
   {
-  	super(ZoomAllAction.ID, EditorPlugin.getResourceString("action.zoom.all.label"));
-  	setToolTipText(EditorPlugin.getResourceString("action.zoom.all.tooltip"));
+  	super(ZoomAllAction.ID, Messages.getString("org.nightlabs.editor2d.actions.zoom.ZoomAllRetargetAction.text")); //$NON-NLS-1$
+  	setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.zoom.ZoomAllRetargetAction.tooltip")); //$NON-NLS-1$
   	setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), ZoomAllAction.class));
   	setActionDefinitionId(EditorCommandConstants.ZOOM_ALL_ID);  	
   }
-
 }

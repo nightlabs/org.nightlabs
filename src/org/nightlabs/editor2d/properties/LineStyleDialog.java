@@ -35,20 +35,16 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ListDialog;
-
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class LineStyleDialog 
 extends ListDialog
-//extends org.eclipse.jface.dialogs.Dialog
-//extends Dialog
 {
-
   public LineStyleDialog(Shell parent) 
   {
     super(parent);
-    setTitle(EditorPlugin.getResourceString("dialog.lineStyle.title"));
-    setMessage(EditorPlugin.getResourceString("dialog.lineStyle.message"));
+    setTitle(Messages.getString("org.nightlabs.editor2d.properties.LineStyleDialog.title")); //$NON-NLS-1$
+    setMessage(Messages.getString("org.nightlabs.editor2d.properties.LineStyleDialog.message")); //$NON-NLS-1$
     setContentProvider(contentProvider);
     setLabelProvider(new LineStyleLabelProvider());
     setInput(null);
@@ -56,9 +52,7 @@ extends ListDialog
     
   protected IStructuredContentProvider contentProvider = new IStructuredContentProvider() 
   {  
-    public void inputChanged(Viewer viewer, Object oldInput, Object newInput) 
-    {
-      
+    public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
     }
   
     public void dispose() {
@@ -66,7 +60,7 @@ extends ListDialog
   
     public Object[] getElements(Object inputElement) 
     {
-      List lineStyles = new ArrayList();
+      List<Integer> lineStyles = new ArrayList<Integer>();
       lineStyles.add(new Integer(SWT.LINE_SOLID));
       lineStyles.add(new Integer(SWT.LINE_DOT));
       lineStyles.add(new Integer(SWT.LINE_DASH));

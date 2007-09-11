@@ -32,6 +32,7 @@ import org.eclipse.gef.commands.Command;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class DrawComponentReorderCommand 
@@ -45,7 +46,7 @@ extends Command
 
   public DrawComponentReorderCommand(DrawComponent child, DrawComponentContainer parent, int newIndex ) 
   {
-  	super(EditorPlugin.getResourceString("command.reorder.drawcomponent"));
+  	super(Messages.getString("org.nightlabs.editor2d.command.DrawComponentReorderCommand.label")); //$NON-NLS-1$
   	this.child = child;
   	this.parent = parent;
   	this.newIndex = newIndex;

@@ -32,7 +32,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.util.Assert;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -157,7 +157,6 @@ extends XContributionItem
   public final void fill(Menu parent, int index) 
   {
   	Assert.isTrue(false, "Can't add a control to a menu");//$NON-NLS-1$  	
-//  	MenuItem mi = new MenuItem(parent, SWT.NONE);
   }
   
 	protected SelectionListener comboSelectionListener = new SelectionListener()
@@ -198,10 +197,10 @@ extends XContributionItem
 			if (combo != null)
 				combo.select(index);
 			else
-				logger.debug("combo == null!");
+				logger.debug("combo == null!"); //$NON-NLS-1$
 		}
 		else
-			logger.debug("units does not contain IUnit "+unit);
+			logger.debug("units does not contain IUnit "+unit); //$NON-NLS-1$
 	}
 	
 	public IUnit getSelectedUnit() 

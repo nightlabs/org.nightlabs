@@ -32,21 +32,20 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.gef.commands.Command;
-
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorGuide;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.EditorRuler;
+import org.nightlabs.editor2d.resource.Messages;
 
 public class DeleteGuideCommand 
 extends Command 
 {
   private EditorRuler parent;
   private EditorGuide guide;
-  private Map oldParts;
+  private Map<DrawComponent, Integer> oldParts;
 
   public DeleteGuideCommand(EditorGuide guide, EditorRuler parent) {
-  	super(EditorPlugin.getResourceString("command.delete.guide"));
+  	super(Messages.getString("org.nightlabs.editor2d.command,DeleteGuideCommand.label")); //$NON-NLS-1$
   	this.guide = guide;
   	this.parent = parent;
   }
@@ -57,10 +56,10 @@ extends Command
 
   public void execute() 
   {
-  	oldParts = new HashMap(guide.getMap());
-  	Iterator iter = oldParts.keySet().iterator();
+  	oldParts = new HashMap<DrawComponent, Integer>(guide.getMap());
+  	Iterator<DrawComponent> iter = oldParts.keySet().iterator();
   	while (iter.hasNext()) {
-  		guide.detachPart((DrawComponent)iter.next());
+  		guide.detachPart(iter.next());
   	}
   	parent.removeGuide(guide);
   }
@@ -68,10 +67,10 @@ extends Command
   public void undo() 
   {
   	parent.addGuide(guide);
-  	Iterator iter = oldParts.keySet().iterator();
+  	Iterator<DrawComponent> iter = oldParts.keySet().iterator();
   	while (iter.hasNext()) {
-  	  DrawComponent part = (DrawComponent)iter.next();
-  		guide.attachPart(part, ((Integer)oldParts.get(part)).intValue());
+  	  DrawComponent part = iter.next();
+  		guide.attachPart(part, oldParts.get(part));
   	}
   }
   	  

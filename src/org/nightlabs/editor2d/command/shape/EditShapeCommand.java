@@ -31,62 +31,42 @@ import java.awt.geom.PathIterator;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
-
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class EditShapeCommand 
 extends Command 
 {
-  protected GeneralShape oldGeneralShape;    
-  protected GeneralShape generalShape;  
+  private GeneralShape oldGeneralShape;    
+  private GeneralShape generalShape;  
   
-  protected int pathSegmentIndex;      
+  private int pathSegmentIndex;      
 	public void setPathSegmentIndex(int pathSegmentIndex) {
 	  this.pathSegmentIndex = pathSegmentIndex;
 	}
 		
-	protected Point location;	
+	private Point location;	
   public void setLocation(Point location) {
     this.location = location;
   }
   
 	/** The ShapeDrawComponent to edit */
-	protected ShapeDrawComponent shape;
+  private ShapeDrawComponent shape;
 	public void setShapeDrawComponent(ShapeDrawComponent sdc) {
 	  shape = sdc;
 	}  
 	  
-  /**
-   * 
-   */
   public EditShapeCommand() 
   {
     super();
-    setLabel(EditorPlugin.getResourceString("command.edit.shape"));
-  }
-
-  /**
-   * @param label
-   */
-  public EditShapeCommand(String label) 
-  {
-    super(label);
+    setLabel(Messages.getString("org.nightlabs.editor2d.command.shape.EditShapeCommand.label")); //$NON-NLS-1$
   }
     
   public void execute() 
   {        
-    oldGeneralShape = (GeneralShape) shape.getGeneralShape().clone();
-//    generalShape = (GeneralShape) shape.getGeneralShape();
-//    float[] coords = new float[] {location.x, location.y};
-//    if (pathSegmentIndex == 0) {
-//      generalShape.setPathSegment(PathIterator.SEG_MOVETO, pathSegmentIndex, coords);
-//    } else {
-//      generalShape.setPathSegment(PathIterator.SEG_LINETO, pathSegmentIndex, coords);      
-//    }
-    
+    oldGeneralShape = (GeneralShape) shape.getGeneralShape().clone();    
     generalShape = new GeneralShape();
     float[] coords = new float[6];
     int index = 0;

@@ -89,13 +89,8 @@ extends ConfigModule
 		}
 		if (editorClass2EditorID == null) {
 			editorClass2EditorID = new HashMap<Class, String>();
-			editorClass2EditorID.put(Editor.class, "org.nightlabs.editor2d.Editor");
+			editorClass2EditorID.put(Editor.class, "org.nightlabs.editor2d.Editor"); //$NON-NLS-1$
 		}
 	}
-		
-//	public static DocumentProperties getDefault() 
-//	{
-//		return new DocumentProperties(new A4Page(), 
-//				PageDrawComponent.ORIENTATION_VERTICAL, IResolutionUnit.dpiUnit, 762);		
-//	}
+
 }

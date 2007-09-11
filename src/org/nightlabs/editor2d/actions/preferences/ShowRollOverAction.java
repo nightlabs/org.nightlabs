@@ -26,7 +26,7 @@
 package org.nightlabs.editor2d.actions.preferences;
 
 import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -54,17 +54,15 @@ extends PreferencesAction
 	protected void init() 
 	{
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.showRollover.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.showRollover.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.preferences.ShowRollOverAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.preferences.ShowRollOverAction.tooltip")); //$NON-NLS-1$
 	}	
 	
-	public boolean isChecked() 
-	{
+	public boolean isChecked() {
 		return prefConfMod.isShowRollOver();
 	}
 
-	public void run() 
-	{
+	public void run() {
 		prefConfMod.setShowRollOver(!isChecked());
 	}		
 }

@@ -29,6 +29,8 @@ package org.nightlabs.editor2d.request;
 
 import java.util.List;
 
+import org.eclipse.gef.EditPart;
+
 public interface EditorGroupRequest 
 {
   /**
@@ -36,13 +38,13 @@ public interface EditorGroupRequest
    *
    * @return A List containing the EditParts making this Request.
    */
-  public List getEditParts();
+  public List<EditPart> getEditParts();
   
   /**
    * Sets the EditParts making this Request to the given List.
    *
    * @param list The List of EditParts.
    */
-  public void setEditParts(List list);
+  public void setEditParts(List<EditPart> list);
     
 }

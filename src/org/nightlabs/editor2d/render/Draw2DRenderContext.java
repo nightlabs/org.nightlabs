@@ -34,6 +34,6 @@ import org.nightlabs.editor2d.DrawComponent;
 public interface Draw2DRenderContext 
 extends RenderContext<Graphics>
 {
-	public static final String RENDER_CONTEXT_TYPE = "Draw2D";
+	public static final String RENDER_CONTEXT_TYPE = "Draw2D"; //$NON-NLS-1$
 	void paint(DrawComponent dc, Graphics g);	
 }

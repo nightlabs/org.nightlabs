@@ -27,8 +27,8 @@ package org.nightlabs.editor2d.actions.order;
 
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.EditorCommandConstants;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * changes the order of the selected Objects to the front
@@ -57,8 +57,8 @@ extends AbstractChangeOrderSelectionAction
 
 	public void init() 
 	{
-		setText(EditorPlugin.getResourceString("action.changeOrderToLocalFront.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.changeOrderToLocalFront.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.order.ChangeOrderToLocalFront.tooltip")); //$NON-NLS-1$
 		setId(ID);
 		setActionDefinitionId(EditorCommandConstants.ORDER_TO_LOCAL_FRONT_ID);
 	}
@@ -83,5 +83,4 @@ extends AbstractChangeOrderSelectionAction
 	{
 		return primarySelected.getParent();		 		
 	}
-		
 }

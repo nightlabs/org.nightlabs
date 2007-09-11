@@ -28,10 +28,10 @@
 package org.nightlabs.editor2d.command;
 
 import org.nightlabs.editor2d.Editor2DFactory;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RootDrawComponent;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class CreateLayerCommand  
@@ -40,11 +40,11 @@ extends CreateDrawComponentCommand
 	public CreateLayerCommand(PageDrawComponent parent, Editor2DFactory factory)
 	{
 		if (parent == null) {
-			throw new IllegalArgumentException("Param parent (PageDrawComponent) must not be null!");
+			throw new IllegalArgumentException("Param parent (PageDrawComponent) must not be null!"); //$NON-NLS-1$
 		}	  
 		this.parent = parent;
 	  this.factory = factory;
-	  setLabel(EditorPlugin.getResourceString("command.create.layer"));	  
+	  setLabel(Messages.getString("org.nightlabs.editor2d.command.CreateLayerCommand.label"));	   //$NON-NLS-1$
 	}
 	
 	private Editor2DFactory factory = null;

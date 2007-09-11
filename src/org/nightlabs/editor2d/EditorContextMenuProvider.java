@@ -62,12 +62,13 @@ import org.nightlabs.editor2d.actions.shape.ShapeExclusiveOrAction;
 import org.nightlabs.editor2d.actions.shape.ShapeIntersectAction;
 import org.nightlabs.editor2d.actions.shape.ShapeSubtractAction;
 import org.nightlabs.editor2d.actions.shape.ShapeUnionAction;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class EditorContextMenuProvider 
 extends ContextMenuProvider
 {
-  public static final String CONTEXT_MENU_ID = "org.nightlabs.editor2d.outline.contextmenu";
+  public static final String CONTEXT_MENU_ID = "org.nightlabs.editor2d.outline.contextmenu"; //$NON-NLS-1$
   
   /** The editor's action registry. */
   private ActionRegistry actionRegistry;
@@ -138,37 +139,37 @@ extends ContextMenuProvider
 //  		manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
   	
   	// View SubMenu
-  	MenuManager viewsubmenu = new MenuManager(EditorPlugin.getResourceString("menu.view"));  	 
+  	MenuManager viewsubmenu = new MenuManager(Messages.getString("org.nightlabs.editor2d.EditorContextMenuProvider.menu.view"));  	  //$NON-NLS-1$
   	buildViewSubMenu(viewsubmenu);  	
   	if (!viewsubmenu.isEmpty())
   		manager.appendToGroup(GEFActionConstants.GROUP_REST, viewsubmenu);
   	
   	// Edit SubMenu
-  	MenuManager editsubmenu = new MenuManager(EditorPlugin.getResourceString("menu.edit"));
+  	MenuManager editsubmenu = new MenuManager(Messages.getString("org.nightlabs.editor2d.EditorContextMenuProvider.menu.edit")); //$NON-NLS-1$
   	buildEditSubMenu(editsubmenu);  	
   	if (!editsubmenu.isEmpty())
   		manager.appendToGroup(GEFActionConstants.GROUP_REST, editsubmenu);
   	
   	// Alignment SubMenu
-  	MenuManager alignSubMenu = new MenuManager(EditorPlugin.getResourceString("menu.align"));
+  	MenuManager alignSubMenu = new MenuManager(Messages.getString("org.nightlabs.editor2d.EditorContextMenuProvider.menu.align")); //$NON-NLS-1$
   	buildAlignSubMenu(alignSubMenu);
   	if (!alignSubMenu.isEmpty())
   		manager.appendToGroup(GEFActionConstants.GROUP_REST, alignSubMenu);
 
   	// Mark SubMenu
-  	MenuManager markSubMenu = new MenuManager(EditorPlugin.getResourceString("menu.mark"));
+  	MenuManager markSubMenu = new MenuManager(Messages.getString("org.nightlabs.editor2d.EditorContextMenuProvider.menu.mark")); //$NON-NLS-1$
   	buildMarkSubMenu(markSubMenu);
   	if (!markSubMenu.isEmpty())
   		manager.appendToGroup(GEFActionConstants.GROUP_REST, markSubMenu);  	
 
   	// Order SubMenu
-  	MenuManager orderSubMenu = new MenuManager(EditorPlugin.getResourceString("menu.order"));
+  	MenuManager orderSubMenu = new MenuManager(Messages.getString("org.nightlabs.editor2d.EditorContextMenuProvider.menu.order")); //$NON-NLS-1$
   	buildOrderSubMenu(orderSubMenu);
   	if (!orderSubMenu.isEmpty())
   		manager.appendToGroup(GEFActionConstants.GROUP_REST, orderSubMenu);  	
 
   	// Order SubMenu
-  	MenuManager shapeSubMenu = new MenuManager(EditorPlugin.getResourceString("menu.shape"));
+  	MenuManager shapeSubMenu = new MenuManager(Messages.getString("org.nightlabs.editor2d.EditorContextMenuProvider.menu.shape")); //$NON-NLS-1$
   	buildShapeSubMenu(shapeSubMenu);
   	if (!shapeSubMenu.isEmpty())
   		manager.appendToGroup(GEFActionConstants.GROUP_REST, shapeSubMenu);  	
@@ -216,7 +217,7 @@ extends ContextMenuProvider
   	
   	menuMan.add(new Separator());
   	
-  	MenuManager sendToLayerSubMenu = new MenuManager(EditorPlugin.getResourceString("menu.sendToLayer"));
+  	MenuManager sendToLayerSubMenu = new MenuManager(Messages.getString("org.nightlabs.editor2d.EditorContextMenuProvider.menu.sendToLayer")); //$NON-NLS-1$
   	buildSendToLayerSubMenu(sendToLayerSubMenu);
   	if (!sendToLayerSubMenu.isEmpty())
   		menuMan.appendToGroup(GEFActionConstants.GROUP_REST, sendToLayerSubMenu);  	  	  	

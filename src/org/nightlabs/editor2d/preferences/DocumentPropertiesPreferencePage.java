@@ -47,7 +47,7 @@ import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
-import org.nightlabs.base.composite.ComboComposite;
+import org.nightlabs.base.composite.XComboComposite;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
@@ -63,6 +63,7 @@ import org.nightlabs.editor2d.page.PageOrientationComposite;
 import org.nightlabs.editor2d.page.PredefinedPageComposite;
 import org.nightlabs.editor2d.page.ResolutionUnitComposite;
 import org.nightlabs.editor2d.page.UnitComposite;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -71,14 +72,13 @@ public class DocumentPropertiesPreferencePage
 extends PreferencePage
 implements IWorkbenchPreferencePage 
 {
-
 	public DocumentPropertiesPreferencePage() {
 		init();
 	}
 
 	protected void init() 
 	{
-		setTitle(EditorPlugin.getResourceString("preferences.document.properties.title"));
+		setTitle(Messages.getString("org.nightlabs.editor2d.preferences.DocumentPropertiesPreferencePage.title")); //$NON-NLS-1$
 		setPreferenceStore(Preferences.getPreferenceStore());
 	}
 	
@@ -87,13 +87,9 @@ implements IWorkbenchPreferencePage
 	private UnitComposite unitComp = null;
 	private Text resolutionText = null;
 	private PageOrientationComposite orientationComp = null;
-	private ComboComposite<Class> editorChooseCombo = null;
+	private XComboComposite<Class> editorChooseCombo = null;
 	
-//	private DocumentConfigModule documentConfigModule = null;
 	protected  DocumentConfigModule getDocumentConfigModule() {
-//		if (documentConfigModule == null)
-//			documentConfigModule = (DocumentConfigModule) Config.sharedInstance().createConfigModule(DocumentConfigModule.class);
-//		return documentConfigModule;
 		return DocumentPropertiesRegistry.sharedInstance().getDocumentConfModule();
 	}
 	
@@ -125,8 +121,9 @@ implements IWorkbenchPreferencePage
 		
 		// Editors
 		Label editorSelectLabel = new Label(content, SWT.NONE);
-		editorSelectLabel.setText(EditorPlugin.getResourceString("preferences.document.properties.editorSelect.label"));
-		editorChooseCombo = new ComboComposite<Class>(content, SWT.NONE, getEditorClasses(), editorLabelProvider);
+		editorSelectLabel.setText(Messages.getString("org.nightlabs.editor2d.preferences.DocumentPropertiesPreferencePage.label.editor")); //$NON-NLS-1$
+		editorChooseCombo = new XComboComposite<Class>(content, SWT.NONE, editorLabelProvider);
+		editorChooseCombo.setInput(getEditorClasses());
 		editorChooseCombo.selectElement(Editor.class);
 		editorChooseCombo.addSelectionChangedListener(editorListener);
 		editorChooseCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -138,7 +135,7 @@ implements IWorkbenchPreferencePage
 		
 		// Predefined Pages
 		Label pageSelectLabel = new Label(content, SWT.NONE);
-		pageSelectLabel.setText(EditorPlugin.getResourceString("preferences.document.properties.pageSelect.label"));
+		pageSelectLabel.setText(Messages.getString("org.nightlabs.editor2d.preferences.DocumentPropertiesPreferencePage.label.predefinedPage")); //$NON-NLS-1$
 		pageComp = new PredefinedPageComposite(content, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 		pageComp.selectPage(PredefinedPageEP.sharedInstance().getPageRegistry().getPage(
 				Preferences.getPreferenceStore().getString(Preferences.PREF_PREDEFINED_PAGE_ID)));
@@ -146,7 +143,7 @@ implements IWorkbenchPreferencePage
 	
 		// Page Orientation
 		Label orientationLabel = new Label(content, SWT.NONE);
-		orientationLabel.setText(EditorPlugin.getResourceString("preferences.document.properties.pageOrientation.label"));
+		orientationLabel.setText(Messages.getString("org.nightlabs.editor2d.preferences.DocumentPropertiesPreferencePage.label.orientation")); //$NON-NLS-1$
 		orientationComp = new PageOrientationComposite(content, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 		orientationComp.selectOrientation(Preferences.getPreferenceStore().getInt(
 				Preferences.PREF_PAGE_ORIENTATION_ID));
@@ -154,7 +151,7 @@ implements IWorkbenchPreferencePage
 		
 		// Resolution Unit
 		Label resolutionUnitSelectLabel = new Label(content, SWT.NONE);
-		resolutionUnitSelectLabel.setText(EditorPlugin.getResourceString("preferences.document.properties.resolutionUnit.label"));
+		resolutionUnitSelectLabel.setText(Messages.getString("org.nightlabs.editor2d.preferences.DocumentPropertiesPreferencePage.label.resolutionUnit")); //$NON-NLS-1$
 		resUnitComp = new ResolutionUnitComposite(content, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 		resUnitComp.selectResolutionUnit(ResolutionUnitEP.sharedInstance().getResolutionUnitRegistry().getResolutionUnit(
 				Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID)));
@@ -162,14 +159,14 @@ implements IWorkbenchPreferencePage
 
 		// Resolution
 		Label resolutionLabel = new Label(content, SWT.NONE);
-		resolutionLabel.setText(EditorPlugin.getResourceString("preferences.document.properties.resolution.label"));
+		resolutionLabel.setText(Messages.getString("org.nightlabs.editor2d.preferences.DocumentPropertiesPreferencePage.label.resolution")); //$NON-NLS-1$
 		resolutionText = new Text(content, SWT.BORDER);
 		resolutionText.setText(Preferences.getPreferenceStore().getString(Preferences.PREF_DOCUMENT_RESOLUTION));
 		resolutionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		// Standard Unit
 		Label unitSelectLabel = new Label(content, SWT.NONE);
-		unitSelectLabel.setText(EditorPlugin.getResourceString("preferences.document.properties.standardUnit.label"));
+		unitSelectLabel.setText(Messages.getString("org.nightlabs.editor2d.preferences.DocumentPropertiesPreferencePage.label.standardUnit")); //$NON-NLS-1$
 		unitComp = new UnitComposite(content, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 		unitComp.selectUnit(UnitRegistryEP.sharedInstance().getUnitRegistry().getUnit(
 				Preferences.getPreferenceStore().getString(Preferences.PREF_STANDARD_UNIT_ID)));
@@ -216,7 +213,7 @@ implements IWorkbenchPreferencePage
 	{
 		pageComp.selectPage(documentProperties.getPredefinedPage());
 		resUnitComp.selectResolutionUnit(documentProperties.getResolutionUnit());
-		resolutionText.setText(""+documentProperties.getResolution());
+		resolutionText.setText(String.valueOf(documentProperties.getResolution()));
 		orientationComp.selectOrientation(documentProperties.getOrientation());
 	}
 	
@@ -231,13 +228,6 @@ implements IWorkbenchPreferencePage
 		return editorClasses;
 	}
 	
-//	private ILabelProvider getEditorLabelProvider() 
-//	{
-//  	IEditorRegistry editorRegistry = PlatformUI.getWorkbench().getEditorRegistry();
-//  	String editorID = null;
-//  	String editorName = editorRegistry.findEditor(editorID).;
-//	}
-
 	private ILabelProvider editorLabelProvider = new LabelProvider() 
 	{
 		@Override
@@ -255,16 +245,8 @@ implements IWorkbenchPreferencePage
 	@Override
 	public boolean performOk() 
 	{
-//		Preferences.getPreferenceStore().setValue(Preferences.PREF_PREDEFINED_PAGE_ID, 
-//				pageComp.getSelectedPage().getPageID());
-//		Preferences.getPreferenceStore().setValue(Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID, 
-//				resUnitComp.getSelectedResolutionUnit().getResolutionID());
 		Preferences.getPreferenceStore().setValue(Preferences.PREF_STANDARD_UNIT_ID, 
 				unitComp.getSelectedUnit().getUnitID());		
-//		Preferences.getPreferenceStore().setValue(Preferences.PREF_DOCUMENT_RESOLUTION,
-//				getResolution());
-//		Preferences.getPreferenceStore().setValue(Preferences.PREF_PAGE_ORIENTATION_ID,
-//				orientationComp.getOrientation());
 		Map<Class, DocumentProperties> editorClass2DocumentProperties = getDocumentConfigModule().getEditorClass2DocumentProperties();
 		editorClass2DocumentProperties.put(editorChooseCombo.getSelectedElement(), getCurrentDocmuentProperties());
 		getDocumentConfigModule().setEditorClass2DocumentProperties(editorClass2DocumentProperties);
@@ -275,16 +257,8 @@ implements IWorkbenchPreferencePage
 	@Override
 	protected void performDefaults() 
 	{
-//		pageComp.selectPage(PredefinedPageEP.sharedInstance().getPageRegistry().getPage(
-//				Preferences.PREF_PREDEFINED_PAGE_ID_DEFAULT));
-//		resUnitComp.selectResolutionUnit(ResolutionUnitEP.sharedInstance().getResolutionUnitRegistry().getResolutionUnit(
-//				Preferences.PREF_STANDARD_RESOLUTION_UNIT_ID_DEFAULT));
 		unitComp.selectUnit(UnitRegistryEP.sharedInstance().getUnitRegistry().getUnit(
 				Preferences.PREF_STANDARD_UNIT_ID_DEFAULT));
-//		resolutionText.setText(""+Preferences.getPreferenceStore().getDefaultDouble(
-//				Preferences.PREF_DOCUMENT_RESOLUTION));
-//		orientationComp.selectOrientation(Preferences.getPreferenceStore().getDefaultInt(
-//				Preferences.PREF_PAGE_ORIENTATION_ID));
 		editorChooseCombo.selectElement(Editor.class);
 		DocumentProperties documentProperties = getDocumentConfigModule().getEditorClass2DocumentProperties().get(Editor.class);
 		setDocumentProperties(documentProperties);

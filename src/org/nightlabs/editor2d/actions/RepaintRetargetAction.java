@@ -27,6 +27,7 @@ package org.nightlabs.editor2d.actions;
 
 import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -36,9 +37,9 @@ extends EditorRetargetAction
 {
 	public RepaintRetargetAction() 
 	{
-		super(RepaintAction.ID, EditorPlugin.getResourceString("action.repaint.text"));
-		setImageDescriptor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), RepaintAction.class));
-		setToolTipText(EditorPlugin.getResourceString("action.repaint.tooltip"));
+		super(RepaintAction.ID, Messages.getString("org.nightlabs.editor2d.actions.RepaintRetargetAction.text")); //$NON-NLS-1$
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(
+				EditorPlugin.getDefault(), RepaintAction.class));
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.actions.RepaintRetargetAction.tooltip")); //$NON-NLS-1$
 	}
-
 }

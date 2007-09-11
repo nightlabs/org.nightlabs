@@ -28,13 +28,12 @@ package org.nightlabs.editor2d.print;
 import org.apache.log4j.Logger;
 import org.nightlabs.base.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.AbstractEditor;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
  */
 public class EditorPrintSetupAction 
-//extends AbstractEditorAction
 extends AbstractEditorPrintAction
 {
 	public static final String ID = EditorPrintSetupAction.class.getName();
@@ -62,13 +61,14 @@ extends AbstractEditorPrintAction
 	protected void init() 
 	{
 		setId(ID);
-		setText(EditorPlugin.getResourceString("action.printPageSetup.text"));
-		setToolTipText(EditorPlugin.getResourceString("action.printPageSetup.tooltip"));
+		setText(Messages.getString("org.nightlabs.editor2d.print.EditorPrintSetupAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.editor2d.print.EditorPrintSetupAction.tooltip")); //$NON-NLS-1$
 	}
 
 	public void run() 
 	{
-		PrinterInterfaceManager.sharedInstance().editPrinterConfiguration(PrintUtil.PRINTER_USE_CASE_EDITOR_2D, true);
+		PrinterInterfaceManager.sharedInstance().editPrinterConfiguration(
+				PrintUtil.PRINTER_USE_CASE_EDITOR_2D, true);
 //		PrinterJob printJob = PrinterJob.getPrinterJob();
 ////		PageFormat defaultPageFormat = printJob.defaultPage();
 //		logger.debug("Page Setup before Modification");

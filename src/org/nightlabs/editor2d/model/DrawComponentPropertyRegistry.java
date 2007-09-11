@@ -44,12 +44,12 @@ extends AbstractEPProcessor
 {
 	private static final Logger logger = Logger.getLogger(DrawComponentPropertyRegistry.class);
 	
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.editor2d.drawComponentProperty";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.editor2d.drawComponentProperty"; //$NON-NLS-1$
 	
-	public static final String ELEMENT_DRAWCOMPONENT_PROPERTY = "drawComponentProperty";
-	public static final String ATTRIBUTE_DRAWCOMPONENT_PROPERTY = "drawComponentProperty";	
-	public static final String ATTRIBUTE_DRAWCOMPONENT_CLASS = "drawComponentClass";
-	public static final String ATTRIBUTE_ROOT_DRAWCOMPONENT_CLASS = "rootDrawComponentClass";
+	public static final String ELEMENT_DRAWCOMPONENT_PROPERTY = "drawComponentProperty"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_DRAWCOMPONENT_PROPERTY = "drawComponentProperty";	 //$NON-NLS-1$
+	public static final String ATTRIBUTE_DRAWCOMPONENT_CLASS = "drawComponentClass"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_ROOT_DRAWCOMPONENT_CLASS = "rootDrawComponentClass"; //$NON-NLS-1$
 	
 	private static DrawComponentPropertyRegistry sharedInstance;
 	public static DrawComponentPropertyRegistry sharedInstance() {
@@ -78,7 +78,7 @@ extends AbstractEPProcessor
 			try {
 				dcProperty = (DrawComponentProperty) element.createExecutableExtension(ATTRIBUTE_DRAWCOMPONENT_PROPERTY);
 			} catch (CoreException e) {
-				logger.warn("There occured an error when trying to create the drawComponentProperty "+element.getAttribute(ATTRIBUTE_DRAWCOMPONENT_PROPERTY), e);
+				logger.warn("There occured an error when trying to create the drawComponentProperty "+element.getAttribute(ATTRIBUTE_DRAWCOMPONENT_PROPERTY), e); //$NON-NLS-1$
 			}
 			
 			String rootDrawComponentClassName = element.getAttribute(ATTRIBUTE_ROOT_DRAWCOMPONENT_CLASS);			

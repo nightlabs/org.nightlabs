@@ -33,7 +33,7 @@ import java.util.Map;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.EditorPlugin;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -41,11 +41,10 @@ import org.nightlabs.editor2d.EditorPlugin;
 public class CutDrawComponentCommand 
 extends Command 
 {
-
 	public CutDrawComponentCommand(Collection<DrawComponent> dcs) 
 	{
 		super();
-		setLabel(EditorPlugin.getResourceString("command.cut.text"));
+		setLabel(Messages.getString("org.nightlabs.editor2d.command.CutDrawComponentCommand.label")); //$NON-NLS-1$
 		this.dcs = dcs;
 	}
 

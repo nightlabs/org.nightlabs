@@ -26,9 +26,9 @@
 package org.nightlabs.editor2d.command;
 
 import org.nightlabs.editor2d.Editor2DFactory;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RootDrawComponent;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -36,18 +36,17 @@ import org.nightlabs.editor2d.RootDrawComponent;
 public class CreatePageCommand 
 extends CreateDrawComponentCommand 
 {
-
 	public CreatePageCommand(RootDrawComponent root, Editor2DFactory factory)
 	{
 		super();
 		if (root == null)
-			throw new IllegalArgumentException("Param root must not be null!");
+			throw new IllegalArgumentException("Param root must not be null!"); //$NON-NLS-1$
 		if (factory == null)
-			throw new IllegalArgumentException("Param factory must not be null!");	  
+			throw new IllegalArgumentException("Param factory must not be null!");	   //$NON-NLS-1$
 		
 		this.parent = root;
 	  this.factory = factory;
-	  setLabel(EditorPlugin.getResourceString("command.create.layer"));	  
+	  setLabel(Messages.getString("org.nightlabs.editor2d.command.CreatePageCommand.label"));	   //$NON-NLS-1$
 	}
 	
 	private Editor2DFactory factory = null;

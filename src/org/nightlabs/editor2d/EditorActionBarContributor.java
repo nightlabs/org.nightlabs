@@ -82,6 +82,7 @@ import org.nightlabs.editor2d.custom.EditorZoomComboContributionItem;
 import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintSetupAction;
 import org.nightlabs.editor2d.render.RenderModeManager;
+import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.viewer.action.RenderModeContributionItem;
 import org.nightlabs.editor2d.viewer.render.RendererRegistry;
 
@@ -89,10 +90,6 @@ import org.nightlabs.editor2d.viewer.render.RendererRegistry;
 public class EditorActionBarContributor 
 extends ActionBarContributor 
 {
-
-  /* (non-Javadoc)
-   * @see org.eclipse.gef.ui.actions.ActionBarContributor#buildActions()
-   */
   protected void buildActions() 
   {
   	// Undo / Redo
@@ -102,21 +99,21 @@ extends ActionBarContributor
   	// Delete
 //  	addRetargetAction(new DeleteRetargetAction());
   	addRetargetAction(new RetargetAction(DeleteAction.ID, 
-  			EditorPlugin.getResourceString("action.delete.text")));  	
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.delete")));  	 //$NON-NLS-1$
   	  	
   	// Cut / Copy / Paste
   	addRetargetAction(new RetargetAction(CopyAction.ID, 
-  			EditorPlugin.getResourceString("action.copy.text")));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.copy"))); //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(PasteAction.ID, 
-  			EditorPlugin.getResourceString("action.paste.text")));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.paste"))); //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(CutAction.ID, 
-  			EditorPlugin.getResourceString("action.cut.text")));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.cut"))); //$NON-NLS-1$
   	
   	// Group
   	addRetargetAction(new RetargetAction(GroupAction.ID,
-  			EditorPlugin.getResourceString("action.group.text")));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.group"))); //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(UnGroupAction.ID,
-  			EditorPlugin.getResourceString("action.ungroup.text")));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.ungroup"))); //$NON-NLS-1$
   	
   	// Alignment
   	addRetargetAction(new AlignmentRetargetAction(PositionConstants.LEFT));
@@ -130,23 +127,23 @@ extends ActionBarContributor
   	
   	// Order
   	addRetargetAction(new RetargetAction(ChangeOrderToLocalFront.ID,
-  		EditorPlugin.getResourceString("action.changeOrderToLocalFront.text")));
+  		Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.bringToFront"))); //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(ChangeOrderOneUp.ID,
-    		EditorPlugin.getResourceString("action.changeOrderOneUp.text")));
+    	Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.moveOneUp"))); //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(ChangeOrderOneDown.ID,
-    		EditorPlugin.getResourceString("action.changeOrderOneDown.text")));
+    	Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.moveOneDown"))); //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(ChangeOrderToLocalBack.ID,
-    		EditorPlugin.getResourceString("action.changeOrderToLocalBack.text")));
+    	Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.bringToBack"))); //$NON-NLS-1$
   	
   	// Ruler / Grid
   	addRetargetAction(new RetargetAction(
   			GEFActionConstants.TOGGLE_RULER_VISIBILITY, 
-  			GEFMessages.ToggleRulerVisibility_Label, IAction.AS_CHECK_BOX));  	
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.menu.showRuler"), IAction.AS_CHECK_BOX));  	 //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(
   			GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY, 
-  			GEFMessages.ToggleSnapToGeometry_Label, IAction.AS_CHECK_BOX));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.menu.snapToGeometry"), IAction.AS_CHECK_BOX)); //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY, 
-  			GEFMessages.ToggleGrid_Label, IAction.AS_CHECK_BOX));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.menu.showGrid"), IAction.AS_CHECK_BOX)); //$NON-NLS-1$
 
   	// Zoom
   	addRetargetAction(new ZoomInRetargetAction());
@@ -156,39 +153,41 @@ extends ActionBarContributor
   	addRetargetAction(new ZoomPageRetargetAction());
   	  	
   	addRetargetAction(new RetargetAction(ShowFigureToolTipAction.ID, 
-  			EditorPlugin.getResourceString("action.showFigureToolTip.text"), IAction.AS_CHECK_BOX));  	
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.showToolTips"),  //$NON-NLS-1$
+  			IAction.AS_CHECK_BOX));  	
   	addRetargetAction(new RetargetAction(ShowStatusLineAction.ID,
-  			EditorPlugin.getResourceString("action.statusLine.text"), IAction.AS_CHECK_BOX));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.showStatusLineInfo"),  //$NON-NLS-1$
+  			IAction.AS_CHECK_BOX));
   	
   	addRetargetAction(new RepaintRetargetAction());
   	
   	// Print
   	addRetargetAction(new RetargetAction(EditorPrintAction.ID, 
-  			EditorPlugin.getResourceString("action.print.text")));  	
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.print")));  	 //$NON-NLS-1$
 //  	addRetargetAction(new RetargetAction(EditorPrintPreviewAction.ID, 
-//  			EditorPlugin.getResourceString("action.printPreview.text")));  	  	
+//  			"PrintPreview"));  	  	
   	addRetargetAction(new RetargetAction(EditorPrintSetupAction.ID, 
-  			EditorPlugin.getResourceString("action.printPageSetup.text")));  	
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.pageSetup")));  	 //$NON-NLS-1$
   	
   	// Shape Actions
   	addRetargetAction(new RetargetAction(ConvertToShapeAction.ID,
-  			EditorPlugin.getResourceString("action.convertToShape.text")));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.convertToShape"))); //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(EditShapeAction.ID,
-  			EditorPlugin.getResourceString("action.editshape.text")));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.editShape"))); //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(ShapeUnionAction.ID,
-  			EditorPlugin.getResourceString("action.shapeUnion.text")));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.shape.union"))); //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(ShapeSubtractAction.ID,
-  			EditorPlugin.getResourceString("action.shapeSubtract.text")));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.shape.subtract"))); //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(ShapeIntersectAction.ID,
-  			EditorPlugin.getResourceString("action.shapeIntersection.text")));
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.shape.intersect"))); //$NON-NLS-1$
   	addRetargetAction(new RetargetAction(ShapeExclusiveOrAction.ID,
-  			EditorPlugin.getResourceString("action.shapeExclusiveOr.text")));  	
+  			Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.shape.exclusiveOr")));  	 //$NON-NLS-1$
   }
 
   public static final String ID_VIEW_MENU = IWorkbenchActionConstants.M_VIEW;
   public static final String ID_EDIT_MENU = IWorkbenchActionConstants.M_EDIT;
   public static final String ID_FILE_MENU = IWorkbenchActionConstants.M_FILE;
-  public static final String ID_SHAPE_MENU = "shape";
+  public static final String ID_SHAPE_MENU = Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.menu.shape"); //$NON-NLS-1$
   
   /**
    * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToMenu(IMenuManager)
@@ -214,7 +213,7 @@ extends ActionBarContributor
   	}
 
   	// Edit
-  	editMenu = new MenuManager(EditorPlugin.getResourceString("menu.edit"), ID_EDIT_MENU);
+  	editMenu = new MenuManager(Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.menu.edit"), ID_EDIT_MENU); //$NON-NLS-1$
   	
   	// Undo / Redo
   	editMenu.add(getAction(ActionFactory.UNDO.getId()));
@@ -238,22 +237,16 @@ extends ActionBarContributor
   	editMenu.add(new Separator());  	
   	
   	// Edit - Align  	
-//  	IMenuManager alignMenu = new MenuManager(EditorPlugin.getResourceString("menu.align"));
-//  	buildAlignMenu(alignMenu);
-//  	editMenu.add(alignMenu);
   	addAlignActions(editMenu);  	
   	  	
   	// Edit - Order  	
   	editMenu.add(new Separator());
-//  	IMenuManager orderMenu = new MenuManager(EditorPlugin.getResourceString("menu.order"));
-//  	buildOrderMenu(orderMenu);
-//  	editMenu.add(orderMenu);  	
   	addOrderActions(editMenu);  	
   	
   	menubar.insertAfter(IWorkbenchActionConstants.M_FILE, editMenu);  	
   	
   	// View
-  	viewMenu = new MenuManager(EditorPlugin.getResourceString("menu.view"), ID_VIEW_MENU);
+  	viewMenu = new MenuManager(Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.menu.view"), ID_VIEW_MENU); //$NON-NLS-1$
   	addZoomActions(viewMenu);
   	
   	viewMenu.add(new Separator());
@@ -268,7 +261,7 @@ extends ActionBarContributor
   	menubar.insertAfter(ID_EDIT_MENU, viewMenu);
   	
   	// Shape
-  	shapeMenu = new MenuManager(EditorPlugin.getResourceString("menu.shape"), ID_SHAPE_MENU);
+  	shapeMenu = new MenuManager(Messages.getString("org.nightlabs.editor2d.EditorActionBarContributor.submenu.shape"), ID_SHAPE_MENU); //$NON-NLS-1$
   	shapeMenu.add(getAction(ConvertToShapeAction.ID));
   	shapeMenu.add(getAction(EditShapeAction.ID));
   	shapeMenu.add(new Separator());
@@ -323,12 +316,12 @@ extends ActionBarContributor
   {
   	IAction zoomInAction = getAction(GEFActionConstants.ZOOM_IN);
   	zoomInAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
-  			EditorPlugin.getDefault(), EditorActionBarContributor.class, "ZoomIn"));
+  			EditorPlugin.getDefault(), EditorActionBarContributor.class, "ZoomIn")); //$NON-NLS-1$
   	cm.add(zoomInAction);
 
   	IAction zoomOutAction = getAction(GEFActionConstants.ZOOM_OUT);
   	zoomOutAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
-  			EditorPlugin.getDefault(), EditorActionBarContributor.class, "ZoomOut"));  	
+  			EditorPlugin.getDefault(), EditorActionBarContributor.class, "ZoomOut"));  	 //$NON-NLS-1$
   	cm.add(zoomOutAction);
 
   	cm.add(getAction(ZoomAllAction.ID));
@@ -380,8 +373,7 @@ extends ActionBarContributor
   		tbm.add(new RenderModeContributionItem(getPage()));  	  		  	
   	tbm.add(new Separator());
   	
-  	// Repaint
-  	tbm.add(getAction(RepaintAction.ID));
+//  	tbm.add(getAction(RepaintAction.ID));
 //  	tbm.add(getAction(ViewerAction.ID));
   }  
     

@@ -27,10 +27,10 @@ package org.nightlabs.editor2d.command.shape;
 
 import org.eclipse.gef.commands.Command;
 import org.nightlabs.editor2d.DrawComponentContainer;
-import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.impl.ShapeDrawComponentImpl;
 import org.nightlabs.editor2d.j2d.GeneralShape;
+import org.nightlabs.editor2d.resource.Messages;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
@@ -38,11 +38,10 @@ import org.nightlabs.editor2d.j2d.GeneralShape;
 public class ConvertToShapeCommand 
 extends Command 
 {
-
 	public ConvertToShapeCommand(ShapeDrawComponent sdc) 
 	{
 		super();
-		setLabel(EditorPlugin.getResourceString("command.convertToShape.text"));
+		setLabel(Messages.getString("org.nightlabs.editor2d.command.shape.ConvertToShapeCommand.label")); //$NON-NLS-1$
 		this.sdc = sdc;
 	}
 
@@ -84,5 +83,4 @@ extends Command
 		parent.removeDrawComponent(convertedShape);
 		parent.addDrawComponent(sdc, drawOrderIndex);
 	}
-	
 }

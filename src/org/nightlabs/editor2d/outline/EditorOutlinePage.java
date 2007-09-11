@@ -66,6 +66,7 @@ import org.nightlabs.editor2d.EditorContextMenuProvider;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
+import org.nightlabs.editor2d.resource.Messages;
 
 
 public class EditorOutlinePage 
@@ -142,7 +143,7 @@ implements IAdaptable
       }
     };
     showOutlineAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
-    		EditorPlugin.getDefault(), EditorOutlinePage.class, "Outline"));    
+    		EditorPlugin.getDefault(), EditorOutlinePage.class, "Outline"));     //$NON-NLS-1$
     tbm.add(showOutlineAction);
     
     // Show Overview
@@ -152,7 +153,7 @@ implements IAdaptable
       }
     };
     showOverviewAction.setImageDescriptor(SharedImages.getSharedImageDescriptor(
-    		EditorPlugin.getDefault(), EditorOutlinePage.class, "Overview"));
+    		EditorPlugin.getDefault(), EditorOutlinePage.class, "Overview")); //$NON-NLS-1$
     tbm.add(showOverviewAction);  	
     
 //    // Add Page
@@ -185,7 +186,7 @@ implements IAdaptable
         filterMan.setAllFiltersAvailable();
       }  			
 		};
-		filterNoneAction.setText(EditorPlugin.getResourceString("action.filter.none"));
+		filterNoneAction.setText(Messages.getString("org.nightlabs.editor2d.outline.EditorOutlinePage.label.filterNone")); //$NON-NLS-1$
 		menuMan.add(filterNoneAction);
 		
   	for (Iterator it = filterMan.getAllFilters().iterator(); it.hasNext(); ) 

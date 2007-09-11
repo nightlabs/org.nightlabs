@@ -38,8 +38,6 @@ import org.nightlabs.editor2d.EditorPlugin;
 public class EditorCursors 
 extends Cursors 
 {
-
-//  public static Cursor ROTATE = new Cursor(null, new ImageData(EditorPlugin.getResourceString("icon.rotate.nw")), 8, 8); 
   public static final Cursor ROTATE;
   public static final Cursor SHEAR_HORIZONTAL;
   public static final Cursor SHEAR_VERTICAL;
@@ -47,18 +45,7 @@ extends Cursors
   public EditorCursors() {
     super();
   }
-  
-//  private static ImageDescriptor createDescriptor(String filename) {
-//    return ImageDescriptor.createFromFile(EditorPlugin.class, filename);
-//  }   
-//  
-//  private static Cursor createCursor(String fileName) 
-//  {
-//    ImageDescriptor desc = createDescriptor(fileName);
-//    Image image = desc.createImage();
-//    return new Cursor(null, desc.getImageData(), image.getBounds().x, image.getBounds().y);
-//  }
-    
+      
   private static Cursor createCursor(ImageDescriptor desc) 
   {
     Image image = desc.createImage();
@@ -67,15 +54,11 @@ extends Cursors
   
   static 
   {
-//    ROTATE = createCursor("icons/cursorRotate16.gif"); //$NON-NLS-1$
-//    SHEAR_HORIZONTAL = createCursor("icons/shearHorizontal16.gif"); //$NON-NLS-2$
-//    SHEAR_VERTICAL = createCursor("icons/shearVertical16.gif"); //$NON-NLS-2$
-  	
   	ROTATE = createCursor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-  			EditorCursors.class, "RotateCursor"));
+  			EditorCursors.class, "RotateCursor")); //$NON-NLS-1$
     SHEAR_HORIZONTAL = createCursor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-  			EditorCursors.class, "ShareHorizontalCursor"));
+  			EditorCursors.class, "ShareHorizontalCursor")); //$NON-NLS-1$
     SHEAR_VERTICAL = createCursor(SharedImages.getSharedImageDescriptor(EditorPlugin.getDefault(), 
-  			EditorCursors.class, "ShareVerticalCursor"));  	
+  			EditorCursors.class, "ShareVerticalCursor"));  	 //$NON-NLS-1$
   }  
 }
