@@ -32,37 +32,37 @@ import org.eclipse.core.runtime.Path;
  */
 public class StandardPropertiesFileCreator extends PropertiesFileCreator {
 
-	private String dir;
-	private String baseFileName;
-	private String extension;
-	
-	/**
-	 * Constructor.
-	 * @param dir directory in wich to create the file
-	 * @param baseFileName base name of file to create
-	 * @param extension file extension
-	 */
-	public StandardPropertiesFileCreator(
-			String dir, String baseFileName, String extension) {
-		super();
-		this.dir = dir;
-		this.baseFileName = baseFileName;
-		this.extension = extension;
-	}
+    private String dir;
+    private String baseFileName;
+    private String extension;
+    
+    /**
+     * Constructor.
+     * @param dir directory in wich to create the file
+     * @param baseFileName base name of file to create
+     * @param extension file extension
+     */
+    public StandardPropertiesFileCreator(
+            String dir, String baseFileName, String extension) {
+        super();
+        this.dir = dir;
+        this.baseFileName = baseFileName;
+        this.extension = extension;
+    }
 
-	/**
-	 * @see com.essiembre.eclipse.rbe.model.workbench.files.PropertiesFileCreator#buildFilePath(java.util.Locale)
-	 */
-	protected IPath buildFilePath(Locale locale) {
-		
-		IPath path = new Path(dir);
-		path = path.append(baseFileName);
-		if (locale != null) {
-			path = new Path(
-					path.toString() + "_" + locale.toString()); //$NON-NLS-1$
-		}
-		return path.addFileExtension(extension);
-	}
+    /**
+     * @see com.essiembre.eclipse.rbe.model.workbench.files.PropertiesFileCreator#buildFilePath(java.util.Locale)
+     */
+    protected IPath buildFilePath(Locale locale) {
+        
+        IPath path = new Path(dir);
+        path = path.append(baseFileName);
+        if (locale != null) {
+            path = new Path(
+                    path.toString() + "_" + locale.toString()); //$NON-NLS-1$
+        }
+        return path.addFileExtension(extension);
+    }
 
 
 }

@@ -32,47 +32,47 @@ import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;
  */
 public abstract class KeyTreeUpdater {
 
-	/**
-	 * Constructor.
-	 */
-	public KeyTreeUpdater() {
-		super();
-	}
-	
-	/**
-	 * Adds a key to the key tree.
-	 * @param keyTree key tree on which to add the key
-	 * @param key key to add
-	 */
-	public abstract void addKey(KeyTree keyTree, String key);
+    /**
+     * Constructor.
+     */
+    public KeyTreeUpdater() {
+        super();
+    }
+    
+    /**
+     * Adds a key to the key tree.
+     * @param keyTree key tree on which to add the key
+     * @param key key to add
+     */
+    public abstract void addKey(KeyTree keyTree, String key);
 
-	/**
-	 * Removes a key from the key tree.
-	 * @param keyTree key tree from which to remove the key
-	 * @param key key to remove
-	 */
-	public void removeKey(KeyTree keyTree, String key) {
-		Map keyCache = keyTree.getKeyItemsCache();
-		KeyTreeItem item = (KeyTreeItem) keyCache.get(key);
-		if (item != null) {
-			Object parent = item.getParent();
-			if (parent instanceof KeyTree) {
-				((KeyTree) parent).getRootKeyItems().remove(item);
-			} else {
-				((KeyTreeItem) parent).removeChildren(item);
-			}
-			keyCache.remove(key);
+    /**
+     * Removes a key from the key tree.
+     * @param keyTree key tree from which to remove the key
+     * @param key key to remove
+     */
+    public void removeKey(KeyTree keyTree, String key) {
+        Map keyCache = keyTree.getKeyItemsCache();
+        KeyTreeItem item = (KeyTreeItem) keyCache.get(key);
+        if (item != null) {
+            Object parent = item.getParent();
+            if (parent instanceof KeyTree) {
+                ((KeyTree) parent).getRootKeyItems().remove(item);
+            } else {
+                ((KeyTreeItem) parent).removeChildren(item);
+            }
+            keyCache.remove(key);
 
-			// remove parents with no children having invalid keys. 
-			if (parent instanceof KeyTreeItem) {
-				KeyTreeItem parentItem = (KeyTreeItem) parent;
-				boolean isKey = 
-						keyTree.getBundleGroup().isKey(parentItem.getId());
-				boolean hasChildren = parentItem.getChildren().size() > 0;
-				if (!isKey && ! hasChildren) {
-					removeKey(keyTree, parentItem.getId());
-				}
-			}
-		}
-	}
+            // remove parents with no children having invalid keys. 
+            if (parent instanceof KeyTreeItem) {
+                KeyTreeItem parentItem = (KeyTreeItem) parent;
+                boolean isKey = 
+                        keyTree.getBundleGroup().isKey(parentItem.getId());
+                boolean hasChildren = parentItem.getChildren().size() > 0;
+                if (!isKey && ! hasChildren) {
+                    removeKey(keyTree, parentItem.getId());
+                }
+            }
+        }
+    }
 }

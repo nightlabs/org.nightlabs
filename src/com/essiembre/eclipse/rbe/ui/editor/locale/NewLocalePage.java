@@ -49,69 +49,69 @@ import com.essiembre.eclipse.rbe.ui.widgets.LocaleSelector;
  */
 public class NewLocalePage extends Composite {
 
-	private Font fontBoldBig = UIUtils.createFont(this, SWT.BOLD, 5);
-	private Font fontBold = UIUtils.createFont(this, SWT.BOLD, 1);
-	
-	/**
-	 * Constructor.
-	 * @param parent parent component.
-	 * @param resourceManager resource manager 
-	 */
-	public NewLocalePage(
-			final Composite parent, 
-			final ResourceManager resourceManager,
-			final ResourceBundleEditor editor) {
-		super(parent, SWT.NONE);
-		
-		setLayout(new GridLayout());
+    private Font fontBoldBig = UIUtils.createFont(this, SWT.BOLD, 5);
+    private Font fontBold = UIUtils.createFont(this, SWT.BOLD, 1);
+    
+    /**
+     * Constructor.
+     * @param parent parent component.
+     * @param resourceManager resource manager 
+     */
+    public NewLocalePage(
+            final Composite parent, 
+            final ResourceManager resourceManager,
+            final ResourceBundleEditor editor) {
+        super(parent, SWT.NONE);
+        
+        setLayout(new GridLayout());
 
-		Composite block = new Composite(this, SWT.NONE);
-		block.setLayout(new GridLayout());
-		
-		GridData gridData = new GridData();
-		gridData.horizontalAlignment = GridData.CENTER;
-		gridData.verticalAlignment = GridData.CENTER;
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = true;
-		block.setLayoutData(gridData);
-		
-		// Title label
-		Label label = new Label(block, SWT.NONE);
-		label.setText(RBEPlugin.getString("editor.new.title")); //$NON-NLS-1$
-		label.setFont(fontBoldBig);
-		gridData = new GridData();
-		gridData.horizontalAlignment = GridData.CENTER;
-		label.setLayoutData(gridData);
+        Composite block = new Composite(this, SWT.NONE);
+        block.setLayout(new GridLayout());
+        
+        GridData gridData = new GridData();
+        gridData.horizontalAlignment = GridData.CENTER;
+        gridData.verticalAlignment = GridData.CENTER;
+        gridData.grabExcessHorizontalSpace = true;
+        gridData.grabExcessVerticalSpace = true;
+        block.setLayoutData(gridData);
+        
+        // Title label
+        Label label = new Label(block, SWT.NONE);
+        label.setText(RBEPlugin.getString("editor.new.title")); //$NON-NLS-1$
+        label.setFont(fontBoldBig);
+        gridData = new GridData();
+        gridData.horizontalAlignment = GridData.CENTER;
+        label.setLayoutData(gridData);
 
-		// Locale selector
-		final LocaleSelector localeSelector = 
-				new LocaleSelector(block);
-		gridData = new GridData();
-		gridData.horizontalAlignment = GridData.CENTER;
-		localeSelector.setLayoutData(gridData);
-		
-		// Create button
-		Button createButton = new Button(block, SWT.NULL);
-		createButton.setText(RBEPlugin.getString(
-				"editor.new.create")); //$NON-NLS-1$
-		createButton.setFont(fontBold);
-		gridData = new GridData();
-		gridData.horizontalAlignment = GridData.CENTER;
-		createButton.setLayoutData(gridData);
-		createButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				final Locale locale = localeSelector.getSelectedLocale();
-				try {
-					// Create the new file
-					try {
-						//TODO add "newPropertiesFile" method to seGroup.
-						final IFile file = 
-								resourceManager.createPropertiesFile(locale);
-						Display.getDefault().asyncExec(new Runnable() {
-							public void run() {
-								editor.addResource(file, locale);
-							}
-						});
+        // Locale selector
+        final LocaleSelector localeSelector = 
+                new LocaleSelector(block);
+        gridData = new GridData();
+        gridData.horizontalAlignment = GridData.CENTER;
+        localeSelector.setLayoutData(gridData);
+        
+        // Create button
+        Button createButton = new Button(block, SWT.NULL);
+        createButton.setText(RBEPlugin.getString(
+                "editor.new.create")); //$NON-NLS-1$
+        createButton.setFont(fontBold);
+        gridData = new GridData();
+        gridData.horizontalAlignment = GridData.CENTER;
+        createButton.setLayoutData(gridData);
+        createButton.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent event) {
+                final Locale locale = localeSelector.getSelectedLocale();
+                try {
+                    // Create the new file
+                    try {
+                        //TODO add "newPropertiesFile" method to seGroup.
+                        final IFile file = 
+                                resourceManager.createPropertiesFile(locale);
+                        Display.getDefault().asyncExec(new Runnable() {
+                            public void run() {
+                                editor.addResource(file, locale);
+                            }
+                        });
 //                        
 //                        final IWorkbenchPage page = PlatformUI.getWorkbench()
 //                                .getActiveWorkbenchWindow().getActivePage();
@@ -128,29 +128,29 @@ public class NewLocalePage extends Composite {
 //                        });
 //                        // Close active editor (prior adding locale)
 //                        page.closeEditor(page.getActiveEditor(), true);
-					} catch (NullPointerException e) {
-						UIUtils.showErrorDialog(getShell(), e, 
-								"error.newfile.cannotCreate"); //$NON-NLS-1$
-						throw e;
-					}
-				} catch (CoreException e) {
-					UIUtils.showErrorDialog(getShell(), e, 
-							"error.newfile.cannotCreate"); //$NON-NLS-1$
-				} catch (IOException e) {
-					UIUtils.showErrorDialog(getShell(), e, 
-							"error.newfile.cannotCreate"); //$NON-NLS-1$
-				}
-			}
-		});
-		this.layout();
-	}
+                    } catch (NullPointerException e) {
+                        UIUtils.showErrorDialog(getShell(), e, 
+                                "error.newfile.cannotCreate"); //$NON-NLS-1$
+                        throw e;
+                    }
+                } catch (CoreException e) {
+                    UIUtils.showErrorDialog(getShell(), e, 
+                            "error.newfile.cannotCreate"); //$NON-NLS-1$
+                } catch (IOException e) {
+                    UIUtils.showErrorDialog(getShell(), e, 
+                            "error.newfile.cannotCreate"); //$NON-NLS-1$
+                }
+            }
+        });
+        this.layout();
+    }
 
-	/**
-	 * @see org.eclipse.swt.widgets.Widget#dispose()
-	 */
-	public void dispose() {
-		fontBold.dispose();
-		fontBoldBig.dispose();
-		super.dispose();
-	}
+    /**
+     * @see org.eclipse.swt.widgets.Widget#dispose()
+     */
+    public void dispose() {
+        fontBold.dispose();
+        fontBoldBig.dispose();
+        super.dispose();
+    }
 }

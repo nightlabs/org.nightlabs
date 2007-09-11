@@ -35,45 +35,45 @@ import com.essiembre.eclipse.rbe.model.tree.KeyTreeVisitorAdapter;
  */
 public class KeysStartingWithVisitor extends KeyTreeVisitorAdapter {
 
-	/** Holder for matching keys. */
-	List items = new ArrayList();
-	
-	/**
-	 * Constructor.
-	 */
-	public KeysStartingWithVisitor() {
-		super();
-	}
+    /** Holder for matching keys. */
+    List items = new ArrayList();
+    
+    /**
+     * Constructor.
+     */
+    public KeysStartingWithVisitor() {
+        super();
+    }
 
-	/**
-	 * @see com.essiembre.eclipse.rbe.model.tree.IKeyTreeVisitor
-	 *         #visitKeyTreeItem(
-	 *                 com.essiembre.eclipse.rbe.model.tree.KeyTreeItem,
-	 *                 java.lang.Object)
-	 */
-	public void visitKeyTreeItem(KeyTreeItem item, Object passAlongArgument) {
-		String keyStart = (String) passAlongArgument;
-		if (item.getId().startsWith(keyStart)) {
-			items.add(item);
-		}
-	}
+    /**
+     * @see com.essiembre.eclipse.rbe.model.tree.IKeyTreeVisitor
+     *         #visitKeyTreeItem(
+     *                 com.essiembre.eclipse.rbe.model.tree.KeyTreeItem,
+     *                 java.lang.Object)
+     */
+    public void visitKeyTreeItem(KeyTreeItem item, Object passAlongArgument) {
+        String keyStart = (String) passAlongArgument;
+        if (item.getId().startsWith(keyStart)) {
+            items.add(item);
+        }
+    }
 
-	/**
-	 * Gets matching key tree items.
-	 * @return matching key tree items
-	 */
-	public Collection getKeyTreeItems() {
-		return items;
-	}
-	
-	/**
-	 * Gets the first item matched.
-	 * @return first item matched, or <code>null</code> if none was found
-	 */
-	public KeyTreeItem getKeyTreeItem() {
-		if (items.size() > 0) {
-			return (KeyTreeItem) items.get(0);
-		}
-		return null;
-	}
+    /**
+     * Gets matching key tree items.
+     * @return matching key tree items
+     */
+    public Collection getKeyTreeItems() {
+        return items;
+    }
+    
+    /**
+     * Gets the first item matched.
+     * @return first item matched, or <code>null</code> if none was found
+     */
+    public KeyTreeItem getKeyTreeItem() {
+        if (items.size() > 0) {
+            return (KeyTreeItem) items.get(0);
+        }
+        return null;
+    }
 }

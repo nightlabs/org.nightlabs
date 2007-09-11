@@ -32,158 +32,158 @@ import java.util.TreeSet;
  */
 public class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisitable {
 
-	/** Parent key tree. */
-	private KeyTree keyTree;
-	/** Unique identifier (e.g., full key). */
-	private String id;
-	/** Item name (e.g., last segment / display name). */
-	private String name;
-	/** Parent item. */
-	private Object parent;
-	/** Child items. */
-	private final SortedSet<KeyTreeItem> children = new TreeSet<KeyTreeItem>();
-	
-	/**
-	 * Constructor.
-	 * @param keyTree associated key tree
-	 * @param id unique identifier
-	 * @param name name
-	 */
-	public KeyTreeItem(KeyTree keyTree, String id, String name) {
-		super();
-		this.keyTree = keyTree;
-		this.id = id;
-		this.name = name;
-	}
-	
-	/**
-	 * Returns true if this item is a leaf.
-	 * 
-	 * @return    true <=> This item is a leaf.
-	 */
-	public boolean isLeaf() {
-		return (children.isEmpty());
-	}
-	
-	/**
-	 * Gets the "parent" attribute.
-	 * @return Returns the parent.
-	 */
-	public Object getParent() {
-		return parent;
-	}
-	/**
-	 * Sets the "parent" attribute.
-	 * @param parent The parent to set.
-	 */
-	public void setParent(Object parent) {
-		this.parent = parent;
-	}
-	/**
-	 * Gets the "children" attribute.
-	 * @return Returns the children.
-	 */
-	public SortedSet<KeyTreeItem> getChildren() {
-		return children;
-	}
-	/**
-	 * Gets the "id" attribute.
-	 * @return Returns the id.
-	 */
-	public String getId() {
-		return id;
-	}
-	/**
-	 * Gets the "keyTree" attribute.
-	 * @return Returns the keyTree.
-	 */
-	public KeyTree getKeyTree() {
-		return keyTree;
-	}
-	/**
-	 * Gets the "name" attribute.
-	 * @return Returns the name.
-	 */
-	public String getName() {
-		return name;
-	}
+    /** Parent key tree. */
+    private KeyTree keyTree;
+    /** Unique identifier (e.g., full key). */
+    private String id;
+    /** Item name (e.g., last segment / display name). */
+    private String name;
+    /** Parent item. */
+    private Object parent;
+    /** Child items. */
+    private final SortedSet<KeyTreeItem> children = new TreeSet<KeyTreeItem>();
+    
+    /**
+     * Constructor.
+     * @param keyTree associated key tree
+     * @param id unique identifier
+     * @param name name
+     */
+    public KeyTreeItem(KeyTree keyTree, String id, String name) {
+        super();
+        this.keyTree = keyTree;
+        this.id = id;
+        this.name = name;
+    }
+    
+    /**
+     * Returns true if this item is a leaf.
+     * 
+     * @return    true <=> This item is a leaf.
+     */
+    public boolean isLeaf() {
+        return (children.isEmpty());
+    }
+    
+    /**
+     * Gets the "parent" attribute.
+     * @return Returns the parent.
+     */
+    public Object getParent() {
+        return parent;
+    }
+    /**
+     * Sets the "parent" attribute.
+     * @param parent The parent to set.
+     */
+    public void setParent(Object parent) {
+        this.parent = parent;
+    }
+    /**
+     * Gets the "children" attribute.
+     * @return Returns the children.
+     */
+    public SortedSet<KeyTreeItem> getChildren() {
+        return children;
+    }
+    /**
+     * Gets the "id" attribute.
+     * @return Returns the id.
+     */
+    public String getId() {
+        return id;
+    }
+    /**
+     * Gets the "keyTree" attribute.
+     * @return Returns the keyTree.
+     */
+    public KeyTree getKeyTree() {
+        return keyTree;
+    }
+    /**
+     * Gets the "name" attribute.
+     * @return Returns the name.
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Gets all children of this item, from all available level.
-	 * @return collection of <code>KeyTreeItem</code> objects
-	 */
-	public Set<KeyTreeItem> getNestedChildren() {
-		Set<KeyTreeItem> nestedChildren = new TreeSet<KeyTreeItem>();
-		nestedChildren.addAll(children);
-		for (KeyTreeItem item : children) {
-			nestedChildren.addAll(item.getNestedChildren());
-		} 
-		return nestedChildren;
-	}
+    /**
+     * Gets all children of this item, from all available level.
+     * @return collection of <code>KeyTreeItem</code> objects
+     */
+    public Set<KeyTreeItem> getNestedChildren() {
+        Set<KeyTreeItem> nestedChildren = new TreeSet<KeyTreeItem>();
+        nestedChildren.addAll(children);
+        for (KeyTreeItem item : children) {
+            nestedChildren.addAll(item.getNestedChildren());
+        } 
+        return nestedChildren;
+    }
    
-	/**
-	 * Adds a child to this item.
-	 * @param item child to add
-	 */
-	public void addChildren(KeyTreeItem item) {
-		children.add(item);
-	}
-	/**
-	 * Removes a child from this item.
-	 * @param item child to remove
-	 */
-	public void removeChildren(KeyTreeItem item) {
-		children.remove(item);
-	}
-	
-	/**
-	 * @see java.lang.Object#toString()
-	 */    
-	public String toString() {
-		return id;
-	}
+    /**
+     * Adds a child to this item.
+     * @param item child to add
+     */
+    public void addChildren(KeyTreeItem item) {
+        children.add(item);
+    }
+    /**
+     * Removes a child from this item.
+     * @param item child to remove
+     */
+    public void removeChildren(KeyTreeItem item) {
+        children.remove(item);
+    }
+    
+    /**
+     * @see java.lang.Object#toString()
+     */    
+    public String toString() {
+        return id;
+    }
 
-	/**
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	public int compareTo(KeyTreeItem o) {
-		// TODO consider leaving this out to be configurable
-		return this.id.compareTo((o).getId());
-	}
-	
-	/**
-	 * @see com.essiembre.eclipse.rbe.model.tree.IKeyTreeVisitable#accept(
-	 *         com.essiembre.eclipse.rbe.model.tree.IKeyTreeVisitor,
-	 *         java.lang.Object)
-	 */
-	public void accept(IKeyTreeVisitor visitor, Object passAlongArgument) {
-		visitor.visitKeyTreeItem(this, passAlongArgument);
-	}
+    /**
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    public int compareTo(KeyTreeItem o) {
+        // TODO consider leaving this out to be configurable
+        return this.id.compareTo((o).getId());
+    }
+    
+    /**
+     * @see com.essiembre.eclipse.rbe.model.tree.IKeyTreeVisitable#accept(
+     *         com.essiembre.eclipse.rbe.model.tree.IKeyTreeVisitor,
+     *         java.lang.Object)
+     */
+    public void accept(IKeyTreeVisitor visitor, Object passAlongArgument) {
+        visitor.visitKeyTreeItem(this, passAlongArgument);
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		final KeyTreeItem other = (KeyTreeItem) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final KeyTreeItem other = (KeyTreeItem) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
 
-	
+    
 }

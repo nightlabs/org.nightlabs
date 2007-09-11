@@ -54,265 +54,265 @@ import com.essiembre.eclipse.rbe.ui.editor.resources.ResourceManager;
  */
 public class I18nPage extends ScrolledComposite {
 
-	/** Minimum height of text fields. */
-	private static final int TEXT_MIN_HEIGHT = 90;
+    /** Minimum height of text fields. */
+    private static final int TEXT_MIN_HEIGHT = 90;
 
-	private final ResourceManager resourceMediator;
-	private final KeyTreeComposite keysComposite;
-	private final List<BundleEntryComposite> entryComposites = new ArrayList<BundleEntryComposite>(); 
-	private final LocalBehaviour localBehaviour = new LocalBehaviour();
-	private final ScrolledComposite editingComposite;
-	
-	/*default*/ BundleEntryComposite activeEntry;
-	
-	/**
-	 * Constructor.
-	 * @param parent parent component.
-	 * @param style  style to apply to this component
-	 * @param resourceMediator resource manager
-	 */
-	public I18nPage(
-			Composite parent, int style, 
-			final ResourceManager resourceMediator) {
-		super(parent, style);
-		this.resourceMediator = resourceMediator; 
+    private final ResourceManager resourceMediator;
+    private final KeyTreeComposite keysComposite;
+    private final List<BundleEntryComposite> entryComposites = new ArrayList<BundleEntryComposite>(); 
+    private final LocalBehaviour localBehaviour = new LocalBehaviour();
+    private final ScrolledComposite editingComposite;
+    
+    /*default*/ BundleEntryComposite activeEntry;
+    
+    /**
+     * Constructor.
+     * @param parent parent component.
+     * @param style  style to apply to this component
+     * @param resourceMediator resource manager
+     */
+    public I18nPage(
+            Composite parent, int style, 
+            final ResourceManager resourceMediator) {
+        super(parent, style);
+        this.resourceMediator = resourceMediator; 
 
-		if(RBEPreferences.getNoTreeInEditor()) {
-			keysComposite = null;
-			editingComposite = this;
-			createEditingPart(this);        	
-		} else {
-					// Create screen        
-			SashForm sashForm = new SashForm(this, SWT.NONE);
-	
-			setContent(sashForm);
-	
-			keysComposite = new KeyTreeComposite(
-						sashForm, 
-						resourceMediator.getKeyTree());
-			keysComposite.getTreeViewer().addSelectionChangedListener(localBehaviour);
-			
-			editingComposite = new ScrolledComposite(sashForm, SWT.V_SCROLL | SWT.H_SCROLL);
-			createSashRightSide();
-					
-			sashForm.setWeights(new int[]{25, 75});
-			
-		}
+        if(RBEPreferences.getNoTreeInEditor()) {
+            keysComposite = null;
+            editingComposite = this;
+            createEditingPart(this);        	
+        } else {
+                    // Create screen        
+            SashForm sashForm = new SashForm(this, SWT.NONE);
+    
+            setContent(sashForm);
+    
+            keysComposite = new KeyTreeComposite(
+                        sashForm, 
+                        resourceMediator.getKeyTree());
+            keysComposite.getTreeViewer().addSelectionChangedListener(localBehaviour);
+            
+            editingComposite = new ScrolledComposite(sashForm, SWT.V_SCROLL | SWT.H_SCROLL);
+            createSashRightSide();
+                    
+            sashForm.setWeights(new int[]{25, 75});
+            
+        }
 
-		setExpandHorizontal(true);
-		setExpandVertical(true);
-		setMinWidth(400);
-		
-		resourceMediator.getKeyTree().addListener(localBehaviour);
-		
-	}
-	
-	
-	/**
-	 * Gets selected key.
-	 * @return selected key
-	 */
-	private String getSelectedKey() {
-		return (resourceMediator.getKeyTree().getSelectedKey());
-	}
+        setExpandHorizontal(true);
+        setExpandVertical(true);
+        setMinWidth(400);
+        
+        resourceMediator.getKeyTree().addListener(localBehaviour);
+        
+    }
+    
+    
+    /**
+     * Gets selected key.
+     * @return selected key
+     */
+    private String getSelectedKey() {
+        return (resourceMediator.getKeyTree().getSelectedKey());
+    }
 
 
-	/**
-	 * Creates right side of main sash form.
-	 * @param sashForm parent sash form
-	 */
-	private void createSashRightSide() {
-		editingComposite.setExpandHorizontal(true);
-		editingComposite.setExpandVertical(true);
-		editingComposite.setSize(SWT.DEFAULT, 100);
-		createEditingPart(editingComposite);
-	}
-	
-	
-	/**
-	 * Creates the editing parts which are display within the supplied
-	 * parental ScrolledComposite instance.
-	 *
-	 * @param parent   A container to collect the bundle entry editors.
-	 */
-	private void createEditingPart(ScrolledComposite parent) {
-		Control[] children = parent.getChildren();
-		for (int i = 0; i < children.length; i++) {
-			children[i].dispose();
-		}
-		Composite rightComposite = new Composite(parent, SWT.BORDER);
-		parent.setContent(rightComposite);
-		parent.setMinSize(rightComposite.computeSize(
-				SWT.DEFAULT,
-				resourceMediator.getLocales().size() * TEXT_MIN_HEIGHT));
-		rightComposite.setLayout(new GridLayout(1, false));
-		entryComposites.clear();
-		for (Iterator iter = resourceMediator.getLocales().iterator();
-				iter.hasNext();) {
-			Locale locale = (Locale) iter.next();
-			BundleEntryComposite entryComposite = new BundleEntryComposite(
-					rightComposite, resourceMediator, locale, this);
-			entryComposite.addFocusListener(localBehaviour);
-			entryComposites.add(entryComposite);
-		}
-	}
-	
-	public void focusBundleEntryComposite(Locale locale) {
-		for (BundleEntryComposite bec : entryComposites) {
-			if ((bec.getLocale() == null) && (locale == null) || (locale != null && locale.equals(bec.getLocale()))) {
-				bec.focusTextBox();
-				return;
-			}
-		}
-	}
-	
-	public void focusNextBundleEntryComposite() {
-		int index = entryComposites.indexOf(activeEntry);
-		if (index < entryComposites.size()-1)
-			entryComposites.get(++index).focusTextBox();
-		else
-			entryComposites.get(0).focusTextBox();
-	}
-	
-	public void focusPreviousBundleEntryComposite() {
-		int index = entryComposites.indexOf(activeEntry);
-		if (index > 0)
-			entryComposites.get(--index).focusTextBox();
-		else
-			entryComposites.get(entryComposites.size()-1).focusTextBox();
-	}
-	
-	
-	public void selectNextTreeEntry() {
-		activeEntry.updateBundleOnChanges();
-		String nextKey = resourceMediator.getBundleGroup().getNextKey(getSelectedKey());
-		if (nextKey == null)
-			return;
+    /**
+     * Creates right side of main sash form.
+     * @param sashForm parent sash form
+     */
+    private void createSashRightSide() {
+        editingComposite.setExpandHorizontal(true);
+        editingComposite.setExpandVertical(true);
+        editingComposite.setSize(SWT.DEFAULT, 100);
+        createEditingPart(editingComposite);
+    }
+    
+    
+    /**
+     * Creates the editing parts which are display within the supplied
+     * parental ScrolledComposite instance.
+     *
+     * @param parent   A container to collect the bundle entry editors.
+     */
+    private void createEditingPart(ScrolledComposite parent) {
+        Control[] children = parent.getChildren();
+        for (int i = 0; i < children.length; i++) {
+            children[i].dispose();
+        }
+        Composite rightComposite = new Composite(parent, SWT.BORDER);
+        parent.setContent(rightComposite);
+        parent.setMinSize(rightComposite.computeSize(
+                SWT.DEFAULT,
+                resourceMediator.getLocales().size() * TEXT_MIN_HEIGHT));
+        rightComposite.setLayout(new GridLayout(1, false));
+        entryComposites.clear();
+        for (Iterator iter = resourceMediator.getLocales().iterator();
+                iter.hasNext();) {
+            Locale locale = (Locale) iter.next();
+            BundleEntryComposite entryComposite = new BundleEntryComposite(
+                    rightComposite, resourceMediator, locale, this);
+            entryComposite.addFocusListener(localBehaviour);
+            entryComposites.add(entryComposite);
+        }
+    }
+    
+    public void focusBundleEntryComposite(Locale locale) {
+        for (BundleEntryComposite bec : entryComposites) {
+            if ((bec.getLocale() == null) && (locale == null) || (locale != null && locale.equals(bec.getLocale()))) {
+                bec.focusTextBox();
+                return;
+            }
+        }
+    }
+    
+    public void focusNextBundleEntryComposite() {
+        int index = entryComposites.indexOf(activeEntry);
+        if (index < entryComposites.size()-1)
+            entryComposites.get(++index).focusTextBox();
+        else
+            entryComposites.get(0).focusTextBox();
+    }
+    
+    public void focusPreviousBundleEntryComposite() {
+        int index = entryComposites.indexOf(activeEntry);
+        if (index > 0)
+            entryComposites.get(--index).focusTextBox();
+        else
+            entryComposites.get(entryComposites.size()-1).focusTextBox();
+    }
+    
+    
+    public void selectNextTreeEntry() {
+        activeEntry.updateBundleOnChanges();
+        String nextKey = resourceMediator.getBundleGroup().getNextKey(getSelectedKey());
+        if (nextKey == null)
+            return;
 
-		Locale currentLocale = activeEntry.getLocale();
-		resourceMediator.getKeyTree().selectKey(nextKey);
-		focusBundleEntryComposite(currentLocale);
-	}
-	
-	public void selectPreviousTreeEntry() {
-		activeEntry.updateBundleOnChanges();
-		String prevKey = resourceMediator.getBundleGroup().getPreviousKey(getSelectedKey());
-		if (prevKey == null)
-			return;
-		
-		Locale currentLocale = activeEntry.getLocale();
-		resourceMediator.getKeyTree().selectKey(prevKey);
-		focusBundleEntryComposite(currentLocale);
-	}
-	
+        Locale currentLocale = activeEntry.getLocale();
+        resourceMediator.getKeyTree().selectKey(nextKey);
+        focusBundleEntryComposite(currentLocale);
+    }
+    
+    public void selectPreviousTreeEntry() {
+        activeEntry.updateBundleOnChanges();
+        String prevKey = resourceMediator.getBundleGroup().getPreviousKey(getSelectedKey());
+        if (prevKey == null)
+            return;
+        
+        Locale currentLocale = activeEntry.getLocale();
+        resourceMediator.getKeyTree().selectKey(prevKey);
+        focusBundleEntryComposite(currentLocale);
+    }
+    
 
-	/**
-	 * Refreshes the editor associated with the active text box (if any)
-	 * if it has changed.
-	 */
-	public void refreshEditorOnChanges(){
-		if (activeEntry != null) {
-			activeEntry.updateBundleOnChanges();
-		}
-	}
-		
-	/**
-	 * Refreshes all value-holding text boxes in this page.
-	 */
-	public void refreshTextBoxes() {
-		String key = getSelectedKey();
-		for (Iterator iter = entryComposites.iterator(); iter.hasNext();) {
-			BundleEntryComposite entryComposite = 
-					(BundleEntryComposite) iter.next();
-			entryComposite.refresh(key);
-		}
-	}
-	
-	/**
-	 * Refreshes the tree and recreates the editing part.
-	 */
-	public void refreshPage() {
-		if (keysComposite != null)
-			keysComposite.getTreeViewer().refresh(true);
-		createEditingPart(editingComposite);
-		editingComposite.layout(true, true);
-	}
-	
-	
-	/**
-	 * @see org.eclipse.swt.widgets.Widget#dispose()
-	 */
-	public void dispose() {
-		if(keysComposite != null) {
-			keysComposite.dispose();
-		}
-		for (Iterator iter = entryComposites.iterator(); iter.hasNext();) {
-			((BundleEntryComposite) iter.next()).dispose();
-		}
-		super.dispose();
-	}
-	
-	/**
-	 * Implementation of custom behaviour.
-	 */
-	private class LocalBehaviour implements FocusListener, IDeltaListener, ISelectionChangedListener {
+    /**
+     * Refreshes the editor associated with the active text box (if any)
+     * if it has changed.
+     */
+    public void refreshEditorOnChanges(){
+        if (activeEntry != null) {
+            activeEntry.updateBundleOnChanges();
+        }
+    }
+        
+    /**
+     * Refreshes all value-holding text boxes in this page.
+     */
+    public void refreshTextBoxes() {
+        String key = getSelectedKey();
+        for (Iterator iter = entryComposites.iterator(); iter.hasNext();) {
+            BundleEntryComposite entryComposite = 
+                    (BundleEntryComposite) iter.next();
+            entryComposite.refresh(key);
+        }
+    }
+    
+    /**
+     * Refreshes the tree and recreates the editing part.
+     */
+    public void refreshPage() {
+        if (keysComposite != null)
+            keysComposite.getTreeViewer().refresh(true);
+        createEditingPart(editingComposite);
+        editingComposite.layout(true, true);
+    }
+    
+    
+    /**
+     * @see org.eclipse.swt.widgets.Widget#dispose()
+     */
+    public void dispose() {
+        if(keysComposite != null) {
+            keysComposite.dispose();
+        }
+        for (Iterator iter = entryComposites.iterator(); iter.hasNext();) {
+            ((BundleEntryComposite) iter.next()).dispose();
+        }
+        super.dispose();
+    }
+    
+    /**
+     * Implementation of custom behaviour.
+     */
+    private class LocalBehaviour implements FocusListener, IDeltaListener, ISelectionChangedListener {
 
-		/**
-		 * {@inheritDoc}
-		 */
-		public void focusGained(FocusEvent event) {
-			activeEntry = (BundleEntryComposite) event.widget;
-		}
+        /**
+         * {@inheritDoc}
+         */
+        public void focusGained(FocusEvent event) {
+            activeEntry = (BundleEntryComposite) event.widget;
+        }
 
-		/**
-		 * {@inheritDoc}
-		 */
-		public void focusLost(FocusEvent event) {
-			activeEntry = null;
-		}
+        /**
+         * {@inheritDoc}
+         */
+        public void focusLost(FocusEvent event) {
+            activeEntry = null;
+        }
 
-		/**
-		 * {@inheritDoc}
-		 */
-		public void selectionChanged(SelectionChangedEvent event) {
-			refreshTextBoxes();
-			String selected = getSelectedKey();
-			if(selected != null) {
-				resourceMediator.getKeyTree().selectKey(selected);
-			}
-		}
-		
-		/**
-		 * {@inheritDoc}
-		 */
-		public void add(DeltaEvent event) {
-		}
+        /**
+         * {@inheritDoc}
+         */
+        public void selectionChanged(SelectionChangedEvent event) {
+            refreshTextBoxes();
+            String selected = getSelectedKey();
+            if(selected != null) {
+                resourceMediator.getKeyTree().selectKey(selected);
+            }
+        }
+        
+        /**
+         * {@inheritDoc}
+         */
+        public void add(DeltaEvent event) {
+        }
 
-		/**
-		 * {@inheritDoc}
-		 */
-		public void remove(DeltaEvent event) {
-		}
+        /**
+         * {@inheritDoc}
+         */
+        public void remove(DeltaEvent event) {
+        }
 
-		/**
-		 * {@inheritDoc}
-		 */
-		public void modify(DeltaEvent event) {
-		}
+        /**
+         * {@inheritDoc}
+         */
+        public void modify(DeltaEvent event) {
+        }
 
-		/**
-		 * {@inheritDoc}
-		 */
-		public void select(DeltaEvent event) {
-			KeyTreeItem item = (KeyTreeItem) event.receiver();
-			if(keysComposite != null) {
-				if(item != null) {
-					keysComposite.getTreeViewer().setSelection(new StructuredSelection(item));
-				}
-			} else {
-				refreshTextBoxes();
-			}
-		}
-		
-	} /* ENDCLASS */
+        /**
+         * {@inheritDoc}
+         */
+        public void select(DeltaEvent event) {
+            KeyTreeItem item = (KeyTreeItem) event.receiver();
+            if(keysComposite != null) {
+                if(item != null) {
+                    keysComposite.getTreeViewer().setSelection(new StructuredSelection(item));
+                }
+            } else {
+                refreshTextBoxes();
+            }
+        }
+        
+    } /* ENDCLASS */
 }

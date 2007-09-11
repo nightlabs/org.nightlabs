@@ -41,33 +41,33 @@ import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
  */
 public abstract class PropertiesFileCreator {
 
-	/**
-	 * Creates a propertiles file.
-	 * @param locale locale representing properties file
-	 * @return the properties file
-	 * @throws CoreException problem creating file
-	 * @throws IOException problem creating file
-	 */
-	public IFile createPropertiesFile(Locale locale)
-			throws CoreException, IOException {
-		IPath filePath = buildFilePath(locale);
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		IFile file = root.getFile(filePath);
-		if (file.exists()) {
-			//TODO internationalize.
-			throw new IOException(
-					"File already exists: " + file.getName()); //$NON-NLS-1$
-		}
-		String contents = ""; //$NON-NLS-1$
-		if (RBEPreferences.getShowGenerator()) {
-			contents = PropertiesGenerator.GENERATED_BY;
-		}
-		InputStream stream = 
-			new ByteArrayInputStream(contents.getBytes());
-		file.create(stream, true, null);
-		stream.close();
-		return file;
-	}
-	
-	protected abstract IPath buildFilePath(Locale locale) throws CoreException;
+    /**
+     * Creates a propertiles file.
+     * @param locale locale representing properties file
+     * @return the properties file
+     * @throws CoreException problem creating file
+     * @throws IOException problem creating file
+     */
+    public IFile createPropertiesFile(Locale locale)
+            throws CoreException, IOException {
+        IPath filePath = buildFilePath(locale);
+        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+        IFile file = root.getFile(filePath);
+        if (file.exists()) {
+            //TODO internationalize.
+            throw new IOException(
+                    "File already exists: " + file.getName()); //$NON-NLS-1$
+        }
+        String contents = ""; //$NON-NLS-1$
+        if (RBEPreferences.getShowGenerator()) {
+            contents = PropertiesGenerator.GENERATED_BY;
+        }
+        InputStream stream = 
+            new ByteArrayInputStream(contents.getBytes());
+        file.create(stream, true, null);
+        stream.close();
+        return file;
+    }
+    
+    protected abstract IPath buildFilePath(Locale locale) throws CoreException;
 }

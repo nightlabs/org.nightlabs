@@ -33,24 +33,24 @@ import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;
  */
 public class FlatKeyTreeUpdater extends KeyTreeUpdater {
 
-	/**
-	 * Constructor.
-	 */
-	public FlatKeyTreeUpdater() {
-		super();
-	}
-	
-	/**
-	 * @see com.essiembre.eclipse.rbe.model.tree.updater.KeyTreeUpdater#addKey(
-	 *         com.essiembre.eclipse.rbe.model.tree.KeyTree, java.lang.String)
-	 */
-	public void addKey(KeyTree keyTree, String key) {
-		Map keyCache = keyTree.getKeyItemsCache();
-		if (!keyCache.containsKey(key)) {
-			KeyTreeItem item = new KeyTreeItem(keyTree, key, key);
-			item.setParent(keyTree);
-			keyTree.getRootKeyItems().add(item);
-			keyCache.put(key, item);
-		}
-	}
+    /**
+     * Constructor.
+     */
+    public FlatKeyTreeUpdater() {
+        super();
+    }
+    
+    /**
+     * @see com.essiembre.eclipse.rbe.model.tree.updater.KeyTreeUpdater#addKey(
+     *         com.essiembre.eclipse.rbe.model.tree.KeyTree, java.lang.String)
+     */
+    public void addKey(KeyTree keyTree, String key) {
+        Map keyCache = keyTree.getKeyItemsCache();
+        if (!keyCache.containsKey(key)) {
+            KeyTreeItem item = new KeyTreeItem(keyTree, key, key);
+            item.setParent(keyTree);
+            keyTree.getRootKeyItems().add(item);
+            keyCache.put(key, item);
+        }
+    }
 }

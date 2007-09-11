@@ -27,10 +27,10 @@ package com.essiembre.eclipse.rbe.model.bundle;
  * @version $Author: essiembre $ $Revision: 1.1 $ $Date: 2005/06/13 01:43:30 $
  */
 public interface IBundleVisitable {
-	/**
-	 * Accepts the visitor by passing itself and/or appropriate resources to it.
-	 * @param visitor the object to visit
-	 * @param passAlongArgument optional argument passed to the visitor
-	 */
-	void accept(IBundleVisitor visitor, Object passAlongArgument);
+    /**
+     * Accepts the visitor by passing itself and/or appropriate resources to it.
+     * @param visitor the object to visit
+     * @param passAlongArgument optional argument passed to the visitor
+     */
+    void accept(IBundleVisitor visitor, Object passAlongArgument);
 }

@@ -34,46 +34,46 @@ import com.essiembre.eclipse.rbe.model.bundle.BundleVisitorAdapter;
  */
 public class DuplicateValuesVisitor extends BundleVisitorAdapter {
 
-	/** Holder for bundle entries having duplicate values. */
-	private final Collection duplicates = new ArrayList();
-	
-	/**
-	 * Constructor.
-	 */
-	public DuplicateValuesVisitor() {
-		super();
-	}
+    /** Holder for bundle entries having duplicate values. */
+    private final Collection duplicates = new ArrayList();
+    
+    /**
+     * Constructor.
+     */
+    public DuplicateValuesVisitor() {
+        super();
+    }
 
-	/**
-	 * @see com.essiembre.eclipse.rbe.model.bundle.IBundleVisitor
-	 *         #visitBundleEntry(
-	 *                 com.essiembre.eclipse.rbe.model.bundle.BundleEntry,
-	 *                 java.lang.Object)
-	 */
-	public void visitBundleEntry(BundleEntry entry, Object passAlongArgument) {
-		
-		BundleEntry entryToMatch = (BundleEntry) passAlongArgument;
-		if (entry != entryToMatch
-				&& entry != null && entryToMatch != null
-				&& entry.getValue().length() > 0
-				&& entry.getValue().equals(entryToMatch.getValue())) {
-			duplicates.add(entry);
-		}
-	}
-	
-	/**
-	 * Gets a collection of duplicate <code>BundleEntry</code> instance.
-	 * @return bundle entries with duplicate values
-	 */
-	public Collection getDuplicates() {
-		return duplicates;
-	}
-	
-	/**
-	 * Clears the list of duplicate values.
-	 */
-	public void clear() {
-		duplicates.clear();
-	}
-	
+    /**
+     * @see com.essiembre.eclipse.rbe.model.bundle.IBundleVisitor
+     *         #visitBundleEntry(
+     *                 com.essiembre.eclipse.rbe.model.bundle.BundleEntry,
+     *                 java.lang.Object)
+     */
+    public void visitBundleEntry(BundleEntry entry, Object passAlongArgument) {
+        
+        BundleEntry entryToMatch = (BundleEntry) passAlongArgument;
+        if (entry != entryToMatch
+                && entry != null && entryToMatch != null
+                && entry.getValue().length() > 0
+                && entry.getValue().equals(entryToMatch.getValue())) {
+            duplicates.add(entry);
+        }
+    }
+    
+    /**
+     * Gets a collection of duplicate <code>BundleEntry</code> instance.
+     * @return bundle entries with duplicate values
+     */
+    public Collection getDuplicates() {
+        return duplicates;
+    }
+    
+    /**
+     * Clears the list of duplicate values.
+     */
+    public void clear() {
+        duplicates.clear();
+    }
+    
 }

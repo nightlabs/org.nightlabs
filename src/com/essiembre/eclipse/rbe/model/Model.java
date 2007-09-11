@@ -34,70 +34,70 @@ import java.util.List;
  */
 public abstract class Model {
 
-	/* The holder for listeners was changed from ListenerList to ArrayList
-	 * to support both Eclipse 3.1 and 3.2.  The ListenerList location changed
-	 * from 3.1 to 3.2 as described here:
-	 * https://bugs.eclipse.org/bugs/show_bug.cgi?format=multiple&id=94156
-	 */
-	/** Listeners for this object. */
-	private final List listeners = new ArrayList();
-	
-	/**
-	 * Fires an "add" event.
-	 * @param added object added
-	 */
-	protected void fireAdd(Object added) {
-		for (Iterator iter = listeners.iterator(); iter.hasNext();) {
-			IDeltaListener listener = (IDeltaListener) iter.next();
-			listener.add(new DeltaEvent(added));
-		}
-	}
+    /* The holder for listeners was changed from ListenerList to ArrayList
+     * to support both Eclipse 3.1 and 3.2.  The ListenerList location changed
+     * from 3.1 to 3.2 as described here:
+     * https://bugs.eclipse.org/bugs/show_bug.cgi?format=multiple&id=94156
+     */
+    /** Listeners for this object. */
+    private final List listeners = new ArrayList();
+    
+    /**
+     * Fires an "add" event.
+     * @param added object added
+     */
+    protected void fireAdd(Object added) {
+        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+            IDeltaListener listener = (IDeltaListener) iter.next();
+            listener.add(new DeltaEvent(added));
+        }
+    }
 
-	/**
-	 * Fires a "remove" event.
-	 * @param removed object removed
-	 */
-	protected void fireRemove(Object removed) {
-		for (Iterator iter = listeners.iterator(); iter.hasNext();) {
-			IDeltaListener listener = (IDeltaListener) iter.next();
-			listener.remove(new DeltaEvent(removed));
-		}
-	}
-	
-	/**
-	 * Fires a "modify" event.
-	 * @param modified object modified
-	 */
-	protected void fireModify(Object modified) {
-		for (Iterator iter = listeners.iterator(); iter.hasNext();) {
-			IDeltaListener listener = (IDeltaListener) iter.next();
-			listener.modify(new DeltaEvent(modified));
-		}
-	}
-	
-	/**
-	 * Fires a "select" event.
-	 * @param selected the selected object.
-	 */
-	protected void fireSelect(Object selected) {
-		for (Iterator iter = listeners.iterator(); iter.hasNext();) {
-			IDeltaListener listener = (IDeltaListener) iter.next();
-			listener.select(new DeltaEvent(selected));
-		}
-	}
+    /**
+     * Fires a "remove" event.
+     * @param removed object removed
+     */
+    protected void fireRemove(Object removed) {
+        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+            IDeltaListener listener = (IDeltaListener) iter.next();
+            listener.remove(new DeltaEvent(removed));
+        }
+    }
+    
+    /**
+     * Fires a "modify" event.
+     * @param modified object modified
+     */
+    protected void fireModify(Object modified) {
+        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+            IDeltaListener listener = (IDeltaListener) iter.next();
+            listener.modify(new DeltaEvent(modified));
+        }
+    }
+    
+    /**
+     * Fires a "select" event.
+     * @param selected the selected object.
+     */
+    protected void fireSelect(Object selected) {
+        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+            IDeltaListener listener = (IDeltaListener) iter.next();
+            listener.select(new DeltaEvent(selected));
+        }
+    }
 
-	/**
-	 * Adds a listener to this instance.
-	 * @param listener listener to add
-	 */
-	public void addListener(IDeltaListener listener) {
-		listeners.add(0, listener);
-	}
-	/**
-	 * Removes a listener from this instance.
-	 * @param listener listener to remove
-	 */
-	public void removeListener(IDeltaListener listener) {
-		listeners.remove(listener);
-	}
+    /**
+     * Adds a listener to this instance.
+     * @param listener listener to add
+     */
+    public void addListener(IDeltaListener listener) {
+        listeners.add(0, listener);
+    }
+    /**
+     * Removes a listener from this instance.
+     * @param listener listener to remove
+     */
+    public void removeListener(IDeltaListener listener) {
+        listeners.remove(listener);
+    }
 }

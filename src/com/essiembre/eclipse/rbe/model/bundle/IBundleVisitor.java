@@ -27,22 +27,22 @@ package com.essiembre.eclipse.rbe.model.bundle;
  * @version $Author: essiembre $ $Revision: 1.2 $ $Date: 2005/07/30 22:10:55 $
  */
 public interface IBundleVisitor {
-	/**
-	 * Visits a bundle group.
-	 * @param group bundle group
-	 * @param passAlongArgument an optional argument
-	 */
-	public void visitBundleGroup(BundleGroup group, Object passAlongArgument);
-	/**
-	 * Visits a bundle.
-	 * @param bundle bundle
-	 * @param passAlongArgument an optional argument
-	 */
-	public void visitBundle(Bundle bundle, Object passAlongArgument);
-	/**
-	 * Visits a bundle entry.
-	 * @param entry bundle entry
-	 * @param passAlongArgument an optional argument
-	 */
-	public void visitBundleEntry(BundleEntry entry, Object passAlongArgument);
+    /**
+     * Visits a bundle group.
+     * @param group bundle group
+     * @param passAlongArgument an optional argument
+     */
+    public void visitBundleGroup(BundleGroup group, Object passAlongArgument);
+    /**
+     * Visits a bundle.
+     * @param bundle bundle
+     * @param passAlongArgument an optional argument
+     */
+    public void visitBundle(Bundle bundle, Object passAlongArgument);
+    /**
+     * Visits a bundle entry.
+     * @param entry bundle entry
+     * @param passAlongArgument an optional argument
+     */
+    public void visitBundleEntry(BundleEntry entry, Object passAlongArgument);
 }

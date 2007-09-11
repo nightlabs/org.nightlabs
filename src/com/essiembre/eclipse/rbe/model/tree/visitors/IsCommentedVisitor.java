@@ -36,55 +36,55 @@ import com.essiembre.eclipse.rbe.model.tree.KeyTreeVisitorAdapter;
  */
 public class IsCommentedVisitor extends KeyTreeVisitorAdapter {
 
-	/** Whether corresponding bundle entries have one commented. */
-	boolean hasOneCommented = false;
-	/** Whether corresponding bundle entries are all commented. */
-	boolean areAllCommented = false;
-	
-	/**
-	 * Constructor.
-	 */
-	public IsCommentedVisitor() {
-		super();
-	}
+    /** Whether corresponding bundle entries have one commented. */
+    boolean hasOneCommented = false;
+    /** Whether corresponding bundle entries are all commented. */
+    boolean areAllCommented = false;
+    
+    /**
+     * Constructor.
+     */
+    public IsCommentedVisitor() {
+        super();
+    }
 
-	/**
-	 * @see com.essiembre.eclipse.rbe.model.tree.IKeyTreeVisitor
-	 *         #visitKeyTreeItem(
-	 *                 com.essiembre.eclipse.rbe.model.tree.KeyTreeItem,
-	 *                 java.lang.Object)
-	 */
-	public void visitKeyTreeItem(KeyTreeItem item, Object passAlongArgument) {
-		String key = item.getId();
-		BundleGroup bundleGroup = item.getKeyTree().getBundleGroup();
-		if (bundleGroup.isKey(key)) {
-			Collection entries = bundleGroup.getBundleEntries(key);
-			int commentedCount = 0;
-			for (Iterator iter = entries.iterator(); iter.hasNext();) {
-				BundleEntry entry = (BundleEntry) iter.next();
-				if (entry != null && entry.isCommented()) {
-					hasOneCommented = true;
-					commentedCount++;
-				}
-			}
-			if (commentedCount == entries.size()) {
-				areAllCommented = true;
-			}
-		}
-	}
-	
-	/**
-	 * Gets the "areAllCommented" attribute.
-	 * @return Returns the areAllCommented.
-	 */
-	public boolean areAllCommented() {
-		return areAllCommented;
-	}
-	/**
-	 * Gets the "hasOneCommented" attribute.
-	 * @return Returns the hasOneCommented.
-	 */
-	public boolean hasOneCommented() {
-		return hasOneCommented;
-	}
+    /**
+     * @see com.essiembre.eclipse.rbe.model.tree.IKeyTreeVisitor
+     *         #visitKeyTreeItem(
+     *                 com.essiembre.eclipse.rbe.model.tree.KeyTreeItem,
+     *                 java.lang.Object)
+     */
+    public void visitKeyTreeItem(KeyTreeItem item, Object passAlongArgument) {
+        String key = item.getId();
+        BundleGroup bundleGroup = item.getKeyTree().getBundleGroup();
+        if (bundleGroup.isKey(key)) {
+            Collection entries = bundleGroup.getBundleEntries(key);
+            int commentedCount = 0;
+            for (Iterator iter = entries.iterator(); iter.hasNext();) {
+                BundleEntry entry = (BundleEntry) iter.next();
+                if (entry != null && entry.isCommented()) {
+                    hasOneCommented = true;
+                    commentedCount++;
+                }
+            }
+            if (commentedCount == entries.size()) {
+                areAllCommented = true;
+            }
+        }
+    }
+    
+    /**
+     * Gets the "areAllCommented" attribute.
+     * @return Returns the areAllCommented.
+     */
+    public boolean areAllCommented() {
+        return areAllCommented;
+    }
+    /**
+     * Gets the "hasOneCommented" attribute.
+     * @return Returns the hasOneCommented.
+     */
+    public boolean hasOneCommented() {
+        return hasOneCommented;
+    }
 }

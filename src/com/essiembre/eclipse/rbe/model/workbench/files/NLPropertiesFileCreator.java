@@ -38,64 +38,64 @@ import org.eclipse.core.runtime.Path;
  */
 public class NLPropertiesFileCreator extends PropertiesFileCreator {
 
-	private String nlDir;
-	private String fileName;
-	
-	/**
-	 * Constructor.
-	 * @param nlDir NL directory name
-	 * @param fileName file name
-	 */
-	public NLPropertiesFileCreator(String nlDir, String fileName) {
-		super();
-		this.nlDir = nlDir;
-		this.fileName = fileName;
-	}
+    private String nlDir;
+    private String fileName;
+    
+    /**
+     * Constructor.
+     * @param nlDir NL directory name
+     * @param fileName file name
+     */
+    public NLPropertiesFileCreator(String nlDir, String fileName) {
+        super();
+        this.nlDir = nlDir;
+        this.fileName = fileName;
+    }
 
-	/**
-	 * @throws CoreException
-	 * @see com.essiembre.eclipse.rbe.model.workbench.files.PropertiesFileCreator#buildFilePath(java.util.Locale)
-	 */
-	protected IPath buildFilePath(Locale locale) throws CoreException {
-		String folderPath = ""; //$NON-NLS-1$
-		IWorkspaceRoot root = 
-				ResourcesPlugin.getWorkspace().getRoot();
-		IResource resource = root.findMember(nlDir);
-		IContainer container = (IContainer) resource;
+    /**
+     * @throws CoreException
+     * @see com.essiembre.eclipse.rbe.model.workbench.files.PropertiesFileCreator#buildFilePath(java.util.Locale)
+     */
+    protected IPath buildFilePath(Locale locale) throws CoreException {
+        String folderPath = ""; //$NON-NLS-1$
+        IWorkspaceRoot root = 
+                ResourcesPlugin.getWorkspace().getRoot();
+        IResource resource = root.findMember(nlDir);
+        IContainer container = (IContainer) resource;
 
-		if (locale != null) {
-			if (locale.getLanguage().length() > 0) {
-				folderPath += locale.getLanguage() + "/";  //$NON-NLS-1$
-				IFolder folder = container.getFolder(
-						new Path(folderPath));
-				if (!folder.exists()) {
-					folder.create(true, true, null);
-				}
-			}
-			if (locale.getCountry().length() > 0) {
-				folderPath += locale.getCountry() + "/";  //$NON-NLS-1$
-				IFolder folder = container.getFolder(
-						new Path(folderPath));
-				if (!folder.exists()) {
-					folder.create(true, true, null);
-				}
-			}
-			if (locale.getVariant().length() > 0) {
-				folderPath += locale.getVariant() + "/";  //$NON-NLS-1$
-				IFolder folder = container.getFolder(
-						new Path(folderPath));
-				if (!folder.exists()) {
-					folder.create(true, true, null);
-				}
-			}
-			folderPath = nlDir + "/" + folderPath; //$NON-NLS-1$
-		} else {
-			folderPath = nlDir.substring(
-					0, nlDir.length() - "/nl".length()) //$NON-NLS-1$
-				  + "/" + folderPath; //$NON-NLS-1$
-		}
-		return new Path(folderPath + fileName);
-	}
+        if (locale != null) {
+            if (locale.getLanguage().length() > 0) {
+                folderPath += locale.getLanguage() + "/";  //$NON-NLS-1$
+                IFolder folder = container.getFolder(
+                        new Path(folderPath));
+                if (!folder.exists()) {
+                    folder.create(true, true, null);
+                }
+            }
+            if (locale.getCountry().length() > 0) {
+                folderPath += locale.getCountry() + "/";  //$NON-NLS-1$
+                IFolder folder = container.getFolder(
+                        new Path(folderPath));
+                if (!folder.exists()) {
+                    folder.create(true, true, null);
+                }
+            }
+            if (locale.getVariant().length() > 0) {
+                folderPath += locale.getVariant() + "/";  //$NON-NLS-1$
+                IFolder folder = container.getFolder(
+                        new Path(folderPath));
+                if (!folder.exists()) {
+                    folder.create(true, true, null);
+                }
+            }
+            folderPath = nlDir + "/" + folderPath; //$NON-NLS-1$
+        } else {
+            folderPath = nlDir.substring(
+                    0, nlDir.length() - "/nl".length()) //$NON-NLS-1$
+                  + "/" + folderPath; //$NON-NLS-1$
+        }
+        return new Path(folderPath + fileName);
+    }
 
 
 }
