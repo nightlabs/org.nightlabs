@@ -38,6 +38,7 @@ import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
@@ -103,7 +104,7 @@ public class BundleEntryComposite extends Composite {
 	/*default*/ DuplicateValuesVisitor duplVisitor;
 	/*default*/ SimilarValuesVisitor similarVisitor;
 	
-	FocusListener internalFocusListener = new FocusListener() {
+	private FocusListener internalFocusListener = new FocusListener() {
 		public void focusGained(FocusEvent e) {
 			e.widget = BundleEntryComposite.this;
 			for (FocusListener listener : focusListeners)
@@ -113,6 +114,7 @@ public class BundleEntryComposite extends Composite {
 			e.widget = BundleEntryComposite.this;
 			for (FocusListener listener : focusListeners)
 				listener.focusLost(e);
+			textViewer.setSelectedRange(0, 0);
 		}
 	};
 
@@ -576,25 +578,17 @@ public class BundleEntryComposite extends Composite {
 						page.selectPreviousTreeEntry();
 					}
 				} 
-//				} else if (event.keyCode == SWT.ARROW_DOWN && event.stateMask == SWT.CTRL) {
-//					event.doit = true;
-//					event.detail = SWT.TRAVERSE_NONE;
-//					page.selectNextTreeEntry();
-//				} else if (event.keyCode == SWT.ARROW_UP && event.stateMask == SWT.CTRL) {
-//					event.doit = true;
-//					event.detail = SWT.TRAVERSE_NONE;
-//					page.selectPreviousTreeEntry();
-//				} 
-
 			}
 		});
 
 		textBox.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent event) {
-				if (event.keyCode == 'z' && event.stateMask == SWT.CTRL) {
+				if (isKeyCombination(event, SWT.CTRL, 'z')) {
 					undoManager.undo();
-				} else if (event.keyCode == 'y' && event.stateMask == SWT.CTRL) {
+				} else if (isKeyCombination(event, SWT.CTRL, 'y')) {
 					undoManager.redo();
+				} else if (isKeyCombination(event, SWT.CTRL, 'a')) {
+					textViewer.setSelectedRange(0, textViewer.getDocument().getLength());
 				}
 				
 				StyledText eventBox = (StyledText) event.widget;
@@ -631,6 +625,14 @@ public class BundleEntryComposite extends Composite {
 		});
 		
 		textBox.addFocusListener(internalFocusListener);
+	}
+	
+	private static boolean isKeyCombination(KeyEvent event, int modifier1, int keyCode) {
+		return (event.keyCode == keyCode && event.stateMask == modifier1);
+	}
+	
+	private static boolean isKeyCombination(KeyEvent event, int modifier1, int modifier2, int keyCode) {
+		return (event.keyCode == keyCode && event.stateMask == (modifier1 & modifier2));
 	}
 
 
@@ -671,10 +673,9 @@ public class BundleEntryComposite extends Composite {
 	}
 
 	public void focusTextBox() {
-		final StyledText textBox = textViewer.getTextWidget();
+		StyledText textBox = textViewer.getTextWidget();
 		textBox.setFocus();
 		textViewer.setSelectedRange(0, textViewer.getDocument().getLength());
-//		textBox.setSelection(0, textBox.getText().length());
 	}
 
 	/** Additions by Eric FETTWEIS */
