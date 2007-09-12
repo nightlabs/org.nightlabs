@@ -169,7 +169,10 @@ extends CenteredDialog
       if (f.equals(getDefaultFont().getName())) {
         fontCombo.select(i);
       }
-    }    
+    }
+    
+    if (fontCombo.getSelectionIndex() < 0)
+    	fontCombo.select(0);
   }
   
   protected String[] getFontSizes() {

@@ -62,9 +62,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.nightlabs.base.composite.XComposite;
 import org.nightlabs.base.composite.XComposite.LayoutMode;
 import org.nightlabs.base.form.NightlabsFormsToolkit;
-import org.nightlabs.base.form.XFormToolkit;
 import org.nightlabs.base.resource.SharedImages;
-import org.nightlabs.base.toolkit.IToolkit;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.DrawComponentContainer;
@@ -209,6 +207,7 @@ extends ViewPart
   	init();
         
   	this.parent = parent;    
+//  	this.parent = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
     parent.setLayout(XComposite.getLayout(LayoutMode.ORDINARY_WRAPPER));    
     parent.setLayoutData(new GridData(GridData.FILL_BOTH));    
     
@@ -216,6 +215,7 @@ extends ViewPart
 //		toolkit = new XFormToolkit(parent.getDisplay());
 //		toolkit.setCurrentMode(TOOLKIT_MODE.COMPOSITE);				
 //		parent.setBackground(getToolkit().getBackground());
+		parent.setBackground(getToolkit().getColors().getBackground());
 				
 		form = getForm();
 		createComposites();
