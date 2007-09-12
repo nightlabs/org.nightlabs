@@ -58,9 +58,8 @@ extends CenteredDialog
 		getShell().setSize(500, 500);
 	}	
 		
-	protected BufferedImage image = null;
-	
-	protected ConvertImageComposite convertImageComp = null;
+	private BufferedImage image = null;	
+	private ConvertImageComposite convertImageComp = null;
 	public ConvertImageComposite getConvertImageComposite() {
 		return convertImageComp;
 	}
@@ -70,6 +69,7 @@ extends CenteredDialog
 	 */
 	protected Control createDialogArea(Composite parent) 
 	{
-		return new ConvertImageComposite(parent, SWT.NONE, image);
+		convertImageComp = new ConvertImageComposite(parent, SWT.NONE, image);
+		return convertImageComp;
 	}
 }

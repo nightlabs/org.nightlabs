@@ -117,7 +117,7 @@ extends XComposite
 		addDisposeListener(disposeListener);
 	}
 		
-	private NightlabsFormsToolkit toolkit = null;	
+//	private NightlabsFormsToolkit toolkit = null;	
 //	private XFormToolkit toolkit = null;
 //	private TOOLKIT_MODE toolkitMode = TOOLKIT_MODE.COMPOSITE;
 	
@@ -137,16 +137,21 @@ extends XComposite
 	{
 //		toolkit = new XFormToolkit(Display.getCurrent());
 //		toolkit.setCurrentMode(toolkitMode);
-		toolkit = new NightlabsFormsToolkit(Display.getCurrent());				
-		previewComp = new ImagePreviewComposite(originalImage, parent, SWT.NONE);
-			
+		
+//		toolkit = new NightlabsFormsToolkit(Display.getCurrent());				
+		previewComp = new ImagePreviewComposite(originalImage, parent, SWT.NONE);		
+//		parent.setBackground(toolkit.getColors().getBackground());
+		
 //		Composite optionsComp = toolkit.createXComposite(parent, SWT.NONE, 
 		Composite optionsComp = new XComposite(parent, SWT.NONE,
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		optionsComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		optionsComp.setLayout(new GridLayout(2, false));
 		
-		Label colorModeLabel = toolkit.createLabel(optionsComp, Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.label.colorModel"));		 //$NON-NLS-1$
+//		Label colorModeLabel = toolkit.createLabel(optionsComp, Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.label.colorModel"));		 //$NON-NLS-1$
+		Label colorModeLabel = new Label(optionsComp, SWT.NONE);
+		colorModeLabel.setText(Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.label.colorModel"));		 //$NON-NLS-1$
+		
 		colorModelCombo = new XComboComposite<ColorModel>(optionsComp, 
 				SWT.READ_ONLY | getBorderStyle(), 
 				(String)null, colorModelLabelProvider);
@@ -155,14 +160,21 @@ extends XComposite
 				GridData.HORIZONTAL_ALIGN_CENTER, GridData.VERTICAL_ALIGN_BEGINNING, true, false));
 		colorModelCombo.addSelectionListener(colorModelListener);
 
-		Label imageScaleLabel = toolkit.createLabel(optionsComp, Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.label.fitImage")); //$NON-NLS-1$
-		fitImageButton = toolkit.createButton(optionsComp, "", SWT.CHECK); //$NON-NLS-1$
+//		Label imageScaleLabel = toolkit.createLabel(optionsComp, Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.label.fitImage")); //$NON-NLS-1$
+		Label imageScaleLabel = new Label(optionsComp, SWT.NONE);
+		imageScaleLabel.setText(Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.label.fitImage")); //$NON-NLS-1$		
+//		fitImageButton = toolkit.createButton(optionsComp, "", SWT.CHECK); //$NON-NLS-1$
+		fitImageButton = new Button(optionsComp, SWT.CHECK);
 		fitImageButton.setSelection(fitImage);
 		fitImageButton.addSelectionListener(fitImageListener);
 
-		Label ditherLabel = toolkit.createLabel(optionsComp, 
-				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.label.ditheringMode")); //$NON-NLS-1$
-		ditherButton = toolkit.createButton(optionsComp, "", SWT.CHECK); //$NON-NLS-1$
+//		Label ditherLabel = toolkit.createLabel(optionsComp, 
+//				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.label.ditheringMode")); //$NON-NLS-1$
+		Label ditherLabel = new Label(optionsComp, SWT.NONE); 
+		ditherLabel.setText(Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.label.ditheringMode")); //$NON-NLS-1$
+		
+//		ditherButton = toolkit.createButton(optionsComp, "", SWT.CHECK); //$NON-NLS-1$
+		ditherButton = new Button(optionsComp, SWT.CHECK);
 		ditherButton.setSelection(dithering);
 		ditherButton.addSelectionListener(ditherButtonListener);
 		
@@ -175,6 +187,8 @@ extends XComposite
 		colorModelCombo.selectElement(rgb);
 
 		previewComp.repaintCanvas();
+		
+		adaptToToolkit();
 		
 		long end = System.currentTimeMillis() - start;
 		logger.debug("init took "+end+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -207,7 +221,8 @@ extends XComposite
 	private Button buttonDitherMask441 = null;
 	protected Composite createDitherDetail(Composite parent) 
 	{		
-		ExpandableComposite ec = toolkit.createExpandableComposite(parent, SWT.NONE);
+//		ExpandableComposite ec = toolkit.createExpandableComposite(parent, SWT.NONE);#
+		ExpandableComposite ec = new ExpandableComposite(parent, SWT.NONE);
 		ec.setText(Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.text.ditheringOptions")); //$NON-NLS-1$
 		detailComp = ec;				
 		detailComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
@@ -219,14 +234,22 @@ extends XComposite
 		comp.setLayout(new GridLayout());
 		comp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		buttonFilterFloydSteinberg = toolkit.createButton(comp,
-				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.floydSteinberg"), SWT.RADIO); //$NON-NLS-1$
-		buttonFilterJarvis = toolkit.createButton(comp,
-				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.jarvis"), SWT.RADIO); //$NON-NLS-1$
-		buttonFilterStucki = toolkit.createButton(comp,
-				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.stucki"), SWT.RADIO); //$NON-NLS-1$
-		buttonDitherMask441 = toolkit.createButton(comp, 
-				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.matrix441"), SWT.RADIO); //$NON-NLS-1$
+//		buttonFilterFloydSteinberg = toolkit.createButton(comp,
+//				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.floydSteinberg"), SWT.RADIO); //$NON-NLS-1$
+//		buttonFilterJarvis = toolkit.createButton(comp,
+//				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.jarvis"), SWT.RADIO); //$NON-NLS-1$
+//		buttonFilterStucki = toolkit.createButton(comp,
+//				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.stucki"), SWT.RADIO); //$NON-NLS-1$
+//		buttonDitherMask441 = toolkit.createButton(comp, 
+//				Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.matrix441"), SWT.RADIO); //$NON-NLS-1$
+		buttonFilterFloydSteinberg = new Button(comp, SWT.RADIO);
+		buttonFilterFloydSteinberg.setText(Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.floydSteinberg")); //$NON-NLS-1$
+		buttonFilterJarvis = new Button(comp, SWT.RADIO);
+		buttonFilterJarvis.setText(Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.jarvis")); //$NON-NLS-1$
+		buttonFilterStucki = new Button(comp, SWT.RADIO);
+		buttonFilterStucki.setText(Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.stucki")); //$NON-NLS-1$
+		buttonDitherMask441 = new Button(comp, SWT.RADIO); 
+		buttonDitherMask441.setText(Messages.getString("org.nightlabs.editor2d.composite.ConvertImageComposite.button.matrix441")); //$NON-NLS-1$
 		
 		buttonFilterFloydSteinberg.setSelection(true);
 		

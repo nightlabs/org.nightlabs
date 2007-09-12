@@ -121,7 +121,8 @@ extends XComposite
 	{
 		toolkit = new NightlabsFormsToolkit(Display.getCurrent());
 		
-		Composite comp = toolkit.createComposite(parent, SWT.NONE);
+//		Composite comp = toolkit.createComposite(parent, SWT.NONE);
+		Composite comp = new XComposite(parent, SWT.NONE);
 		comp.setLayout(new GridLayout(2, true));
 		comp.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
