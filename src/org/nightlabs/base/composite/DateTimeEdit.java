@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.l10n.DateFormatProvider;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.l10n.DateParseException;
@@ -178,7 +179,7 @@ public class DateTimeEdit extends XComposite
 
 	private void lookupButtonClicked()
 	{
-		CalendarDateTimeEditLookupDialog dialog = new CalendarDateTimeEditLookupDialog(getShell(), this);
+		CalendarDateTimeEditLookupDialog dialog = new CalendarDateTimeEditLookupDialog(getShell(), this, lookupButton.toDisplay(0, 0));
 		if (dialog.open() == CalendarDateTimeEditLookupDialog.OK) {
 			setDate(dialog.getDate());
 		}

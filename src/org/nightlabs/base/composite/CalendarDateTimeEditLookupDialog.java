@@ -10,6 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -45,10 +46,27 @@ extends Dialog
 	
 	public CalendarDateTimeEditLookupDialog(Shell parentShell, DateTimeEdit dateTimeEdit)
 	{
+		this(parentShell, dateTimeEdit, null);
+	}
+
+	private Point initialLocation;
+
+	public CalendarDateTimeEditLookupDialog(Shell parentShell, DateTimeEdit dateTimeEdit, Point initialLocation)
+	{
 		super(parentShell);
 		this.dateTimeEdit = dateTimeEdit;
 		this.calendar = Calendar.getInstance();
 		this.calendar.setTime(dateTimeEdit.getDate());
+		this.initialLocation = initialLocation;
+	}
+
+	@Override
+	protected Point getInitialLocation(Point initialSize)
+	{
+		if (initialLocation != null)
+			return initialLocation;
+
+		return super.getInitialLocation(initialSize);
 	}
 
 	@Override

@@ -87,6 +87,12 @@ extends XComposite
 	private Color foreground, background;
 	private Font font;	
 	private Table table;
+
+	private static boolean isGtk()
+	{
+		String ws = System.getProperty("osgi.ws");
+		return "gtk".equals(ws);
+	}
 	
 /**
  * Constructs a new instance of this class given its parent
@@ -127,9 +133,11 @@ public XCombo (Composite parent, int style) {
 	if ((style & SWT.READ_ONLY) != 0) textStyle |= SWT.READ_ONLY;
 	if ((style & SWT.FLAT) != 0) textStyle |= SWT.FLAT;
 	text = new Text (this, textStyle);
-	// Workaround to avoid grey background if style == SWT.READ_ONLY;
-	if (isReadOnly())	
-		text.setBackground(getDefaultBackgroundColor());
+	// Workaround to avoid grey background if style == SWT.READ_ONLY; // TODO why this?! The native combos are grey, if this style is set.
+//	if (!isGtk()) { // added by Marco, because it doesn't look good in GTK.
+		if (isReadOnly())	
+			text.setBackground(getDefaultBackgroundColor());
+//	}
 
 	int arrowStyle = SWT.DOWN | SWT.ARROW;
 	if ((style & SWT.FLAT) != 0) arrowStyle |= SWT.FLAT;
@@ -447,7 +455,13 @@ public Point computeSize (int wHint, int hHint, boolean changed)
 	Point arrowSize = arrow.computeSize (SWT.DEFAULT, SWT.DEFAULT, changed);
 	
 	// TODO workaround to change the size of the XCombo
-//	arrowSize.y -= 5;
+	if (isGtk()) { // added by Marco, because it doesn't look good in GTK.
+		Text t = new Text(this, SWT.BORDER);
+		t.setText("ABCxyz");
+		arrowSize.y = t.getSize().y;
+		t.dispose();
+//		arrowSize.y -= 5;
+	}
 	
 	Point listSize = table.computeSize (wHint, SWT.DEFAULT, changed);
 	int borderWidth = getBorderWidth ();
