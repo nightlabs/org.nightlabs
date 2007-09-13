@@ -11,6 +11,8 @@
     - build-nightlabs-compile.post.xml
     - build-nightlabs-dist.bin.pre.xml
     - build-nightlabs-dist.bin.post.xml
+    - build-nightlabs-dist.plugin.jar.pre.xml
+    - build-nightlabs-dist.plugin.jar.post.xml
     - build-nightlabs-dist.plugin.pre.xml
     - build-nightlabs-dist.plugin.post.xml
     - build-nightlabs-deploy.pre.xml
@@ -335,7 +337,7 @@
   </target>
 
 	<!-- Create all available dist formats -->
-  <target name="dist" depends="dist.bin, dist.plugin">
+  <target name="dist" depends="dist.bin, dist.plugin.jar, dist.plugin">
   </target>
 
 	<!-- Create the plugins jar file -->
@@ -343,14 +345,25 @@
   	<dolocaliftrue boolean="true" target="dist.bin.pre"/>
     <mkdir dir="${project.dir}/${dist.dir}/" />
     <delete file="${project.dir}/${dist.dir}/${project.jar}" failonerror="false" />
-    <jar jarfile="${project.dir}/${dist.dir}/${project.jar}" index="true">
+    <jar jarfile="${project.dir}/${dist.dir}/${project.jar}" index="true" duplicate="fail">
       <fileset dir="${project.dir}/${bin.dir}">
         <include name="**/*.*"/>
       </fileset>
-    	<fileset dir="${project.dir}" includes="${bin.includes}">
-    	</fileset>
     </jar>
   	<dolocaliftrue boolean="true" target="dist.bin.post"/>
+  </target>
+	
+	<!-- Create the plugins jar containing all files needed to run it as an RCP Plugin -->
+  <target name="dist.plugin.jar" depends="dist.bin">
+  	<dolocaliftrue boolean="true" target="dist.plugin.jar.pre"/>
+    <mkdir dir="${project.dir}/${dist.dir}/" />
+    <delete file="${project.dir}/${dist.dir}/${project.jar}_${project.version}.jar" failonerror="false" />
+    <jar jarfile="${project.dir}/${dist.dir}/${project.jar}_${project.version}.jar" 
+    	duplicate="fail" manifest="${project.dir}/META-INF/MANIFEST.MF">
+    	<fileset dir="${project.dir}" includes="${bin.includes}"></fileset>
+    	<fileset dir="${project.dir}/${dist.dir}" includes="${project.jar}"></fileset>
+    </jar>
+  	<dolocaliftrue boolean="true" target="dist.plugin.jar.post"/>
   </target>
 
 	<!-- Create a plugin distribution directory and archive -->
@@ -363,7 +376,7 @@
     </copy>
     <tar destfile="${project.dir}/${dist.dir}/${project.name}_${project.version}.tar.gz" compression="gzip">
       <tarfileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}"
-        prefix="plugins/${project.name}_${project.version}" />
+        prefix="plugins/${project.name}_${project.version}"/>
     </tar>
   	<dolocaliftrue boolean="true" target="dist.plugin.post"/>
   </target>
