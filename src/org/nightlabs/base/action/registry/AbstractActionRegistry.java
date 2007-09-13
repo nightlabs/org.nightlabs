@@ -855,7 +855,7 @@ extends AbstractEPProcessor
 						for (Iterator it = menuRaw.iterator(); it.hasNext(); ) {
 							ItemDescriptor item = (ItemDescriptor) it.next();
 							if (item instanceof ActionDescriptor) {
-								logger.debug("    Action with id=" + ((ActionDescriptor)item).getAction().getId()); //$NON-NLS-1$
+								logger.debug("    Action with id=" + ((ActionDescriptor)item).getID()); //$NON-NLS-1$
 							}
 							else if (item instanceof MenuDescriptor) {
 								logger.debug("    Menu with id=" + ((MenuDescriptor)item).getId()); //$NON-NLS-1$
