@@ -97,14 +97,24 @@ public class FileSelectComposite extends XComposite {
 			public void widgetSelected(SelectionEvent e)
 			{
 				FileDialog fileDialog = new FileDialog(RCPUtil.getActiveWorkbenchShell());
-				fileDialog.setFilterExtensions(new String[]{"*.*"}); //$NON-NLS-1$
-				fileDialog.setFilterNames(new String[]{Messages.getString("org.nightlabs.base.composite.FileSelectComposite.filterName_allFiles")}); //$NON-NLS-1$
+				setUpFileDialog(fileDialog);
 				String selectedFile = fileDialog.open();
 				if (selectedFile != null)
 					fileTextControl.setText(selectedFile);
 			}
 		});
 		
+	}
+	
+	/**
+	 * Override this method to setup up specific Filters, etc.
+	 * Default implementation adds '*.*' filter.
+	 * 
+	 * @param fileDialog the FileDialog which will be used.
+	 */
+	protected void setUpFileDialog(FileDialog fileDialog) {
+		fileDialog.setFilterExtensions(new String[]{"*.*"}); //$NON-NLS-1$
+		fileDialog.setFilterNames(new String[]{Messages.getString("org.nightlabs.base.composite.FileSelectComposite.filterName_allFiles")}); //$NON-NLS-1$
 	}
 	
 	public String getFileText() {
