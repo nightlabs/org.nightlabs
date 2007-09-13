@@ -343,10 +343,12 @@
   	<dolocaliftrue boolean="true" target="dist.bin.pre"/>
     <mkdir dir="${project.dir}/${dist.dir}/" />
     <delete file="${project.dir}/${dist.dir}/${project.jar}" failonerror="false" />
-    <jar jarfile="${project.dir}/${dist.dir}/${project.jar}">
+    <jar jarfile="${project.dir}/${dist.dir}/${project.jar}" index="true">
       <fileset dir="${project.dir}/${bin.dir}">
         <include name="**/*.*"/>
       </fileset>
+    	<fileset dir="${project.dir}" includes="${bin.includes}">
+    	</fileset>
     </jar>
   	<dolocaliftrue boolean="true" target="dist.bin.post"/>
   </target>
