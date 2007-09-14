@@ -105,12 +105,12 @@ extends EditorPartAction
 	 * @param drawComponents a List of DrawComponents to find a EditParts for
 	 * @return a List of the corresponding EditParts
 	 */
-	public List getEditParts(List drawComponents) 
+	public List<EditPart> getEditParts(List<DrawComponent> drawComponents) 
 	{
-		List editParts = new ArrayList();
-		for (Iterator it = drawComponents.iterator(); it.hasNext(); ) 
+		List<EditPart> editParts = new ArrayList<EditPart>();
+		for (Iterator<DrawComponent> it = drawComponents.iterator(); it.hasNext(); ) 
 		{
-			DrawComponent dc = (DrawComponent) it.next();
+			DrawComponent dc = it.next();
 			EditPart ep = getEditPart(dc);
 			editParts.add(ep);
 		}

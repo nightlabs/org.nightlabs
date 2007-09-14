@@ -55,13 +55,18 @@ extends CreationTool
     this(aFactory, false);
   }
 
-  public ImageTool(IModelCreationFactory aFactory, boolean colorConversion)  
-  {
+  public ImageTool(IModelCreationFactory aFactory, boolean colorConversion) {
     super(aFactory);
     this.colorConversion = colorConversion;
   }
     
-  protected boolean colorConversion = false;
+  private boolean colorConversion = false;
+  
+  // TODO should come from ImageIO
+  private static final String[] fileExtensions = 
+  	new String[] {"*.jpg", "*.png", "*.gif", "*.bmp", "*.pcx"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+  
+  private List<RenderModeMetaData> renderModeMetaDatas = new LinkedList<RenderModeMetaData>();
   
   /**
    * Creates a {@link CreateRequest} and sets this tool's factory on the request.
@@ -77,11 +82,7 @@ extends CreationTool
   protected ImageCreateRequest getImageCreateRequest() {
     return (ImageCreateRequest) getTargetRequest();
   }
-  
-  // TODO should come from ImageIO
-  protected static final String[] fileExtensions = 
-  	new String[] {"*.jpg", "*.png", "*.gif", "*.bmp", "*.pcx"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-  
+    
   public String[] getFileExtensions() {
   	return fileExtensions;
   }
@@ -142,6 +143,4 @@ extends CreationTool
     ((CreateImageCommand)getCurrentCommand()).setRenderModeMetaData(renderModeMetaDatas);        
     performCreation(1);  	
   }
-    
-  protected List<RenderModeMetaData> renderModeMetaDatas = new LinkedList<RenderModeMetaData>();
 }

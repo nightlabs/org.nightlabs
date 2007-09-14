@@ -29,7 +29,6 @@ package org.nightlabs.editor2d;
 
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.internal.GEFMessages;
 import org.eclipse.gef.ui.actions.ActionBarContributor;
 import org.eclipse.gef.ui.actions.AlignmentRetargetAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
@@ -53,7 +52,6 @@ import org.nightlabs.base.resource.SharedImages;
 import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.editor2d.actions.DeleteAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
-import org.nightlabs.editor2d.actions.RepaintAction;
 import org.nightlabs.editor2d.actions.RepaintRetargetAction;
 import org.nightlabs.editor2d.actions.RotateAction;
 import org.nightlabs.editor2d.actions.copy.CopyAction;
@@ -270,22 +268,22 @@ extends ActionBarContributor
   	menubar.insertAfter(ID_VIEW_MENU, shapeMenu);  	
   }
   
-  protected IMenuManager viewMenu = null;
+  private IMenuManager viewMenu = null;
   protected IMenuManager getViewMenu() {
   	return viewMenu;
   }
   
-  protected IMenuManager editMenu = null;
+  private IMenuManager editMenu = null;
   protected IMenuManager getEditMenu() {
   	return editMenu;
   }
   
-  protected IMenuManager fileMenu = null;
+  private IMenuManager fileMenu = null;
   protected IMenuManager getFileMenu() {
   	return fileMenu;
   }
 
-  protected IMenuManager shapeMenu = null;
+  private IMenuManager shapeMenu = null;
   protected IMenuManager getShapeMenu() {
   	return shapeMenu;
   }
