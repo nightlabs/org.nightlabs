@@ -47,8 +47,7 @@ extends Draw2DBaseRenderer
 	 */
 	private static final Logger logger = Logger.getLogger(Draw2DShapeDefaultRenderer.class);
 	
-	public Draw2DShapeDefaultRenderer() 
-	{
+	public Draw2DShapeDefaultRenderer() {
 		super();
 	}
 
@@ -74,10 +73,6 @@ extends Draw2DBaseRenderer
 		return AWTSWTUtil.convertShape(s, null, null);
 	}
 	 
-//	protected int convertLineStyle(int lineStyle) 
-//	{
-//		return lineStyle;
-//	}
 	protected int convertLineStyle(LineStyle lineStyle) 
 	{
 		switch (lineStyle) 

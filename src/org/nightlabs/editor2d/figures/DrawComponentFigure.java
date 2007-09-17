@@ -44,6 +44,7 @@ import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.j2d.GeneralShape;
 import org.nightlabs.editor2d.render.Draw2DRenderContext;
 import org.nightlabs.editor2d.render.RenderContext;
+import org.nightlabs.editor2d.render.RenderContextFinder;
 import org.nightlabs.editor2d.render.Renderer;
 import org.nightlabs.editor2d.util.J2DUtil;
 import org.nightlabs.editor2d.util.RenderUtil;
@@ -73,12 +74,21 @@ implements RendererFigure
           
   public static void paintDraw2D(Graphics g, DrawComponent dc, Renderer r) 
   {
-		if (r != null && dc != null && g != null) {				
-			RenderContext rc = r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE);
-			if (rc != null) {
-				((Draw2DRenderContext) rc).paint(dc, g);
-			}  					
-		}					
+  	RenderContextFinder<Graphics> rcf = new RenderContextFinder<Graphics>();
+  	rcf.paintRenderContext(g, dc, r, Draw2DRenderContext.RENDER_CONTEXT_TYPE);
+//		if (r != null && dc != null && g != null) {				
+//			RenderContext rc = r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE);
+//			if (rc != null) {
+//				((Draw2DRenderContext) rc).paint(dc, g);
+//			}
+//			else {
+//				r = dc.getRenderModeManager().getDefaultRenderer(dc.getClass());
+//				rc = r.getRenderContext(Draw2DRenderContext.RENDER_CONTEXT_TYPE);
+//				if (rc != null) {
+//					((Draw2DRenderContext) rc).paint(dc, g);
+//				}
+//			}
+//		}					
   }
     
   public void paint(Graphics graphics) 

@@ -29,6 +29,7 @@ import java.awt.image.BufferedImage;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.ImageDrawComponent;
 import org.nightlabs.editor2d.viewer.util.AWTSWTUtil;
@@ -39,9 +40,7 @@ import org.nightlabs.editor2d.viewer.util.AWTSWTUtil;
 public class Draw2DImageDefaultRenderer 
 extends Draw2DBaseRenderer 
 {
-
-	public Draw2DImageDefaultRenderer() 
-	{
+	public Draw2DImageDefaultRenderer() {
 		super();
 	}
 
@@ -54,8 +53,8 @@ extends Draw2DBaseRenderer
     }
 	}
 	
-	protected Image convertImage(BufferedImage img) 
-	{
-		return AWTSWTUtil.toSWTImage(img, null);
+	protected Image convertImage(BufferedImage img) {
+//		return AWTSWTUtil.toSWTImage(img, null);
+		return AWTSWTUtil.toSWTImage(img, Display.getDefault());
 	}
 }

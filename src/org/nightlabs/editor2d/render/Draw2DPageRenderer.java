@@ -37,7 +37,6 @@ import org.nightlabs.editor2d.PageDrawComponent;
 public class Draw2DPageRenderer 
 extends Draw2DBaseRenderer 
 {
-
 	public Draw2DPageRenderer() {
 		super();
 	}
