@@ -27,21 +27,20 @@
 package org.nightlabs.base.composite;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.base.resource.Messages;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class FileSelectComposite extends AbstractFileDialogComposite<FileDialog> {
+public class DirectorySelectComposite extends AbstractFileDialogComposite<DirectoryDialog> {
 
 	/**
 	 * @param parent
 	 * @param style
 	 */
-	public FileSelectComposite(Composite parent, int style, String caption) {
+	public DirectorySelectComposite(Composite parent, int style, String caption) {
 		super(parent, style, caption);
 	}
 	
@@ -49,30 +48,23 @@ public class FileSelectComposite extends AbstractFileDialogComposite<FileDialog>
 	 * @param parent
 	 * @param style
 	 */
-	public FileSelectComposite(Composite parent, int style, LayoutMode layoutMode, 
+	public DirectorySelectComposite(Composite parent, int style, LayoutMode layoutMode, 
 			LayoutDataMode layoutDataMode, String caption) 
 	{
 		super(parent, style, layoutMode, layoutDataMode, caption);
 	}	
 
 	@Override
-	protected FileDialog createFileDialog(Shell parentShell) {	
-		return new FileDialog(parentShell);
+	protected DirectoryDialog createFileDialog(Shell parentShell) {	
+		return new DirectoryDialog(parentShell);
 	}
 	
 	@Override
-	protected String openDialog(FileDialog dialog) {	
+	protected String openDialog(DirectoryDialog dialog) {	
 		return dialog.open();
 	}
-	
-	/**
-	 * Override this method to setup up specific Filters, etc.
-	 * Default implementation adds '*.*' filter.
-	 * 
-	 * @param fileDialog the FileDialog which will be used.
-	 */
-	protected void setUpFileDialog(FileDialog fileDialog) {
-		fileDialog.setFilterExtensions(new String[]{"*.*"}); //$NON-NLS-1$
-		fileDialog.setFilterNames(new String[]{Messages.getString("org.nightlabs.base.composite.FileSelectComposite.filterName_allFiles")}); //$NON-NLS-1$
+
+	@Override
+	protected void setUpFileDialog(DirectoryDialog fileDialog) {
 	}
 }
