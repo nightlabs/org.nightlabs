@@ -231,7 +231,11 @@ implements ISelectionProvider
 	
 	/**
 	 * This is convenience method to retrieve the default widget style.
+	 * <!--
+	 * Tobias: commented the following remark, static methods cannot be overwritten anyway
+	 * 
 	 * It is not intended to be overridden by subclasses!
+	 * -->
 	 * 
 	 * @param comp some composite 
 	 * @return SWT.READ_ONLY | XComposite.getBorderStyle(comp)

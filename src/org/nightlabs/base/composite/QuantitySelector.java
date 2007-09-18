@@ -47,6 +47,8 @@ public abstract class QuantitySelector extends XComposite
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		getGridData().grabExcessHorizontalSpace = false;
 		getGridData().grabExcessVerticalSpace = false;
+		getGridLayout().verticalSpacing = 0;
+		getGridLayout().horizontalSpacing = 0;
 
 		for (int i = 0; i < quickQtyButtons.length; ++i) {
 			quickQtyButtons[i] = new Button(this, SWT.FLAT);
