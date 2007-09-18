@@ -48,22 +48,8 @@ extends CellEditor
 {
 	public AbstractComboBoxCellEditor(Composite parent, int style) {
 		super(parent, style);
-//		populateComboBoxItems();
 	}
 	
-//  /**
-//   * the CCombo which will display 
-//   */
-//	protected CCombo comboBox;
-//	public CCombo getComboBox() {
-//		return comboBox;
-//	}
-	
-//	protected Combo comboBox;
-//	public Combo getComboBox() {
-//		return comboBox;
-//	}
-
   /**
    * the XCombo which will display 
    */
@@ -83,7 +69,6 @@ extends CellEditor
   protected Control createControl(Composite parent) 
   {	
 	  comboBox = new XCombo(parent, getStyle());
-//  	comboBox = new Combo(parent, getStyle());
 	  comboBox.setFont(parent.getFont());
 	
 	  comboBox.addKeyListener(new KeyAdapter() {
