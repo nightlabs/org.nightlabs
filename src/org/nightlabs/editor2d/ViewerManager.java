@@ -232,7 +232,8 @@ public class ViewerManager
 //    	Rectangle figureBounds = dcPart.getFigure().getBounds();
     	if (rollOverFigure == null)
     		rollOverFigure = new DrawComponentFigure();
-    	Renderer r = dc.getRenderModeManager().getRenderer(RenderConstants.ROLLOVER_MODE, dc.getClass());
+//    	Renderer r = dc.getRenderModeManager().getRenderer(RenderConstants.ROLLOVER_MODE, dc.getClass());
+    	Renderer r = dc.getRenderModeManager().getRenderer(RenderConstants.ROLLOVER_MODE, dc.getClass().getName());    	
     	
     	if (r != null) 
     	{

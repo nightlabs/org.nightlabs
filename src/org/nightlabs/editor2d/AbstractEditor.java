@@ -89,6 +89,7 @@ import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.gef.ui.properties.UndoablePropertySheetEntry;
 import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
@@ -125,7 +126,6 @@ import org.nightlabs.base.wizard.IWizardHop;
 import org.nightlabs.editor2d.actions.DeleteAction;
 import org.nightlabs.editor2d.actions.EditShapeAction;
 import org.nightlabs.editor2d.actions.NormalSelectionAction;
-import org.nightlabs.editor2d.actions.RepaintAction;
 import org.nightlabs.editor2d.actions.ResetRotationCenterAction;
 import org.nightlabs.editor2d.actions.RotateAction;
 import org.nightlabs.editor2d.actions.SelectAllWithSameName;
@@ -437,6 +437,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		return descriptorManager;
 	}
 
+	@Override
 	protected void configureGraphicalViewer() 
 	{
 		super.configureGraphicalViewer();
@@ -536,6 +537,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		};
 	}
 
+	@Override
 	public Object getAdapter(Class type)
 	{
 		if (type == IContentOutlinePage.class) {
@@ -581,6 +583,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		return zoomManager;		
 	}
 	
+	@Override
 	public void doSave(IProgressMonitor monitor) 
 	{
 		try {      	
@@ -615,9 +618,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		}   
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.ISaveablePart#doSaveAs()
-	 */
+	@Override
 	public void doSaveAs() 
 	{
 		performSaveAs();      
@@ -688,6 +689,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	 * Set up the editor's inital content (after creation).
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#initializeGraphicalViewer()
 	 */
+	@Override
 	protected void initializeGraphicalViewer() 
 	{
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
@@ -741,9 +743,9 @@ extends J2DGraphicalEditorWithFlyoutPalette
 
 	protected void configureFilterManager() 
 	{
-		Map class2DrawComponents = getRootDrawComponent().getClass2DrawComponents();
-		for (Iterator it = class2DrawComponents.keySet().iterator(); it.hasNext(); ) {
-			Class c = (Class) it.next();
+		Map<Class, List<DrawComponent>> class2DrawComponents = getRootDrawComponent().getClass2DrawComponents();
+		for (Iterator<Class> it = class2DrawComponents.keySet().iterator(); it.hasNext(); ) {
+			Class c = it.next();
 			getFilterManager().addFilter(c);
 		}
 		getRootDrawComponent().addPropertyChangeListener(getFilterManager().getTypeListener());    		
@@ -788,6 +790,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		return null;
 	}
 	
+	@Override
 	protected void createActions() 
 	{
 		super.createActions();
@@ -1005,6 +1008,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	/**
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#createGraphicalViewer(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	protected void createGraphicalViewer(Composite parent) 
 	{
 		long start = System.currentTimeMillis();
@@ -1291,6 +1295,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		}    	
 	}
 
+	@Override
 	protected void setInput(IEditorInput input)
 	{ 
 		long start = System.currentTimeMillis();
@@ -1303,8 +1308,14 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			root = getRootDrawComponent();        
 			if (!fileInput.isSaved()) {
 				initialzePage();
-			} else {        	
-				load(fileInput);
+			} else {    
+				try {
+					load(fileInput);
+				} catch (OutOfMemoryError e) {
+					System.gc();
+					MessageDialog.openError(RCPUtil.getActiveWorkbenchShell(), 
+							"Not enough memory", "The opened File needs more memory than is available");
+				}
 				zoomAll();				
 			}            	      	
 		} 
@@ -1318,7 +1329,6 @@ extends J2DGraphicalEditorWithFlyoutPalette
 			long duration = System.currentTimeMillis() - start;
 			logger.debug("setInput() took "+duration+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		
 	}
 	
 	protected void initialzePage() 
