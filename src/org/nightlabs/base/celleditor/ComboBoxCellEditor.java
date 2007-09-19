@@ -34,21 +34,20 @@ import org.eclipse.swt.widgets.Composite;
 public class ComboBoxCellEditor 
 extends AbstractComboBoxCellEditor 
 {
-
   /**
    * The list of items to present in the combo box.
    */
-  protected String[] items;
+  private String[] items;
 
   /**
    * the list of images to present in the combo box.
    */
-  protected Image[] images;
+  private Image[] images;
   
   /**
    * the SWT style parameter for all contained Composites 
    */
-  protected static final int style = SWT.NONE;
+  private static final int style = SWT.NONE;
   
   public ComboBoxCellEditor(Composite parent, String[] items) 
   {
@@ -110,8 +109,7 @@ extends AbstractComboBoxCellEditor
    *
    * @return the String of the Selection
    */
-  protected Object getReturnValue() 
-  {
+  protected Object getReturnValue() {
 		return items[getComboBox().getSelectionIndex()];
   }
     
