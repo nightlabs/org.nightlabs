@@ -39,9 +39,8 @@ extends ComboBoxCellEditor
     super(parent, FontUtil.getFontSizes());
   }
  
-  protected Object doGetValue() 
-  {      	
-    return new Integer(items[getComboBox().getSelectionIndex()]); 
+  protected Object doGetValue() {      	
+    return new Integer(getItems()[getComboBox().getSelectionIndex()]); 
   }    
   
   protected void doSetValue(Object value) 
@@ -55,8 +54,8 @@ extends ComboBoxCellEditor
       string = ((Integer)value).toString();
     }
     
-    for (int i=0; i<items.length; i++) {
-      String s = items[i];
+    for (int i=0; i<getItems().length; i++) {
+      String s = getItems()[i];
       if (s.equals(string)) {
       	getComboBox().select(i);
         break;
