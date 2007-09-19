@@ -53,9 +53,9 @@ import org.nightlabs.base.util.RCPUtil;
 public abstract class FileSelectionComposite 
 	extends XComposite 
 {
-
 	public static final int OPEN_FILE = 1;
 	public static final int OPEN_DIR = 1 << 1;
+	
 	/**
 	 * @param parent
 	 * @param compositeStyle
@@ -90,7 +90,13 @@ public abstract class FileSelectionComposite
 			String dirSelectionCaption) 
 	{
 		if ((OPEN_DIR & dialogStyle) != 0) {
-			createTextAndButtonControl(fileTextForFolders, dirSelectionCaption, browseButtonForFolders);
+			if (dirSelectionCaption != null)
+				new Label(this, SWT.NONE).setText(dirSelectionCaption); //$NON-NLS-1$
+			
+			XComposite fileComp = new XComposite(this, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);		
+			fileComp.getGridLayout().numColumns = 3;
+			fileTextForFolders = new Text(fileComp, fileComp.getBorderStyle());
+			fileTextForFolders.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			fileTextForFolders.addModifyListener(new ModifyListener() {
 				public void modifyText(ModifyEvent e)
 				{
@@ -101,10 +107,12 @@ public abstract class FileSelectionComposite
 				}
 			});
 
+			browseButtonForFolders = new Button(fileComp, SWT.PUSH);
+			browseButtonForFolders.setText(Messages.getString("org.nightlabs.base.composite.FileSelectComposite.browseButton.text")); //$NON-NLS-1$
 			browseButtonForFolders.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e)
 				{
-					FileDialog fileDialog = new FileDialog(RCPUtil.getActiveWorkbenchShell());
+					DirectoryDialog fileDialog = new DirectoryDialog(RCPUtil.getActiveWorkbenchShell());
 					setUpFileDialog(fileDialog);
 					String selectedFile = fileDialog.open();
 					if (selectedFile != null) {
@@ -118,7 +126,13 @@ public abstract class FileSelectionComposite
 		} // ((OPEN_DIR & dialogStyle) != 0)
 		
 		if ((OPEN_FILE & dialogStyle) != 0) {
-			createTextAndButtonControl(fileTextForFiles, fileSelectionCaption, browseButtonForFiles);
+			if (fileSelectionCaption != null)
+				new Label(this, SWT.NONE).setText(fileSelectionCaption); //$NON-NLS-1$
+
+			XComposite fileCompFile = new XComposite(this, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);		
+			fileCompFile.getGridLayout().numColumns = 3;
+			fileTextForFiles = new Text(fileCompFile, fileCompFile.getBorderStyle());
+			fileTextForFiles.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			fileTextForFiles.addModifyListener(new ModifyListener() {
 				public void modifyText(ModifyEvent e)
 				{
@@ -129,6 +143,9 @@ public abstract class FileSelectionComposite
 				}
 			});
 
+
+			browseButtonForFiles = new Button(fileCompFile, SWT.PUSH);
+			browseButtonForFiles.setText(Messages.getString("org.nightlabs.base.composite.FileSelectComposite.browseButton.text")); //$NON-NLS-1$
 			browseButtonForFiles.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e)
 				{
@@ -144,21 +161,6 @@ public abstract class FileSelectionComposite
 			});
 		} // ((OPEN_FILE & dialogStyle) != 0)
 		
-	}
-	
-	private void createTextAndButtonControl(Text textfield, String textFieldCaption,
-			Button openDialogButton) 
-	{
-		if (textFieldCaption != null)
-			new Label(this, SWT.NONE).setText(textFieldCaption); //$NON-NLS-1$
-
-		XComposite fileComp = new XComposite(this, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);		
-		fileComp.getGridLayout().numColumns = 3;
-		textfield = new Text(fileComp, fileComp.getBorderStyle());
-		textfield.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		browseButtonForFiles = new Button(fileComp, SWT.PUSH);
-		browseButtonForFiles.setText(Messages.getString("org.nightlabs.base.composite.FileSelectComposite.browseButton.text")); //$NON-NLS-1$
 	}
 	
 	private List<String> filterNames;
