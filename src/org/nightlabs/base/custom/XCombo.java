@@ -342,7 +342,7 @@ public void addSelectionListener(SelectionListener listener) {
 }
 
 // TODO: This is used to ship around an event dispatching order problem. see arrowEvent and popupEvent
-private long popupTime = 0;
+//private long popupTime = 0;
 
 void arrowEvent (Event event) {
 	switch (event.type) {
@@ -351,13 +351,10 @@ void arrowEvent (Event event) {
 			break;
 		}
 		case SWT.Selection: {
-			// TODO: This is a dirty hack to get rid of the unclosable popup.
-			long eventTime = event.time & 0xFFFFFFFFL;
-			if (Math.abs(eventTime - popupTime) < 100)
-				return;
+			if (!shellJustDeactivated)
+				dropDown (!isDropped ());
 			
-			popupTime = eventTime;
-			dropDown (!isDropped ());
+			shellJustDeactivated = false;
 			break;
 		}
 	}
@@ -478,6 +475,7 @@ public Point computeSize (int wHint, int hHint, boolean changed)
 void createPopup(TableItem[] items, int selectionIndex) {		
 		// create shell and list
 		popup = new Shell (getShell (), SWT.NO_TRIM | SWT.ON_TOP);
+//		shellJustDeactivated = false;
 		int style = getStyle ();
 		int listStyle = SWT.SINGLE | SWT.V_SCROLL;
 		if ((style & SWT.FLAT) != 0) listStyle |= SWT.FLAT;
@@ -1129,7 +1127,19 @@ void listEvent (Event event) {
 	}
 }
 
+/**
+ * This boolean's purpose is to tell whether  the last event for the {@link #popup}-Shell was of type
+ * {@link SWT#Deactivate}. It is used in the method {@link #arrowEvent(Event)} to avoid a problem
+ * ocurring when the user tries to close the popup by clicking on the arrow button, that renders the
+ * popup uncloseable. The cause for this is that first the shell's Deactivate event closes the drop
+ * down and then the arrow button receives the Selection event which causes the popup to be opened
+ * again. The workaround is now to skip the opening of the drop down in {@link #arrowEvent(Event)}
+ * if <code>shellJustDeactivated == true</code>.
+ */
+boolean shellJustDeactivated = false;
+
 void popupEvent(Event event) {
+	shellJustDeactivated = false;
 	switch (event.type) {
 		case SWT.Paint:
 			// draw black rectangle around list
@@ -1143,16 +1153,8 @@ void popupEvent(Event event) {
 			dropDown (false);
 			break;
 		case SWT.Deactivate:
-			// This deactivation causes a problem if one clicks on the button to close the popup.
-			// In this case, this event will close the popup, but since the SWT.Selection for the button 
-			// is triggered as well, it will be rebuilt!
-			// TODO: This is a dirty hack to get rid of the unclosable popup.
-			long eventTime = event.time & 0xFFFFFFFFL;
-			if (Math.abs(eventTime - popupTime) < 100)
-				return;
-
-			popupTime = eventTime;
 			dropDown (false);
+			shellJustDeactivated = true;
 			break;
 	}
 }
