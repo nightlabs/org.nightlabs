@@ -355,10 +355,16 @@ implements ISelectionProvider
 	}
 	
 	/**
-	 * The tree might hold a special type of node objects that contain the real objects.
-	 * This method can be used to intercept when the selection is read in order to return the
+	 * The tree normally holds a special type of node objects that contain the real objects.
+	 * This method is used to intercept when the selection is read in order to return the
 	 * real selection object.
-	 * The default implementation returns the given obj. 
+	 * <p>
+	 * The default implementation returns the given obj.
+	 * </p>
+	 * <p>
+	 * When overriding this method, you should return <code>null</code>, if the passed object <code>obj</code>
+	 * cannot be transformed into an instance of <code>ElementType</code> (for example, if it's a temporary "loading data..." node).
+	 * </p>
 	 * 
 	 * @see #getSelectedElements()
 	 * @see #getFirstSelectedElement()
@@ -366,7 +372,9 @@ implements ISelectionProvider
 	 * @param obj The viewers selection object. 
 	 * @return The selection object that should be passed as selection.
 	 */
-	protected ElementType getSelectionObject(Object obj) {
+	protected ElementType getSelectionObject(Object obj)
+	{
+		// TODO maybe we should make this method abstract, since the tree holds almost always nodes and not the managed objects directly. Marco. 
 		return (ElementType) obj;
 	}
 	
@@ -379,8 +387,12 @@ implements ISelectionProvider
 	 * @return The (first) selected element or null.
 	 */
 	public ElementType getFirstSelectedElement() {
-		if (getTree().getSelectionCount() == 1) {
-			return getSelectionObject(getTree().getSelection()[0].getData());
+		if (getTree().getSelectionCount() >= 1) {
+			for (int idx = 0; idx < getTree().getSelectionCount(); ++idx) {
+				ElementType res = getSelectionObject(getTree().getSelection()[idx].getData());
+				if (res != null)
+					return res;
+			}
 		}
 		return null;
 	}
@@ -397,7 +409,9 @@ implements ISelectionProvider
 		TreeItem[] items = getTree().getSelection();
 		Set<ElementType> result = new HashSet<ElementType>();
 		for (int i = 0; i < items.length; i++) {
-			result.add(getSelectionObject(items[i].getData()));
+			ElementType e = getSelectionObject(items[i].getData());
+			if (e != null)
+				result.add(e);
 		}
 		return result;
 	}

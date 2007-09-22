@@ -13,8 +13,8 @@
    <element name="extension">
       <complexType>
          <sequence>
-            <element ref="searchResultProviderFactory" minOccurs="1" maxOccurs="unbounded"/>
-            <element ref="searchResultActionHandler" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="searchResultProviderFactory" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="searchResultActionHandler" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
