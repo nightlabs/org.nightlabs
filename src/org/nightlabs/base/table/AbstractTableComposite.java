@@ -142,6 +142,10 @@ implements ISelectionProvider
 	
 	private boolean sortColumns = true;
 	
+	public void setSortColumns(boolean sortColumns) {
+		this.sortColumns = sortColumns;
+	}
+	
 	/**
 	 * Calls refresh for the TableViewer.
 	 */
@@ -284,6 +288,34 @@ implements ISelectionProvider
 			items[i].setChecked(false);
 			if (elements.contains(items[i].getData()))
 				items[i].setChecked(true);
+		}
+	}
+	
+	/**
+	 * If the this table-composite's table was created with
+	 * the {@link SWT#CHECK} flag this method will
+	 * check all rows in the table
+	 */
+	public void checkAll() {
+		if ((table.getStyle() & SWT.CHECK) == 0)
+			return;
+		TableItem[] items = tableViewer.getTable().getItems();
+		for (int i = 0; i < items.length; i++) {
+			items[i].setChecked(true);
+		}
+	}
+	
+	/**
+	 * If the this table-composite's table was created with
+	 * the {@link SWT#CHECK} flag this method will
+	 * uncheck all rows in the table
+	 */
+	public void uncheckAll() {
+		if ((table.getStyle() & SWT.CHECK) == 0)
+			return;
+		TableItem[] items = tableViewer.getTable().getItems();
+		for (int i = 0; i < items.length; i++) {
+			items[i].setChecked(false);
 		}
 	}
 	
