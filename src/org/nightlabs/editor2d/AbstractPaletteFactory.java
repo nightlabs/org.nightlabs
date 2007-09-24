@@ -165,27 +165,26 @@ public abstract class AbstractPaletteFactory
   toolGroup.add(tool);
   palette.setDefaultEntry(tool);
   
-  // Add a marquee tool to the group
-  toolGroup.add(createMarqueeToolEntry());
+//  // Add a marquee tool to the group
+//  toolGroup.add(createMarqueeToolEntry());
 
   // Add a zoom tool to the group
   toolGroup.add(createZoomToolEntry());
   
-  // Add a (unnamed) separator to the group
-  toolGroup.add(new PaletteSeparator());
+//  // Add a (unnamed) separator to the group
+//  toolGroup.add(new PaletteSeparator());
 
   return toolGroup;
  }
-  
- protected ToolEntry createEditorSelectionToolEntry() 
- {
+ 
+ protected ToolEntry createEditorSelectionToolEntry() {
 	  return new EditorSelectionToolEntry();	 
  }
  
- protected ToolEntry createMarqueeToolEntry() 
- {
-	  return new MarqueeToolEntry();	 
- }
+// protected ToolEntry createMarqueeToolEntry() 
+// {
+//	  return new MarqueeToolEntry();	 
+// }
 
  protected ToolEntry createZoomToolEntry() 
  {

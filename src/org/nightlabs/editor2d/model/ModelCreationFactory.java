@@ -72,9 +72,9 @@ implements IModelCreationFactory
 		else if( targetClass.equals(EllipseDrawComponent.class)) {
 			result = factory.createEllipseDrawComponent();
 		}
-		else if( targetClass.equals(RootDrawComponent.class)) {
-		  result = factory.createRootDrawComponent();
-		}
+//		else if( targetClass.equals(RootDrawComponent.class)) {
+//		  result = factory.createRootDrawComponent();
+//		}
 		else if( targetClass.equals(EditorGuide.class)) {
 		  result = factory.createEditorGuide();
 		}

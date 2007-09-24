@@ -86,9 +86,9 @@ extends AbstractEditorPrintAction
 		}
 
 		if (pf != null)
-			printJob.setPrintable(getPrintable(PrintConstant.FIT_PAGE), pf);
+			printJob.setPrintable(getPrintable(getPrintConstant()), pf);
 		else
-			printJob.setPrintable(getPrintable(PrintConstant.FIT_PAGE));
+			printJob.setPrintable(getPrintable(getPrintConstant()));
 		try {
 			printJob.print();
 		} catch (Exception e) {
@@ -96,4 +96,7 @@ extends AbstractEditorPrintAction
 		}
 	}
 
+	protected PrintConstant getPrintConstant() {
+		return PrintConstant.FIT_ALL;
+	}
 }

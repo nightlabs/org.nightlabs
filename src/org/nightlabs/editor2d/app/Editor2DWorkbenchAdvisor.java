@@ -34,7 +34,6 @@ import org.nightlabs.editor2d.EditorPerspective;
 public class Editor2DWorkbenchAdvisor 
 extends AbstractWorkbenchAdvisor 
 {
-
 	public Editor2DWorkbenchAdvisor() {
 		super();		
 	}

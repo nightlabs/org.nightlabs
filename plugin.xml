@@ -78,6 +78,7 @@
          point="org.nightlabs.base.editorfilefilter">
       <editorFileFilter pattern="org\.nightlabs.*"/>
    </extension>
+<!--   
    <extension
          point="org.nightlabs.base.newfileaction">
       <action
@@ -89,6 +90,7 @@
             id="%category.name"
             name="%category.name"/>
    </extension>
+-->   
    <extension
          point="org.nightlabs.base.editor2perspective">
       <registry
@@ -134,11 +136,6 @@
             name="%command.showFigureToolTip.name"/>
       <command
             categoryId="org.nightlabs.editor2d"
-            description="%command.showStatusLine.description"
-            id="org.nightlabs.editor2d.showStatusLine"
-            name="%command.showStatusLine.name"/>
-      <command
-            categoryId="org.nightlabs.editor2d"
             description="%command.zoomSelection.description"
             id="org.nightlabs.editor2d.zoomSelection"
             name="%command.zoomSelection.name"/>
@@ -156,6 +153,12 @@
             id="org.nightlabs.editor2d"
             name="%command.context.editor2d.name"
             parentId="org.eclipse.ui.contexts.window"/>
+      <command
+            categoryId="org.nightlabs.editor2d"
+            description="%command.zoomPage.description"
+            id="org.nightlabs.editor2d.zoomPage"
+            name="%command.zoomPage.name">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -166,31 +169,27 @@
       <key
             commandId="org.nightlabs.editor2d.editShape"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+E"/>
+            sequence="CTRL+ALT+E"/>
       <key
             commandId="org.nightlabs.editor2d.orderOneUp"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+Up"/>
+            sequence="CTRL+ARROW_UP"/>
       <key
             commandId="org.nightlabs.editor2d.orderOneDown"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+Down"/>
+            sequence="CTRL+ARROW_DOWN"/>
       <key
             commandId="org.nightlabs.editor2d.orderToLocaFront"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+Shift+Up"/>
+            sequence="CTRL+Shift+ARROW_UP"/>
       <key
             commandId="org.nightlabs.editor2d.orderToLocalBack"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+Shift+Down"/>
+            sequence="CTRL+Shift+ARROW_DOWN"/>
       <key
             commandId="org.nightlabs.editor2d.showFigureToolTip"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+Shift+T"/>
-      <key
-            commandId="org.nightlabs.editor2d.showStatusLine"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+Shift+S"/>
       <key
             commandId="org.nightlabs.editor2d.zoomSelection"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
@@ -198,7 +197,12 @@
       <key
             commandId="org.nightlabs.editor2d.zoomAll"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+Shift+A"/>
+            sequence="CTRL+Alt+A"/>
+      <key
+            commandId="org.nightlabs.editor2d.zoomPage"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="CTRL+Alt+P">
+      </key>
    </extension>
    
    <extension

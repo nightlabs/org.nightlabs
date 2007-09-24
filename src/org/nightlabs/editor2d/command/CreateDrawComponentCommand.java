@@ -46,8 +46,7 @@ extends Command
 	/** the bounds of the created drawComponent **/
 	protected Rectangle rect;
 	
-	public CreateDrawComponentCommand() 
-	{
+	public CreateDrawComponentCommand() {
 	  super(Messages.getString("org.nightlabs.editor2d.command.CreateDrawComponentCommand.label"));	   //$NON-NLS-1$
 	}
 

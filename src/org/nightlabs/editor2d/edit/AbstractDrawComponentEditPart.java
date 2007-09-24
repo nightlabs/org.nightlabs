@@ -324,7 +324,11 @@ implements EditorRequestConstants
 			boolean template = ((Boolean)evt.getNewValue());
 			setContains(!template);
 			return;
-		} 
+		}
+		else if (propertyName.equals(DrawComponent.PROP_VISIBLE)) {
+			refreshVisuals();
+			return;
+		} 		
 	}
 	  
   /**

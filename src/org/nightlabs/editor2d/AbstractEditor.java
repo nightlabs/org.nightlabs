@@ -155,7 +155,6 @@ import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.impl.LayerImpl;
 import org.nightlabs.editor2d.outline.EditorOutlinePage;
 import org.nightlabs.editor2d.outline.filter.FilterManager;
-import org.nightlabs.editor2d.outline.filter.NameProvider;
 import org.nightlabs.editor2d.page.DocumentProperties;
 import org.nightlabs.editor2d.page.DocumentPropertiesRegistry;
 import org.nightlabs.editor2d.preferences.Preferences;
@@ -226,12 +225,20 @@ extends J2DGraphicalEditorWithFlyoutPalette
 		return unitManager;
 	}
 
-	protected abstract RootDrawComponent createRootDrawComponent();    
+//	protected abstract RootDrawComponent createRootDrawComponent();    
+	protected RootDrawComponent createRootDrawComponent() {
+		RootDrawComponent root = getModelFactory().createRootDrawComponent(false);
+		root.setNameProvider(getNameProvider());
+		getModelFactory().validateRoot(root);
+		return root;
+	}
+	
 	private RootDrawComponent root = null;  
 	public RootDrawComponent getRootDrawComponent() 
 	{
 		if (root == null) {
 			root = createRootDrawComponent();
+//			root.setNameProvider(getNameProvider());
 		}      
 		return root;
 	}
@@ -291,7 +298,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	protected abstract NameProvider createNameProvider();
 
 	private NameProvider nameProvider = null;
-	public NameProvider getFilterNameProvider() {
+	public NameProvider getNameProvider() {
 		if (nameProvider == null)
 			nameProvider = createNameProvider();
 		return nameProvider;
@@ -319,7 +326,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	public AbstractEditor() 
 	{
 		init();
-		filterMan = new FilterManager(getFilterNameProvider()); 
+		filterMan = new FilterManager(getNameProvider()); 
 //		initJ2DRegistry();
 	}
 	

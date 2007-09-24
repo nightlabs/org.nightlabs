@@ -30,17 +30,17 @@ package org.nightlabs.editor2d.util;
 import org.nightlabs.editor2d.EllipseDrawComponent;
 import org.nightlabs.editor2d.GroupDrawComponent;
 import org.nightlabs.editor2d.ImageDrawComponent;
+import org.nightlabs.editor2d.Layer;
 import org.nightlabs.editor2d.LineDrawComponent;
+import org.nightlabs.editor2d.NameProvider;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RectangleDrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
-import org.nightlabs.editor2d.outline.filter.NameProvider;
 import org.nightlabs.editor2d.resource.Messages;
 
 public class EditorNameProvider
 implements NameProvider
 {
-
 	public EditorNameProvider() {
 		super();
 	}
@@ -73,6 +73,9 @@ implements NameProvider
 		}		
 		else if (GroupDrawComponent.class.isAssignableFrom(c)) {
 			return Messages.getString("org.nightlabs.editor2d.util.EditorNameProvider.group"); //$NON-NLS-1$
+		}				
+		else if (Layer.class.isAssignableFrom(c)) {
+			return Messages.getString("org.nightlabs.editor2d.util.EditorNameProvider.layer"); //$NON-NLS-1$
 		}				
 		
 		return Messages.getString("org.nightlabs.editor2d.util.EditorNameProvider.object"); //$NON-NLS-1$

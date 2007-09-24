@@ -32,7 +32,6 @@ import org.eclipse.gef.EditPartFactory;
 import org.nightlabs.editor2d.edit.GraphicalEditPartFactory;
 import org.nightlabs.editor2d.edit.tree.TreePartFactory;
 import org.nightlabs.editor2d.impl.Editor2DFactoryImpl;
-import org.nightlabs.editor2d.outline.filter.NameProvider;
 import org.nightlabs.editor2d.util.EditorNameProvider;
 
 
@@ -74,13 +73,13 @@ extends AbstractEditor
 		return new Editor2DFactoryImpl();
 	}
 	
-	/**
-	 * @see org.nightlabs.editor2d.AbstractEditor#createRootDrawComponent()
-	 */    
-	public RootDrawComponent createRootDrawComponent() {
-		RootDrawComponent root = getModelFactory().createRootDrawComponent();		
-    return root;
-  }
+//	/**
+//	 * @see org.nightlabs.editor2d.AbstractEditor#createRootDrawComponent()
+//	 */    
+//	public RootDrawComponent createRootDrawComponent() {
+//		RootDrawComponent root = getModelFactory().createRootDrawComponent();		
+//    return root;
+//  }
 	
 	/**
 	 * @see org.nightlabs.editor2d.AbstractEditor#createPaletteFactory()
