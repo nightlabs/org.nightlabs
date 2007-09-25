@@ -59,6 +59,7 @@ import org.nightlabs.base.action.INewFileAction;
 import org.nightlabs.base.action.NewFileRegistry;
 import org.nightlabs.base.action.OpenFileAction;
 import org.nightlabs.base.action.ReOpenFileAction;
+import org.nightlabs.base.action.UpdateAction;
 import org.nightlabs.base.config.RecentFileCfMod;
 import org.nightlabs.base.extensionpoint.EPProcessorException;
 import org.nightlabs.base.resource.Messages;
@@ -130,7 +131,8 @@ extends ActionBarAdvisor
 	// Help-Menu
 	protected ActionFactory.IWorkbenchAction introAction; 
 	protected ActionFactory.IWorkbenchAction helpAction;
-	protected ActionFactory.IWorkbenchAction updateAction;
+//	protected ActionFactory.IWorkbenchAction updateAction;
+	protected IAction updateAction;
 	protected ActionFactory.IWorkbenchAction aboutAction;
 	
 	protected ShowKeyAssistHandler keyAssistHandler;
@@ -188,7 +190,8 @@ extends ActionBarAdvisor
 			openAction = new OpenFileAction();
 		if (menuBarItems.contains(ActionBarItem.RecentFiles))
 		{
-			openAction.addPropertyChangeListener(historyFileListener);
+			if (openAction != null)
+				openAction.addPropertyChangeListener(historyFileListener);
 			recentFilesMenu = new MenuManager(Messages.getString("org.nightlabs.base.app.DefaultActionBuilder.recentFilesMenu.text"), NLWorkbenchActionConstants.M_RECENT_FILES); //$NON-NLS-1$
 			recentFilesMenu.add(new GroupMarker(IWorkbenchActionConstants.HISTORY_GROUP));			
 		}
@@ -254,6 +257,8 @@ extends ActionBarAdvisor
 			// TODO: find out how to hook updateAction
 		}
 
+		// Commented to avoid "ordinary" update action
+//		updateAction = new UpdateAction();
 		aboutAction = ActionFactory.ABOUT.create(window);
 		actions.put(ActionBarItem.About, aboutAction);
 		
@@ -428,7 +433,6 @@ extends ActionBarAdvisor
 		helpMenu = new MenuManager(Messages.getString("org.nightlabs.base.app.DefaultActionBuilder.helpMenu.text"),  //$NON-NLS-1$
 				IWorkbenchActionConstants.M_HELP);
 		menuBar.add(helpMenu);
-//		helpMenu.add(introAction);
 		if (menuBarItems.contains(ActionBarItem.Help)) {
 			helpMenu.add(helpAction);
 			helpMenu.add(new Separator());
@@ -440,6 +444,8 @@ extends ActionBarAdvisor
 			helpMenu.add(new Separator());			
 		}
 		
+		if (updateAction != null)
+			helpMenu.add(updateAction);
 		helpMenu.add(aboutAction);
 		
 		try {

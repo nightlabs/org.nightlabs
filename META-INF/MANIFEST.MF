@@ -200,7 +200,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.ui.forms;visibility:=reexport,
  org.eclipse.ui.views;visibility:=reexport,
- org.eclipse.core.resources;visibility:=reexport
+ org.eclipse.core.resources;visibility:=reexport,
+ org.eclipse.update.ui
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: org.nightlabs.jfire.base.j2ee
