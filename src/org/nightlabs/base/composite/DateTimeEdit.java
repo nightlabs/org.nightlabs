@@ -44,7 +44,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.nightlabs.base.util.RCPUtil;
 import org.nightlabs.l10n.DateFormatProvider;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.l10n.DateParseException;
@@ -98,7 +97,7 @@ public class DateTimeEdit extends XComposite
 	/**
 	 * @param parent The SWT parent.
 	 * @param flags One of the "FLAGS_"-constants in {@link DateFormatter} - if needed, combined with {@link #FLAGS_SHOW_ACTIVE_CHECK_BOX}.
-	 * @param date The current date to display. Must not be <tt>null</tt>.
+	 * @param date The current date to display. May be <code>null</code> to indicate that no initial date should be set.
 	 * @param caption Either <tt>null</tt> or a text that should be displayed above the date-input.
 	 */
 	public DateTimeEdit(Composite parent, long flags, Date date, String caption)
@@ -150,7 +149,10 @@ public class DateTimeEdit extends XComposite
 		text.addModifyListener(textModifyListener);
 		text.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent e) {
-				setTimestamp(DateTimeEdit.this.date.getTime());
+				if (text.getText().equals(""))
+					setDate(null);
+				else if (DateTimeEdit.this.date != null)
+					setTimestamp(DateTimeEdit.this.date.getTime());
 			}
 		});
 
@@ -262,15 +264,23 @@ public class DateTimeEdit extends XComposite
 	 */
 	public void setTimestamp(long timestamp)
 	{
-		date.setTime(timestamp);
+		if (date == null)
+			date = new Date(timestamp);
+		else
+			date.setTime(timestamp);
+		
 		text.setText(DateFormatter.formatDate(date, flags));
 		this.dateParseException = null;
 	}
 	/**
-	 * @return Returns the timestamp.
+	 * @return Returns the timestamp
+	 * @throws NullPointerException if no date is set
 	 */
 	public long getTimestamp()
 	{
+		if (date == null)
+			throw new NullPointerException("No date set.");
+		
 		return date.getTime();
 	}
 
@@ -285,15 +295,13 @@ public class DateTimeEdit extends XComposite
 	}
 
 	/**
-	 * @param date The date to set.
+	 * @param date The date to set. May be null to indicate that no date should be set.
 	 */
 	public void setDate(Date date)
 	{
-		if (date == null)
-			throw new NullPointerException("date must not be null!"); //$NON-NLS-1$
-
 		this.date = date;
-		text.setText(DateFormatter.formatDate(date, flags));
+		if (date != null)
+			text.setText(DateFormatter.formatDate(date, flags));
 		this.dateParseException = null;
 	}
 	/**
@@ -303,7 +311,7 @@ public class DateTimeEdit extends XComposite
 	{
 		return date;
 	}
-
+	
 	/**
 	 * @return Returns the flags.
 	 */

@@ -56,7 +56,10 @@ extends Dialog
 		super(parentShell);
 		this.dateTimeEdit = dateTimeEdit;
 		this.calendar = Calendar.getInstance();
-		this.calendar.setTime(dateTimeEdit.getDate());
+		Date date = dateTimeEdit.getDate();
+		if (date == null)
+			date = new Date();
+		this.calendar.setTime(date);
 		this.initialLocation = initialLocation;
 	}
 
