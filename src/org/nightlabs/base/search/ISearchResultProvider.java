@@ -28,6 +28,11 @@ package org.nightlabs.base.search;
 import java.util.Collection;
 
 /**
+ * Interface which describes a contract for providing search results
+ * Implementations get a search string and must return a Collection of
+ * objects
+ * Instances of ISearchResultProvider are created by an {@link ISearchResultProviderFactory}
+ * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */

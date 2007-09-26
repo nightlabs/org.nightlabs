@@ -31,6 +31,9 @@ import org.nightlabs.i18n.I18nText;
 
 
 /**
+ * Factory which creates instances of {@link ISearchResultProvider}
+ * and holds the describing data like name, image etc 
+ * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  */
 public interface ISearchResultProviderFactory

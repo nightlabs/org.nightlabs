@@ -38,21 +38,6 @@ public class SearchResultProviderRegistryUseCase {
 	public SearchResultProviderRegistryUseCase() {
 	}
  
-//	private String currentSearchResultProviderFactoryID = null;
-//	/**
-//	 * @return the currentSearchResultProviderFactoryID
-//	 */
-//	public String getCurrentSearchResultProviderFactoryID() {
-//		return currentSearchResultProviderFactoryID;
-//	}
-//	/**
-//	 * @param currentSearchResultProviderFactoryID the currentSearchResultProviderFactoryID to set
-//	 */
-//	public void setCurrentSearchResultProviderFactoryID(
-//			String currentSearchResultProviderFactoryID) {
-//		this.currentSearchResultProviderFactoryID = currentSearchResultProviderFactoryID;
-//	}
-
 	private ISearchResultProviderFactory currentSearchResultProviderFactory = null;
 	/**
 	 * @return the currentSearchResultProviderFactory

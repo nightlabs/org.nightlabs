@@ -36,12 +36,11 @@ import org.nightlabs.base.editor.RestorableSectionPart;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
+ * @deprecated is never used
  */
 public abstract class AbstractEntitySection<T> 
 extends RestorableSectionPart 
 {
-
 	public AbstractEntitySection(IFormPage page, Composite parent, int style, String sectionText) {
 		super(parent, page.getEditor().getToolkit(), style);
 		init(page, sectionText);

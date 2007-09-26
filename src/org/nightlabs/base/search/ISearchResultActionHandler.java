@@ -27,6 +27,9 @@ package org.nightlabs.base.search;
 
 
 /**
+ * An ISearchResultActionHandler can perform a certain action
+ * with the search results provided by an {@link ISearchResultProvider} 
+ *  
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */

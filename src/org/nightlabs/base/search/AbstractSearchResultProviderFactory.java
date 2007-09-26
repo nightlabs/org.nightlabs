@@ -33,8 +33,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.IPerspectiveDescriptor;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.util.RCPUtil;
@@ -74,9 +72,6 @@ implements ISearchResultProviderFactory
 
 	public ISearchResultActionHandler getActionHandler() 
 	{
-//		IPerspectiveDescriptor perspectiveDescriptor = 
-//			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getPerspective();
-//		ISearchResultActionHandler actionHandler = perspectiveID2ActionHandler.get(perspectiveDescriptor.getId());
 		String perspectiveID = RCPUtil.getActivePerspectiveID();			
 		ISearchResultActionHandler actionHandler = perspectiveID2ActionHandler.get(perspectiveID);
 		if (actionHandler == null) {
