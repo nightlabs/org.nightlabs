@@ -42,36 +42,48 @@ extends Action implements IUpdateActionOrContributionItem
 	public static final String ID = InheritanceAction.class.getName();
 	
 	public InheritanceAction() {
-		super();
+		super("", Action.AS_CHECK_BOX);
 		setId(ID);
 		setToolTipText(Messages.getString("org.nightlabs.base.action.InheritanceAction.toolTipText")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				NLBasePlugin.getDefault(), InheritanceToggleButton.class, InheritanceToggleButton.IMAGE_SUFFIX_UNLINKED));
 	}
 
-	/**
-	 * @param text
-	 * @param style
-	 */
-	public InheritanceAction(String text, int style) {
-		super(text, style);
-	}
+//	/**
+//	 * @param text
+//	 * @param style
+//	 */
+//	public InheritanceAction(String text, int style) {
+//		super(text, style);
+//	}
 
-	private boolean selection = false;
+//	private boolean selection = false;
 
-	/**
-	 * @return the selection
-	 */
-	public boolean isSelection() {
-		return selection;
-	}
+//	/**
+//	 * @deprecated Use {@link #isChecked()} instead!
+//	 */
+//	public boolean isSelection() {
+//		return isChecked();
+////		return selection;
+//	}
+//
+//	/**
+//	 * @deprecated Use {@link #setChecked(boolean)} instead!
+//	 */
+//	public void setSelection(boolean selection) {
+//		setChecked(selection);
+////		this.selection = selection;
+////		if (selection)
+////			setImageDescriptor(SharedImages.getSharedImageDescriptor(NLBasePlugin.getDefault(), InheritanceToggleButton.class, InheritanceToggleButton.IMAGE_SUFFIX_LINKED));
+////		else
+////			setImageDescriptor(SharedImages.getSharedImageDescriptor(NLBasePlugin.getDefault(), InheritanceToggleButton.class, InheritanceToggleButton.IMAGE_SUFFIX_UNLINKED));
+//	}
 
-	/**
-	 * @param selection the selection to set
-	 */
-	public void setSelection(boolean selection) {
-		this.selection = selection;
-		if (selection)
+	@Override
+	public void setChecked(boolean checked)
+	{
+		super.setChecked(checked);
+		if (checked)
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(NLBasePlugin.getDefault(), InheritanceToggleButton.class, InheritanceToggleButton.IMAGE_SUFFIX_LINKED));
 		else
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(NLBasePlugin.getDefault(), InheritanceToggleButton.class, InheritanceToggleButton.IMAGE_SUFFIX_UNLINKED));
