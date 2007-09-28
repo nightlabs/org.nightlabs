@@ -117,8 +117,11 @@ public abstract class FileSelectionComposite
 					String selectedFile = fileDialog.open();
 					if (selectedFile != null) {
 						fileTextForFolders.setText(selectedFile);
-						if (fileTextForFiles != null)
+						if (fileTextForFiles != null) {
+							updating = true;
 							fileTextForFiles.setText("");
+							updating = false;
+						}
 					}
 				}
 			});
@@ -154,8 +157,11 @@ public abstract class FileSelectionComposite
 					String selectedFile = fileDialog.open();
 					if (selectedFile != null) {
 						fileTextForFiles.setText(selectedFile);
-						if (fileTextForFolders != null)
+						if (fileTextForFolders != null) {
+							updating = true;
 							fileTextForFolders.setText("");
+							updating = false;
+						}
 					}
 				}
 			});
