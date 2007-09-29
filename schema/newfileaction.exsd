@@ -19,9 +19,9 @@ Optional you can declare an category to which this action should be added
          </documentation>
       </annotation>
       <complexType>
-         <sequence>
-            <element ref="action"/>
-            <element ref="category"/>
+         <sequence minOccurs="0" maxOccurs="unbounded">
+            <element ref="action" minOccurs="0" maxOccurs="1"/>
+            <element ref="category" minOccurs="0" maxOccurs="1"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
