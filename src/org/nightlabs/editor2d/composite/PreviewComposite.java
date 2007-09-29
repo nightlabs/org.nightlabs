@@ -1,5 +1,5 @@
 /**
- * <p> Project: org.nightlabs.ipanema.sun </p>
+ * <p> Project: org.nightlabs.crossticket.smd.ui </p>
  * <p> Copyright: Copyright (c) 2005 </p>
  * <p> Company: NightLabs GmbH (Germany) </p>
  * <p> Creation Date: 10.08.2005 </p>
