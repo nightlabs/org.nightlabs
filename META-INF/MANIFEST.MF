@@ -49,7 +49,7 @@ Export-Package: org.nightlabs.editor2d,
  org.nightlabs.editor2d.views
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
- org.nightlabs.base,
+ org.nightlabs.base.ui,
  org.holongate.j2d;visibility:=reexport,
  org.nightlabs.editor2d.viewer;visibility:=reexport,
  org.eclipse.draw2d,
