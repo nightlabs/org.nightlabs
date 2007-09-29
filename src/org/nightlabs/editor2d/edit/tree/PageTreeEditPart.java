@@ -27,8 +27,8 @@ package org.nightlabs.editor2d.edit.tree;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.nightlabs.base.resource.SharedImages;
-import org.nightlabs.base.resource.SharedImages.ImageFormat;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.model.PagePropertySource;

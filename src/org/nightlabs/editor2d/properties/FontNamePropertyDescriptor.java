@@ -27,7 +27,7 @@
 
 package org.nightlabs.editor2d.properties;
 
-import org.nightlabs.base.property.ComboBoxPropertyDescriptor;
+import org.nightlabs.base.ui.property.ComboBoxPropertyDescriptor;
 import org.nightlabs.util.FontUtil;
 
 public class FontNamePropertyDescriptor 

@@ -75,14 +75,14 @@
    </extension>
 
    <extension
-         point="org.nightlabs.base.editorfilefilter">
+         point="org.nightlabs.base.ui.editorfilefilter">
       <editorFileFilter pattern="org\.nightlabs.*"/>
    </extension>
 <!--   
    <extension
-         point="org.nightlabs.base.newfileaction">
+         point="org.nightlabs.base.ui.newfileaction">
       <action
-            class="org.nightlabs.base.action.NewFileAction"
+            class="org.nightlabs.base.ui.action.NewFileAction"
             fileExtension="e2d"
             title="%action.new.text"
             tooltip="%action.new.tooltip"/>
@@ -92,7 +92,7 @@
    </extension>
 -->   
    <extension
-         point="org.nightlabs.base.editor2perspective">
+         point="org.nightlabs.base.ui.editor2perspective">
       <registry
             editorID="org.nightlabs.editor2d.Editor"
             perspectiveID="org.nightlabs.editor2d.EditorPerspective"/>
@@ -257,7 +257,7 @@
             name="%preferences.document.properties.title"/>
    </extension>
    <extension
-         point="org.nightlabs.base.printerConfiguration">
+         point="org.nightlabs.base.ui.printerConfiguration">
       <printerUseCase
             description="Prints of Graphics produced by the editor 2D framework"
             id="PrinterUseCase-Editor2D"

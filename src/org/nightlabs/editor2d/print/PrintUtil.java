@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.base - NightLabs Eclipse utilities                            *
+ * org.nightlabs.base.ui - NightLabs Eclipse utilities                            *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *

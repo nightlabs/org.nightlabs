@@ -33,8 +33,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.i18n.ResolutionUnitEP;
+import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.i18n.ResolutionUnitEP;
 import org.nightlabs.i18n.unit.resolution.IResolutionUnit;
 import org.nightlabs.i18n.unit.resolution.ResolutionUnitRegistry;
 

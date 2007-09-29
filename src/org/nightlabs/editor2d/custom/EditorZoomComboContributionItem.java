@@ -48,7 +48,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbenchPart;
-import org.nightlabs.base.action.XContributionItem;
+import org.nightlabs.base.ui.action.XContributionItem;
 import org.nightlabs.editor2d.RootDrawComponent;
 import org.nightlabs.i18n.unit.resolution.DPIResolutionUnit;
 import org.nightlabs.i18n.unit.resolution.IResolutionUnit;

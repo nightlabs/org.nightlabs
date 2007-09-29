@@ -25,7 +25,7 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.actions;
 
-import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.resource.Messages;

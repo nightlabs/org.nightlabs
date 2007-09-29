@@ -30,7 +30,7 @@ import java.awt.Shape;
 import org.apache.log4j.Logger;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.swt.graphics.Path;
-import org.nightlabs.base.util.ColorUtil;
+import org.nightlabs.base.ui.util.ColorUtil;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent.LineStyle;

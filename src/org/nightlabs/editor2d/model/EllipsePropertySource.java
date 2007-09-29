@@ -30,7 +30,7 @@ package org.nightlabs.editor2d.model;
 import java.util.List;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.nightlabs.base.property.IntPropertyDescriptor;
+import org.nightlabs.base.ui.property.IntPropertyDescriptor;
 import org.nightlabs.editor2d.EllipseDrawComponent;
 import org.nightlabs.editor2d.resource.Messages;
 

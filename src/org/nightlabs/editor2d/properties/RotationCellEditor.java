@@ -26,7 +26,7 @@
 package org.nightlabs.editor2d.properties;
 
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.celleditor.DoubleCellEditor;
+import org.nightlabs.base.ui.celleditor.DoubleCellEditor;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

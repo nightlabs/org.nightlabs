@@ -26,7 +26,7 @@
 package org.nightlabs.editor2d.print;
 
 import org.apache.log4j.Logger;
-import org.nightlabs.base.print.PrinterInterfaceManager;
+import org.nightlabs.base.ui.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.resource.Messages;
 

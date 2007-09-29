@@ -55,9 +55,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.holongate.j2d.IPaintable;
 import org.holongate.j2d.J2DCanvas;
-import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.composite.XComposite.LayoutMode;
-import org.nightlabs.base.dialog.CenteredDialog;
+import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.j2dswt.DrawComponentPaintable;
@@ -379,7 +379,7 @@ extends CenteredDialog
 
 		Rectangle bounds = getBounds();
 		dcBounds = GeomUtil.translateToOrigin(bounds);				
-		canvasBounds = org.nightlabs.base.util.GeomUtil.toAWTRectangle(canvas.getClientArea());										
+		canvasBounds = org.nightlabs.base.ui.util.GeomUtil.toAWTRectangle(canvas.getClientArea());										
 		Rectangle shrinkedCanvasBounds = new Rectangle(0, 0, 
 				(int)(pageFormat.getImageableWidth() / canvasScaleFactor), 
 				(int)(pageFormat.getImageableHeight() / canvasScaleFactor) );		
@@ -429,7 +429,7 @@ extends CenteredDialog
 		{
 			GC gc = e.gc; 
 			Transform transform = new Transform(gc.getDevice());			
-			Rectangle canvasBounds = org.nightlabs.base.util.GeomUtil.toAWTRectangle(canvas.getClientArea());			
+			Rectangle canvasBounds = org.nightlabs.base.ui.util.GeomUtil.toAWTRectangle(canvas.getClientArea());			
 			Point2D scales = GeomUtil.calcScale(pageRectangle, canvasBounds);			
 			double gcScale = Math.min(scales.getX(), scales.getY());											
 			transform.scale((float)gcScale, (float)gcScale);

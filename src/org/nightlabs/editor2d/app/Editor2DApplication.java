@@ -26,8 +26,8 @@
 package org.nightlabs.editor2d.app;
 
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.base.app.AbstractApplication;
-import org.nightlabs.base.app.AbstractWorkbenchAdvisor;
+import org.nightlabs.base.ui.app.AbstractApplication;
+import org.nightlabs.base.ui.app.AbstractWorkbenchAdvisor;
 import org.nightlabs.editor2d.resource.Messages;
 
 /**

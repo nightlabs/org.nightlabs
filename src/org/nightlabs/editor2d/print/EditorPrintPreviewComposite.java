@@ -36,8 +36,8 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.holongate.j2d.J2DCanvas;
-import org.nightlabs.base.print.PrintPreviewComposite;
-import org.nightlabs.base.util.ColorUtil;
+import org.nightlabs.base.ui.print.PrintPreviewComposite;
+import org.nightlabs.base.ui.util.ColorUtil;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.j2dswt.PrintPreviewPaintable;
 import org.nightlabs.editor2d.util.GeomUtil;
@@ -144,7 +144,7 @@ extends PrintPreviewComposite
 	}
 	
 	protected Rectangle getCanvasBounds() {
-		return org.nightlabs.base.util.GeomUtil.toAWTRectangle(getJ2DCanvas().getClientArea());
+		return org.nightlabs.base.ui.util.GeomUtil.toAWTRectangle(getJ2DCanvas().getClientArea());
 	}
 		
 	private double resolutionScale = 1.0;
@@ -253,7 +253,7 @@ extends PrintPreviewComposite
 	}
  		
 	private Rectangle scaleRect(Rectangle rect, double scaleX, double scaleY, boolean onlyDimension) {
-		return org.nightlabs.base.util.GeomUtil.scaleRect(rect, scaleX, scaleY, onlyDimension);
+		return org.nightlabs.base.ui.util.GeomUtil.scaleRect(rect, scaleX, scaleY, onlyDimension);
 	}
 	
 //	@Override

@@ -60,7 +60,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageBook;
 import org.holongate.j2d.J2DCanvas;
-import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorContextMenuProvider;
 import org.nightlabs.editor2d.EditorPlugin;

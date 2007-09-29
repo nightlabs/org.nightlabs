@@ -33,8 +33,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.composite.XComposite;
-import org.nightlabs.base.print.page.PredefinedPageEP;
+import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.print.page.PredefinedPageEP;
 import org.nightlabs.print.page.IPredefinedPage;
 import org.nightlabs.print.page.PredefinedPageRegistry;
 

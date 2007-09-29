@@ -29,7 +29,7 @@ package org.nightlabs.editor2d.properties;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.nightlabs.base.util.ImageUtil;
+import org.nightlabs.base.ui.util.ImageUtil;
 
 public class LineStyleLabelProvider 
 extends LabelProvider 

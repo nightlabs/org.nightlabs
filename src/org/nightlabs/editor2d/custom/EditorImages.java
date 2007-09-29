@@ -31,7 +31,7 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 
-import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.editor2d.EditorPlugin;
 
 public class EditorImages 

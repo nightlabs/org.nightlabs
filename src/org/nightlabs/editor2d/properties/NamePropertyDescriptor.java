@@ -29,9 +29,9 @@ package org.nightlabs.editor2d.properties;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.celleditor.XI18nTextCellEditor;
-import org.nightlabs.base.labelprovider.I18nTextLabelProvider;
-import org.nightlabs.base.property.XPropertyDescriptor;
+import org.nightlabs.base.ui.celleditor.XI18nTextCellEditor;
+import org.nightlabs.base.ui.labelprovider.I18nTextLabelProvider;
+import org.nightlabs.base.ui.property.XPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 
 public class NamePropertyDescriptor 

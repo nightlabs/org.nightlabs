@@ -25,7 +25,7 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.app;
 
-import org.nightlabs.base.app.AbstractWorkbenchAdvisor;
+import org.nightlabs.base.ui.app.AbstractWorkbenchAdvisor;
 import org.nightlabs.editor2d.EditorPerspective;
 
 /**

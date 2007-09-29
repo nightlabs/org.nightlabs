@@ -27,8 +27,8 @@ package org.nightlabs.editor2d.print;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.print.PageSetupComposite;
-import org.nightlabs.base.print.PrinterConfiguratorComposite;
+import org.nightlabs.base.ui.print.PageSetupComposite;
+import org.nightlabs.base.ui.print.PrinterConfiguratorComposite;
 import org.nightlabs.editor2d.DrawComponent;
 
 /**

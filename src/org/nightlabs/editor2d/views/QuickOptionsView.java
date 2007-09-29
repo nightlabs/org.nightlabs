@@ -47,7 +47,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.ViewPart;
-import org.nightlabs.base.form.NightlabsFormsToolkit;
+import org.nightlabs.base.ui.form.NightlabsFormsToolkit;
 import org.nightlabs.config.Config;
 import org.nightlabs.config.ConfigException;
 import org.nightlabs.editor2d.config.QuickOptionsConfigModule;

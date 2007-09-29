@@ -29,10 +29,10 @@ import java.util.List;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
-import org.nightlabs.base.property.CheckboxPropertyDescriptor;
-import org.nightlabs.base.property.ComboBoxPropertyDescriptor;
-import org.nightlabs.base.property.DoublePropertyDescriptor;
-import org.nightlabs.base.property.XTextPropertyDescriptor;
+import org.nightlabs.base.ui.property.CheckboxPropertyDescriptor;
+import org.nightlabs.base.ui.property.ComboBoxPropertyDescriptor;
+import org.nightlabs.base.ui.property.DoublePropertyDescriptor;
+import org.nightlabs.base.ui.property.XTextPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.PageDrawComponent;
 import org.nightlabs.editor2d.RootDrawComponent;

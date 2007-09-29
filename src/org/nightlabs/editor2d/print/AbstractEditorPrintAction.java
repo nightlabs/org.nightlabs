@@ -31,7 +31,7 @@ import java.awt.print.PrinterException;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 
-import org.nightlabs.base.print.PrinterInterfaceManager;
+import org.nightlabs.base.ui.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.actions.AbstractEditorAction;

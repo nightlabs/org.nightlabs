@@ -28,9 +28,9 @@ package org.nightlabs.editor2d.decorators;
 import org.eclipse.jface.resource.CompositeImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.nightlabs.base.resource.SharedImages;
-import org.nightlabs.base.resource.SharedImages.ImageDimension;
-import org.nightlabs.base.resource.SharedImages.ImageFormat;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
+import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.editor2d.EditorPlugin;
 
 /**

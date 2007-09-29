@@ -27,7 +27,7 @@ package org.nightlabs.editor2d.actions.zoom;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.nightlabs.base.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.editor2d.AbstractEditor;
 import org.nightlabs.editor2d.EditorPlugin;
 import org.nightlabs.editor2d.actions.AbstractEditorAction;

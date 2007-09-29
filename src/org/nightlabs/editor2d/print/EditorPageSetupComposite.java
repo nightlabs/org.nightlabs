@@ -29,8 +29,8 @@ import java.awt.print.PageFormat;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.print.PageSetupComposite;
-import org.nightlabs.base.print.PrintPreviewComposite;
+import org.nightlabs.base.ui.print.PageSetupComposite;
+import org.nightlabs.base.ui.print.PrintPreviewComposite;
 import org.nightlabs.editor2d.DrawComponent;
 
 /**
