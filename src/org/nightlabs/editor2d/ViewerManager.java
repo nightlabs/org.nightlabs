@@ -56,7 +56,7 @@ import org.nightlabs.editor2d.render.RenderConstants;
 import org.nightlabs.editor2d.render.Renderer;
 import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.util.EditorUtil;
-import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
+import org.nightlabs.editor2d.viewer.ui.descriptor.DescriptorManager;
 
 public class ViewerManager 
 {

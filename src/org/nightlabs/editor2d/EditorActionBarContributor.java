@@ -81,8 +81,8 @@ import org.nightlabs.editor2d.print.EditorPrintAction;
 import org.nightlabs.editor2d.print.EditorPrintSetupAction;
 import org.nightlabs.editor2d.render.RenderModeManager;
 import org.nightlabs.editor2d.resource.Messages;
-import org.nightlabs.editor2d.viewer.action.RenderModeContributionItem;
-import org.nightlabs.editor2d.viewer.render.RendererRegistry;
+import org.nightlabs.editor2d.viewer.ui.action.RenderModeContributionItem;
+import org.nightlabs.editor2d.viewer.ui.render.RendererRegistry;
 
 
 public class EditorActionBarContributor 

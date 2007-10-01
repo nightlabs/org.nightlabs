@@ -32,7 +32,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.ImageDrawComponent;
-import org.nightlabs.editor2d.viewer.util.AWTSWTUtil;
+import org.nightlabs.editor2d.viewer.ui.util.AWTSWTUtil;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

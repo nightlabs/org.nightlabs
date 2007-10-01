@@ -206,7 +206,7 @@
    </extension>
    
    <extension
-         point="org.nightlabs.editor2d.viewer.renderModeRegistry">
+         point="org.nightlabs.editor2d.viewer.ui.renderModeRegistry">
       <registry
             drawComponentClass="org.nightlabs.editor2d.ShapeDrawComponent"
             mode="default"

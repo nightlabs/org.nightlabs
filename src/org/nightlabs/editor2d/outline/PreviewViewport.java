@@ -31,7 +31,7 @@ import java.beans.PropertyChangeListener;
 
 import org.eclipse.draw2d.Viewport;
 import org.nightlabs.editor2d.util.J2DUtil;
-import org.nightlabs.editor2d.viewer.IViewport;
+import org.nightlabs.editor2d.viewer.ui.IViewport;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>

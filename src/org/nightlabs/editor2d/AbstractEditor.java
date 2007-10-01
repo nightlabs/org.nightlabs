@@ -167,8 +167,8 @@ import org.nightlabs.editor2d.resource.Messages;
 import org.nightlabs.editor2d.rulers.EditorRulerProvider;
 import org.nightlabs.editor2d.unit.DotUnit;
 import org.nightlabs.editor2d.unit.UnitConstants;
-import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
-import org.nightlabs.editor2d.viewer.render.RendererRegistry;
+import org.nightlabs.editor2d.viewer.ui.descriptor.DescriptorManager;
+import org.nightlabs.editor2d.viewer.ui.render.RendererRegistry;
 import org.nightlabs.i18n.unit.IUnit;
 import org.nightlabs.i18n.unit.UnitRegistry;
 import org.nightlabs.i18n.unit.resolution.Resolution;
@@ -774,7 +774,7 @@ extends J2DGraphicalEditorWithFlyoutPalette
 	 * By Default this Method does nothing, but Inheritans can override this Method to add 
 	 * Descriptors for special classes to the DescriptorManager
 	 * 
-	 * @see DescriptorManager#addDescriptor(org.nightlabs.editor2d.viewer.descriptor.IDrawComponentDescriptor, Class) 
+	 * @see DescriptorManager#addDescriptor(org.nightlabs.editor2d.viewer.ui.descriptor.IDrawComponentDescriptor, Class) 
 	 */
 	protected void configureDescriptorManager() 
 	{

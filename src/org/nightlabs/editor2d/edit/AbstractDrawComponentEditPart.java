@@ -49,7 +49,7 @@ import org.nightlabs.editor2d.model.DrawComponentPropertySource;
 import org.nightlabs.editor2d.request.EditorRequestConstants;
 import org.nightlabs.editor2d.util.EditorUtil;
 import org.nightlabs.editor2d.util.J2DUtil;
-import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
+import org.nightlabs.editor2d.viewer.ui.descriptor.DescriptorManager;
 
 public abstract class AbstractDrawComponentEditPart 
 extends AbstractGraphicalEditPart

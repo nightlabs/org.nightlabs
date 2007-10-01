@@ -50,7 +50,7 @@ import org.nightlabs.editor2d.config.PreferencesConfigModule;
 import org.nightlabs.editor2d.figures.BufferedFreeformLayer;
 import org.nightlabs.editor2d.figures.OversizedBufferFreeformLayer;
 import org.nightlabs.editor2d.model.RootDrawComponentPropertySource;
-import org.nightlabs.editor2d.viewer.descriptor.DescriptorManager;
+import org.nightlabs.editor2d.viewer.ui.descriptor.DescriptorManager;
 
 public class RootDrawComponentEditPart 
 extends AbstractDrawComponentContainerEditPart

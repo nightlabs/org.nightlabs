@@ -34,7 +34,7 @@ import org.nightlabs.base.ui.util.ColorUtil;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent;
 import org.nightlabs.editor2d.ShapeDrawComponent.LineStyle;
-import org.nightlabs.editor2d.viewer.util.AWTSWTUtil;
+import org.nightlabs.editor2d.viewer.ui.util.AWTSWTUtil;
 
 /**
  * <p> Author: Daniel.Mazurek[AT]NightLabs[DOT]de </p>
