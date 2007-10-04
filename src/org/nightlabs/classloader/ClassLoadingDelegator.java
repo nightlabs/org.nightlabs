@@ -16,6 +16,7 @@ import java.net.URL;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.security.cert.Certificate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -214,8 +215,14 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 	/**
 	 * Instances either of {@link ClassLoaderDelegate} or {@link ClassDataLoaderDelegate}.
 	 */
-	private List<Object> delegates = new LinkedList<Object>();
-	
+	private List<Object> delegates = new ArrayList<Object>();
+	/**
+	 * Is a copy of {@link #delegates} in order to prevent concurrent modifications and deadlocks at the same time. This mechanism
+	 * is less efficient (copying the whole list), but these changes don't happen often, the list contains only few entries and
+	 * reading (which happens often) is fast and without synchronization.
+	 */
+	private volatile List<Object> _delegates = new ArrayList<Object>(0);
+
 	private List<PathEntry> libpath = new LinkedList<PathEntry>();
 	
 	private List<PathEntry> classpath = new LinkedList<PathEntry>();
@@ -228,29 +235,28 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 		this.classLoader = classLoader;
 	}
 	
-	public synchronized void addDelegate(ClassDataLoaderDelegate delegate) {
+	public void addDelegate(ClassDataLoaderDelegate delegate) {
 		addDelegate((Object)delegate);
 	}
 	
-	public synchronized void addDelegate(ClassLoaderDelegate delegate) {
+	public void addDelegate(ClassLoaderDelegate delegate) {
 		addDelegate((Object)delegate);
 	}
 
-	/*
-	 * 
-	 */
-	protected synchronized void addDelegate(Object delegate)
+	protected void addDelegate(Object delegate)
 	{
 		// TODO Add a security check to allow only delegate classes that have been declared in
 		// a properties file.
 		// Or maybe another (better) security system?!
-		
-		LogUtil.log_info(this.getClass(), "addDelegate", "DelegatingClassLoader.addDelegate("+delegate+") registering delegate.");
-		if (delegate == null)
-			throw new NullPointerException("delegate must not be null!");
-		if ((!(delegate instanceof ClassDataLoaderDelegate)) && (!(delegate instanceof ClassLoaderDelegate)))
-			throw new IllegalArgumentException("delegate must be an instance of "+ClassDataLoaderDelegate.class.getName()+" or "+ClassLoaderDelegate.class.getName());
-		delegates.add(delegate);
+		synchronized (delegates) {
+			LogUtil.log_info(this.getClass(), "addDelegate", "DelegatingClassLoader.addDelegate("+delegate+") registering delegate.");
+			if (delegate == null)
+				throw new NullPointerException("delegate must not be null!");
+			if ((!(delegate instanceof ClassDataLoaderDelegate)) && (!(delegate instanceof ClassLoaderDelegate)))
+				throw new IllegalArgumentException("delegate must be an instance of "+ClassDataLoaderDelegate.class.getName()+" or "+ClassLoaderDelegate.class.getName());
+			delegates.add(delegate);
+			_delegates = new ArrayList<Object>(delegates);
+		}
 		clearCache();
 	}
 
@@ -258,12 +264,15 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 	 * (non-Javadoc)
 	 * @see org.nightlabs.classloader.IClassLoadingDelegator#removeDelegate(java.lang.Object)
 	 */
-	public synchronized void removeDelegate(Object delegate)
+	public void removeDelegate(Object delegate)
 	{
-		LogUtil.log_info(this.getClass(), "removeDelegate", "DelegatingClassLoader.removeDelegate("+delegate+") unregistering delegate.");
-		if (delegate == null)
-			throw new NullPointerException("delegate must not be null!");
-		delegates.remove(delegate);
+		synchronized (delegates) {
+			LogUtil.log_info(this.getClass(), "removeDelegate", "DelegatingClassLoader.removeDelegate("+delegate+") unregistering delegate.");
+			if (delegate == null)
+				throw new NullPointerException("delegate must not be null!");
+			delegates.remove(delegate);
+			_delegates = new ArrayList<Object>(delegates);
+		}
 		clearCache();
 	}
 
@@ -459,7 +468,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			}
 
 			// now check whether one of the delegates can deliver the class
-			for (Iterator it = delegates.iterator(); it.hasNext(); ) {
+			for (Iterator it = _delegates.iterator(); it.hasNext(); ) {
 				Object delegateInstance = it.next();
 				if (foundClass != null)
 					break;
@@ -569,7 +578,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			}
 	
 			// now check whether one of the delegates can deliver the resource
-			for (Iterator it = delegates.iterator(); it.hasNext(); ) {
+			for (Iterator it = _delegates.iterator(); it.hasNext(); ) {
 				ResourceFinder delegate = (ResourceFinder) it.next();
 				List<URL> delegateRes = delegate.getResources(name, returnAfterFoundFirst);
 				if (delegateRes != null) {
