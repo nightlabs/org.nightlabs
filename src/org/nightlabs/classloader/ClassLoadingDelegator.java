@@ -75,16 +75,16 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 	 */
 	protected class ClassSearchResult {
 
-		public ClassSearchResult(Class _class) {
+		public ClassSearchResult(Class<?> _class) {
 			this.foundClass = _class;
 		}
 
-		protected Class foundClass;
+		protected Class<?> foundClass;
 
-		public Class getFoundClass() {
+		public Class<?> getFoundClass() {
 			return foundClass;
 		}
-		public void setFoundClass(Class foundClass) {
+		public void setFoundClass(Class<?> foundClass) {
 			this.foundClass = foundClass;
 		}
 	}
@@ -105,7 +105,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 		/**
 		 * contains an instance of JarFile (or null, if memory short)
 		 */
-		private Reference jarFile = null;
+		private Reference<?> jarFile = null;
 
 		/**
 		 * @return Returns the path.
@@ -342,7 +342,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.classloader.IDelegatingClassLoader#findDelegateClass(java.lang.String)
 	 */
-	public Class findDelegateClass(String name)
+	public Class<?> findDelegateClass(String name)
 	throws ClassNotFoundException
 	{
 		LogUtil.log_debug(this.getClass(), "findDelegateClass", "Entered findClass for name \"" + name + "\".");
@@ -389,7 +389,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 		}
 	}
 
-	protected Class internalFindDelegateClass(String name)
+	protected Class<?> internalFindDelegateClass(String name)
 	throws ClassNotFoundException
 	{
 		synchronized(foundClasses) {
@@ -416,12 +416,11 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 		try {
 	
 //			if (name.startsWith("org.nightlabs.")) log_debug("DelegatingClassLoader.findClass(\""+name+"\")");
-			Class foundClass = null;
+			Class<?> foundClass = null;
 	
 			// first check the local repository (defined by path properties)
 			String fileName = name.replace('.', '/').concat(".class");
-			for (Iterator it = classpath.iterator(); it.hasNext(); ) {
-				PathEntry pe = (PathEntry)it.next();
+			for (PathEntry pe : classpath) {
 				if (foundClass != null)
 					break;
 	
@@ -468,7 +467,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			}
 
 			// now check whether one of the delegates can deliver the class
-			for (Iterator it = _delegates.iterator(); it.hasNext(); ) {
+			for (Iterator<?> it = _delegates.iterator(); it.hasNext(); ) {
 				Object delegateInstance = it.next();
 				if (foundClass != null)
 					break;
@@ -552,8 +551,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			String absoluteFileName = "/" + relativeFileName;
 	
 			// first check the local repository (defined by path properties)
-			for (Iterator it = classpath.iterator(); it.hasNext(); ) {
-				PathEntry pe = (PathEntry)it.next();
+			for (PathEntry pe : classpath) {
 	
 				if (pe.isDirectory()) {
 					File f = new File(pe.getPath(), relativeFileName);
@@ -578,7 +576,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			}
 	
 			// now check whether one of the delegates can deliver the resource
-			for (Iterator it = _delegates.iterator(); it.hasNext(); ) {
+			for (Iterator<?> it = _delegates.iterator(); it.hasNext(); ) {
 				ResourceFinder delegate = (ResourceFinder) it.next();
 				List<URL> delegateRes = delegate.getResources(name, returnAfterFoundFirst);
 				if (delegateRes != null) {
@@ -618,7 +616,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 	 * @param probableLength Expected length of the data. This may be -1. It is only used for buffer optimization.
 	 * @return Returns the loaded class (the result of defineClass(...)).
 	 */
-	private Class defineClassFromInputStream(String name, InputStream in, int probableLength, ProtectionDomain protectionDomain)
+	private Class<?> defineClassFromInputStream(String name, InputStream in, int probableLength, ProtectionDomain protectionDomain)
 	{
 		try {
 			if (probableLength < 1)

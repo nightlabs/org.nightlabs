@@ -43,7 +43,7 @@ public interface IClassLoadingDelegator {
 	 * @return The class found
 	 * @throws ClassNotFoundException Thrown when the class was not found by any delegate.
 	 */
-	public abstract Class findDelegateClass(String name)
+	public abstract Class<?> findDelegateClass(String name)
 			throws ClassNotFoundException;
 
 	/**

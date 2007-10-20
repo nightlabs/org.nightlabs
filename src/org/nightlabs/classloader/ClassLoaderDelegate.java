@@ -32,5 +32,5 @@ package org.nightlabs.classloader;
  */
 public interface ClassLoaderDelegate extends ResourceFinder 
 {
-	public Class loadClass(String className);
+	public Class<?> loadClass(String className);
 }

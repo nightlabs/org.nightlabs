@@ -109,7 +109,7 @@ public class DelegatingClassLoader
 	// TODO there's a lot of magic in this classloading stuff, thus I don't know whether this
 	// method would ever be called. Even if this method is never called, it probably doesn't hurt, either ;-)
   @SuppressWarnings("unused")
-	private Class loadClassInternal(String name)
+	private Class<?> loadClassInternal(String name)
   throws ClassNotFoundException
   {
   	log_info("loadClassInternal(String name)", "Amazing! The classloader magic calls my loadClassInternal method!");
@@ -147,7 +147,7 @@ public class DelegatingClassLoader
 				}
 			}
 
-			Class c;
+			Class<?> c;
 			try {
 				c = super.loadClass(name, resolve);
 			} catch (ClassNotFoundException x) {
@@ -183,7 +183,7 @@ public class DelegatingClassLoader
 	{
 		log_debug("findResource", "DelegatingClassLoader.findResource(\""+name+"\")");
 
-		List resources;
+		List<URL> resources;
 		try {
 			resources = findDelegateResources(name, true);
 		} catch (IOException e) {
@@ -192,7 +192,7 @@ public class DelegatingClassLoader
 		if (resources == null || resources.isEmpty())
 			return null;
 		else
-			return (URL)resources.get(0);
+			return resources.get(0);
 	}
 
 	@Override
@@ -219,7 +219,7 @@ public class DelegatingClassLoader
 		return defineClass(name, b, off, len, protectionDomain);
 	}
 	
-	public Class findDelegateClass(String name) throws ClassNotFoundException {
+	public Class<?> findDelegateClass(String name) throws ClassNotFoundException {
 		return classLoadingDelegator.findDelegateClass(name);
 	}
 	public List<URL> findDelegateResources(String name, boolean returnAfterFoundFirst) throws IOException {
