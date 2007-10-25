@@ -393,7 +393,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 	throws ClassNotFoundException
 	{
 		synchronized(foundClasses) {
-			ClassSearchResult csr = (ClassSearchResult)foundClasses.get(name);
+			ClassSearchResult csr = foundClasses.get(name);
 			if (csr != null) {
 				LogUtil.log_debug(this.getClass(), "internalFindDelegateClass", "Already searched the class \""+name+"\" before. Returning "+csr.getFoundClass());
 				if (csr.getFoundClass() != null)
@@ -515,7 +515,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 	throws IOException
 	{
 		synchronized(foundResources) {
-			ResourceSearchResult rsr = (ResourceSearchResult)foundResources.get(name);
+			ResourceSearchResult rsr = foundResources.get(name);
 			if (rsr != null) {
 				// only first element queried dont care for last search
 				if (returnAfterFoundFirst) {
