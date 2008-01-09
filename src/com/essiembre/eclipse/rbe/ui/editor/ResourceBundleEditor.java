@@ -332,8 +332,10 @@ public class ResourceBundleEditor extends MultiPageEditorPart
      * @see org.eclipse.ui.IWorkbenchPart#dispose()
      */
     public void dispose() {
-        i18nPage.dispose();
-        newLocalePage.dispose();
         super.dispose();
+    	if (i18nPage != null && !i18nPage.isDisposed())
+    		i18nPage.dispose();
+    	if (newLocalePage != null && !newLocalePage.isDisposed())
+    		newLocalePage.dispose();
     }
 }
