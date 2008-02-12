@@ -435,7 +435,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 						}
 						CodeSource codeSource;
 						try {
-							codeSource = new CodeSource(pe.getPath().toURL(), (Certificate[])null);
+							codeSource = new CodeSource(pe.getPath().toURI().toURL(), (Certificate[])null);
 						} catch (MalformedURLException e) {
 							throw new ClassNotFoundException("Creating codeSource failed!", e);
 						}
@@ -454,7 +454,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 						}
 						CodeSource codeSource;
 						try {
-							codeSource = new CodeSource(pe.getPath().toURL(), (Certificate[])null);
+							codeSource = new CodeSource(pe.getPath().toURI().toURL(), (Certificate[])null);
 						} catch (MalformedURLException e) {
 							throw new ClassNotFoundException("Creating codeSource failed!", e);
 						}
@@ -556,7 +556,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 				if (pe.isDirectory()) {
 					File f = new File(pe.getPath(), relativeFileName);
 					if (f.exists()) {
-						resources.add(f.toURL());
+						resources.add(f.toURI().toURL());
 						if (returnAfterFoundFirst)
 							return resources;
 					}
