@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.model.bundle;
@@ -24,14 +24,14 @@ import com.essiembre.eclipse.rbe.RBEPlugin;
 import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
 
 /**
- * Bundle-related utility methods. 
+ * Bundle-related utility methods.
  * @author Pascal Essiembre (essiembre@users.sourceforge.net)
  * @version $Author: essiembre $ $Revision: 1.11 $ $Date: 2007/02/02 04:14:39 $
  */
 public final class PropertiesParser {
 
     /** System line separator. */
-    private static final String SYSTEM_LINE_SEPARATOR = 
+    private static final String SYSTEM_LINE_SEPARATOR =
             System.getProperty("line.separator"); //$NON-NLS-1$
     
     /** Characters accepted as key value separators. */
@@ -46,7 +46,7 @@ public final class PropertiesParser {
     }
 
     /**
-     * Parses a string and converts it to a <code>Bundle</code>.  The string is 
+     * Parses a string and converts it to a <code>Bundle</code>.  The string is
      * expected to match the documented structure of a properties file.
      * The returned bundle will have no <code>Locale</code> and no
      * <code>BundleGroup</code> associated to it.
@@ -69,7 +69,7 @@ public final class PropertiesParser {
         
             int equalPosition = findKeyValueSeparator(line);
             boolean isRegularLine = line.matches("^[^#].*"); //$NON-NLS-1$
-            boolean isCommentedLine = doneWithFileComment 
+            boolean isCommentedLine = doneWithFileComment
                     && line.matches("^##[^#].*"); //$NON-NLS-1$
             
             // parse regular and commented lines

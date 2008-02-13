@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.editor.i18n;
@@ -38,7 +38,6 @@ import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
@@ -58,8 +57,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.text.undo.DocumentUndoManagerRegistry;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
@@ -126,8 +123,8 @@ public class BundleEntryComposite extends Composite {
      * @param locale locale for this bundle entry
      */
     public BundleEntryComposite(
-            final Composite parent, 
-            final ResourceManager resourceManager, 
+            final Composite parent,
+            final ResourceManager resourceManager,
             final Locale locale,
             final I18nPage page) {
 
@@ -139,7 +136,7 @@ public class BundleEntryComposite extends Composite {
         this.boldFont = UIUtils.createFont(this, SWT.BOLD, 0);
         this.smallFont = UIUtils.createFont(SWT.NONE, -1);
 
-        GridLayout gridLayout = new GridLayout(1, false);        
+        GridLayout gridLayout = new GridLayout(1, false);
         gridLayout.horizontalSpacing = 0;
         gridLayout.verticalSpacing = 2;
         gridLayout.marginWidth = 0;
@@ -172,9 +169,9 @@ public class BundleEntryComposite extends Composite {
                     comment = entry.getComment();
                 }
                 bundleGroup.addBundleEntry(locale, new BundleEntry(
-                        activeKey, 
-                        textViewer.getDocument().get(), 
-                        comment, 
+                        activeKey,
+                        textViewer.getDocument().get(),
+                        comment,
                         commentedSelected));
             }
         }
@@ -183,7 +180,8 @@ public class BundleEntryComposite extends Composite {
     /**
      * @see org.eclipse.swt.widgets.Widget#dispose()
      */
-    public void dispose() {
+    @Override
+		public void dispose() {
         super.dispose();
         boldFont.dispose();
         smallFont.dispose();
@@ -258,7 +256,7 @@ public class BundleEntryComposite extends Composite {
             simButton.setVisible(false);
         }
         
-        textViewer.setDocument(document);		
+        textViewer.setDocument(document);
         resetCommented();
     }
 
@@ -326,7 +324,8 @@ public class BundleEntryComposite extends Composite {
         simButton.setToolTipText(
                 RBEPlugin.getString("value.similar.tooltip")); //$NON-NLS-1$
         simButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 String head = RBEPlugin.getString(
                         "dialog.similar.head"); //$NON-NLS-1$
                 String body = RBEPlugin.getString(
@@ -339,7 +338,7 @@ public class BundleEntryComposite extends Composite {
                         + ((BundleEntry) iter.next()).getKey()
                         + "\n"; //$NON-NLS-1$
                 }
-                MessageDialog.openInformation(getShell(), head, body); 
+                MessageDialog.openInformation(getShell(), head, body);
             }
         });
 
@@ -354,7 +353,8 @@ public class BundleEntryComposite extends Composite {
                 RBEPlugin.getString("value.duplicate.tooltip")); //$NON-NLS-1$
 
         duplButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 String head = RBEPlugin.getString(
                         "dialog.identical.head"); //$NON-NLS-1$
                 String body = RBEPlugin.getString(
@@ -367,7 +367,7 @@ public class BundleEntryComposite extends Composite {
                         + ((BundleEntry) iter.next()).getKey()
                         + "\n"; //$NON-NLS-1$
                 }
-                MessageDialog.openInformation(getShell(), head, body); 
+                MessageDialog.openInformation(getShell(), head, body);
             }
         });
 
@@ -381,7 +381,8 @@ public class BundleEntryComposite extends Composite {
         commentedCheckbox.setFont(smallFont);
         commentedCheckbox.setLayoutData(gridData);
         commentedCheckbox.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 resetCommented();
                 updateBundleOnChanges();
             }
@@ -404,10 +405,11 @@ public class BundleEntryComposite extends Composite {
                 RBEPlugin.getString("value.goto.tooltip")); //$NON-NLS-1$
         gotoButton.setEnabled(false);
         gotoButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 ITextEditor editor = resourceManager.getSourceEditor(
                         locale).getEditor();
-                Object activeEditor = 
+                Object activeEditor =
                     editor.getSite().getPage().getActiveEditor();
                 if (activeEditor instanceof ResourceBundleEditor) {
                     ((ResourceBundleEditor) activeEditor).setActivePage(locale);
@@ -417,7 +419,7 @@ public class BundleEntryComposite extends Composite {
         gotoButton.setLayoutData(gridData);
     }
     
-    private Collection<FocusListener> focusListeners = new LinkedList<FocusListener>();	
+    private Collection<FocusListener> focusListeners = new LinkedList<FocusListener>();
     @Override
     public void addFocusListener(FocusListener listener) {
         if (!focusListeners.contains(listener))
@@ -427,11 +429,11 @@ public class BundleEntryComposite extends Composite {
 //	 * Creates the text row.
 //	 */
 //	private void createTextRow() {
-//		textBox = new Text(this, SWT.MULTI | SWT.WRAP | 
+//		textBox = new Text(this, SWT.MULTI | SWT.WRAP |
 //				SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 //		textBox.setEnabled(false);
 //		//Addition by Eric FETTWEIS
-//		//Note that this does not seem to work... It would however be usefull for arabic and some other languages  
+//		//Note that this does not seem to work... It would however be usefull for arabic and some other languages
 //		textBox.setOrientation(getOrientation(locale));
 //
 //		GridData gridData = new GridData();
@@ -461,7 +463,7 @@ public class BundleEntryComposite extends Composite {
 //						page.focusPreviousBundleEntryComposite();
 //				} else if (event.character == SWT.CR) {
 //					if (event.stateMask == SWT.CTRL) {
-//						event.doit = false;						
+//						event.doit = false;
 //					} else if (event.stateMask == 0) {
 //						event.doit = true;
 //						event.detail = SWT.TRAVERSE_NONE;
@@ -480,7 +482,7 @@ public class BundleEntryComposite extends Composite {
 ////					event.doit = true;
 ////					event.detail = SWT.TRAVERSE_NONE;
 ////					page.selectPreviousTreeEntry();
-////				} 
+////				}
 //
 //			}
 //		});
@@ -490,10 +492,10 @@ public class BundleEntryComposite extends Composite {
 //				final ITextEditor editor = resourceManager.getSourceEditor(
 //						locale).getEditor();
 //				// Text field has changed: make editor dirty if not already
-//				if (textBeforeUpdate != null 
+//				if (textBeforeUpdate != null
 //						&& !textBeforeUpdate.equals(eventBox.getText())) {
-//					// Make the editor dirty if not already.  If it is, 
-//					// we wait until field focus lost (or save) to 
+//					// Make the editor dirty if not already.  If it is,
+//					// we wait until field focus lost (or save) to
 //					// update it completely.
 //					if (!editor.isDirty()) {
 //						int caretPosition = eventBox.getCaretPosition();
@@ -504,7 +506,7 @@ public class BundleEntryComposite extends Composite {
 //				}
 //			}
 //		});
-//		// Eric Fettweis : new listener to automatically change the font 
+//		// Eric Fettweis : new listener to automatically change the font
 //		textBox.addModifyListener(new ModifyListener() {
 //
 //			public void modifyText(ModifyEvent e) {
@@ -518,7 +520,7 @@ public class BundleEntryComposite extends Composite {
 //			}
 //
 //		});
-//		
+//
 //		textBox.addFocusListener(internalFocusListener);
 //	}
     
@@ -526,7 +528,7 @@ public class BundleEntryComposite extends Composite {
      * Creates the text row.
      */
     private void createTextViewerRow() {
-        textViewer = new TextViewer(this, SWT.MULTI | SWT.WRAP | 
+        textViewer = new TextViewer(this, SWT.MULTI | SWT.WRAP |
                 SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
         
         textViewer.setDocument(new Document());
@@ -537,7 +539,7 @@ public class BundleEntryComposite extends Composite {
         
         textBox.setEnabled(false);
         //Addition by Eric FETTWEIS
-        //Note that this does not seem to work... It would however be usefull for arabic and some other languages  
+        //Note that this does not seem to work... It would however be usefull for arabic and some other languages
         textBox.setOrientation(getOrientation(locale));
 
         GridData gridData = new GridData();
@@ -567,7 +569,7 @@ public class BundleEntryComposite extends Composite {
                         page.focusPreviousBundleEntryComposite();
                 } else if (event.character == SWT.CR) {
                     if (event.stateMask == SWT.CTRL) {
-                        event.doit = false;						
+                        event.doit = false;
                     } else if (event.stateMask == 0) {
                         event.doit = true;
                         event.detail = SWT.TRAVERSE_NONE;
@@ -577,12 +579,13 @@ public class BundleEntryComposite extends Composite {
                         event.detail = SWT.TRAVERSE_NONE;
                         page.selectPreviousTreeEntry();
                     }
-                } 
+                }
             }
         });
 
         textBox.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent event) {
+            @Override
+						public void keyReleased(KeyEvent event) {
                 if (isKeyCombination(event, SWT.CTRL, 'z')) {
                     undoManager.undo();
                 } else if (isKeyCombination(event, SWT.CTRL, 'y')) {
@@ -595,10 +598,10 @@ public class BundleEntryComposite extends Composite {
                 final ITextEditor editor = resourceManager.getSourceEditor(
                         locale).getEditor();
                 // Text field has changed: make editor dirty if not already
-                if (textBeforeUpdate != null 
+                if (textBeforeUpdate != null
                         && !textBeforeUpdate.equals(eventBox.getText())) {
-                    // Make the editor dirty if not already.  If it is, 
-                    // we wait until field focus lost (or save) to 
+                    // Make the editor dirty if not already.  If it is,
+                    // we wait until field focus lost (or save) to
                     // update it completely.
                     if (!editor.isDirty()) {
                         int caretPosition = eventBox.getSelection().x;
@@ -609,7 +612,7 @@ public class BundleEntryComposite extends Composite {
                 }
             }
         });
-        // Eric Fettweis : new listener to automatically change the font 
+        // Eric Fettweis : new listener to automatically change the font
         textBox.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
@@ -702,15 +705,15 @@ public class BundleEntryComposite extends Composite {
     }
 }*/
     /**
-     * Holds swt fonts used for the textBox. 
+     * Holds swt fonts used for the textBox.
      */
     private Map swtFontCache = new HashMap();
 
     /**
      * Gets a font by its name. The resulting font is build based on the baseFont parameter.
      * The font is retrieved from the swtFontCache, or created if needed.
-     * @param baseFont the current font used to build the new one. 
-     * Only the name of the new font will differ fromm the original one. 
+     * @param baseFont the current font used to build the new one.
+     * Only the name of the new font will differ fromm the original one.
      * @parama baseFont a font
      * @param name the new font name
      * @return a font with the same style and size as the original.
@@ -722,11 +725,11 @@ public class BundleEntryComposite extends Composite {
             swtFontCache.put(name, font);
         }
         return font;
-    }	
+    }
     /**
      * Gets the name of the font which will be the best to display a String.
      * All installed fonts are searched. If a font can display the entire string, then it is retuned immediately.
-     * Otherwise, the font returned is the one which can display properly the longest substring possible from the argument value. 
+     * Otherwise, the font returned is the one which can display properly the longest substring possible from the argument value.
      * @param baseFontName a font to be tested before any other. It will be the current font used by a widget.
      * @param value the string to be displayed.
      * @return a font name
@@ -774,7 +777,7 @@ public class BundleEntryComposite extends Composite {
      * Can a font display correctly an entire string ?
      * @param fontName the font name
      * @param value the string to be displayed
-     * @return 
+     * @return
      */
     private static boolean canFullyDisplay(String fontName, String value){
         return canDisplayUpTo(fontName, value)==-1;

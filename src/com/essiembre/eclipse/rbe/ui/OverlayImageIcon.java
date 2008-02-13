@@ -38,7 +38,7 @@ public class OverlayImageIcon extends CompositeImageDescriptor {
         this.overlayImage = overlayImage;
         this.location = location;
         this.imgSize = new Point(
-                baseImage.getImageData().width, 
+                baseImage.getImageData().width,
                 baseImage.getImageData().height);
     }
 
@@ -46,9 +46,10 @@ public class OverlayImageIcon extends CompositeImageDescriptor {
      * @see org.eclipse.jface.resource.CompositeImageDescriptor
      *         #drawCompositeImage(int, int)
      */
-    protected void drawCompositeImage(int width, int height) {
+    @Override
+		protected void drawCompositeImage(int width, int height) {
         // Draw the base image
-        drawImage(baseImage.getImageData(), 0, 0); 
+        drawImage(baseImage.getImageData(), 0, 0);
         ImageData imageData = overlayImage.getImageData();
         switch(location) {
             // Draw on the top left corner
@@ -56,17 +57,17 @@ public class OverlayImageIcon extends CompositeImageDescriptor {
                 drawImage(imageData, 0, 0);
                 break;
             
-            // Draw on top right corner  
+            // Draw on top right corner
             case TOP_RIGHT:
                 drawImage(imageData, imgSize.x - imageData.width, 0);
                 break;
             
-            // Draw on bottom left  
+            // Draw on bottom left
             case BOTTOM_LEFT:
                 drawImage(imageData, 0, imgSize.y - imageData.height);
                 break;
             
-            // Draw on bottom right corner  
+            // Draw on bottom right corner
             case BOTTOM_RIGHT:
                 drawImage(imageData, imgSize.x - imageData.width,
                         imgSize.y - imageData.height);
@@ -78,7 +79,8 @@ public class OverlayImageIcon extends CompositeImageDescriptor {
     /**
      * @see org.eclipse.jface.resource.CompositeImageDescriptor#getSize()
      */
-    protected Point getSize() {
+    @Override
+		protected Point getSize() {
         return imgSize;
     }
 

@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.preferences;
@@ -78,7 +78,8 @@ public class RBEFormattingPrefPage extends AbstractRBEPrefPage {
      * @see org.eclipse.jface.preference.PreferencePage#createContents(
      *         org.eclipse.swt.widgets.Composite)
      */
-    protected Control createContents(Composite parent) {
+    @Override
+		protected Control createContents(Composite parent) {
         IPreferenceStore prefs = getPreferenceStore();
         Composite field = null;
         Composite composite = new Composite(parent, SWT.NONE);
@@ -98,7 +99,8 @@ public class RBEFormattingPrefPage extends AbstractRBEPrefPage {
         convertUnicodeToEncoded.setSelection(
                 prefs.getBoolean(RBEPreferences.CONVERT_UNICODE_TO_ENCODED));
         convertUnicodeToEncoded.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 refreshEnabledStatuses();
             }
         });
@@ -119,7 +121,8 @@ public class RBEFormattingPrefPage extends AbstractRBEPrefPage {
         alignEqualSigns.setSelection(
                 prefs.getBoolean(RBEPreferences.ALIGN_EQUAL_SIGNS));
         alignEqualSigns.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 refreshEnabledStatuses();
             }
         });
@@ -138,7 +141,8 @@ public class RBEFormattingPrefPage extends AbstractRBEPrefPage {
         groupKeys = new Button(field, SWT.CHECK);
         groupKeys.setSelection(prefs.getBoolean(RBEPreferences.GROUP_KEYS));
         groupKeys.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 refreshEnabledStatuses();
             }
         });
@@ -184,7 +188,8 @@ public class RBEFormattingPrefPage extends AbstractRBEPrefPage {
         wrapLines = new Button(field, SWT.CHECK);
         wrapLines.setSelection(prefs.getBoolean(RBEPreferences.WRAP_LINES));
         wrapLines.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 refreshEnabledStatuses();
             }
         });
@@ -209,7 +214,8 @@ public class RBEFormattingPrefPage extends AbstractRBEPrefPage {
         wrapAlignEqualSigns.setSelection(
                 prefs.getBoolean(RBEPreferences.WRAP_ALIGN_EQUAL_SIGNS));
         wrapAlignEqualSigns.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 refreshEnabledStatuses();
             }
         });
@@ -244,20 +250,21 @@ public class RBEFormattingPrefPage extends AbstractRBEPrefPage {
         newLineTypeForce.setSelection(
                 prefs.getBoolean(RBEPreferences.FORCE_NEW_LINE_TYPE));
         newLineTypeForce.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 refreshEnabledStatuses();
             }
         });
-        Composite newLineRadioGroup = new Composite(field, SWT.NONE); 
+        Composite newLineRadioGroup = new Composite(field, SWT.NONE);
         new Label(newLineRadioGroup, SWT.NONE).setText(
                 RBEPlugin.getString(
                         "prefs.newline.force")); //$NON-NLS-1$
         newLineRadioGroup.setLayout(new RowLayout());
-        newLineTypes[RBEPreferences.NEW_LINE_UNIX] = 
+        newLineTypes[RBEPreferences.NEW_LINE_UNIX] =
                 new Button(newLineRadioGroup, SWT.RADIO);
         newLineTypes[RBEPreferences.NEW_LINE_UNIX].setText(
                 "UNIX (\\n)"); //$NON-NLS-1$
-        newLineTypes[RBEPreferences.NEW_LINE_WIN] = 
+        newLineTypes[RBEPreferences.NEW_LINE_WIN] =
                 new Button(newLineRadioGroup, SWT.RADIO);
         newLineTypes[RBEPreferences.NEW_LINE_WIN].setText(
                 "Windows (\\r\\n)"); //$NON-NLS-1$
@@ -285,7 +292,8 @@ public class RBEFormattingPrefPage extends AbstractRBEPrefPage {
     /**
      * @see org.eclipse.jface.preference.IPreferencePage#performOk()
      */
-    public boolean performOk() {
+    @Override
+		public boolean performOk() {
         IPreferenceStore prefs = getPreferenceStore();
         prefs.setValue(RBEPreferences.SHOW_GENERATOR,
                 showGeneratedBy.getSelection());
@@ -332,7 +340,8 @@ public class RBEFormattingPrefPage extends AbstractRBEPrefPage {
     /**
      * @see org.eclipse.jface.preference.PreferencePage#performDefaults()
      */
-    protected void performDefaults() {
+    @Override
+		protected void performDefaults() {
         IPreferenceStore prefs = getPreferenceStore();
         showGeneratedBy.setSelection(prefs.getDefaultBoolean(
                 RBEPreferences.SHOW_GENERATOR));

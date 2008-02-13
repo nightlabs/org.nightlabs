@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.editor.resources;
@@ -55,7 +55,7 @@ public class NLResourceFactory extends ResourceFactory {
      * @param file file used to open all related files
      * @throws CoreException problem creating factory
      */
-    protected NLResourceFactory(IEditorSite site, IFile file) 
+    protected NLResourceFactory(IEditorSite site, IFile file)
             throws CoreException {
         super();
         this.site = site;
@@ -65,7 +65,7 @@ public class NLResourceFactory extends ResourceFactory {
         // Locate "nl" directory (if any)
         IContainer container = file.getParent();
         IResource nlDir = null;
-        while (container != null 
+        while (container != null
                 && (nlDir == null || !(nlDir instanceof Folder))) {
             nlDir = container.findMember("nl"); //$NON-NLS-1$
             container = container.getParent();
@@ -90,7 +90,7 @@ public class NLResourceFactory extends ResourceFactory {
                     IFolder langFolder = (IFolder) langResource;
                     language = langFolder.getName();
                     sourceEditor = createEditor(
-                            site, 
+                            site,
                             langFolder.findMember(filename),
                             new Locale(language));
                     if (sourceEditor != null) {
@@ -106,7 +106,7 @@ public class NLResourceFactory extends ResourceFactory {
                             IFolder cntryFolder = (IFolder) cntryResource;
                             country = cntryFolder.getName();
                             sourceEditor = createEditor(
-                                    site, 
+                                    site,
                                     cntryFolder.findMember(filename),
                                     new Locale(language, country));
                             if (sourceEditor != null) {
@@ -120,7 +120,7 @@ public class NLResourceFactory extends ResourceFactory {
                                 if (vrntResource instanceof IFolder) {
                                     IFolder vrntFolder = (IFolder) vrntResource;
                                     sourceEditor = createEditor(
-                                            site, 
+                                            site,
                                             vrntFolder.findMember(filename),
                                             new Locale(language, country,
                                                     vrntFolder.getName()));
@@ -130,10 +130,10 @@ public class NLResourceFactory extends ResourceFactory {
                                 }
                             }
                         }
-                    }                        
+                    }
                 }
-            }            
-            fileCreator = 
+            }
+            fileCreator =
                 new NLPropertiesFileCreator(nlDir.toString(), filename);
             displayName = filename;
         } else {
@@ -146,7 +146,8 @@ public class NLResourceFactory extends ResourceFactory {
      * @see com.essiembre.eclipse.rbe.ui.editor.resources
      *         .ResourceFactory#getEditorDisplayName()
      */
-    public String getEditorDisplayName() {
+    @Override
+		public String getEditorDisplayName() {
         return displayName;
     }
 
@@ -154,7 +155,8 @@ public class NLResourceFactory extends ResourceFactory {
      * @see com.essiembre.eclipse.rbe.ui.editor.resources
      *         .ResourceFactory#getSourceEditors()
      */
-    public SourceEditor[] getSourceEditors() {
+    @Override
+		public SourceEditor[] getSourceEditors() {
         return (SourceEditor[]) sourceEditors.values().toArray();
     }
 
@@ -162,7 +164,8 @@ public class NLResourceFactory extends ResourceFactory {
      * @see com.essiembre.eclipse.rbe.ui.editor.resources
      *         .ResourceFactory#getPropertiesFileCreator()
      */
-    public PropertiesFileCreator getPropertiesFileCreator() {
+    @Override
+		public PropertiesFileCreator getPropertiesFileCreator() {
         return fileCreator;
     }
 

@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.preferences;
@@ -64,7 +64,8 @@ public class RBEGeneralPrefPage extends AbstractRBEPrefPage  {
      * @see org.eclipse.jface.preference.PreferencePage
      *         #createContents(org.eclipse.swt.widgets.Composite)
      */
-    protected Control createContents(Composite parent) {
+    @Override
+		protected Control createContents(Composite parent) {
         IPreferenceStore prefs = getPreferenceStore();
         Composite field = null;
         Composite composite = new Composite(parent, SWT.NONE);
@@ -106,7 +107,7 @@ public class RBEGeneralPrefPage extends AbstractRBEPrefPage  {
         field = createFieldComposite(composite);
         keyTreeExpanded = new Button(field, SWT.CHECK);
         keyTreeExpanded.setSelection(prefs.getBoolean(
-                RBEPreferences.KEY_TREE_EXPANDED)); //$NON-NLS-1$
+                RBEPreferences.KEY_TREE_EXPANDED)); 
         new Label(field, SWT.NONE).setText(
                 RBEPlugin.getString("prefs.keyTree.expanded")); //$NON-NLS-1$
 
@@ -121,7 +122,7 @@ public class RBEGeneralPrefPage extends AbstractRBEPrefPage  {
         field = createFieldComposite(composite);
         noTreeInEditor = new Button(field, SWT.CHECK);
         noTreeInEditor.setSelection(
-                prefs.getBoolean(RBEPreferences.NO_TREE_IN_EDITOR)); //$NON-NLS-1$
+                prefs.getBoolean(RBEPreferences.NO_TREE_IN_EDITOR)); 
         new Label(field, SWT.NONE).setText(
                 RBEPlugin.getString("prefs.noTreeInEditor")); //$NON-NLS-1$
         
@@ -132,7 +133,8 @@ public class RBEGeneralPrefPage extends AbstractRBEPrefPage  {
     /**
      * @see org.eclipse.jface.preference.IPreferencePage#performOk()
      */
-    public boolean performOk() {
+    @Override
+		public boolean performOk() {
         IPreferenceStore prefs = getPreferenceStore();
         prefs.setValue(RBEPreferences.KEY_GROUP_SEPARATOR,
                 keyGroupSeparator.getText());
@@ -155,7 +157,8 @@ public class RBEGeneralPrefPage extends AbstractRBEPrefPage  {
     /**
      * @see org.eclipse.jface.preference.PreferencePage#performDefaults()
      */
-    protected void performDefaults() {
+    @Override
+		protected void performDefaults() {
         IPreferenceStore prefs = getPreferenceStore();
         keyGroupSeparator.setText(
                 prefs.getDefaultString(RBEPreferences.KEY_GROUP_SEPARATOR));

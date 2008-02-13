@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe;
@@ -37,7 +37,7 @@ import java.util.*;
 public class RBEPlugin extends AbstractUIPlugin {
 
     /** Plugin unique id. */
-    public static final String ID = 
+    public static final String ID =
             "com.essiembre.eclipse.i18n.resourcebundle"; //$NON-NLS-1$
     
     //The shared instance.
@@ -56,10 +56,11 @@ public class RBEPlugin extends AbstractUIPlugin {
     /**
      * This method is called upon plug-in activation
      */
-    public void start(BundleContext context) throws Exception {
+    @Override
+		public void start(BundleContext context) throws Exception {
         super.start(context);
         try {
-            URL messagesUrl = 
+            URL messagesUrl =
                     find(new Path("$nl$/messages.properties")); //$NON-NLS-1$
             if(messagesUrl != null) {
                 resourceBundle = new PropertyResourceBundle(
@@ -73,7 +74,8 @@ public class RBEPlugin extends AbstractUIPlugin {
     /**
      * This method is called when the plug-in is stopped
      */
-    public void stop(BundleContext context) throws Exception {
+    @Override
+		public void stop(BundleContext context) throws Exception {
         super.stop(context);
     }
 
@@ -92,7 +94,7 @@ public class RBEPlugin extends AbstractUIPlugin {
      * @return localized string corresponding to key
      */
     public static String getString(String key) {
-        ResourceBundle bundle = 
+        ResourceBundle bundle =
                 RBEPlugin.getDefault().getResourceBundle();
         try {
             return (bundle != null) ? bundle.getString(key) : key;
@@ -105,7 +107,7 @@ public class RBEPlugin extends AbstractUIPlugin {
      * Returns the string from the plugin's resource bundle,
      * or 'key' if not found.
      * @param key the key for which to fetch a localized text
-     * @param arg1 runtime argument to replace in key value 
+     * @param arg1 runtime argument to replace in key value
      * @return localized string corresponding to key
      */
     public static String getString(String key, String arg1) {
@@ -127,7 +129,7 @@ public class RBEPlugin extends AbstractUIPlugin {
      * Returns the string from the plugin's resource bundle,
      * or 'key' if not found.
      * @param key the key for which to fetch a localized text
-     * @param arg1 runtime argument to replace in key value 
+     * @param arg1 runtime argument to replace in key value
      * @param arg2 runtime second argument to replace in key value
      * @param arg3 runtime third argument to replace in key value
      * @return localized string corresponding to key

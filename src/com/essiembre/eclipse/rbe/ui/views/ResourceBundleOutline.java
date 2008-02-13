@@ -3,27 +3,23 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.views;
 
-
-import com.essiembre.eclipse.rbe.model.tree.updater.GroupedKeyTreeUpdater;
-import com.essiembre.eclipse.rbe.model.tree.updater.FlatKeyTreeUpdater;
-import com.essiembre.eclipse.rbe.model.tree.updater.KeyTreeUpdater;
 
 import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;
 import com.essiembre.eclipse.rbe.model.tree.KeyTree;
@@ -36,7 +32,6 @@ import com.essiembre.eclipse.rbe.model.DeltaEvent;
 import com.essiembre.eclipse.rbe.ui.editor.i18n.tree.KeyTreeContentProvider;
 import com.essiembre.eclipse.rbe.ui.editor.i18n.tree.TreeViewerContributor;
 import com.essiembre.eclipse.rbe.ui.editor.i18n.tree.KeyTreeLabelProvider;
-import com.essiembre.eclipse.rbe.ui.editor.resources.ResourceManager;
 import com.essiembre.eclipse.rbe.ui.UIUtils;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
@@ -92,7 +87,8 @@ public class ResourceBundleOutline extends ContentOutlinePage {
     /**
      * {@inheritDoc}
      */
-    public void createControl(Composite parent) {
+    @Override
+		public void createControl(Composite parent) {
         super.createControl(parent);
         getTreeViewer().setContentProvider(contentprovider);
         getTreeViewer().setLabelProvider(new KeyTreeLabelProvider());
@@ -112,7 +108,8 @@ public class ResourceBundleOutline extends ContentOutlinePage {
     /**
      * {@inheritDoc}
      */
-    public void dispose() {
+    @Override
+		public void dispose() {
 //		contributor.dispose();
         super.dispose();
     }
@@ -145,7 +142,8 @@ public class ResourceBundleOutline extends ContentOutlinePage {
     /**
      * {@inheritDoc}
      */
-    public void setActionBars(IActionBars actionbars) {
+    @Override
+		public void setActionBars(IActionBars actionbars) {
         super.setActionBars(actionbars);
         filterincomplete   = new ToggleAction(UIUtils.IMAGE_INCOMPLETE_ENTRIES);
         flataction         = new ToggleAction(UIUtils.IMAGE_LAYOUT_FLAT);
@@ -200,7 +198,8 @@ public class ResourceBundleOutline extends ContentOutlinePage {
         /**
          * {@inheritDoc}
          */
-        public void run() {
+        @Override
+				public void run() {
             update(this);
         }
         
@@ -210,7 +209,7 @@ public class ResourceBundleOutline extends ContentOutlinePage {
     /**
      * Implementation of custom behaviour.
      */
-    private class LocalBehaviour extends MouseAdapter implements IDeltaListener            , 
+    private class LocalBehaviour extends MouseAdapter implements IDeltaListener            ,
                                                                  ISelectionChangedListener {
 
         
@@ -255,7 +254,8 @@ public class ResourceBundleOutline extends ContentOutlinePage {
         /**
          * {@inheritDoc}
          */
-        public void mouseDoubleClick(MouseEvent event) {
+        @Override
+				public void mouseDoubleClick(MouseEvent event) {
             Object element = getSelection();
             if (getTreeViewer().isExpandable(element)) {
                 if (getTreeViewer().getExpandedState(element)) {

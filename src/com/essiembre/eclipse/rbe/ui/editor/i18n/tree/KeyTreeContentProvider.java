@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.editor.i18n.tree;
@@ -36,7 +36,7 @@ import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;
  * @author Pascal Essiembre (essiembre@users.sourceforge.net)
  * @version $Author: costamojan $ $Revision: 1.5 $ $Date: 2006/05/12 20:54:28 $
  */
-public class KeyTreeContentProvider implements 
+public class KeyTreeContentProvider implements
         ITreeContentProvider, IDeltaListener {
 
     /** Represents empty objects. */
@@ -68,9 +68,9 @@ public class KeyTreeContentProvider implements
      */
     public Object[] getChildren(Object parentElement) {
         if(parentElement instanceof KeyTree) {
-            return ((KeyTree) parentElement).getRootKeyItems().toArray(); 
+            return ((KeyTree) parentElement).getRootKeyItems().toArray();
         } else if (parentElement instanceof KeyTreeItem) {
-            return ((KeyTreeItem) parentElement).getChildren().toArray(); 
+            return ((KeyTreeItem) parentElement).getChildren().toArray();
         }
         return EMPTY_ARRAY;
     }

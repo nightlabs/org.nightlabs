@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.editor.i18n.tree;
@@ -78,7 +78,7 @@ public class KeyTreeComposite extends Composite {
     protected KeyTreeLabelProvider labelProvider;
     
     /** Flat or Tree mode? */
-    private boolean keyTreeHierarchical = 
+    private boolean keyTreeHierarchical =
             RBEPreferences.getKeyTreeHierarchical();
     
     /** Text box to add a new key. */
@@ -126,7 +126,7 @@ public class KeyTreeComposite extends Composite {
      * @return key tree item
      */
     public KeyTreeItem getSelection() {
-        IStructuredSelection selection = 
+        IStructuredSelection selection =
                 (IStructuredSelection) treeViewer.getSelection();
         return (KeyTreeItem) selection.getFirstElement();
     }
@@ -147,7 +147,8 @@ public class KeyTreeComposite extends Composite {
     /**
      * @see org.eclipse.swt.widgets.Widget#dispose()
      */
-    public void dispose() {
+    @Override
+		public void dispose() {
         waitCursor.dispose();
         defaultCursor.dispose();
 //        treeviewerContributor.dispose();
@@ -175,7 +176,7 @@ public class KeyTreeComposite extends Composite {
             msgHead = RBEPlugin.getString(
                     "dialog.delete.head.multiple"); //$NON-NLS-1$
             msgBody = RBEPlugin.getString(
-                    "dialog.delete.body.multiple", //$NON-NLS-1$ 
+                    "dialog.delete.body.multiple", //$NON-NLS-1$
                     selectedItem.getName());
         }
         MessageBox msgBox = new MessageBox(
@@ -192,7 +193,7 @@ public class KeyTreeComposite extends Composite {
                 bundleGroup.removeKey(item.getId());
             }
         }
-    }    
+    }
 
     
     /**
@@ -230,7 +231,8 @@ public class KeyTreeComposite extends Composite {
         }
         //TODO merge the two listeners into one
         hierModeButton.addSelectionListener(new SelectionAdapter () {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 if (hierModeButton.getSelection()) {
                     flatModeButton.setSelection(false);
                     flatModeButton.setEnabled(true);
@@ -251,7 +253,8 @@ public class KeyTreeComposite extends Composite {
             }
         });
         flatModeButton.addSelectionListener(new SelectionAdapter () {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 if (flatModeButton.getSelection()) {
                     hierModeButton.setSelection(false);
                     hierModeButton.setEnabled(true);
@@ -290,9 +293,10 @@ public class KeyTreeComposite extends Composite {
         if (RBEPreferences.getKeyTreeExpanded()) {
             treeViewer.expandAll();
         }
-        treeViewer.getTree().setLayoutData(gridData);      
+        treeViewer.getTree().setLayoutData(gridData);
         treeViewer.getTree().addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent event) {
+            @Override
+						public void keyReleased(KeyEvent event) {
                 if (event.character == SWT.DEL) {
                     deleteKeyOrGroup();
                 }
@@ -309,7 +313,8 @@ public class KeyTreeComposite extends Composite {
                     }
         });
         treeViewer.getTree().addMouseListener(new MouseAdapter() {
-            public void mouseDoubleClick(MouseEvent event) {
+            @Override
+						public void mouseDoubleClick(MouseEvent event) {
                 Object element = getSelection();
                 if (treeViewer.isExpandable(element)) {
                     if (treeViewer.getExpandedState(element)) {
@@ -356,13 +361,15 @@ public class KeyTreeComposite extends Composite {
         addButton.setText(RBEPlugin.getString("key.add")); //$NON-NLS-1$
         addButton.setEnabled(false);
         addButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 addKey();
             }
         });
 
         addTextBox.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent event) {
+            @Override
+						public void keyReleased(KeyEvent event) {
                 String key = addTextBox.getText();
                 if (event.character == SWT.CR) {
                     addKey();

@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.editor;
@@ -32,8 +32,8 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 
 /**
- * Manages the installation/deinstallation of global actions for multi-page 
- * editors. Responsible for the redirection of global actions to the active 
+ * Manages the installation/deinstallation of global actions for multi-page
+ * editors. Responsible for the redirection of global actions to the active
  * editor.
  * Multi-page contributor replaces the contributors for the individual editors
  * in the multi-page editor.
@@ -61,7 +61,8 @@ public class ResourceBundleEditorContributor extends MultiPageEditorActionBarCon
      * @see MultiPageEditorActionBarContributor
      *         #setActivePage(org.eclipse.ui.IEditorPart)
      */
-    public void setActivePage(IEditorPart part) {
+    @Override
+		public void setActivePage(IEditorPart part) {
         if (activeEditorPart == part)
             return;
 
@@ -70,7 +71,7 @@ public class ResourceBundleEditorContributor extends MultiPageEditorActionBarCon
         IActionBars actionBars = getActionBars();
         if (actionBars != null) {
 
-            ITextEditor editor = (part instanceof ITextEditor) 
+            ITextEditor editor = (part instanceof ITextEditor)
                                ? (ITextEditor) part : null;
 
             actionBars.setGlobalActionHandler(
@@ -120,7 +121,8 @@ public class ResourceBundleEditorContributor extends MultiPageEditorActionBarCon
      * @see org.eclipse.ui.part.EditorActionBarContributor
      *         #contributeToMenu(org.eclipse.jface.action.IMenuManager)
      */
-    public void contributeToMenu(IMenuManager manager) {
+    @Override
+		public void contributeToMenu(IMenuManager manager) {
 //		IMenuManager menu = new MenuManager("Editor &Menu");
 //		manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, menu);
 //		menu.add(sampleAction);
@@ -129,7 +131,8 @@ public class ResourceBundleEditorContributor extends MultiPageEditorActionBarCon
      * @see org.eclipse.ui.part.EditorActionBarContributor
      *         #contributeToToolBar(org.eclipse.jface.action.IToolBarManager)
      */
-    public void contributeToToolBar(IToolBarManager manager) {
+    @Override
+		public void contributeToToolBar(IToolBarManager manager) {
 //		manager.add(new Separator());
 //		manager.add(sampleAction);
     }

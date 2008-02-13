@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.widgets;
@@ -52,7 +52,7 @@ import com.essiembre.eclipse.rbe.ui.UIUtils;
 public class LocaleSelector extends Composite {
 
     private static final String DEFAULT_LOCALE = "[" //$NON-NLS-1$
-            + RBEPlugin.getString("editor.default") //$NON-NLS-1$ 
+            + RBEPlugin.getString("editor.default") //$NON-NLS-1$
             + "]"; //$NON-NLS-1$
     
     /*default*/ Locale[] availableLocales;
@@ -103,7 +103,8 @@ public class LocaleSelector extends Composite {
             localesCombo.add(availableLocales[i].getDisplayName());
         }
         localesCombo.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
+            @Override
+						public void widgetSelected(SelectionEvent e) {
                 int index = localesCombo.getSelectionIndex();
                 if (index == 0) { // default
                     langText.setText(""); //$NON-NLS-1$
@@ -124,7 +125,8 @@ public class LocaleSelector extends Composite {
         gd.widthHint = UIUtils.getWidthInChars(langText, 4);
         langText.setLayoutData(gd);
         langText.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent e) {
+            @Override
+						public void focusLost(FocusEvent e) {
                 langText.setText(langText.getText().toLowerCase());
                 setLocaleOnlocalesCombo();
             }
@@ -137,7 +139,8 @@ public class LocaleSelector extends Composite {
         gd.widthHint = UIUtils.getWidthInChars(countryText, 4);
         countryText.setLayoutData(gd);
         countryText.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent e) {
+            @Override
+						public void focusLost(FocusEvent e) {
                 countryText.setText(
                         countryText.getText().toUpperCase());
                 setLocaleOnlocalesCombo();
@@ -150,7 +153,8 @@ public class LocaleSelector extends Composite {
         gd.widthHint = UIUtils.getWidthInChars(variantText, 4);
         variantText.setLayoutData(gd);
         variantText.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent e) {
+            @Override
+						public void focusLost(FocusEvent e) {
                 setLocaleOnlocalesCombo();
             }
         });
@@ -178,7 +182,7 @@ public class LocaleSelector extends Composite {
     }
 
     /**
-     * Gets the selected locale.  Default locale is represented by a 
+     * Gets the selected locale.  Default locale is represented by a
      * <code>null</code> value.
      * @return selected locale
      */

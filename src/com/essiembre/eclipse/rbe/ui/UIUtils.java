@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui;
@@ -49,19 +49,19 @@ import com.essiembre.eclipse.rbe.RBEPlugin;
 public final class UIUtils {
 
     /** Name of resource bundle image. */
-    public static final String IMAGE_RESOURCE_BUNDLE = 
+    public static final String IMAGE_RESOURCE_BUNDLE =
             "resourcebundle.gif";  //$NON-NLS-1$
     /** Name of properties file image. */
-    public static final String IMAGE_PROPERTIES_FILE = 
+    public static final String IMAGE_PROPERTIES_FILE =
             "propertiesfile.gif";  //$NON-NLS-1$
     /** Name of new properties file image. */
-    public static final String IMAGE_NEW_PROPERTIES_FILE = 
+    public static final String IMAGE_NEW_PROPERTIES_FILE =
             "newpropertiesfile.gif";  //$NON-NLS-1$
     /** Name of hierarchical layout image. */
     public static final String IMAGE_LAYOUT_HIERARCHICAL =
             "hierarchicalLayout.gif";  //$NON-NLS-1$
     /** Name of flat layout image. */
-    public static final String IMAGE_LAYOUT_FLAT = 
+    public static final String IMAGE_LAYOUT_FLAT =
             "flatLayout.gif";  //$NON-NLS-1$
     
     public static final String IMAGE_INCOMPLETE_ENTRIES =
@@ -161,7 +161,7 @@ public final class UIUtils {
      * @param control the control on which to get width
      * @param numOfChars the number of chars
      * @return width
-     */    
+     */
     public static int getWidthInChars(Control control, int numOfChars) {
         GC gc = new GC(control);
         Point extent = gc.textExtent("W");//$NON-NLS-1$
@@ -175,7 +175,7 @@ public final class UIUtils {
      * @param control the control on which to get height
      * @param numOfChars the number of chars
      * @return height
-     */    
+     */
     public static int getHeightInChars(Control control, int numOfChars) {
         GC gc = new GC(control);
         Point extent = gc.textExtent("W");//$NON-NLS-1$
@@ -209,9 +209,9 @@ public final class UIUtils {
             Shell shell, Exception exception, String msgKey) {
         exception.printStackTrace();
         IStatus status = new Status(
-                IStatus.ERROR, 
+                IStatus.ERROR,
                 RBEPlugin.ID,
-                0, 
+                0,
                 RBEPlugin.getString(msgKey) + " " //$NON-NLS-1$
                         + RBEPlugin.getString("error.seeLogs"), //$NON-NLS-1$
                 exception);

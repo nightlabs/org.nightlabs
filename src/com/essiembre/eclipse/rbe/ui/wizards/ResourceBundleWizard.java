@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.wizards;
@@ -43,7 +43,6 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -53,9 +52,9 @@ import com.essiembre.eclipse.rbe.model.bundle.PropertiesGenerator;
 import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
 
 /**
- * This is a sample new wizard. Its role is to create a new file 
+ * This is a sample new wizard. Its role is to create a new file
  * resource in the provided container. If the container resource
- * (a folder or a project) is selected in the workspace 
+ * (a folder or a project) is selected in the workspace
  * when the wizard is opened, it will accept it as the target
  * container. The wizard creates one or several files with the extension
  * "properties". If a sample multi-page editor (also available
@@ -78,7 +77,8 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
      * Adding the page to the wizard.
      */
 
-    public void addPages() {
+    @Override
+		public void addPages() {
         page = new ResourceBundleNewWizardPage(selection);
         addPage(page);
     }
@@ -88,7 +88,8 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
      * the wizard. We will create an operation and run it
      * using wizard as execution context.
      */
-    public boolean performFinish() {
+    @Override
+		public boolean performFinish() {
         final String containerName = page.getContainerName();
         final String baseName = page.getFileName();
         final String[] locales = page.getLocaleStrings();
@@ -135,7 +136,7 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
             return false;
         } catch (InvocationTargetException e) {
             Throwable realException = e.getTargetException();
-            MessageDialog.openError(getShell(), 
+            MessageDialog.openError(getShell(),
                     "Error", realException.getMessage()); //$NON-NLS-1$
             return false;
         }
@@ -188,7 +189,7 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
     }
 
     private void throwCoreException(String message) throws CoreException {
-        IStatus status = new Status(IStatus.ERROR, 
+        IStatus status = new Status(IStatus.ERROR,
                 "com.essiembre.eclipse.i18n.resourcebundle",  //$NON-NLS-1$
                 IStatus.OK, message, null);
         throw new CoreException(status);

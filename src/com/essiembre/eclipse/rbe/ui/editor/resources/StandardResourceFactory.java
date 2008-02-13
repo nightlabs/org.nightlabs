@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.editor.resources;
@@ -57,7 +57,7 @@ public class StandardResourceFactory extends ResourceFactory {
      * @param file file used to open all related files
      * @throws CoreException problem creating factory
      */
-    protected StandardResourceFactory(IEditorSite site, IFile file) 
+    protected StandardResourceFactory(IEditorSite site, IFile file)
              throws CoreException {
         super();
         this.site = site;
@@ -70,9 +70,9 @@ public class StandardResourceFactory extends ResourceFactory {
             IResource resource = resources[i];
             String resourceName = resource.getName();
             // Build local title
-            String localeText = 
+            String localeText =
                     resourceName.replaceFirst(regex, "$2"); //$NON-NLS-1$
-            StringTokenizer tokens = 
+            StringTokenizer tokens =
                 new StringTokenizer(localeText, "_"); //$NON-NLS-1$
             List localeSections = new ArrayList();
             while (tokens.hasMoreTokens()) {
@@ -97,7 +97,7 @@ public class StandardResourceFactory extends ResourceFactory {
             default:
                 break;
             }
-            SourceEditor sourceEditor = 
+            SourceEditor sourceEditor =
                     createEditor(site, resource, locale);
             if (sourceEditor != null) {
                 sourceEditors.put(sourceEditor.getLocale(), sourceEditor);
@@ -115,7 +115,8 @@ public class StandardResourceFactory extends ResourceFactory {
      * @see com.essiembre.eclipse.rbe.ui.editor.resources.ResourceFactory
      *         #getEditorDisplayName()
      */
-    public String getEditorDisplayName() {
+    @Override
+		public String getEditorDisplayName() {
         return displayName;
     }
 
@@ -123,7 +124,8 @@ public class StandardResourceFactory extends ResourceFactory {
      * @see com.essiembre.eclipse.rbe.ui.editor.resources.ResourceFactory
      *         #getSourceEditors()
      */
-    public SourceEditor[] getSourceEditors() {
+    @Override
+		public SourceEditor[] getSourceEditors() {
         // Java 5 would be better here
         SourceEditor[] editors = new SourceEditor[sourceEditors.size()];
         int i = 0;
@@ -138,7 +140,8 @@ public class StandardResourceFactory extends ResourceFactory {
      * @see com.essiembre.eclipse.rbe.ui.editor.resources.ResourceFactory
      *         #getPropertiesFileCreator()
      */
-    public PropertiesFileCreator getPropertiesFileCreator() {
+    @Override
+		public PropertiesFileCreator getPropertiesFileCreator() {
         return fileCreator;
     }
 

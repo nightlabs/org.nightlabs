@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.preferences;
@@ -45,7 +45,8 @@ public class RBEPreferenceInitializer extends
      * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer
      *      #initializeDefaultPreferences()
      */
-    public void initializeDefaultPreferences() {
+    @Override
+		public void initializeDefaultPreferences() {
         Preferences prefs = RBEPlugin.getDefault().getPluginPreferences();
 
         //General
@@ -73,7 +74,7 @@ public class RBEPreferenceInitializer extends
         prefs.setDefault(RBEPreferences.WRAP_CHAR_LIMIT, 80);
         prefs.setDefault(RBEPreferences.WRAP_INDENT_SPACES, 8);
 
-        prefs.setDefault(RBEPreferences.NEW_LINE_TYPE, 
+        prefs.setDefault(RBEPreferences.NEW_LINE_TYPE,
                 RBEPreferences.NEW_LINE_UNIX);
 
         prefs.setDefault(RBEPreferences.KEEP_EMPTY_FIELDS, false);

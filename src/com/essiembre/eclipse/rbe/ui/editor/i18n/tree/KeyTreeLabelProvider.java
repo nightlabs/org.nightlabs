@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.editor.i18n.tree;
@@ -23,7 +23,6 @@ package com.essiembre.eclipse.rbe.ui.editor.i18n.tree;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -43,8 +42,8 @@ import com.essiembre.eclipse.rbe.ui.UIUtils;
  * @author Pascal Essiembre (essiembre@users.sourceforge.net)
  * @version $Author: essiembre $ $Revision: 1.10 $ $Date: 2005/09/11 01:37:52 $
  */
-public class KeyTreeLabelProvider 
-        extends LabelProvider implements IFontProvider, IColorProvider {	
+public class KeyTreeLabelProvider
+        extends LabelProvider implements IFontProvider, IColorProvider {
     
     private static final int KEY_DEFAULT = 1 << 1;
     private static final int KEY_COMMENTED = 1 << 2;
@@ -65,7 +64,8 @@ public class KeyTreeLabelProvider
     /**
      * @see ILabelProvider#getImage(Object)
      */
-    public Image getImage(Object element) {
+    @Override
+		public Image getImage(Object element) {
         KeyTreeItem treeItem = ((KeyTreeItem) element);
         
         int iconFlags = 0;
@@ -83,7 +83,7 @@ public class KeyTreeLabelProvider
             iconFlags += KEY_NOT;
         }
         
-        // Maybe add warning icon        
+        // Maybe add warning icon
         if (RBEPreferences.getReportMissingValues()) {
             IsMissingValueVisitor misValVisitor = new IsMissingValueVisitor();
             treeItem.accept(misValVisitor, null);
@@ -100,14 +100,16 @@ public class KeyTreeLabelProvider
     /**
      * @see ILabelProvider#getText(Object)
      */
-    public String getText(Object element) {
-        return ((KeyTreeItem) element).getName(); 
+    @Override
+		public String getText(Object element) {
+        return ((KeyTreeItem) element).getName();
     }
 
     /**
      * @see org.eclipse.jface.viewers.IBaseLabelProvider#dispose()
      */
-    public void dispose() {
+    @Override
+		public void dispose() {
         groupFontKey.dispose();
         groupFontNoKey.dispose();
     }
@@ -116,7 +118,7 @@ public class KeyTreeLabelProvider
      * @see org.eclipse.jface.viewers.IFontProvider#getFont(java.lang.Object)
      */
     public Font getFont(Object element) {
-        KeyTreeItem item = (KeyTreeItem) element; 
+        KeyTreeItem item = (KeyTreeItem) element;
         if (item.getChildren().size() > 0) {
             if (item.getKeyTree().getBundleGroup().isKey(item.getId())) {
                 return groupFontKey;
@@ -130,7 +132,7 @@ public class KeyTreeLabelProvider
      * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
      */
     public Color getForeground(Object element) {
-        KeyTreeItem treeItem = (KeyTreeItem) element; 
+        KeyTreeItem treeItem = (KeyTreeItem) element;
         IsCommentedVisitor commentedVisitor = new IsCommentedVisitor();
         treeItem.accept(commentedVisitor, null);
         if (commentedVisitor.hasOneCommented()) {
@@ -148,7 +150,7 @@ public class KeyTreeLabelProvider
     }
     
     /**
-     * Generates an image based on icon flags. 
+     * Generates an image based on icon flags.
      * @param iconFlags
      * @return generated image
      */
@@ -178,8 +180,8 @@ public class KeyTreeLabelProvider
 
     private Image overlayImage(
             Image baseImage, String imageName, int location, int iconFlags) {
-        /* To obtain a unique key, we assume here that the baseImage and 
-         * location are always the same for each imageName and keyFlags 
+        /* To obtain a unique key, we assume here that the baseImage and
+         * location are always the same for each imageName and keyFlags
          * combination.
          */
         String imageKey = imageName + iconFlags;

@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.editor.resources;
@@ -46,17 +46,17 @@ import com.essiembre.eclipse.rbe.model.workbench.files.PropertiesFileCreator;
 public abstract class ResourceFactory {
 
     /** Class name of Properties file editor (Eclipse 3.1). */
-    protected static final String PROPERTIES_EDITOR_CLASS_NAME = 
+    protected static final String PROPERTIES_EDITOR_CLASS_NAME =
             "org.eclipse.jdt.internal.ui.propertiesfileeditor." //$NON-NLS-1$
           + "PropertiesFileEditor"; //$NON-NLS-1$
 
     /** Token to replace in a regular expression with a bundle name. */
     private static final String TOKEN_BUNDLE_NAME = "BUNDLENAME"; //$NON-NLS-1$
     /** Token to replace in a regular expression with a file extension. */
-    private static final String TOKEN_FILE_EXTENSION = 
+    private static final String TOKEN_FILE_EXTENSION =
             "FILEEXTENSION"; //$NON-NLS-1$
     /** Regex to match a properties file. */
-    private static final String PROPERTIES_FILE_REGEX = 
+    private static final String PROPERTIES_FILE_REGEX =
             "^(" + TOKEN_BUNDLE_NAME + ")"  //$NON-NLS-1$//$NON-NLS-2$
           + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" //$NON-NLS-1$
           + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." //$NON-NLS-1$
@@ -109,7 +109,7 @@ public abstract class ResourceFactory {
         
         ITextEditor textEditor = null;
         if (resource != null && resource instanceof IFile) {
-            IEditorInput newEditorInput = 
+            IEditorInput newEditorInput =
                     new FileEditorInput((IFile) resource);
             textEditor = null;
             try {
@@ -119,7 +119,7 @@ public abstract class ResourceFactory {
             } catch (Exception e) {
                 // Use default editor otherwise
                 textEditor = new TextEditor();
-            }			
+            }
             textEditor.init(site, newEditorInput);
         }
         if (textEditor != null) {
@@ -129,7 +129,7 @@ public abstract class ResourceFactory {
     }
 
     
-    private static boolean isNLResource(IFile file) 
+    private static boolean isNLResource(IFile file)
             throws PartInitException {
         /*
          * Check if NL is supported.
@@ -143,7 +143,7 @@ public abstract class ResourceFactory {
          */
         IContainer container = file.getParent();
         IResource nlDir = null;
-        while (container != null 
+        while (container != null
                 && (nlDir == null || !(nlDir instanceof Folder))) {
             nlDir = container.findMember("nl"); //$NON-NLS-1$
             container = container.getParent();

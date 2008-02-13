@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.editor.resources;
@@ -26,17 +26,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipse.ui.texteditor.ITextEditor;
-
 import com.essiembre.eclipse.rbe.model.DeltaEvent;
 import com.essiembre.eclipse.rbe.model.IDeltaListener;
 import com.essiembre.eclipse.rbe.model.bundle.Bundle;
@@ -50,7 +44,7 @@ import com.essiembre.eclipse.rbe.model.tree.updater.KeyTreeUpdater;
 import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
 
 /**
- * Mediator holding instances of commonly used items, dealing with 
+ * Mediator holding instances of commonly used items, dealing with
  * important interactions within themselves.
  * @author Pascal Essiembre (essiembre@users.sourceforge.net)
  * @version $Author: costamojan $ $Revision: 1.9 $ $Date: 2006/05/12 20:50:53 $
@@ -82,14 +76,14 @@ public class ResourceManager {
             sourceEditors.put(locale, sourceEditor);
             locales.add(locale);
             bundleGroup.addBundle(
-                    locale, PropertiesParser.parse(sourceEditor.getContent()));			
+                    locale, PropertiesParser.parse(sourceEditor.getContent()));
         }
         bundleGroup.addListener(new IDeltaListener() {
             public void add(DeltaEvent event) {}    // do nothing
             public void remove(DeltaEvent event) {} // do nothing
             public void modify(DeltaEvent event) {
                 final Bundle bundle = (Bundle) event.receiver();
-                final SourceEditor editor = 
+                final SourceEditor editor =
                         (SourceEditor) sourceEditors.get(bundle.getLocale());
                 String editorContent = PropertiesGenerator.generate(bundle);
                 editor.setContent(editorContent);
@@ -179,7 +173,7 @@ public class ResourceManager {
      * @throws CoreException problem creating file
      * @throws IOException problem creating file
      */
-    public IFile createPropertiesFile(Locale locale) 
+    public IFile createPropertiesFile(Locale locale)
             throws CoreException, IOException {
         return resourcesFactory.getPropertiesFileCreator().createPropertiesFile(
                 locale);
@@ -199,7 +193,7 @@ public class ResourceManager {
         sourceEditors.put(sourceEditor.getLocale(), sourceEditor);
         locales.add(locale);
         bundleGroup.addBundle(
-                locale, PropertiesParser.parse(sourceEditor.getContent())); 
+                locale, PropertiesParser.parse(sourceEditor.getContent()));
         return sourceEditor;
     }
     /**

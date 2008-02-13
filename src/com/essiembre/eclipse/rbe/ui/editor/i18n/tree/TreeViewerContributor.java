@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.editor.i18n.tree;
@@ -37,7 +37,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
@@ -116,7 +115,7 @@ public class TreeViewerContributor {
             structuralupdater = new GroupedKeyTreeUpdater(RBEPreferences.getKeyGroupSeparator());
         } else {
             structuralupdater = new FlatKeyTreeUpdater();
-        }        
+        }
     }
     
     private void buildActions() {
@@ -331,7 +330,7 @@ public class TreeViewerContributor {
             msgHead = RBEPlugin.getString(
                     "dialog.delete.head.multiple"); //$NON-NLS-1$
             msgBody = RBEPlugin.getString(
-                    "dialog.delete.body.multiple", //$NON-NLS-1$ 
+                    "dialog.delete.body.multiple", //$NON-NLS-1$
                     selectedItem.getName());
         }
         MessageBox msgBox = new MessageBox(getShell(), SWT.ICON_QUESTION|SWT.OK|SWT.CANCEL);
@@ -384,7 +383,7 @@ public class TreeViewerContributor {
             msgHead = RBEPlugin.getString(
                     "dialog.duplicate.head.multiple"); //$NON-NLS-1$
             msgBody = RBEPlugin.getString(
-                    "dialog.duplicate.body.multiple", //$NON-NLS-1$ 
+                    "dialog.duplicate.body.multiple", //$NON-NLS-1$
                     selectedItem.getName());
         }
         // Rename single item
@@ -400,7 +399,7 @@ public class TreeViewerContributor {
                 KeyTreeItem item = (KeyTreeItem) iter.next();
                 String origItemKey = item.getId();
                 if (origItemKey.startsWith(key)) {
-                    String newItemKey = 
+                    String newItemKey =
                             newKey + origItemKey.substring(key.length());
                     bundleGroup.copyKey(origItemKey, newItemKey);
                 }
@@ -442,32 +441,32 @@ public class TreeViewerContributor {
             if(structuralupdater instanceof GroupedKeyTreeUpdater) {
                 if(RBEPreferences.getKeyTreeExpanded()) {
                     treeviewer.expandAll();
-                }			
+                }
             }
         } else if(action == KT_FLAT) {
-            structuralupdater = new FlatKeyTreeUpdater(); 
+            structuralupdater = new FlatKeyTreeUpdater();
             if((mode & KT_INCOMPLETE) != 0) {
                 // we need to activate the filter
                 tree.setUpdater(
                     new IncompletionUpdater(tree.getBundleGroup(), structuralupdater)
-                );				
+                );
             } else {
                 tree.setUpdater(structuralupdater);
             }
             mode = mode & (~KT_HIERARCHICAL);
         } else if(action == KT_HIERARCHICAL) {
-            structuralupdater = new GroupedKeyTreeUpdater(RBEPreferences.getKeyGroupSeparator()); 
+            structuralupdater = new GroupedKeyTreeUpdater(RBEPreferences.getKeyGroupSeparator());
             if((mode & KT_INCOMPLETE) != 0) {
                 // we need to activate the filter
                 tree.setUpdater(
                     new IncompletionUpdater(tree.getBundleGroup(), structuralupdater)
-                );				
+                );
             } else {
                 tree.setUpdater(structuralupdater);
             }
             if(RBEPreferences.getKeyTreeExpanded()) {
                 treeviewer.expandAll();
-            }			
+            }
             mode = mode | KT_HIERARCHICAL;
         }
         treeviewer.getTree().setCursor(defaultcursor);

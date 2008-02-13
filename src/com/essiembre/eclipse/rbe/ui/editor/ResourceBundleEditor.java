@@ -3,30 +3,25 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.editor;
 
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -41,12 +36,9 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.MultiPageEditorPart;
-import org.eclipse.ui.part.Page;
-import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
@@ -65,7 +57,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
         implements IGotoMarker {
 
     /** Editor ID, as defined in plugin.xml. */
-    public static final String EDITOR_ID = 
+    public static final String EDITOR_ID =
        "com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor"; //$NON-NLS-1$
     
     private ResourceManager resourceMediator;
@@ -87,7 +79,8 @@ public class ResourceBundleEditor extends MultiPageEditorPart
      * The <code>MultiPageEditorExample</code> implementation of this method
      * checks that the input is an instance of <code>IFileEditorInput</code>.
      */
-    public void init(IEditorSite site, IEditorInput editorInput)
+    @Override
+		public void init(IEditorSite site, IEditorInput editorInput)
         throws PartInitException {
         if (editorInput instanceof IFileEditorInput) {
             IFile file = ((IFileEditorInput) editorInput).getFile();
@@ -97,7 +90,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
                 UIUtils.showErrorDialog(
                         getSite().getShell(), e, "error.init.ui"); //$NON-NLS-1$
             }
-//             resourceMediator.getKeyTree().a           
+//             resourceMediator.getKeyTree().a
             setPartName(resourceMediator.getEditorDisplayName());
             setContentDescription(
                     RBEPlugin.getString("editor.content.desc") //$NON-NLS-1$
@@ -122,7 +115,8 @@ public class ResourceBundleEditor extends MultiPageEditorPart
     /**
      * Creates the pages of the multi-page editor.
      */
-    protected void createPages() {
+    @Override
+		protected void createPages() {
         // Create I18N page
         i18nPage = new I18nPage(
                 getContainer(), SWT.NONE, resourceMediator);
@@ -137,18 +131,18 @@ public class ResourceBundleEditor extends MultiPageEditorPart
             for (int i = 0; i < sourceEditors.length; i++) {
                 SourceEditor sourceEditor = sourceEditors[i];
                 index = addPage(
-                        sourceEditor.getEditor(), 
+                        sourceEditor.getEditor(),
                         sourceEditor.getEditor().getEditorInput());
                 setPageText(index, UIUtils.getDisplayName(
                         sourceEditor.getLocale()));
-                setPageImage(index, 
+                setPageImage(index,
                         UIUtils.getImage(UIUtils.IMAGE_PROPERTIES_FILE));
             }
             outline = new ResourceBundleOutline(resourceMediator.getKeyTree());
             
             
         } catch (PartInitException e) {
-            ErrorDialog.openError(getSite().getShell(), 
+            ErrorDialog.openError(getSite().getShell(),
                 "Error creating text editor page.", //$NON-NLS-1$
                 null, e.getStatus());
         }
@@ -162,21 +156,21 @@ public class ResourceBundleEditor extends MultiPageEditorPart
     }
     
     public void addResource(IFile resource, Locale locale) {
-        try {    		
+        try {
             SourceEditor sourceEditor = resourceMediator.addSourceEditor(resource, locale);
             int index = getPageCount() - 1;
             addPage(index,
-                    sourceEditor.getEditor(), 
+                    sourceEditor.getEditor(),
                     sourceEditor.getEditor().getEditorInput());
             setPageText(index, UIUtils.getDisplayName(
                     sourceEditor.getLocale()));
-            setPageImage(index, 
+            setPageImage(index,
                     UIUtils.getImage(UIUtils.IMAGE_PROPERTIES_FILE));
             i18nPage.refreshPage();
             setActivePage(0);
-            sourceEditor.setContent(sourceEditor.getContent()); // re-set the content to trigger dirty state 
+            sourceEditor.setContent(sourceEditor.getContent()); // re-set the content to trigger dirty state
         } catch (PartInitException e) {
-            ErrorDialog.openError(getSite().getShell(), 
+            ErrorDialog.openError(getSite().getShell(),
                     "Error creating resource mediaotr.", //$NON-NLS-1$
                     null, e.getStatus());
         }
@@ -186,7 +180,8 @@ public class ResourceBundleEditor extends MultiPageEditorPart
     /**
      * {@inheritDoc}
      */
-    public Object getAdapter(Class adapter) {
+    @Override
+		public Object getAdapter(Class adapter) {
         Object obj = super.getAdapter(adapter);
         if (obj == null) {
             if (IContentOutlinePage.class.equals(adapter)) {
@@ -200,7 +195,8 @@ public class ResourceBundleEditor extends MultiPageEditorPart
     /**
      * Saves the multi-page editor's document.
      */
-    public void doSave(IProgressMonitor monitor) {
+    @Override
+		public void doSave(IProgressMonitor monitor) {
         KeyTree keyTree = resourceMediator.getKeyTree();
         String key = keyTree.getSelectedKey();
 
@@ -215,14 +211,16 @@ public class ResourceBundleEditor extends MultiPageEditorPart
     /**
      * @see org.eclipse.ui.ISaveablePart#doSaveAs()
      */
-    public void doSaveAs() {
+    @Override
+		public void doSaveAs() {
         // Save As not allowed.
     }
     
     /**
      * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
      */
-    public boolean isSaveAsAllowed() {
+    @Override
+		public boolean isSaveAsAllowed() {
         return false;
     }
 
@@ -271,7 +269,8 @@ public class ResourceBundleEditor extends MultiPageEditorPart
     /**
      * Calculates the contents of page GUI page when it is activated.
      */
-    protected void pageChange(int newPageIndex) {
+    @Override
+		protected void pageChange(int newPageIndex) {
         super.pageChange(newPageIndex);
         KeyTree keyTree = resourceMediator.getKeyTree();
         
@@ -291,7 +290,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
         if (newPageIndex == getPageCount()-1) // switched to last page
             return;
         
-        int editorIndex = newPageIndex - 1; // adjust because first page is tree page		
+        int editorIndex = newPageIndex - 1; // adjust because first page is tree page
         if (editorIndex >= 0 && editorIndex < resourceMediator.getSourceEditors().length) {
             lastEditor = resourceMediator.getSourceEditors()[editorIndex];
             if (keyTree.getSelectedKey() != null)
@@ -331,7 +330,8 @@ public class ResourceBundleEditor extends MultiPageEditorPart
     /**
      * @see org.eclipse.ui.IWorkbenchPart#dispose()
      */
-    public void dispose() {
+    @Override
+		public void dispose() {
         super.dispose();
     	if (i18nPage != null && !i18nPage.isDisposed())
     		i18nPage.dispose();

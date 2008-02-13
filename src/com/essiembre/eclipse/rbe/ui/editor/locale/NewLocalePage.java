@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.editor.locale;
@@ -55,10 +55,10 @@ public class NewLocalePage extends Composite {
     /**
      * Constructor.
      * @param parent parent component.
-     * @param resourceManager resource manager 
+     * @param resourceManager resource manager
      */
     public NewLocalePage(
-            final Composite parent, 
+            final Composite parent,
             final ResourceManager resourceManager,
             final ResourceBundleEditor editor) {
         super(parent, SWT.NONE);
@@ -84,7 +84,7 @@ public class NewLocalePage extends Composite {
         label.setLayoutData(gridData);
 
         // Locale selector
-        final LocaleSelector localeSelector = 
+        final LocaleSelector localeSelector =
                 new LocaleSelector(block);
         gridData = new GridData();
         gridData.horizontalAlignment = GridData.CENTER;
@@ -99,20 +99,21 @@ public class NewLocalePage extends Composite {
         gridData.horizontalAlignment = GridData.CENTER;
         createButton.setLayoutData(gridData);
         createButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 final Locale locale = localeSelector.getSelectedLocale();
                 try {
                     // Create the new file
                     try {
                         //TODO add "newPropertiesFile" method to seGroup.
-                        final IFile file = 
+                        final IFile file =
                                 resourceManager.createPropertiesFile(locale);
                         Display.getDefault().asyncExec(new Runnable() {
                             public void run() {
                                 editor.addResource(file, locale);
                             }
                         });
-//                        
+//
 //                        final IWorkbenchPage page = PlatformUI.getWorkbench()
 //                                .getActiveWorkbenchWindow().getActivePage();
 //                        // Open new editor with new locale
@@ -129,15 +130,15 @@ public class NewLocalePage extends Composite {
 //                        // Close active editor (prior adding locale)
 //                        page.closeEditor(page.getActiveEditor(), true);
                     } catch (NullPointerException e) {
-                        UIUtils.showErrorDialog(getShell(), e, 
+                        UIUtils.showErrorDialog(getShell(), e,
                                 "error.newfile.cannotCreate"); //$NON-NLS-1$
                         throw e;
                     }
                 } catch (CoreException e) {
-                    UIUtils.showErrorDialog(getShell(), e, 
+                    UIUtils.showErrorDialog(getShell(), e,
                             "error.newfile.cannotCreate"); //$NON-NLS-1$
                 } catch (IOException e) {
-                    UIUtils.showErrorDialog(getShell(), e, 
+                    UIUtils.showErrorDialog(getShell(), e,
                             "error.newfile.cannotCreate"); //$NON-NLS-1$
                 }
             }
@@ -148,7 +149,8 @@ public class NewLocalePage extends Composite {
     /**
      * @see org.eclipse.swt.widgets.Widget#dispose()
      */
-    public void dispose() {
+    @Override
+		public void dispose() {
         fontBold.dispose();
         fontBoldBig.dispose();
         super.dispose();

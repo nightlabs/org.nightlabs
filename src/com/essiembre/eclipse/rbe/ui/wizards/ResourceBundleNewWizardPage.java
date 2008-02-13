@@ -3,19 +3,19 @@
  * 
  * This file is part of Essiembre ResourceBundle Editor.
  * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
+ * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
+ * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+ * License along with Essiembre ResourceBundle Editor; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  */
 package com.essiembre.eclipse.rbe.ui.wizards;
@@ -26,7 +26,6 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -96,10 +95,10 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         container.setLayoutData(gd);
         
-        // Bundle name + location        
+        // Bundle name + location
         createTopComposite(container);
 
-        // Locales        
+        // Locales
         createBottomComposite(container);
         
                 
@@ -133,7 +132,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
     }
 
     /**
-     * Creates the bottom part of this wizard where selected locales 
+     * Creates the bottom part of this wizard where selected locales
      * are stored.
      * @param parent parent container
      */
@@ -149,12 +148,13 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         selectedGroup.setLayoutData(gd);
         selectedGroup.setText(RBEPlugin.getString(
                 "editor.wiz.selected")); //$NON-NLS-1$
-        bundleLocalesList = 
+        bundleLocalesList =
                 new List(selectedGroup, SWT.READ_ONLY | SWT.MULTI | SWT.BORDER);
         gd = new GridData(GridData.FILL_BOTH);
         bundleLocalesList.setLayoutData(gd);
         bundleLocalesList.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 removeButton.setEnabled(
                         bundleLocalesList.getSelectionIndices().length != 0);
                 setAddButtonState();
@@ -181,7 +181,8 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         addButton.setText(RBEPlugin.getString(
                 "editor.wiz.add")); //$NON-NLS-1$
         addButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 bundleLocalesList.add(getSelectedLocaleAsString());
                 setAddButtonState();
             }
@@ -194,7 +195,8 @@ public class ResourceBundleNewWizardPage extends WizardPage {
                 "editor.wiz.remove")); //$NON-NLS-1$
         removeButton.setEnabled(false);
         removeButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
+            @Override
+						public void widgetSelected(SelectionEvent event) {
                 bundleLocalesList.remove(
                         bundleLocalesList.getSelectionIndices());
                 removeButton.setEnabled(false);
@@ -210,7 +212,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
      */
     private void createBottomAvailableLocalesComposite(Composite parent) {
 
-        localeSelector = 
+        localeSelector =
                 new LocaleSelector(parent);
         localeSelector.addModifyListener(new ModifyListener(){
             public void modifyText(ModifyEvent e) {
@@ -250,7 +252,8 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         button.setText(RBEPlugin.getString(
                 "editor.wiz.browse")); //$NON-NLS-1$
         button.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
+            @Override
+						public void widgetSelected(SelectionEvent e) {
                 handleBrowse();
             }
         });
@@ -353,7 +356,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
     public String getContainerName() {
         return containerText.getText();
     }
-    /** 
+    /**
      * Gets the file name.
      * @return file name
      */
@@ -362,7 +365,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
     }
     
     /**
-     * Sets the "add" button state. 
+     * Sets the "add" button state.
      */
     /*default*/ void setAddButtonState() {
         addButton.setEnabled(bundleLocalesList.indexOf(
