@@ -14,7 +14,7 @@ import java.util.List;
 public interface IClassLoadingDelegator {
 
 	/**
-	 * Add a ClassDataLoaderDelegate that will be asked for 
+	 * Add a ClassDataLoaderDelegate that will be asked for
 	 * ClassData and resources.
 	 * 
 	 * @param delegate The new delegate to add.
@@ -22,7 +22,7 @@ public interface IClassLoadingDelegator {
 	public abstract void addDelegate(ClassDataLoaderDelegate delegate);
 
 	/**
-	 * Add a ClassLoaderDelegate that will be asked for 
+	 * Add a ClassLoaderDelegate that will be asked for
 	 * classes and resources.
 	 * 
 	 * @param delegate The new delegate to add.
@@ -37,7 +37,7 @@ public interface IClassLoadingDelegator {
 
 	/**
 	 * Asks the registered delegates for this class and
-	 * returns the first one found.  
+	 * returns the first one found.
 	 * 
 	 * @param name The classname
 	 * @return The class found
@@ -51,8 +51,8 @@ public interface IClassLoadingDelegator {
 	 * first list of resources found by a delegate.
 	 * 
 	 * @param name The name of the resources to find.
-	 * @param returnAfterFoundFirst Whether to return only the first entry in the list of resources possibly to find. 
-	 * @return A list of resources found for the given name, or null if none where found. 
+	 * @param returnAfterFoundFirst Whether to return only the first entry in the list of resources possibly to find.
+	 * @return A list of resources found for the given name, or null if none where found.
 	 * @throws IOException
 	 */
 	public abstract List<URL> findDelegateResources(String name,

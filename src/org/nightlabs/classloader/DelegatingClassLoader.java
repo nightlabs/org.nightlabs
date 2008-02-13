@@ -44,7 +44,7 @@ import java.util.Map;
  * </ul>
  *
  * The DelegatingClassLoader must be declared to be the system class loader of
- * the application. This is done by the VM parameter 
+ * the application. This is done by the VM parameter
  * <tt>-Djava.system.class.loader=org.nightlabs.ipanema.classloader.boot.DelegatingClassLoader</tt>.
  * <br/><br/>
  * For this to work, the project DelegatingClassLoader, which contains this class loader must
@@ -161,7 +161,7 @@ public class DelegatingClassLoader
 	//			} catch (InterruptedException e) {
 	//				e.printStackTrace();
 	//			}
-	//			log_info("loadClass(String name, boolean resolve)", "After sleep, before resolveClass("+name+")");			
+	//			log_info("loadClass(String name, boolean resolve)", "After sleep, before resolveClass("+name+")");
 				
 				resolveClass(c);
 			}

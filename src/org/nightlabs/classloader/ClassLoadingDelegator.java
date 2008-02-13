@@ -70,7 +70,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 
 	/**
 	 * This is used internally for checking weather a class was already
-	 * searched for. 
+	 * searched for.
 	 * @author Alexander Bieber
 	 */
 	protected class ClassSearchResult {
@@ -98,7 +98,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			this.path = _path;
 		}
 
-		private boolean initialized = false;		
+		private boolean initialized = false;
 		private boolean isdirectory;
 		private boolean isjar;
 
@@ -521,7 +521,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 				if (returnAfterFoundFirst) {
 					return rsr.getFoundResources();
 				}
-				// all elements queried 
+				// all elements queried
 				else {
 					if (rsr.wasFullSearch())
 						return rsr.getFoundResources();
@@ -532,7 +532,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			}
 		} // synchronized(foundResources) {
 		
-		String threadClassKey = Thread.currentThread().toString() + "/" + name; 
+		String threadClassKey = Thread.currentThread().toString() + "/" + name;
 		synchronized (ignoredThreadsClassesOrResources) {
 			if (ignoredThreadsClassesOrResources.contains(threadClassKey))
 				return null;
@@ -590,7 +590,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 				foundResources.put(name,new ResourceSearchResult(!returnAfterFoundFirst,resources));
 			}
 			
-			return resources;			
+			return resources;
 			
 		} finally {
 			synchronized (ignoredThreadsClassesOrResources) {
@@ -623,7 +623,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 				probableLength = readBlockSize * 5;
 			byte[] classData = new byte[probableLength];
 			byte[] rbuf = new byte[readBlockSize];
-			int bytesRead = 0;		
+			int bytesRead = 0;
 			try {
 				int br;
 				do {
@@ -649,6 +649,6 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 				LogUtil.log_error(this.getClass(), "defineClassFromInputStream", "Closing input stream failed after loading class \""+name+"\"!", e);
 			}
 		}
-	}	
+	}
 
 }

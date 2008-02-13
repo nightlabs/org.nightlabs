@@ -30,7 +30,7 @@ package org.nightlabs.classloader;
 /**
  * @author Alexander Bieber
  */
-public interface ClassLoaderDelegate extends ResourceFinder 
+public interface ClassLoaderDelegate extends ResourceFinder
 {
 	public Class<?> loadClass(String className);
 }
