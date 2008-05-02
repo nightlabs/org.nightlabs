@@ -22,6 +22,7 @@ package com.essiembre.eclipse.rbe.ui.editor;
 
 
 import java.util.Locale;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;

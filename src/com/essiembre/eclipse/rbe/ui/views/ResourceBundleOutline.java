@@ -21,37 +21,28 @@
 package com.essiembre.eclipse.rbe.ui.views;
 
 
-import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;
-import com.essiembre.eclipse.rbe.model.tree.KeyTree;
-
-import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
-
-import com.essiembre.eclipse.rbe.model.IDeltaListener;
-import com.essiembre.eclipse.rbe.model.DeltaEvent;
-
-import com.essiembre.eclipse.rbe.ui.editor.i18n.tree.KeyTreeContentProvider;
-import com.essiembre.eclipse.rbe.ui.editor.i18n.tree.TreeViewerContributor;
-import com.essiembre.eclipse.rbe.ui.editor.i18n.tree.KeyTreeLabelProvider;
-import com.essiembre.eclipse.rbe.ui.UIUtils;
-
-import com.essiembre.eclipse.rbe.RBEPlugin;
-
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
-
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.Action;
-
-import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
-
-import org.eclipse.ui.IActionBars;
-
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
+
+import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.model.DeltaEvent;
+import com.essiembre.eclipse.rbe.model.IDeltaListener;
+import com.essiembre.eclipse.rbe.model.tree.KeyTree;
+import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;
+import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
+import com.essiembre.eclipse.rbe.ui.UIUtils;
+import com.essiembre.eclipse.rbe.ui.editor.i18n.tree.KeyTreeContentProvider;
+import com.essiembre.eclipse.rbe.ui.editor.i18n.tree.KeyTreeLabelProvider;
+import com.essiembre.eclipse.rbe.ui.editor.i18n.tree.TreeViewerContributor;
 
 
 /**
