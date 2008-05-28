@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -40,7 +40,7 @@ public class IsCommentedVisitor extends KeyTreeVisitorAdapter {
     boolean hasOneCommented = false;
     /** Whether corresponding bundle entries are all commented. */
     boolean areAllCommented = false;
-    
+
     /**
      * Constructor.
      */
@@ -59,10 +59,10 @@ public class IsCommentedVisitor extends KeyTreeVisitorAdapter {
         String key = item.getId();
         BundleGroup bundleGroup = item.getKeyTree().getBundleGroup();
         if (bundleGroup.isKey(key)) {
-            Collection entries = bundleGroup.getBundleEntries(key);
+            Collection<BundleEntry> entries = bundleGroup.getBundleEntries(key);
             int commentedCount = 0;
-            for (Iterator iter = entries.iterator(); iter.hasNext();) {
-                BundleEntry entry = (BundleEntry) iter.next();
+            for (Iterator<BundleEntry> iter = entries.iterator(); iter.hasNext();) {
+                BundleEntry entry = iter.next();
                 if (entry != null && entry.isCommented()) {
                     hasOneCommented = true;
                     commentedCount++;
@@ -73,7 +73,7 @@ public class IsCommentedVisitor extends KeyTreeVisitorAdapter {
             }
         }
     }
-    
+
     /**
      * Gets the "areAllCommented" attribute.
      * @return Returns the areAllCommented.

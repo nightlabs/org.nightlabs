@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -36,8 +36,8 @@ import com.essiembre.eclipse.rbe.model.tree.KeyTreeVisitorAdapter;
 public class KeysStartingWithVisitor extends KeyTreeVisitorAdapter {
 
     /** Holder for matching keys. */
-    List items = new ArrayList();
-    
+    List<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
+
     /**
      * Constructor.
      */
@@ -63,17 +63,17 @@ public class KeysStartingWithVisitor extends KeyTreeVisitorAdapter {
      * Gets matching key tree items.
      * @return matching key tree items
      */
-    public Collection getKeyTreeItems() {
+    public Collection<KeyTreeItem> getKeyTreeItems() {
         return items;
     }
-    
+
     /**
      * Gets the first item matched.
      * @return first item matched, or <code>null</code> if none was found
      */
     public KeyTreeItem getKeyTreeItem() {
         if (items.size() > 0) {
-            return (KeyTreeItem) items.get(0);
+            return items.get(0);
         }
         return null;
     }

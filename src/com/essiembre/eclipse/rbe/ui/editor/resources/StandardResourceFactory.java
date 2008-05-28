@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -46,7 +46,7 @@ import com.essiembre.eclipse.rbe.model.workbench.files.StandardPropertiesFileCre
  */
 public class StandardResourceFactory extends ResourceFactory {
 
-    private final Map sourceEditors;
+    private final Map<Locale, SourceEditor> sourceEditors;
     private final PropertiesFileCreator fileCreator;
     private final String displayName;
     private final IEditorSite site;
@@ -61,7 +61,7 @@ public class StandardResourceFactory extends ResourceFactory {
              throws CoreException {
         super();
         this.site = site;
-        sourceEditors = new HashMap();
+        sourceEditors = new HashMap<Locale, SourceEditor>();
         String bundleName = getBundleName(file);
         String regex = ResourceFactory.getPropertiesFileRegEx(file);
         IResource[] resources = StandardResourceFactory.getResources(file);
@@ -74,25 +74,25 @@ public class StandardResourceFactory extends ResourceFactory {
                     resourceName.replaceFirst(regex, "$2"); //$NON-NLS-1$
             StringTokenizer tokens =
                 new StringTokenizer(localeText, "_"); //$NON-NLS-1$
-            List localeSections = new ArrayList();
+            List<String> localeSections = new ArrayList<String>();
             while (tokens.hasMoreTokens()) {
                 localeSections.add(tokens.nextToken());
             }
             Locale locale = null;
             switch (localeSections.size()) {
             case 1:
-                locale = new Locale((String) localeSections.get(0));
+                locale = new Locale(localeSections.get(0));
                 break;
             case 2:
                 locale = new Locale(
-                        (String) localeSections.get(0),
-                        (String) localeSections.get(1));
+                        localeSections.get(0),
+                        localeSections.get(1));
                 break;
             case 3:
                 locale = new Locale(
-                        (String) localeSections.get(0),
-                        (String) localeSections.get(1),
-                        (String) localeSections.get(2));
+                        localeSections.get(0),
+                        localeSections.get(1),
+                        localeSections.get(2));
                 break;
             default:
                 break;
@@ -110,7 +110,7 @@ public class StandardResourceFactory extends ResourceFactory {
         displayName = bundleName
                 + "[...]." + file.getFileExtension(); //$NON-NLS-1$
     }
-    
+
     /**
      * @see com.essiembre.eclipse.rbe.ui.editor.resources.ResourceFactory
      *         #getEditorDisplayName()
@@ -129,8 +129,8 @@ public class StandardResourceFactory extends ResourceFactory {
         // Java 5 would be better here
         SourceEditor[] editors = new SourceEditor[sourceEditors.size()];
         int i = 0;
-        for (Iterator iter = sourceEditors.values().iterator(); iter.hasNext();) {
-            SourceEditor editor = (SourceEditor) iter.next();
+        for (Iterator<SourceEditor> iter = sourceEditors.values().iterator(); iter.hasNext();) {
+            SourceEditor editor = iter.next();
             editors[i++] = editor;
         }
         return editors;
@@ -147,7 +147,7 @@ public class StandardResourceFactory extends ResourceFactory {
 
     protected static IResource[] getResources(IFile file)
         throws PartInitException {
-        
+
         String regex = ResourceFactory.getPropertiesFileRegEx(file);
         IResource[] resources = null;
         try {
@@ -156,7 +156,7 @@ public class StandardResourceFactory extends ResourceFactory {
             throw new PartInitException(
                    "Can't initialize resource bundle editor.", e); //$NON-NLS-1$
         }
-        Collection validResources = new ArrayList();
+        Collection<IResource> validResources = new ArrayList<IResource>();
         for (int i = 0; i < resources.length; i++) {
             IResource resource = resources[i];
             String resourceName = resource.getName();
@@ -164,7 +164,7 @@ public class StandardResourceFactory extends ResourceFactory {
                 validResources.add(resource);
             }
         }
-        return (IResource[]) validResources.toArray(new IResource[]{});
+        return validResources.toArray(new IResource[]{});
     }
 
     @Override

@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -35,7 +35,7 @@ public class GroupedKeyTreeUpdater extends KeyTreeUpdater {
 
     /** Key group separator. */
     private String separator;
-    
+
     /**
      * Constructor.
      * @param keyGroupSeparator key group separator
@@ -44,14 +44,14 @@ public class GroupedKeyTreeUpdater extends KeyTreeUpdater {
         super();
         this.separator = keyGroupSeparator;
     }
-    
+
     /**
      * @see com.essiembre.eclipse.rbe.model.tree.updater.KeyTreeUpdater#addKey(
      *         com.essiembre.eclipse.rbe.model.tree.KeyTree, java.lang.String)
      */
     @Override
 		public void addKey(KeyTree keyTree, String key) {
-        Map keyCache = keyTree.getKeyItemsCache();
+        Map<String, KeyTreeItem> keyCache = keyTree.getKeyItemsCache();
         if (!keyCache.containsKey(key)) {
             StringBuffer idBuf = new StringBuffer();
             Object parent = keyTree;

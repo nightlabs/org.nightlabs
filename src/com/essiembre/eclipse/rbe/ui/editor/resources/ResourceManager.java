@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -57,9 +57,9 @@ public class ResourceManager {
     private final BundleGroup bundleGroup;
     private final KeyTree keyTree;
     /** key=Locale;value=SourceEditor */
-    /*default*/ final Map sourceEditors = new HashMap();
-    private final Collection locales = new ArrayList();
-    
+    /*default*/ final Map<Locale, SourceEditor> sourceEditors = new HashMap<Locale, SourceEditor>();
+    private final Collection<Locale> locales = new ArrayList<Locale>();
+
     /**
      * Constructor.
      * @param site eclipse editor site
@@ -86,14 +86,14 @@ public class ResourceManager {
             public void modify(DeltaEvent event) {
                 final Bundle bundle = (Bundle) event.receiver();
                 final SourceEditor editor =
-                        (SourceEditor) sourceEditors.get(bundle.getLocale());
+                        sourceEditors.get(bundle.getLocale());
                 String editorContent = PropertiesGenerator.generate(bundle);
                 editor.setContent(editorContent);
             }
             public void select(DeltaEvent event) {
             }
         });
-        
+
         KeyTreeUpdater treeUpdater = null;
         if (RBEPreferences.getKeyTreeHierarchical()) {
             treeUpdater = new GroupedKeyTreeUpdater(
@@ -115,7 +115,7 @@ public class ResourceManager {
      * Gets all locales in this bundle.
      * @return locales
      */
-    public Collection getLocales() {
+    public Collection<Locale> getLocales() {
         return locales;
     }
     /**
@@ -132,7 +132,7 @@ public class ResourceManager {
     public SourceEditor[] getSourceEditors() {
         return resourcesFactory.getSourceEditors();
     }
-    
+
     /**
      * Save all dirty editors.
      * @param monitor progress monitor
@@ -143,7 +143,7 @@ public class ResourceManager {
             editors[i].getEditor().doSave(monitor);
         }
     }
-        
+
     /**
      * Gets the multi-editor display name.
      * @return display name
@@ -167,7 +167,7 @@ public class ResourceManager {
         }
         return false;
     }
-    
+
     /**
      * Creates a properties file.
      * @param locale a locale
@@ -180,16 +180,16 @@ public class ResourceManager {
         return resourcesFactory.getPropertiesFileCreator().createPropertiesFile(
                 locale);
     }
-    
+
     /**
      * Gets the source editor matching the given locale.
      * @param locale locale matching requested source editor
      * @return source editor or <code>null</code> if no match
      */
     public SourceEditor getSourceEditor(Locale locale) {
-        return (SourceEditor) sourceEditors.get(locale);
+        return sourceEditors.get(locale);
     }
-    
+
     public SourceEditor addSourceEditor(IFile resource, Locale locale) throws PartInitException {
         SourceEditor sourceEditor = resourcesFactory.addResource(resource, locale);
         sourceEditors.put(sourceEditor.getLocale(), sourceEditor);

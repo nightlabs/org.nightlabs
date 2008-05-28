@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -60,9 +60,9 @@ public class I18nPage extends ScrolledComposite {
     private final List<BundleEntryComposite> entryComposites = new ArrayList<BundleEntryComposite>();
     private final LocalBehaviour localBehaviour = new LocalBehaviour();
     private final ScrolledComposite editingComposite;
-    
+
     /*default*/ BundleEntryComposite activeEntry;
-    
+
     /**
      * Constructor.
      * @param parent parent component.
@@ -82,30 +82,30 @@ public class I18nPage extends ScrolledComposite {
         } else {
                     // Create screen
             SashForm sashForm = new SashForm(this, SWT.NONE);
-    
+
             setContent(sashForm);
-    
+
             keysComposite = new KeyTreeComposite(
                         sashForm,
                         resourceMediator.getKeyTree());
             keysComposite.getTreeViewer().addSelectionChangedListener(localBehaviour);
-            
+
             editingComposite = new ScrolledComposite(sashForm, SWT.V_SCROLL | SWT.H_SCROLL);
             createSashRightSide();
-                    
+
             sashForm.setWeights(new int[]{25, 75});
-            
+
         }
 
         setExpandHorizontal(true);
         setExpandVertical(true);
         setMinWidth(400);
-        
+
         resourceMediator.getKeyTree().addListener(localBehaviour);
-        
+
     }
-    
-    
+
+
     /**
      * Gets selected key.
      * @return selected key
@@ -125,8 +125,8 @@ public class I18nPage extends ScrolledComposite {
         editingComposite.setSize(SWT.DEFAULT, 100);
         createEditingPart(editingComposite);
     }
-    
-    
+
+
     /**
      * Creates the editing parts which are display within the supplied
      * parental ScrolledComposite instance.
@@ -145,16 +145,16 @@ public class I18nPage extends ScrolledComposite {
                 resourceMediator.getLocales().size() * TEXT_MIN_HEIGHT));
         rightComposite.setLayout(new GridLayout(1, false));
         entryComposites.clear();
-        for (Iterator iter = resourceMediator.getLocales().iterator();
+        for (Iterator<Locale> iter = resourceMediator.getLocales().iterator();
                 iter.hasNext();) {
-            Locale locale = (Locale) iter.next();
+            Locale locale = iter.next();
             BundleEntryComposite entryComposite = new BundleEntryComposite(
                     rightComposite, resourceMediator, locale, this);
             entryComposite.addFocusListener(localBehaviour);
             entryComposites.add(entryComposite);
         }
     }
-    
+
     public void focusBundleEntryComposite(Locale locale) {
         for (BundleEntryComposite bec : entryComposites) {
             if ((bec.getLocale() == null) && (locale == null) || (locale != null && locale.equals(bec.getLocale()))) {
@@ -163,7 +163,7 @@ public class I18nPage extends ScrolledComposite {
             }
         }
     }
-    
+
     public void focusNextBundleEntryComposite() {
         int index = entryComposites.indexOf(activeEntry);
         if (index < entryComposites.size()-1)
@@ -171,7 +171,7 @@ public class I18nPage extends ScrolledComposite {
         else
             entryComposites.get(0).focusTextBox();
     }
-    
+
     public void focusPreviousBundleEntryComposite() {
         int index = entryComposites.indexOf(activeEntry);
         if (index > 0)
@@ -179,8 +179,8 @@ public class I18nPage extends ScrolledComposite {
         else
             entryComposites.get(entryComposites.size()-1).focusTextBox();
     }
-    
-    
+
+
     public void selectNextTreeEntry() {
         activeEntry.updateBundleOnChanges();
         String nextKey = resourceMediator.getBundleGroup().getNextKey(getSelectedKey());
@@ -191,18 +191,18 @@ public class I18nPage extends ScrolledComposite {
         resourceMediator.getKeyTree().selectKey(nextKey);
         focusBundleEntryComposite(currentLocale);
     }
-    
+
     public void selectPreviousTreeEntry() {
         activeEntry.updateBundleOnChanges();
         String prevKey = resourceMediator.getBundleGroup().getPreviousKey(getSelectedKey());
         if (prevKey == null)
             return;
-        
+
         Locale currentLocale = activeEntry.getLocale();
         resourceMediator.getKeyTree().selectKey(prevKey);
         focusBundleEntryComposite(currentLocale);
     }
-    
+
 
     /**
      * Refreshes the editor associated with the active text box (if any)
@@ -213,19 +213,19 @@ public class I18nPage extends ScrolledComposite {
             activeEntry.updateBundleOnChanges();
         }
     }
-        
+
     /**
      * Refreshes all value-holding text boxes in this page.
      */
     public void refreshTextBoxes() {
         String key = getSelectedKey();
-        for (Iterator iter = entryComposites.iterator(); iter.hasNext();) {
+        for (Iterator<BundleEntryComposite> iter = entryComposites.iterator(); iter.hasNext();) {
             BundleEntryComposite entryComposite =
-                    (BundleEntryComposite) iter.next();
+                    iter.next();
             entryComposite.refresh(key);
         }
     }
-    
+
     /**
      * Refreshes the tree and recreates the editing part.
      */
@@ -235,8 +235,8 @@ public class I18nPage extends ScrolledComposite {
         createEditingPart(editingComposite);
         editingComposite.layout(true, true);
     }
-    
-    
+
+
     /**
      * @see org.eclipse.swt.widgets.Widget#dispose()
      */
@@ -245,12 +245,12 @@ public class I18nPage extends ScrolledComposite {
         if(keysComposite != null) {
             keysComposite.dispose();
         }
-        for (Iterator iter = entryComposites.iterator(); iter.hasNext();) {
-            ((BundleEntryComposite) iter.next()).dispose();
+        for (Iterator<BundleEntryComposite> iter = entryComposites.iterator(); iter.hasNext();) {
+            (iter.next()).dispose();
         }
         super.dispose();
     }
-    
+
     /**
      * Implementation of custom behaviour.
      */
@@ -280,7 +280,7 @@ public class I18nPage extends ScrolledComposite {
                 resourceMediator.getKeyTree().selectKey(selected);
             }
         }
-        
+
         /**
          * {@inheritDoc}
          */
@@ -312,6 +312,6 @@ public class I18nPage extends ScrolledComposite {
                 refreshTextBoxes();
             }
         }
-        
+
     } /* ENDCLASS */
 }

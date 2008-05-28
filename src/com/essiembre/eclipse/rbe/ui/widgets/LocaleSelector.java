@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -54,7 +54,7 @@ public class LocaleSelector extends Composite {
     private static final String DEFAULT_LOCALE = "[" //$NON-NLS-1$
             + RBEPlugin.getString("editor.default") //$NON-NLS-1$
             + "]"; //$NON-NLS-1$
-    
+
     /*default*/ Locale[] availableLocales;
 
     /*default*/ Combo localesCombo;
@@ -62,7 +62,7 @@ public class LocaleSelector extends Composite {
     /*default*/ Text countryText;
     /*default*/ Text variantText;
 
-    
+
     /**
      * Constructor.
      * @param parent parent composite
@@ -72,27 +72,27 @@ public class LocaleSelector extends Composite {
 
         // Init available locales
         availableLocales = Locale.getAvailableLocales();
-        Arrays.sort(availableLocales, new Comparator() {
-            public int compare(Object locale1, Object locale2) {
+        Arrays.sort(availableLocales, new Comparator<Locale>() {
+            public int compare(Locale locale1, Locale locale2) {
                 return Collator.getInstance().compare(
-                        ((Locale) locale1).getDisplayName(),
-                        ((Locale) locale2).getDisplayName());
+                        (locale1).getDisplayName(),
+                        (locale2).getDisplayName());
             }
         });
-        
+
         // This layout
         GridLayout layout = new GridLayout();
         setLayout(layout);
         layout.numColumns = 1;
         layout.verticalSpacing = 20;
-        
+
         // Group settings
         Group selectionGroup = new Group(this, SWT.NULL);
         layout = new GridLayout(3, false);
         selectionGroup.setLayout(layout);
         selectionGroup.setText(RBEPlugin.getString(
                 "selector.title")); //$NON-NLS-1$
-        
+
         // Set locales drop-down
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         gd.horizontalSpan = 3;
@@ -158,7 +158,7 @@ public class LocaleSelector extends Composite {
                 setLocaleOnlocalesCombo();
             }
         });
-        
+
         // Labels
         gd = new GridData();
         gd.horizontalAlignment = GridData.CENTER;
@@ -190,7 +190,7 @@ public class LocaleSelector extends Composite {
         String lang = langText.getText().trim();
         String country = countryText.getText().trim();
         String variant = variantText.getText().trim();
-        
+
         if (lang.length() > 0 && country.length() > 0 && variant.length() > 0) {
             return new Locale(lang, country, variant);
         } else if (lang.length() > 0 && country.length() > 0) {
@@ -223,7 +223,7 @@ public class LocaleSelector extends Composite {
             localesCombo.clearSelection();
         }
     }
-    
+
     /**
      * Adds a modify listener.
      * @param listener modify listener

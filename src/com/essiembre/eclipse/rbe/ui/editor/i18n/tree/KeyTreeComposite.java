@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -71,28 +71,28 @@ public class KeyTreeComposite extends Composite {
 
     /*default*/ Cursor waitCursor;
     /*default*/ Cursor defaultCursor;
-    
+
     /** Key Tree Viewer. */
     /*default*/ TreeViewer treeViewer;
     /** TreeViewer label provider. */
     protected KeyTreeLabelProvider labelProvider;
-    
+
     /** Flat or Tree mode? */
     private boolean keyTreeHierarchical =
             RBEPreferences.getKeyTreeHierarchical();
-    
+
     /** Text box to add a new key. */
     /*default*/ Text addTextBox;
-    
+
     /** Key tree. */
     /*default*/ KeyTree keyTree;
-    
+
     /** Whether to synchronize the add text box with tree key selection. */
     /*default*/ boolean syncAddTextBox = true;
 
     /** Contributes menu items to the tree viewer. */
     private TreeViewerContributor  treeviewerContributor;
-    
+
     /**
      * Constructor.
      * @param parent parent composite
@@ -120,7 +120,7 @@ public class KeyTreeComposite extends Composite {
     public TreeViewer getTreeViewer() {
         return treeViewer;
     }
-    
+
     /**
      * Gets the selected key tree item.
      * @return key tree item
@@ -154,10 +154,10 @@ public class KeyTreeComposite extends Composite {
 //        treeviewerContributor.dispose();
         labelProvider.dispose();
         addTextBox.dispose();
-        
+
         super.dispose();
     }
-    
+
 
     /**
      * Deletes a key or group of key.
@@ -185,17 +185,17 @@ public class KeyTreeComposite extends Composite {
         msgBox.setText(msgHead);
         if (msgBox.open() == SWT.OK) {
             BundleGroup bundleGroup = keyTree.getBundleGroup();
-            Collection items = new ArrayList();
+            Collection<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
             items.add(selectedItem);
             items.addAll(selectedItem.getNestedChildren());
-            for (Iterator iter = items.iterator(); iter.hasNext();) {
-                KeyTreeItem item = (KeyTreeItem) iter.next();
+            for (Iterator<KeyTreeItem> iter = items.iterator(); iter.hasNext();) {
+                KeyTreeItem item = iter.next();
                 bundleGroup.removeKey(item.getId());
             }
         }
     }
 
-    
+
     /**
      * Creates the top section (toggle buttons) of this composite.
      */
@@ -213,7 +213,7 @@ public class KeyTreeComposite extends Composite {
         gridData.verticalAlignment = GridData.CENTER;
         gridData.grabExcessHorizontalSpace = true;
         topComposite.setLayoutData(gridData);
-        
+
         final Button hierModeButton = new Button(topComposite, SWT.TOGGLE);
         hierModeButton.setImage(treeToggleImage);
         hierModeButton.setToolTipText(
@@ -271,7 +271,7 @@ public class KeyTreeComposite extends Composite {
             }
         });
     }
-    
+
     /**
      * Creates the middle (tree) section of this composite.
      */
@@ -325,12 +325,12 @@ public class KeyTreeComposite extends Composite {
                 }
             }
         });
-        
+
         treeviewerContributor = new TreeViewerContributor(keyTree, treeViewer);
         treeviewerContributor.createControl(this);
 
     }
-    
+
     /**
      * Creates the botton section (add field/button) of this composite.
      */
@@ -396,7 +396,7 @@ public class KeyTreeComposite extends Composite {
             }
         });
     }
-    
+
     /**
      * Adds a key to the tree, based on content from add field.
      */
@@ -405,7 +405,7 @@ public class KeyTreeComposite extends Composite {
         keyTree.getBundleGroup().addKey(key);
         selectKeyTreeItem(key);
     }
-    
+
     /**
      * Selected the key tree item matching given key.
      * @param key key to select
@@ -413,7 +413,7 @@ public class KeyTreeComposite extends Composite {
     /*default*/ void selectKeyTreeItem(String key) {
         selectKeyTreeItem(keyTree.getKeyTreeItem(key));
     }
-    
+
     /**
      * Selected the key tree item matching given key tree item.
      * @param item key tree item to select
@@ -423,7 +423,7 @@ public class KeyTreeComposite extends Composite {
             treeViewer.setSelection(new StructuredSelection(item), true);
         }
     }
-    
+
 //	public KeyTreeItem getNextKeyTreeItem() {
 //		// Either find the next sibbling
 //		KeyTreeItem currentItem = keyTree.getKeyTreeItem(keyTree.getSelectedKey());

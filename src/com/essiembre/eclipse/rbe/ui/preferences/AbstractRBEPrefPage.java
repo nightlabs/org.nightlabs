@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -48,10 +48,10 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
 
     /** Number of pixels per field indentation  */
     protected final int indentPixels = 20;
-    
+
     /** Controls with errors in them. */
-    protected final Map errors = new HashMap();
-    
+    protected final Map<Text, String> errors = new HashMap<Text, String>();
+
     /**
      * Constructor.
      */
@@ -82,9 +82,9 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
     }
 
     protected class IntTextValidatorKeyListener extends KeyAdapter {
-        
+
         private String errMsg = null;
-        
+
         /**
          * Constructor.
          * @param errMsg error message
@@ -109,7 +109,7 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
                     setValid(true);
                 } else {
                     setErrorMessage(
-                            (String) errors.values().iterator().next());
+                            errors.values().iterator().next());
                 }
             } else {
                 errors.put(text, errMsg);
@@ -120,11 +120,11 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
     }
 
     protected class DoubleTextValidatorKeyListener extends KeyAdapter {
-        
+
         private String errMsg;
         private double minValue;
         private double maxValue;
-        
+
         /**
          * Constructor.
          * @param errMsg error message
@@ -146,7 +146,7 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
             this.minValue = minValue;
             this.maxValue = maxValue;
         }
-        
+
         /**
          * @see org.eclipse.swt.events.KeyAdapter#keyPressed(
          *          org.eclipse.swt.events.KeyEvent)
@@ -171,7 +171,7 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
                     setValid(true);
                 } else {
                     setErrorMessage(
-                            (String) errors.values().iterator().next());
+                            errors.values().iterator().next());
                 }
             } else {
                 errors.put(text, errMsg);
@@ -180,7 +180,7 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
             }
         }
     }
-    
+
     protected void setWidthInChars(Control field, int widthInChars) {
         GridData gd = new GridData();
         gd.widthHint = UIUtils.getWidthInChars(field, widthInChars);

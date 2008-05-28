@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -34,15 +34,15 @@ import com.essiembre.eclipse.rbe.model.tree.KeyTree;
  */
 public class IncompletionUpdater extends KeyTreeUpdater {
 
-    
+
     private KeyTreeUpdater   delegation  ;
     private BundleGroup      bundlegroup ;
-    
+
 
     /**
      * Initialises this BundleGroup instance which allows to access
      * the bundles keeping the i18n information.
-     * 
+     *
      * @param group     A container for the i18n information.
      * @param delegate  The update which will be used for delegation. Mainly
      *                  intended for structural information.
@@ -51,16 +51,16 @@ public class IncompletionUpdater extends KeyTreeUpdater {
         delegation  = delegate;
         bundlegroup = group;
     }
-    
+
 
     /**
      * {@inheritDoc}
      */
     @Override
 		public void addKey(KeyTree keytree, String key) {
-        Collection entries  = bundlegroup.getBundleEntries(key);
+        Collection<BundleEntry> entries  = bundlegroup.getBundleEntries(key);
         int        count    = 0;
-        Iterator   iterator = entries.iterator();
+        Iterator<BundleEntry>   iterator = entries.iterator();
         while(iterator.hasNext()) {
             Object val = iterator.next();
             if(val instanceof BundleEntry) {
@@ -76,6 +76,6 @@ public class IncompletionUpdater extends KeyTreeUpdater {
             delegation.addKey(keytree, key);
         }
     }
-    
-    
+
+
 } /* ENDCLASS */

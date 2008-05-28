@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -58,12 +58,12 @@ import com.essiembre.eclipse.rbe.ui.UIUtils;
  */
 public class TreeViewerContributor {
 
-    
+
     public static final int KT_FLAT         = 0;  // 0th bit unset
     public static final int KT_HIERARCHICAL = 1;  // 0th bit set
     public static final int KT_INCOMPLETE   = 2;  // 1th bit set
-    
-    
+
+
     public  static final int MENU_NEW       = 0 ;
     public  static final int MENU_RENAME    = 1 ;
     public  static final int MENU_DELETE    = 2 ;
@@ -73,34 +73,34 @@ public class TreeViewerContributor {
     public  static final int MENU_EXPAND    = 6 ;
     public  static final int MENU_COLLAPSE  = 7 ;
     private static final int MENU_COUNT     = 8 ;
-    
-    
+
+
     /** the tree which is controlled through this manager.    */
     private KeyTree            tree;
-    
+
     /** the component which displays the tree.                */
     private TreeViewer         treeviewer;
-    
+
     private Separator          separator;
-    
+
     /** actions for the context menu.                           */
     private Action[]           actions;
-    
+
     /** the updater which is used for structural information. */
     private KeyTreeUpdater     structuralupdater;
-    
+
     /** holds the information about the current state.        */
     private int                mode;
 
     /** some cursors to indicate progress                     */
     private Cursor             waitcursor;
     private Cursor             defaultcursor;
-    
-    
+
+
     /**
      * Initializes this contributor using the supplied model structure
      * and the viewer which is used to access the model.
-     * 
+     *
      * @param keytree   Out tree model.
      * @param viewer    The viewer used to display the supplied model.
      */
@@ -117,7 +117,7 @@ public class TreeViewerContributor {
             structuralupdater = new FlatKeyTreeUpdater();
         }
     }
-    
+
     private void buildActions() {
         actions[MENU_NEW] = new Action () {
             @Override
@@ -126,7 +126,7 @@ public class TreeViewerContributor {
             }
         };
         actions[MENU_NEW].setText(RBEPlugin.getString("key.new")); //$NON-NLS-1$
-        
+
         actions[MENU_RENAME] = new Action () {
             @Override
             public void run() {
@@ -134,7 +134,7 @@ public class TreeViewerContributor {
             }
         };
         actions[MENU_RENAME].setText(RBEPlugin.getString("key.rename")); //$NON-NLS-1$
-        
+
         actions[MENU_DELETE] = new Action () {
             @Override
             public void run() {
@@ -142,7 +142,7 @@ public class TreeViewerContributor {
             }
         };
         actions[MENU_DELETE].setText(RBEPlugin.getString("key.delete")); //$NON-NLS-1$
-        
+
         actions[MENU_COPY] = new Action () {
             @Override
             public void run() {
@@ -150,7 +150,7 @@ public class TreeViewerContributor {
             }
         };
         actions[MENU_COPY].setText(RBEPlugin.getString("key.duplicate")); //$NON-NLS-1$
-        
+
         actions[MENU_COMMENT] = new Action () {
             @Override
             public void run() {
@@ -158,7 +158,7 @@ public class TreeViewerContributor {
             }
         };
         actions[MENU_COMMENT].setText(RBEPlugin.getString("key.comment")); //$NON-NLS-1$
-        
+
         actions[MENU_UNCOMMENT] = new Action () {
             @Override
             public void run() {
@@ -167,9 +167,9 @@ public class TreeViewerContributor {
         };
         actions[MENU_UNCOMMENT].setText(
                 RBEPlugin.getString("key.uncomment")); //$NON-NLS-1$
-        
+
         separator = new Separator();
-      
+
         actions[MENU_EXPAND] = new Action () {
             @Override
             public void run() {
@@ -177,7 +177,7 @@ public class TreeViewerContributor {
             }
         };
         actions[MENU_EXPAND].setText(RBEPlugin.getString("key.expandAll")); //$NON-NLS-1$
-        
+
         actions[MENU_COLLAPSE] = new Action () {
             @Override
             public void run() {
@@ -186,7 +186,7 @@ public class TreeViewerContributor {
         };
         actions[MENU_COLLAPSE].setText(RBEPlugin.getString("key.collapseAll")); //$NON-NLS-1$
     }
-    
+
     private void fillMenu(IMenuManager manager) {
         KeyTreeItem selectedItem = getSelection();
         manager.add(actions[MENU_NEW]);
@@ -203,12 +203,12 @@ public class TreeViewerContributor {
         manager.add(separator);
         manager.add(actions[MENU_EXPAND]);
         manager.add(actions[MENU_COLLAPSE]);
-        
+
     }
-    
+
     /**
      * Creates the menu contribution for the supplied parental component.
-     * 
+     *
      * @param parent   The component which is receiving the menu.
      */
     public void createControl(Composite parent) {
@@ -220,11 +220,11 @@ public class TreeViewerContributor {
                 fillMenu(manager);
             }
         });
-        
+
         treeviewer.getTree().setMenu(menuManager.createContextMenu(parent));
-        
+
     }
-    
+
 
     /**
      * Gets the selected key tree item.
@@ -234,7 +234,7 @@ public class TreeViewerContributor {
         IStructuredSelection selection = (IStructuredSelection) treeviewer.getSelection();
         return (KeyTreeItem) selection.getFirstElement();
     }
-    
+
 
     /**
      * Creates a new key in case it isn't existing yet.
@@ -254,8 +254,8 @@ public class TreeViewerContributor {
             }
         }
     }
-    
-    
+
+
     /**
      * Renames a key or group of key.
      */
@@ -282,11 +282,11 @@ public class TreeViewerContributor {
         if (dialog.getReturnCode() == Window.OK ) {
             String newKey = dialog.getValue();
             BundleGroup bundleGroup = tree.getBundleGroup();
-            Collection items = new ArrayList();
+            Collection<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
             items.add(selectedItem);
             items.addAll(selectedItem.getNestedChildren());
-            for (Iterator iter = items.iterator(); iter.hasNext();) {
-                KeyTreeItem item = (KeyTreeItem) iter.next();
+            for (Iterator<KeyTreeItem> iter = items.iterator(); iter.hasNext();) {
+                KeyTreeItem item = iter.next();
                 String oldItemKey = item.getId();
                 if (oldItemKey.startsWith(key)) {
                     String newItemKey = newKey + oldItemKey.substring(key.length());
@@ -303,11 +303,11 @@ public class TreeViewerContributor {
     protected void uncommentKey() {
         KeyTreeItem selectedItem = getSelection();
         BundleGroup bundleGroup = tree.getBundleGroup();
-        Collection items = new ArrayList();
+        Collection<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
         items.add(selectedItem);
         items.addAll(selectedItem.getNestedChildren());
-        for (Iterator iter = items.iterator(); iter.hasNext();) {
-            KeyTreeItem item = (KeyTreeItem) iter.next();
+        for (Iterator<KeyTreeItem> iter = items.iterator(); iter.hasNext();) {
+            KeyTreeItem item = iter.next();
             bundleGroup.uncommentKey(item.getId());
         }
     }
@@ -338,11 +338,11 @@ public class TreeViewerContributor {
         msgBox.setText(msgHead);
         if (msgBox.open() == SWT.OK) {
             BundleGroup bundleGroup = tree.getBundleGroup();
-            Collection items = new ArrayList();
+            Collection<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
             items.add(selectedItem);
             items.addAll(selectedItem.getNestedChildren());
-            for (Iterator iter = items.iterator(); iter.hasNext();) {
-                KeyTreeItem item = (KeyTreeItem) iter.next();
+            for (Iterator<KeyTreeItem> iter = items.iterator(); iter.hasNext();) {
+                KeyTreeItem item = iter.next();
                 bundleGroup.removeKey(item.getId());
             }
         }
@@ -355,14 +355,14 @@ public class TreeViewerContributor {
     protected void commentKey() {
         KeyTreeItem selectedItem = getSelection();
         BundleGroup bundleGroup = tree.getBundleGroup();
-        Collection items = new ArrayList();
+        Collection<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
         items.add(selectedItem);
         items.addAll(selectedItem.getNestedChildren());
-        for (Iterator iter = items.iterator(); iter.hasNext();) {
-            KeyTreeItem item = (KeyTreeItem) iter.next();
+        for (Iterator<KeyTreeItem> iter = items.iterator(); iter.hasNext();) {
+            KeyTreeItem item = iter.next();
             bundleGroup.commentKey(item.getId());
         }
-        
+
     }
 
 
@@ -392,11 +392,11 @@ public class TreeViewerContributor {
         if (dialog.getReturnCode() == Window.OK ) {
             String newKey = dialog.getValue();
             BundleGroup bundleGroup = tree.getBundleGroup();
-            Collection items = new ArrayList();
+            Collection<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
             items.add(selectedItem);
             items.addAll(selectedItem.getNestedChildren());
-            for (Iterator iter = items.iterator(); iter.hasNext();) {
-                KeyTreeItem item = (KeyTreeItem) iter.next();
+            for (Iterator<KeyTreeItem> iter = items.iterator(); iter.hasNext();) {
+                KeyTreeItem item = iter.next();
                 String origItemKey = item.getId();
                 if (origItemKey.startsWith(key)) {
                     String newItemKey =
@@ -406,21 +406,21 @@ public class TreeViewerContributor {
             }
         }
     }
-    
+
 
     /**
      * Returns the currently used Shell instance.
-     * 
+     *
      * @return   The currently used Shell instance.
      */
     private Shell getShell() {
         return(RBEPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell());
     }
 
-    
+
     /**
      * Modifies the current filter according to a selected activity.
-     * 
+     *
      * @param action     One of the KT_??? constants declared above.
      * @param activate   true <=> Enable this activity.
      */
@@ -471,16 +471,16 @@ public class TreeViewerContributor {
         }
         treeviewer.getTree().setCursor(defaultcursor);
     }
-    
+
 
     /**
      * Returns the currently used mode.
-     * 
+     *
      * @return   The currently used mode.
      */
     public int getMode() {
         return(mode);
     }
-    
-    
+
+
 } /* ENDCLASS */

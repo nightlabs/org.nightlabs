@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -89,7 +89,7 @@ public class BundleEntryComposite extends Composite {
 //	/*default*/ Text textBox;
     private ITextViewer textViewer;
     private IUndoManager undoManager;
-    
+
     private Button commentedCheckbox;
     private Button gotoButton;
     private Button duplButton;
@@ -100,7 +100,7 @@ public class BundleEntryComposite extends Composite {
 
     /*default*/ DuplicateValuesVisitor duplVisitor;
     /*default*/ SimilarValuesVisitor similarVisitor;
-    
+
     private FocusListener internalFocusListener = new FocusListener() {
         public void focusGained(FocusEvent e) {
             e.widget = BundleEntryComposite.this;
@@ -187,8 +187,8 @@ public class BundleEntryComposite extends Composite {
         smallFont.dispose();
 
         //Addition by Eric Fettweis
-        for(Iterator it = swtFontCache.values().iterator();it.hasNext();){
-            Font font = (Font) it.next();
+        for(Iterator<Font> it = swtFontCache.values().iterator();it.hasNext();){
+            Font font = it.next();
             font.dispose();
         }
         swtFontCache.clear();
@@ -219,9 +219,9 @@ public class BundleEntryComposite extends Composite {
         activeKey = key;
         BundleGroup bundleGroup = resourceManager.getBundleGroup();
         StyledText textBox = textViewer.getTextWidget();
-        
+
         IDocument document = new Document();
-        
+
         if (key != null && bundleGroup.isKey(key)) {
             BundleEntry bundleEntry = bundleGroup.getBundleEntry(locale, key);
             SourceEditor sourceEditor = resourceManager.getSourceEditor(locale);
@@ -255,7 +255,7 @@ public class BundleEntryComposite extends Composite {
             duplButton.setVisible(false);
             simButton.setVisible(false);
         }
-        
+
         textViewer.setDocument(document);
         resetCommented();
     }
@@ -332,10 +332,10 @@ public class BundleEntryComposite extends Composite {
                         "dialog.similar.body", activeKey, //$NON-NLS-1$
                         UIUtils.getDisplayName(locale));
                 body += "\n\n"; //$NON-NLS-1$
-                for (Iterator iter = similarVisitor.getSimilars().iterator();
+                for (Iterator<BundleEntry> iter = similarVisitor.getSimilars().iterator();
                 iter.hasNext();) {
                     body += "        " //$NON-NLS-1$
-                        + ((BundleEntry) iter.next()).getKey()
+                        + (iter.next()).getKey()
                         + "\n"; //$NON-NLS-1$
                 }
                 MessageDialog.openInformation(getShell(), head, body);
@@ -361,10 +361,10 @@ public class BundleEntryComposite extends Composite {
                         "dialog.identical.body", activeKey, //$NON-NLS-1$
                         UIUtils.getDisplayName(locale));
                 body += "\n\n"; //$NON-NLS-1$
-                for (Iterator iter = duplVisitor.getDuplicates().iterator();
+                for (Iterator<BundleEntry> iter = duplVisitor.getDuplicates().iterator();
                 iter.hasNext();) {
                     body += "        " //$NON-NLS-1$
-                        + ((BundleEntry) iter.next()).getKey()
+                        + (iter.next()).getKey()
                         + "\n"; //$NON-NLS-1$
                 }
                 MessageDialog.openInformation(getShell(), head, body);
@@ -418,7 +418,7 @@ public class BundleEntryComposite extends Composite {
         });
         gotoButton.setLayoutData(gridData);
     }
-    
+
     private Collection<FocusListener> focusListeners = new LinkedList<FocusListener>();
     @Override
     public void addFocusListener(FocusListener listener) {
@@ -523,20 +523,20 @@ public class BundleEntryComposite extends Composite {
 //
 //		textBox.addFocusListener(internalFocusListener);
 //	}
-    
+
     /**
      * Creates the text row.
      */
     private void createTextViewerRow() {
         textViewer = new TextViewer(this, SWT.MULTI | SWT.WRAP |
                 SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-        
+
         textViewer.setDocument(new Document());
         undoManager = new TextViewerUndoManager(20);
         textViewer.setUndoManager(undoManager);
         textViewer.activatePlugins();
         final StyledText textBox = textViewer.getTextWidget();
-        
+
         textBox.setEnabled(false);
         //Addition by Eric FETTWEIS
         //Note that this does not seem to work... It would however be usefull for arabic and some other languages
@@ -593,7 +593,7 @@ public class BundleEntryComposite extends Composite {
                 } else if (isKeyCombination(event, SWT.CTRL, 'a')) {
                     textViewer.setSelectedRange(0, textViewer.getDocument().getLength());
                 }
-                
+
                 StyledText eventBox = (StyledText) event.widget;
                 final ITextEditor editor = resourceManager.getSourceEditor(
                         locale).getEditor();
@@ -626,14 +626,14 @@ public class BundleEntryComposite extends Composite {
             }
 
         });
-        
+
         textBox.addFocusListener(internalFocusListener);
     }
-    
+
     private static boolean isKeyCombination(KeyEvent event, int modifier1, int keyCode) {
         return (event.keyCode == keyCode && event.stateMask == modifier1);
     }
-    
+
     private static boolean isKeyCombination(KeyEvent event, int modifier1, int modifier2, int keyCode) {
         return (event.keyCode == keyCode && event.stateMask == (modifier1 & modifier2));
     }
@@ -707,7 +707,7 @@ public class BundleEntryComposite extends Composite {
     /**
      * Holds swt fonts used for the textBox.
      */
-    private Map swtFontCache = new HashMap();
+    private Map<String, Font> swtFontCache = new HashMap<String, Font>();
 
     /**
      * Gets a font by its name. The resulting font is build based on the baseFont parameter.
@@ -719,7 +719,7 @@ public class BundleEntryComposite extends Composite {
      * @return a font with the same style and size as the original.
      */
     private Font getSWTFont(Font baseFont, String name){
-        Font font = (Font) swtFontCache.get(name);
+        Font font = swtFontCache.get(name);
         if(font==null){
             font = createFont(baseFont, getDisplay(), name);
             swtFontCache.put(name, font);
@@ -757,7 +757,7 @@ public class BundleEntryComposite extends Composite {
     /**
      * A cache holding an instance of every AWT font tested.
      */
-    private static Map awtFontCache = new HashMap();
+    private static Map<String, java.awt.Font> awtFontCache = new HashMap<String, java.awt.Font>();
 
     /**
      * Creates a variation from an original font, by changing the face name.
@@ -801,7 +801,7 @@ public class BundleEntryComposite extends Composite {
      * @return an AWT Font
      */
     private static java.awt.Font getAWTFont(String name){
-        java.awt.Font font = (java.awt.Font) awtFontCache.get(name);
+        java.awt.Font font = awtFontCache.get(name);
         if(font==null){
             font = new java.awt.Font(name, java.awt.Font.PLAIN, 12);
             awtFontCache.put(name, font);

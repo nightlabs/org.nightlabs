@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -39,11 +39,11 @@ import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
 public class SimilarValuesVisitor extends BundleVisitorAdapter {
 
     /** Holder for bundle entries having similars values. */
-    private final Collection similars = new ArrayList();
+    private final Collection<BundleEntry> similars = new ArrayList<BundleEntry>();
 
     /** Proximity analyzer used to find similarities. */
     private ProximityAnalyzer analyzer = WordCountAnalyzer.getInstance();
-    
+
     /**
      * Constructor.
      */
@@ -59,7 +59,7 @@ public class SimilarValuesVisitor extends BundleVisitorAdapter {
      */
     @Override
 		public void visitBundleEntry(BundleEntry entry, Object passAlongArgument) {
-        
+
         BundleEntry entryToMatch = (BundleEntry) passAlongArgument;
         if (entry != entryToMatch
                 && entry != null && entryToMatch != null
@@ -71,9 +71,9 @@ public class SimilarValuesVisitor extends BundleVisitorAdapter {
             similars.add(entry);
         }
     }
-    
-    
-    
+
+
+
     /**
      * Gets the proximity analyzer.
      * @return Returns the proximity analyzer.
@@ -88,20 +88,20 @@ public class SimilarValuesVisitor extends BundleVisitorAdapter {
     public void setProximityAnalyzer(ProximityAnalyzer analyzer) {
         this.analyzer = analyzer;
     }
-    
+
     /**
      * Gets a collection of similar <code>BundleEntry</code> instance.
      * @return bundle entries with similar values
      */
-    public Collection getSimilars() {
+    public Collection<BundleEntry> getSimilars() {
         return similars;
     }
-    
+
     /**
      * Clears the list of duplicate values.
      */
     public void clear() {
         similars.clear();
     }
-    
+
 }

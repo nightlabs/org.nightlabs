@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -60,15 +60,15 @@ public class ResourceBundleEditor extends MultiPageEditorPart
     /** Editor ID, as defined in plugin.xml. */
     public static final String EDITOR_ID =
        "com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor"; //$NON-NLS-1$
-    
+
     private ResourceManager resourceMediator;
     private I18nPage i18nPage;
     /** New locale page. */
     private NewLocalePage newLocalePage;
-    
+
     /** the outline which additionally allows to navigate through the keys. */
     private ResourceBundleOutline outline;
-    
+
     /**
      * Creates a multi-page editor example.
      */
@@ -104,7 +104,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
                     "Invalid Input: Must be IFileEditorInput"); //$NON-NLS-1$
         }
     }
-    
+
     /**
      * Gets the resource manager.
      * @return the resource manager
@@ -112,7 +112,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
     public ResourceManager getResourceManager() {
         return resourceMediator;
     }
-    
+
     /**
      * Creates the pages of the multi-page editor.
      */
@@ -125,7 +125,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
         setPageText(index, RBEPlugin.getString(
                 "editor.properties")); //$NON-NLS-1$
         setPageImage(index, UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
-        
+
         // Create text editor pages for each locales
         try {
             SourceEditor[] sourceEditors = resourceMediator.getSourceEditors();
@@ -140,14 +140,14 @@ public class ResourceBundleEditor extends MultiPageEditorPart
                         UIUtils.getImage(UIUtils.IMAGE_PROPERTIES_FILE));
             }
             outline = new ResourceBundleOutline(resourceMediator.getKeyTree());
-            
-            
+
+
         } catch (PartInitException e) {
             ErrorDialog.openError(getSite().getShell(),
                 "Error creating text editor page.", //$NON-NLS-1$
                 null, e.getStatus());
         }
-        
+
         // Add "new locale" page
         newLocalePage = new NewLocalePage(getContainer(), resourceMediator, this);
         index = addPage(newLocalePage);
@@ -155,7 +155,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
         setPageImage(
                 index, UIUtils.getImage(UIUtils.IMAGE_NEW_PROPERTIES_FILE));
     }
-    
+
     public void addResource(IFile resource, Locale locale) {
         try {
             SourceEditor sourceEditor = resourceMediator.addSourceEditor(resource, locale);
@@ -177,10 +177,11 @@ public class ResourceBundleEditor extends MultiPageEditorPart
         }
     }
 
-    
+
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
 		public Object getAdapter(Class adapter) {
         Object obj = super.getAdapter(adapter);
@@ -191,8 +192,8 @@ public class ResourceBundleEditor extends MultiPageEditorPart
         }
         return (obj);
     }
-    
-    
+
+
     /**
      * Saves the multi-page editor's document.
      */
@@ -203,12 +204,12 @@ public class ResourceBundleEditor extends MultiPageEditorPart
 
         i18nPage.refreshEditorOnChanges();
         resourceMediator.save(monitor);
-        
+
         keyTree.setUpdater(keyTree.getUpdater());
         if (key != null)
             keyTree.selectKey(key);
     }
-    
+
     /**
      * @see org.eclipse.ui.ISaveablePart#doSaveAs()
      */
@@ -216,7 +217,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
 		public void doSaveAs() {
         // Save As not allowed.
     }
-    
+
     /**
      * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
      */
@@ -264,9 +265,9 @@ public class ResourceBundleEditor extends MultiPageEditorPart
             }
         }
     }
-    
+
     private SourceEditor lastEditor;
-    
+
     /**
      * Calculates the contents of page GUI page when it is activated.
      */
@@ -274,23 +275,23 @@ public class ResourceBundleEditor extends MultiPageEditorPart
 		protected void pageChange(int newPageIndex) {
         super.pageChange(newPageIndex);
         KeyTree keyTree = resourceMediator.getKeyTree();
-        
+
         if (lastEditor != null) {
             String lastEditorKey = lastEditor.getCurrentKey();
             if (lastEditorKey != null)
                 keyTree.selectKey(lastEditor.getCurrentKey());
         }
-        
+
         if (newPageIndex == 0) {  // switched to first page
             resourceMediator.reloadProperties();
             i18nPage.refreshTextBoxes();
             lastEditor = null; // reset lastEditor
             return;
         }
-        
+
         if (newPageIndex == getPageCount()-1) // switched to last page
             return;
-        
+
         int editorIndex = newPageIndex - 1; // adjust because first page is tree page
         if (editorIndex >= 0 && editorIndex < resourceMediator.getSourceEditors().length) {
             lastEditor = resourceMediator.getSourceEditors()[editorIndex];
@@ -299,7 +300,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
         }
     }
 
-    
+
     /**
      * Is the given file a member of this resource bundle.
      * @param file file to test
@@ -326,8 +327,8 @@ public class ResourceBundleEditor extends MultiPageEditorPart
         }
     }
 
-    
-    
+
+
     /**
      * @see org.eclipse.ui.IWorkbenchPart#dispose()
      */

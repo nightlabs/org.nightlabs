@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -40,7 +40,7 @@ public class IsMissingValueVisitor extends KeyTreeVisitorAdapter {
     boolean isMissingValue = false;
     /** Whether a corresponding bundle entries children are missing a value. */
     boolean isMissingChildValueOnly = false;
-    
+
     /**
      * Constructor.
      */
@@ -58,12 +58,12 @@ public class IsMissingValueVisitor extends KeyTreeVisitorAdapter {
 		public void visitKeyTreeItem(KeyTreeItem item, Object passAlongArgument) {
         // passed item
         isMissingValue = isItemMissingValue(item);
-        
+
         // chidren items
         if (!isMissingValue) {
-            for (Iterator iter = item.getNestedChildren().iterator();
+            for (Iterator<KeyTreeItem> iter = item.getNestedChildren().iterator();
                     iter.hasNext();) {
-                KeyTreeItem childItem = (KeyTreeItem) iter.next();
+                KeyTreeItem childItem = iter.next();
                 isMissingChildValueOnly = isItemMissingValue(childItem);
                 if (isMissingChildValueOnly) {
                     return;
@@ -103,7 +103,7 @@ public class IsMissingValueVisitor extends KeyTreeVisitorAdapter {
     public void setMissingValue(boolean isMissingValue) {
         this.isMissingValue = isMissingValue;
     }
-    
+
     /**
      * Checks if the given item is missing a value.
      * @param item the item to check
@@ -113,12 +113,12 @@ public class IsMissingValueVisitor extends KeyTreeVisitorAdapter {
         String key = item.getId();
         BundleGroup bundleGroup = item.getKeyTree().getBundleGroup();
         if (bundleGroup.isKey(key)) {
-            Collection entries = bundleGroup.getBundleEntries(key);
+            Collection<BundleEntry> entries = bundleGroup.getBundleEntries(key);
             if (entries.size() != bundleGroup.getSize()) {
                 return true;
             }
-            for (Iterator iter = entries.iterator(); iter.hasNext();) {
-                BundleEntry entry = (BundleEntry) iter.next();
+            for (Iterator<BundleEntry> iter = entries.iterator(); iter.hasNext();) {
+                BundleEntry entry = iter.next();
                 if (entry == null || entry.getValue().length() == 0) {
                     return true;
                 }

@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
+ *
  * This file is part of Essiembre ResourceBundle Editor.
- * 
+ *
  * Essiembre ResourceBundle Editor is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * Essiembre ResourceBundle Editor is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Essiembre ResourceBundle Editor; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
@@ -47,7 +47,7 @@ public final class PropertiesGenerator {
     /** Special resouce bundle characters when persisting keys. */
     private static final String SPECIAL_KEY_SAVE_CHARS =
             "=\t\f#!: "; //$NON-NLS-1$
-    
+
     /** System line separator. */
     private static final String SYSTEM_LINE_SEP =
             System.getProperty("line.separator"); //$NON-NLS-1$
@@ -88,23 +88,23 @@ public final class PropertiesGenerator {
             }
             text.append(headComment);
         }
-        
+
         // Format
         String group = null;
         int equalIndex = -1;
-        for (Iterator iter = bundle.getKeys().iterator(); iter.hasNext();) {
-            BundleEntry bundleEntry = bundle.getEntry((String) iter.next());
+        for (Iterator<String> iter = bundle.getKeys().iterator(); iter.hasNext();) {
+            BundleEntry bundleEntry = bundle.getEntry(iter.next());
             String key = bundleEntry.getKey();
             String value = bundleEntry.getValue();
             String comment = bundleEntry.getComment();
-            
+
             if (value != null){
                 // escape backslashes
                 if (RBEPreferences.getConvertUnicodeToEncoded()) {
                     value = value.replaceAll(
                             "\\\\", "\\\\\\\\");//$NON-NLS-1$ //$NON-NLS-2$
                 }
-                
+
                 // handle new lines in value
                 if (RBEPreferences.getForceNewLineType()) {
                     value = value.replaceAll(
@@ -119,7 +119,7 @@ public final class PropertiesGenerator {
             } else {
                 value = ""; //$NON-NLS-1$
             }
-            
+
             if (RBEPreferences.getKeepEmptyFields() || value.length() > 0) {
                 // handle group equal align and line break options
                 if (RBEPreferences.getGroupKeys()) {
@@ -134,7 +134,7 @@ public final class PropertiesGenerator {
                 } else {
                     equalIndex = getEqualIndex(key, null, bundle);
                 }
-                
+
                 // Build line
                 if (RBEPreferences.getConvertUnicodeToEncoded()) {
                     key = PropertiesGenerator.convertUnicodeToEncoded(key);
@@ -150,7 +150,7 @@ public final class PropertiesGenerator {
         }
         return text.toString();
     }
-        
+
     /**
      * Converts unicodes to encoded &#92;uxxxx.
      * @param str string to convert
@@ -176,7 +176,7 @@ public final class PropertiesGenerator {
         }
         return outBuffer.toString();
     }
-    
+
     /**
      * Converts a nibble to a hex character
      * @param nibble  the nibble to convert.
@@ -212,7 +212,7 @@ public final class PropertiesGenerator {
             } else {
                 valueStartPos += 1;
             }
-            
+
             // Break line after escaped new line
             if (RBEPreferences.getNewLineNice()) {
                 value = value.replaceAll(
@@ -277,7 +277,7 @@ public final class PropertiesGenerator {
         if (commented) {
             text.append("##"); //$NON-NLS-1$
         }
-        
+
         // Escape and persist the rest
         saveKey(text, key);
 //        text.append(key);
@@ -290,15 +290,15 @@ public final class PropertiesGenerator {
             text.append("="); //$NON-NLS-1$
         }
     }
-    
-    
+
+
     private static void saveKey(StringBuffer buf, String str) {
         saveText(buf, str, SPECIAL_KEY_SAVE_CHARS);
     }
     private static void saveValue(StringBuffer buf, String str) {
         saveText(buf, str, SPECIAL_VALUE_SAVE_CHARS);
     }
-    
+
     /**
      * Saves some text in a given buffer after converting special characters.
      * @param buf the buffer to store the text into
@@ -316,7 +316,7 @@ public final class PropertiesGenerator {
             buf.append(aChar);
         }
     }
-    
+
     /**
      * Gets the group from a resource bundle key.
      * @param key the key to get a group from
@@ -327,7 +327,7 @@ public final class PropertiesGenerator {
         int deepness = RBEPreferences.getGroupLevelDeepness();
         int endIndex = 0;
         int levelFound = 0;
-        
+
         for (int i = 0; i < deepness; i++) {
             int sepIndex = key.indexOf(sep, endIndex);
             if (sepIndex != -1) {
@@ -343,7 +343,7 @@ public final class PropertiesGenerator {
         }
         return null;
     }
-    
+
     /**
      * Gets the position where the equal sign should be located for
      * the given group.
@@ -363,10 +363,10 @@ public final class PropertiesGenerator {
                          || groupKeys && group == null) {
             return key.length();
         }
-        
+
         // Get equal index
-        for (Iterator iter = bundle.getKeys().iterator(); iter.hasNext();) {
-            String iterKey = (String) iter.next();
+        for (Iterator<String> iter = bundle.getKeys().iterator(); iter.hasNext();) {
+            String iterKey = iter.next();
             if (!groupKeys || groupAlignEquals && iterKey.startsWith(group)) {
                 int index = iterKey.length();
                 if (index > equalIndex) {
