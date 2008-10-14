@@ -1,0 +1,5 @@
+<project default="dist.post">
+	<target name="dist.post">
+		<copy file="${project.dir}/${dist.dir}/plugins/${project.name}_${project.version}.jar" tofile="${project.dir}/${dist.dir}/${project.name}.jar" />
+	</target>
+</project>
