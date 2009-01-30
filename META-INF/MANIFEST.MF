@@ -5,3 +5,4 @@ Bundle-SymbolicName: org.nightlabs.htmlcontent
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: nightlabs.org
 Export-Package: org.nightlabs.htmlcontent
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
