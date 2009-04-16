@@ -11,9 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.Remote;
-import javax.management.AttributeChangeNotification;
 import javax.management.MBeanServerInvocationHandler;
-import javax.management.MalformedObjectNameException;
 import javax.management.Notification;
 import javax.management.NotificationListener;
 import javax.management.ObjectName;
@@ -44,8 +42,8 @@ import org.jboss.system.ServiceMBeanSupport;
  * <p>
  * Of course, this strategy does not work, if there are multiple EJB classes implementing
  * the same remote interface or if an EJB is deployed multiple times (with different
- * configurations). In this case, error messages will be logged and the bean that was
- * first processed can be found in the ejb-by-remote-interface-location in JNDI.
+ * configurations). In this case, <code>WARN</code> messages are logged and the affected
+ * remote interface is removed from the ejb-by-remote-interface-location in JNDI.
  * </p>
  *
  * @author marco schulze - marco at nightlabs dot de
@@ -76,15 +74,10 @@ implements UnifiedEjbJndiDeployerMBean
 
 		getServer().addNotificationListener(ejb3DeployerObjectName, ejb3DeployerListener, null, this);
 
-		// Look for all already deployed EJBs so that we can register the listeners and add the JNDI-aliases.
+		// Look for all already deployed EJBs so that we can add the JNDI-aliases.
 		for (ObjectName objectName : getServer().queryNames(new ObjectName("jboss.j2ee:*"), null)) {
-			if (objectName.getKeyProperty("module") != null) {
-				synchronized (ejb3ModulesWithListeners) {
-					ejb3ModulesWithListeners.add(objectName);
-				}
-				getServer().addNotificationListener(objectName, ejb3ModuleListener, null, this);
+			if (objectName.getKeyProperty("module") != null)
 				createJndiAliases(objectName);
-			}
 		}
 
 		if (log.isDebugEnabled())
@@ -99,33 +92,26 @@ implements UnifiedEjbJndiDeployerMBean
 			log.debug("stopService: Beginning.");
 
 		// Remove all JNDI-aliases that we have added.
-		Collection<ObjectName> ejb3ModuleNames;
-		synchronized (ejb3ModuleName2JndiAliases) {
-			ejb3ModuleNames = new ArrayList<ObjectName>(ejb3ModuleName2JndiAliases.keySet());
-		}
-
-		for (ObjectName ejb3ModuleName : ejb3ModuleNames) {
-			try {
-				destroyJndiAliases(ejb3ModuleName);
-			} catch (Throwable t) {
-				log.warn("stopService: " + t, t);
+		// Because during remove, there might be new ones created, we  don't simply iterate them, but perform a loop until
+		// the map is empty.
+		boolean ejb3ModuleName2JndiAliasesIsEmpty;
+		do {
+			Collection<ObjectName> ejb3ModuleNames;
+			synchronized (ejb3ModuleName2JndiAliases) {
+				ejb3ModuleNames = new ArrayList<ObjectName>(ejb3ModuleName2JndiAliases.keySet());
 			}
-		}
+			ejb3ModuleName2JndiAliasesIsEmpty = ejb3ModuleNames.isEmpty();
 
-		// Remove all listeners.
-		Collection<ObjectName> ejb3ModuleNamesForListenerRemoval;
-		synchronized (ejb3ModulesWithListeners) {
-			ejb3ModuleNamesForListenerRemoval = new ArrayList<ObjectName>(ejb3ModulesWithListeners);
-			ejb3ModulesWithListeners.clear();
-		}
-		for (ObjectName objectName : ejb3ModuleNamesForListenerRemoval) {
-			try {
-				getServer().removeNotificationListener(objectName, ejb3ModuleListener);
-			} catch (Throwable t) {
-				log.warn("stopService: " + t, t);
+			for (ObjectName ejb3ModuleName : ejb3ModuleNames) {
+				try {
+					destroyJndiAliases(ejb3ModuleName);
+				} catch (Throwable t) {
+					log.warn("stopService: " + t, t);
+				}
 			}
-		}
+		} while (!ejb3ModuleName2JndiAliasesIsEmpty);
 
+		// Remove the listener.
 		getServer().removeNotificationListener(ejb3DeployerObjectName, ejb3DeployerListener);
 
 		super.stopService();
@@ -134,45 +120,17 @@ implements UnifiedEjbJndiDeployerMBean
 			log.debug("stopService: Done in " + (System.currentTimeMillis() - timestampBegin) + " msec.");
 	}
 
-	/**
-	 * Compose an {@link ObjectName} for the EJB3 module referenced by the given {@link DeploymentInfo}.
-	 *
-	 * @param deploymentInfo the meta-data about the deployment of an EJB3 module.
-	 * @return the name of the EJB3 module that was deployed or undeployed.
-	 */
-	private ObjectName getEjb3ModuleName(DeploymentInfo deploymentInfo)
-	{
-		try {
-			return new ObjectName("jboss.j2ee:module="+ deploymentInfo.shortName +",service=EJB3");
-		} catch (MalformedObjectNameException e) {
-			throw new RuntimeException(e); // should never happen - what we generate above should always be well-formed!
-		}
-	}
-
 	private NotificationListener ejb3DeployerListener = new NotificationListener() {
 		@Override
 		public void handleNotification(Notification notification, Object handback) {
 			try {
 				if (SubDeployer.CREATE_NOTIFICATION.equals(notification.getType())) {
 					DeploymentInfo deploymentInfo = (DeploymentInfo) notification.getUserData();
-					ObjectName on = getEjb3ModuleName(deploymentInfo);
-
-					synchronized (ejb3ModulesWithListeners) {
-						ejb3ModulesWithListeners.add(on);
-					}
-					getServer().addNotificationListener(on, ejb3ModuleListener, null, this);
+					createJndiAliases(deploymentInfo.deployedObject);
 				}
 				else if (SubDeployer.DESTROY_NOTIFICATION.equals(notification.getType())) {
 					DeploymentInfo deploymentInfo = (DeploymentInfo) notification.getUserData();
-					ObjectName on = getEjb3ModuleName(deploymentInfo);
-
-					synchronized (ejb3ModulesWithListeners) {
-						// Remove the ObjectName from our list so that stopService() doesn't try
-						// to access non-existent things.
-						ejb3ModulesWithListeners.remove(on);
-					}
-					// No need to remove the listener, because that is done automatically when
-					// the corresponding MBean is destroyed.
+					destroyJndiAliases(deploymentInfo.deployedObject);
 				}
 			} catch (Throwable t) {
 				log.error("ejb3DeployerListener.handleNotification: " + t, t);
@@ -180,7 +138,20 @@ implements UnifiedEjbJndiDeployerMBean
 		}
 	};
 
-	private Set<ObjectName> ejb3ModulesWithListeners = new HashSet<ObjectName>();
+	/**
+	 * Tracks which remote interface is implemented by which EJBs in order to provide helpful warning
+	 * messages, if there is no unique interface-to-implementation-relationship (multiple deployments
+	 * of the same EJB or multiple EJB classes implementing the same remote interface).
+	 * <p>
+	 * Important: Use this object as mutex for accessing it (synchronized block)!
+	 * </p>
+	 */
+	private Map<Class<?>, Set<EjbDescriptor>> remoteInterface2ejbSet = new HashMap<Class<?>, Set<EjbDescriptor>>();
+
+	/**
+	 * Important: Use {@link #remoteInterface2ejbSet} as mutex for accessing this <code>Map</code>!
+	 */
+	private Map<ObjectName, Map<Class<?>, Set<EjbDescriptor>>> ejb3ModuleName2remoteInterface2ejbSet = new HashMap<ObjectName, Map<Class<?>,Set<EjbDescriptor>>>();
 
 	/**
 	 * Get all interfaces that are either directly annotated with {@link Remote} or
@@ -334,11 +305,14 @@ implements UnifiedEjbJndiDeployerMBean
 	 * EJB3 module specified by the given <code>ejb3ModuleName</code>.
 	 *
 	 * @param ejb3ModuleName the name of the EJB3 module.
-	 * @throws NamingException if accessing JNDI fails fundamentally.
+	 * @throws NamingException if accessing JNDI fails.
 	 */
 	protected void createJndiAliases(ObjectName ejb3ModuleName)
 	throws NamingException
 	{
+		if (log.isDebugEnabled())
+			log.debug("createJndiAliases: Beginnning for: " + ejb3ModuleName);
+
 		InitialContext initialContext = new InitialContext();
 		try {
 			Context ejbByRemoteInterfaceContext = getSubcontext(initialContext, JNDI_PREFIX_BY_REMOTE_INTERFACE);
@@ -346,22 +320,43 @@ implements UnifiedEjbJndiDeployerMBean
 			Ejb3ModuleMBean ejb3ModuleMBean = getEjb3ModuleMBean(ejb3ModuleName);
 			for (SessionContainer container : getSessionContainers(ejb3ModuleMBean)) {
 				Class<?> ejbClass = container.getClazz();
+				EjbDescriptor ejbDesc = new EjbDescriptor(container.getObjectName(), ejbClass, ejb3ModuleName);
 				Set<Class<?>> remoteInterfaces = getRemoteInterfaces(ejbClass);
 
 				for (Class<?> remoteInterface : remoteInterfaces) {
-					try {
-						String jndiName = container.getEjbJndiName(remoteInterface);
-						LinkRef linkRef = new LinkRef(jndiName);
-						String jndiSimpleAlias = remoteInterface.getName();
-						String jndiQualifiedAlias = JNDI_PREFIX_BY_REMOTE_INTERFACE + jndiSimpleAlias;
+					String jndiName = container.getEjbJndiName(remoteInterface);
+					LinkRef linkRef = new LinkRef(jndiName);
+					String jndiSimpleAlias = remoteInterface.getName();
+					String jndiQualifiedAlias = JNDI_PREFIX_BY_REMOTE_INTERFACE + jndiSimpleAlias;
 
-						// If there exist multiple beans for the same remote-interface, the following method
-						// causes an exception. Otherwise it doesn't, because we maintain our
-						// ejb-by-remote-interface-JNDI-subcontext and ensure that entries for undeployed EJBs
-						// are cleaned up.
+					Collection<EjbDescriptor> ejbDescriptors;
+					synchronized (remoteInterface2ejbSet) {
+						Map<Class<?>, Set<EjbDescriptor>> m1 = ejb3ModuleName2remoteInterface2ejbSet.get(ejb3ModuleName);
+						if (m1 == null) {
+							m1 = new HashMap<Class<?>, Set<EjbDescriptor>>();
+							ejb3ModuleName2remoteInterface2ejbSet.put(ejb3ModuleName, m1);
+						}
+						Set<EjbDescriptor> ejbSet_thisModule = m1.get(remoteInterface);
+						if (ejbSet_thisModule == null) {
+							ejbSet_thisModule = new HashSet<EjbDescriptor>();
+							m1.put(remoteInterface, ejbSet_thisModule);
+						}
+						ejbSet_thisModule.add(ejbDesc);
 
-						ejbByRemoteInterfaceContext.bind(jndiSimpleAlias, linkRef);
+						Set<EjbDescriptor> ejbSet_allModules = remoteInterface2ejbSet.get(remoteInterface);
+						if (ejbSet_allModules == null) {
+							ejbSet_allModules = new HashSet<EjbDescriptor>();
+							remoteInterface2ejbSet.put(remoteInterface, ejbSet_allModules);
+						}
+						ejbSet_allModules.add(ejbDesc);
 
+						if (ejbSet_allModules.size() == 1)
+							ejbDescriptors = null;
+						else
+							ejbDescriptors = new ArrayList<EjbDescriptor>(ejbSet_allModules);
+					}
+
+					if (ejbDescriptors == null) {
 						synchronized (ejb3ModuleName2JndiAliases) {
 							Set<String> jndiAliases = ejb3ModuleName2JndiAliases.get(ejb3ModuleName);
 							if (jndiAliases == null) {
@@ -370,21 +365,77 @@ implements UnifiedEjbJndiDeployerMBean
 							}
 							jndiAliases.add(jndiQualifiedAlias);
 						}
-					} catch (NamingException e) {
-						log.error("Registering alias failed: " + e, e);
+
+						ejbByRemoteInterfaceContext.bind(jndiSimpleAlias, linkRef);
+					}
+					else {
+						log.warn("createJndiAliases: Duplicate use of remote interface \"" + remoteInterface.getName() + "\"!");
+						log.warn("createJndiAliases: The following " + ejbDescriptors.size() + " EJBs share the same remote interface:");
+						for (EjbDescriptor ejbD : ejbDescriptors) {
+							log.warn("createJndiAliases:   * class \"" + ejbD.getEjbClass().getName() + "\" deployed as \"" + ejbD.getSessionContainerName() + "\"");
+						}
+						try {
+							ejbByRemoteInterfaceContext.unbind(jndiSimpleAlias);
+						} catch (NameNotFoundException x) {
+							// According to the javadoc, this should never happen, but if it does, we silently ignore it ;-)
+						}
 					}
 				}
 			}
 		} finally {
 			initialContext.close();
 		}
+
+		if (log.isDebugEnabled())
+			log.debug("createJndiAliases: Done for: " + ejb3ModuleName);
 	}
 
+
+	/**
+	 * Remove all JNDI aliases that have been added for an EJB3 module. If the disappearing of this
+	 * EJB3 module causes duplicate usages of remote interfaces not to be duplicate anymore, this
+	 * method will re-initialise the affected EJB3 modules (and thus add the previously suppressed EJB
+	 * aliases).
+	 *
+	 * @param ejb3ModuleName the name of the EJB3 module.
+	 * @throws NamingException if a fundamental JNDI error occurs.
+	 */
 	protected void destroyJndiAliases(ObjectName ejb3ModuleName)
 	throws NamingException
 	{
+		if (log.isDebugEnabled())
+			log.debug("destroyJndiAliases: Beginning for: " + ejb3ModuleName);
+
+		Set<ObjectName> ejb3ModuleNamesRequiringReprocessing = new HashSet<ObjectName>();
+
 		InitialContext initialContext = new InitialContext();
 		try {
+			synchronized (remoteInterface2ejbSet) {
+				Map<Class<?>, Set<EjbDescriptor>> m1 = ejb3ModuleName2remoteInterface2ejbSet.remove(ejb3ModuleName);
+				if (m1 != null) {
+					for (Map.Entry<Class<?>, Set<EjbDescriptor>> me1 : m1.entrySet()) {
+						Class<?> remoteInterface = me1.getKey();
+						Set<EjbDescriptor> ejbSet_thisModule = me1.getValue();
+						Set<EjbDescriptor> ejbSet_allModules = remoteInterface2ejbSet.get(remoteInterface);
+						if (ejbSet_allModules != null) {
+							int ejbSet_allModules_sizeBefore = ejbSet_allModules.size();
+							ejbSet_allModules.removeAll(ejbSet_thisModule);
+
+							if (ejbSet_allModules.size() == 1 && ejbSet_allModules_sizeBefore > 1) {
+								// We need to create the JNDI aliases now, since they were unregistered before
+								// due to duplicate remote interfaces, but don't are duplicate any longer.
+								ejb3ModuleNamesRequiringReprocessing.add(
+										ejbSet_allModules.iterator().next().getEjb3ModuleName()
+								);
+							}
+
+							if (ejbSet_allModules.isEmpty())
+								remoteInterface2ejbSet.remove(remoteInterface);
+						}
+					}
+				}
+			}
+
 			Collection<String> jndiAliases = null;
 			synchronized (ejb3ModuleName2JndiAliases) {
 				Set<String> _jndiAliases = ejb3ModuleName2JndiAliases.remove(ejb3ModuleName);
@@ -396,46 +447,27 @@ implements UnifiedEjbJndiDeployerMBean
 				for (String jndiAlias : jndiAliases) {
 					try {
 						initialContext.unbind(jndiAlias);
+					} catch (NameNotFoundException x) {
+						// According to the javadoc, we shouldn't get an exception, if it does not exist; but I just encountered one.
+						// Hence, we silently ignore it. If it's not existing, we already have what we want. Marco.
 					} catch (NamingException e) {
-						log.error("Unregistering alias failed: " + e, e);
+						log.error("destroyJndiAliases: " + e, e);
 					}
 				}
 			}
 		} finally {
 			initialContext.close();
 		}
-	}
 
-	/**
-	 * The listener that is triggered whenever an EJB3 module is created/started/stopped/destroyed.
-	 */
-	private NotificationListener ejb3ModuleListener = new NotificationListener() {
-		@Override
-		public void handleNotification(Notification notification, Object handback) {
-			try {
-				if (!AttributeChangeNotification.ATTRIBUTE_CHANGE.equals(notification.getType()))
-					return;
+		if (!ejb3ModuleNamesRequiringReprocessing.isEmpty()) {
+			for (ObjectName ejb3ModuleNameRequiringReprocessing : ejb3ModuleNamesRequiringReprocessing)
+				destroyJndiAliases(ejb3ModuleNameRequiringReprocessing);
 
-				if (!(notification instanceof AttributeChangeNotification))
-					return;
-
-				AttributeChangeNotification attributeChangeNotification = (AttributeChangeNotification) notification;
-				Object newValue = attributeChangeNotification.getNewValue();
-				if (!(newValue instanceof Integer))
-					return;
-
-				int newState = ((Integer)newValue).intValue();
-
-				ObjectName ejb3ModuleName = (ObjectName)notification.getSource();
-
-				if (Ejb3ModuleMBean.STARTED == newState)
-					createJndiAliases(ejb3ModuleName);
-				else if (Ejb3ModuleMBean.STOPPING == newState)
-					destroyJndiAliases(ejb3ModuleName);
-
-			} catch (Throwable t) {
-				log.error("ejb3ModuleListener.handleNotification: " + t, t);
-			}
+			for (ObjectName ejb3ModuleNameRequiringReprocessing : ejb3ModuleNamesRequiringReprocessing)
+				createJndiAliases(ejb3ModuleNameRequiringReprocessing);
 		}
-	};
+
+		if (log.isDebugEnabled())
+			log.debug("destroyJndiAliases: Done for: " + ejb3ModuleName);
+	}
 }
