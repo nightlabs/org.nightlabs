@@ -215,8 +215,8 @@ implements UnifiedEjbJndiDeployerMBean
 		Class<?> clazz = theClass;
 		while (clazz != null) {
 			for (Class<?> iface : clazz.getInterfaces()) {
-				interfaces.add(iface);
-				collectAllInterfaces(interfaces, iface);
+				if (interfaces.add(iface))
+					collectAllInterfaces(interfaces, iface);
 			}
 
 			clazz = clazz.getSuperclass();
