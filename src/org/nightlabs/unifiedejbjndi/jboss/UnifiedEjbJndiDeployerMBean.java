@@ -12,5 +12,8 @@ import org.jboss.system.ServiceMBean;
  */
 public interface UnifiedEjbJndiDeployerMBean extends ServiceMBean
 {
-	public static final String JNDI_PREFIX_BY_REMOTE_INTERFACE = "ejb/byRemoteInterface/";
+	public static final String JNDI_PREFIX_EJB_BY_REMOTE_INTERFACE = "ejb/byRemoteInterface/";
+	public static final String JNDI_PREFIX_EJB_BY_LOCAL_INTERFACE = "ejb/byLocalInterface/";
+	public static final String JNDI_PREFIX_EJB_META_DATA_BY_REMOTE_INTERFACE = "ejb/meta/byRemoteInterface/";
+	public static final String JNDI_PREFIX_EJB_META_DATA_BY_LOCAL_INTERFACE = "ejb/meta/byLocalInterface/";
 }

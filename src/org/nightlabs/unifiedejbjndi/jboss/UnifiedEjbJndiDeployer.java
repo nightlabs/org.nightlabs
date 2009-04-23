@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.management.MBeanServerInvocationHandler;
 import javax.management.Notification;
@@ -92,15 +93,22 @@ implements UnifiedEjbJndiDeployerMBean
 			log.debug("stopService: Beginning.");
 
 		// Remove all JNDI-aliases that we have added.
-		// Because during remove, there might be new ones created, we  don't simply iterate them, but perform a loop until
+		// Because during remove, there might be new ones created, we don't simply iterate them, but perform a loop until
 		// the map is empty.
-		boolean ejb3ModuleName2JndiAliasesIsEmpty;
+		boolean ejb3ModuleNamesIsEmpty;
 		do {
 			Collection<ObjectName> ejb3ModuleNames;
-			synchronized (ejb3ModuleName2JndiAliases) {
-				ejb3ModuleNames = new ArrayList<ObjectName>(ejb3ModuleName2JndiAliases.keySet());
+			synchronized (ejbInterfaceType2ejb3ModuleName2JndiAliases) {
+				int arrayListSize = 0;
+				for (Map<ObjectName, Set<String>> ejb3ModuleName2JndiAliases : ejbInterfaceType2ejb3ModuleName2JndiAliases.values())
+					arrayListSize += ejb3ModuleName2JndiAliases.size();
+
+				ejb3ModuleNames = new ArrayList<ObjectName>(arrayListSize);
+
+				for (Map<ObjectName, Set<String>> ejb3ModuleName2JndiAliases : ejbInterfaceType2ejb3ModuleName2JndiAliases.values())
+					ejb3ModuleNames.addAll(ejb3ModuleName2JndiAliases.keySet());
 			}
-			ejb3ModuleName2JndiAliasesIsEmpty = ejb3ModuleNames.isEmpty();
+			ejb3ModuleNamesIsEmpty = ejb3ModuleNames.isEmpty();
 
 			for (ObjectName ejb3ModuleName : ejb3ModuleNames) {
 				try {
@@ -109,7 +117,7 @@ implements UnifiedEjbJndiDeployerMBean
 					log.warn("stopService: " + t, t);
 				}
 			}
-		} while (!ejb3ModuleName2JndiAliasesIsEmpty);
+		} while (!ejb3ModuleNamesIsEmpty);
 
 		// Remove the listener.
 		getServer().removeNotificationListener(ejb3DeployerObjectName, ejb3DeployerListener);
@@ -146,15 +154,39 @@ implements UnifiedEjbJndiDeployerMBean
 	 * Important: Use this object as mutex for accessing it (synchronized block)!
 	 * </p>
 	 */
-	private Map<Class<?>, Set<EjbDescriptor>> remoteInterface2ejbSet = new HashMap<Class<?>, Set<EjbDescriptor>>();
+	private Map<EjbInterfaceType, Map<Class<?>, Set<EjbDescriptor>>> ejbInterfaceType2ejbInterface2ejbSet = new HashMap<EjbInterfaceType, Map<Class<?>,Set<EjbDescriptor>>>();
 
 	/**
 	 * Important: Use {@link #remoteInterface2ejbSet} as mutex for accessing this <code>Map</code>!
 	 */
-	private Map<ObjectName, Map<Class<?>, Set<EjbDescriptor>>> ejb3ModuleName2remoteInterface2ejbSet = new HashMap<ObjectName, Map<Class<?>,Set<EjbDescriptor>>>();
+	private Map<EjbInterfaceType, Map<ObjectName, Map<Class<?>, Set<EjbDescriptor>>>> ejbInterfaceType2ejb3ModuleName2ejbInterface2ejbSet = new HashMap<EjbInterfaceType, Map<ObjectName,Map<Class<?>,Set<EjbDescriptor>>>>();
+
+	{
+		for (EjbInterfaceType ejbInterfaceType : EjbInterfaceType.values()) {
+			ejbInterfaceType2ejbInterface2ejbSet.put(ejbInterfaceType, new HashMap<Class<?>, Set<EjbDescriptor>>());
+			ejbInterfaceType2ejb3ModuleName2ejbInterface2ejbSet.put(ejbInterfaceType, new HashMap<ObjectName, Map<Class<?>, Set<EjbDescriptor>>>());
+		}
+	}
+
+	private static Set<Class<?>> getEjbInterfaces(EjbInterfaceType ejbInterfaceType, Class<?> ejbClass)
+	{
+		Set<Class<?>> ejbInterfaces;
+		switch (ejbInterfaceType) {
+			case local:
+				ejbInterfaces = getLocalInterfaces(ejbClass);
+				break;
+			case remote:
+				ejbInterfaces = getRemoteInterfaces(ejbClass);
+				break;
+
+			default:
+				throw new IllegalStateException("Unknown ejbInterfaceType: " + ejbInterfaceType);
+		}
+		return ejbInterfaces;
+	}
 
 	/**
-	 * Get all interfaces that are either directly annotated with {@link Remote} or
+	 * Get all remote interfaces that are either directly annotated with {@link Remote} or
 	 * referenced by a <code>@Remote</code> annotation in the EJB class. This method
 	 * can be used with any class; non-EJB-classes or EJB-classes having solely local interfaces
 	 * (no remote interfaces) will cause the result to be an empty {@link Set}.
@@ -198,6 +230,53 @@ implements UnifiedEjbJndiDeployerMBean
 		}
 
 		return remoteInterfaces;
+	}
+
+	/**
+	 * Get all local interfaces that are either directly annotated with {@link Local} or
+	 * referenced by a <code>@Local</code> annotation in the EJB class. This method
+	 * can be used with any class; non-EJB-classes or EJB-classes having solely local interfaces
+	 * (no local interfaces) will cause the result to be an empty {@link Set}.
+	 *
+	 * @param ejbClass the EJB class. A non-EJB class or <code>null</code> leads to an empty result (silently; without exception).
+	 * @return a {@link Set} of {@link Class} containing all EJB local interfaces; never <code>null</code>.
+	 */
+	private static Set<Class<?>> getLocalInterfaces(Class<?> ejbClass)
+	{
+		Set<Class<?>> localInterfaces = new HashSet<Class<?>>();
+
+		{
+			// Collect all local-interfaces that are declared via the @Local annotation directly
+			// in the class or a superclass.
+			Class<?> clazz = ejbClass;
+			while (clazz != null) {
+				for (Annotation annotation : clazz.getDeclaredAnnotations()) {
+					if (annotation instanceof Local) {
+						Local localAnnotation = (Local) annotation;
+						for (Class<?> localInterface : localAnnotation.value())
+							localInterfaces.add(localInterface);
+					}
+				}
+
+				clazz = clazz.getSuperclass();
+			}
+		}
+
+		{
+			// Collect all local-interfaces that are tagged by the @Local annotation.
+			Set<Class<?>> interfaces = new HashSet<Class<?>>();
+			collectAllInterfaces(interfaces, ejbClass);
+			iterateInterfaces: for (Class<?> iface : interfaces) {
+				for (Annotation annotation : iface.getDeclaredAnnotations()) {
+					if (annotation instanceof Local) {
+						localInterfaces.add(iface);
+						continue iterateInterfaces;
+					}
+				}
+			}
+		}
+
+		return localInterfaces;
 	}
 
 	/**
@@ -298,55 +377,74 @@ implements UnifiedEjbJndiDeployerMBean
 		return subcontext;
 	}
 
-	private Map<ObjectName, Set<String>> ejb3ModuleName2JndiAliases = new HashMap<ObjectName, Set<String>>();
+	private Map<EjbInterfaceType, Map<ObjectName, Set<String>>> ejbInterfaceType2ejb3ModuleName2JndiAliases = new HashMap<EjbInterfaceType, Map<ObjectName,Set<String>>>();
+
+	{
+		for (EjbInterfaceType ejbInterfaceType : EjbInterfaceType.values()) {
+			ejbInterfaceType2ejb3ModuleName2JndiAliases.put(ejbInterfaceType, new HashMap<ObjectName, Set<String>>());
+		}
+	}
+
+	protected void createJndiAliases(ObjectName ejb3ModuleName)
+	throws NamingException
+	{
+		createJndiAliases(EjbInterfaceType.remote, ejb3ModuleName);
+		createJndiAliases(EjbInterfaceType.local, ejb3ModuleName);
+	}
 
 	/**
 	 * Create JNDI aliases for all session beans (stateless or stateful) that are contained in the
 	 * EJB3 module specified by the given <code>ejb3ModuleName</code>.
-	 *
+	 * @param ejbInterfaceType process local or remote interfaces.
 	 * @param ejb3ModuleName the name of the EJB3 module.
+	 *
 	 * @throws NamingException if accessing JNDI fails.
 	 */
-	protected void createJndiAliases(ObjectName ejb3ModuleName)
+	protected void createJndiAliases(EjbInterfaceType ejbInterfaceType, ObjectName ejb3ModuleName)
 	throws NamingException
 	{
 		if (log.isDebugEnabled())
-			log.debug("createJndiAliases: Beginnning for: " + ejb3ModuleName);
+			log.debug("createJndiAliases("+ejbInterfaceType+"): Beginnning for: " + ejb3ModuleName);
+
+		String jndiPrefix = getEjbAliasJndiPrefix(ejbInterfaceType);
 
 		InitialContext initialContext = new InitialContext();
 		try {
-			Context ejbByRemoteInterfaceContext = getSubcontext(initialContext, JNDI_PREFIX_BY_REMOTE_INTERFACE);
+			Context ejbByRemoteInterfaceContext = getSubcontext(initialContext, jndiPrefix);
 
 			Ejb3ModuleMBean ejb3ModuleMBean = getEjb3ModuleMBean(ejb3ModuleName);
 			for (SessionContainer container : getSessionContainers(ejb3ModuleMBean)) {
 				Class<?> ejbClass = container.getClazz();
 				EjbDescriptor ejbDesc = new EjbDescriptor(container.getObjectName(), ejbClass, ejb3ModuleName);
-				Set<Class<?>> remoteInterfaces = getRemoteInterfaces(ejbClass);
+				Set<Class<?>> ejbInterfaces = getEjbInterfaces(ejbInterfaceType, ejbClass);
 
-				for (Class<?> remoteInterface : remoteInterfaces) {
-					String jndiName = container.getEjbJndiName(remoteInterface);
+				for (Class<?> ejbInterface : ejbInterfaces) {
+					String jndiName = container.getEjbJndiName(ejbInterface);
 					LinkRef linkRef = new LinkRef(jndiName);
-					String jndiSimpleAlias = remoteInterface.getName();
-					String jndiQualifiedAlias = JNDI_PREFIX_BY_REMOTE_INTERFACE + jndiSimpleAlias;
+					String jndiSimpleAlias = ejbInterface.getName();
+					String jndiQualifiedAlias = jndiPrefix + jndiSimpleAlias;
 
 					Collection<EjbDescriptor> ejbDescriptors;
-					synchronized (remoteInterface2ejbSet) {
-						Map<Class<?>, Set<EjbDescriptor>> m1 = ejb3ModuleName2remoteInterface2ejbSet.get(ejb3ModuleName);
+					synchronized (ejbInterfaceType2ejbInterface2ejbSet) {
+						Map<Class<?>, Set<EjbDescriptor>> ejbInterface2ejbSet = ejbInterfaceType2ejbInterface2ejbSet.get(ejbInterfaceType);
+						Map<ObjectName, Map<Class<?>, Set<EjbDescriptor>>> ejb3ModuleName2ejbInterface2ejbSet = ejbInterfaceType2ejb3ModuleName2ejbInterface2ejbSet.get(ejbInterfaceType);
+
+						Map<Class<?>, Set<EjbDescriptor>> m1 = ejb3ModuleName2ejbInterface2ejbSet.get(ejb3ModuleName);
 						if (m1 == null) {
 							m1 = new HashMap<Class<?>, Set<EjbDescriptor>>();
-							ejb3ModuleName2remoteInterface2ejbSet.put(ejb3ModuleName, m1);
+							ejb3ModuleName2ejbInterface2ejbSet.put(ejb3ModuleName, m1);
 						}
-						Set<EjbDescriptor> ejbSet_thisModule = m1.get(remoteInterface);
+						Set<EjbDescriptor> ejbSet_thisModule = m1.get(ejbInterface);
 						if (ejbSet_thisModule == null) {
 							ejbSet_thisModule = new HashSet<EjbDescriptor>();
-							m1.put(remoteInterface, ejbSet_thisModule);
+							m1.put(ejbInterface, ejbSet_thisModule);
 						}
 						ejbSet_thisModule.add(ejbDesc);
 
-						Set<EjbDescriptor> ejbSet_allModules = remoteInterface2ejbSet.get(remoteInterface);
+						Set<EjbDescriptor> ejbSet_allModules = ejbInterface2ejbSet.get(ejbInterface);
 						if (ejbSet_allModules == null) {
 							ejbSet_allModules = new HashSet<EjbDescriptor>();
-							remoteInterface2ejbSet.put(remoteInterface, ejbSet_allModules);
+							ejbInterface2ejbSet.put(ejbInterface, ejbSet_allModules);
 						}
 						ejbSet_allModules.add(ejbDesc);
 
@@ -357,7 +455,9 @@ implements UnifiedEjbJndiDeployerMBean
 					}
 
 					if (ejbDescriptors == null) {
-						synchronized (ejb3ModuleName2JndiAliases) {
+						synchronized (ejbInterfaceType2ejb3ModuleName2JndiAliases) {
+							Map<ObjectName, Set<String>> ejb3ModuleName2JndiAliases = ejbInterfaceType2ejb3ModuleName2JndiAliases.get(ejbInterfaceType);
+
 							Set<String> jndiAliases = ejb3ModuleName2JndiAliases.get(ejb3ModuleName);
 							if (jndiAliases == null) {
 								jndiAliases = new HashSet<String>();
@@ -369,10 +469,10 @@ implements UnifiedEjbJndiDeployerMBean
 						ejbByRemoteInterfaceContext.bind(jndiSimpleAlias, linkRef);
 					}
 					else {
-						log.warn("createJndiAliases: Duplicate use of remote interface \"" + remoteInterface.getName() + "\"!");
-						log.warn("createJndiAliases: The following " + ejbDescriptors.size() + " EJBs share the same remote interface:");
+						log.warn("createJndiAliases("+ejbInterfaceType+"): Duplicate use of EJB interface \"" + ejbInterface.getName() + "\"!");
+						log.warn("createJndiAliases("+ejbInterfaceType+"): The following " + ejbDescriptors.size() + " EJBs share the same EJB interface:");
 						for (EjbDescriptor ejbD : ejbDescriptors) {
-							log.warn("createJndiAliases:   * class \"" + ejbD.getEjbClass().getName() + "\" deployed as \"" + ejbD.getSessionContainerName() + "\"");
+							log.warn("createJndiAliases("+ejbInterfaceType+"):   * class \"" + ejbD.getEjbClass().getName() + "\" deployed as \"" + ejbD.getSessionContainerName() + "\"");
 						}
 						try {
 							ejbByRemoteInterfaceContext.unbind(jndiSimpleAlias);
@@ -387,36 +487,62 @@ implements UnifiedEjbJndiDeployerMBean
 		}
 
 		if (log.isDebugEnabled())
-			log.debug("createJndiAliases: Done for: " + ejb3ModuleName);
+			log.debug("createJndiAliases("+ejbInterfaceType+"): Done for: " + ejb3ModuleName);
 	}
 
+	private static String getEjbAliasJndiPrefix(EjbInterfaceType ejbInterfaceType) {
+		String jndiPrefix;
+		switch (ejbInterfaceType) {
+			case local:
+				jndiPrefix = JNDI_PREFIX_EJB_BY_LOCAL_INTERFACE;
+				break;
+			case remote:
+				jndiPrefix = JNDI_PREFIX_EJB_BY_REMOTE_INTERFACE;
+				break;
+
+			default:
+				throw new IllegalStateException("Unknown ejbInterfaceType: " + ejbInterfaceType);
+		}
+		return jndiPrefix;
+	}
+
+	protected void destroyJndiAliases(ObjectName ejb3ModuleName)
+	throws NamingException
+	{
+		destroyJndiAliases(EjbInterfaceType.local, ejb3ModuleName);
+		destroyJndiAliases(EjbInterfaceType.remote, ejb3ModuleName);
+	}
 
 	/**
 	 * Remove all JNDI aliases that have been added for an EJB3 module. If the disappearing of this
 	 * EJB3 module causes duplicate usages of remote interfaces not to be duplicate anymore, this
 	 * method will re-initialise the affected EJB3 modules (and thus add the previously suppressed EJB
 	 * aliases).
-	 *
+	 * @param ejbInterfaceType process local or remote interfaces.
 	 * @param ejb3ModuleName the name of the EJB3 module.
+	 *
 	 * @throws NamingException if a fundamental JNDI error occurs.
 	 */
-	protected void destroyJndiAliases(ObjectName ejb3ModuleName)
+	protected void destroyJndiAliases(EjbInterfaceType ejbInterfaceType, ObjectName ejb3ModuleName)
 	throws NamingException
 	{
 		if (log.isDebugEnabled())
-			log.debug("destroyJndiAliases: Beginning for: " + ejb3ModuleName);
+			log.debug("destroyJndiAliases("+ejbInterfaceType+"): Beginning for: " + ejb3ModuleName);
 
 		Set<ObjectName> ejb3ModuleNamesRequiringReprocessing = new HashSet<ObjectName>();
 
 		InitialContext initialContext = new InitialContext();
 		try {
-			synchronized (remoteInterface2ejbSet) {
-				Map<Class<?>, Set<EjbDescriptor>> m1 = ejb3ModuleName2remoteInterface2ejbSet.remove(ejb3ModuleName);
+			synchronized (ejbInterfaceType2ejbInterface2ejbSet) {
+				Map<Class<?>, Set<EjbDescriptor>> ejbInterface2ejbSet = ejbInterfaceType2ejbInterface2ejbSet.get(ejbInterfaceType);
+				Map<ObjectName, Map<Class<?>, Set<EjbDescriptor>>> ejb3ModuleName2ejbInterface2ejbSet = ejbInterfaceType2ejb3ModuleName2ejbInterface2ejbSet.get(ejbInterfaceType);
+
+				Map<Class<?>, Set<EjbDescriptor>> m1 = ejb3ModuleName2ejbInterface2ejbSet.remove(ejb3ModuleName);
 				if (m1 != null) {
 					for (Map.Entry<Class<?>, Set<EjbDescriptor>> me1 : m1.entrySet()) {
 						Class<?> remoteInterface = me1.getKey();
 						Set<EjbDescriptor> ejbSet_thisModule = me1.getValue();
-						Set<EjbDescriptor> ejbSet_allModules = remoteInterface2ejbSet.get(remoteInterface);
+						Set<EjbDescriptor> ejbSet_allModules = ejbInterface2ejbSet.get(remoteInterface);
 						if (ejbSet_allModules != null) {
 							int ejbSet_allModules_sizeBefore = ejbSet_allModules.size();
 							ejbSet_allModules.removeAll(ejbSet_thisModule);
@@ -430,14 +556,16 @@ implements UnifiedEjbJndiDeployerMBean
 							}
 
 							if (ejbSet_allModules.isEmpty())
-								remoteInterface2ejbSet.remove(remoteInterface);
+								ejbInterface2ejbSet.remove(remoteInterface);
 						}
 					}
 				}
 			}
 
 			Collection<String> jndiAliases = null;
-			synchronized (ejb3ModuleName2JndiAliases) {
+			synchronized (ejbInterfaceType2ejb3ModuleName2JndiAliases) {
+				Map<ObjectName, Set<String>> ejb3ModuleName2JndiAliases = ejbInterfaceType2ejb3ModuleName2JndiAliases.get(ejbInterfaceType);
+
 				Set<String> _jndiAliases = ejb3ModuleName2JndiAliases.remove(ejb3ModuleName);
 				if (_jndiAliases != null)
 					jndiAliases = new ArrayList<String>(_jndiAliases);
@@ -451,7 +579,7 @@ implements UnifiedEjbJndiDeployerMBean
 						// According to the javadoc, we shouldn't get an exception, if it does not exist; but I just encountered one.
 						// Hence, we silently ignore it. If it's not existing, we already have what we want. Marco.
 					} catch (NamingException e) {
-						log.error("destroyJndiAliases: " + e, e);
+						log.error("destroyJndiAliases("+ejbInterfaceType+"): " + e, e);
 					}
 				}
 			}
@@ -461,13 +589,13 @@ implements UnifiedEjbJndiDeployerMBean
 
 		if (!ejb3ModuleNamesRequiringReprocessing.isEmpty()) {
 			for (ObjectName ejb3ModuleNameRequiringReprocessing : ejb3ModuleNamesRequiringReprocessing)
-				destroyJndiAliases(ejb3ModuleNameRequiringReprocessing);
+				destroyJndiAliases(ejbInterfaceType, ejb3ModuleNameRequiringReprocessing);
 
 			for (ObjectName ejb3ModuleNameRequiringReprocessing : ejb3ModuleNamesRequiringReprocessing)
-				createJndiAliases(ejb3ModuleNameRequiringReprocessing);
+				createJndiAliases(ejbInterfaceType, ejb3ModuleNameRequiringReprocessing);
 		}
 
 		if (log.isDebugEnabled())
-			log.debug("destroyJndiAliases: Done for: " + ejb3ModuleName);
+			log.debug("destroyJndiAliases("+ejbInterfaceType+"): Done for: " + ejb3ModuleName);
 	}
 }
