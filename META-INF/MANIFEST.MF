@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Clientui
+Bundle-SymbolicName: org.nightlabs.clientui
+Bundle-Version: 1.0.0
+Export-Package: org.nightlabs.clientui.layout
