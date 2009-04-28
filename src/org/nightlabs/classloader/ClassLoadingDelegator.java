@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.nightlabs.classloader;
 
 import java.io.File;
@@ -134,7 +131,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 
 			initialized = true;
 		}
-		
+
 		/**
 		 * @return Returns the directory.
 		 */
@@ -174,7 +171,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			return jf;
 		}
 	}
-	
+
 	public static class ResourceEnumeration<T> implements Enumeration<T>
 	{
 		private Iterator<T> iterator;
@@ -193,25 +190,25 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			return iterator.next();
 		}
 	}
-	
-	
+
+
 	private IClassLoaderDelegate classLoader;
-	
+
 	/**
 	 * Map caching already queried resources
 	 * key: String resourceName
 	 * value: ResourceSearchResult found resources
 	 */
 	private Map<String, ResourceSearchResult> foundResources = new HashMap<String, ResourceSearchResult>();
-	
-	
+
+
 	/**
 	 * Map caching already queried classes
 	 * key: String className
 	 * value: ClassSearchResult foundClass
 	 */
 	private Map<String, ClassSearchResult> foundClasses = new HashMap<String, ClassSearchResult>();
-	
+
 	/**
 	 * Instances either of {@link ClassLoaderDelegate} or {@link ClassDataLoaderDelegate}.
 	 */
@@ -224,21 +221,21 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 	private volatile List<Object> _delegates = new ArrayList<Object>(0);
 
 	private List<PathEntry> libpath = new LinkedList<PathEntry>();
-	
+
 	private List<PathEntry> classpath = new LinkedList<PathEntry>();
-	
+
 	protected Set<String> ignoredThreadsClassesOrResources = new HashSet<String>();
-	
+
 	public ClassLoadingDelegator(IClassLoaderDelegate classLoader) {
 		if (classLoader == null)
 			throw new IllegalArgumentException("Argument classLoader must not be null!);");
 		this.classLoader = classLoader;
 	}
-	
+
 	public void addDelegate(ClassDataLoaderDelegate delegate) {
 		addDelegate((Object)delegate);
 	}
-	
+
 	public void addDelegate(ClassLoaderDelegate delegate) {
 		addDelegate((Object)delegate);
 	}
@@ -294,7 +291,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			return true;
 		}
 	}
-	
+
 	private static String pathSeparator = System.getProperty("path.separator");
 	private static void addPathEntry(Collection<PathEntry> pathCollection, File pathItem, boolean recursiveDirs, FilenameFilter dirListFilter)
 	{
@@ -326,19 +323,19 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			}
 		}
 	}
-	
+
 	public void parseLibPaths(String[] paths) {
 		for (int i = 0; i < paths.length; i++) {
 			parsePathProperty(libpath, paths[i], false, null);
 		}
 	}
-	
+
 	public void parseClassPaths(String[] paths, FilenameFilter filter) {
 		for (int i = 0; i < paths.length; i++) {
 			parsePathProperty(libpath, paths[i], false, filter);
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.classloader.IDelegatingClassLoader#findDelegateClass(java.lang.String)
 	 */
@@ -414,16 +411,16 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			ignoredThreadsClassesOrResources.add(threadClassKey);
 		}
 		try {
-	
+
 //			if (name.startsWith("org.nightlabs.")) log_debug("DelegatingClassLoader.findClass(\""+name+"\")");
 			Class<?> foundClass = null;
-	
+
 			// first check the local repository (defined by path properties)
 			String fileName = name.replace('.', '/').concat(".class");
 			for (PathEntry pe : classpath) {
 				if (foundClass != null)
 					break;
-	
+
 				if (pe.isDirectory()) {
 					File f = new File(pe.getPath(), fileName);
 					if (f.exists()) {
@@ -471,10 +468,10 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 				Object delegateInstance = it.next();
 				if (foundClass != null)
 					break;
-				
+
 				if (delegateInstance instanceof ClassDataLoaderDelegate) {
 					ClassDataLoaderDelegate delegate = (ClassDataLoaderDelegate) delegateInstance;
-					
+
 					ClassDataLoaderDelegate.ClassData classData = delegate.getClassData(name);
 					if (classData != null) {
 						if (classData.getClassDataAsByteArray() != null)
@@ -531,7 +528,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 				}
 			}
 		} // synchronized(foundResources) {
-		
+
 		String threadClassKey = Thread.currentThread().toString() + "/" + name;
 		synchronized (ignoredThreadsClassesOrResources) {
 			if (ignoredThreadsClassesOrResources.contains(threadClassKey))
@@ -539,20 +536,20 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 			ignoredThreadsClassesOrResources.add(threadClassKey);
 		}
 		try {
-		
+
 			List<URL> resources = new LinkedList<URL>();
-	
+
 			String relativeFileName;
 			if (name.startsWith("/"))
 				relativeFileName = name.substring(1);
 			else
 				relativeFileName = name;
-	
+
 			String absoluteFileName = "/" + relativeFileName;
-	
+
 			// first check the local repository (defined by path properties)
 			for (PathEntry pe : classpath) {
-	
+
 				if (pe.isDirectory()) {
 					File f = new File(pe.getPath(), relativeFileName);
 					if (f.exists()) {
@@ -565,7 +562,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 					JarFile jf = pe.getJarFile();
 					JarEntry je = jf.getJarEntry(relativeFileName);
 					if (je != null) {
-						resources.add(new URL("jar", "", -1, "file:" + pe.getPath() + "!" + absoluteFileName, new sun.net.www.protocol.jar.Handler()));
+						resources.add(new URL("jar", "", -1, "file:" + pe.getPath() + "!" + absoluteFileName)); //, new sun.net.www.protocol.jar.Handler() - shouldn't be necessary since a jar handler is guaranteed to be available (see javadoc of this constructor) - marius
 						if (returnAfterFoundFirst)
 							return resources;
 					}
@@ -574,7 +571,7 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 					LogUtil.log_warn(this.getClass(), "findResources", "Path entry \""+pe.getPath()+"\" defined in 'java.ext.dirs' or 'java.class.path' is neither a directory nor a readable jar file!");
 				}
 			}
-	
+
 			// now check whether one of the delegates can deliver the resource
 			for (Iterator<?> it = _delegates.iterator(); it.hasNext(); ) {
 				ResourceFinder delegate = (ResourceFinder) it.next();
@@ -585,25 +582,25 @@ public class ClassLoadingDelegator implements IClassLoadingDelegator {
 						return resources;
 				} //	if (delegateRes != null) {
 			}
-	
+
 			synchronized(foundResources) {
 				foundResources.put(name,new ResourceSearchResult(!returnAfterFoundFirst,resources));
 			}
-			
+
 			return resources;
-			
+
 		} finally {
 			synchronized (ignoredThreadsClassesOrResources) {
 				ignoredThreadsClassesOrResources.remove(threadClassKey);
 			}
 		}
 	}
-	
+
 	public void clearCache() {
 		synchronized(foundResources){foundResources.clear();}
 		synchronized(foundClasses){foundClasses.clear();}
 	}
-	
+
 	private static final int readBlockSize = 10240;
 	/**
 	 * This method reads always till the end of the stream (until <tt>in.read()</tt> returns -1)! The
