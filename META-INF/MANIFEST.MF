@@ -6,3 +6,5 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: nightlabs.org
 Export-Package: org.nightlabs.htmlcontent
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.nightlabs.jfire.base.j2ee;resolution:=optional
+Eclipse-RegisterBuddy: org.nightlabs.jfire.base.j2ee
