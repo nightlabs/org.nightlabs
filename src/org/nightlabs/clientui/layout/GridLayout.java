@@ -5,6 +5,17 @@ package org.nightlabs.clientui.layout;
 
 import java.io.Serializable;
 
+import javax.jdo.annotations.PrimaryKey;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import org.nightlabs.clientui.layout.id.GridLayoutID;
+import javax.jdo.annotations.DiscriminatorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceModifier;
+import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.Discriminator;
+import javax.jdo.annotations.Inheritance;
+
 /**
  * Instance of {@link GridLayout} can be used to store the layout of a widget 
  * of some client UI persistently on the JFire server.
@@ -23,6 +34,13 @@ import java.io.Serializable;
  *
  * @jdo.create-objectid-class field-order="gridLayoutID"
  */
+@PersistenceCapable(
+	objectIdClass=GridLayoutID.class,
+	identityType=IdentityType.APPLICATION,
+	detachable="true",
+	table="NightLabsClientUI_GridLayout")
+@Discriminator(strategy=DiscriminatorStrategy.CLASS_NAME)
+@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public class GridLayout implements Serializable {
 
 	private static final long serialVersionUID = 20090119L;
@@ -30,56 +48,67 @@ public class GridLayout implements Serializable {
 	/**
 	 * @jdo.field primary-key="true"
 	 */
+	@PrimaryKey
 	private long gridLayoutID;
 	
  	/**
  	 * @jdo.field persistence-modifier="persistent"
  	 */
+ 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
 	private int numColumns;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
+	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
 	private boolean makeColumnsEqualWidth;
 	
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
+	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
  	private int marginWidth;
  	
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
+	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
  	private int marginHeight;
 
  	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
+ 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
 	private int marginLeft;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
+	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
 	private int marginTop;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
+	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
 	private int marginRight;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
+	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
 	private int marginBottom;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
+	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
  	private int horizontalSpacing;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
+	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
  	private int verticalSpacing;
 
  	/**
