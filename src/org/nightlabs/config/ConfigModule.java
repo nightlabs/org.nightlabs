@@ -26,8 +26,10 @@ package org.nightlabs.config;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
 import java.io.Serializable;
 
 import org.nightlabs.concurrent.DeadLockException;
@@ -257,12 +259,44 @@ public abstract class ConfigModule
 			out.writeObject(this);
 			out.close();
 
-			ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(buf.toByteArray()));
+			ObjectInputStream in = new ClassLoaderObjectInputStream(
+					new ByteArrayInputStream(buf.toByteArray()), this.getClass().getClassLoader()
+			);
 			Object n = in.readObject();
 			in.close();
 			return (ConfigModule) n;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * An {@link ObjectInputStream} instance that uses the given
+	 * {@link ClassLoader} to resolve classes that are to be deserialized.
+	 * @author Marc Klinger - marc[at]nightlabs[dot]de
+	 */
+	private static class ClassLoaderObjectInputStream extends ObjectInputStream
+	{
+		private ClassLoader classLoader;
+		public ClassLoaderObjectInputStream(InputStream in, ClassLoader classLoader) throws IOException {
+			super(in);
+			this.classLoader = classLoader;
+		}
+		/* (non-Javadoc)
+		 * @see java.io.ObjectInputStream#resolveClass(java.io.ObjectStreamClass)
+		 */
+		@Override
+		protected Class<?> resolveClass(ObjectStreamClass desc)
+				throws IOException, ClassNotFoundException
+		{
+			if(classLoader == null)
+				return super.resolveClass(desc);
+			String name = desc.getName();
+			try {
+			    return Class.forName(name, false, classLoader);
+			} catch (ClassNotFoundException ex) {
+				return super.resolveClass(desc);
+			}
 		}
 	}
 
