@@ -1,4 +1,4 @@
-package org.nightlabs.classloader;
+package org.nightlabs.classloader.delegating;
 
 import java.security.ProtectionDomain;
 

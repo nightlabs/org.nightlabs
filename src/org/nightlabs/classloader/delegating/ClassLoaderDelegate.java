@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.classloader;
+package org.nightlabs.classloader.delegating;
 
 
 /**

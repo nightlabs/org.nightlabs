@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.nightlabs.classloader;
+package org.nightlabs.classloader.delegating;
 
 /**
  * @author Alexander Bieber <alex [AT] nightlabs [DOT] de>

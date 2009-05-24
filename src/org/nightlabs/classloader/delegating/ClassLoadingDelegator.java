@@ -1,4 +1,4 @@
-package org.nightlabs.classloader;
+package org.nightlabs.classloader.delegating;
 
 import java.io.File;
 import java.io.FileInputStream;
