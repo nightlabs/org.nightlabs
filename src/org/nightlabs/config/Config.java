@@ -700,6 +700,34 @@ public class Config
 		} // synchronized (ioMutex) {
 	}
 
+	private ClassLoader classLoader;
+
+	public ClassLoader getClassLoader() {
+		return classLoader;
+	}
+	public void setClassLoader(ClassLoader classLoader) {
+		this.classLoader = classLoader;
+	}
+
+	private ClassLoader getDefaultClassLoader()
+	{
+		if (classLoader == null)
+			return Config.class.getClassLoader();
+		else
+			return classLoader;
+	}
+
+	private XMLDecoder createXMLDecoder(InputStream in, ExceptionListener exceptionListener)
+	{
+		return new XMLDecoder(
+				in,
+				null,
+				exceptionListener,
+				getDefaultClassLoader()
+		);
+	}
+
+
 	private Set<String> loadedConfigModuleClassNames = new HashSet<String>();
 
 	private void loadConfigModulesForClass(String configModuleClassName)
@@ -762,9 +790,9 @@ public class Config
 					InputStream in = includeFileURL.openStream();
 					try {
 						ConfigModule cfMod;
-						XMLDecoder d = new XMLDecoder(in);
+						XMLDecoder d = createXMLDecoder(in, new ConfigExceptionListener("Error reading config module file \"" + includeFileURL + "\"!"));
 						try {
-							d.setExceptionListener(new ConfigExceptionListener("Error reading config module file \"" + includeFileURL + "\"!"));
+//							d.setExceptionListener(new ConfigExceptionListener("Error reading config module file \"" + includeFileURL + "\"!"));
 							cfMod = (ConfigModule)d.readObject();
 							cfMod.setChanged(false);
 							if(logger.isDebugEnabled())
@@ -1508,9 +1536,9 @@ public class Config
 //			Unmarshaller unMarshaller = new Unmarshaller(ListEnvelope.class); // , org.nightlabs.plugin.PluginMan.getClassLoader());
 //			ListEnvelope env = (ListEnvelope)unMarshaller.unmarshal(isReader);
 			List<?> ls;
-			XMLDecoder d = new XMLDecoder(fin);
+			XMLDecoder d = createXMLDecoder(fin, new ConfigExceptionListener("Error reading main config file!"));
 			try {
-				d.setExceptionListener(new ConfigExceptionListener("Error reading main config file!"));
+//				d.setExceptionListener(new ConfigExceptionListener("Error reading main config file!"));
 				ls = (List<?>)d.readObject();
 			} finally {
 				d.close();
