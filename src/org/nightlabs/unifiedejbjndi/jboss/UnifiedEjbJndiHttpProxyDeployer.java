@@ -182,7 +182,6 @@ public class UnifiedEjbJndiHttpProxyDeployer
 			try {
 				if (SubDeployer.START_NOTIFICATION.equals(notification.getType())) {
 					DeploymentInfo deploymentInfo = (DeploymentInfo) notification.getUserData();
-					log.warn("Creating new Proxies for: "+deploymentInfo.deployedObject);
 					createRemoteProxies(deploymentInfo.deployedObject);
 				}
 				else if (SubDeployer.DESTROY_NOTIFICATION.equals(notification.getType())) {
