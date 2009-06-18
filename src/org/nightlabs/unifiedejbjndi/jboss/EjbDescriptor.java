@@ -2,8 +2,17 @@ package org.nightlabs.unifiedejbjndi.jboss;
 
 import javax.management.ObjectName;
 
-class EjbDescriptor {
-	public EjbDescriptor(ObjectName sessionContainerName, Class<?> ejbClass, ObjectName ejb3ModuleName) {
+import org.jboss.annotation.ejb.RemoteBindings;
+
+class EjbDescriptor
+{
+	public EjbDescriptor(ObjectName sessionContainerName, Class<?> ejbClass, ObjectName ejb3ModuleName)
+	{
+		this(sessionContainerName, ejbClass, ejb3ModuleName, null);
+	}
+
+	public EjbDescriptor(ObjectName sessionContainerName, Class<?> ejbClass, ObjectName ejb3ModuleName, RemoteBindings oldBindings)
+	{
 		if (sessionContainerName == null)
 			throw new IllegalArgumentException("sessionContainerName must not be null!");
 
@@ -16,11 +25,13 @@ class EjbDescriptor {
 		this.sessionContainerName = sessionContainerName;
 		this.ejbClass = ejbClass;
 		this.ejb3ModuleName = ejb3ModuleName;
+		this.originalBindings = oldBindings;
 	}
 
 	private ObjectName sessionContainerName;
 	private Class<?> ejbClass;
 	private ObjectName ejb3ModuleName;
+	private RemoteBindings originalBindings;
 
 	public ObjectName getSessionContainerName() {
 		return sessionContainerName;
@@ -32,6 +43,15 @@ class EjbDescriptor {
 
 	public ObjectName getEjb3ModuleName() {
 		return ejb3ModuleName;
+	}
+
+	public void setOriginalBindings(RemoteBindings originalBindings)
+	{
+		this.originalBindings = originalBindings;
+	}
+
+	public RemoteBindings getOriginalBindings()	{
+		return originalBindings;
 	}
 
 	@Override

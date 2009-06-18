@@ -8,4 +8,8 @@ PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
           name="jboss.ejb3:service=UnifiedEjbJndiDeployer">
       <depends>jboss.ejb3:service=EJB3Deployer</depends>
    </mbean>
+   <mbean code="org.nightlabs.unifiedejbjndi.jboss.UnifiedEjbJndiHttpProxyDeployer"
+          name="jboss.ejb3:service=UnifiedEjbJndiHttpProxyDeployer">
+      <depends>jboss.ejb3:service=EJB3Deployer</depends>
+   </mbean>
 </server>
