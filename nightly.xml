@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.5//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_5.dtd">
+<nightlybuild>
+
+	<project name="NightLabsQuery" category="NightLabs.server">
+    <!-- repository is defined in NightLabsOSSBuildAll/nightly.xml -->
+    <ant path="NightLabsQuery" file="build-nightlabs.xml" target="deploy"/>
+    <provides/>
+    <requires classpathfile="NightLabsQuery/.classpath"/>
+    <publishes description="NightLabs query base library" location="NightLabsQuery/dist/NightLabsQuery.jar"/>
+    <javadoc path="NightLabsQuery/src"/>
+	</project>
+	
+</nightlybuild>
