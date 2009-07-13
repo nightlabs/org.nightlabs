@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.5//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_5.dtd">
+<nightlybuild>
+
+	<project name="NightLabsQueryJDO" category="NightLabs.server">
+    <!-- repository is defined in NightLabsOSSBuildAll/nightly.xml -->
+    <ant path="NightLabsQueryJDO" file="build-nightlabs.xml" target="deploy"/>
+    <provides />
+    <requires classpathfile="NightLabsQueryJDO/.classpath"/>
+    <publishes description="NightLabs JDOQuery library" location="NightLabsQueryJDO/dist/NightLabsQueryJDO.jar"/>
+    <javadoc path="NightLabsQueryJDO/src"/>
+	</project>
+	
+</nightlybuild>
