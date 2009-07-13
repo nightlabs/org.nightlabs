@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.9//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_9.dtd">
+<!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.5//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_5.dtd">
 
 <nightlybuild>
-  <project name="org.nightlabs.jdo.ui">
-	<plugin/>
-    <ant path="org.nightlabs.jdo.ui" file="build-nightlabs.xml" target="deploy"/>
-    <requires/>
-    <provides/>
-    <publishes description="..." location="org.nightlabs.jdo.ui/dist/org.nightlabs.jdo_0.9.1.tar.gz"/>
-    <javadoc path="org.nightlabs.jdo.ui/src"/>
-  </project>
+	<project name="NightLabsJDO">
+		<ant path="NightLabsJDO" file="build-nightlabs.xml" target="deploy"/>
+		<provides path="NightLabsJDO" location="NightLabsJDO/dist/NightLabsJDO.jar"/>
+		<provides path="/NightLabsJDO" location="NightLabsJDO/dist/NightLabsJDO.jar"/>
+		<provides path="/NightLabsJDO/dist/NightLabsJDO.jar" location="NightLabsJDO/dist/NightLabsJDO.jar"/>
+		<provides path="WORKSPACE/NightLabsJDO/dist/NightLabsJDO.jar" location="NightLabsJDO/dist/NightLabsJDO.jar"/>
+		<requires classpathfile="NightLabsJDO/.classpath"/>
+		<publishes description="NightLabs JDO base library" location="NightLabsJDO/dist/NightLabsJDO.jar"/>
+		<javadoc path="NightLabsJDO/src"/>
+	</project>
 </nightlybuild>

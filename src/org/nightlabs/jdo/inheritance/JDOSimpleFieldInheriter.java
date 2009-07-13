@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.jdo.ui - NightLabs Eclipse utilities for JDO                     *
+ * NightLabsJDO - NightLabs Utilities for JDO                                  *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -24,27 +24,31 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jdo.ui.search;
+package org.nightlabs.jdo.inheritance;
 
+import java.lang.reflect.Field;
 
+import javax.jdo.JDOHelper;
+
+import org.nightlabs.inheritance.FieldMetaData;
+import org.nightlabs.inheritance.Inheritable;
+import org.nightlabs.inheritance.SimpleFieldInheriter;
 
 /**
- * Common interface to handle triggerment of searches
- * for persons.
- * 
- * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ * @author Marco Schulze - marco at nightlabs dot de
  */
-public interface SearchResultFetcher {
-	/**
-	 * Will be called when a search is triggered.
-	 * The criteriaBuilder will provide a SearchFilter.
-	 * Fetchers have to perform the search themselves
-	 * within this method. With the login passed fetchers 
-	 * can have access to a j2ee server to perform the
-	 * search based on the obtained search filter.
-	 * 
-	 * @param criteriaBuilder
-	 * @param login
-	 */
-	public void searchTriggered(SearchFilterProvider filterProvider);
+public class JDOSimpleFieldInheriter extends SimpleFieldInheriter
+{
+	@Override
+	public void copyFieldValue(
+			Inheritable mother, Inheritable child,
+			Class<?> motherClass, Class<?> childClass,
+			Field motherField, Field childField,
+			FieldMetaData motherFieldMetaData, FieldMetaData childFieldMetaData
+	)
+	{
+		super.copyFieldValue(mother, child, motherClass, childClass, motherField,
+				childField, motherFieldMetaData, childFieldMetaData);
+		JDOHelper.makeDirty(child, motherField.getName());
+	}
 }

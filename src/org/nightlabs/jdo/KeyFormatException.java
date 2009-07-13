@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.jdo.ui - NightLabs Eclipse utilities for JDO                     *
+ * NightLabsJDO - NightLabs Utilities for JDO                                  *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -24,36 +24,40 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jdo.ui.search;
-
-import org.eclipse.swt.widgets.Composite;
+package org.nightlabs.jdo;
 
 /**
- * Default implementation of a item-based SearchFilterProvider.
- * 
- * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ * @author marco
  */
-public abstract class ItemBasedSearchFilterProvider extends
-		AbstractItemBasedSearchFilterProvider {
+public class KeyFormatException extends ObjectIDException {
+	private static final long serialVersionUID = 1L;
 
-	public ItemBasedSearchFilterProvider(SearchFilterItemListMutator listMutator) {
-		super(listMutator);
+	/**
+	 * 
+	 */
+	public KeyFormatException() {
+		super();
 	}
 
-	public AbstractItemBasedSearchFilterProviderComposite createProviderComposite(
-			Composite parent, 
-			int style, 
-			SearchFilterProvider searchFilterProvider, 
-			SearchFilterItemListMutator listMutator, 
-			SearchResultFetcher resultFetcher
-		) {
-		return new ItemBasedSearchFilterProviderComposite(
-				parent,
-				style,
-				searchFilterProvider,
-				listMutator,
-				resultFetcher
-			);
+	/**
+	 * @param message
+	 */
+	public KeyFormatException(String message) {
+		super(message);
 	}
 
+	/**
+	 * @param cause
+	 */
+	public KeyFormatException(Throwable cause) {
+		super(cause);
+	}
+
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public KeyFormatException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

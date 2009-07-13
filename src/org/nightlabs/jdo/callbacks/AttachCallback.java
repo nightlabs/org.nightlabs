@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.jdo.ui - NightLabs Eclipse utilities for JDO                     *
+ * NightLabsJDO - NightLabs Utilities for JDO                                  *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -24,58 +24,15 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jdo.ui.search;
-
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.nightlabs.jdo.search.SearchFilterItem;
+package org.nightlabs.jdo.callbacks;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ *
+ * @deprecated Callbacks for all seem to be part of the JDO standard by now.
  */
-public abstract class SearchFilterItemEditor {
-	
-	/**
-	 * After the first call this method should always
-	 * return the same control. So from the second call
-	 * the parent parameter should be neglected.
-	 * 
-	 * @param parent
-	 * @return
-	 */
-	public abstract Control getControl(Composite parent);
-	
-	/**
-	 * Should return the SearchFilterItem this 
-	 * editor has build.
-	 * 
-	 * @return
-	 */
-	public abstract SearchFilterItem getSearchFilterItem();
-	
-	/**
-	 * Will be called when the
-	 * editor is closed. It should be
-	 * used for cleanup (removing listeners), 
-	 * not for disposing widgets.
-	 */
-	public abstract void close();
-	
-	/**
-	 * Creates a new instance of the current class.
-	 * 
-	 * @return
-	 */
-	public SearchFilterItemEditor newInstance() {
-		SearchFilterItemEditor newEditor = null;
-		try {
-			newEditor = (SearchFilterItemEditor) this.getClass().newInstance();
-		} catch (Throwable t) {
-			IllegalStateException ill = new IllegalStateException("Could not create new instance of SearchFilterItemEditor "+this); //$NON-NLS-1$
-			ill.initCause(t);
-			throw ill;
-		}
-		return newEditor;
-	}
-	
+@Deprecated
+public interface AttachCallback {
+	public void nljdoPreAttach();
+	public void nljdoPostAttach();
 }

@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.jdo.ui - NightLabs Eclipse utilities for JDO                     *
+ * NightLabsJDO - NightLabs Utilities for JDO                                  *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -24,39 +24,15 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jdo.ui.search;
-
-import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.jdo.search.SearchFilter;
+package org.nightlabs.jdo.callbacks;
 
 /**
- * Common interface to handle different scenarios of 
- * searching entities with the SearchFilter framework.
- * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ *
+ * @deprecated Callbacks for all seem to be part of the JDO standard by now.
  */
-public interface SearchFilterProvider {
-	
-	/**
-	 * Should create and return a GUI-representation of this
-	 * CriteriaBuilder as Composite. 
-	 * 
-	 * @param parent
-	 * @return
-	 */
-	public Composite createComposite(Composite parent);
-	
-	/**
-	 * Should return the Composite created in {@link #createComposite(Composite)}.
-	 * @return
-	 */
-	public Composite getComposite();
-	
-	/**
-	 * Return the PersonSearchFilter build up by this
-	 * Criteria builder.
-	 * 
-	 * @return
-	 */
-	public SearchFilter getSearchFilter();
+@Deprecated
+public interface DetachCallback {
+	public void nljdoPreDetach();
+	public void nljdoPostDetach();
 }

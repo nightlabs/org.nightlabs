@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.jdo.ui - NightLabs Eclipse utilities for JDO                     *
+ * NightLabsJDO - NightLabs Utilities for JDO                                  *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -24,25 +24,15 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jdo.ui.search;
-
+package org.nightlabs.jdo.callbacks;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ *
+ * @deprecated Callbacks for all seem to be part of the JDO standard by now.
  */
-public interface SearchFilterItemListMutator {
-	
-	/**
-	 * Will be called when a new 
-	 * SearchFilterItemEditor has to be created
-	 * and added to the list.<br/>
-	 * Most implementations will look like:
-	 * <pre>
-	 * 	list.addItemEditor(new MyInheritorOfSearchFilterItemEditor())
-	 * </pre>
-	 * 
-	 * @param list The list the editor should be added
-	 */
-	public void addItemEditor(SearchFilterItemList list);
-	
+@Deprecated
+public interface StoreCallback {
+	public void nljdoPreStore();
+	public void nljdoPostStore();
 }

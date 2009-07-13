@@ -1,5 +1,5 @@
 /* *****************************************************************************
- * org.nightlabs.jdo.ui - NightLabs Eclipse utilities for JDO                     *
+ * NightLabsJDO - NightLabs Utilities for JDO                                  *
  * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
  *                                                                             *
  * This library is free software; you can redistribute it and/or               *
@@ -24,71 +24,15 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jdo.ui;
-
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.BundleContext;
+package org.nightlabs.jdo.callbacks;
 
 /**
- * The main plugin class to be used in the desktop.
+ * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ *
+ * @deprecated Callbacks for all seem to be part of the JDO standard by now.
  */
-public class JdoPlugin extends AbstractUIPlugin {
-	//The shared instance.
-	private static JdoPlugin plugin;
-//	//Resource bundle.
-//	private ResourceBundle resourceBundle;
-
-	/**
-	 * The constructor.
-	 */
-	public JdoPlugin() {
-		super();
-		plugin = this;
-//		try {
-//			resourceBundle = ResourceBundle.getBundle("org.nightlabs.jdo.ui.plugin"); //$NON-NLS-1$
-//		} catch (MissingResourceException x) {
-//			resourceBundle = null;
-//		}
-	}
-
-	/**
-	 * This method is called upon plug-in activation
-	 */
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-	}
-
-	/**
-	 * This method is called when the plug-in is stopped
-	 */
-	public void stop(BundleContext context) throws Exception {
-		super.stop(context);
-	}
-
-	/**
-	 * Returns the shared instance.
-	 */
-	public static JdoPlugin getDefault() {
-		return plugin;
-	}
-
-//	/**
-//	 * Returns the string from the plugin's resource bundle,
-//	 * or 'key' if not found.
-//	 */
-//	public static String getResourceString(String key) {
-//		ResourceBundle bundle = JdoPlugin.getDefault().getResourceBundle();
-//		try {
-//			return (bundle != null) ? bundle.getString(key) : key;
-//		} catch (MissingResourceException e) {
-//			return key;
-//		}
-//	}
-
-//	/**
-//	 * Returns the plugin's resource bundle,
-//	 */
-//	public ResourceBundle getResourceBundle() {
-//		return resourceBundle;
-//	}
+@Deprecated
+public interface DeleteCallback {
+	public void nljdoPreDelete();
+	public void nljdoPostDelete();
 }
