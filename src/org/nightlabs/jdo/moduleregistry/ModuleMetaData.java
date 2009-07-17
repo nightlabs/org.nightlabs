@@ -26,6 +26,7 @@
 
 package org.nightlabs.jdo.moduleregistry;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -105,6 +106,31 @@ public class ModuleMetaData
 
 		referenceClassURLBase = referenceClassURLBase.substring(0, referenceClassURLBase.length() - referenceClassRelativePath.length());
 
+		// strip the EJB-JAR-inside part of the URL ("jar:" at the beginning and "!" at the end)
+		String jarPrefix = "jar:";
+		if (referenceClassURLBase.startsWith(jarPrefix)) {
+			if (!referenceClassURLBase.endsWith("!"))
+				throw new IllegalStateException("referenceClassURLBase starts with \"" + jarPrefix + "\" but does not end with \"!\": " + referenceClassURLBase);
+
+			referenceClassURLBase = referenceClassURLBase.substring(jarPrefix.length(), referenceClassURLBase.length() - 1);
+		}
+		else
+			throw new UnsupportedOperationException("referenceClassURL does not reference a class inside a JAR!");
+
+		// strip the name of the JAR at the end
+		if (referenceClassURLBase.endsWith("/") || referenceClassURLBase.endsWith(File.separator))
+			throw new IllegalStateException("Expected a normal character but found \"/\" at the end: " + referenceClassURLBase);
+
+		int lastSlashIdx = referenceClassURLBase.replace(File.separatorChar, '/').lastIndexOf('/'); // We find both, slashes and backslashes this way.
+		if (lastSlashIdx < 0)
+			throw new IllegalStateException("referenceClassURLBase does not contain any EAR! Cannot find separator anymore: " + referenceClassURLBase);
+
+		String jarNameToBeCut = referenceClassURLBase.substring(lastSlashIdx);
+		if (jarNameToBeCut.contains("!"))
+			throw new IllegalStateException("We have a JAR-separator (!) inside the part that we would cut (lastSlashIdx="+ lastSlashIdx +"): " + referenceClassURLBase);
+
+		referenceClassURLBase = referenceClassURLBase.substring(0, lastSlashIdx);
+
 		String manifestResourceName = "/META-INF/MANIFEST.MF";
 		URL manifestResourceUrl = new URL(referenceClassURLBase + manifestResourceName);
 
@@ -119,33 +145,19 @@ public class ModuleMetaData
 
 		String earModuleIDKey = "EAR-Module-ID";
 		String earModuleIDValue = manifest.getMainAttributes().getValue(earModuleIDKey);
-		String earModuleVersionKey = "EAR-Module-Version";
-		String earModuleVersionValue = manifest.getMainAttributes().getValue(earModuleVersionKey);
+//		String earModuleVersionKey = "EAR-Module-Version";
+//		String earModuleVersionValue = manifest.getMainAttributes().getValue(earModuleVersionKey);
 		String earSchemaVersionKey = "EAR-Schema-Version";
 		String earSchemaVersionValue = manifest.getMainAttributes().getValue(earSchemaVersionKey);
-
-		String bundleIDKey = "Bundle-SymbolicName";
-		String bundleIDValue = manifest.getMainAttributes().getValue(bundleIDKey);
-		String bundleVersionKey = "Bundle-Version";
-		String bundleVersionValue = manifest.getMainAttributes().getValue(bundleVersionKey);
-
-		// Even though we persist only the schema version into the datastore, we read and check all relevant entries
-		// to ensure our MANIFEST.MF is complete.
 
 		if (earModuleIDValue != null)
 			earModuleIDValue = earModuleIDValue.trim();
 
-		if (earModuleVersionValue != null)
-			earModuleVersionValue = earModuleVersionValue.trim();
+//		if (earModuleVersionValue != null)
+//			earModuleVersionValue = earModuleVersionValue.trim();
 
 		if (earSchemaVersionValue != null)
 			earSchemaVersionValue = earSchemaVersionValue.trim();
-
-		if (bundleIDValue != null)
-			bundleIDValue = bundleIDValue.trim();
-
-		if (bundleVersionValue != null)
-			bundleVersionValue = bundleVersionValue.trim();
 
 		if (earModuleIDValue == null || earModuleIDValue.isEmpty())
 			throw new IllegalStateException("Key \"" + earModuleIDKey + "\" missing or having empty value in file: " + manifestResourceUrl);
@@ -153,17 +165,11 @@ public class ModuleMetaData
 		if (!moduleID.equals(earModuleIDValue))
 			throw new IllegalStateException("Key \"" + earModuleIDKey + "\" is expected to have value \"" + moduleID + "\" but has value \"" + earModuleIDValue + "\" in file: " + manifestResourceUrl);
 
-		if (earModuleVersionValue == null || earModuleVersionValue.isEmpty())
-			throw new IllegalStateException("Key \"" + earModuleVersionKey + "\" missing or having empty value in file: " + manifestResourceUrl);
+//		if (earModuleVersionValue == null || earModuleVersionValue.isEmpty())
+//			throw new IllegalStateException("Key \"" + earModuleVersionKey + "\" missing or having empty value in file: " + manifestResourceUrl);
 
 		if (earSchemaVersionValue == null || earSchemaVersionValue.isEmpty())
 			throw new IllegalStateException("Key \"" + earSchemaVersionKey + "\" missing or having empty value in file: " + manifestResourceUrl);
-
-		if (bundleIDValue == null || bundleIDValue.isEmpty())
-			throw new IllegalStateException("Key \"" + bundleIDKey + "\" missing or having empty value in file: " + manifestResourceUrl);
-
-		if (bundleVersionValue == null || bundleVersionValue.isEmpty())
-			throw new IllegalStateException("Key \"" + bundleVersionKey + "\" missing or having empty value in file: " + manifestResourceUrl);
 
 		return new ModuleMetaData(moduleID, earSchemaVersionValue);
 	}
