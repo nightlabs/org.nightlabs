@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: UnifiedJndiLogin
-Bundle-SymbolicName: org.nightlabs.unified.jndi.jboss.ui;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-SymbolicName: org.nightlabs.unifiedjndi.jboss.client;singleton:=true
+Bundle-Version: 1.0.1
 Bundle-Vendor: NightLabs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
