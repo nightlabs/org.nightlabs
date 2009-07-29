@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: UnifiedJndiLogin
+Bundle-SymbolicName: org.nightlabs.unified.jndi.jboss.ui;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Vendor: NightLabs
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Eclipse-LazyStart: false
+Export-Package: org.nightlabs.unified.jndi.jboss.ui
+Import-Package: org.apache.log4j;version="1.2.0",
+ org.jboss.naming,
+ org.jboss.security
