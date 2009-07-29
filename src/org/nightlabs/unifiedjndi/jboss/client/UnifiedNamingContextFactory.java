@@ -1,4 +1,4 @@
-package org.nightlabs.unified.jndi.jboss.ui;
+package org.nightlabs.unifiedjndi.jboss.client;
 
 import java.net.URI;
 import java.util.Hashtable;
