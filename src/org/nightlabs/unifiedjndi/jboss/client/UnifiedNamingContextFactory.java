@@ -90,7 +90,10 @@ public class UnifiedNamingContextFactory
 			throw new IllegalStateException("The given scheme is unknown -> Cannot decide which InitialContextFactory " +
 					"to create!\n\t ProviderURL="+jndiURI);
 
-		return new UnifiedLoginContext(contextFactory.getInitialContext(env), new UserDescriptor(username, password),
+		if (username == null && password == null)
+			return new UnifiedJNDIContext(contextFactory.getInitialContext(env), additionalPrefix);
+		else
+			return new UnifiedLoginContext(contextFactory.getInitialContext(env), new UserDescriptor(username, password),
 				additionalPrefix);
 	}
 

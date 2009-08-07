@@ -5,15 +5,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.security.Principal;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Set;
 
-import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.Name;
-import javax.naming.NameClassPair;
-import javax.naming.NameParser;
-import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.security.auth.login.LoginContext;
 
@@ -21,20 +16,19 @@ import org.apache.log4j.Logger;
 import org.jboss.security.SecurityAssociation;
 
 /**
- * @author Marius Heinzmann - marius[at]nightlabs[dot]de
+ * This context enforces authentication and deauthentication on every lookup, as well as for the method invocation of
+ * every stub that is returned by wrapping these stubs into {@link CascadedAuthenticationInvocationHandler}.
  *
+ * @author Marius Heinzmann - marius[at]nightlabs[dot]de
  */
-public class UnifiedLoginContext
-implements Context
+public class UnifiedLoginContext extends UnifiedJNDIContext
+	implements Context
 {
 	private static final String DefaultSecurityProtocol = "jfire";
 	private static final Logger logger = Logger.getLogger(UnifiedLoginContext.class);
-	private static final boolean LOGIN_DURING_LOOKUP_ENABLED = false;
+	static final boolean LOGIN_DURING_LOOKUP_ENABLED = false;
 
-	private Context delegate;
 	private UserDescriptor userDescriptor;
-	private String additionalJNDIPrefix;
-
 	static {
 		// Every Thread has to be authenticated!! Otherwise we'll run into threading problems!
 		// The default is that only the whole VM is authenticated, but this won't work for us, since we heavily depend on
@@ -43,28 +37,15 @@ implements Context
 		SecurityAssociation.setServer();
 	}
 
-//	public UnifiedLoginContext(Context _delegate, UserDescriptor _userDescriptor)
-//	throws NamingException
-//	{
-//		this(_delegate, _userDescriptor, null);
-//	}
-
 	public UnifiedLoginContext(Context _delegate, UserDescriptor _userDescriptor, String additionalTargetPrefix)
 	throws NamingException
 	{
-		if (_delegate == null)
-			throw new IllegalArgumentException("_delegate must not be null!");
+		super(_delegate, additionalTargetPrefix);
 
 		if (_userDescriptor == null)
 			throw new IllegalArgumentException("_userDescriptor must not be null!");
 
-		this.delegate = _delegate;
 		this.userDescriptor = _userDescriptor;
-		this.additionalJNDIPrefix = additionalTargetPrefix == null ? "" : additionalTargetPrefix;
-
-		// ensure that the additional prefix ends with a '/' when an additional prefix is given.
-		if (additionalJNDIPrefix.length() > 0 && ! additionalJNDIPrefix.endsWith("/"))
-			additionalJNDIPrefix += "/";
 	}
 
 	protected UserDescriptor getUserDescriptor() {
@@ -153,7 +134,7 @@ implements Context
 	}
 
 	private static long invokeProxyMethod_invocationID = 0;
-	private static synchronized long next_invokeProxyMethod_invocationID() {
+	static synchronized long next_invokeProxyMethod_invocationID() {
 		return ++invokeProxyMethod_invocationID;
 	}
 
@@ -278,13 +259,13 @@ implements Context
 		}
 	}
 
-	private static final class LoginDescriptor {
+	static final class LoginDescriptor {
 		public Principal previousPrincipal;
 		public Principal previousCallerPrincipal;
 		public LoginContext loginContext;
 	}
 
-	private LoginDescriptor login(String invocationID)
+	LoginDescriptor login(String invocationID)
 	{
 		try {
 			// Now, we find out our current identity to determine whether we need to change the identity.
@@ -345,7 +326,7 @@ implements Context
 		}
 	}
 
-	private void logout(String invocationID, LoginDescriptor loginDescriptor)
+	void logout(String invocationID, LoginDescriptor loginDescriptor)
 	{
 		if (loginDescriptor == null)
 			return;
@@ -383,137 +364,20 @@ implements Context
 	}
 
 	@Override
-	public Object lookup(Name name) throws NamingException
-	{
-		return lookup(name.toString());
-//		LoginDescriptor loginDescriptor = null;
-//		String invocationID = null;
-//		if (LOGIN_DURING_LOOKUP_ENABLED) {
-//			invocationID = "lookupN_" + Long.toHexString(next_invokeProxyMethod_invocationID());
-//			loginDescriptor = login(invocationID);
-//		}
-//		try {
-//			return wrapProxy(delegate.lookup(name));
-//		} finally {
-//			logout(invocationID, loginDescriptor);
-//		}
-	}
-
-	@Override
 	public Object lookup(String name) throws NamingException
 	{
 		LoginDescriptor loginDescriptor = null;
 		String invocationID = null;
 
-		if (additionalJNDIPrefix != null && name.contains("ejb/byRemoteInterface"));
-		{
-			name = name.replace("byRemoteInterface/", "byRemoteInterface/" + additionalJNDIPrefix);
-		}
 		if (LOGIN_DURING_LOOKUP_ENABLED) {
 			invocationID = "lookupS_" + Long.toHexString(next_invokeProxyMethod_invocationID());
 			loginDescriptor = login(invocationID);
 		}
 		try {
-			return wrapProxy(delegate.lookup(name));
+			return wrapProxy(super.lookup(name));
 		} finally {
 			logout(invocationID, loginDescriptor);
 		}
-	}
-
-	@Override
-	public void bind(Name name, Object obj) throws NamingException
-	{
-		delegate.bind(name, obj);
-	}
-
-	@Override
-	public void bind(String name, Object obj) throws NamingException
-	{
-		delegate.bind(name, obj);
-	}
-
-	@Override
-	public void rebind(Name name, Object obj) throws NamingException
-	{
-		delegate.rebind(name, obj);
-	}
-
-	@Override
-	public void rebind(String name, Object obj) throws NamingException
-	{
-		delegate.rebind(name, obj);
-	}
-
-	@Override
-	public void unbind(Name name) throws NamingException
-	{
-		delegate.unbind(name);
-	}
-
-	@Override
-	public void unbind(String name) throws NamingException
-	{
-		delegate.unbind(name);
-	}
-
-	@Override
-	public void rename(Name oldName, Name newName) throws NamingException
-	{
-		delegate.rename(oldName, newName);
-	}
-
-	@Override
-	public void rename(String oldName, String newName) throws NamingException
-	{
-		delegate.rename(oldName, newName);
-	}
-
-	@Override
-	public NamingEnumeration<NameClassPair> list(Name name) throws NamingException
-	{
-		return delegate.list(name);
-	}
-
-	@Override
-	public NamingEnumeration<NameClassPair> list(String name) throws NamingException
-	{
-		return delegate.list(name);
-	}
-
-	@Override
-	public NamingEnumeration<Binding> listBindings(Name name) throws NamingException
-	{
-		return delegate.listBindings(name);
-	}
-
-	@Override
-	public NamingEnumeration<Binding> listBindings(String name) throws NamingException
-	{
-		return delegate.listBindings(name);
-	}
-
-	@Override
-	public void destroySubcontext(Name name) throws NamingException
-	{
-		delegate.destroySubcontext(name);
-	}
-
-	@Override
-	public void destroySubcontext(String name) throws NamingException
-	{
-		delegate.destroySubcontext(name);
-	}
-
-	@Override
-	public Context createSubcontext(Name name) throws NamingException
-	{
-		return delegate.createSubcontext(name);
-	}
-
-	@Override
-	public Context createSubcontext(String name) throws NamingException
-	{
-		return delegate.createSubcontext(name);
 	}
 
 	@Override
@@ -526,7 +390,7 @@ implements Context
 			loginDescriptor = login(invocationID);
 		}
 		try {
-			return wrapProxy(delegate.lookupLink(name));
+			return wrapProxy(super.lookupLink(name));
 		} finally {
 			logout(invocationID, loginDescriptor);
 		}
@@ -542,63 +406,9 @@ implements Context
 			loginDescriptor = login(invocationID);
 		}
 		try {
-			return wrapProxy(delegate.lookupLink(name));
+			return wrapProxy(super.lookupLink(name));
 		} finally {
 			logout(invocationID, loginDescriptor);
 		}
-	}
-
-	@Override
-	public NameParser getNameParser(Name name) throws NamingException
-	{
-		return delegate.getNameParser(name);
-	}
-
-	@Override
-	public NameParser getNameParser(String name) throws NamingException
-	{
-		return delegate.getNameParser(name);
-	}
-
-	@Override
-	public Name composeName(Name name, Name prefix) throws NamingException
-	{
-		return delegate.composeName(name, prefix);
-	}
-
-	@Override
-	public String composeName(String name, String prefix) throws NamingException
-	{
-		return delegate.composeName(name, prefix);
-	}
-
-	@Override
-	public Object addToEnvironment(String propName, Object propVal) throws NamingException
-	{
-		return delegate.addToEnvironment(propName, propVal);
-	}
-
-	@Override
-	public Object removeFromEnvironment(String propName) throws NamingException
-	{
-		return delegate.removeFromEnvironment(propName);
-	}
-
-	@Override
-	public Hashtable<?,?> getEnvironment() throws NamingException
-	{
-		return delegate.getEnvironment();
-	}
-
-	@Override
-	public void close() throws NamingException
-	{
-		delegate.close();
-	}
-
-	@Override
-	public String getNameInNamespace() throws NamingException
-	{
-		return delegate.getNameInNamespace();
 	}
 }
