@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Util Plug-in
+Bundle-SymbolicName: org.nightlabs.util
+Bundle-Version: 1.1.0
+Bundle-Vendor: nightlabs.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.nightlabs.io,
+ org.nightlabs.progress,
+ org.nightlabs.util,
+ org.nightlabs.util.bean,
+ org.nightlabs.util.collection,
+ org.nightlabs.util.reflect
+Require-Bundle: org.apache.log4j
