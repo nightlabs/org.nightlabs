@@ -26,13 +26,17 @@ package org.nightlabs.i18n;
 import java.util.Locale;
 
 /**
- * 
  * @author Alexander Bieber <!-- alex [at] nightlabs [dot] de -->
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
+ * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
-public class NLLocale {
-
-	//org.nightlabs.util.NLLocale
+public class NLLocale 
+{
+	/**
+	 * Fall back system property key. Introduced after moving the class to another package to
+	 * retain backwards-compatibility.
+	 */
+	public static final String SYSTEM_PROPERTY_KEY_NL_LOCALE_CLASS_OLD = "org.nightlabs.util.NLLocale";
 	public static final String SYSTEM_PROPERTY_KEY_NL_LOCALE_CLASS = NLLocale.class.getName();
 	private static NLLocale sharedInstance = null;
 
@@ -50,7 +54,13 @@ public class NLLocale {
 	public synchronized static Locale getDefault() 
 	{
 		if (sharedInstance == null) {
-			String className = System.getProperty(SYSTEM_PROPERTY_KEY_NL_LOCALE_CLASS);
+			String key = SYSTEM_PROPERTY_KEY_NL_LOCALE_CLASS;
+			String className = System.getProperty(key);
+			if(className == null) {
+				// try fall back to the old system property key
+				key = SYSTEM_PROPERTY_KEY_NL_LOCALE_CLASS_OLD;
+				className = System.getProperty(key);
+			}
 			// if no system property is set, we are probably in the client so just use Locale.getDefault()
 
 			Class<?> nlLocaleClass;
@@ -60,14 +70,14 @@ public class NLLocale {
 				try {
 					nlLocaleClass = Class.forName(className);
 				} catch (ClassNotFoundException e) {
-					throw new RuntimeException("The system-property '" + SYSTEM_PROPERTY_KEY_NL_LOCALE_CLASS + "' was specified as '"+className+"' but this class cannot be found!", e);
+					throw new RuntimeException("The system-property '" + key + "' was specified as '"+className+"' but this class cannot be found!", e);
 				}
 			}
 
 			try {
 				sharedInstance = (NLLocale) nlLocaleClass.newInstance();
 			} catch (Exception e) {
-				throw new RuntimeException("Instantiating the class '"+className+"' specified by the system-property '" + SYSTEM_PROPERTY_KEY_NL_LOCALE_CLASS + "' was found, but it could not be instantiated!", e);
+				throw new RuntimeException("Instantiating the class '"+className+"' specified by the system-property '" + key + "' was found, but it could not be instantiated!", e);
 			}
 		}
 
