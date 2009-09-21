@@ -107,7 +107,7 @@ implements Serializable, SearchQuery
 		//------------------------------------------------------------Because the listeners won't be triggered if it has the same values!!!!
 		for (String fieldName : getFieldName2FieldMap().keySet()) {
 			Field field = getFieldName2FieldMap().get(fieldName);
-			fieldsEnabledMap.put(getEnabledFieldName(fieldName), Boolean.TRUE);
+			fieldsEnabledMap.put(getEnabledFieldName(fieldName), Boolean.FALSE);
 			setFieldEnabled(getEnabledFieldName(fieldName), false);
 			if (!field.getType().isPrimitive()) {
 				setFieldValue(fieldName, null);
