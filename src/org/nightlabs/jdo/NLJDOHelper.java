@@ -296,8 +296,15 @@ public final class NLJDOHelper
 			return false;
 		else if (c.size() == 1)
 			return true;
-		else
-			throw new IllegalStateException("Query returned an impossible number of elements: " + c.size());
+		else {
+			// WORKAROUND DataNucleus sometimes retuns collection with size 2 and same objects 
+			HashSet<?> set = new HashSet(c);
+			if (set.size() == 1)
+				return true;
+			else 
+				throw new IllegalStateException("Query returned an impossible number of elements: " + c.size());			
+//			throw new IllegalStateException("Query returned an impossible number of elements: " + c.size());			
+		}
 	}
 
 	/**
