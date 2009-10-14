@@ -47,6 +47,9 @@ import javax.jdo.JDOHelper;
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+import javax.jdo.listener.DeleteCallback;
+import javax.jdo.listener.DeleteLifecycleListener;
+import javax.jdo.listener.InstanceLifecycleEvent;
 import javax.jdo.spi.PersistenceCapable;
 
 import org.apache.log4j.Logger;
@@ -297,13 +300,12 @@ public final class NLJDOHelper
 		else if (c.size() == 1)
 			return true;
 		else {
-			// WORKAROUND DataNucleus sometimes retuns collection with size 2 and same objects 
+			// WORKAROUND DataNucleus sometimes retuns collection with size 2 and same objects
 			HashSet<?> set = new HashSet(c);
 			if (set.size() == 1)
 				return true;
-			else 
-				throw new IllegalStateException("Query returned an impossible number of elements: " + c.size());			
-//			throw new IllegalStateException("Query returned an impossible number of elements: " + c.size());			
+			else
+				throw new IllegalStateException("Query returned an impossible number of elements: " + c.size());
 		}
 	}
 
@@ -1470,5 +1472,70 @@ Caused by: ERROR 42Y90: FOR UPDATE is not permitted in this type of statement.
 			result = Boolean.FALSE;
 		cachedClass2PersistanceCapable.put(obj.getClass(), result);
 		return result;
+	}
+
+	/**
+	 * Delete one or more objects after the deletion of a primary object completed.
+	 * This is usually used in a {@link DeleteCallback} for deleting objects that
+	 * would otherwise become orphans but that cannot be directly deleted since the
+	 * primary object still references them.
+	 * <p>
+	 * At the moment, there exists a DataNucleus bug, preventing dependend objects to be
+	 * deleted and thus requiring this workaround being used.
+	 * See: https://www.jfire.org/modules/bugs/view.php?id=1330
+	 * </p>
+	 * <p>
+	 * Example code:
+	 * <pre>
+	 * public class A
+	 * implements DeleteCallback
+	 * {
+	 *   @Persistent(nullValue=NullValue.EXCEPTION)
+	 *   private B someDependentField;
+	 *
+	 *   @Override
+	 *   public void jdoPreDelete() {
+	 *   	NLJDOHelper.deleteAfterPrimaryObjectDeleted(this, someDependentField);
+	 *   }
+	 * }
+	 * </pre>
+	 * </p>
+	 *
+	 * @param primaryObject the primary object. <code>null</code> is not allowed for this argument.
+	 * @param objectsToBeDeleted one or more objects to be deleted, after the primary object was deleted. <code>null</code> elements are silently ignored and the whole var-arg-array can be <code>null</code>, too, thus there's no need for null-checks.
+	 */
+	public static void deleteAfterPrimaryObjectDeleted(
+			final Object primaryObject, final Object ... objectsToBeDeleted
+	)
+	{
+		if (primaryObject == null)
+			throw new IllegalArgumentException("primaryObject == null");
+
+		final PersistenceManager pm = JDOHelper.getPersistenceManager(primaryObject);
+		if (pm == null)
+			throw new IllegalArgumentException("JDOHelper.getPersistenceManager(primaryObject) returned null!!!");
+
+		pm.addInstanceLifecycleListener(new DeleteLifecycleListener() {
+			@Override
+			public void preDelete(InstanceLifecycleEvent event) { }
+
+			@Override
+			public void postDelete(InstanceLifecycleEvent event) {
+				if (event.getPersistentInstance() != primaryObject)
+					return;
+
+				pm.removeInstanceLifecycleListener(this);
+				pm.flush();
+
+				if (objectsToBeDeleted != null) {
+					for (Object object : objectsToBeDeleted) {
+						if (object != null) {
+							pm.deletePersistent(object);
+							pm.flush();
+						}
+					}
+				}
+			}
+		}, primaryObject.getClass());
 	}
 }
