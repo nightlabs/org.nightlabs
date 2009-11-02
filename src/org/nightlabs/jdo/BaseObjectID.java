@@ -295,10 +295,10 @@ implements ObjectID
 						val = c.newInstance(new Object[] {valStr});
 					}
 					else if (boolean.class.isAssignableFrom(fieldType)) {
-						val = new Boolean(valStr);
+						val = Boolean.valueOf(valStr);
 					}
 					else if (char.class.isAssignableFrom(fieldType)) {
-						val = new Character(valStr.charAt(0));
+						val = Character.valueOf(valStr.charAt(0));
 					}
 					else if (byte.class.isAssignableFrom(fieldType)) {
 						val = new Byte(valStr);
