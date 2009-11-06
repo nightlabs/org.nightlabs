@@ -184,7 +184,8 @@ implements Serializable
 		} // if (languageIDs != null) {
 
 		if (flagIcon16x16 == null) {
-			String flagResource = "resource/Flag-" + languageID + ".16x16.png";
+//			String flagResource = "resource/Flag-" + languageID + ".16x16.png";
+			String flagResource = "resource/"+languageID + ".png";
 			try {
 				InputStream in = LanguageCf.class.getResourceAsStream(flagResource);
 				if (in != null) {
