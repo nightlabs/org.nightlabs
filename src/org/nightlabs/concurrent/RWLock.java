@@ -337,7 +337,7 @@ public class RWLock implements RWLockable
         lockStack = new ArrayList<Boolean>();
         lockStacksByThread.put(currentThread, lockStack);
       }
-      lockStack.add(new Boolean(false)); // Boolean isWriteLock
+      lockStack.add(Boolean.FALSE); // Boolean isWriteLock
 
 //      if (currentWriteThread != currentThread) {
       if (currentLocks >= 0) {
@@ -430,7 +430,7 @@ public class RWLock implements RWLockable
         lockStack = new ArrayList<Boolean>();
         lockStacksByThread.put(currentThread, lockStack);
       }
-      lockStack.add(new Boolean(true)); // Boolean isWriteLock
+      lockStack.add(Boolean.TRUE); // Boolean isWriteLock
 
       currentLocks--;
     } // synchronized(mutex) {
