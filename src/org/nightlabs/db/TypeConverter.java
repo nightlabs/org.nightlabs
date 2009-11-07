@@ -137,19 +137,19 @@ public class TypeConverter
 
     switch (typeID) {
       case Types.TINYINT:
-        return new Byte(value);
+        return Byte.valueOf(value);
       case Types.SMALLINT:
-        return new Short(value);
+        return Short.valueOf(value);
       case Types.INTEGER:
-        return new Integer(value);
+        return Integer.valueOf(value);
       case Types.BIGINT:
         return new BigInteger(value);
       case Types.FLOAT:
-        return new Float(value);
+        return Float.valueOf(value);
       case Types.DOUBLE:
-        return new Double(value); /** TODO testen, ob das ueberhaupt unser gewuenschtes Format ("m.n", z.B. "23.45245897" verwendet */
+        return Double.valueOf(value); /** TODO testen, ob das ueberhaupt unser gewuenschtes Format ("m.n", z.B. "23.45245897" verwendet */
       case Types.BOOLEAN:
-        return new Boolean(value);
+        return Boolean.valueOf(value);
       case Types.DATE:
         	if(value.length() == 10)
         		value += " 00:00:00";

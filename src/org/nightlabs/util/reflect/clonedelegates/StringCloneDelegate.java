@@ -33,7 +33,9 @@ implements CloneDelegate
 		return String.class;
 	}
 
+	// Strings are immutable - return the argument
+	// see Findbugs Pattern id: DM_STRING_CTOR, type: Dm, category: PERFORMANCE
 	public Object clone(String original) {
-		return new String(original);
+		return original;
 	}
 }

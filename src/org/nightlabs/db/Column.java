@@ -63,13 +63,13 @@ public class Column implements Serializable {
 			try {
 				displaySize = Integer.parseInt(displaySizeStr);
 			} catch (Throwable t) {
-				throw new SQLException("columnName \""+columnName+"\" has invalid format. Size cannot be parsed as integer! Expected is \"simpletypename\", \"simpletypename(size)\" or \"simpletypename(size,scale)\".");
+				throw new SQLException("columnName \""+_columnName+"\" has invalid format. Size cannot be parsed as integer! Expected is \"simpletypename\", \"simpletypename(size)\" or \"simpletypename(size,scale)\".");
 			}
 			if (scaleStr != null) {
 				try {
 					scale = Integer.parseInt(scaleStr);
 				} catch (Throwable t) {
-					throw new SQLException("columnName \""+columnName+"\" has invalid format. Size cannot be parsed as integer! Expected is \"simpletypename\", \"simpletypename(size)\" or \"simpletypename(size,scale)\".");
+					throw new SQLException("columnName \""+_columnName+"\" has invalid format. Size cannot be parsed as integer! Expected is \"simpletypename\", \"simpletypename(size)\" or \"simpletypename(size,scale)\".");
 				}
 			}
 

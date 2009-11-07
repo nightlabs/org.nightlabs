@@ -629,7 +629,7 @@ public class IOUtil
 	 */
 	public static synchronized File createUniqueIncrementalFolder(File rootFolder, final String prefix) throws IOException
 	{
-		for(int n=0; n<=Integer.MAX_VALUE; n++) {
+		for(int n=0; n<Integer.MAX_VALUE; n++) {
 			File f = new File(rootFolder, String.format("%s%x", prefix, n));
 			if(!f.exists()) {
 				if(!f.mkdirs())
