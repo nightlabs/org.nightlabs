@@ -335,8 +335,8 @@ implements ObjectID
 	protected static final String SEPARATORS_FOR_TOKENIZER = "/?=&";
 	protected static final String SEPARATOR_KEY_VALUE = "=";
 	protected static final String SEPARATOR_ENTRY = "&";
-	protected static final Byte NULLBYTE = new Byte((byte)0);
-	protected static final Character NULLCHAR = new Character((char)0);
+	protected static final Byte NULLBYTE = Byte.valueOf((byte)0);
+	protected static final Character NULLCHAR = Character.valueOf((char)0);
 
 //	/**
 //	 * This method parses the keyStr, decodes it and returns a name-value-map with the key
