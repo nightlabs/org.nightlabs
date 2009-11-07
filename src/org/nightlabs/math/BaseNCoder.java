@@ -86,7 +86,7 @@ public class BaseNCoder
 		for (int i = 0; i < digitSymbols.length; ++i) {
 			char c = digitSymbols[i];
 
-			if (symbolMap.put(new Character(c), new Integer(i)) != null)
+			if (symbolMap.put(Character.valueOf(c), Integer.valueOf(i)) != null)
 				throw new IllegalArgumentException("Collision: The character '" + c + "' occurs at least twice in list of digitSymbols!");
 		}
 	}
@@ -155,7 +155,7 @@ public class BaseNCoder
 		long res = 0;
 		for (int i = s.length() - 1; i >= 0; --i) {
 			char c = s.charAt(i);
-			Integer digitValue = symbolMap.get(new Character(c));
+			Integer digitValue = symbolMap.get(Character.valueOf(c));
 			if (digitValue == null)
 				throw new NumberFormatException("Unknown digit: " + c);
 

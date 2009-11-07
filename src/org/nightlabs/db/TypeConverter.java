@@ -240,7 +240,7 @@ public class TypeConverter
   protected static TypeDef getTypeDefByID(int typeID)
   throws SQLException
   {
-    TypeDef typeDef = typeID2DefMap.get(new Integer(typeID));
+    TypeDef typeDef = typeID2DefMap.get(Integer.valueOf(typeID));
     if (typeDef == null)
       throw new SQLException("No typeDef found for typeID=\""+typeID+"\"!");
     return typeDef;
@@ -283,7 +283,7 @@ public class TypeConverter
       throw new NullPointerException("typeName must not be null!");
 
     TypeDef typeDef = new TypeDef(typeID, typeName, dynamicSizeMode);
-    typeID2DefMap.put(new Integer(typeID), typeDef);
+    typeID2DefMap.put(Integer.valueOf(typeID), typeDef);
     typeName2DefMap.put(typeName, typeDef);
   }
 
@@ -334,12 +334,12 @@ public class TypeConverter
 
   public static boolean isFieldTypeValid(int _columnType)
   {
-    return typeID2DefMap.containsKey(new Integer(_columnType));
+    return typeID2DefMap.containsKey(Integer.valueOf(_columnType));
   }
 
   public static int getSizeMode(int _columnType)
   {
-    TypeDef typeDef = typeID2DefMap.get(new Integer(_columnType));
+    TypeDef typeDef = typeID2DefMap.get(Integer.valueOf(_columnType));
     return typeDef.dynamicSizeMode;
   }
 

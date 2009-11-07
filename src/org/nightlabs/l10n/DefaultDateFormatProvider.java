@@ -104,7 +104,7 @@ public class DefaultDateFormatProvider implements DateFormatProvider
 	 */
 	public DateFormat getDateFormat(long flags)
 	{
-		Long flagsL = new Long(flags);
+		Long flagsL = Long.valueOf(flags);
 		SimpleDateFormat sdf;
 //		synchronized (dateFormatsByFlags) {
 			sdf = dateFormatsByFlags.get().get(flagsL);

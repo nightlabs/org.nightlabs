@@ -140,7 +140,7 @@ implements IOFilterWithProgress
 			throw new IllegalArgumentException("Param work is too big, the addition of all subTasks is > then TotalWork!");
 		
 		subTasks.add(name);
-		subTask2Work.put(name, new Integer(work));
+		subTask2Work.put(name, Integer.valueOf(work));
 	}
 	
 	/**

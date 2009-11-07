@@ -283,7 +283,7 @@ public class BeanUtil
 							continue;
 						}
 						else {
-							indexes.add(new Integer(i));
+							indexes.add(Integer.valueOf(i));
 						}
 					} // for (Iterator it2 = oldPropertyDescriptors.iterator(); it2.hasNext(); )
 					if (!indexes.isEmpty())

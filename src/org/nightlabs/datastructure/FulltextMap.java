@@ -420,7 +420,7 @@ public class FulltextMap<K,V> extends HashMap<K,V>
 		int charIdx = inverse ? keyPart.length() - 1 : 0;
 		int increment = inverse ? -1 : 1;
 		while (inverse ? (charIdx >= 0) : (charIdx < keyPart.length())) {
-			Character c = new Character(keyPart.charAt(charIdx));
+			Character c = Character.valueOf(keyPart.charAt(charIdx));
 			Map childTreeNode = (Map) treeNode.get(c);
 			if (childTreeNode == null) {
 				childTreeNode = new HashMap(5);
@@ -527,7 +527,7 @@ public class FulltextMap<K,V> extends HashMap<K,V>
 		int charIdx = inverse ? keyPart.length() - 1 : 0;
 		int increment = inverse ? -1 : 1;
 		while (inverse ? (charIdx >= 0) : (charIdx < keyPart.length())) {
-			Character c = new Character(keyPart.charAt(charIdx));
+			Character c = Character.valueOf(keyPart.charAt(charIdx));
 			Map childTreeNode = (Map) treeNode.get(c);
 			if (childTreeNode == null)
 				return null;

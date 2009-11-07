@@ -812,31 +812,31 @@ implements Table, Serializable
 	}
 
 	public void updateBoolean(int columnIndex, boolean x) throws SQLException {
-		updateObject(columnIndex, new Boolean(x));
+		updateObject(columnIndex, Boolean.valueOf(x));
 	}
 
 	public void updateByte(int columnIndex, byte x) throws SQLException {
-		updateObject(columnIndex, new Byte(x));
+		updateObject(columnIndex, Byte.valueOf(x));
 	}
 
 	public void updateShort(int columnIndex, short x) throws SQLException {
-		updateObject(columnIndex, new Short(x));
+		updateObject(columnIndex, Short.valueOf(x));
 	}
 
 	public void updateInt(int columnIndex, int x) throws SQLException {
-		updateObject(columnIndex, new Integer(x));
+		updateObject(columnIndex, Integer.valueOf(x));
 	}
 
 	public void updateLong(int columnIndex, long x) throws SQLException {
-		updateObject(columnIndex, new Long(x));
+		updateObject(columnIndex, Long.valueOf(x));
 	}
 
 	public void updateFloat(int columnIndex, float x) throws SQLException {
-		updateObject(columnIndex, new Float(x));
+		updateObject(columnIndex, Float.valueOf(x));
 	}
 
 	public void updateDouble(int columnIndex, double x) throws SQLException {
-		updateObject(columnIndex, new Double(x));
+		updateObject(columnIndex, Double.valueOf(x));
 	}
 
 	public void updateBigDecimal(int columnIndex, BigDecimal x) throws SQLException {
@@ -886,25 +886,25 @@ implements Table, Serializable
 		updateObject(columnName, null);
 	}
 	public void updateBoolean(String columnName, boolean x) throws SQLException {
-		updateObject(columnName, new Boolean(x));
+		updateObject(columnName, Boolean.valueOf(x));
 	}
 	public void updateByte(String columnName, byte x) throws SQLException {
-		updateObject(columnName, new Byte(x));
+		updateObject(columnName, Byte.valueOf(x));
 	}
 	public void updateShort(String columnName, short x) throws SQLException {
-		updateObject(columnName, new Short(x));
+		updateObject(columnName, Short.valueOf(x));
 	}
 	public void updateInt(String columnName, int x) throws SQLException {
-		updateObject(columnName, new Integer(x));
+		updateObject(columnName, Integer.valueOf(x));
 	}
 	public void updateLong(String columnName, long x) throws SQLException {
-		updateObject(columnName, new Long(x));
+		updateObject(columnName, Long.valueOf(x));
 	}
 	public void updateFloat(String columnName, float x) throws SQLException {
-		updateObject(columnName, new Float(x));
+		updateObject(columnName, Float.valueOf(x));
 	}
 	public void updateDouble(String columnName, double x) throws SQLException {
-		updateObject(columnName, new Double(x));
+		updateObject(columnName, Double.valueOf(x));
 	}
 	public void updateBigDecimal(String columnName, BigDecimal x) throws SQLException {
 		updateObject(columnName, x);

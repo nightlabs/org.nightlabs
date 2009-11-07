@@ -56,7 +56,7 @@ public class PageLink
 				if (i != currentPageIndex) {
 					pl.setUrlParams(new HashMap<String, String>(urlParams));
 					pl.setUrlParam("pageIndex", Integer.toString(i));
-					pl.setUrlParam("itemsPerPage", new Integer(searchResult.getItemsPerPage()));
+					pl.setUrlParam("itemsPerPage", Integer.valueOf(searchResult.getItemsPerPage()));
 				} // if (i != currentPageIndex) {
 				pageLinks.add(pl);
 				haveDots = true;

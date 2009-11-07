@@ -114,7 +114,7 @@ public class TableBufferMetaData implements ResultSetMetaData, Serializable
 			for (int col = 1; col <= columns.size(); col++)
 				columnName2IDMap.put(
 						getColumn(col).columnName,
-						new Integer(col)
+						Integer.valueOf(col)
 				);
 		} // if (columnName2IDMap == null) {
 

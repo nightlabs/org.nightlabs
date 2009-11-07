@@ -99,7 +99,7 @@ class TimePatternSetUtil
 			if (isOverMaximum(next))
 				return null;
 		}
-		return new Long(next);
+		return Long.valueOf(next);
 	}
 
 	/**
