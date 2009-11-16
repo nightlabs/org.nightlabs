@@ -5,12 +5,13 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 /**
  * The default implementation of {@link QueryProvider} maintains one Query instance per query class.
- * 
+ *
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class DefaultQueryProvider<Q extends AbstractSearchQuery>
@@ -33,24 +34,24 @@ public class DefaultQueryProvider<Q extends AbstractSearchQuery>
 			else
 			{
 				// the query we attached this listener to, must have been at least of type Q
-				final QueryEvent event = new QueryEvent((AbstractSearchQuery) evt.getSource(), 
+				final QueryEvent event = new QueryEvent((AbstractSearchQuery) evt.getSource(),
 					evt.getPropertyName(), evt.getOldValue(), evt.getNewValue()
 					);
-				
+
 				notifyListeners((Class<? extends Q>) event.getChangedQuery().getClass(), event);
 			}
 		}
 	};
-	
+
 	/**
-	 * @param queryResultClass the topmost class that all maintained queries have to return. 
+	 * @param queryResultClass the topmost class that all maintained queries have to return.
 	 */
 	public DefaultQueryProvider(Class<?> queryResultClass)
 	{
 		queryMap = new QueryMap<Q>(queryResultClass);
 		listeners = new HashMap<Class<? extends Q>, PropertyChangeSupport>();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jdo.query.QueryProvider#getManagedQueries()
@@ -60,7 +61,47 @@ public class DefaultQueryProvider<Q extends AbstractSearchQuery>
 	{
 		return new QueryCollection<Q>(queryMap);
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.nightlabs.jdo.query.QueryProvider#getFromInclude()
+	 */
+	@Override
+	public long getFromInclude()
+	{
+		return queryMap.getFromInclude();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.nightlabs.jdo.query.QueryProvider#getToExclude()
+	 */
+	@Override
+	public long getToExclude()
+	{
+		return queryMap.getToExclude();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.nightlabs.jdo.query.QueryProvider#setFromInclude(long)
+	 */
+	@Override
+	public void setFromInclude(long fromInclude)
+	{
+		queryMap.setFromInclude(fromInclude);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.nightlabs.jdo.query.QueryProvider#setToExclude(long)
+	 */
+	@Override
+	public void setToExclude(long toExclude)
+	{
+		queryMap.setToExclude(toExclude);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jdo.query.QueryProvider#getQueryOfType(java.lang.Class)
@@ -70,7 +111,7 @@ public class DefaultQueryProvider<Q extends AbstractSearchQuery>
 	{
 		return getQueryOfType(queryClass, true);
 	}
-	
+
 	public <ReqQuery extends Q> ReqQuery getQueryOfType(Class<ReqQuery> queryClass, boolean createIfNotExisting)
 	{
 		ReqQuery query = queryMap.getQueryOfType(queryClass, createIfNotExisting);
@@ -78,8 +119,8 @@ public class DefaultQueryProvider<Q extends AbstractSearchQuery>
 		{
 			query.addQueryChangeListener(queryChangeDelegator);
 		}
-		
-		return query; 
+
+		return query;
 	}
 
 	/*
@@ -94,10 +135,10 @@ public class DefaultQueryProvider<Q extends AbstractSearchQuery>
 		{
 			throw new IllegalStateException("The given QueryCollection is not defined with the same base return type ");
 		}
-		
+
 		final QueryMap<Q> oldQueries = queryMap;
 		queryMap = new QueryMap<Q>(oldQueries.getResultClass());
-		
+
 		// add new Queries
 		if (newQueries != null)
 		{
@@ -106,47 +147,47 @@ public class DefaultQueryProvider<Q extends AbstractSearchQuery>
 			queryMap.setFromInclude(newQueries.getFromInclude());
 			queryMap.setToExclude(newQueries.getToExclude());
 		}
-		
+
 		// notify all listeners of the old query types (with the new query if there is one)
 		for (Q oldQuery : oldQueries)
 		{
 			// remove change propagation listener
 			oldQuery.removeQueryChangeListener(queryChangeDelegator);
-			
+
 			// notify change listeners of that type
 			PropertyChangeSupport queryTypeListeners = listeners.get(oldQuery.getClass());
 			if (queryTypeListeners != null && queryTypeListeners.hasListeners(null))
 			{
 				final Q newQuery = queryMap.getQueryOfType((Class<? extends Q>)oldQuery.getClass(), false);
-				final QueryEvent event = new QueryEvent(newQuery == null ? oldQuery : newQuery, 
+				final QueryEvent event = new QueryEvent(newQuery == null ? oldQuery : newQuery,
 					AbstractSearchQuery.PROPERTY_WHOLE_QUERY, oldQuery, newQuery);
-				
+
 				queryTypeListeners.firePropertyChange(event);
 			}
 		}
-		
+
 		Set<Class<? extends Q>> registeredListenerTypes = oldQueries.getManagedQueryTypes();
-		// notify all listeners of new query types that haven't been handled yet 
+		// notify all listeners of new query types that haven't been handled yet
 		for (Q query : queryMap)
 		{
 			// add propagation listener
 			query.addQueryChangeListener(queryChangeDelegator);
-			
+
 			// if this type of query was already handled -> skip it
 			if (registeredListenerTypes.contains(query.getClass()))
 				continue;
-			
+
 			PropertyChangeSupport queryTypeListeners = listeners.get(query.getClass());
 			if (queryTypeListeners != null && queryTypeListeners.hasListeners(null))
 			{
 				final QueryEvent event = new QueryEvent(query, AbstractSearchQuery.PROPERTY_WHOLE_QUERY,
 					null, query);
-				
+
 				queryTypeListeners.firePropertyChange(event);
 			}
 		}
 	}
-	
+
 	/**
 	 * Internal method used to notify the listeners of a given query type.
 	 * @param <T> the type of Query for which all registered listeners shall be notified.
@@ -175,16 +216,16 @@ public class DefaultQueryProvider<Q extends AbstractSearchQuery>
 		if (queryListeners == null)
 		{
 			queryListeners = new PropertyChangeSupport(this);
-			
+
 			listeners.put(targetQueryKind, queryListeners);
 		}
-		
+
 		if (! Arrays.asList(queryListeners.getPropertyChangeListeners()).contains(listener))
 		{
 			queryListeners.addPropertyChangeListener(listener);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jdo.query.QueryProvider#removeModifyListener(java.beans.PropertyChangeListener)
@@ -211,6 +252,16 @@ public class DefaultQueryProvider<Q extends AbstractSearchQuery>
 		{
 			queryListeners.removePropertyChangeListener(listener);
 		}
+	}
+
+	/**
+	 * Provides an iterator over the life QueryCollection, hence you may call methods changing the real queries, which is
+	 * <b>NOT</b> possible with {@link #getManagedQueries()}.
+	 */
+	@Override
+	public Iterator<Q> iterator()
+	{
+		return queryMap.iterator();
 	}
 
 }

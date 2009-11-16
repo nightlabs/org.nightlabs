@@ -87,6 +87,8 @@ public class QueryCollection<Q extends AbstractSearchQuery>
 	{
 		this(original.getResultClass());
 		addAll(original.getManagedQueries());
+		this.fromInclude = original.getFromInclude();
+		this.toExclude = original.getToExclude();
 	}
 
 	protected Collection<Q> getManagedQueries()

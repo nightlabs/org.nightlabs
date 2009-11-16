@@ -105,13 +105,23 @@ implements Serializable, SearchQuery
 	public void clearQuery() {
 		//-----------------Set All Fields Enabled First----------------Maybe we should find other ways to do this
 		//------------------------------------------------------------Because the listeners won't be triggered if it has the same values!!!!
-		for (String fieldName : getFieldName2FieldMap().keySet()) {
+		for (String fieldName : getFieldName2FieldMap().keySet())
+		{
 			Field field = getFieldName2FieldMap().get(fieldName);
-			fieldsEnabledMap.put(getEnabledFieldName(fieldName), Boolean.FALSE);
-			setFieldEnabled(getEnabledFieldName(fieldName), false);
-			if (!field.getType().isPrimitive()) {
+//			TODO: What was this supposed to mean? And please read the javadoc of the methods you use!
+//			      The getEneabledFieldName(fieldName) was unnecessary for setFieldEnabled(...)
+//			fieldsEnabledMap.put(getEnabledFieldName(fieldName), Boolean.TRUE);
+			setFieldEnabled(fieldName, false);
+			if (!field.getType().isPrimitive())
+			{
+				final Object oldValue = getFieldValue(fieldName);
 				setFieldValue(fieldName, null);
-				notifyListeners(fieldName, new Object(), null);
+				notifyListeners(fieldName, oldValue, null);
+			}
+			else
+			{
+				logger.error("Cannot reset a query field value, since it is of primitive type! Query class: "+
+						getClass().getName() + ", fieldName='"+fieldName+"'.");
 			}
 		}
 	}
