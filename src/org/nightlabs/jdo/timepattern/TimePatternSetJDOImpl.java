@@ -26,26 +26,25 @@
 
 package org.nightlabs.jdo.timepattern;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.FetchGroup;
+import javax.jdo.annotations.FetchGroups;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.PersistenceModifier;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import org.nightlabs.jdo.timepattern.id.TimePatternSetID;
 import org.nightlabs.timepattern.TimePattern;
 import org.nightlabs.timepattern.TimePatternFormatException;
 import org.nightlabs.timepattern.TimePatternSet;
 import org.nightlabs.util.CollectionUtil;
-
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.FetchGroups;
-import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.annotations.Inheritance;
-import javax.jdo.annotations.PrimaryKey;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.FetchGroup;
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.IdentityType;
-import org.nightlabs.jdo.timepattern.id.TimePatternSetID;
-import javax.jdo.annotations.PersistenceModifier;
 
 /**
  * @author Alexander Bieber  <alex [AT] nightlabs [DOT] de>
