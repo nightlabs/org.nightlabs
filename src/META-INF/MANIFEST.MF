@@ -3,4 +3,4 @@ EAR-Module-ID: JFireBaseEAR
 EAR-Module-Version: 1.0.1
 EAR-Schema-Version: 1.0.0
 Bundle-SymbolicName: org.nightlabs.base
-Bundle-Version: 1.0.1
+Bundle-Version: 1.0.3

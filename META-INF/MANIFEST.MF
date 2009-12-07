@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: NightLabsBase
 Bundle-SymbolicName: org.nightlabs.base
-Bundle-Version: 1.0.1.qualifier
+Bundle-Version: 1.0.3.qualifier
 Export-Package: org.nightlabs,
  org.nightlabs.annotation,
  org.nightlabs.datastructure,
