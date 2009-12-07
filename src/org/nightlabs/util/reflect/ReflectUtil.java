@@ -687,7 +687,7 @@ public class ReflectUtil
 		// list all resource-entries for the given package
 		List<File> pathEntries = new LinkedList<File>();
 		List<JarFile> jarEntries = new LinkedList<JarFile>();
-		String path = packageName.replace('.', '/');
+		String path = packageName.replace('.', '/') + '/';
 		try {
 			// Ask for all resources for the path
 			Enumeration<URL> resources = cld.getResources(path);
@@ -737,11 +737,11 @@ public class ReflectUtil
 			for (Enumeration<JarEntry> e = jarFile.entries(); e.hasMoreElements(); )
 			{
 				JarEntry entry = e.nextElement();
-				if (!(entry.getName().length() > path.length() && entry.getName().substring(0, path.length()).equals(path))) {
+				if (!(entry.getName().length() >= path.length() && entry.getName().substring(0, path.length()).equals(path))) {
 					continue;
 				}
 				if (entry.isDirectory()) {
-					String suffix = entry.getName().substring(path.length() + 1 );
+					String suffix = entry.getName().substring(path.length());
 					if ("".equals(suffix)) {
 						continue;
 					}
@@ -754,9 +754,11 @@ public class ReflectUtil
 				}
 				if(
 						entry.getName().endsWith(".class") &&
-						entry.getName().indexOf("/", path.length() + 1) < 0
+						entry.getName().indexOf("/", path.length()) < 0
 				) {
-					resultClasses.add(Class.forName(entry.getName().replaceAll("/", ".").replace(".class", "")));
+					String cn = entry.getName().substring(0, entry.getName().length() - ".class".length());
+					cn = cn.replaceAll("/", ".");
+					resultClasses.add(Class.forName(cn));
 				}
 			}
 		}
