@@ -33,6 +33,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.nightlabs.i18n.I18nTextBuffer;
+import org.nightlabs.i18n.I18nUtil;
 import org.nightlabs.io.DataBuffer;
 import org.nightlabs.util.Util;
 
@@ -185,9 +186,9 @@ implements Serializable
 
 		if (flagIcon16x16 == null) {
 //			String flagResource = "resource/Flag-" + languageID + ".16x16.png";
-			String flagResource = "resource/"+languageID + ".png";
+			String flagResource = "resource/language/" + languageID + ".png";
 			try {
-				InputStream in = LanguageCf.class.getResourceAsStream(flagResource);
+				InputStream in = I18nUtil.class.getResourceAsStream(flagResource);
 				if (in != null) {
 					try {
 						_setFlagIcon16x16(new DataBuffer(in).createByteArray());
