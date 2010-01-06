@@ -247,6 +247,9 @@ public class QueryCollection<Q extends AbstractSearchQuery>
 	{
 		if (resultClass == null)
 		{
+			if (resultClassName == null)
+				return null;
+
 			try
 			{
 				// This can only be class<R> since we don't allow any other class object to be set!
