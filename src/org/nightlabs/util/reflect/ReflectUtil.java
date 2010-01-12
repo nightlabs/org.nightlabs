@@ -37,6 +37,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -868,4 +869,81 @@ public class ReflectUtil
 		return null;
 	}
 
+	
+	/**
+	 * 
+	 * Collects the class-hierarchy (not including interfaces) for the given start-class until the
+	 * given base-class is reached.
+	 * 
+	 * @param startClass The class to start collecting the hierarchy for.
+	 * @param baseClass The class to stop collecting.
+	 * @param includeBaseClass Whether to include the base-class in the result.
+	 * @return A list with the class-hierarchy of the given start-class.
+	 */
+	public static List<Class<?>> collectClassHierarchy(Class<?> startClass, Class<?> baseClass, boolean includeBaseClass) {
+		Class<?> stopClass = baseClass;
+		if (stopClass == null)
+			stopClass = Object.class;
+
+		List<Class<?>> result = new ArrayList<Class<?>>();
+		Class<?> checkClass = startClass;
+		while (checkClass != null && checkClass != stopClass) {
+			result.add(checkClass);
+			checkClass = checkClass.getSuperclass();
+		}
+
+		if (stopClass != Object.class && checkClass == Object.class)
+			throw new IllegalStateException("The given start class " + startClass + " was not a subclass of " + baseClass.getName()); //$NON-NLS-1$ //$NON-NLS-2$
+		if (includeBaseClass) {
+			result.add(stopClass);
+		}
+		Collections.reverse(result);
+		return result;
+	}
+
+	/**
+	 * Collects the type-hierarchy (including interfaces) for the given class. This method ensures
+	 * that the type-hierarchy including interfaces is always in the same order.
+	 * 
+	 * @param clazz The class to get the type hierarchy for.
+	 * @return A list containing the type hierarchy of the given class (containing the given class
+	 *         and all its direct and indirect super-classes/interfaces)
+	 */
+	public static List<Class<?>> collectTypeHierarchy(Class<?> clazz) {
+		List<Class<?>> classes = new ArrayList<Class<?>>();
+		computeClassOrder(clazz, classes);
+		return classes;
+	}
+
+	/**
+	 * Internally used by {@link #collectClassHierarchy(Class, Class, boolean)}.
+	 */
+	private static void computeClassOrder(Class<?> clazz, List<Class<?>> classes) {
+		Class<?> _clazz = clazz;
+		Set<Class<?>> seen = new HashSet<Class<?>>();
+		while (_clazz != null) {
+			classes.add(_clazz);
+			computeInterfaceOrder(_clazz.getInterfaces(), classes, seen);
+			_clazz = _clazz.isInterface() ? Object.class : _clazz.getSuperclass();
+		}
+	}
+
+	/**
+	 * Internally used by {@link #collectClassHierarchy(Class, Class, boolean)}.
+	 */
+	private static void computeInterfaceOrder(Class<?>[] interfaces, Collection<Class<?>> classes, Set<Class<?>> seen) {
+		List<Class<?>> newInterfaces = new ArrayList<Class<?>>(interfaces.length);
+		for (int i = 0; i < interfaces.length; i++) {
+			Class<?> iface = interfaces[i];
+			if (seen.add(iface)) {
+				// note we cannot recurse here without changing the resulting interface order
+				classes.add(iface);
+				newInterfaces.add(iface);
+			}
+		}
+		for (Class<?> newInterface : newInterfaces) {
+			computeInterfaceOrder((newInterface).getInterfaces(), classes, seen);
+		}
+	}   
+	
 }
