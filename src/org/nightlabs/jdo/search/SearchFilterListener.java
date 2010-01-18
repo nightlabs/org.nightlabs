@@ -40,19 +40,19 @@ public interface SearchFilterListener {
 	 * 
 	 * @param item
 	 */
-	public void itemAdded(SearchFilterItem item);
+	public void itemAdded(ISearchFilterItem item);
 	
 	/**
 	 * Called after the passed item was removed.
 	 * 
 	 * @param item
 	 */
-	public void itemRemoved(SearchFilterItem item);
+	public void itemRemoved(ISearchFilterItem item);
 
 	/**
 	 * Called when the passed item has to be updated.
 	 * 
 	 * @param item
 	 */
-	public void updateItem(SearchFilterItem item);
+	public void updateItem(ISearchFilterItem item);
 }

@@ -94,7 +94,6 @@ public class JDOQueryCollectionDecorator<Q extends AbstractSearchQuery>
 		return wrappedCollection.isEmpty();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Iterator<Q> iterator() {
 		return (Iterator<Q>) wrappedCollection.iterator();

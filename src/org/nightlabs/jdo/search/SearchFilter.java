@@ -64,7 +64,7 @@ public abstract class SearchFilter
 	public static final int CONJUNCTION_DEFAULT = CONJUNCTION_AND;
 	
 	private int conjunction;
-	private List<SearchFilterItem> filterItems = new ArrayList<SearchFilterItem>();	
+	private List<ISearchFilterItem> filterItems = new ArrayList<ISearchFilterItem>();
 	private List<SearchFilterListener> searchFilterListeners = new LinkedList<SearchFilterListener>();
 	private Map<String, Object> paramMap;
 	
@@ -166,7 +166,7 @@ public abstract class SearchFilter
 	 * Returns the list of {@link SearchFilterItem}
 	 * @return
 	 */
-	public List<SearchFilterItem> getFilters()
+	public List<ISearchFilterItem> getFilters()
 	{
 		return filterItems;
 	}
@@ -177,7 +177,7 @@ public abstract class SearchFilter
 	 * 
 	 * @param item
 	 */
-	public void addSearchFilterItem(SearchFilterItem item) {
+	public void addSearchFilterItem(ISearchFilterItem item) {
 		filterItems.add(item);
 		for (Iterator<SearchFilterListener> iter = searchFilterListeners.iterator(); iter.hasNext();) {
 			SearchFilterListener listener = iter.next();
@@ -191,7 +191,7 @@ public abstract class SearchFilter
 	 * 
 	 * @param item
 	 */
-	public void removeSearchFilterItem(SearchFilterItem item) {
+	public void removeSearchFilterItem(ISearchFilterItem item) {
 		filterItems.remove(item);
 		for (Iterator<SearchFilterListener> iter = searchFilterListeners.iterator(); iter.hasNext();) {
 			SearchFilterListener listener = iter.next();
@@ -199,7 +199,7 @@ public abstract class SearchFilter
 		}
 	}
 	
-	public void updateItem(SearchFilterItem item) {
+	public void updateItem(ISearchFilterItem item) {
 		for (Iterator<SearchFilterListener> iter = searchFilterListeners.iterator(); iter.hasNext();) {
 			SearchFilterListener listener = iter.next();
 			listener.updateItem(item);

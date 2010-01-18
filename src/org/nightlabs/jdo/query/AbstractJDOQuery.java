@@ -194,7 +194,7 @@ public abstract class AbstractJDOQuery
 
 			Object result = q.executeWithMap(params);
 			result = postProcessQueryResult(result);
-			if (result instanceof Collection)
+			if (result instanceof Collection<?>)
 			{
 				final Collection<?> jdoResult = (Collection<?>) result;
 				for (Object element : jdoResult)
