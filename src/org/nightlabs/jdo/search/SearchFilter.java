@@ -79,7 +79,7 @@ public abstract class SearchFilter
 	/**
 	 * Is called by {@link #executeQuery(PersistenceManager)} to actually build the
 	 * query before it is executed. Implementors should fill the parameters
-	 * according to entries in {@link #getFilters()}. to form
+	 * according to entries in {@link #getFilterItems()}. to form
 	 * a functional query that can be executed with paramMap as parameters.
 	 * 
 	 * @param imports Instances of {@link Class} added here will be imported in the Query.
@@ -166,7 +166,7 @@ public abstract class SearchFilter
 	 * Returns the list of {@link SearchFilterItem}
 	 * @return
 	 */
-	public List<ISearchFilterItem> getFilters()
+	public List<ISearchFilterItem> getFilterItems()
 	{
 		return filterItems;
 	}
