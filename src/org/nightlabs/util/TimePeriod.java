@@ -35,7 +35,7 @@ import java.util.Date;
  */
 public class TimePeriod implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 20100203L;
 	
 	private Date from;
 	private Date to;

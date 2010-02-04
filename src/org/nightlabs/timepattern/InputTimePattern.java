@@ -57,6 +57,8 @@ public class InputTimePattern implements Serializable {
 	public static final String MINUTE_VAR = "m";
 	public static final String SECOND_VAR = "s";
 	
+	public static final String VALIDATION_KEY_ERR_INVALID = InputTimePattern.class.getName() + ".validation.error.invalid";
+	
 	private static class PatternPart {
 		String varName;
 		int calField;
@@ -80,6 +82,13 @@ public class InputTimePattern implements Serializable {
 	
 	private volatile transient List<PatternPart> patternParts = null;
 	private transient String thisString = null;
+
+	/**
+	 * Constructs a new {@link InputTimePattern} that references exact input-date.
+	 */
+	public InputTimePattern() {
+		this(YEAR_VAR, MONTH_VAR, DAX_OF_MONTH_VAR, HOUR_VAR, MINUTE_VAR, SECOND_VAR);
+	}
 	
 	/**	
 	 * Constructs a new {@link InputTimePattern} with the given pattern parts.
@@ -113,7 +122,7 @@ public class InputTimePattern implements Serializable {
 	 * @param patternString The String to parse.
 	 */
 	public InputTimePattern(String patternString) {
-		String[] parts = patternString.split("|");
+		String[] parts = patternString.split("\\|");
 		if (parts.length != 6)
 			throw new IllegalArgumentException("The patternString '" + patternString + "' could not be parsed into an InputTimePattern, the number of parts does not match: " + parts.length);
 		this.year = parts[0];
@@ -276,10 +285,23 @@ public class InputTimePattern implements Serializable {
 		this.second = second;
 	}
 
+	/**
+	 * Get the definition String of this InputTimePattern. This String can be used to create a new
+	 * TimePattern.
+	 * 
+	 * @return The definition String of this InputTimePattern.
+	 */
+	public String getDefinitionString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getYear()).append("|").append(getMonth()).append("|").append(getDayOfMonth()).append("|").
+			append(getHour()).append("|").append(getMinute()).append("|").append(getSecond());
+		return sb.toString();
+	}
+	
 	@Override
 	public String toString() {
 		if (thisString == null) {
-			StringBuffer sb = new StringBuffer(this.getClass().getName());
+			StringBuilder sb = new StringBuilder(this.getClass().getName());
 			sb.append("[\"");
 			sb.append(getYear());
 			sb.append("\",\"");
@@ -299,10 +321,23 @@ public class InputTimePattern implements Serializable {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		InputTimePattern pat = new InputTimePattern("Y", "M-12", "1", "L", "L", "L");
+//		InputTimePattern pat = new InputTimePattern("Y", "M-12", "1", "L", "L", "L");
+		InputTimePattern pat = new InputTimePattern("Y|M-2|L|L|L|L");
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	    Date input = dateFormat.parse("2008-12-31 22:53:00");
+//	    Date input = dateFormat.parse("2008-12-31 22:53:00");
+		Date input = new Date();
 	    System.out.println(dateFormat.format(pat.getTime(input)));
+	}
+	
+	private static Date testDate = new Date();
+	
+	public String validate() {
+		try {
+			getTime(testDate);
+		} catch (Exception ex) {
+			return VALIDATION_KEY_ERR_INVALID;
+		}
+		return null;
 	}
 	
 	
