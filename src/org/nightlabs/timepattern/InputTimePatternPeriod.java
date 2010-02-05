@@ -87,7 +87,39 @@ public class InputTimePatternPeriod implements Serializable {
 	public boolean isConfining() {
 		return isToSet() || isFromSet();
 	}
+	
+	/**
+	 * Sets the from value for this period.
+	 * 
+	 * @param from The from value to set.
+	 */
+	public void setFrom(InputTimePattern from) {
+		this.from = from;
+	}
+	
+	/**
+	 * @return The from value of this period, if set, <code>null</code> otherwise.
+	 */
+	public InputTimePattern getFrom() {
+		return from;
+	}
 
+	/**
+	 * Sets the to value for this period.
+	 * 
+	 * @param to The to value to set.
+	 */
+	public void setTo(InputTimePattern to) {
+		this.to = to;
+	}
+	
+	/**
+	 * @return The to value of this period, if set, <code>null</code> otherwise.
+	 */
+	public InputTimePattern getTo() {
+		return to;
+	}
+	
 	/**
 	 * Returns the {@link TimePeriod} that results from the execution of the from- and
 	 * to-InputTimePatterns of this {@link InputTimePatternPeriod}.
