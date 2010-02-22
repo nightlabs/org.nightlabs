@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Utility methods for collections.
+ * Utility mathods for collections.
  */
 public class CollectionUtil
 {
@@ -60,6 +60,7 @@ public class CollectionUtil
 	 *
 	 * @param in The collection that needs to be casted.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> Collection<T> castCollection(Collection<?> in)
 	{
 		return (Collection<T>) in;
@@ -71,22 +72,26 @@ public class CollectionUtil
 //			return new DelegatingCollection<T>(in);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> Collection<T> castCollection(Object obj) {
 		return (Collection<T>) obj;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> List<T> castList(List<?> in)
 	{
 //		return new DelegatingList<T>(in);
 		return (List<T>) in;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> Set<T> castSet(Set<?> in)
 	{
 //		return new DelegatingSet<T>(in);
 		return (Set<T>) in;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T, U> Map<T, U> castMap(Map<?, ?> in)
 	{
 		return (Map<T, U>) in;
@@ -192,6 +197,7 @@ public class CollectionUtil
 	 * @return Returns a typed object array (or <tt>null</tt>, if <tt>c == null && canReturnNull</tt>).
 	 *		If <tt>canReturnNull</tt> is false and <tt>c == null</tt>, an empty array will be returned.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> T[] collection2TypedArray(Collection<T> c, Class<T> clazz, boolean canReturnNull)
 	{
 		if (canReturnNull && c == null)
@@ -259,6 +265,7 @@ public class CollectionUtil
 		list.add(index+1, element);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T extends Enum<T>> List<T> enum2List(Enum<T> e)
 	{
 		return array2ArrayList((T[])e.getClass().getEnumConstants());
