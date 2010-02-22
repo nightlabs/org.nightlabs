@@ -219,6 +219,9 @@ implements Serializable, SearchQuery
 	 */
 	protected long getToExclude()
 	{
+		if (toExclude == 0) {
+			return Long.MAX_VALUE;
+		}
 		return toExclude;
 	}
 
