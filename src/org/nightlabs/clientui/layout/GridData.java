@@ -78,79 +78,79 @@ public class GridData implements Serializable
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public int verticalAlignment;
+	private int verticalAlignment;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public int horizontalAlignment;
+	private int horizontalAlignment;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public int widthHint;
+	private int widthHint;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public int heightHint;
+	private int heightHint;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public int horizontalIndent;
+	private int horizontalIndent;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public int verticalIndent;
+	private int verticalIndent;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public int horizontalSpan;
+	private int horizontalSpan;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public int verticalSpan;
+	private int verticalSpan;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public boolean grabExcessHorizontalSpace;
+	private boolean grabExcessHorizontalSpace;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public boolean grabExcessVerticalSpace;
+	private boolean grabExcessVerticalSpace;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public int minimumWidth;
+	private int minimumWidth;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public int minimumHeight;
+	private int minimumHeight;
 
 	/**
  	 * @jdo.field persistence-modifier="persistent"
 	 */
 	@Persistent(persistenceModifier=PersistenceModifier.PERSISTENT)
-	public boolean exclude;
+	private boolean exclude;
 
 	/**
 	 * @deprecated Only for JDO
