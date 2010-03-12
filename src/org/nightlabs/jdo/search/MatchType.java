@@ -1,6 +1,6 @@
 package org.nightlabs.jdo.search;
 
-import org.nightlabs.jdo.resource.Messages;
+import org.nightlabs.jdo.query.resource.Messages;
 
 /**
  * This enum defines constants for the various match types of search filter items.
