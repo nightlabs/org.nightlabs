@@ -43,7 +43,7 @@ import javax.jdo.annotations.PersistenceModifier;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import org.nightlabs.moduleregistry.jdo.ModuleMetaDataID;
+import org.nightlabs.jdo.moduleregistry.id.ModuleMetaDataID;
 import org.nightlabs.version.MalformedVersionException;
 import org.nightlabs.version.Version;
 
