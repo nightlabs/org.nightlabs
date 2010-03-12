@@ -207,9 +207,9 @@ implements ObjectID
 					if (boolean.class.isAssignableFrom(fieldType))
 						field.set(this, Boolean.FALSE);
 					else if (char.class.isAssignableFrom(fieldType))
-						field.set(this, new Character((char)0));
+						field.set(this, Character.valueOf((char)0));
 					else // for all other primitives - i.e. byte, short, int, long, float, double
-						field.set(this, new Byte((byte)0));
+						field.set(this, Byte.valueOf((byte)0));
 				}
 			}
 			else {
@@ -217,17 +217,17 @@ implements ObjectID
 				if (String.class.isAssignableFrom(fieldType))
 					val = valStr;
 				else if (boolean.class.isAssignableFrom(fieldType))
-					val = new Boolean(valStr);
+					val = Boolean.valueOf(valStr);
 				else if (char.class.isAssignableFrom(fieldType))
-					val = new Character(valStr.charAt(0));
+					val = Character.valueOf(valStr.charAt(0));
 				else if (byte.class.isAssignableFrom(fieldType))
-					val = new Byte(Byte.parseByte(valStr, RADIX));
+					val = Byte.valueOf(valStr, RADIX);
 				else if (short.class.isAssignableFrom(fieldType))
-					val = new Short(Short.parseShort(valStr, RADIX));
+					val = Short.valueOf(valStr, RADIX);
 				else if (int.class.isAssignableFrom(fieldType))
-					val = new Integer(Integer.parseInt(valStr, RADIX));
+					val = Integer.valueOf(valStr, RADIX);
 				else if (long.class.isAssignableFrom(fieldType))
-					val = new Long(Long.parseLong(valStr, RADIX));
+					val = Long.valueOf(valStr, RADIX);
 				else
 					throw new IllegalArgumentException(
 							"Type "+ //$NON-NLS-1$
