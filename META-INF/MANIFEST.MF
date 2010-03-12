@@ -7,7 +7,6 @@ Export-Package: org.nightlabs.jdo,
  org.nightlabs.jdo.callbacks,
  org.nightlabs.jdo.inheritance,
  org.nightlabs.jdo.moduleregistry,
- org.nightlabs.jdo.resource,
  org.nightlabs.jdo.timepattern
 Require-Bundle: org.apache.log4j;bundle-version="1.2.13",
  javax.jdo,

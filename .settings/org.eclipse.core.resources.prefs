@@ -1,7 +1,5 @@
-#Wed Apr 08 11:25:28 CEST 2009
+#Fri Mar 12 22:36:45 CET 2010
 eclipse.preferences.version=1
-encoding//src/org/nightlabs/jdo/resource/messages.properties=8859_1
-encoding//src/org/nightlabs/jdo/resource/messages_de.properties=ISO-8859-1
 encoding//src/org/nightlabs/jdo/timepattern/TimePatternID.java=UTF-8
 encoding//src/org/nightlabs/jdo/timepattern/id/TimePatternSetID.java=UTF-8
 encoding//src/org/nightlabs/moduleregistry/jdo/ModuleMetaDataID.java=UTF-8
