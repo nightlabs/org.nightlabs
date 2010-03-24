@@ -726,7 +726,7 @@ public class ReflectUtil
 						// we are only interested in .class files
 						if (file.getName().endsWith(".class")) {
 							// removes the .class extension
-							resultClasses.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
+							resultClasses.add(cld.loadClass(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
 						}
 					}
 				}
@@ -759,7 +759,7 @@ public class ReflectUtil
 				) {
 					String cn = entry.getName().substring(0, entry.getName().length() - ".class".length());
 					cn = cn.replaceAll("/", ".");
-					resultClasses.add(Class.forName(cn));
+					resultClasses.add(cld.loadClass(cn));
 				}
 			}
 		}
@@ -869,12 +869,12 @@ public class ReflectUtil
 		return null;
 	}
 
-	
+
 	/**
-	 * 
+	 *
 	 * Collects the class-hierarchy (not including interfaces) for the given start-class until the
 	 * given base-class is reached.
-	 * 
+	 *
 	 * @param startClass The class to start collecting the hierarchy for.
 	 * @param baseClass The class to stop collecting.
 	 * @param includeBaseClass Whether to include the base-class in the result.
@@ -904,7 +904,7 @@ public class ReflectUtil
 	/**
 	 * Collects the type-hierarchy (including interfaces) for the given class. This method ensures
 	 * that the type-hierarchy including interfaces is always in the same order.
-	 * 
+	 *
 	 * @param clazz The class to get the type hierarchy for.
 	 * @return A list containing the type hierarchy of the given class (containing the given class
 	 *         and all its direct and indirect super-classes/interfaces)
@@ -944,6 +944,6 @@ public class ReflectUtil
 		for (Class<?> newInterface : newInterfaces) {
 			computeInterfaceOrder((newInterface).getInterfaces(), classes, seen);
 		}
-	}   
-	
+	}
+
 }
