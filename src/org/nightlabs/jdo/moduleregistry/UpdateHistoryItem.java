@@ -26,7 +26,7 @@ import org.nightlabs.util.Util;
 		objectIdClass=UpdateHistoryItemID.class,
 		identityType=IdentityType.APPLICATION,
 		detachable="true",
-		table="NightLabsJDO_UpdateHistoryItem"
+		table="nightlabsjdo_updatehistoryitem" // This must be lower-case (no matter whether JDO is configured to change to lower-case or not, because UpdateHistoryItemSQL accesses this table directly via SQL and uses a lower-case name.
 )
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 @Queries(
