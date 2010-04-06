@@ -51,7 +51,7 @@ public class UpdateHistoryItemSQL {
 
 		PreparedStatement preparedStatement = connection.prepareStatement(
 				"SELECT resume_id, end_timestamp " +
-				"FROM NightLabsJDO_UpdateHistoryItem " +
+				"FROM nightlabsjdo_updatehistoryitem " +
 				"WHERE module_id = ? AND update_history_item_id = ? " +
 				"ORDER BY resume_id"
 		);
@@ -113,7 +113,7 @@ public class UpdateHistoryItemSQL {
 			// According to http://www.w3schools.com/sql/sql_func_max.asp the MAX() function with AS keyword is ANSI standard.
 			PreparedStatement preparedStatement = connection.prepareStatement(
 					"SELECT MAX(resume_id) AS max_resume_id " +
-					"FROM NightLabsJDO_UpdateHistoryItem " +
+					"FROM nightlabsjdo_updatehistoryitem " +
 					"WHERE module_id = ? AND update_history_item_id = ?"
 			);
 			try {
@@ -142,7 +142,7 @@ public class UpdateHistoryItemSQL {
 			}
 
 			preparedStatement = connection.prepareStatement(
-					"INSERT INTO NightLabsJDO_UpdateHistoryItem (module_id, update_history_item_id, resume_id, begin_timestamp) " +
+					"INSERT INTO nightlabsjdo_updatehistoryitem (module_id, update_history_item_id, resume_id, begin_timestamp) " +
 					"VALUES (?, ?, ?, ?)"
 			);
 			try {
@@ -184,7 +184,7 @@ public class UpdateHistoryItemSQL {
 				throw new IllegalStateException("Cannot end update with moduleID='" + moduleID + "' updateHistoryItemID='" + updateHistoryItemID + "', because this update is already done!");
 
 			PreparedStatement preparedStatement = connection.prepareStatement(
-					"UPDATE NightLabsJDO_UpdateHistoryItem SET end_timestamp = ? " +
+					"UPDATE nightlabsjdo_updatehistoryitem SET end_timestamp = ? " +
 					"WHERE module_id = ? AND update_history_item_id = ? AND resume_id = ? AND end_timestamp IS NULL"
 			);
 			try {
