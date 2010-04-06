@@ -56,8 +56,8 @@ public class UpdateHistoryItemSQL {
 				"ORDER BY resume_id"
 		);
 		try {
-			preparedStatement.setString(0, moduleID);
-			preparedStatement.setString(1, updateHistoryItemID);
+			preparedStatement.setString(1, moduleID);
+			preparedStatement.setString(2, updateHistoryItemID);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			// If there is no entry at all, the update was not even started, thus the result stays false.
@@ -117,8 +117,8 @@ public class UpdateHistoryItemSQL {
 					"WHERE module_id = ? AND update_history_item_id = ?"
 			);
 			try {
-				preparedStatement.setString(0, result.moduleID);
-				preparedStatement.setString(1, result.updateHistoryItemID);
+				preparedStatement.setString(1, result.moduleID);
+				preparedStatement.setString(2, result.updateHistoryItemID);
 				ResultSet resultSet = preparedStatement.executeQuery();
 
 				if (resultSet.next()) { // Maybe some drivers return no record at all, if there is no record at all.
@@ -146,10 +146,10 @@ public class UpdateHistoryItemSQL {
 					"VALUES (?, ?, ?, ?)"
 			);
 			try {
-				preparedStatement.setString(0, result.moduleID);
-				preparedStatement.setString(1, result.updateHistoryItemID);
-				preparedStatement.setInt(2, result.resumeID);
-				preparedStatement.setDate(3, new Date(System.currentTimeMillis()));
+				preparedStatement.setString(1, result.moduleID);
+				preparedStatement.setString(2, result.updateHistoryItemID);
+				preparedStatement.setInt(3, result.resumeID);
+				preparedStatement.setDate(4, new Date(System.currentTimeMillis()));
 				preparedStatement.executeUpdate();
 			} finally {
 				preparedStatement.close();
@@ -188,10 +188,10 @@ public class UpdateHistoryItemSQL {
 					"WHERE module_id = ? AND update_history_item_id = ? AND resume_id = ? AND end_timestamp IS NULL"
 			);
 			try {
-				preparedStatement.setDate(0, new Date(System.currentTimeMillis()));
-				preparedStatement.setString(1, updateHistoryItemID_updateInProgress.moduleID);
-				preparedStatement.setString(2, updateHistoryItemID_updateInProgress.updateHistoryItemID);
-				preparedStatement.setInt(3, updateHistoryItemID_updateInProgress.resumeID);
+				preparedStatement.setDate(1, new Date(System.currentTimeMillis()));
+				preparedStatement.setString(2, updateHistoryItemID_updateInProgress.moduleID);
+				preparedStatement.setString(3, updateHistoryItemID_updateInProgress.updateHistoryItemID);
+				preparedStatement.setInt(4, updateHistoryItemID_updateInProgress.resumeID);
 				int affectedRowCount = preparedStatement.executeUpdate();
 				if (affectedRowCount != 1)
 					throw new IllegalStateException("UPDATE did not affect exactly 1 row, but " + affectedRowCount + " rows!");
