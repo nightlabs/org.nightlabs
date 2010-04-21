@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -412,6 +413,23 @@ public class NotificationManager
 		return event;
 	}
 
+	private static List<Class<?>> getAllInterfaces(Class<?> clazz)
+	{
+		List<Class<?>> interfaces = new LinkedList<Class<?>>();
+		Set<Class<?>> seen = new HashSet<Class<?>>();
+		populateInterfaces(interfaces, seen, clazz);
+		return interfaces;
+	}
+	private static void populateInterfaces(List<Class<?>> interfaces, Set<Class<?>> seen, Class<?> clazz)
+	{
+		Class<?>[] ifs = clazz.getInterfaces();
+		for (Class<?> iface : ifs) {
+			if (seen.add(iface)) {
+				interfaces.add(iface);
+				populateInterfaces(interfaces, seen, iface);
+			}
+		}
+	}
 
 	/**
 	 * @param event The event to fire.
@@ -486,7 +504,7 @@ public class NotificationManager
 
 							boolean copiedMapListeners = false;
 							if (!interfacesIgnored) {
-								Class<?>[] interfaces = clazz.getInterfaces();
+								Collection<Class<?>> interfaces = getAllInterfaces(clazz);
 								for (Class<?> element1 : interfaces) {
 									Map<NotificationListener, Map<String, NotificationListenerMeta>> mapListenersForInterface = notificationListenersBySubjectClass.get(element1);
 									if (mapListenersForInterface != null) {
