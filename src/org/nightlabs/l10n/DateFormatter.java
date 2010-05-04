@@ -94,8 +94,8 @@ public class DateFormatter
 		return dateFormatterFactory;
 	}
 
-	private Config config;
-	private Locale locale;
+	private final Config config;
+	private final Locale locale;
 
 	/**
 	 * @param config
@@ -272,6 +272,9 @@ public class DateFormatter
 
 	public static String formatDate(Date dt, long flags)
 	{
+		if (dt == null)
+			return null;
+
 		DateFormat dateFormat = sharedInstance().getDateFormatProvider().getDateFormat(flags);
 		return dateFormat.format(dt);
 	}
