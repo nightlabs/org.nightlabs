@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.nightlabs.i18n
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: NightLabs.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.nightlabs.util,
+Import-Package: org.nightlabs.progress,
+ org.nightlabs.util,
  org.slf4j
 Export-Package: org.nightlabs.i18n,
  org.nightlabs.i18n.unit,
