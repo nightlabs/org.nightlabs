@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Progress Plug-in
-Bundle-SymbolicName: org.nightlabs.progress
-Bundle-Version: 1.0.0
-Bundle-Vendor: nightlabs.org
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
