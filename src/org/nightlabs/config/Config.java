@@ -381,7 +381,7 @@ public class Config
 	public Config(InputStream configStream)
 	throws ConfigException
 	{
-		this.readFromInputStream(configStream);
+		this.readFromInputStream(configStream, Config.class.getClassLoader());
 	}
 
 	/**
@@ -604,7 +604,7 @@ public class Config
 				if (configFile.exists()) {
 					FileInputStream fin = new FileInputStream(configFile);
 					try {
-						readFromInputStream(fin);
+						readFromInputStream(fin, Config.class.getClassLoader());
 						if(logger.isDebugEnabled())
 							logger.debug("Config file read: "+configFile.getAbsolutePath());
 					} finally {
@@ -717,22 +717,36 @@ public class Config
 			return classLoader;
 	}
 
-	private XMLDecoder createXMLDecoder(InputStream in, ExceptionListener exceptionListener)
+	private XMLDecoder createXMLDecoder(InputStream in, ExceptionListener exceptionListener, ClassLoader classLoader)
 	{
 		return new XMLDecoder(
 				in,
 				null,
 				exceptionListener,
-				getDefaultClassLoader()
+				classLoader == null ? getDefaultClassLoader() : classLoader
 		);
 	}
 
 
 	private Set<String> loadedConfigModuleClassNames = new HashSet<String>();
 
-	private void loadConfigModulesForClass(String configModuleClassName)
+	private void loadConfigModulesForClass(Class<? extends ConfigModule> configModuleClass, String configModuleClassName)
 	{
 		assertLoaded();
+
+		if (configModuleClass == null && configModuleClassName == null)
+			throw new IllegalArgumentException("Arguments configModuleClass and configModuleClassName must not both be null! One of them must be assigned!");
+
+		if (configModuleClass != null)
+			configModuleClassName = configModuleClass.getName();
+		else {
+			try {
+				configModuleClass = (Class<? extends ConfigModule>) getDefaultClassLoader().loadClass(configModuleClassName);
+			} catch (ClassNotFoundException e) {
+				configModuleClass = null;
+				logger.warn("Loading ConfigModule-class " + configModuleClassName + " failed.", e);
+			}
+		}
 
 		synchronized (ioMutex) {
 			if (loadedConfigModuleClassNames.contains(configModuleClassName))
@@ -789,17 +803,46 @@ public class Config
 					// read include file from input stream
 					InputStream in = includeFileURL.openStream();
 					try {
-						ConfigModule cfMod;
-						XMLDecoder d = createXMLDecoder(in, new ConfigExceptionListener("Error reading config module file \"" + includeFileURL + "\"!"));
-						try {
-//							d.setExceptionListener(new ConfigExceptionListener("Error reading config module file \"" + includeFileURL + "\"!"));
-							cfMod = (ConfigModule)d.readObject();
-							cfMod.setChanged(false);
-							if(logger.isDebugEnabled())
-								logger.debug("Config file read: "+includeFileURL);
-						} finally {
-							d.close();
+						ConfigModule cfMod = null;
+						RuntimeException readFileException = null;
+						loopTryDifferentClassLoaders: for (int classLoaderMode = 0; classLoaderMode < 2; ++classLoaderMode) {
+							if (cfMod != null)
+								break loopTryDifferentClassLoaders;
+
+							ClassLoader cl = null;
+							switch (classLoaderMode) {
+								case 0:
+									if (configModuleClass == null)
+										continue loopTryDifferentClassLoaders;
+
+									cl = configModuleClass.getClassLoader();
+									break;
+								case 1:
+									cl = null;
+
+								default:
+									throw new IllegalStateException("Unknown classLoaderMode: " + classLoaderMode);
+							}
+							XMLDecoder d = createXMLDecoder(
+									in,
+									new ConfigExceptionListener("Error reading config module file \"" + includeFileURL + "\"!"),
+									cl
+							);
+							try {
+								cfMod = (ConfigModule)d.readObject();
+								cfMod.setChanged(false);
+								if(logger.isDebugEnabled())
+									logger.debug("Config file read: "+includeFileURL);
+
+								readFileException = null;
+							} catch (RuntimeException x) { // our ConfigExceptionListener encapsulates every exception in a RuntimeException
+								readFileException = x;
+							} finally {
+								d.close();
+							}
 						}
+						if (readFileException != null)
+							throw readFileException;
 
 						// get deserialized config module, call init() and add it to local lists.
 						cfMod._setConfig(this);
@@ -1227,7 +1270,7 @@ public class Config
 	public <T extends ConfigModule> T createConfigModule(Class<T> configModuleClass, String identifier)
 	throws ConfigException
 	{
-		loadConfigModulesForClass(configModuleClass.getName());
+		loadConfigModulesForClass(configModuleClass, null);
 
 		try {
 			ConfigModule cfMod = configModules.get(getConfigModuleIdentifyingName(configModuleClass, identifier));
@@ -1379,7 +1422,7 @@ public class Config
 	 */
 	public ConfigModule getConfigModule(String configModuleClassName, String identifier, boolean throwExceptionIfNotExistent)
 	{
-		loadConfigModulesForClass(configModuleClassName);
+		loadConfigModulesForClass(null, configModuleClassName);
 		ConfigModule cfMod = configModules.get(getConfigModuleIdentifyingName(configModuleClassName, identifier));
 		if (cfMod == null && throwExceptionIfNotExistent)
 			throw new ConfigModuleNotFoundException("No ConfigModule of type \""+configModuleClassName+"\" existent!");
@@ -1528,7 +1571,7 @@ public class Config
 	// =======================================
 	// PRIVATE HELPING METHODS
 	// =======================================
-	private void readFromInputStream(InputStream fin)
+	private void readFromInputStream(InputStream fin, ClassLoader classLoader)
 	throws ConfigException
 	{
 		try {
@@ -1536,7 +1579,7 @@ public class Config
 //			Unmarshaller unMarshaller = new Unmarshaller(ListEnvelope.class); // , org.nightlabs.plugin.PluginMan.getClassLoader());
 //			ListEnvelope env = (ListEnvelope)unMarshaller.unmarshal(isReader);
 			List<?> ls;
-			XMLDecoder d = createXMLDecoder(fin, new ConfigExceptionListener("Error reading main config file!"));
+			XMLDecoder d = createXMLDecoder(fin, new ConfigExceptionListener("Error reading main config file!"), classLoader);
 			try {
 //				d.setExceptionListener(new ConfigExceptionListener("Error reading main config file!"));
 				ls = (List<?>)d.readObject();
