@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: NightLabs Unified Connection Framework
 Bundle-SymbolicName: org.nightlabs.connection
-Bundle-Version: 1.0.2
+Bundle-Version: 1.1.0
 Bundle-ClassPath: .,
  lib/RXTXcomm.jar
 Export-Package: gnu.io,
@@ -13,3 +13,5 @@ Export-Package: gnu.io,
  org.nightlabs.connection.rxtx.config,
  org.nightlabs.connection.tcp,
  org.nightlabs.connection.tcp.config
+Require-Bundle: org.nightlabs.base,
+ org.nightlabs.config
