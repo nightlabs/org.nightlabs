@@ -23,18 +23,14 @@
  **********************************************************************/
 package org.nightlabs.language;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.i18n.I18nUtil;
-import org.nightlabs.io.DataBuffer;
 import org.nightlabs.util.Util;
 
 //TODO: use language and country (complete locale)
@@ -185,22 +181,23 @@ implements Serializable
 		} // if (languageIDs != null) {
 
 		if (flagIcon16x16 == null) {
-//			String flagResource = "resource/Flag-" + languageID + ".16x16.png";
-			String flagResource = "resource/language/" + languageID + ".png";
-			try {
-				InputStream in = I18nUtil.class.getResourceAsStream(flagResource);
-				if (in != null) {
-					try {
-						_setFlagIcon16x16(new DataBuffer(in).createByteArray());
-					} finally {
-						in.close();
-					}
-					modified = true;
-				}
-			} catch (IOException x) {
-				flagIcon16x16 = null;
-				Logger.getLogger(LanguageCf.class).warn("Loading resource \"" + flagResource + "\" failed!", x);
-			}
+			_setFlagIcon16x16(I18nUtil.getLanguageFlag16x16(languageID, true));
+////			String flagResource = "resource/Flag-" + languageID + ".16x16.png";
+//			String flagResource = "resource/language/" + languageID + ".png";
+//			try {
+//				InputStream in = I18nUtil.class.getResourceAsStream(flagResource);
+//				if (in != null) {
+//					try {
+//						_setFlagIcon16x16(new DataBuffer(in).createByteArray());
+//					} finally {
+//						in.close();
+//					}
+//					modified = true;
+//				}
+//			} catch (IOException x) {
+//				flagIcon16x16 = null;
+//				Logger.getLogger(LanguageCf.class).warn("Loading resource \"" + flagResource + "\" failed!", x);
+//			}
 		}
 
 		return modified;

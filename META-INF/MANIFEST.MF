@@ -2,13 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: NightLabsBase
 Bundle-SymbolicName: org.nightlabs.base
-Bundle-Version: 1.0.8.qualifier
+Bundle-Version: 1.0.10.qualifier
 Export-Package: org.nightlabs,
  org.nightlabs.annotation,
  org.nightlabs.datastructure,
  org.nightlabs.db,
  org.nightlabs.environment,
- org.nightlabs.i18n,
  org.nightlabs.i18n.resource.country,
  org.nightlabs.i18n.resource.language,
  org.nightlabs.i18n.unit,
@@ -25,20 +24,15 @@ Export-Package: org.nightlabs,
  org.nightlabs.notification,
  org.nightlabs.print,
  org.nightlabs.print.page,
- org.nightlabs.progress,
  org.nightlabs.script,
  org.nightlabs.timepattern,
- org.nightlabs.util,
- org.nightlabs.util.bean,
- org.nightlabs.util.bean.propertyeditor,
- org.nightlabs.util.collection,
- org.nightlabs.util.reflect,
- org.nightlabs.util.reflect.clonedelegates,
  org.nightlabs.version,
  org.nightlabs.webapp,
  org.nightlabs.xml
 Require-Bundle: org.apache.log4j,
  org.apache.xerces,
- org.nightlabs.config
+ org.nightlabs.config,
+ org.nightlabs.util;visibility:=reexport,
+ org.nightlabs.i18n;visibility:=reexport,
+ org.nightlabs.progress;visibility:=reexport
 Eclipse-BuddyPolicy: registered
-TODO: There is no Bundle-ClassPath and there should be buddy-classloading enabled!
