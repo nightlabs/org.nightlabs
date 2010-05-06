@@ -2,12 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.nightlabs.keyreader
 Bundle-SymbolicName:  org.nightlabs.keyreader
-Bundle-Version: 1.0.2.qualifier
+Bundle-Version: 1.1.0.qualifier
 Export-Package: 
  org.nightlabs.keyreader,
  org.nightlabs.keyreader.config,
  org.nightlabs.keyreader.vendor.generic
 Require-Bundle: org.apache.log4j,
- org.nightlabs.config
+ org.nightlabs.config,
+ org.nightlabs.base,
+ org.nightlabs.connection
 Eclipse-BuddyPolicy: registered
 
