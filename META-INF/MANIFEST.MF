@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: NightLabs Progress
+Bundle-SymbolicName: org.nightlabs.progress
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: NightLabs.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.nightlabs.progress
