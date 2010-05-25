@@ -53,8 +53,8 @@ public class DefaultNumberFormatCfMod extends ConfigModule
 
 	private String currencySymbolPosition;
 
-	public static String CURRENCYSYMBOLPOSITION_BEGIN = "begin";
-	public static String CURRENCYSYMBOLPOSITION_END = "end";
+	public static final String CURRENCYSYMBOLPOSITION_BEGIN = "begin";
+	public static final String CURRENCYSYMBOLPOSITION_END = "end";
 
 	
 	public DefaultNumberFormatCfMod()

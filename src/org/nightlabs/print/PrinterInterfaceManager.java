@@ -55,13 +55,14 @@ public abstract class PrinterInterfaceManager {
 	 * Using this in the methods requiring an {@link PrinterInterfaceFactory} will cause
 	 * them to return an {@link AWTPrinter}.
 	 */
-	public static PrinterInterfaceFactory INTERFACE_FACTORY_AWT = new AWTPrinter.Factory();
+	public static final PrinterInterfaceFactory INTERFACE_FACTORY_AWT = new AWTPrinter.Factory();
+	
 	/**
 	 * Constant for the interface factory when printing documents.
 	 * Using this in the methods requiring an {@link PrinterInterfaceFactory} will cause
 	 * them to return an {@link DelegatingDocumentPrinter}.
 	 */
-	public static PrinterInterfaceFactory INTERFACE_FACTORY_DOCUMENT = new DelegatingDocumentPrinter.Factory();
+	public static final PrinterInterfaceFactory INTERFACE_FACTORY_DOCUMENT = new DelegatingDocumentPrinter.Factory();
 	
 	private static final Logger logger = Logger.getLogger(PrinterInterfaceManager.class);
 	

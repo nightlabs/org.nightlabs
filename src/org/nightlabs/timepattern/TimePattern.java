@@ -154,13 +154,13 @@ public abstract class TimePattern
 	public static final String FRIDAY_NAME = "fri";
 	public static final String SATURDAY_NAME = "sat";
 
-	protected static String[] DAYOFWEEK_NAMES = new String[] {
+	protected static final String[] DAYOFWEEK_NAMES = new String[] {
 		SUNDAY_NAME, MONDAY_NAME, TUESDAY_NAME,
 		WEDNESDAY_NAME, THURSDAY_NAME, FRIDAY_NAME, SATURDAY_NAME, SUNDAY_NAME
 	};
 	
-	public static byte CONVERT_DAYOFWEEK_NUMBER_TO_NAME = 1;
-	public static byte CONVERT_DAYOFWEEK_NAME_TO_NUMBER = 2;
+	public static final byte CONVERT_DAYOFWEEK_NUMBER_TO_NAME = 1;
+	public static final byte CONVERT_DAYOFWEEK_NAME_TO_NUMBER = 2;
 
 	/**
 	 * cachedPeriods is used to speed up the matches(...) method by shortcutting

@@ -106,7 +106,7 @@ public class LoginData
 	 */
 	public LoginData() {}
 
-	public static Pattern PATTERN_SPLIT_LOGIN = Pattern.compile("[@\\?]");
+	public static final Pattern PATTERN_SPLIT_LOGIN = Pattern.compile("[@\\?]");
 
 	/**
 	 * @param login the composite of userID, organisationID and additional parameters.

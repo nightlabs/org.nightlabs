@@ -35,12 +35,12 @@ import org.nightlabs.util.Binary;
  */
 public class PCXHeader
 {
-	public static byte MANUFACTURER_PC_PAINTBRUSH	 = 10;
-	public static byte VERSION_2_5						= 0;
-	public static byte VERSION_2_8p					 = 2;
-	public static byte VERSION_2_8						= 3;
-	public static byte VERSION_3_0p					 = 5;
-	public static byte ENCODING_RLE		= 1;
+	public static final byte MANUFACTURER_PC_PAINTBRUSH	= 10;
+	public static final byte VERSION_2_5				= 0;
+	public static final byte VERSION_2_8p				= 2;
+	public static final byte VERSION_2_8				= 3;
+	public static final byte VERSION_3_0p				= 5;
+	public static final byte ENCODING_RLE				= 1;
 
 	/**
 	 * unsigned byte (we use short only because of java's signed bytes)

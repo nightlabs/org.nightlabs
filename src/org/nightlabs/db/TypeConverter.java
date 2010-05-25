@@ -251,13 +251,13 @@ public class TypeConverter
    * key: Integer typeID<br/>
    * value: TypeDef typeDef
    */
-  protected static HashMap<Integer, TypeDef> typeID2DefMap = new HashMap<Integer, TypeDef>();
+  protected static final HashMap<Integer, TypeDef> typeID2DefMap = new HashMap<Integer, TypeDef>();
 
   /**
    * key: String typeName<br/>
    * value: TypeDef typeDef
    */
-  protected static HashMap<String, TypeDef> typeName2DefMap = new HashMap<String, TypeDef>();
+  protected static final HashMap<String, TypeDef> typeName2DefMap = new HashMap<String, TypeDef>();
 
   public static final int SIZEMODE_FIX = 0;
   public static final int SIZEMODE_DISPLAYSIZE = 1;
