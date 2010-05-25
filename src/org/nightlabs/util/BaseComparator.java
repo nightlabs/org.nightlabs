@@ -15,7 +15,7 @@ import java.util.Comparator;
 public class BaseComparator<T>
 implements Comparator<T>
 {
-	public static int COMPARE_RESULT_NOT_NULL = Integer.MAX_VALUE - 1;
+	public static final int COMPARE_RESULT_NOT_NULL = Integer.MAX_VALUE - 1;
 
 	/**
 	 * Check both elements for null.

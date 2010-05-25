@@ -41,7 +41,7 @@ public class ColorUtil
 		public int r, g, b, a;
 	}
 
-	protected static Pattern SPLIT_RGBA_PATTERN = Pattern.compile(
+	protected static final Pattern SPLIT_RGBA_PATTERN = Pattern.compile(
 			"^\\p{Blank}*|\\p{Blank}*\\{\\p{Blank}*|\\p{Blank}*\\}\\p{Blank}*$|,\\p{Blank}*");
 
 	protected static RGBA parseRGBA(String color)
@@ -82,10 +82,6 @@ public class ColorUtil
 	}
 
 	/**
-	 * @param red
-	 * @param green
-	 * @param blue
-	 * @param alpha
 	 * @return Returns a String in the form RGBA{255,0,128,255}
 	 */
 	public static String colorToString(int red, int green, int blue, int alpha)
@@ -108,7 +104,7 @@ public class ColorUtil
 	}
 
 	/**
-	 * darkens the given color corresponding to the given multiplier
+	 * Darkens the given color corresponding to the given multiplier.
 	 * 
 	 * @param c the source Color
 	 * @param multiplier the factor which determines how much darker the color should be
@@ -127,7 +123,7 @@ public class ColorUtil
 	}
 
 	/**
-	 * brightens the given color corresponding to the given multiplier
+	 * Brightens the given color corresponding to the given multiplier.
 	 * 
 	 * @param c the source Color
 	 * @param multiplier the factor which determines how much brighter the color should be

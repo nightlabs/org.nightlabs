@@ -391,7 +391,7 @@ public class Binary
 		write((byte)0); // ASCII-Z
 	}
 	
-	public static String CHARSET = "ISO-8859-1";
+	public static final String CHARSET = "ISO-8859-1";
 	
 	/**
 	 * This method writes the given number of bytes to the OutputStream.
