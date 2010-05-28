@@ -33,16 +33,12 @@ import org.nightlabs.editor2d.DrawComponentContainer;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public abstract class AbstractConstrainedRotationTextDrawComponent
 extends AbstractTextDrawComponent
 {
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
-	public static List<Double> constrainedRotationValues;
+	private static final List<Double> constrainedRotationValues;
 	static
 	{
 		constrainedRotationValues = new LinkedList<Double>();
@@ -161,5 +157,4 @@ extends AbstractTextDrawComponent
 		}
 		return rotationY;
 	}
-
 }

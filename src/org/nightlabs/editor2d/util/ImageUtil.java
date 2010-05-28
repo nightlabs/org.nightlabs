@@ -428,10 +428,10 @@ public class ImageUtil
 		return null;
 	}
 
-	public static ColorModel COLOR_MODEL_BLACK_WHITE = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_GRAY),
+	public static final ColorModel COLOR_MODEL_BLACK_WHITE = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_GRAY),
 			new int[] {2}, false, false, Transparency.OPAQUE, DataBuffer.TYPE_BYTE);
 
-	public static ColorModel COLOR_MODEL_GRAY = ImageUtil.getColorModel(BufferedImage.TYPE_BYTE_GRAY);
+	public static final ColorModel COLOR_MODEL_GRAY = ImageUtil.getColorModel(BufferedImage.TYPE_BYTE_GRAY);
 
-	public static ColorModel COLOR_MODEL_RGB = ImageUtil.getColorModel(BufferedImage.TYPE_INT_ARGB);
+	public static final ColorModel COLOR_MODEL_RGB = ImageUtil.getColorModel(BufferedImage.TYPE_INT_ARGB);
 }

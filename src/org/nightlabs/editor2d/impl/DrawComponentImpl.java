@@ -68,6 +68,12 @@ import org.nightlabs.util.collection.MapChangedEvent.MapChange;
 public abstract class DrawComponentImpl
 implements DrawComponent
 {
+	/**
+	 * determines the max/min rotation.
+	 * Each rotation above/under this limit is minimzied by this value
+	 */
+	protected static final transient double rotationLimit = 360.0d;
+	
 	private static final Logger logger = Logger.getLogger(DrawComponentImpl.class);
 
 	private static final long serialVersionUID = 1L;
@@ -403,12 +409,6 @@ implements DrawComponent
 	public double getRotation() {
 		return rotation;
 	}
-
-	/**
-	 * determines the max/min rotation.
-	 * Each rotation above/under this limit is minimzied by this value
-	 */
-	protected static transient double rotationLimit = 360.0d;
 
 	/**
 	 * returns the cached value of the bounds, which are cached until a new transformation took place
