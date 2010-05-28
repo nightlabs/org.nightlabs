@@ -56,7 +56,7 @@ public class KeyReaderListenerThread extends Thread
 	 * many bytes are read at one step before executing KeyReader.dataReceived(...).
 	 * Because a barcode reader sends normally only a few bytes, we set this to 512 bytes, only.
 	 */
-	protected static int readBufSize = 512; // bytes
+	protected static final int readBufSize = 512; // bytes
 
 	@Override
 	public void run()
