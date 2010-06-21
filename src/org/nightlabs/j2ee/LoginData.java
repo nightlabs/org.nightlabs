@@ -262,8 +262,10 @@ public class LoginData
 	 * @param additionalParams the additionalParams to set
 	 */
 	public void setAdditionalParams(ParameterMap additionalParams) {
-		if (additionalParams == null)
-			additionalParams.clear();
+		if (additionalParams == null) {
+			if (this.additionalParams != null)
+				this.additionalParams.clear();
+		}
 		else
 			this.additionalParams = additionalParams;
 	}
