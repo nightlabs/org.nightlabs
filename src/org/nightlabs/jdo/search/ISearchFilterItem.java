@@ -6,13 +6,13 @@ import java.util.Set;
 
 public interface ISearchFilterItem {
 
-//	/**
-//	 * Should return whether or not this item trims the searched domain, i.e. whether it does contain any criteria
-//	 * that will reduce the amount of returned results.
-//	 *
-//	 * @return whether or not this item trims the searched set.
-//	 */
-//	public abstract boolean isConstraint();
+	/**
+	 * Should return whether or not this item trims the searched domain, i.e. whether it does contain any criteria
+	 * that will reduce the amount of returned results.
+	 *
+	 * @return whether or not this item trims the searched set.
+	 */
+	public abstract boolean isConstraint();
 
 	/**
 	 * Callback method to add this items criteria to

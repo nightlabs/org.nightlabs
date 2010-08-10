@@ -28,7 +28,6 @@ package org.nightlabs.jdo.search;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -115,12 +114,12 @@ public abstract class SearchFilter
 	{
 			Set<Class<?>> imports = new HashSet<Class<?>>();
 
-			paramMap = new HashMap<String, Object>();
 			StringBuffer vars = new StringBuffer();
 			StringBuffer filter = new StringBuffer();
 			StringBuffer params = new StringBuffer();
 			StringBuffer result = new StringBuffer();
 			// doExcecution
+			Map<String, Object> paramMap = getParameters();
 			prepareQuery(imports, vars, filter, params, paramMap, result);
 
 			StringBuffer importsSB = new StringBuffer();
@@ -157,8 +156,26 @@ public abstract class SearchFilter
 	protected Collection<?> executeQuery()
 	{
 		final Query q = createQuery();
-		prepareQuery(q);
-		return (Collection<?>) q.executeWithMap(paramMap);
+		try {
+			configureQuery(q);
+			prepareQuery(q);
+			addFieldsAsQueryParameters(getParameters());
+			Collection<?> result = (Collection<?>) q.executeWithMap(getParameters());
+			postProcessQueryResult(result);
+			return result;
+			
+		} catch (Throwable t) {
+			logger.error("Executing SearchFilter defined by an instance of "
+					+ this.getClass().getName() + " failed!\nQuery: " + q
+					+ "\nParams: " + getParameters(), t);
+			if (t instanceof RuntimeException)
+				throw (RuntimeException) t;
+
+			if (t instanceof Error)
+				throw (Error) t;
+
+			throw new RuntimeException(t);
+		}
 	}
 
 	
@@ -243,5 +260,14 @@ public abstract class SearchFilter
 	public void clear() {
 		searchFilterListeners.clear();
 		filterItems.clear();
+	}
+	
+	@Override
+	public boolean isConstraint() {
+		for (ISearchFilterItem filterItem : getFilterItems()) {
+			if (filterItem.isConstraint())
+				return true;
+		}
+		return false;
 	}
 }
