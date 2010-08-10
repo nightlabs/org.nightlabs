@@ -114,17 +114,9 @@ public class QueryCollection<Q extends AbstractSearchQuery>
 		List<Q> queriesToExecute = new LinkedList<Q>();
 		if (queries.size() > 1) {
 			for (Q q : queries) {
-				boolean needQueryExecution = false;
-				Map<String, Boolean> fieldsEnabled = q.getFieldsEnabled();
-				for (Boolean b : fieldsEnabled.values()) {
-					if (Boolean.TRUE.equals(b)) {
-						needQueryExecution = true;
-						break;
-					}
-				}
-
-				if (needQueryExecution)
+				if (q.isConstraint()) {
 					queriesToExecute.add(q);
+				}
 			}
 			if (queriesToExecute.isEmpty())
 				queriesToExecute.add(queries.iterator().next());

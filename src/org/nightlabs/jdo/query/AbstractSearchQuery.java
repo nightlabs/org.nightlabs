@@ -822,4 +822,18 @@ implements Serializable, SearchQuery
 			return sb.toString();
 		}
 	}
+
+	protected boolean isConstraintBasedOnFields() {
+		Map<String, Boolean> fieldsEnabled = getFieldsEnabled();
+		for (Boolean b : fieldsEnabled.values()) {
+			if (Boolean.TRUE.equals(b)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isConstraint() {
+		return isConstraintBasedOnFields();
+	}
 }
