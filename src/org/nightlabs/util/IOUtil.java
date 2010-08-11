@@ -40,7 +40,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.LinkedList;
@@ -51,7 +50,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import org.nightlabs.progress.LoggerProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -943,8 +944,19 @@ public class IOUtil
 
 	public static void main(String[] args) throws Exception
 	{
-		System.out.println(URLEncoder.encode("Hallo_+-*/Welt!", CHARSET_NAME_UTF_8));
-		System.out.println(new ParameterCoderMinusHex().encode("Hallo_+-*/Welt!"));
+//		System.out.println(URLEncoder.encode("Hallo_+-*/Welt!", CHARSET_NAME_UTF_8));
+//		System.out.println(new ParameterCoderMinusHex().encode("Hallo_+-*/Welt!"));
+
+		File zip = new File("/tmp/test.zip");
+		zip.delete();
+
+		IOUtil.zipFolder(zip, new File("/home/marco/temp/0"));
+		zip.delete();
+
+		LoggerProgressMonitor monitor = new LoggerProgressMonitor(logger);
+//		monitor.setLogMinPercentageDifference(0);
+//		monitor.setLogMinPeriodMSec(Long.MAX_VALUE);
+		IOUtil.zipFolder(zip, new File("/home/marco/temp"), monitor);
 	}
 
 	/**
@@ -1111,15 +1123,22 @@ public class IOUtil
 	public static void zipFolder(File zipOutputFile, File zipInputFolder)
 	throws IOException
 	{
-		zipFilesRecursively(zipOutputFile, zipInputFolder.listFiles(), zipInputFolder.getAbsoluteFile());
-//		FileOutputStream fout = new FileOutputStream(zipOutputFile);
-//		ZipOutputStream out = new ZipOutputStream(fout);
-//		try {
-//			File[] files = zipInputFolder.listFiles();
-//			zipFilesRecursively(out, zipOutputFile, files, zipInputFolder.getAbsoluteFile());
-//		} finally {
-//			out.close();
-//		}
+		zipFolder(zipOutputFile, zipInputFolder, (ProgressMonitor) null);
+	}
+
+	/**
+	 * Recursively zips all entries of the given zipInputFolder to
+	 * a zipFile defined by zipOutputFile.
+	 *
+	 * @param zipOutputFile The file to write to (will be deleted if existent).
+	 * @param zipInputFolder The inputFolder to zip.
+	 * @param monitor an optional monitor for progress feedback (can be <code>null</code>).
+	 * @throws IOException in case of an I/O error.
+	 */
+	public static void zipFolder(File zipOutputFile, File zipInputFolder, ProgressMonitor monitor)
+	throws IOException
+	{
+		zipFilesRecursively(zipOutputFile, zipInputFolder.listFiles(), zipInputFolder.getAbsoluteFile(), monitor);
 	}
 
 	/**
@@ -1137,10 +1156,29 @@ public class IOUtil
 	public static void zipFilesRecursively(File zipOutputFile, File[] files, File entryRoot)
 	throws IOException
 	{
+		zipFilesRecursively(zipOutputFile, files, entryRoot, (ProgressMonitor) null);
+	}
+
+	/**
+	 * Recursively zips all given files to a zipFile defined by zipOutputFile.
+	 *
+	 * @param zipOutputFile The file to write to (will be deleted if existent).
+	 * @param files The files to zip (optional, defaults to all files recursively). It must not be <code>null</code>,
+	 *		if <code>entryRoot</code> is <code>null</code>.
+	 * @param entryRoot The root folder of all entries. Entries in subfolders will be
+	 *		added relative to this. If <code>entryRoot==null</code>, all given files will be
+	 *		added without any path (directly into the zip's root). <code>entryRoot</code> and <code>files</code> must not
+	 *		both be <code>null</code> at the same time.
+	 * @param monitor an optional monitor for progress feedback (can be <code>null</code>).
+	 * @throws IOException in case of an I/O error.
+	 */
+	public static void zipFilesRecursively(File zipOutputFile, File[] files, File entryRoot, ProgressMonitor monitor)
+	throws IOException
+	{
 		FileOutputStream fout = new FileOutputStream(zipOutputFile);
 		ZipOutputStream out = new ZipOutputStream(fout);
 		try {
-			zipFilesRecursively(out, zipOutputFile, files, entryRoot);
+			zipFilesRecursively(out, zipOutputFile, files, entryRoot, monitor);
 		} finally {
 			out.close();
 		}
@@ -1164,6 +1202,28 @@ public class IOUtil
 	public static void zipFilesRecursively(ZipOutputStream out, File zipOutputFile, File[] files, File entryRoot)
 	throws IOException
 	{
+		zipFilesRecursively(out, zipOutputFile, files, entryRoot, (ProgressMonitor) null);
+	}
+
+	/**
+	 * Recursively writes all found files as entries into the given ZipOutputStream.
+	 *
+	 * @param out The ZipOutputStream to write to.
+	 * @param zipOutputFile the output zipFile. optional. if it is null, this method cannot check whether
+	 *		your current output file is located within the zipped directory tree. You must not locate
+	 *		your zip-output file within the source directory, if you leave this <code>null</code>.
+	 * @param files The files to zip (optional, defaults to all files recursively). It must not be <code>null</code>,
+	 *		if <code>entryRoot</code> is <code>null</code>.
+	 * @param entryRoot The root folder of all entries. Entries in subfolders will be
+	 *		added relative to this. If <code>entryRoot==null</code>, all given files will be
+	 *		added without any path (directly into the zip's root). <code>entryRoot</code> and <code>files</code> must not
+	 *		both be <code>null</code> at the same time.
+	 * @param monitor an optional monitor for progress feedback (can be <code>null</code>).
+	 * @throws IOException in case of an I/O error.
+	 */
+	public static void zipFilesRecursively(ZipOutputStream out, File zipOutputFile, File[] files, File entryRoot, ProgressMonitor monitor)
+	throws IOException
+	{
 		if (entryRoot == null && files == null)
 			throw new IllegalArgumentException("entryRoot and files must not both be null!");
 
@@ -1174,33 +1234,81 @@ public class IOUtil
 			files = new File[] { entryRoot };
 		}
 
-		byte[] buf = new byte[1024 * 5];
-		for (File file : files) {
-			if (zipOutputFile != null)
-				if (file.equals(zipOutputFile))
-					continue;
-			if ( file.isDirectory() ) {
-				// recurse
-				File[] dirFiles = file.listFiles();
-				zipFilesRecursively(out, zipOutputFile, dirFiles, entryRoot);
+		if (monitor != null) {
+			int dirCount = 0;
+			int fileCount = 0;
+			for (File file : files) {
+				if (file.isDirectory())
+					++dirCount;
+				else
+					++fileCount;
 			}
-			else {
-				// Create a new zipEntry
-				BufferedInputStream in = new BufferedInputStream( new FileInputStream(file) );
-				String relativePath = entryRoot == null ? file.getName() : getRelativePath(entryRoot, file.getAbsoluteFile());
-				ZipEntry entry = new ZipEntry(relativePath);
-				entry.setTime(file.lastModified());
-				out.putNextEntry(entry);
 
-				int len;
-				while ((len = in.read(buf)) > 0) {
-					out.write(buf, 0, len);
+			monitor.beginTask("Zipping files", dirCount * 10 + fileCount);
+		}
+		try {
+			byte[] buf = new byte[1024 * 5];
+			for (File file : files) {
+				if (zipOutputFile != null && file.equals(zipOutputFile)) {
+					if (monitor != null)
+						monitor.worked(1);
+
+					continue;
 				}
 
-				out.closeEntry();
-				in.close();
-			}
-		} // end of for ( int i = 0; i < files.length; i++ )
+				if ( file.isDirectory() ) {
+					// store directory (necessary, in case the directory is empty - otherwise it's lost)
+					String relativePath = entryRoot == null ? file.getName() : getRelativePath(entryRoot, file.getAbsoluteFile());
+					ZipEntry entry = new ZipEntry(relativePath);
+					entry.setTime(file.lastModified());
+					entry.setSize(0);
+					entry.setCompressedSize(0);
+					entry.setCrc(0);
+					entry.setMethod(ZipEntry.STORED);
+					out.putNextEntry(entry);
+					out.closeEntry();
+
+					// recurse
+					File[] dirFiles = file.listFiles();
+					if (dirFiles == null) {
+						logger.error("zipFilesRecursively: file.listFiles() returned null, even though file is a directory! file=\"{}\"", file.getAbsolutePath());
+						if (monitor != null)
+							monitor.worked(10);
+					}
+					else {
+						zipFilesRecursively(
+								out,
+								zipOutputFile,
+								dirFiles,
+								entryRoot,
+								monitor == null ? null : new SubProgressMonitor(monitor, 10)
+						);
+					}
+				}
+				else {
+					// Create a new zipEntry
+					BufferedInputStream in = new BufferedInputStream( new FileInputStream(file) );
+					String relativePath = entryRoot == null ? file.getName() : getRelativePath(entryRoot, file.getAbsoluteFile());
+					ZipEntry entry = new ZipEntry(relativePath);
+					entry.setTime(file.lastModified());
+					out.putNextEntry(entry);
+
+					int len;
+					while ((len = in.read(buf)) > 0) {
+						out.write(buf, 0, len);
+					}
+
+					out.closeEntry();
+					in.close();
+
+					if (monitor != null)
+						monitor.worked(1);
+				}
+			} // end of for ( int i = 0; i < files.length; i++ )
+		} finally {
+			if (monitor != null)
+				monitor.done();
+		}
 	}
 
 	private static final String PROPERTY_KEY_ZIP_TIMESTAMP = "zip.timestamp";
