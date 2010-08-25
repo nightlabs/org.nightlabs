@@ -26,10 +26,6 @@ package org.nightlabs.i18n;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * This class is a simple implementation of <tt>I18nText</tt>. It is meant to be able
  * to store temporarily i18n data when not yet having a real <tt>I18nText</tt> available
@@ -38,7 +34,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version $Revision: 12386 $ - $Date: 2008-10-10 14:42:28 +0200 (Fr, 10 Okt 2008) $
  * @author Marco Schulze - marco at nightlabs dot de
  */
-@XmlRootElement
 public class I18nTextBuffer extends I18nText
 {
 	/**
@@ -50,7 +45,6 @@ public class I18nTextBuffer extends I18nText
 	 * key: String languageID<br/>
 	 * value: String text
 	 */
-	@XmlElement
 	private Map<String, String> texts = new HashMap<String, String>();
 
 	/**
@@ -62,7 +56,6 @@ public class I18nTextBuffer extends I18nText
 		return texts;
 	}
 
-	@XmlAttribute
 	private String fallBackValue = "";
 
 	public void setFallBackValue(String fallBackValue)
