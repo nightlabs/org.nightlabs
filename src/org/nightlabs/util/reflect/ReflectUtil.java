@@ -26,6 +26,7 @@ package org.nightlabs.util.reflect;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -49,6 +50,10 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.apache.bcel.generic.NEW;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * @author Daniel Mazurek
@@ -57,6 +62,7 @@ import java.util.jar.JarFile;
  */
 public class ReflectUtil
 {
+	private static final Logger logger = LoggerFactory.getLogger(ReflectUtil.class); 
 
 	public ReflectUtil()
 	{
@@ -648,6 +654,43 @@ public class ReflectUtil
 	}
 
 	/**
+	 * Returns all classes that have a class {@link Annotation} of the given annotationClass.
+	 * 
+	 * @param annotationClass The type of annotation all classes are searched for.
+	 * @return all classes that have a class {@link Annotation} of the given annotationClass.
+	 */
+	public static Set<Class<?>> getAllClassesAnnotatedWith(Class<? extends Annotation> annotationClass, String... basePackageNames)
+	{
+		if (annotationClass == null)
+			throw new IllegalArgumentException("The given annotationClass must NOT be null!");
+		
+		if (basePackageNames == null || basePackageNames.length == 0)
+			throw new IllegalArgumentException("The given basePackageNames must NOT be null or empty!");
+
+		Set<Class<?>> annotatedClasses = new HashSet<Class<?>>();
+		
+		// Search for all existing classes of the packages with the given basePackageNames 
+		for (String string : basePackageNames)
+		{
+			try
+			{
+				Collection<Class<?>> listedClasses = listClassesInPackage(string, true);
+				for (Class<?> listedClass : listedClasses)
+				{
+					if (listedClass.getAnnotation(annotationClass) != null)
+						annotatedClasses.add(listedClass);
+				}
+			}
+			catch (ClassNotFoundException e)
+			{
+				throw new IllegalStateException("Finding all classes of package '"+string+"' failed!", e);
+			}
+		}
+
+		return annotatedClasses;
+	}
+
+	/**
 	 * Lists all (and of course loads all) the classes in the given package.
 	 * The {@link Thread#getContextClassLoader()} classloader will be
 	 * used to list the resources in the package, but to load the class
@@ -726,7 +769,15 @@ public class ReflectUtil
 						// we are only interested in .class files
 						if (file.getName().endsWith(".class")) {
 							// removes the .class extension
-							resultClasses.add(cld.loadClass(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
+							final String className = packageName + '.' + file.getName().substring(0, file.getName().length() - 6);
+							try {
+								resultClasses.add(cld.loadClass(className));
+							} catch (ClassFormatError e) {
+								// ignore these errors as they might occur when using intentionally borked jars like: http://forums.java.net/jive/message.jspa?messageID=226931
+								logger.warn("Couldn't get class definition for {} from file {}!", className, file.getAbsoluteFile().toString());
+							} catch (NoClassDefFoundError e) {
+								logger.warn("No class definition found for {} from file {}!", className, file.getAbsoluteFile().toString());
+							}
 						}
 					}
 				}
