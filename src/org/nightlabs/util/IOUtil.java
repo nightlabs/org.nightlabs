@@ -152,7 +152,8 @@ public class IOUtil
 			if (res != null)
 				return up + res;
 
-			up = "../" + up;
+//			up = "../" + up;
+			up = ".." + File.separatorChar + up;
 			b = b.getParentFile();
 		}
 
@@ -1256,9 +1257,15 @@ public class IOUtil
 					continue;
 				}
 
+				String relativePath = entryRoot == null ? file.getName() : getRelativePath(entryRoot, file.getAbsoluteFile());
+				// The method ZipEntry.isDirectory checks for 'name.endsWith("/");' and thus seems not to take
+				// File.separator into account. Furthermore, I browsed the web for source codes (both implementation and
+				// usage of ZipFile/ZipEntry and it seems to always use '/' - even in Windows.
+				// Thus, I assume that all backslashes should be converted to slashes here. Marco.
+				relativePath = relativePath.replace('\\', '/');
 				if ( file.isDirectory() ) {
 					// store directory (necessary, in case the directory is empty - otherwise it's lost)
-					String relativePath = entryRoot == null ? file.getName() : getRelativePath(entryRoot, file.getAbsoluteFile());
+					relativePath += '/';
 					ZipEntry entry = new ZipEntry(relativePath);
 					entry.setTime(file.lastModified());
 					entry.setSize(0);
@@ -1288,7 +1295,6 @@ public class IOUtil
 				else {
 					// Create a new zipEntry
 					BufferedInputStream in = new BufferedInputStream( new FileInputStream(file) );
-					String relativePath = entryRoot == null ? file.getName() : getRelativePath(entryRoot, file.getAbsoluteFile());
 					ZipEntry entry = new ZipEntry(relativePath);
 					entry.setTime(file.lastModified());
 					out.putNextEntry(entry);

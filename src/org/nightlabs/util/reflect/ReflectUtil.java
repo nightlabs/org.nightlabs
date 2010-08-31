@@ -50,7 +50,6 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.apache.bcel.generic.NEW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +61,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ReflectUtil
 {
-	private static final Logger logger = LoggerFactory.getLogger(ReflectUtil.class); 
+	private static final Logger logger = LoggerFactory.getLogger(ReflectUtil.class);
 
 	public ReflectUtil()
 	{
@@ -655,7 +654,7 @@ public class ReflectUtil
 
 	/**
 	 * Returns all classes that have a class {@link Annotation} of the given annotationClass.
-	 * 
+	 *
 	 * @param annotationClass The type of annotation all classes are searched for.
 	 * @return all classes that have a class {@link Annotation} of the given annotationClass.
 	 */
@@ -663,13 +662,13 @@ public class ReflectUtil
 	{
 		if (annotationClass == null)
 			throw new IllegalArgumentException("The given annotationClass must NOT be null!");
-		
+
 		if (basePackageNames == null || basePackageNames.length == 0)
 			throw new IllegalArgumentException("The given basePackageNames must NOT be null or empty!");
 
 		Set<Class<?>> annotatedClasses = new HashSet<Class<?>>();
-		
-		// Search for all existing classes of the packages with the given basePackageNames 
+
+		// Search for all existing classes of the packages with the given basePackageNames
 		for (String string : basePackageNames)
 		{
 			try
@@ -774,9 +773,9 @@ public class ReflectUtil
 								resultClasses.add(cld.loadClass(className));
 							} catch (ClassFormatError e) {
 								// ignore these errors as they might occur when using intentionally borked jars like: http://forums.java.net/jive/message.jspa?messageID=226931
-								logger.warn("Couldn't get class definition for {} from file {}!", className, file.getAbsoluteFile().toString());
+								logger.warn("Couldn't get class definition for {} from file {}!", className, file.getAbsolutePath());
 							} catch (NoClassDefFoundError e) {
-								logger.warn("No class definition found for {} from file {}!", className, file.getAbsoluteFile().toString());
+								logger.warn("No class definition found for {} from file {}!", className, file.getAbsolutePath());
 							}
 						}
 					}
@@ -786,9 +785,9 @@ public class ReflectUtil
 			}
 		}
 		for (JarFile jarFile : jarEntries) {
-			for (Enumeration<JarEntry> e = jarFile.entries(); e.hasMoreElements(); )
+			for (Enumeration<JarEntry> enumeration = jarFile.entries(); enumeration.hasMoreElements(); )
 			{
-				JarEntry entry = e.nextElement();
+				JarEntry entry = enumeration.nextElement();
 				if (!(entry.getName().length() >= path.length() && entry.getName().substring(0, path.length()).equals(path))) {
 					continue;
 				}
@@ -810,7 +809,14 @@ public class ReflectUtil
 				) {
 					String cn = entry.getName().substring(0, entry.getName().length() - ".class".length());
 					cn = cn.replaceAll("/", ".");
-					resultClasses.add(cld.loadClass(cn));
+					try {
+						resultClasses.add(cld.loadClass(cn));
+					} catch (ClassFormatError e) {
+						// ignore these errors as they might occur when using intentionally borked jars like: http://forums.java.net/jive/message.jspa?messageID=226931
+						logger.warn("Couldn't get class definition for {} from file {}!", cn, jarFile.getName());
+					} catch (NoClassDefFoundError e) {
+						logger.warn("No class definition found for {} from file {}!", cn, jarFile.getName());
+					}
 				}
 			}
 		}
