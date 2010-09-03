@@ -217,7 +217,7 @@ public class InheritanceManager
 		{
 			FieldInheriter fieldInheriter = child.getFieldInheriter(childField.getName());
 			if (fieldInheriter == null)
-				throw new NullPointerException("fieldInheriter must not be null!");
+				throw new NullPointerException("fieldInheriter must not be null. Attempt to inherit " + childField.getName() + " from " + child.getClass().getName() + ". Child: " + child + " mother: " + mother);
 
 			if (logger.isDebugEnabled()) {
 				String fieldName = motherField.getName();
