@@ -94,10 +94,10 @@ extends AbstractSingleFileExtensionIOFilter
     	Rectangle bounds = root.getBounds();
 //    	Rectangle bounds = root.getCurrentPage().getBounds();
 //	    Rectangle bounds = root.getCurrentPage().getPageBounds();
-	    double width = PageSize.A4.width();
-	    double height = PageSize.A4.height();
-			double dcWidth = bounds.width;
-			double dcHeight = bounds.height;
+	    double width = PageSize.A4.getWidth();
+	    double height = PageSize.A4.getHeight();
+		double dcWidth = bounds.width;
+		double dcHeight = bounds.height;
       
       int w = (int)dcWidth;
       int h = (int)dcHeight;
@@ -107,7 +107,7 @@ extends AbstractSingleFileExtensionIOFilter
       logger.debug("height = "+h);
      
       PdfContentByte cb = writer.getDirectContent();
-      Graphics2D g2d = cb.createGraphicsShapes(PageSize.A4.width(), PageSize.A4.height());
+      Graphics2D g2d = cb.createGraphicsShapes(PageSize.A4.getWidth(), PageSize.A4.getHeight());
       
   		double scaleX = width / dcWidth;
   		double scaleY = height / dcHeight;
