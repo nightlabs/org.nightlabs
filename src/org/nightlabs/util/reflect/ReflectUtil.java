@@ -743,6 +743,8 @@ public class ReflectUtil
 					jarPath = jarPath.substring(0, jarPath.indexOf("!"));
 					if (jarPath.startsWith("file:"))
 						jarPath = jarPath.substring(5);
+
+					jarPath = URLDecoder.decode(jarPath, "UTF-8");
 					jarEntries.add(new JarFile(jarPath));
 				}
 			}
