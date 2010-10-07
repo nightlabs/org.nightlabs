@@ -42,6 +42,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
@@ -943,22 +944,26 @@ public class IOUtil
 		return tempDir;
 	}
 
-	public static void main(String[] args) throws Exception
-	{
-//		System.out.println(URLEncoder.encode("Hallo_+-*/Welt!", CHARSET_NAME_UTF_8));
-//		System.out.println(new ParameterCoderMinusHex().encode("Hallo_+-*/Welt!"));
-
-		File zip = new File("/tmp/test.zip");
-		zip.delete();
-
-		IOUtil.zipFolder(zip, new File("/home/marco/temp/0"));
-		zip.delete();
-
-		LoggerProgressMonitor monitor = new LoggerProgressMonitor(logger);
-//		monitor.setLogMinPercentageDifference(0);
-//		monitor.setLogMinPeriodMSec(Long.MAX_VALUE);
-		IOUtil.zipFolder(zip, new File("/home/marco/temp"), monitor);
-	}
+//	public static void main(String[] args) throws Exception
+//	{
+//////		System.out.println(URLEncoder.encode("Hallo_+-*/Welt!", CHARSET_NAME_UTF_8));
+//////		System.out.println(new ParameterCoderMinusHex().encode("Hallo_+-*/Welt!"));
+////
+////		File zip = new File("/tmp/test.zip");
+////		zip.delete();
+////
+////		IOUtil.zipFolder(zip, new File("/home/marco/temp/0"));
+////		zip.delete();
+////
+////		LoggerProgressMonitor monitor = new LoggerProgressMonitor(logger);
+//////		monitor.setLogMinPercentageDifference(0);
+//////		monitor.setLogMinPeriodMSec(Long.MAX_VALUE);
+////		IOUtil.zipFolder(zip, new File("/home/marco/temp"), monitor);
+//		
+//		Map<String, String> variables = new HashMap<String, String>();
+//		variables.put("gaga", "_____________");
+//		System.out.println(IOUtil.replaceTemplateVariables("<y{{xc${{vbnm,.-${gaga}as{df}gh${\n}jk${aaa}löä#+üpoiuz$}trewq^12234567890ß'", variables ));
+//	}
 
 	/**
 	 * Get a user-dependent temp directory in every operating system and create it, if it does not exist.
@@ -1782,7 +1787,7 @@ public class IOUtil
 
 		// Read, parse and replace variables from template and write to FileWriter fw.
 		String variableName = null;
-		StringBuffer tmpBuf = new StringBuffer();
+		StringBuilder tmpBuf = new StringBuilder();
 		ParserExpects parserExpects = ParserExpects.NORMAL;
 		while (stk.nextToken() != StreamTokenizer.TT_EOF) {
 			String stringToWrite = null;
@@ -1804,13 +1809,15 @@ public class IOUtil
 				}
 			}
 			else if (stk.ttype == '\n') {
-				stringToWrite = new String(new char[] { (char)stk.ttype });
+//				stringToWrite = new String(new char[] { (char)stk.ttype });
+				stringToWrite = new String(Character.toChars(stk.ttype));
 
 				// These chars are not valid within a variable, so we reset the variable parsing, if we're currently parsing one.
 				// This helps keeping the tmpBuf small (to check for rowbreaks is not really necessary).
 				if (parserExpects != ParserExpects.NORMAL) {
 					parserExpects = ParserExpects.NORMAL;
-					stringToWrite = tmpBuf.toString() + stringToWrite;
+					tmpBuf.append(stringToWrite);
+					stringToWrite = tmpBuf.toString(); // + stringToWrite;
 					tmpBuf.setLength(0);
 				}
 			}
@@ -1819,32 +1826,38 @@ public class IOUtil
 					stringToWrite = tmpBuf.toString();
 					tmpBuf.setLength(0);
 				}
-				tmpBuf.append((char)stk.ttype);
+//				tmpBuf.append((char)stk.ttype);
+				tmpBuf.appendCodePoint(stk.ttype);
 				parserExpects = ParserExpects.BRACKET_OPEN;
 			}
 			else if (stk.ttype == '{') {
 				switch (parserExpects) {
 				case NORMAL:
-					stringToWrite = new String(new char[] { (char)stk.ttype });
+//					stringToWrite = new String(new char[] { (char)stk.ttype });
+					stringToWrite = new String(Character.toChars(stk.ttype));
 					break;
 				case BRACKET_OPEN:
-					tmpBuf.append((char)stk.ttype);
+//					tmpBuf.append((char)stk.ttype);
+					tmpBuf.appendCodePoint(stk.ttype);
 					parserExpects = ParserExpects.VARIABLE;
 					break;
 				default:
 					parserExpects = ParserExpects.NORMAL;
-				stringToWrite = tmpBuf.toString() + (char)stk.ttype;
-				tmpBuf.setLength(0);
+					tmpBuf.appendCodePoint(stk.ttype);
+					stringToWrite = tmpBuf.toString(); // + (char)stk.ttype;
+					tmpBuf.setLength(0);
 				}
 			}
 			else if (stk.ttype == '}') {
 				switch (parserExpects) {
 				case NORMAL:
-					stringToWrite = new String(new char[] { (char)stk.ttype });
+//					stringToWrite = new String(new char[] { (char)stk.ttype });
+					stringToWrite = new String(Character.toChars(stk.ttype));
 					break;
 				case BRACKET_CLOSE:
 					parserExpects = ParserExpects.NORMAL;
-					tmpBuf.append((char)stk.ttype);
+//					tmpBuf.append((char)stk.ttype);
+					tmpBuf.appendCodePoint(stk.ttype);
 
 					if (variableName == null)
 						throw new IllegalStateException("variableName is null!!!");
@@ -1858,8 +1871,9 @@ public class IOUtil
 					break;
 				default:
 					parserExpects = ParserExpects.NORMAL;
-				stringToWrite = tmpBuf.toString() + (char)stk.ttype;
-				tmpBuf.setLength(0);
+					tmpBuf.appendCodePoint(stk.ttype);
+					stringToWrite = tmpBuf.toString(); // + (char)stk.ttype;
+					tmpBuf.setLength(0);
 				}
 			}
 
