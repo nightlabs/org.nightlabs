@@ -61,7 +61,7 @@ public class CollectionUtil
 	 * @param in The collection that needs to be casted.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> Collection<T> castCollection(Collection<?> in)
+	public static <T> Collection<T> castCollection(final Collection<?> in)
 	{
 		return (Collection<T>) in;
 //		if (in instanceof Set)
@@ -73,26 +73,26 @@ public class CollectionUtil
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> Collection<T> castCollection(Object obj) {
+	public static <T> Collection<T> castCollection(final Object obj) {
 		return (Collection<T>) obj;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> castList(List<?> in)
+	public static <T> List<T> castList(final List<?> in)
 	{
 //		return new DelegatingList<T>(in);
 		return (List<T>) in;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> Set<T> castSet(Set<?> in)
+	public static <T> Set<T> castSet(final Set<?> in)
 	{
 //		return new DelegatingSet<T>(in);
 		return (Set<T>) in;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T, U> Map<T, U> castMap(Map<?, ?> in)
+	public static <T, U> Map<T, U> castMap(final Map<?, ?> in)
 	{
 		return (Map<T, U>) in;
 	}
@@ -102,8 +102,8 @@ public class CollectionUtil
 	 * Given an Object obj, usually from a resulting Object obtained after executing a query (in which this resulting Object
 	 * is known to be a Collection of instances of the type T), return this as a HashSet of the type T.
 	 */
-	public static <T> HashSet<T> createHashSetFromCollection(Object obj) {
-		Collection<? extends T> results = CollectionUtil.castCollection(obj);
+	public static <T> HashSet<T> createHashSetFromCollection(final Object obj) {
+		final Collection<? extends T> results = CollectionUtil.castCollection(obj);
 		return new HashSet<T>( results );
 	}
 
@@ -114,7 +114,7 @@ public class CollectionUtil
 	 * @param objects An array of objects - can be <tt>null</tt>.
 	 * @return Returns an <tt>ArrayList</tt> (or <tt>null</tt> if <tt>objects == null</tt>).
 	 */
-	public static <T> ArrayList<T> array2ArrayList(T[] objects)
+	public static <T> ArrayList<T> array2ArrayList(final T[] objects)
 	{
 		return array2ArrayList(objects, true);
 	}
@@ -128,14 +128,14 @@ public class CollectionUtil
 	 * <tt>canReturnNull</tt> is <tt>false</tt>. If <tt>canReturnNull == true</tt>
 	 * and <tt>objects == null</tt>, the result will be <tt>null</tt>.
 	 */
-	public static <T> ArrayList<T> array2ArrayList(T[] objects, boolean canReturnNull)
+	public static <T> ArrayList<T> array2ArrayList(final T[] objects, final boolean canReturnNull)
 	{
 		if (canReturnNull && objects == null)
 			return null;
 
-		ArrayList<T> l = new ArrayList<T>(objects == null ? 0 : objects.length);
+		final ArrayList<T> l = new ArrayList<T>(objects == null ? 0 : objects.length);
 		if (objects != null) {
-			for (T element : objects)
+			for (final T element : objects)
 				l.add(element);
 		}
 		return l;
@@ -148,7 +148,7 @@ public class CollectionUtil
 	 * @param objects An array of objects - can be <tt>null</tt>.
 	 * @return Returns an <tt>ArrayList</tt> (or <tt>null</tt>, if <tt>objects == null</tt>).
 	 */
-	public static <T> HashSet<T> array2HashSet(T[] objects)
+	public static <T> HashSet<T> array2HashSet(final T[] objects)
 	{
 		return CollectionUtil.array2HashSet(objects, true);
 	}
@@ -157,19 +157,19 @@ public class CollectionUtil
 	 * @param canReturnNull If <tt>false</tt>, the result will never be <tt>null</tt>,
 	 *		but an empty list if <tt>objects</tt> is null.
 	 * @param objects An array of objects - can be <tt>null</tt>.
-	 * @return Returns an <tt>ArrayList</tt> - never <tt>null</tt>.
-	 * The <tt>ArrayList</tt> is empty if <tt>objects</tt> is <tt>null</tt> and
+	 * @return a <tt>HashSet</tt> or <tt>null</tt>.
+	 * The result is empty if <tt>objects</tt> is <tt>null</tt> and
 	 * <tt>canReturnNull</tt> is <tt>false</tt>. If <tt>canReturnNull == true</tt>
 	 * and <tt>objects == null</tt>, the result will be <tt>null</tt>.
 	 */
-	public static <T> HashSet<T> array2HashSet(T[] objects, boolean canReturnNull)
+	public static <T> HashSet<T> array2HashSet(final T[] objects, final boolean canReturnNull)
 	{
 		if (canReturnNull && objects == null)
 			return null;
 
-		HashSet<T> s = new HashSet<T>(objects == null ? 0 : objects.length);
+		final HashSet<T> s = new HashSet<T>(objects == null ? 0 : objects.length);
 		if (objects != null) {
-			for (T element : objects)
+			for (final T element : objects)
 				s.add(element);
 		}
 		return s;
@@ -183,7 +183,7 @@ public class CollectionUtil
 	 * @param clazz The type of the elements of the returned object-array (e.g. <tt>String.class</tt> for the returned type <tt>String[]</tt>).
 	 * @return Returns a typed object array (or <tt>null</tt>, if <tt>c == null</tt>).
 	 */
-	public static <T> T[] collection2TypedArray(Collection<T> c, Class<T> clazz)
+	public static <T> T[] collection2TypedArray(final Collection<T> c, final Class<T> clazz)
 	{
 		return CollectionUtil.collection2TypedArray(c, clazz, true);
 	}
@@ -198,15 +198,15 @@ public class CollectionUtil
 	 *		If <tt>canReturnNull</tt> is false and <tt>c == null</tt>, an empty array will be returned.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T[] collection2TypedArray(Collection<T> c, Class<T> clazz, boolean canReturnNull)
+	public static <T> T[] collection2TypedArray(final Collection<T> c, final Class<T> clazz, final boolean canReturnNull)
 	{
 		if (canReturnNull && c == null)
 			return null;
 
-		Object array = Array.newInstance(clazz, c == null ? 0 : c.size());
+		final Object array = Array.newInstance(clazz, c == null ? 0 : c.size());
 		if (c != null) {
 			int i = 0;
-			for (Object element : c)
+			for (final Object element : c)
 				Array.set(array, i++, element);
 		}
 		return (T[])array;
@@ -223,13 +223,13 @@ public class CollectionUtil
 	 * @param ts The arrays to merge.
 	 * @return A new array containing the entries of the given ones.
 	 */
-	public static <T> T[] mergeArrays(T[] ... ts)
+	public static <T> T[] mergeArrays(final T[] ... ts)
 	{
 		if (ts.length == 0)
 			return null;
 		if (ts.length == 1)
 			return ts[0];
-		List<T> tList = array2ArrayList(ts[0]);
+		final List<T> tList = array2ArrayList(ts[0]);
 		for (int i = 1; i < ts.length; i++) {
 			addAllToCollection(ts[i], tList);
 		}
@@ -242,9 +242,9 @@ public class CollectionUtil
 	 * @param list The list
 	 * @param element The element
 	 */
-	public static <T> void moveListElementUp(List<T> list, T element)
+	public static <T> void moveListElementUp(final List<T> list, final T element)
 	{
-		int index = list.indexOf(element);
+		final int index = list.indexOf(element);
 		if (index <= 0 || index >= list.size())
 			return;
 		list.remove(index);
@@ -256,9 +256,9 @@ public class CollectionUtil
 	 * @param list The list
 	 * @param element The element
 	 */
-	public static <T> void moveListElementDown(List<T> list, T element)
+	public static <T> void moveListElementDown(final List<T> list, final T element)
 	{
-		int index = list.indexOf(element);
+		final int index = list.indexOf(element);
 		if (index < 0 || index >= list.size()-1)
 			return;
 		list.remove(index);
@@ -266,7 +266,7 @@ public class CollectionUtil
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends Enum<T>> List<T> enum2List(Enum<T> e)
+	public static <T extends Enum<T>> List<T> enum2List(final Enum<T> e)
 	{
 		return array2ArrayList((T[])e.getClass().getEnumConstants());
 	}
@@ -276,7 +276,7 @@ public class CollectionUtil
 	 * @param c The collection to create a string representation for
 	 * @return The string representation for the given collection
 	 */
-	public static String toString(Collection<?> c)
+	public static String toString(final Collection<?> c)
 	{
 		return toString(c, ",", true, null, false, "null");
 	}
@@ -291,11 +291,11 @@ public class CollectionUtil
 	 * @param nullString The string to use as value when value is <code>null</code>
 	 * @return The string representation for the given collection
 	 */
-	public static String toString(Collection<?> c, String fieldPrefix, boolean fieldPrefixBeforeFirst, String fieldSuffix, boolean fieldSuffixAfterLast, String nullString)
+	public static String toString(final Collection<?> c, final String fieldPrefix, final boolean fieldPrefixBeforeFirst, final String fieldSuffix, final boolean fieldSuffixAfterLast, final String nullString)
 	{
-		StringBuffer s = new StringBuffer();
+		final StringBuffer s = new StringBuffer();
 		boolean first = true;
-		for (Object object : c) {
+		for (final Object object : c) {
 			if(fieldPrefix != null) {
 				if(first) {
 					first = false;
@@ -305,7 +305,7 @@ public class CollectionUtil
 					s.append(fieldPrefix);
 				}
 			}
-			String valueString = (object==null?(nullString==null?"":nullString):object.toString());
+			final String valueString = (object==null?(nullString==null?"":nullString):object.toString());
 			s.append(valueString);
 			if(fieldSuffix != null)
 				s.append(fieldSuffix);
@@ -320,7 +320,7 @@ public class CollectionUtil
 	 * @param m The map to create a string representation for
 	 * @return The string representation for the given map
 	 */
-	public static String toString(Map<?, ?> m)
+	public static String toString(final Map<?, ?> m)
 	{
 		return toString(m, ",", true, null, false, "[", "]", "=", "null");
 	}
@@ -338,11 +338,11 @@ public class CollectionUtil
 	 * @param nullString The string to use as value when value is <code>null</code>
 	 * @return The string representation for the given map
 	 */
-	public static String toString(Map<?, ?> m, String fieldPrefix, boolean fieldPrefixBeforeFirst, String fieldSuffix, boolean fieldSuffixAfterLast, String keyPrefix, String keySuffix, String assignmentString, String nullString)
+	public static String toString(final Map<?, ?> m, final String fieldPrefix, final boolean fieldPrefixBeforeFirst, final String fieldSuffix, final boolean fieldSuffixAfterLast, final String keyPrefix, final String keySuffix, final String assignmentString, final String nullString)
 	{
-		StringBuffer s = new StringBuffer();
+		final StringBuffer s = new StringBuffer();
 		boolean first = true;
-		for (Object key : m.keySet()) {
+		for (final Object key : m.keySet()) {
 			if(fieldPrefix != null) {
 				if(first) {
 					first = false;
@@ -359,8 +359,8 @@ public class CollectionUtil
 				s.append(keySuffix);
 			if(assignmentString != null)
 				s.append(assignmentString);
-			Object value = m.get(key);
-			String valueString = (value==null?(nullString==null?"":nullString):value.toString());
+			final Object value = m.get(key);
+			final String valueString = (value==null?(nullString==null?"":nullString):value.toString());
 			s.append(valueString);
 			if(fieldSuffix != null)
 				s.append(fieldSuffix);
@@ -375,7 +375,7 @@ public class CollectionUtil
 	 * @param array The array to create a string representation for
 	 * @return The string representation for the given array
 	 */
-	public static <T> String toString(T[] array)
+	public static <T> String toString(final T[] array)
 	{
 		return toString(array, ",", true, null, false, "[", "]", "=", "null");
 	}
@@ -393,9 +393,9 @@ public class CollectionUtil
 	 * @param nullString The string to use as value when value is <code>null</code>
 	 * @return The string representation for the given array
 	 */
-	public static <T> String toString(T[] array, String fieldPrefix, boolean fieldPrefixBeforeFirst, String fieldSuffix, boolean fieldSuffixAfterLast, String keyPrefix, String keySuffix, String assignmentString, String nullString)
+	public static <T> String toString(final T[] array, final String fieldPrefix, final boolean fieldPrefixBeforeFirst, final String fieldSuffix, final boolean fieldSuffixAfterLast, final String keyPrefix, final String keySuffix, final String assignmentString, final String nullString)
 	{
-		StringBuffer s = new StringBuffer();
+		final StringBuffer s = new StringBuffer();
 		for(int i=0; i<array.length; i++) {
 			if(fieldPrefix != null && (i > 0 || fieldPrefixBeforeFirst))
 				s.append(fieldPrefix);
@@ -406,8 +406,8 @@ public class CollectionUtil
 				s.append(keySuffix);
 			if(assignmentString != null)
 				s.append(assignmentString);
-			Object value = array[i];
-			String valueString = (value==null?(nullString==null?"":nullString):value.toString());
+			final Object value = array[i];
+			final String valueString = (value==null?(nullString==null?"":nullString):value.toString());
 			s.append(valueString);
 			if(fieldSuffix != null && (i<array.length-1 || fieldSuffixAfterLast))
 				s.append(fieldSuffix);
@@ -426,9 +426,9 @@ public class CollectionUtil
 	 * @param replacement The object that should be inserted into the collection.
 	 */
 	@SuppressWarnings("unchecked")
-	public static void replaceAllInCollection(Collection collection, Object replace, Object replacement) {
+	public static void replaceAllInCollection(final Collection collection, final Object replace, final Object replacement) {
 		if (collection instanceof List) {
-			List list = (List) collection;
+			final List list = (List) collection;
 			int idx = list.indexOf(replace);
 			while (idx >= 0) {
 				list.set(idx, replacement);
@@ -451,10 +451,10 @@ public class CollectionUtil
 	 * @param item The items to be added.
 	 * @return Returns a new typed ArrayList which contains the given items.
 	 */
-	public static <T> ArrayList<T> createArrayList(T ... item)
+	public static <T> ArrayList<T> createArrayList(final T ... item)
 	{
-		ArrayList<T> list = new ArrayList<T>(item.length);
-		for (T t : item)
+		final ArrayList<T> list = new ArrayList<T>(item.length);
+		for (final T t : item)
 			list.add(t);
 
 		return list;
@@ -468,10 +468,10 @@ public class CollectionUtil
 	 * @param item The items to be added.
 	 * @return Returns a new typed HashSet which contains the given items.
 	 */
-	public static <T> HashSet<T> createHashSet(T ... item)
+	public static <T> HashSet<T> createHashSet(final T ... item)
 	{
-		HashSet<T> set = new HashSet<T>(item.length);
-		for (T t : item)
+		final HashSet<T> set = new HashSet<T>(item.length);
+		for (final T t : item)
 			set.add(t);
 
 		return set;
@@ -484,9 +484,9 @@ public class CollectionUtil
 	 * @param array The array whose items should be added.
 	 * @param list The list where the items should be added.
 	 */
-	public static <T> void addAllToCollection(T[] array, List<T> list)
+	public static <T> void addAllToCollection(final T[] array, final List<T> list)
 	{
-		for (T t : array)
+		for (final T t : array)
 			list.add(t);
 	}
 
