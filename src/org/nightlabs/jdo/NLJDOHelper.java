@@ -79,7 +79,7 @@ public final class NLJDOHelper
 	 *
 	 * @param persistenceManager the {@link PersistenceManager} to be bound to the current <code>Thread</code>.
 	 */
-	public static void setThreadPersistenceManager(PersistenceManager persistenceManager) {
+	public static void setThreadPersistenceManager(final PersistenceManager persistenceManager) {
 		if (persistenceManager == null)
 			throw new IllegalArgumentException("persistenceManager must not be null!");
 
@@ -90,7 +90,7 @@ public final class NLJDOHelper
 		}
 
 		// clean up all closed PMs before adding our new one
-		for (Iterator<PersistenceManager> it = pmStack.iterator(); it.hasNext(); ) {
+		for (final Iterator<PersistenceManager> it = pmStack.iterator(); it.hasNext(); ) {
 			if (it.next().isClosed())
 				it.remove();
 		}
@@ -129,11 +129,11 @@ public final class NLJDOHelper
 	 * @throws IllegalStateException if there is no {@link PersistenceManager} bound to the current thread and
 	 *		<code>throwExceptionIfNotAvailable</code> is <code>true</code>.
 	 */
-	public static PersistenceManager getThreadPersistenceManager(boolean throwExceptionIfNotAvailable) {
+	public static PersistenceManager getThreadPersistenceManager(final boolean throwExceptionIfNotAvailable) {
 		PersistenceManager pm = null;
-		LinkedList<PersistenceManager> pmStack = persistenceManagerThreadLocal.get();
+		final LinkedList<PersistenceManager> pmStack = persistenceManagerThreadLocal.get();
 		if (pmStack != null) {
-			for (Iterator<PersistenceManager> it = pmStack.iterator(); it.hasNext(); ) {
+			for (final Iterator<PersistenceManager> it = pmStack.iterator(); it.hasNext(); ) {
 				pm = it.next();
 				if (pm.isClosed()) {
 					it.remove();
@@ -157,7 +157,7 @@ public final class NLJDOHelper
 	 * @return a backup of the <code>fetchPlan</code>
 	 * @see #restoreFetchPlan(FetchPlan, FetchPlanBackup)
 	 */
-	public static FetchPlanBackup backupFetchPlan(FetchPlan fetchPlan)
+	public static FetchPlanBackup backupFetchPlan(final FetchPlan fetchPlan)
 	{
 		return new FetchPlanBackup(fetchPlan);
 	}
@@ -168,7 +168,7 @@ public final class NLJDOHelper
 	 * @param fetchPlanBackup The backup-object created by {@link #backupFetchPlan(FetchPlan)}
 	 * @see #backupFetchPlan(FetchPlan)
 	 */
-	public static void restoreFetchPlan(FetchPlan fetchPlan, FetchPlanBackup fetchPlanBackup)
+	public static void restoreFetchPlan(final FetchPlan fetchPlan, final FetchPlanBackup fetchPlanBackup)
 	{
 		fetchPlan.setDetachmentOptions(fetchPlanBackup.getDetachmentOptions());
 		fetchPlan.setGroups(fetchPlanBackup.getGroups());
@@ -192,7 +192,7 @@ public final class NLJDOHelper
 	 *		and currently exists in the datastore
 	 *		specified by <tt>pm</tt>. <tt>false</tt> otherwise.
 	 */
-	public static boolean exists(PersistenceManager pm, Object object)
+	public static boolean exists(final PersistenceManager pm, final Object object)
 	{
 		if (pm == null)
 			throw new IllegalArgumentException("pm must not be null!");
@@ -200,7 +200,7 @@ public final class NLJDOHelper
 		if (object == null)
 			throw new IllegalArgumentException("object must not be null!");
 
-		Object objectID = JDOHelper.getObjectId(object);
+		final Object objectID = JDOHelper.getObjectId(object);
 		if (objectID == null)
 			return false;
 
@@ -292,16 +292,16 @@ public final class NLJDOHelper
 //		        at org.jboss.remoting.transport.socket.ServerThread.dorun(ServerThread.java:387)
 //		        at org.jboss.remoting.transport.socket.ServerThread.run(ServerThread.java:166)
 
-		Query q = pm.newQuery(object.getClass());
+		final Query q = pm.newQuery(object.getClass());
 		q.setFilter("JDOHelper.getObjectId(this) == :objectID");
-		Collection<?> c = (Collection<?>) q.execute(objectID);
+		final Collection<?> c = (Collection<?>) q.execute(objectID);
 		if (c.size() == 0)
 			return false;
 		else if (c.size() == 1)
 			return true;
 		else {
 			// WORKAROUND DataNucleus sometimes retuns collection with size 2 and same objects
-			HashSet<?> set = new HashSet(c);
+			final HashSet<?> set = new HashSet(c);
 			if (set.size() == 1)
 				return true;
 			else
@@ -317,7 +317,7 @@ public final class NLJDOHelper
 	 * @return Returns a detached copy of <tt>object</tt>, if <tt>get</tt> is <tt>true</tt>; otherwise <tt>null</tt>.
 	 */
 	public static <T> T storeJDO(
-			PersistenceManager pm, T object, boolean get, String[] fetchGroups, int maxFetchDepth)
+			final PersistenceManager pm, T object, final boolean get, final String[] fetchGroups, final int maxFetchDepth)
 	{
 		pm.getFetchPlan().setMaxFetchDepth(maxFetchDepth);
 		if (fetchGroups != null)
@@ -339,7 +339,7 @@ public final class NLJDOHelper
 	 * @return Returns a detached copy of <tt>objects</tt>, if <tt>get</tt> is <tt>true</tt>; otherwise <tt>null</tt>.
 	 */
 	public static <T> Collection<T> storeJDOCollection(
-			PersistenceManager pm, Collection<T> objects, boolean get, String[] fetchGroups, int maxFetchDepth)
+			final PersistenceManager pm, Collection<T> objects, final boolean get, final String[] fetchGroups, final int maxFetchDepth)
 	{
 		pm.getFetchPlan().setMaxFetchDepth(maxFetchDepth);
 		if (fetchGroups != null)
@@ -350,7 +350,7 @@ public final class NLJDOHelper
 		if (!get)
 			return null;
 
-		Collection<T> c = pm.detachCopyAll(objects);
+		final Collection<T> c = pm.detachCopyAll(objects);
 		assertHasObjectIDAssigned(c);
 		return c;
 	}
@@ -369,13 +369,13 @@ public final class NLJDOHelper
 	 * @return The number of knonw objects of the given class.
 	 */
 	public static long getObjectCount(
-			PersistenceManager pm,
-			Class<?> objectClass,
-			String filter,
-			String memberName,
-			boolean includeSubclasses
+			final PersistenceManager pm,
+			final Class<?> objectClass,
+			final String filter,
+			final String memberName,
+			final boolean includeSubclasses
 	) {
-		Query query = pm.newQuery(pm.getExtent(objectClass, includeSubclasses));
+		final Query query = pm.newQuery(pm.getExtent(objectClass, includeSubclasses));
 		// WORKAROUND: Remove membername and switch to count(this) when JPOX bug is fixed
 		query.setResult("count("+ ((memberName != null) ? memberName : "this") +")");
 		if (filter != null && !"".equals(filter))
@@ -397,9 +397,9 @@ public final class NLJDOHelper
 	 * @see #getObjectCount(PersistenceManager, Class, String, String, boolean)
 	 */
 	public static long getObjectCount(
-			PersistenceManager pm,
-			Class<?> objectClass,
-			boolean includeSubclasses
+			final PersistenceManager pm,
+			final Class<?> objectClass,
+			final boolean includeSubclasses
 	) {
 		return getObjectCount(pm, objectClass, null, null, includeSubclasses);
 	}
@@ -433,9 +433,9 @@ public final class NLJDOHelper
 	 * This is more-or-less a temporary check, since DataNucleus seems to sometimes return detached objects not having an object-id assigned.
 	 * TODO remove this workaround, when it is not necessary anymore!
 	 */
-	private static void assertHasObjectIDAssigned(Collection<?> c)
+	private static void assertHasObjectIDAssigned(final Collection<?> c)
 	{
-		for (Object object : c) {
+		for (final Object object : c) {
 			if (JDOHelper.getObjectId(object) == null)
 				throw new IllegalStateException("Object has no object-id assigned: " + object);
 		}
@@ -479,13 +479,13 @@ public final class NLJDOHelper
 	 * @return Returns the detached JDO objects that correspond to the given <code>objectIDs</code>.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> getDetachedObjectList(PersistenceManager pm, Collection objectIDs, Object classes, String[] fetchGroups, int maxFetchDepth, QueryOption ... options)
+	public static <T> List<T> getDetachedObjectList(final PersistenceManager pm, final Collection objectIDs, final Object classes, final String[] fetchGroups, final int maxFetchDepth, final QueryOption ... options)
 	{
 		pm.getFetchPlan().setMaxFetchDepth(maxFetchDepth);
 		if (fetchGroups != null)
 			pm.getFetchPlan().setGroups(fetchGroups);
 
-		Collection c = pm.detachCopyAll(getObjectList(pm, objectIDs, classes, options));
+		final Collection c = pm.detachCopyAll(getObjectList(pm, objectIDs, classes, options));
 		assertHasObjectIDAssigned(c);
 		if (c instanceof List)
 			return (List<T>)c;
@@ -502,13 +502,13 @@ public final class NLJDOHelper
 	 * @return Returns the detached JDO objects that correspond to the given <code>objectIDs</code>.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> Set<T> getDetachedObjectSet(PersistenceManager pm, Collection objectIDs, Object classes, String[] fetchGroups, int maxFetchDepth, QueryOption ... options)
+	public static <T> Set<T> getDetachedObjectSet(final PersistenceManager pm, final Collection objectIDs, final Object classes, final String[] fetchGroups, final int maxFetchDepth, final QueryOption ... options)
 	{
 		pm.getFetchPlan().setMaxFetchDepth(maxFetchDepth);
 		if (fetchGroups != null)
 			pm.getFetchPlan().setGroups(fetchGroups);
 
-		Collection c = pm.detachCopyAll(getObjectSet(pm, objectIDs, classes, options));
+		final Collection c = pm.detachCopyAll(getObjectSet(pm, objectIDs, classes, options));
 		assertHasObjectIDAssigned(c);
 		if (c instanceof Set)
 			return (Set<T>)c;
@@ -517,14 +517,14 @@ public final class NLJDOHelper
 	}
 
 	@SuppressWarnings("unchecked")
-	private static void _loadObjects(Extent extent, Collection objects)
+	private static void _loadObjects(final Extent extent, final Collection objects)
 	{
-		for (Iterator iter = extent.iterator(); iter.hasNext();)
+		for (final Iterator iter = extent.iterator(); iter.hasNext();)
 			objects.add(iter.next());
 	}
 
 	@SuppressWarnings("unchecked")
-	private static HashSet<Class<?>> _getValidClassesSet(Object classes)
+	private static HashSet<Class<?>> _getValidClassesSet(final Object classes)
 	{
 		HashSet<Class<?>> res; // = new HashSet<Class>();
 		if (classes instanceof Class) {
@@ -538,8 +538,8 @@ public final class NLJDOHelper
 		}
 		else if (classes instanceof Collection) {
 			res = new HashSet<Class<?>>();
-			Collection<Class<?>> clazzes = (Collection<Class<?>>) classes;
-			for (Class clazz : clazzes) {
+			final Collection<Class<?>> clazzes = (Collection<Class<?>>) classes;
+			for (final Class clazz : clazzes) {
 				res.add(clazz);
 //				while (clazz != null) {
 //				res.add(clazz);
@@ -553,7 +553,7 @@ public final class NLJDOHelper
 		return res;
 	}
 
-	private static boolean _isClassValid(Set<Class<?>> validClasses, Class<?> classOrInterface)
+	private static boolean _isClassValid(final Set<Class<?>> validClasses, final Class<?> classOrInterface)
 	{
 		Class<?> clazz = classOrInterface;
 		while (clazz != null) {
@@ -561,7 +561,7 @@ public final class NLJDOHelper
 				return true;
 
 			// check interfaces
-			for (Class<?> iface : clazz.getInterfaces()) {
+			for (final Class<?> iface : clazz.getInterfaces()) {
 				if (_isClassValid(validClasses, iface))
 					return true;
 			}
@@ -572,7 +572,7 @@ public final class NLJDOHelper
 		return false;
 	}
 
-	private static void _checkObjectClass(Set<Class<?>> validClasses, Object instance)
+	private static void _checkObjectClass(final Set<Class<?>> validClasses, final Object instance)
 	{
 		if (instance == null)
 			return;
@@ -580,7 +580,7 @@ public final class NLJDOHelper
 		// If we have a small number of classes, it's probably faster to iterate them and ask the JVM whether the instance is really an instance
 		// of one of the classes. But if there are more classes, we traverse the instance's class-graph with all interfaces and check whether the set contains one of them.
 		if (validClasses.size() <= 5) {
-			for (Class<?> vc : validClasses) {
+			for (final Class<?> vc : validClasses) {
 				if (vc.isInstance(instance))
 					return;
 			}
@@ -597,8 +597,8 @@ public final class NLJDOHelper
 //			}
 		}
 
-		StringBuffer vcb = new StringBuffer();
-		for (Class<?> vc : validClasses) {
+		final StringBuffer vcb = new StringBuffer();
+		for (final Class<?> vc : validClasses) {
 			if (vcb.length() > 0)
 				vcb.append('|');
 
@@ -632,19 +632,19 @@ public final class NLJDOHelper
 	 * @return Returns the JDO objects that correspond to the given <code>objectIDs</code>.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> getObjectList(PersistenceManager pm, Collection<?> objectIDs, Object classes, QueryOption ... options)
+	public static <T> List<T> getObjectList(final PersistenceManager pm, final Collection<?> objectIDs, final Object classes, final QueryOption ... options)
 	{
 		if (objectIDs == null && classes == null)
 			throw new IllegalArgumentException("objectIDs and classes cannot both be null!");
 
-		Set<QueryOption> optionSet = CollectionUtil.array2HashSet(options);
+		final Set<QueryOption> optionSet = CollectionUtil.array2HashSet(options, false);
 
-		List<T> res = objectIDs == null ? new ArrayList<T>() : new ArrayList<T>(objectIDs.size());
+		final List<T> res = objectIDs == null ? new ArrayList<T>() : new ArrayList<T>(objectIDs.size());
 		Set<Class<?>> validClasses = null;
 		if (classes != null) {
 			if (classes instanceof Collection) {
-				for (Iterator<?> iter = ((Collection<?>)classes).iterator(); iter.hasNext();) {
-					Class<?> clazz = (Class<?>) iter.next();
+				for (final Iterator<?> iter = ((Collection<?>)classes).iterator(); iter.hasNext();) {
+					final Class<?> clazz = (Class<?>) iter.next();
 					Extent<?> extent = null;
 					if (PersistenceCapable.class.isAssignableFrom(clazz))
 						extent = pm.getExtent(clazz);
@@ -655,7 +655,7 @@ public final class NLJDOHelper
 			}
 			else if (classes instanceof Class) {
 				Extent<?> extent = null;
-				Class<?> clazz = (Class<?>)classes;
+				final Class<?> clazz = (Class<?>)classes;
 				if (PersistenceCapable.class.isAssignableFrom(clazz))
 					extent = pm.getExtent(clazz);
 
@@ -692,15 +692,15 @@ public final class NLJDOHelper
 		}
 
 		if (objectIDs != null) {
-			iterateObjectIDs: for (Iterator<?> iter = objectIDs.iterator(); iter.hasNext();) {
-				Object oID = iter.next();
+			iterateObjectIDs: for (final Iterator<?> iter = objectIDs.iterator(); iter.hasNext();) {
+				final Object oID = iter.next();
 				T o;
 				try {
 					if (validClasses != null && onlyOneResultClass)
 						o = (T)pm.getObjectById(resultClass, oID.toString()); // need to pass the string-representation of the objectid here unfortunately, see jdo javadoc
 					else
 						o = (T)pm.getObjectById(oID);
-				} catch (JDOObjectNotFoundException x) {
+				} catch (final JDOObjectNotFoundException x) {
 					if (optionSet.contains(QueryOption.throwExceptionOnMissingObject))
 						throw x;
 					else
@@ -745,26 +745,26 @@ public final class NLJDOHelper
 	 * @return Returns the JDO objects that correspond to the given <code>objectIDs</code>.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> Set<T> getObjectSet(PersistenceManager pm, Collection<?> objectIDs, Object classes, QueryOption ... options)
+	public static <T> Set<T> getObjectSet(final PersistenceManager pm, Collection<?> objectIDs, final Object classes, final QueryOption ... options)
 	{
 		if (objectIDs == null && classes == null)
 			throw new IllegalArgumentException("objectIDs and classes cannot both be null!");
 
-		Set<QueryOption> optionSet = (Set<QueryOption>) (options != null ? CollectionUtil.array2HashSet(options) : Collections.emptySet());
+		final Set<QueryOption> optionSet = (Set<QueryOption>) (options != null ? CollectionUtil.array2HashSet(options) : Collections.emptySet());
 
-		Set<T> res = objectIDs == null ? new HashSet<T>() : new HashSet<T>(objectIDs.size());
+		final Set<T> res = objectIDs == null ? new HashSet<T>() : new HashSet<T>(objectIDs.size());
 		Set<Class<?>> validClasses = null;
 		if (classes != null) {
 			if (classes instanceof Collection) {
-				for (Iterator iter = ((Collection)classes).iterator(); iter.hasNext();) {
-					Class clazz = (Class) iter.next();
-					Extent extent = pm.getExtent(clazz);
+				for (final Iterator iter = ((Collection)classes).iterator(); iter.hasNext();) {
+					final Class clazz = (Class) iter.next();
+					final Extent extent = pm.getExtent(clazz);
 					if (objectIDs == null)
 						_loadObjects(extent, res);
 				}
 			}
 			else if (classes instanceof Class) {
-				Extent extent = pm.getExtent((Class)classes);
+				final Extent extent = pm.getExtent((Class)classes);
 				if (objectIDs == null)
 					_loadObjects(extent, res);
 			}
@@ -781,12 +781,12 @@ public final class NLJDOHelper
 
 			Set<Class> knownValidClasses = null;
 
-			iterateObjectIDs: for (Iterator iter = objectIDs.iterator(); iter.hasNext();) {
-				Object oID = iter.next();
+			iterateObjectIDs: for (final Iterator iter = objectIDs.iterator(); iter.hasNext();) {
+				final Object oID = iter.next();
 				T o;
 				try {
 					o = (T)pm.getObjectById(oID);
-				} catch (JDOObjectNotFoundException x) {
+				} catch (final JDOObjectNotFoundException x) {
 					if (optionSet.contains(QueryOption.throwExceptionOnMissingObject))
 						throw x;
 					else
@@ -819,11 +819,11 @@ public final class NLJDOHelper
 	 * @return Get a {@link List} containing the ObjectIDs for all the given {@link PersistenceCapable} objects.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> getObjectIDList(Collection<?> objects)
+	public static <T> List<T> getObjectIDList(final Collection<?> objects)
 	{
-		List<T> res = new ArrayList<T>(objects.size());
-		for (Iterator iter = objects.iterator(); iter.hasNext();) {
-			Object o = iter.next();
+		final List<T> res = new ArrayList<T>(objects.size());
+		for (final Iterator iter = objects.iterator(); iter.hasNext();) {
+			final Object o = iter.next();
 			// TODO WORKAROUND: This is a workaround for a situation when this method is called with instances of ObjectID. Thus, the code should be changed NOT to call this method and this check should be reverted (no instanceof check!).
 			if (o instanceof PersistenceCapable)
 				res.add((T)JDOHelper.getObjectId(o));
@@ -845,11 +845,11 @@ public final class NLJDOHelper
 	 * @return Get a {@link Set} containing the ObjectIDs for all the given {@link PersistenceCapable} objects.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> Set<T> getObjectIDSet(Collection<?> objects)
+	public static <T> Set<T> getObjectIDSet(final Collection<?> objects)
 	{
-		Set<T> res = new HashSet<T>(objects.size());
-		for (Iterator iter = objects.iterator(); iter.hasNext();) {
-			Object o = iter.next();
+		final Set<T> res = new HashSet<T>(objects.size());
+		for (final Iterator iter = objects.iterator(); iter.hasNext();) {
+			final Object o = iter.next();
 			// TODO WORKAROUND: This is a workaround for a situation when this method is called with instances of ObjectID. Thus, the code should be changed NOT to call this method and this check should be reverted (no instanceof check!).
 			if (o instanceof PersistenceCapable)
 				res.add((T)JDOHelper.getObjectId(o));
@@ -866,7 +866,7 @@ public final class NLJDOHelper
 	 * @param queryResult the result of a JDO {@link Query}.
 	 * @returns a serialisable Collection with the content of the given <code>queryResult</code>.
 	 */
-	public static <T> List<T> getDetachedQueryResultAsList(PersistenceManager pm, T queryResult) {
+	public static <T> List<T> getDetachedQueryResultAsList(final PersistenceManager pm, final T queryResult) {
 		return (List<T>) getDetachedQueryResultInternal(pm, queryResult, new ArrayList<T> (1));
 	}
 
@@ -877,7 +877,7 @@ public final class NLJDOHelper
 	 * @param queryResult the result of a JDO {@link Query}.
 	 * @returns a serialisable Collection with the content of the given <code>queryResult</code>.
 	 */
-	public static <T> Set<T> getDetachedQueryResultAsSet(PersistenceManager pm, T queryResult) {
+	public static <T> Set<T> getDetachedQueryResultAsSet(final PersistenceManager pm, final T queryResult) {
 		return (Set<T>) getDetachedQueryResultInternal(pm, queryResult, new HashSet<T> (1));
 	}
 
@@ -888,7 +888,7 @@ public final class NLJDOHelper
 	 * @param queryResult the result of a JDO {@link Query}.
 	 * @returns a serialisable Collection with the contents of the given <code>queryResult</code>.
 	 */
-	public static <T> List<T> getDetachedQueryResultAsList(PersistenceManager pm, Collection<T> queryResult) {
+	public static <T> List<T> getDetachedQueryResultAsList(final PersistenceManager pm, final Collection<T> queryResult) {
 		if (queryResult == null  || queryResult.isEmpty())
 			return new ArrayList<T>();
 		return (List<T>) getDetachedQueryResultInternal(pm, queryResult, new ArrayList<T> (queryResult.size()));
@@ -901,7 +901,7 @@ public final class NLJDOHelper
 	 * @param queryResult the result of a JDO {@link Query}.
 	 * @returns a serialisable Collection with the contents of the given <code>queryResult</code>. Never returns <code>null</code>.
 	 */
-	public static <T> Set<T> getDetachedQueryResultAsSet(PersistenceManager pm, Collection<T> queryResult) {
+	public static <T> Set<T> getDetachedQueryResultAsSet(final PersistenceManager pm, final Collection<T> queryResult) {
 		if (queryResult == null  || queryResult.isEmpty())
 			return new HashSet<T>();
 		return (Set<T>) getDetachedQueryResultInternal(pm, queryResult, new HashSet<T> (queryResult.size()));
@@ -918,18 +918,18 @@ public final class NLJDOHelper
 	 * @return the result after it has been populated.
 	 */
 	@SuppressWarnings("unchecked")
-	protected static <T> Collection<T> getDetachedQueryResultInternal(PersistenceManager pm, T queryResult, Collection<T> result) {
+	protected static <T> Collection<T> getDetachedQueryResultInternal(final PersistenceManager pm, final T queryResult, final Collection<T> result) {
 		if (queryResult == null) {
 			result.add(null);
 			return result;
 		}
 
-		Class<T> clazz = (Class<T>) queryResult.getClass();
+		final Class<T> clazz = (Class<T>) queryResult.getClass();
 		if (clazz.isArray()) {
-			int size = Array.getLength(queryResult);
+			final int size = Array.getLength(queryResult);
 //			For information about this Warning see:
 //			http://www.angelikalanger.com/GenericsFAQ/FAQSections/ParameterizedTypes.html#How%20can%20I%20work%20around%20the%20restriction%20that%20there%20are%20no%20arrays%20whose%20component%20type%20is%20a%20concrete%20instantiation%20of%20a
-			T newArray = (T) Array.newInstance(clazz.getComponentType(), size); // Warning is ok, it is still type safe
+			final T newArray = (T) Array.newInstance(clazz.getComponentType(), size); // Warning is ok, it is still type safe
 			for (int i = 0; i < size; i++) {
 				if (Array.get(queryResult, i) instanceof PersistenceCapable)
 					Array.set(newArray, i, clazz.getComponentType().cast(pm.detachCopy(Array.get(queryResult, i))));
@@ -956,24 +956,24 @@ public final class NLJDOHelper
 	 * @return the result after it has been populated.
 	 */
 	@SuppressWarnings("unchecked")
-	protected static <T> Collection<T> getDetachedQueryResultInternal(PersistenceManager pm, Collection<T> queryResult, Collection<T> result)
+	protected static <T> Collection<T> getDetachedQueryResultInternal(final PersistenceManager pm, final Collection<T> queryResult, final Collection<T> result)
 	{
 		if (queryResult == null || queryResult.isEmpty())
 			return result;
 
 //		Class<T> innerClass = (Class<T>) queryResult.iterator().next().getClass();
 
-		for (Iterator<T> iter = queryResult.iterator(); iter.hasNext();) {
-			T element = iter.next();
+		for (final Iterator<T> iter = queryResult.iterator(); iter.hasNext();) {
+			final T element = iter.next();
 			if (element == null)
 				result.add(null);
 			else {
-				Class<T> innerClass = (Class<T>) element.getClass();
+				final Class<T> innerClass = (Class<T>) element.getClass();
 				if (innerClass.isArray()) {
-					int size = Array.getLength(element);
+					final int size = Array.getLength(element);
 	//				For information about this Warning see:
 	//				http://www.angelikalanger.com/GenericsFAQ/FAQSections/ParameterizedTypes.html#How%20can%20I%20work%20around%20the%20restriction%20that%20there%20are%20no%20arrays%20whose%20component%20type%20is%20a%20concrete%20instantiation%20of%20a
-					T newArray = (T) Array.newInstance(innerClass.getComponentType(), size); // Warning is ok, it is still type safe
+					final T newArray = (T) Array.newInstance(innerClass.getComponentType(), size); // Warning is ok, it is still type safe
 					for (int i = 0; i < size; i++) {
 						if (Array.get(element, i) instanceof PersistenceCapable)
 							Array.set(newArray, i, innerClass.getComponentType().cast(pm.detachCopy(Array.get(element, i))));
@@ -1003,7 +1003,7 @@ public final class NLJDOHelper
 	 * @param object the root object of the graph. This may either be a {@link PersistenceCapable}, a {@link Collection},
 	 *		a {@link Map} or an array. Objects of other types are silently ignored.
 	 */
-	public static void makeDirtyAllFieldsRecursively(Object object)
+	public static void makeDirtyAllFieldsRecursively(final Object object)
 	{
 		if (object == null)
 			throw new IllegalArgumentException("object must not be null!");
@@ -1014,7 +1014,7 @@ public final class NLJDOHelper
 		internalMakeDirtyAllFieldsRecursively(object, new IdentityHashSet<Object>());
 	}
 
-	private static void internalMakeDirtyAllFieldsRecursively(Object object, IdentityHashSet<Object> alreadyProcessedObjects)
+	private static void internalMakeDirtyAllFieldsRecursively(final Object object, final IdentityHashSet<Object> alreadyProcessedObjects)
 	{
 		if (object == null)
 			return;
@@ -1022,41 +1022,41 @@ public final class NLJDOHelper
 		if (!alreadyProcessedObjects.add(object))
 			return;
 
-		boolean trace = logger.isTraceEnabled();
+		final boolean trace = logger.isTraceEnabled();
 		if (trace)
 			logger.trace("internalMakeDirtyAllFieldsRecursively: object=" + JDOHelper.getObjectId(object));
 
 		if (object instanceof Collection) {
-			Collection<?> c = (Collection<?>) object;
+			final Collection<?> c = (Collection<?>) object;
 			Iterator<?> iterator;
 			try {
 				iterator = c.iterator();
-			} catch (UnsupportedOperationException x) {
+			} catch (final UnsupportedOperationException x) {
 				iterator = null;
 				// ignore
 			}
 
 			if (iterator != null) {
 				while (iterator.hasNext()) {
-					Object element = iterator.next();
+					final Object element = iterator.next();
 					internalMakeDirtyAllFieldsRecursively(element, alreadyProcessedObjects);
 				}
 			}
 
 			return;
 		} else if (object instanceof Map) {
-			Map<?, ?> m = (Map<?, ?>) object;
+			final Map<?, ?> m = (Map<?, ?>) object;
 			Iterator<? extends Map.Entry<?, ?>> iterator;
 			try {
 				iterator = m.entrySet().iterator();
-			} catch (UnsupportedOperationException x) {
+			} catch (final UnsupportedOperationException x) {
 				iterator = null;
 				// ignore
 			}
 
 			if (iterator != null) {
 				while (iterator.hasNext()) {
-					Map.Entry<?, ?> me = iterator.next();
+					final Map.Entry<?, ?> me = iterator.next();
 					internalMakeDirtyAllFieldsRecursively(me.getKey(), alreadyProcessedObjects);
 					internalMakeDirtyAllFieldsRecursively(me.getValue(), alreadyProcessedObjects);
 				}
@@ -1064,8 +1064,8 @@ public final class NLJDOHelper
 
 			return;
 		} else if (object instanceof Object[]) {
-			Object[] array = (Object[]) object;
-			for (Object element : array)
+			final Object[] array = (Object[]) object;
+			for (final Object element : array)
 				internalMakeDirtyAllFieldsRecursively(element, alreadyProcessedObjects);
 
 			return;
@@ -1074,22 +1074,22 @@ public final class NLJDOHelper
 			return;
 
 		try {
-			Class<?> clazz = object.getClass();
-			for (Field field : ReflectUtil.collectAllFields(clazz, true)) {
-				String fieldName = field.getName();
+			final Class<?> clazz = object.getClass();
+			for (final Field field : ReflectUtil.collectAllFields(clazz, true)) {
+				final String fieldName = field.getName();
 
 // TODO WORKAROUND for DataNucleus - BEGIN
 // this is a hack to workaround this problem: http://www.jpox.org/servlet/forum/viewthread?thread=5086
 // hmmmm... seems there is a bug concerning simple int fields not being updated during replication. it works fine with this workaround in place. marco. 2008-11-20.
 				if (fieldName.equals("jdoDetachedState")) {
 					field.setAccessible(true);
-					Object fieldValue = field.get(object);
+					final Object fieldValue = field.get(object);
 					if (fieldValue instanceof Object[]) {
-						Object[] detachedState = (Object[]) fieldValue;
+						final Object[] detachedState = (Object[]) fieldValue;
 						if (detachedState.length >= 4) {
 							if ((detachedState[2] instanceof BitSet) && (detachedState[3] instanceof BitSet)) {
-								BitSet detachedFields = (BitSet) detachedState[2];
-								BitSet dirtyFields = (BitSet) detachedState[3];
+								final BitSet detachedFields = (BitSet) detachedState[2];
+								final BitSet dirtyFields = (BitSet) detachedState[3];
 								dirtyFields.or(detachedFields);
 							}
 						}
@@ -1105,7 +1105,7 @@ public final class NLJDOHelper
 				}
 
 //				String qualifiedFieldName = field.getDeclaringClass().getName() + '#' + fieldName; // maybe this '#' should be a '.', but at the moment both don't work :-( have to discuss with erik and andy (and maybe create a test case)
-				String qualifiedFieldName = field.getDeclaringClass().getName() + '.' + fieldName; // maybe this '#' should be a '.', but at the moment both don't work :-( have to discuss with erik and andy (and maybe create a test case)
+				final String qualifiedFieldName = field.getDeclaringClass().getName() + '.' + fieldName; // maybe this '#' should be a '.', but at the moment both don't work :-( have to discuss with erik and andy (and maybe create a test case)
 
 				field.setAccessible(true);
 				try {
@@ -1113,13 +1113,13 @@ public final class NLJDOHelper
 						logger.trace("internalMakeDirtyAllFieldsRecursively: calling JDOHelper.makeDirty with object=" + JDOHelper.getObjectId(object) + " qualifiedFieldName=" + qualifiedFieldName);
 
 					JDOHelper.makeDirty(object, qualifiedFieldName);
-				} catch (JDODetachedFieldAccessException x) { // I'm not sure what the current version of the JDO 2.1 spec says about non-detached fields and makeDirty
+				} catch (final JDODetachedFieldAccessException x) { // I'm not sure what the current version of the JDO 2.1 spec says about non-detached fields and makeDirty
 					// ignore
 
 					if (trace)
 						logger.trace("internalMakeDirtyAllFieldsRecursively: JDOHelper.makeDirty failed with JDODetachedFieldAccessException.");
 				}
-				Object fo = field.get(object);
+				final Object fo = field.get(object);
 				internalMakeDirtyAllFieldsRecursively(fo, alreadyProcessedObjects);
 //				if (fo instanceof Collection) {
 //					Collection<?> c = (Collection<?>) fo;
@@ -1138,9 +1138,9 @@ public final class NLJDOHelper
 //				} else if (fo instanceof PersistenceCapable)
 //					internalMakeDirtyAllFieldsRecursively(fo, alreadyProcessedObjects);
 			}
-		} catch (RuntimeException x) {
+		} catch (final RuntimeException x) {
 			throw x;
-		} catch (Exception x) {
+		} catch (final Exception x) {
 			throw new RuntimeException(x);
 		}
 	}
@@ -1198,8 +1198,8 @@ public final class NLJDOHelper
 	 * @param serializeReadObjects <code>true</code> means read operations will lock objects in the underlying datastore; <code>false</code>
 	 *		means reading without locks.
 	 */
-	public static void enableTransactionSerializeReadObjects(PersistenceManager pm) {
-		int[] refCount = transactionSerializeReadObjectsReferenceCounterTL.get();
+	public static void enableTransactionSerializeReadObjects(final PersistenceManager pm) {
+		final int[] refCount = transactionSerializeReadObjectsReferenceCounterTL.get();
 		++refCount[0];
 		setTransactionSerializeReadObjects(pm, true);
 	}
@@ -1210,8 +1210,8 @@ public final class NLJDOHelper
 	 *
 	 * @param pm the door to the datastore (and accessor to the current transaction object).
 	 */
-	public static void disableTransactionSerializeReadObjects(PersistenceManager pm) {
-		int[] refCount = transactionSerializeReadObjectsReferenceCounterTL.get();
+	public static void disableTransactionSerializeReadObjects(final PersistenceManager pm) {
+		final int[] refCount = transactionSerializeReadObjectsReferenceCounterTL.get();
 		if (--refCount[0] < 0)
 			throw new IllegalStateException("transactionSerializeReadObjectsReferenceCounterTL got negative!");
 
@@ -1366,12 +1366,12 @@ Caused by: ERROR 42Y90: FOR UPDATE is not permitted in this type of statement.
 
 	 */
 	@Deprecated
-	public static void setForceDisableTransactionSerializeReadObjects(boolean force)
+	public static void setForceDisableTransactionSerializeReadObjects(final boolean force)
 	{
 		forceDisableTransactionSerializeReadObjects = force;
 	}
 
-	private static void setTransactionSerializeReadObjects(PersistenceManager pm, boolean serializeReadObjects) {
+	private static void setTransactionSerializeReadObjects(final PersistenceManager pm, boolean serializeReadObjects) {
 		if (forceDisableTransactionSerializeReadObjects)
 			serializeReadObjects = false;
 
@@ -1391,7 +1391,7 @@ Caused by: ERROR 42Y90: FOR UPDATE is not permitted in this type of statement.
 	 *
 	 * @param query the query for which to enable update-locks.
 	 */
-	public static void enableQuerySerializeReadObjects(Query query)
+	public static void enableQuerySerializeReadObjects(final Query query)
 	{
 		query.addExtension("datanucleus.rdbms.query.useUpdateLock", "true");
 	}
@@ -1422,7 +1422,7 @@ Caused by: ERROR 42Y90: FOR UPDATE is not permitted in this type of statement.
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static int compareObjectVersions(Object oldObject, Object newObject)
+	public static int compareObjectVersions(final Object oldObject, final Object newObject)
 	{
 		if (oldObject == null)
 			return 2;
@@ -1430,20 +1430,20 @@ Caused by: ERROR 42Y90: FOR UPDATE is not permitted in this type of statement.
 		if (newObject == null)
 			return -2;
 
-		Object oldOid = JDOHelper.getObjectId(oldObject);
-		Object newOid = JDOHelper.getObjectId(newObject);
+		final Object oldOid = JDOHelper.getObjectId(oldObject);
+		final Object newOid = JDOHelper.getObjectId(newObject);
 
 		if (oldOid != null && newOid != null && !oldOid.equals(newOid))
 			throw new IllegalArgumentException("Comparing apples to pears! The object-ids of oldObject and newObject do not match! oldOid=\"" + oldOid + "\" newOid=\"" + newOid + "\"");
 
-		Object oldVersion = JDOHelper.getVersion(oldObject);
-		Object newVersion = JDOHelper.getVersion(newObject);
+		final Object oldVersion = JDOHelper.getVersion(oldObject);
+		final Object newVersion = JDOHelper.getVersion(newObject);
 		if (oldVersion == null || newVersion == null)
 			return 3;
 
-		Comparable<Object> oldVersionC = (Comparable<Object>) oldVersion;
-		Comparable<Object> newVersionC = (Comparable<Object>) newVersion;
-		int compareResult = newVersionC.compareTo(oldVersionC);
+		final Comparable<Object> oldVersionC = (Comparable<Object>) oldVersion;
+		final Comparable<Object> newVersionC = (Comparable<Object>) newVersion;
+		final int compareResult = newVersionC.compareTo(oldVersionC);
 		return compareResult < 0 ? -1 : (compareResult > 0 ? 1 : 0);
 	}
 
@@ -1455,14 +1455,14 @@ Caused by: ERROR 42Y90: FOR UPDATE is not permitted in this type of statement.
 	 * @param obj The object to check, might be <code>null</code>.
 	 * @return Whether the exact class of the given object declares {@link PersistenceCapable}.
 	 */
-	public static boolean isPersistenceCapable(Object obj) {
+	public static boolean isPersistenceCapable(final Object obj) {
 		if (obj == null)
 			return false;
-		Boolean cachedResult = cachedClass2PersistanceCapable.get(obj.getClass());
+		final Boolean cachedResult = cachedClass2PersistanceCapable.get(obj.getClass());
 		if (cachedResult != null)
 			return cachedResult;
 		Boolean result = null;
-		for (Class<?> iface : obj.getClass().getInterfaces()) {
+		for (final Class<?> iface : obj.getClass().getInterfaces()) {
 			if (iface == PersistenceCapable.class) {
 				result = Boolean.TRUE;
 				break;
@@ -1490,10 +1490,10 @@ Caused by: ERROR 42Y90: FOR UPDATE is not permitted in this type of statement.
 	 * public class A
 	 * implements DeleteCallback
 	 * {
-	 *   @Persistent(nullValue=NullValue.EXCEPTION)
+	 *   &#64;Persistent(nullValue=NullValue.EXCEPTION)
 	 *   private B someDependentField;
 	 *
-	 *   @Override
+	 *   &#64;Override
 	 *   public void jdoPreDelete() {
 	 *   	NLJDOHelper.deleteAfterPrimaryObjectDeleted(this, someDependentField);
 	 *   }
@@ -1517,10 +1517,10 @@ Caused by: ERROR 42Y90: FOR UPDATE is not permitted in this type of statement.
 
 		pm.addInstanceLifecycleListener(new DeleteLifecycleListener() {
 			@Override
-			public void preDelete(InstanceLifecycleEvent event) { }
+			public void preDelete(final InstanceLifecycleEvent event) { }
 
 			@Override
-			public void postDelete(InstanceLifecycleEvent event) {
+			public void postDelete(final InstanceLifecycleEvent event) {
 				if (event.getPersistentInstance() != primaryObject)
 					return;
 
@@ -1528,7 +1528,7 @@ Caused by: ERROR 42Y90: FOR UPDATE is not permitted in this type of statement.
 				pm.flush();
 
 				if (objectsToBeDeleted != null) {
-					for (Object object : objectsToBeDeleted) {
+					for (final Object object : objectsToBeDeleted) {
 						if (object != null) {
 							pm.deletePersistent(object);
 							pm.flush();
