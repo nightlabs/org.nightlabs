@@ -750,7 +750,7 @@ public final class NLJDOHelper
 		if (objectIDs == null && classes == null)
 			throw new IllegalArgumentException("objectIDs and classes cannot both be null!");
 
-		final Set<QueryOption> optionSet = (Set<QueryOption>) (options != null ? CollectionUtil.array2HashSet(options) : Collections.emptySet());
+		final Set<QueryOption> optionSet = CollectionUtil.array2HashSet(options, false);
 
 		final Set<T> res = objectIDs == null ? new HashSet<T>() : new HashSet<T>(objectIDs.size());
 		Set<Class<?>> validClasses = null;
