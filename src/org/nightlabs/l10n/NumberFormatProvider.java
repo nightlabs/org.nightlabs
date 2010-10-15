@@ -24,6 +24,7 @@
 package org.nightlabs.l10n;
 
 import java.text.NumberFormat;
+import java.util.Locale;
 
 import org.nightlabs.config.Config;
 
@@ -39,10 +40,10 @@ public interface NumberFormatProvider
 	 *
 	 * @param config
 	 */
-	public void init(Config config, String isoLanguage, String isoCountry);
+	public void init(Config config, Locale locale);
 
 	public NumberFormat getIntegerFormat(int minIntegerDigitCount);
 	public NumberFormat getFloatFormat(int minIntegerDigitCount, int minDecimalDigitCount, int maxDecimalDigitCount);
-	public NumberFormat getCurrencyFormat(int minIntegerDigitCount, int minDecimalDigitCount, int maxDecimalDigitCount, String currencySymbol, boolean includeCurrencySymbol);
+	public NumberFormat getCurrencyFormat(int minIntegerDigitCount, int minDecimalDigitCount, int maxDecimalDigitCount, Currency currency, boolean includeCurrencySymbol);
 	public NumberFormat getScientificFormat(int preferredIntegerDigitCount, int minDecimalDigitCount, int maxDecimalDigitCount, int exponentDigitCount);
 }

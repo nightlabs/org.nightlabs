@@ -24,6 +24,7 @@
 package org.nightlabs.l10n;
 
 import java.text.DateFormat;
+import java.util.Locale;
 
 import org.nightlabs.config.Config;
 
@@ -39,10 +40,9 @@ public interface DateFormatProvider
 	 * has been instantiated.
 	 *
 	 * @param config The configuration
-	 * @param isoLanguage The language to use
-	 * @param isoCountry The country to use
+	 * @param locale The locale to use
 	 */
-	public void init(Config config, String isoLanguage, String isoCountry);
+	public void init(Config config, Locale locale);
 
 	public static final long DATE         = 0x000001L;
 	public static final long DATE_LONG    = 0x000002L | DATE;

@@ -28,6 +28,7 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -37,7 +38,7 @@ import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
- * @author Marc Klinger - marc at nightlabs dot de (API documentation fixes)
+ * @author Marc Klinger - marc at nightlabs dot de
  */
 public class DefaultDateFormatProvider implements DateFormatProvider
 {
@@ -58,29 +59,30 @@ public class DefaultDateFormatProvider implements DateFormatProvider
 	 */
 	private static final Map<Long, Boolean> flags2utc;
 	static {
-		Map<Long, Boolean> m = new HashMap<Long, Boolean>();
+		final Map<Long, Boolean> m = new HashMap<Long, Boolean>();
 
-		m.put(DateFormatter.FLAGS_DATE_SHORT, Boolean.TRUE);
-		m.put(DateFormatter.FLAGS_DATE_SHORT_WEEKDAY, Boolean.TRUE);
-		m.put(DateFormatter.FLAGS_DATE_LONG, Boolean.TRUE);
-		m.put(DateFormatter.FLAGS_DATE_LONG_WEEKDAY, Boolean.TRUE);
+		m.put(IDateFormatter.FLAGS_DATE_SHORT, Boolean.TRUE);
+		m.put(IDateFormatter.FLAGS_DATE_SHORT_WEEKDAY, Boolean.TRUE);
+		m.put(IDateFormatter.FLAGS_DATE_LONG, Boolean.TRUE);
+		m.put(IDateFormatter.FLAGS_DATE_LONG_WEEKDAY, Boolean.TRUE);
 
 		flags2utc = Collections.unmodifiableMap(m);
 	}
 
-	/**
-	 * @see org.nightlabs.l10n.DateFormatProvider#init(Config, String, String)
+	/* (non-Javadoc)
+	 * @see org.nightlabs.l10n.DateFormatProvider#init(org.nightlabs.config.Config, java.util.Locale)
 	 */
-	public void init(Config config, String isoLanguage, String isoCountry)
+	@Override
+	public void init(final Config config, final Locale locale)
 	{
 		try {
 			this.config = config;
-			this.isoLanguage = isoLanguage;
-			this.isoCountry = isoCountry;
+			this.isoLanguage = locale.getLanguage();
+			this.isoCountry = locale.getCountry();
 			this.defaultDateFormatCfMod = ConfigUtil.createConfigModule(config, DefaultDateFormatCfMod.class, isoLanguage, isoCountry);
-		} catch (RuntimeException x) {
+		} catch (final RuntimeException x) {
 			throw x;
-		} catch (Exception x) {
+		} catch (final Exception x) {
 			throw new RuntimeException(x);
 		}
 	}
@@ -102,13 +104,13 @@ public class DefaultDateFormatProvider implements DateFormatProvider
 	/**
 	 * @see org.nightlabs.l10n.DateFormatProvider#getDateFormat(long)
 	 */
-	public DateFormat getDateFormat(long flags)
+	public DateFormat getDateFormat(final long flags)
 	{
-		Long flagsL = Long.valueOf(flags);
+		final Long flagsL = Long.valueOf(flags);
 		SimpleDateFormat sdf;
-//		synchronized (dateFormatsByFlags) {
-			sdf = dateFormatsByFlags.get().get(flagsL);
-//		}
+		//		synchronized (dateFormatsByFlags) {
+		sdf = dateFormatsByFlags.get().get(flagsL);
+		//		}
 		if (sdf == null) {
 			String datePattern = null;
 			String timePattern = null;
@@ -140,7 +142,7 @@ public class DefaultDateFormatProvider implements DateFormatProvider
 			if (pattern == null)
 				throw new IllegalArgumentException("It seems the flags were not producing a senseful pattern!");
 
-			DateFormatSymbols dfs = new DateFormatSymbols(NLLocale.getDefault());
+			final DateFormatSymbols dfs = new DateFormatSymbols(NLLocale.getDefault());
 			dfs.setAmPmStrings(defaultDateFormatCfMod.getAmPmStrings());
 			dfs.setEras(defaultDateFormatCfMod.getEras());
 			dfs.setMonths(defaultDateFormatCfMod.getMonthsLong());
@@ -153,11 +155,11 @@ public class DefaultDateFormatProvider implements DateFormatProvider
 				sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 			// Maybe we should allow configuration of the time zone in a config-module. For now, it's ok to use the OS' time zone.
-//			sdf.setTimeZone(TimeZone.getDefault());
+			//			sdf.setTimeZone(TimeZone.getDefault());
 
-//			synchronized (dateFormatsByFlags) {
-				dateFormatsByFlags.get().put(flagsL, sdf);
-//			}
+			//			synchronized (dateFormatsByFlags) {
+			dateFormatsByFlags.get().put(flagsL, sdf);
+			//			}
 		}
 		return sdf;
 	}

@@ -35,31 +35,31 @@ import org.nightlabs.config.Config;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
+ * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
 public class DefaultNumberFormatProvider implements NumberFormatProvider
 {
 	protected Config config;
-	protected String isoLanguage;
-	protected String isoCountry;
+	protected Locale locale;
 	protected DefaultNumberFormatCfMod defaultNumberFormatCfMod;
-	
+
 	public DefaultNumberFormatProvider()
 	{
 	}
 
-	/**
-	 * @see org.nightlabs.l10n.NumberFormatProvider#init(Config, String, String)
+	/* (non-Javadoc)
+	 * @see org.nightlabs.l10n.NumberFormatProvider#init(org.nightlabs.config.Config, java.util.Locale)
 	 */
-	public void init(Config config, String isoLanguage, String isoCountry)
+	@Override
+	public void init(final Config config, final Locale locale)
 	{
 		try {
 			this.config = config;
-			this.isoLanguage = isoLanguage;
-			this.isoCountry = isoCountry;
-			this.defaultNumberFormatCfMod = (DefaultNumberFormatCfMod) ConfigUtil.createConfigModule(config, DefaultNumberFormatCfMod.class, isoLanguage, isoCountry);
-		} catch (RuntimeException x) {
+			this.locale = locale;
+			this.defaultNumberFormatCfMod = ConfigUtil.createConfigModule(config, DefaultNumberFormatCfMod.class, locale.getLanguage(), locale.getCountry());
+		} catch (final RuntimeException x) {
 			throw x;
-		} catch (Exception x) {
+		} catch (final Exception x) {
 			throw new RuntimeException(x);
 		}
 	}
@@ -71,16 +71,16 @@ public class DefaultNumberFormatProvider implements NumberFormatProvider
 
 	protected DecimalFormatSymbols createDecimalFormatSymbols()
 	{
-		DecimalFormatSymbols dfs = new DecimalFormatSymbols(new Locale(isoLanguage, isoCountry));
+		final DecimalFormatSymbols dfs = new DecimalFormatSymbols(locale);
 		dfs.setGroupingSeparator(defaultNumberFormatCfMod.getGroupingSeparator());
 		dfs.setDecimalSeparator(defaultNumberFormatCfMod.getDecimalSeparator());
 		return dfs;
 	}
-	
-	protected String createIntegerDigitCountPattern(int integerDigitCount)
+
+	protected String createIntegerDigitCountPattern(final int integerDigitCount)
 	{
-		StringBuffer sb = new StringBuffer();
-		int groupingSize = defaultNumberFormatCfMod.getGroupingSize();
+		final StringBuffer sb = new StringBuffer();
+		final int groupingSize = defaultNumberFormatCfMod.getGroupingSize();
 		for (int i = 1; i <= integerDigitCount || i <= groupingSize; ++i) {
 			sb.insert(0, i <= integerDigitCount ? '0' : '#');
 			if (i % groupingSize == 0)
@@ -88,29 +88,30 @@ public class DefaultNumberFormatProvider implements NumberFormatProvider
 		}
 		return sb.toString();
 	}
-	
-	protected String createDecimalDigitCountPattern(int minDecimalDigitCount, int maxDecimalDigitCount)
+
+	protected String createDecimalDigitCountPattern(final int minDecimalDigitCount, final int maxDecimalDigitCount)
 	{
-		StringBuffer sb = new StringBuffer();
+		final StringBuffer sb = new StringBuffer();
 		for (int i = 1; i <= minDecimalDigitCount || i <= maxDecimalDigitCount; ++i) {
 			sb.append(i <= minDecimalDigitCount ? '0' : '#');
 		}
 		return sb.toString();
 	}
 
-	/**
+	/* (non-Javadoc)
 	 * @see org.nightlabs.l10n.NumberFormatProvider#getIntegerFormat(int)
 	 */
-	public NumberFormat getIntegerFormat(int minIntegerDigitCount)
+	@Override
+	public NumberFormat getIntegerFormat(final int minIntegerDigitCount)
 	{
-		String key = "integer_"+Integer.toHexString(minIntegerDigitCount);
+		final String key = "integer_"+Integer.toHexString(minIntegerDigitCount);
 		DecimalFormat df;
 		synchronized (numberFormats) {
 			df = numberFormats.get(key);
 		}
 		if (df == null) {
-			DecimalFormatSymbols dfs = createDecimalFormatSymbols();
-			String integerDigitCountPattern = createIntegerDigitCountPattern(minIntegerDigitCount);
+			final DecimalFormatSymbols dfs = createDecimalFormatSymbols();
+			final String integerDigitCountPattern = createIntegerDigitCountPattern(minIntegerDigitCount);
 
 			df = new DecimalFormat(
 					defaultNumberFormatCfMod.getPositivePrefix()
@@ -126,26 +127,27 @@ public class DefaultNumberFormatProvider implements NumberFormatProvider
 				numberFormats.put(key, df);
 			}
 		}
-		
+
 		return df;
 	}
 
-	/**
+	/* (non-Javadoc)
 	 * @see org.nightlabs.l10n.NumberFormatProvider#getFloatFormat(int, int, int)
 	 */
-	public NumberFormat getFloatFormat(int minIntegerDigitCount, int minDecimalDigitCount, int maxDecimalDigitCount)
+	@Override
+	public NumberFormat getFloatFormat(final int minIntegerDigitCount, final int minDecimalDigitCount, final int maxDecimalDigitCount)
 	{
-		String key = "float_"+Integer.toHexString(minIntegerDigitCount)
-				+'_'+Integer.toHexString(minDecimalDigitCount)
-				+'_'+Integer.toHexString(maxDecimalDigitCount);
+		final String key = "float_"+Integer.toHexString(minIntegerDigitCount)
+		+'_'+Integer.toHexString(minDecimalDigitCount)
+		+'_'+Integer.toHexString(maxDecimalDigitCount);
 		DecimalFormat df;
 		synchronized (numberFormats) {
 			df = numberFormats.get(key);
 		}
 		if (df == null) {
-			DecimalFormatSymbols dfs = createDecimalFormatSymbols();
-			String integerDigitCountPattern = createIntegerDigitCountPattern(minIntegerDigitCount);
-			String decimalDigitCountPattern = createDecimalDigitCountPattern(minDecimalDigitCount, maxDecimalDigitCount);
+			final DecimalFormatSymbols dfs = createDecimalFormatSymbols();
+			final String integerDigitCountPattern = createIntegerDigitCountPattern(minIntegerDigitCount);
+			final String decimalDigitCountPattern = createDecimalDigitCountPattern(minDecimalDigitCount, maxDecimalDigitCount);
 
 			df = new DecimalFormat(
 					defaultNumberFormatCfMod.getPositivePrefix()
@@ -158,7 +160,7 @@ public class DefaultNumberFormatProvider implements NumberFormatProvider
 					+'.'+decimalDigitCountPattern
 					+defaultNumberFormatCfMod.getNegativeSuffix(),
 					dfs);
-			
+
 			synchronized (numberFormats) {
 				numberFormats.put(key, df);
 			}
@@ -167,26 +169,29 @@ public class DefaultNumberFormatProvider implements NumberFormatProvider
 		return df;
 	}
 
-	/**
-	 * @see org.nightlabs.l10n.NumberFormatProvider#getCurrencyFormat(int, int, int, String, boolean)
+	/* (non-Javadoc)
+	 * @see org.nightlabs.l10n.NumberFormatProvider#getCurrencyFormat(int, int, int, org.nightlabs.l10n.Currency, boolean)
 	 */
-	public NumberFormat getCurrencyFormat(int minIntegerDigitCount, int minDecimalDigitCount, int maxDecimalDigitCount, String currencySymbol, boolean includeCurrencySymbol)
+	@Override
+	public NumberFormat getCurrencyFormat(final int minIntegerDigitCount, final int minDecimalDigitCount, final int maxDecimalDigitCount, final Currency currency, final boolean includeCurrencySymbol)
 	{
-		String key = "currency_"+Integer.toHexString(minIntegerDigitCount)
-				+'_'+Integer.toHexString(minDecimalDigitCount)
-				+'_'+Integer.toHexString(maxDecimalDigitCount)
-				+'_'+currencySymbol
-				+'_'+includeCurrencySymbol;
+		final String currencySymbol = getCurrencySymbol(currency, locale);
+
+		final String key = "currency_"+Integer.toHexString(minIntegerDigitCount)
+		+'_'+Integer.toHexString(minDecimalDigitCount)
+		+'_'+Integer.toHexString(maxDecimalDigitCount)
+		+'_'+currencySymbol
+		+'_'+includeCurrencySymbol;
 		DecimalFormat df;
 		synchronized (numberFormats) {
 			df = numberFormats.get(key);
 		}
 		if (df == null) {
-			DecimalFormatSymbols dfs = createDecimalFormatSymbols();
-//			dfs.setInternationalCurrencySymbol(null);
+			final DecimalFormatSymbols dfs = createDecimalFormatSymbols();
+			//			dfs.setInternationalCurrencySymbol(null);
 			dfs.setCurrencySymbol(currencySymbol);
-			String integerDigitCountPattern = createIntegerDigitCountPattern(minIntegerDigitCount);
-			String decimalDigitCountPattern = createDecimalDigitCountPattern(minDecimalDigitCount, maxDecimalDigitCount);
+			final String integerDigitCountPattern = createIntegerDigitCountPattern(minIntegerDigitCount);
+			final String decimalDigitCountPattern = createDecimalDigitCountPattern(minDecimalDigitCount, maxDecimalDigitCount);
 
 			String beginCurrSymbol;
 			String endCurrSymbol;
@@ -228,32 +233,57 @@ public class DefaultNumberFormatProvider implements NumberFormatProvider
 	}
 
 	/**
+	 * Get the currency symbol for the given currency. This method tries
+	 * to lookup the java.util.Currency to get a symbol for the given locale.
+	 * If this fails, {@link Currency#getCurrencySymbol()} is used.
+	 * @param currency The currency
+	 * @return The currency symbol - never <code>null</code>
+	 * @throws IllegalArgumentException if no symbol could be found for the given currency.
+	 */
+	private static String getCurrencySymbol(final Currency currency, final Locale locale) {
+		String currencySymbol = null;
+		try {
+			final java.util.Currency javaCurrency = java.util.Currency.getInstance(currency.getCurrencyID());
+			currencySymbol = javaCurrency.getSymbol(locale);
+		} catch(final Exception e) {
+			// ignore
+		}
+		if(currencySymbol == null) {
+			currencySymbol = currency.getCurrencySymbol();
+		}
+		if (currencySymbol == null) {
+			throw new IllegalArgumentException("currency.getCurrencySymbol() returned null an currency is unknown for Java! currency.getCurrencyID=\"" + currency.getCurrencyID() + "\"");
+		}
+		return currencySymbol;
+	}
+
+	/**
 	 * @see org.nightlabs.l10n.NumberFormatProvider#getScientificFormat(int, int, int, int)
 	 */
-	public NumberFormat getScientificFormat(int preferredIntegerDigitCount, int minDecimalDigitCount, int maxDecimalDigitCount, int exponentDigitCount)
+	public NumberFormat getScientificFormat(final int preferredIntegerDigitCount, final int minDecimalDigitCount, final int maxDecimalDigitCount, final int exponentDigitCount)
 	{
-		String key = "scientific_"+Integer.toHexString(preferredIntegerDigitCount)
-				+'_'+Integer.toHexString(minDecimalDigitCount)
-				+'_'+Integer.toHexString(maxDecimalDigitCount)
-				+'_'+Integer.toHexString(exponentDigitCount);
+		final String key = "scientific_"+Integer.toHexString(preferredIntegerDigitCount)
+		+'_'+Integer.toHexString(minDecimalDigitCount)
+		+'_'+Integer.toHexString(maxDecimalDigitCount)
+		+'_'+Integer.toHexString(exponentDigitCount);
 		DecimalFormat df;
 		synchronized (numberFormats) {
 			df = numberFormats.get(key);
 		}
 		if (df == null) {
-			DecimalFormatSymbols dfs = createDecimalFormatSymbols();
-			
-			StringBuffer sb = new StringBuffer();
+			final DecimalFormatSymbols dfs = createDecimalFormatSymbols();
+
+			final StringBuffer sb = new StringBuffer();
 			for (int i = 1; i <= preferredIntegerDigitCount; ++i) {
 				sb.append('0');
 			}
-			String integerDigitCountPattern = sb.toString();
-			String decimalDigitCountPattern = createDecimalDigitCountPattern(minDecimalDigitCount, maxDecimalDigitCount);
+			final String integerDigitCountPattern = sb.toString();
+			final String decimalDigitCountPattern = createDecimalDigitCountPattern(minDecimalDigitCount, maxDecimalDigitCount);
 			sb.setLength(0);
 			for (int i = 1; i <= exponentDigitCount; ++i) {
 				sb.append('0');
 			}
-			String exponentDigitCountPattern = sb.toString();
+			final String exponentDigitCountPattern = sb.toString();
 
 			df = new DecimalFormat(
 					defaultNumberFormatCfMod.getPositivePrefix()
