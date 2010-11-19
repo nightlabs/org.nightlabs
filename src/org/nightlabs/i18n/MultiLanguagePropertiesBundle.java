@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.nightlabs.i18n;
 
 import java.io.IOException;
@@ -10,12 +7,15 @@ import java.net.URLConnection;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * A {@link MultiLanguagePropertiesBundle} iterates all installed locales (or languages)
@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
  * from that resource available.
  *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] -->
+ * @author Sebastian <!-- sebastian [AT] nightlabs [DOT] de -->
  */
 public class MultiLanguagePropertiesBundle {
 
@@ -49,6 +50,34 @@ public class MultiLanguagePropertiesBundle {
 		this(baseName, loader, true);
 	}
 
+//	public static void main(String[] args) {
+//		Locale[] locales = Locale.getAvailableLocales();
+//		for (Locale locale : locales) {
+//			if (isLanguageOnly(locale))
+//				System.out.println(locale);
+//		}
+//
+//		Properties properties1 = new Properties();
+//		Properties properties2 = new Properties(properties1);
+//		Properties properties3 = new Properties(properties2);
+//
+//		properties1.setProperty("only1", "value1");
+//
+//		String val = properties3.getProperty("only1");
+//		System.out.println("val: " + val);
+//		System.out.println("keyset: " + properties3.stringPropertyNames());
+//	}
+
+	/**
+	 * Tests if the given {@link Locale} has a country midfix defined or not.
+	 *
+	 * @return <code>true</code> if the given {@link Locale} has a country midfix defined.
+	 */
+	private static boolean isLanguageOnly(Locale locale)
+	{
+		return locale.getCountry() == null || locale.getCountry().isEmpty();
+	}
+
 	/**
 	 * Constructs a new {@link MultiLanguagePropertiesBundle} for the given baseName and {@link ClassLoader}.
 	 * @param baseName
@@ -66,43 +95,42 @@ public class MultiLanguagePropertiesBundle {
 
 		String baseResourcePath = baseName.replaceAll("\\.", "/");
 
-		Locale[] locales = null;
-		if (!useOnlyLanguages)
-			locales = Locale.getAvailableLocales();
-		else {
-			String[] langs = Locale.getISOLanguages();
-			locales = new Locale[langs.length];
-			for (int i = 0; i < langs.length; i++) {
-				locales[i] = new Locale(langs[i]);
-			}
+		// Step 1: Read default properties
+		Properties defaultProps = loadPropertiesFromResource(null, loader, baseResourcePath, null);
+		if (defaultProps != null)
+			properties.put(null, defaultProps);
+
+		final Locale[] locales = Locale.getAvailableLocales();
+
+		// Step 2: Read all existing language properties
+		for (Locale locale : locales) {
+			if (!isLanguageOnly(locale))
+				continue;
+
+			Properties langProps = loadPropertiesFromResource(defaultProps, loader, baseResourcePath, locale);
+			if (langProps != null)
+				properties.put(locale, langProps);
 		}
 
-		Properties fallbackProps = loadPropertiesFromResource(loader, baseResourcePath, null);
+		if (useOnlyLanguages)
+			return;
+
+		// Step 3: Process countries (which of course have a language, too)
 		for (Locale locale : locales) {
-			// We want the fallback only for English - not all locales that exist in the Java VM, because
-			// we otherwise populate the properties map with hundreds of same elements.
+			if (isLanguageOnly(locale))
+				continue;
 
-			Properties localeProps = loadPropertiesFromResource(loader, baseResourcePath, locale);
+			Properties defaults = properties.get(new Locale(locale.getLanguage()));
+			if (defaults == null)
+				defaults = defaultProps;
 
-			if (localeProps != null || Locale.ENGLISH.getLanguage().equals(locale.getLanguage())) {
-				Properties props;
-				if (fallbackProps == null)
-					props = localeProps;
-				else {
-					// merge via Properties' defaults feature
-					props = new Properties(fallbackProps);
-
-					if (localeProps != null)
-						props.putAll(localeProps);
-				}
-
-				if (props != null)
-					properties.put(locale, props);
-			}
+			Properties countryProps = loadPropertiesFromResource(defaults, loader, baseResourcePath, locale);
+			if (countryProps != null)
+				properties.put(locale, countryProps);
 		}
 	}
 
-	private Properties loadPropertiesFromResource(ClassLoader loader, String baseResourcePath, Locale locale)
+	private Properties loadPropertiesFromResource(Properties defaultProps, ClassLoader loader, String baseResourcePath, Locale locale)
 	{
 		String resPath = locale == null ? baseResourcePath + ".properties" : baseResourcePath + "_" + locale.toString() + ".properties";
 		URL resURL = loader.getResource(resPath);
@@ -128,7 +156,7 @@ public class MultiLanguagePropertiesBundle {
 			return null;
 		}
 		try {
-			Properties props = new Properties();
+			Properties props = new Properties(defaultProps);
 			props.load(in);
 			return props;
 		} catch (IOException e) {
@@ -151,7 +179,9 @@ public class MultiLanguagePropertiesBundle {
 	 * 		has found resources for.
 	 */
 	public Collection<Locale> getLocales() {
-		return Collections.unmodifiableCollection(properties.keySet());
+		Set<Locale> keySet = new HashSet<Locale>(properties.keySet());
+		keySet.remove(null);
+		return keySet;
 	}
 
 	/**
@@ -215,4 +245,33 @@ public class MultiLanguagePropertiesBundle {
 			return props.getProperty(key);
 	}
 
+	/**
+	 * FIXME: Add javadoc!!
+	 *
+	 * @param locale
+	 * @return
+	 */
+	public Set<String> getKeys(Locale locale)
+	{
+		Properties localeProps = properties.get(locale);
+		if (localeProps == null)
+			return Collections.emptySet();
+
+		return localeProps.stringPropertyNames();
+	}
+
+	/**
+	 * FIXME: add javadoc!
+	 * @return
+	 */
+	public Set<String> getAllKeys()
+	{
+		Set<String> allKeys = new HashSet<String>();
+		for (Map.Entry<Locale, Properties> entry : properties.entrySet()) {
+			Locale locale = entry.getKey();
+			Properties props = properties.get(locale);
+			allKeys.addAll(props.stringPropertyNames());
+		}
+		return allKeys;
+	}
 }
