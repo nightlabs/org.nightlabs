@@ -221,8 +221,8 @@ public class MultiLanguagePropertiesBundle {
 		else {
 			if (fallbackToDefault)
 				return props.getProperty(key) != null;
-
-			return props.containsKey(key);
+			else
+				return props.containsKey(key);
 		}
 	}
 
@@ -246,23 +246,30 @@ public class MultiLanguagePropertiesBundle {
 	}
 
 	/**
-	 * FIXME: Add javadoc!!
+	 * Retrieves all keys corresponding to one given {@link Locale}.
 	 *
-	 * @param locale
-	 * @return
+	 * @param locale {@link Locale}.
+	 * @return Will return an empty {@link Set} if no keys are saved for this {@link Locale}.
+	 * Otherwise the keys of this Locale will be returned as {@link Set}.
 	 */
 	public Set<String> getKeys(Locale locale)
 	{
 		Properties localeProps = properties.get(locale);
 		if (localeProps == null)
 			return Collections.emptySet();
-
-		return localeProps.stringPropertyNames();
+		else
+			return localeProps.stringPropertyNames();
 	}
 
 	/**
-	 * FIXME: add javadoc!
-	 * @return
+	 * Retrieves <i>all keys </i> of <i>all resource files</i> (*.properties).
+	 * This might be useful, as in some cases the resource files are not maintained
+	 * very careful and there are different keys and/or different amount of keys in some resource-files.
+	 * Or there is not always a fallback/default properties file (with <i>no</i> LANGUAGE[_COUNTRY]
+	 * codes in the *.properties files), so a programmer can not easily iterate just this file and count on
+	 * the constraint that this one really contains all keys.
+	 * @return Returns a new {@link Set} with all different keys of all resource-files.
+	 * All keys of all resources will be added in a {@link Set}, so the union will be build.
 	 */
 	public Set<String> getAllKeys()
 	{
