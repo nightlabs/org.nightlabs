@@ -648,7 +648,7 @@ public class ReflectUtil
 	throws ClassNotFoundException
 	{
 		List<Class<?>> result = new LinkedList<Class<?>>();
-		_listClassesOfPackage(packageName, cld, result, recurse);
+		_listClassesOfPackage(packageName, cld, result, recurse, new HashSet<String>());
 		return result;
 	}
 
@@ -666,14 +666,23 @@ public class ReflectUtil
 		if (basePackageNames == null || basePackageNames.length == 0)
 			throw new IllegalArgumentException("The given basePackageNames must NOT be null or empty!");
 
+		logger.debug("getAllClassesAnnotatedWith: Entered for {} packages.", basePackageNames.length);
+
 		Set<Class<?>> annotatedClasses = new HashSet<Class<?>>();
+		Set<String> processedPackages = new HashSet<String>(basePackageNames.length);
 
 		// Search for all existing classes of the packages with the given basePackageNames
-		for (String string : basePackageNames)
+		for (String basePackageName : basePackageNames)
 		{
+			if (!processedPackages.add(basePackageName)) {
+				logger.warn("getAllClassesAnnotatedWith: Package " + basePackageName + " occurs multiple times in argument basePackageNames! Skipping it this time.");
+				continue;
+			}
+
+			logger.debug("getAllClassesAnnotatedWith: Beginning package {}", basePackageName);
 			try
 			{
-				Collection<Class<?>> listedClasses = listClassesInPackage(string, true);
+				Collection<Class<?>> listedClasses = listClassesInPackage(basePackageName, true);
 				for (Class<?> listedClass : listedClasses)
 				{
 					if (listedClass.getAnnotation(annotationClass) != null)
@@ -682,8 +691,9 @@ public class ReflectUtil
 			}
 			catch (ClassNotFoundException e)
 			{
-				throw new IllegalStateException("Finding all classes of package '"+string+"' failed!", e);
+				throw new IllegalStateException("Finding all classes of package '"+basePackageName+"' failed!", e);
 			}
+			logger.debug("getAllClassesAnnotatedWith: Completed package {}", basePackageName);
 		}
 
 		return annotatedClasses;
@@ -708,7 +718,7 @@ public class ReflectUtil
 		if (cld == null) {
 			throw new ClassNotFoundException("Can't get class loader.");
 		}
-		_listClassesOfPackage(packageName, cld, result, recurse);
+		_listClassesOfPackage(packageName, cld, result, recurse, new HashSet<String>());
 		return result;
 	}
 
@@ -724,9 +734,12 @@ public class ReflectUtil
 	 * @param packageName The package name to search classes for.
 	 * @param resultClasses The colleciton where the (recursive) runs of this method stores the found classes.
 	 * @param recurse Whether this method should recurse in sub-packages.
+	 * @param processedPaths preventing endless recursions by collecting all processed paths (jar or directory) here. Initially this must be passed empty. It will be populated by this method.
 	 * @throws ClassNotFoundException If something went wrong.
 	 */
-	protected static void _listClassesOfPackage(String packageName, ClassLoader cld, Collection<Class<?>> resultClasses, boolean recurse) throws ClassNotFoundException {
+	protected static void _listClassesOfPackage(String packageName, ClassLoader cld, Collection<Class<?>> resultClasses, boolean recurse, Set<String> processedPaths) throws ClassNotFoundException {
+		logger.debug("_listClassesOfPackage: Entered for package {}", packageName);
+
 		// list all resource-entries for the given package
 		List<File> pathEntries = new LinkedList<File>();
 		List<JarFile> jarEntries = new LinkedList<JarFile>();
@@ -737,7 +750,12 @@ public class ReflectUtil
 			while (resources.hasMoreElements()) {
 				URL resourceURL = resources.nextElement();
 				if (resourceURL.getProtocol() == null || resourceURL.getProtocol().equalsIgnoreCase("file")) {
-					pathEntries.add(new File(URLDecoder.decode(resourceURL.getPath(), "UTF-8")));
+					File pathEntry = new File(URLDecoder.decode(resourceURL.getPath(), "UTF-8"));
+					String pathEntryString = pathEntry.getAbsolutePath();
+					if (processedPaths.add(pathEntryString))
+						pathEntries.add(pathEntry);
+					else
+						logger.debug("_listClassesOfPackage: Skipping previously processed path: {}", pathEntryString);
 				} else if (resourceURL.getProtocol().equalsIgnoreCase("jar")) {
 					String jarPath = resourceURL.getPath();
 					jarPath = jarPath.substring(0, jarPath.indexOf("!"));
@@ -745,7 +763,11 @@ public class ReflectUtil
 						jarPath = jarPath.substring(5);
 
 					jarPath = URLDecoder.decode(jarPath, "UTF-8");
-					jarEntries.add(new JarFile(jarPath));
+
+					if (processedPaths.add(jarPath))
+						jarEntries.add(new JarFile(jarPath));
+					else
+						logger.debug("_listClassesOfPackage: Skipping previously processed jar: {}", jarPath);
 				}
 			}
 		} catch (NullPointerException x) {
@@ -761,6 +783,8 @@ public class ReflectUtil
 		// For every directory identified capture all the .class files
 		for (File directory : pathEntries) {
 			if (directory.exists()) {
+				logger.debug("_listClassesOfPackage: Scanning directory: {}", directory.getAbsolutePath());
+
 				// Get the list of the files contained in the package
 				File[] files = directory.listFiles();
 				for (File file : files) {
@@ -786,7 +810,10 @@ public class ReflectUtil
 				throw new ClassNotFoundException(packageName + " (" + directory.getPath() + ") does not appear to be a valid package");
 			}
 		}
+
 		for (JarFile jarFile : jarEntries) {
+			logger.debug("_listClassesOfPackage: Scanning JAR: {}", jarFile.getName());
+
 			for (Enumeration<JarEntry> enumeration = jarFile.entries(); enumeration.hasMoreElements(); )
 			{
 				JarEntry entry = enumeration.nextElement();
@@ -825,7 +852,7 @@ public class ReflectUtil
 		// recurse into sub-packages
 		if (recurse) {
 			for (String pack : recursePackages) {
-				_listClassesOfPackage(pack, cld, resultClasses, recurse);
+				_listClassesOfPackage(pack, cld, resultClasses, recurse, processedPaths);
 			}
 		}
 	}
