@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs</groupId>
 	<artifactId>org.nightlabs.i18n</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<name>NightLabs i18n</name>
 	<description>NightLabs basic classes for the internationalization of data.</description>
 
@@ -14,9 +14,9 @@
 		<dependency>
 			<groupId>org.nightlabs</groupId>
 			<artifactId>org.nightlabs.util</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.4</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

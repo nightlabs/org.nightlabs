@@ -181,7 +181,7 @@ public class MultiLanguagePropertiesBundle {
 	public Collection<Locale> getLocales() {
 		Set<Locale> keySet = new HashSet<Locale>(properties.keySet());
 		keySet.remove(null);
-		return keySet;
+		return Collections.unmodifiableSet(keySet);
 	}
 
 	/**
@@ -258,7 +258,7 @@ public class MultiLanguagePropertiesBundle {
 		if (localeProps == null)
 			return Collections.emptySet();
 		else
-			return localeProps.stringPropertyNames();
+			return Collections.unmodifiableSet(localeProps.stringPropertyNames());
 	}
 
 	/**
@@ -279,6 +279,6 @@ public class MultiLanguagePropertiesBundle {
 			Properties props = properties.get(locale);
 			allKeys.addAll(props.stringPropertyNames());
 		}
-		return allKeys;
+		return Collections.unmodifiableSet(allKeys);
 	}
 }
