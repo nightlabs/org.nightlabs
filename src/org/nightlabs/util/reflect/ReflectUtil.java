@@ -39,6 +39,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,6 +48,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -76,46 +79,46 @@ public class ReflectUtil
 	 * @return a cloned instance of the Param original
 	 * @see #clone(Object original, Class stopClass)
 	 */
-	public static Object clone(Object original) {
+	public static Object clone(final Object original) {
 		return clone(original, Object.class);
 	}
 
-	public static Object clone(Object original, String[] ignoredMembers) {
+	public static Object clone(final Object original, final String[] ignoredMembers) {
 		return clone(original, Object.class, ignoredMembers);
 	}
 
-	public static Object clone(Object original, Class<? extends CloneDelegate>[] cloneDelegates) {
+	public static Object clone(final Object original, final Class<? extends CloneDelegate>[] cloneDelegates) {
 		return clone(original, Object.class, null, cloneDelegates);
 	}
 
-	public static Object clone(Object original, String[] ignoredMembers, Class<? extends CloneDelegate>[] cloneDelegtes) {
+	public static Object clone(final Object original, final String[] ignoredMembers, final Class<? extends CloneDelegate>[] cloneDelegtes) {
 		return clone(original, Object.class, ignoredMembers, cloneDelegtes);
 	}
 
-	public static Map<Class<? extends Object>, Class<? extends CloneDelegate>> initCloneDelegates(Class<? extends CloneDelegate>[] cloneDelegates)
+	public static Map<Class<? extends Object>, Class<? extends CloneDelegate>> initCloneDelegates(final Class<? extends CloneDelegate>[] cloneDelegates)
 	throws CloneException
 	{
-		Map<Class<? extends Object>, Class<? extends CloneDelegate>> class2CloneDelegate = new HashMap<Class<? extends Object>, Class<? extends CloneDelegate>>(cloneDelegates.length);
-		for (Class<? extends CloneDelegate> cdClass : cloneDelegates) {
+		final Map<Class<? extends Object>, Class<? extends CloneDelegate>> class2CloneDelegate = new HashMap<Class<? extends Object>, Class<? extends CloneDelegate>>(cloneDelegates.length);
+		for (final Class<? extends CloneDelegate> cdClass : cloneDelegates) {
 			if (CloneDelegate.class.isAssignableFrom(cdClass)) {
 				try {
-					Method getCloneClass = cdClass.getMethod("getCloneClass", (Class<?>) null);
-					Class<?> cloneClass = (Class<?>) getCloneClass.invoke((Object) null, (Object) null);
+					final Method getCloneClass = cdClass.getMethod("getCloneClass", (Class<?>) null);
+					final Class<?> cloneClass = (Class<?>) getCloneClass.invoke((Object) null, (Object) null);
 					class2CloneDelegate.put(cloneClass, cdClass);
 				}
-				catch (SecurityException e) {
+				catch (final SecurityException e) {
 					throw new CloneException(e);
 				}
-				catch (NoSuchMethodException e) {
+				catch (final NoSuchMethodException e) {
 					throw new CloneException(e);
 				}
-				catch (IllegalArgumentException e) {
+				catch (final IllegalArgumentException e) {
 					throw new CloneException(e);
 				}
-				catch (IllegalAccessException e) {
+				catch (final IllegalAccessException e) {
 					throw new CloneException(e);
 				}
-				catch (InvocationTargetException e) {
+				catch (final InvocationTargetException e) {
 					throw new CloneException(e);
 				}
 			}
@@ -123,15 +126,15 @@ public class ReflectUtil
 		return class2CloneDelegate;
 	}
 
-	public static Object clone(Object original,
-			Class<? extends Object> stopClass,
-			String[] ignoredMembers,
-			Class<? extends CloneDelegate>[] cloneDelegates)
+	public static Object clone(final Object original,
+			final Class<? extends Object> stopClass,
+			final String[] ignoredMembers,
+			final Class<? extends CloneDelegate>[] cloneDelegates)
 	{
 		try
 		{
-			Class<? extends Object> orgClass = original.getClass();
-			List<Field> fields = collectAllFields(orgClass, stopClass, true, ignoredMembers);
+			final Class<? extends Object> orgClass = original.getClass();
+			final List<Field> fields = collectAllFields(orgClass, stopClass, true, ignoredMembers);
 			boolean cloneDelegate = false;
 			Map<Class<? extends Object>, Class<? extends CloneDelegate>> class2CloneDelegate = new HashMap<Class<? extends Object>, Class<? extends CloneDelegate>>(0);
 			if (cloneDelegates != null) {
@@ -143,18 +146,18 @@ public class ReflectUtil
 			{
 				// Iterate through all collected fields (except static and final)
 				// and clone the values for the created instance
-				Object dcInstance = orgClass.newInstance();
-				for (Iterator<Field> it = fields.iterator(); it.hasNext(); )
+				final Object dcInstance = orgClass.newInstance();
+				for (final Iterator<Field> it = fields.iterator(); it.hasNext(); )
 				{
-					Field field = it.next();
-					Class<?> fieldType = field.getType();
+					final Field field = it.next();
+					final Class<?> fieldType = field.getType();
 
 					// if a CloneDelegate is registered
 					if (cloneDelegate && class2CloneDelegate.containsKey(fieldType))
 					{
-						Class<? extends CloneDelegate> cdClass = class2CloneDelegate.get(fieldType);
-						Method clone = cdClass.getMethod("clone", new Class[] {fieldType});
-						Object clonedField = clone.invoke(cdClass.newInstance(), new Object[] {field.get(dcInstance)});
+						final Class<? extends CloneDelegate> cdClass = class2CloneDelegate.get(fieldType);
+						final Method clone = cdClass.getMethod("clone", new Class[] {fieldType});
+						final Object clonedField = clone.invoke(cdClass.newInstance(), new Object[] {field.get(dcInstance)});
 						field.set(dcInstance, clonedField);
 					}
 					// check if primitive
@@ -165,15 +168,15 @@ public class ReflectUtil
 					// check if Array
 					else if (fieldType.isArray())
 					{
-						Object array = field.get(original);
+						final Object array = field.get(original);
 						if (array == null)
 							continue;
 
-						int length = Array.getLength(array);
-						Class<?> arrayType = array.getClass();
-						Object clonedArray = Array.newInstance(arrayType.getComponentType(), length);
+						final int length = Array.getLength(array);
+						final Class<?> arrayType = array.getClass();
+						final Object clonedArray = Array.newInstance(arrayType.getComponentType(), length);
 						for (int i=0; i<length; ++i) {
-							Object value = Array.get(array, i);
+							final Object value = Array.get(array, i);
 							Array.set(clonedArray, i, value);
 						}
 						field.set(dcInstance, clonedArray);
@@ -181,7 +184,7 @@ public class ReflectUtil
 					// check if Cloneable
 					else if (Cloneable.class.isAssignableFrom(fieldType))
 					{
-						Object org = field.get(original);
+						final Object org = field.get(original);
 						field.set(dcInstance,
 								org.getClass().getMethod(CLONE, (Class<?>) null).invoke(org, (Object) null)
 						);
@@ -191,28 +194,28 @@ public class ReflectUtil
 				}
 				return dcInstance;
 			}
-			catch (NoSuchMethodException e) {
+			catch (final NoSuchMethodException e) {
 				throw new CloneException(e);
 			}
-			catch (IllegalAccessException e) {
+			catch (final IllegalAccessException e) {
 				throw new CloneException(e);
 			}
-			catch (InstantiationException e) {
+			catch (final InstantiationException e) {
 				throw new CloneException(e);
 			}
-			catch (InvocationTargetException e) {
+			catch (final InvocationTargetException e) {
 				throw new CloneException(e);
 			}
 		}
-		catch (CloneException x) {
+		catch (final CloneException x) {
 			throw new RuntimeException(x);
 		}
 	}
 
 	private static String CLONE = "clone";
-	public static Object clone(Object original,
-			Class<? extends Object> stopClass,
-			String[] ignoredMembers)
+	public static Object clone(final Object original,
+			final Class<? extends Object> stopClass,
+			final String[] ignoredMembers)
 	{
 		return clone(original, stopClass, ignoredMembers, null);
 		//  	try
@@ -287,7 +290,7 @@ public class ReflectUtil
 	 * @see java.lang.Class
 	 * @see java.lang.Cloneable
 	 */
-	public static Object clone(Object original, Class<? extends Object> stopClass)
+	public static Object clone(final Object original, final Class<? extends Object> stopClass)
 	{
 		return clone(original, stopClass, null);
 		//  	try {
@@ -340,12 +343,12 @@ public class ReflectUtil
 	 * @return a List of all collected fields
 	 * @see java.lang.reflect.Field
 	 */
-	public static List<Field> collectAllFields(Class<?> originalClass,
-			Class<?> stopClass,
-			boolean ignoreStaticAndFinalFields,
-			String[] ignoredMembers)
+	public static List<Field> collectAllFields(final Class<?> originalClass,
+			final Class<?> stopClass,
+			final boolean ignoreStaticAndFinalFields,
+			final String[] ignoredMembers)
 			{
-		List<Field> fields = new ArrayList<Field>();
+		final List<Field> fields = new ArrayList<Field>();
 		Class<?> superClass = originalClass;
 
 		// iterate through all superclasses and
@@ -353,15 +356,15 @@ public class ReflectUtil
 		// until the stopClass is reached
 		while (superClass != stopClass)
 		{
-			Field[] f = superClass.getDeclaredFields();
+			final Field[] f = superClass.getDeclaredFields();
 			if (ignoreStaticAndFinalFields) {
-				for (Field element : f) {
+				for (final Field element : f) {
 					if (ignoreField(element))
 						continue;
 					else if (ignoreMembers(element, ignoredMembers))
 						continue;
 					else {
-						Field field = element;
+						final Field field = element;
 						// makes also private Fields accessible
 						field.setAccessible(true);
 						fields.add(field);
@@ -369,7 +372,7 @@ public class ReflectUtil
 				}
 			}
 			else {
-				for (Field field : f) {
+				for (final Field field : f) {
 					if (ignoreMembers(field, ignoredMembers))
 						continue;
 					// makes also private Fields accessible
@@ -391,7 +394,7 @@ public class ReflectUtil
 	 * @return a List of all declaredFields for the originalClass
 	 * @see #collectAllFields(Class, Class, boolean, String[])
 	 */
-	public static List<Field> collectAllFields(Class<?> originalClass, boolean ignoreStaticAndFinalFields) {
+	public static List<Field> collectAllFields(final Class<?> originalClass, final boolean ignoreStaticAndFinalFields) {
 		return collectAllFields(originalClass, Object.class, ignoreStaticAndFinalFields, null);
 	}
 
@@ -402,9 +405,9 @@ public class ReflectUtil
 	 * @param field Ignore this field?
 	 * @return true if the field should be ignored, false if not.
 	 */
-	private static boolean ignoreField(Field field)
+	private static boolean ignoreField(final Field field)
 	{
-		int modifiers = field.getModifiers();
+		final int modifiers = field.getModifiers();
 
 		if ((modifiers & Modifier.STATIC) != 0)
 			return true;
@@ -415,12 +418,12 @@ public class ReflectUtil
 		return false;
 	}
 
-	private static boolean ignoreMembers(Field field, String[] names)
+	private static boolean ignoreMembers(final Field field, final String[] names)
 	{
 		if (names == null)
 			return false;
 
-		for (String name : names) {
+		for (final String name : names) {
 			if (field.getName().equals(name))
 				return true;
 		}
@@ -437,35 +440,35 @@ public class ReflectUtil
 	 * @see java.lang.reflect.Field
 	 * @see #collectAllFields(Class originalClass, boolean ignoreFields)
 	 */
-	public static boolean equals(Object original, Object target)
+	public static boolean equals(final Object original, final Object target)
 	{
 		if (original == target)
 			return true;
 
-		Class<?> originalClass = original.getClass();
-		Class<?> targetClass = target.getClass();
+		final Class<?> originalClass = original.getClass();
+		final Class<?> targetClass = target.getClass();
 
 		if (!originalClass.isAssignableFrom(targetClass))
 			return false;
 
-		List<Field> originalFields = collectAllFields(originalClass, true);
-		List<Field> targetFields = collectAllFields(targetClass, true);
+		final List<Field> originalFields = collectAllFields(originalClass, true);
+		final List<Field> targetFields = collectAllFields(targetClass, true);
 
 		if (originalFields.size() != targetFields.size())
 			return false;
 
 		for (int i=0; i<originalFields.size(); ++i)
 		{
-			Field originalField = originalFields.get(i);
-			Field targetField = targetFields.get(i);
+			final Field originalField = originalFields.get(i);
+			final Field targetField = targetFields.get(i);
 			try {
 				if (!originalField.get(original).equals(targetField.get(target)))
 					return false;
 			}
-			catch (IllegalArgumentException e) {
+			catch (final IllegalArgumentException e) {
 				e.printStackTrace();
 			}
-			catch (IllegalAccessException e) {
+			catch (final IllegalAccessException e) {
 				e.printStackTrace();
 			}
 		}
@@ -483,34 +486,34 @@ public class ReflectUtil
 	 * @return a String which contains the Classname and all Fieldnames
 	 * with the corresponding values
 	 */
-	public static String toString(Object o, boolean withSuperClasses)
+	public static String toString(final Object o, final boolean withSuperClasses)
 	{
-		Class<?> oClass = o.getClass();
-		StringBuffer sb = new StringBuffer();
+		final Class<?> oClass = o.getClass();
+		final StringBuffer sb = new StringBuffer();
 		// add Class Name
 		sb.append(oClass.getName());
 		sb.append("\n");
 		if (withSuperClasses)
 		{
-			List<Field> fields = collectAllFields(oClass, false);
-			for (Field field : fields) {
+			final List<Field> fields = collectAllFields(oClass, false);
+			for (final Field field : fields) {
 				try {
 					sb.append(field.getName());
 					sb.append(" = ");
 					sb.append(String.valueOf(field.get(o)));
 					sb.append("\n");
 				}
-				catch (IllegalArgumentException e) {
+				catch (final IllegalArgumentException e) {
 					e.printStackTrace();
 				}
-				catch (IllegalAccessException e) {
+				catch (final IllegalAccessException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 		else {
-			Field[] fields = oClass.getDeclaredFields();
-			for (Field field : fields) {
+			final Field[] fields = oClass.getDeclaredFields();
+			for (final Field field : fields) {
 				field.setAccessible(true);
 				try {
 					sb.append(field.getName());
@@ -518,10 +521,10 @@ public class ReflectUtil
 					sb.append(String.valueOf(field.get(o)));
 					sb.append("\n");
 				}
-				catch (IllegalArgumentException e) {
+				catch (final IllegalArgumentException e) {
 					e.printStackTrace();
 				}
-				catch (IllegalAccessException e) {
+				catch (final IllegalAccessException e) {
 					e.printStackTrace();
 				}
 			}
@@ -544,10 +547,10 @@ public class ReflectUtil
 	 * @param filter Filter for the scanning (Whether the found classes should or should not be assignable to the given clazz parameter)
 	 * @return Whether an object of the given class could be found in the graph of the given object.
 	 */
-	public static boolean findContainedObjectsByClass(Object checkObject, Class<?> clazz, boolean filter) {
+	public static boolean findContainedObjectsByClass(final Object checkObject, final Class<?> clazz, final boolean filter) {
 		final ObjectFoundResult result = new ObjectFoundResult();
 		findContainedObjectsByClass(checkObject, clazz, filter, true, new IObjectFoundHandler() {
-			public void objectFound(String path, Object object) {
+			public void objectFound(final String path, final Object object) {
 				result.found = true;
 			}
 		});
@@ -564,20 +567,20 @@ public class ReflectUtil
 	 * @param objectFoundHandler The handler to invoke when an object matches
 	 */
 	public static void findContainedObjectsByClass(
-			Object checkObject,
-			Class<?> clazz,
-			boolean filter, boolean returnOnFirstInBranch,
-			IObjectFoundHandler objectFoundHandler
+			final Object checkObject,
+			final Class<?> clazz,
+			final boolean filter, final boolean returnOnFirstInBranch,
+			final IObjectFoundHandler objectFoundHandler
 	)
 	{
 		findContainedObjectsByClass(new HashSet<Object>(), "", checkObject, clazz, filter, returnOnFirstInBranch, objectFoundHandler);
 	}
 
 	private static void findContainedObjectsByClass(
-			Set<Object> checked, String path,
-			Object checkObject, Class<?> clazz,
-			boolean filter, boolean returnOnFirstInBranch,
-			IObjectFoundHandler objectFoundHandler
+			final Set<Object> checked, final String path,
+			final Object checkObject, final Class<?> clazz,
+			final boolean filter, final boolean returnOnFirstInBranch,
+			final IObjectFoundHandler objectFoundHandler
 	)
 	{
 		if (checkObject == null)
@@ -588,34 +591,34 @@ public class ReflectUtil
 				return;
 		}
 
-		Object object = checkObject;
+		final Object object = checkObject;
 		Class<?> classRun = object.getClass();
 		while (!classRun.equals(Object.class)) {
 
-			Field[] fields = classRun.getDeclaredFields();
-			for (Field field : fields) {
+			final Field[] fields = classRun.getDeclaredFields();
+			for (final Field field : fields) {
 				field.setAccessible(true);
 				try {
-					Object o = field.get(object);
+					final Object o = field.get(object);
 					if (o == null)
 						continue;
 					if (!checked.contains(o)) {
 						checked.add(o);
-						if (o instanceof Collection) {
-							Collection<?> col = (Collection<?>)o;
-							for (Object o2 : col) {
+						if (o instanceof Collection<?>) {
+							final Collection<?> col = (Collection<?>)o;
+							for (final Object o2 : col) {
 								if (o2 == null)
 									continue;
 								findContainedObjectsByClass(checked, path+"/"+field.getName()+"$value$"+o2.getClass().getName(), o2, clazz, filter, returnOnFirstInBranch, objectFoundHandler);
 							}
-						} else if (o instanceof Map) {
-							Map<?,?> map = (Map<?,?>)o;
-							for (Object o2 : map.keySet()) {
+						} else if (o instanceof Map<?,?>) {
+							final Map<?,?> map = (Map<?,?>)o;
+							for (final Object o2 : map.keySet()) {
 								if (o2 == null)
 									continue;
 								findContainedObjectsByClass(checked, path+"/"+field.getName()+"$key$"+o2.getClass().getName(), o2, clazz, filter, returnOnFirstInBranch, objectFoundHandler);
 							}
-							for (Object o2 : map.values()) {
+							for (final Object o2 : map.values()) {
 								if (o2 == null)
 									continue;
 								findContainedObjectsByClass(checked, path+"/"+field.getName()+"$value$"+o2.getClass().getName(), o2, clazz, filter, returnOnFirstInBranch, objectFoundHandler);
@@ -625,7 +628,7 @@ public class ReflectUtil
 							findContainedObjectsByClass(checked, path+"/"+field.getName(), o, clazz, filter, returnOnFirstInBranch, objectFoundHandler);
 						}
 					}
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -644,11 +647,11 @@ public class ReflectUtil
 	 * @return A list of classes that exists within the given package.
 	 * @throws ClassNotFoundException If something went wrong.
 	 */
-	public static Collection<Class<?>> listClassesInPackage(String packageName, ClassLoader cld, boolean recurse)
+	public static Collection<Class<?>> listClassesInPackage(final String packageName, final ClassLoader cld, final boolean recurse)
 	throws ClassNotFoundException
 	{
-		List<Class<?>> result = new LinkedList<Class<?>>();
-		_listClassesOfPackage(packageName, cld, result, recurse, new HashSet<String>());
+		final List<Class<?>> result = new LinkedList<Class<?>>();
+		_listClassesOfPackage(packageName, cld, result, true);
 		return result;
 	}
 
@@ -658,7 +661,7 @@ public class ReflectUtil
 	 * @param annotationClass The type of annotation all classes are searched for.
 	 * @return all classes that have a class {@link Annotation} of the given annotationClass.
 	 */
-	public static Set<Class<?>> getAllClassesAnnotatedWith(Class<? extends Annotation> annotationClass, String... basePackageNames)
+	public static Set<Class<?>> getAllClassesAnnotatedWith(final Class<? extends Annotation> annotationClass, final String... basePackageNames)
 	{
 		if (annotationClass == null)
 			throw new IllegalArgumentException("The given annotationClass must NOT be null!");
@@ -668,11 +671,11 @@ public class ReflectUtil
 
 		logger.debug("getAllClassesAnnotatedWith: Entered for {} packages.", basePackageNames.length);
 
-		Set<Class<?>> annotatedClasses = new HashSet<Class<?>>();
-		Set<String> processedPackages = new HashSet<String>(basePackageNames.length);
+		final Set<Class<?>> annotatedClasses = new HashSet<Class<?>>();
+		final Set<String> processedPackages = new HashSet<String>(basePackageNames.length);
 
 		// Search for all existing classes of the packages with the given basePackageNames
-		for (String basePackageName : basePackageNames)
+		for (final String basePackageName : basePackageNames)
 		{
 			if (!processedPackages.add(basePackageName)) {
 				logger.warn("getAllClassesAnnotatedWith: Package " + basePackageName + " occurs multiple times in argument basePackageNames! Skipping it this time.");
@@ -682,14 +685,14 @@ public class ReflectUtil
 			logger.debug("getAllClassesAnnotatedWith: Beginning package {}", basePackageName);
 			try
 			{
-				Collection<Class<?>> listedClasses = listClassesInPackage(basePackageName, true);
-				for (Class<?> listedClass : listedClasses)
+				final Collection<Class<?>> listedClasses = listClassesInPackage(basePackageName, true);
+				for (final Class<?> listedClass : listedClasses)
 				{
 					if (listedClass.getAnnotation(annotationClass) != null)
 						annotatedClasses.add(listedClass);
 				}
 			}
-			catch (ClassNotFoundException e)
+			catch (final ClassNotFoundException e)
 			{
 				throw new IllegalStateException("Finding all classes of package '"+basePackageName+"' failed!", e);
 			}
@@ -710,15 +713,15 @@ public class ReflectUtil
 	 * @return A list of classes that exists within the given package.
 	 * @throws ClassNotFoundException If something went wrong.
 	 */
-	public static Collection<Class<?>> listClassesInPackage(String packageName, boolean recurse)
+	public static Collection<Class<?>> listClassesInPackage(final String packageName, final boolean recurse)
 	throws ClassNotFoundException
 	{
-		List<Class<?>> result = new LinkedList<Class<?>>();
-		ClassLoader cld = Thread.currentThread().getContextClassLoader();
+		final List<Class<?>> result = new LinkedList<Class<?>>();
+		final ClassLoader cld = Thread.currentThread().getContextClassLoader();
 		if (cld == null) {
 			throw new ClassNotFoundException("Can't get class loader.");
 		}
-		_listClassesOfPackage(packageName, cld, result, recurse, new HashSet<String>());
+		_listClassesOfPackage(packageName, cld, result, recurse);
 		return result;
 	}
 
@@ -733,29 +736,50 @@ public class ReflectUtil
 	 * </p>
 	 * @param packageName The package name to search classes for.
 	 * @param resultClasses The colleciton where the (recursive) runs of this method stores the found classes.
-	 * @param recurse Whether this method should recurse in sub-packages.
-	 * @param processedPaths preventing endless recursions by collecting all processed paths (jar or directory) here. Initially this must be passed empty. It will be populated by this method.
+	 * @param recurse TODO
 	 * @throws ClassNotFoundException If something went wrong.
 	 */
-	protected static void _listClassesOfPackage(String packageName, ClassLoader cld, Collection<Class<?>> resultClasses, boolean recurse, Set<String> processedPaths) throws ClassNotFoundException {
+	protected static void _listClassesOfPackage(final String packageName, final ClassLoader cld, final Collection<Class<?>> resultClasses, final boolean recurse)
+		throws ClassNotFoundException
+	{
 		logger.debug("_listClassesOfPackage: Entered for package {}", packageName);
 
 		// list all resource-entries for the given package
-		List<File> pathEntries = new LinkedList<File>();
-		List<JarFile> jarEntries = new LinkedList<JarFile>();
-		String path = packageName.replace('.', '/') + '/';
+		final List<File> pathEntries = new LinkedList<File>();
+		final List<JarFile> jarEntries = new LinkedList<JarFile>();
+		String path = packageName.replace('.', '/');
+		if (! path.endsWith("/"))
+			path += '/';
+
+		SortedSet<URL> resourceURLs = null;
+		if (logger.isTraceEnabled())
+		{
+			resourceURLs = new TreeSet<URL>( new Comparator<URL>()
+					{
+
+				@Override
+				public int compare(final URL o1, final URL o2)
+				{
+					if (o1 != null) {
+						return o1.toString().compareTo(o2 == null ? "" : o2.toString());
+					}
+					else {
+						return o2 != null ? -1 : 0;
+					}
+				}
+					});
+		}
+
 		try {
 			// Ask for all resources for the path
-			Enumeration<URL> resources = cld.getResources(path);
+			final Enumeration<URL> resources = cld.getResources(path);
 			while (resources.hasMoreElements()) {
-				URL resourceURL = resources.nextElement();
+				final URL resourceURL = resources.nextElement();
+				if (logger.isTraceEnabled())
+					resourceURLs.add(resourceURL);
 				if (resourceURL.getProtocol() == null || resourceURL.getProtocol().equalsIgnoreCase("file")) {
-					File pathEntry = new File(URLDecoder.decode(resourceURL.getPath(), "UTF-8"));
-					String pathEntryString = pathEntry.getAbsolutePath();
-					if (processedPaths.add(pathEntryString))
+					final File pathEntry = new File(URLDecoder.decode(resourceURL.getPath(), "UTF-8"));
 						pathEntries.add(pathEntry);
-					else
-						logger.debug("_listClassesOfPackage: Skipping previously processed path: {}", pathEntryString);
 				} else if (resourceURL.getProtocol().equalsIgnoreCase("jar")) {
 					String jarPath = resourceURL.getPath();
 					jarPath = jarPath.substring(0, jarPath.indexOf("!"));
@@ -763,98 +787,114 @@ public class ReflectUtil
 						jarPath = jarPath.substring(5);
 
 					jarPath = URLDecoder.decode(jarPath, "UTF-8");
-
-					if (processedPaths.add(jarPath))
-						jarEntries.add(new JarFile(jarPath));
-					else
-						logger.debug("_listClassesOfPackage: Skipping previously processed jar: {}", jarPath);
+					jarEntries.add(new JarFile(jarPath));
 				}
 			}
-		} catch (NullPointerException x) {
+		} catch (final NullPointerException x) {
 			throw new ClassNotFoundException(packageName + " does not appear to be a valid package (Null pointer exception)");
-		} catch (UnsupportedEncodingException encex) {
+		} catch (final UnsupportedEncodingException encex) {
 			throw new ClassNotFoundException(packageName + " does not appear to be a valid package (Unsupported encoding)");
-		} catch (IOException ioex) {
+		} catch (final IOException ioex) {
 			throw new ClassNotFoundException("IOException was thrown when trying to get all resources for " + packageName, ioex);
 		}
 
-		// separate into classes and directories
-		List<String> recursePackages = new LinkedList<String>();
-		// For every directory identified capture all the .class files
-		for (File directory : pathEntries) {
-			if (directory.exists()) {
-				logger.debug("_listClassesOfPackage: Scanning directory: {}", directory.getAbsolutePath());
+		logger.trace("=============================================================");
+		logger.trace("Foung the following resources: \n {}", resourceURLs);
+		logger.trace("=============================================================");
 
-				// Get the list of the files contained in the package
-				File[] files = directory.listFiles();
-				for (File file : files) {
-					if (file.isDirectory()) {
-						recursePackages.add(packageName + "." + file.getName());
-					} else {
-						// we are only interested in .class files
-						if (file.getName().endsWith(".class")) {
-							// removes the .class extension
-							final String className = packageName + '.' + file.getName().substring(0, file.getName().length() - 6);
-							try {
-								resultClasses.add(cld.loadClass(className));
-							} catch (ClassFormatError e) {
-								// ignore these errors as they might occur when using intentionally borked jars like: http://forums.java.net/jive/message.jspa?messageID=226931
-								logger.warn("Couldn't get class definition for {} from file {}!", className, file.getAbsolutePath());
-							} catch (NoClassDefFoundError e) {
-								logger.warn("No class definition found for {} from file {}!", className, file.getAbsolutePath());
-							}
-						}
-					}
-				}
-			} else {
+		// separate into classes and directories
+		// For every directory identified capture all the .class files
+		for (final File directory : pathEntries)
+		{
+			if (directory.exists()) {
+				recursivelyListClassesOfDirectory(packageName, directory, cld, resultClasses, recurse);
+			}
+			else {
 				throw new ClassNotFoundException(packageName + " (" + directory.getPath() + ") does not appear to be a valid package");
 			}
 		}
 
-		for (JarFile jarFile : jarEntries) {
+		for (final JarFile jarFile : jarEntries) {
 			logger.debug("_listClassesOfPackage: Scanning JAR: {}", jarFile.getName());
 
-			for (Enumeration<JarEntry> enumeration = jarFile.entries(); enumeration.hasMoreElements(); )
+			for (final Enumeration<JarEntry> enumeration = jarFile.entries(); enumeration.hasMoreElements(); )
 			{
-				JarEntry entry = enumeration.nextElement();
+				final JarEntry entry = enumeration.nextElement();
 				if (!(entry.getName().length() >= path.length() && entry.getName().substring(0, path.length()).equals(path))) {
 					continue;
 				}
-				if (entry.isDirectory()) {
-					String suffix = entry.getName().substring(path.length());
-					if ("".equals(suffix)) {
-						continue;
-					}
-					if (suffix.endsWith("/")) {
-						suffix = suffix.substring(0, suffix.length() -1);
-					}
-					if (suffix.indexOf('/') < 0) {
-						recursePackages.add(packageName + "." + suffix);
-					}
-				}
+				if (entry.isDirectory())
+					continue;
 				if(
-						entry.getName().endsWith(".class") &&
-						entry.getName().indexOf("/", path.length()) < 0
+						entry.getName().endsWith(".class")
+//				Important: This is wrong. We are checking all entries in the jar, but only add the classes directly located
+//				           under the given prefix!
+//				           In the next recursion, the jar is already known, hence skipped and no other classes are found! (Marius)
+//						&& entry.getName().indexOf("/", path.length()) < 0
 				) {
 					String cn = entry.getName().substring(0, entry.getName().length() - ".class".length());
 					cn = cn.replaceAll("/", ".");
 					try {
 						resultClasses.add(cld.loadClass(cn));
-					} catch (ClassFormatError e) {
+					} catch (final ClassFormatError e) {
 						// ignore these errors as they might occur when using intentionally borked jars like: http://forums.java.net/jive/message.jspa?messageID=226931
 						logger.warn("Couldn't get class definition for {} from file {}!", cn, jarFile.getName());
-					} catch (NoClassDefFoundError e) {
+					} catch (final NoClassDefFoundError e) {
 						logger.warn("No class definition found for {} from file {}!", cn, jarFile.getName());
 					}
 				}
 			}
 		}
-		// recurse into sub-packages
-		if (recurse) {
-			for (String pack : recursePackages) {
-				_listClassesOfPackage(pack, cld, resultClasses, recurse, processedPaths);
+	}
+
+	/**
+	 * Searches for classes in the given directory (and its sub-directories if <code>recurse == true</code>), loads the
+	 * class object via the classloader and adds them to the resultClasses collection.
+	 * <p>
+	 *  Note: Borked classes (designed to not being loadable - see http://forums.java.net/jive/message.jspa?messageID=226931
+	 *  for an example) may result in ClassFormatError or NoClassDefFoundErrors that are suppressed.
+	 * </p>
+	 *
+	 * @param packageName The packageName corresponding to the given starting directory.
+	 * @param directory The directory from which to load all classes (any maybe the classes of its subdirs).
+	 * @param cld The classloader to user for loading the class objects.
+	 * @param resultClasses The collection of found classes.
+	 * @param recurse Whether to recursively search the subfolders of the given directory.
+	 * @return The collection of found class objects.
+	 * @throws ClassNotFoundException In case the classloader wasn't able to load a class object.
+	 */
+	private static Collection<Class<?>> recursivelyListClassesOfDirectory(
+			final String packageName, final File directory, final ClassLoader cld, final Collection<Class<?>> resultClasses, final boolean recurse)
+		throws ClassNotFoundException
+	{
+		logger.debug("_listClassesOfPackage: Scanning directory: {}", directory.getAbsolutePath());
+		// Get the list of the files contained in the package
+		final File[] files = directory.listFiles();
+		if (files == null || files.length == 0)
+			return resultClasses;
+
+		for (final File file : files)
+		{
+			if (file.isDirectory() && recurse)
+				recursivelyListClassesOfDirectory(packageName + "." + file.getName(), file, cld, resultClasses, recurse);
+
+			// we are only interested in .class files
+			if (file.exists() && file.getName().endsWith(".class"))
+			{
+				logger.trace("recursivelyListClassesOfDirectory: Trying to load class from file '{}'.", file.getAbsolutePath());
+				// removes the .class extension
+				final String className = packageName + '.' + file.getName().substring(0, file.getName().length() - 6);
+				try {
+					resultClasses.add(cld.loadClass(className));
+				} catch (final ClassFormatError e) {
+					// ignore these errors as they might occur when using intentionally borked jars like: http://forums.java.net/jive/message.jspa?messageID=226931
+					logger.warn("Couldn't get class definition for {} from file {}!", className, file.getAbsolutePath());
+				} catch (final NoClassDefFoundError e) {
+					logger.warn("No class definition found for {} from file {}!", className, file.getAbsolutePath());
+				}
 			}
 		}
+		return resultClasses;
 	}
 
 	/**
@@ -870,7 +910,7 @@ public class ReflectUtil
 	 * @throws SecurityException if {@link Class#getDeclaredField(String)} throws a <code>SecurityException</code>.
 	 * @throws NoSuchFieldException if there is no field with the specified name in the complete class hierarchy.
 	 */
-	public static Field getDeclaredField(Class<?> clazz, String fieldName, Class<?> fieldType)
+	public static Field getDeclaredField(final Class<?> clazz, final String fieldName, final Class<?> fieldType)
 	throws SecurityException, NoSuchFieldException
 	{
 		if (clazz == null)
@@ -884,12 +924,12 @@ public class ReflectUtil
 		Class<?> c = clazz;
 		while (c != null) {
 			try {
-				Field f = c.getDeclaredField(fieldName);
+				final Field f = c.getDeclaredField(fieldName);
 				if (fieldType != null && f.getType() != fieldType)
 					throw new NoSuchFieldException("The field \"" + fieldName + "\" exists in class " + c.getName() + " but the type does not match! Expected type is " + fieldType.getName() + " but found " + f.getType().getName() + "!");
 
 				return f;
-			} catch (NoSuchFieldException e) {
+			} catch (final NoSuchFieldException e) {
 				if (firstNoSuchFieldException == null)
 					firstNoSuchFieldException = e;
 			}
@@ -935,16 +975,16 @@ public class ReflectUtil
 	 * 		The list of types used to parameterize the first parameterized super-class of the given class,
 	 * 		or <code>null</code> if no parameterized superclass can be found for the given class.
 	 */
-	public static List<Class<?>> getSuperClassTypeArguments(Class<?> clazz) {
+	public static List<Class<?>> getSuperClassTypeArguments(final Class<?> clazz) {
 		Class<?> checkClazz = clazz;
 		while (checkClazz != Object.class && checkClazz != null) {
-			Type genSuperclass = checkClazz.getGenericSuperclass();
+			final Type genSuperclass = checkClazz.getGenericSuperclass();
 			if (genSuperclass instanceof ParameterizedType) {
-				ParameterizedType parameterizedType = (ParameterizedType) genSuperclass;
-				Type[] typeArguments = parameterizedType.getActualTypeArguments();
-				List<Class<?>> result = new ArrayList<Class<?>>(typeArguments.length);
+				final ParameterizedType parameterizedType = (ParameterizedType) genSuperclass;
+				final Type[] typeArguments = parameterizedType.getActualTypeArguments();
+				final List<Class<?>> result = new ArrayList<Class<?>>(typeArguments.length);
 				for (int j = 0; j < typeArguments.length; j++) {
-					if (typeArguments[j] instanceof Class) {
+					if (typeArguments[j] instanceof Class<?>) {
 						result.add((Class<?>) typeArguments[j]);
 					}
 				}
@@ -966,12 +1006,12 @@ public class ReflectUtil
 	 * @param includeBaseClass Whether to include the base-class in the result.
 	 * @return A list with the class-hierarchy of the given start-class.
 	 */
-	public static List<Class<?>> collectClassHierarchy(Class<?> startClass, Class<?> baseClass, boolean includeBaseClass) {
+	public static List<Class<?>> collectClassHierarchy(final Class<?> startClass, final Class<?> baseClass, final boolean includeBaseClass) {
 		Class<?> stopClass = baseClass;
 		if (stopClass == null)
 			stopClass = Object.class;
 
-		List<Class<?>> result = new ArrayList<Class<?>>();
+		final List<Class<?>> result = new ArrayList<Class<?>>();
 		Class<?> checkClass = startClass;
 		while (checkClass != null && checkClass != stopClass) {
 			result.add(checkClass);
@@ -995,8 +1035,8 @@ public class ReflectUtil
 	 * @return A list containing the type hierarchy of the given class (containing the given class
 	 *         and all its direct and indirect super-classes/interfaces)
 	 */
-	public static List<Class<?>> collectTypeHierarchy(Class<?> clazz) {
-		List<Class<?>> classes = new ArrayList<Class<?>>();
+	public static List<Class<?>> collectTypeHierarchy(final Class<?> clazz) {
+		final List<Class<?>> classes = new ArrayList<Class<?>>();
 		computeClassOrder(clazz, classes);
 		return classes;
 	}
@@ -1004,9 +1044,9 @@ public class ReflectUtil
 	/**
 	 * Internally used by {@link #collectClassHierarchy(Class, Class, boolean)}.
 	 */
-	private static void computeClassOrder(Class<?> clazz, List<Class<?>> classes) {
+	private static void computeClassOrder(final Class<?> clazz, final List<Class<?>> classes) {
 		Class<?> _clazz = clazz;
-		Set<Class<?>> seen = new HashSet<Class<?>>();
+		final Set<Class<?>> seen = new HashSet<Class<?>>();
 		while (_clazz != null) {
 			classes.add(_clazz);
 			computeInterfaceOrder(_clazz.getInterfaces(), classes, seen);
@@ -1017,17 +1057,17 @@ public class ReflectUtil
 	/**
 	 * Internally used by {@link #collectClassHierarchy(Class, Class, boolean)}.
 	 */
-	private static void computeInterfaceOrder(Class<?>[] interfaces, Collection<Class<?>> classes, Set<Class<?>> seen) {
-		List<Class<?>> newInterfaces = new ArrayList<Class<?>>(interfaces.length);
+	private static void computeInterfaceOrder(final Class<?>[] interfaces, final Collection<Class<?>> classes, final Set<Class<?>> seen) {
+		final List<Class<?>> newInterfaces = new ArrayList<Class<?>>(interfaces.length);
 		for (int i = 0; i < interfaces.length; i++) {
-			Class<?> iface = interfaces[i];
+			final Class<?> iface = interfaces[i];
 			if (seen.add(iface)) {
 				// note we cannot recurse here without changing the resulting interface order
 				classes.add(iface);
 				newInterfaces.add(iface);
 			}
 		}
-		for (Class<?> newInterface : newInterfaces) {
+		for (final Class<?> newInterface : newInterfaces) {
 			computeInterfaceOrder((newInterface).getInterfaces(), classes, seen);
 		}
 	}
