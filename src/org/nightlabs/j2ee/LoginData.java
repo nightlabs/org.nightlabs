@@ -24,10 +24,13 @@
 package org.nightlabs.j2ee;
 
 import java.io.Serializable;
+import java.util.Hashtable;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
 import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.nightlabs.util.ParameterMap;
 import org.nightlabs.util.Util;
@@ -332,6 +335,28 @@ public class LoginData
 
 		securityProtocol = DEFAULT_SECURITY_PROTOCOL;
 	}
+
+	/**
+	 * Sets the connection parameters (providerURL and initialContextFactory)
+	 * from a newly created InitialContext. Does only work in an appropriate
+	 * environment where a newly created IntitalContext has these values set.
+	 */
+	public void setConnectionParametersFromInitialContext() {
+		if (getProviderURL() == null || getProviderURL().length() == 0) {
+			try {
+				InitialContext initContext = new InitialContext();
+				Hashtable<?,?> initialContextProperties = initContext.getEnvironment();
+				// TODO does this really work? Alternatively, we might read it from a registry - in the server, this registry exists already (but this is a client lib)...
+				setProviderURL((String) initialContextProperties.get(Context.PROVIDER_URL));
+				setInitialContextFactory((String) initialContextProperties.get(Context.INITIAL_CONTEXT_FACTORY));
+				initContext.close();
+			} catch (NamingException e) {
+				throw new RuntimeException("Could not retrieve the missing connection information " +
+						"via an initial context!", e);
+			}
+		}
+	}
+	
 
 	/**
 	 * @return the password
