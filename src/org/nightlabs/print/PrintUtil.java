@@ -135,6 +135,29 @@ public class PrintUtil {
 		// TODO: Still have to configure the print-service
 		return printService;
 	}
+
+	/**
+	 * Creates a new PrinterJob and assigns it the PrintService in the given
+	 * PrinterConfiguration. The PrintService will be configured to the settings
+	 * of the given printerConfiguration.
+	 * 
+	 * @param printerConfiguration The printerConfiguration to apply.
+	 * @return A new PrinterJob ready configured for the given PrinterConfiguration.
+	 * @throws PrinterException If the PrintService in the given PrinterConfiguration could not be found.
+	 */
+	public static PrinterJob getConfiguredPrinterJob(PrinterConfiguration printerConfiguration) throws PrinterException {
+		// Creates and returns a PrinterJob which is initially associated with the default printer.
+	    PrinterJob printerJob = PrinterJob.getPrinterJob();
+
+	    // Returns a PrintService describing the capabilities of the printer given by the printerConfiguration.
+	    // The PrintService is also configured in compliance with the settings of this configuration.
+		PrintService printService = PrintUtil.getConfiguredPrintService(printerConfiguration, true);
+
+		// Associates the PrinterJob with the PrintService.
+		printerJob.setPrintService(printService);
+
+		return printerJob;
+	}
 	
 	/**
 	 * Retuns the default(current) {@link PageFormat} for the given {@link PrintService}.
