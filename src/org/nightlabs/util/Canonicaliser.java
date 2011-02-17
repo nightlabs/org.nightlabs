@@ -132,7 +132,10 @@ public class Canonicaliser {
 	 * Can be <code>null</code> for setting default values.
 	 * @see #getReplaceableTypes()
 	 */
-	public void setReplaceableTypes(Collection<Class<?>> replaceableTypes) {
+	public void setReplaceableTypes(Collection<Class<?>> replaceableTypes)
+	{
+//		assertConfigurationNotFrozen();
+
 		if (replaceableTypes == null)
 		{
 			replaceableTypes = new LinkedList<Class<?>>();
@@ -214,7 +217,10 @@ public class Canonicaliser {
 	 * Can be <code>null</code> for setting default values.
 	 * @see #getNeverReplaceableTypes()
 	 */
-	public void setNeverReplaceableTypes(Collection<Class<?>> neverReplaceableTypes) {
+	public void setNeverReplaceableTypes(Collection<Class<?>> neverReplaceableTypes)
+	{
+//		assertConfigurationNotFrozen();
+
 		if (neverReplaceableTypes == null)
 		{
 			neverReplaceableTypes = new LinkedList<Class<?>>();
@@ -246,6 +252,28 @@ public class Canonicaliser {
 		return neverReplaceableTypes;
 	}
 
+//	private volatile boolean configurationFrozen = false;
+//
+//	/**
+//	 * Prevent future changes of the configuration.
+//	 * Once this method has been called, {@link #setNeverReplaceableTypes(Collection)}
+//	 * and {@link #setReplaceableTypes(Collection)} cannot be called anymore. Calling them
+//	 * leads to an exception.
+//	 */
+//	public void freezeConfiguration() {
+//		configurationFrozen = true;
+//	}
+//
+//	public boolean isConfigurationFrozen()
+//	{
+//		return configurationFrozen;
+//	}
+//
+//	protected void assertConfigurationNotFrozen()
+//	{
+//		if (isConfigurationFrozen())
+//			throw new IllegalStateException("Configuration frozen! Operation not allowed!");
+//	}
 
 	protected <T> T internalCanonicalise(T object, IdentityHashMap<Object, Object> processed)
 	{
