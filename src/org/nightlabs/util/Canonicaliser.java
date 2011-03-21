@@ -327,10 +327,14 @@ public class Canonicaliser {
 		if (result == null) {
 			result = object;
 
-			if (type.isArray()) {
-				Object[] array = (Object[]) object;
-				for (int i = 0; i < array.length; ++i)
-					array[i] = internalCanonicalise(array[i], processed);
+			if (type.isArray())
+			{
+				// added because otherwise ClassCast Exception occurred with primitive type arrays
+				if (!type.getComponentType().isPrimitive()) {
+					Object[] array = (Object[]) object;
+					for (int i = 0; i < array.length; ++i)
+						array[i] = internalCanonicalise(array[i], processed);					
+				}
 			}
 			else {
 //				stopwatch.start("50.80.collectAllFields");
