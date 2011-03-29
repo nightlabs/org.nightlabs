@@ -50,9 +50,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
@@ -1842,5 +1844,32 @@ public abstract class Util
 	public static String getUserName()
 	{
 		return System.getProperty("user.name"); //$NON-NLS-1$
+	}
+	
+	/**
+	 * Get all system properties and encode the values cause they might contain illegal characters (in windows)
+	 * @return the encoded system properties.
+	 */
+	public static java.util.Properties getEncodedSystemProperties() {
+		Properties sysProps = System.getProperties();
+		for(Map.Entry<Object, Object> entry : sysProps.entrySet()) {
+			ParameterCoder pc = new ParameterCoderMinusHexExt();
+			String newValue = pc.encode(String.valueOf(entry.getValue()));
+	        entry.setValue(newValue);
+		}
+		return sysProps;
+	}
+	
+	/**
+	 * Get all system property map and encode the values cause they might contain illegal characters (in windows)
+	 * @return the encoded system property map.
+	 */
+	public static Map<String, String> getEncodedSystemPropertyMap() {
+		Properties encodedSysProps = getEncodedSystemProperties();
+		Map<String, String> propMap = new HashMap<String, String>();
+		for(Map.Entry<Object, Object> entry : encodedSysProps.entrySet()) {	
+			propMap.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
+		}
+		return propMap;
 	}
 }
