@@ -1850,12 +1850,14 @@ public abstract class Util
 	 * Get all system properties and encode the values cause they might contain illegal characters (in windows)
 	 * @return the encoded system properties.
 	 */
-	public static java.util.Properties getEncodedSystemProperties() {
+	public static java.util.Properties getEncodedSystemProperties(Set<String> encodedProperties) {
 		Properties sysProps = System.getProperties();
 		for(Map.Entry<Object, Object> entry : sysProps.entrySet()) {
-			ParameterCoder pc = new ParameterCoderMinusHexExt();
-			String newValue = pc.encode(String.valueOf(entry.getValue()));
-	        entry.setValue(newValue);
+			if (encodedProperties.contains(entry.getKey())) {
+				ParameterCoder pc = new ParameterCoderMinusHexExt();
+				String newValue = pc.encode(String.valueOf(entry.getValue()));
+				entry.setValue(newValue);
+			}
 		}
 		return sysProps;
 	}
@@ -1865,7 +1867,9 @@ public abstract class Util
 	 * @return the encoded system property map.
 	 */
 	public static Map<String, String> getEncodedSystemPropertyMap() {
-		Properties encodedSysProps = getEncodedSystemProperties();
+		Set<String> encodedProperties = new HashSet<String>();
+		encodedProperties.add("user.name");
+		Properties encodedSysProps = getEncodedSystemProperties(encodedProperties);
 		Map<String, String> propMap = new HashMap<String, String>();
 		for(Map.Entry<Object, Object> entry : encodedSysProps.entrySet()) {	
 			propMap.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
