@@ -5,9 +5,7 @@ Bundle-SymbolicName: org.nightlabs.config;singleton:=true
 Bundle-Version: 1.0.2.qualifier
 Bundle-Activator: org.nightlabs.config.Activator
 Bundle-Vendor: NightLabs.org
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.apache.log4j,
+Require-Bundle: org.apache.log4j,
  org.nightlabs.concurrent;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-LazyStart: true
