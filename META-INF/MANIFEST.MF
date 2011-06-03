@@ -8,10 +8,6 @@ Export-Package: org.nightlabs,
  org.nightlabs.datastructure,
  org.nightlabs.db,
  org.nightlabs.environment,
- org.nightlabs.i18n.resource.country,
- org.nightlabs.i18n.resource.language,
- org.nightlabs.i18n.unit,
- org.nightlabs.i18n.unit.resolution,
  org.nightlabs.inheritance,
  org.nightlabs.io,
  org.nightlabs.io.pcx,
@@ -34,5 +30,6 @@ Require-Bundle: org.apache.log4j,
  org.nightlabs.config,
  org.nightlabs.util;visibility:=reexport,
  org.nightlabs.i18n;visibility:=reexport,
- org.nightlabs.progress;visibility:=reexport
+ org.nightlabs.progress;visibility:=reexport,
+ org.nightlabs.xml;visibility:=reexport
 Eclipse-BuddyPolicy: registered
