@@ -1,70 +1,37 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs</groupId>
-	<artifactId>org.nightlabs.i18n</artifactId>
-	<version>1.0.1</version>
+	<artifactId>i18n</artifactId>
+	<version>1.1-SNAPSHOT</version>
 	<name>NightLabs i18n</name>
 	<description>NightLabs basic classes for the internationalization of data.</description>
+	<packaging>bundle</packaging>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+	<parent>
+		<groupId>org.nightlabs</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.1-SNAPSHOT</version>
+	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.nightlabs</groupId>
-			<artifactId>org.nightlabs.util</artifactId>
-			<version>1.0.4</version>
+			<artifactId>util</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
-<!--
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.6.0</version>
-			<type>jar</type>
-			<scope>compile</scope>
 		</dependency>
--->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
-
-	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<outputDirectory>bin</outputDirectory>
-		<resources>
-			<resource>
-				<directory>src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>6</source>
-					<target>6</target>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifestFile>META-INF/MANIFEST.MF</manifestFile>
-					</archive>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>
