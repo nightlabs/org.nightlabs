@@ -6,3 +6,4 @@ Bundle-Version: 1.0.1.qualifier
 Bundle-Vendor: NightLabs.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.nightlabs.progress
+Import-Package: org.slf4j
