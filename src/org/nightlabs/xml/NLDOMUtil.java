@@ -277,95 +277,108 @@ public class NLDOMUtil
 
   /**
    * Get a text value from an element (i.e. the text within the opening and the closing tags).
+   * This will return all nested text nodes concatenated to one string. Inner XML elements
+   * or comments are not included.
+   * @param node the node from which to obtain the text.
+   * @return the text - an empty string if there is no text content, never <code>null</code>
+   */
+  public static String getTextContent(Node node)
+  {
+	  StringBuilder sb = new StringBuilder();
+	  NodeList nl = node.getChildNodes();
+	  for (int i = 0; i < nl.getLength(); ++i) {
+		  Node ntxt = nl.item(i);
+		  if(ntxt.getNodeType() == Node.TEXT_NODE) {
+			  if (sb == null)
+				  sb = new StringBuilder();
+			  sb.append(((Text)ntxt).getData());
+		  }
+	  }
+	  return sb.toString();
+  }
+
+
+  /**
+   * Get a text value from an element (i.e. the text within the opening and the closing tags).
    * @param node the node from which to obtain the text.
    * @param beautify whether or not to trim and apply some other formatting. This means not only to
    *		remove white spaces before and after the actual text but additionally to remove double white spaces
    *		inbetween and to understand "\" as escape char with "\t" for a tab, "\n" for a line feed and "\\" for a "\".
    *		Note, that <code>beautify == true</code> will remove all "\r" from the text! If you really need Windows CRs,
    *		you have to use <code>beautify == false</code> or replace all "\n" by "\r\n".
-   * @return the text.
+   * @return the text or <code>null</code> if the given node contains no text
    */
   public static String getTextContent(Node node, boolean beautify)
   {
-  	StringBuilder sb = null;
-		NodeList nl = node.getChildNodes();
-		for (int i = 0; i < nl.getLength(); ++i) {
-			Node ntxt = nl.item(i);
-			if (ntxt instanceof Text) {
-				if (sb == null)
-					sb = new StringBuilder();
+	  String text = getTextContent(node);
 
-				sb.append(((Text)ntxt).getData());
-			}
-		}
+	  if (text.isEmpty())
+		  return null;
 
-		if (sb == null)
-			return null;
+	  if (!beautify)
+		  return text;
 
-		if (!beautify)
-			return sb.toString();
+	  // beautify
+	  String lastToken = null;
+	  boolean lastTokenWasLF = false;
+	  StringTokenizer st = new StringTokenizer(text.trim().replace("\r", ""), "\\\n\r \t", true);
+	  StringBuilder sb = new StringBuilder();
+	  while (st.hasMoreTokens()) {
+		  String token = st.nextToken();
+		  if ("\n".equals(token)) {
+			  if (lastTokenWasLF) {
+				  sb.append(token);
+				  lastTokenWasLF = false;
+			  }
+			  else
+				  lastTokenWasLF = true;
+		  }
+		  else if (" ".equals(token)) {
+			  if ("\n".equals(lastToken)) {
+				  if (sb.charAt(sb.length() - 1) != ' ' && sb.charAt(sb.length() - 1) != '\t' && sb.charAt(sb.length() - 1) != '\n')
+					  sb.append(" ");
+			  }
+			  else if (!" ".equals(lastToken) && !"\t".equals(lastToken))
+				  sb.append(token);
+		  }
+		  else if ("\t".equals(token)) {
+			  if ("\n".equals(lastToken)) {
+				  if (sb.charAt(sb.length() - 1) != ' ' && sb.charAt(sb.length() - 1) != '\t' && sb.charAt(sb.length() - 1) != '\n')
+					  sb.append(" ");
+			  }
+			  else if (!" ".equals(lastToken) && !"\t".equals(lastToken))
+				  sb.append(token);
+		  }
+		  else {
+			  if ("\\".equals(lastToken)) { // the first character of the current token is escaped => split
+				  char escapedChar = token.charAt(0);
+				  token = token.substring(1);
 
-		// beautify
-		String lastToken = null;
-		boolean lastTokenWasLF = false;
-		StringTokenizer st = new StringTokenizer(sb.toString().trim().replace("\r", ""), "\\\n\r \t", true);
-		sb.setLength(0); // reuse this StringBuilder
-		while (st.hasMoreTokens()) {
-			String token = st.nextToken();
-			if ("\n".equals(token)) {
-				if (lastTokenWasLF) {
-					sb.append(token);
-					lastTokenWasLF = false;
-				}
-				else
-					lastTokenWasLF = true;
-			}
-			else if (" ".equals(token)) {
-				if ("\n".equals(lastToken)) {
-					if (sb.charAt(sb.length() - 1) != ' ' && sb.charAt(sb.length() - 1) != '\t' && sb.charAt(sb.length() - 1) != '\n')
-						sb.append(" ");
-				}
-				else if (!" ".equals(lastToken) && !"\t".equals(lastToken))
-					sb.append(token);
-			}
-			else if ("\t".equals(token)) {
-				if ("\n".equals(lastToken)) {
-					if (sb.charAt(sb.length() - 1) != ' ' && sb.charAt(sb.length() - 1) != '\t' && sb.charAt(sb.length() - 1) != '\n')
-						sb.append(" ");
-				}
-				else if (!" ".equals(lastToken) && !"\t".equals(lastToken))
-					sb.append(token);
-			}
-			else {
-				if ("\\".equals(lastToken)) { // the first character of the current token is escaped => split
-					char escapedChar = token.charAt(0);
-					token = token.substring(1);
+				  switch (escapedChar) {
+				  case 'n':
+					  sb.append('\n');
+					  break;
+				  case 't':
+					  sb.append('\t');
+					  break;
+				  default:
+					  sb.append(escapedChar);
+				  break;
+				  }
+			  }
+			  else if ("\n".equals(lastToken) && sb.charAt(sb.length() - 1) != ' ' && sb.charAt(sb.length() - 1) != '\t' && sb.charAt(sb.length() - 1) != '\n')
+				  sb.append(" ");
 
-					switch (escapedChar) {
-						case 'n':
-							sb.append('\n');
-							break;
-						case 't':
-							sb.append('\t');
-							break;
-						default:
-							sb.append(escapedChar);
-							break;
-					}
-				}
-				else if ("\n".equals(lastToken) && sb.charAt(sb.length() - 1) != ' ' && sb.charAt(sb.length() - 1) != '\t' && sb.charAt(sb.length() - 1) != '\n')
-					sb.append(" ");
+			  if (!"\\".equals(token))
+				  sb.append(token);
 
-				if (!"\\".equals(token))
-					sb.append(token);
+			  lastTokenWasLF = false;
+		  }
 
-				lastTokenWasLF = false;
-			}
+		  lastToken = token;
+	  }
 
-			lastToken = token;
-		}
-
-		return sb.toString();
+	  return sb.toString();
   }
 
   /**
