@@ -23,8 +23,7 @@ Export-Package: org.nightlabs,
  org.nightlabs.script,
  org.nightlabs.timepattern,
  org.nightlabs.version,
- org.nightlabs.webapp,
- org.nightlabs.xml
+ org.nightlabs.webapp
 Require-Bundle: org.apache.log4j,
  org.apache.xerces,
  org.nightlabs.config,
