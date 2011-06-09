@@ -6,3 +6,4 @@ Bundle-Version: 1.1.0
 Bundle-Vendor: nightlabs.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.apache.xerces
+Export-Package: org.nightlabs.xml
