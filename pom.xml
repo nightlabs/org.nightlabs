@@ -133,8 +133,13 @@
 	
 	<profiles>
 		<profile>
-			<!-- Jenkins Profile. "BUILD_ID" is one of the environment variables set by Jenkins. This will enable this profile automatically. -->
-			<id>BUILD_ID</id>
+			<id>buildserver</id>
+			<!-- Jenkins Profile. "BUILD_NUMBER" is one of the environment variables set by Jenkins. This will activate this profile automatically. -->
+			<activation>
+                <property>
+                    <name>BUILD_NUMBER</name>
+                </property>
+            </activation>
 			<build>
 				<plugins>
 					<plugin>
@@ -143,7 +148,7 @@
 						<version>1.6</version>
 						<executions>
 							<execution>
-								<phase>generate-test-resources</phase>
+								<phase>package</phase>
 								<goals>
 									<goal>run</goal>
 								</goals>
