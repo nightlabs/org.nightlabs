@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs</groupId>
 	<artifactId>org.nightlabs.concurrent</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.2.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>${project.artifactId}</name>
 
 	<parent>
 		<groupId>org.nightlabs</groupId>
 		<artifactId>org.nightlabs.parent</artifactId>
-		<version>1.1-SNAPSHOT</version>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
