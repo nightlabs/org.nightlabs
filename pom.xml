@@ -17,6 +17,23 @@
 		<url>http://www.nightlabs.de/</url>
 	</organization>
 
+	<scm>
+		<connection>scm:svn:https://dev.nightlabs.org/svn/public/main/trunk/org.nightlabs.parent</connection>
+		<developerConnection>scm:svn:https://dev.nightlabs.org/svn/public/main/trunk/org.nightlabs.parent</developerConnection>
+		<url>https://https://dev.nightlabs.org/svn/public/main/trunk/org.nightlabs.parent</url>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>dev.nightlabs.org-libs-releases-local</id>
+			<url>https://dev.nightlabs.org/maven-repository/libs-releases-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>dev.nightlabs.org-libs-snapshots-local</id>
+			<url>https://dev.nightlabs.org/maven-repository/libs-snapshots-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+		
 	<dependencyManagement>
 		<!-- ###### nightlabs ###### -->
 		<dependencies>
