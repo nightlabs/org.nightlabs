@@ -3,12 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs</groupId>
 	<artifactId>org.nightlabs.parent</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<bundle.namespace>${project.artifactId}</bundle.namespace>
 	</properties>
 
 	<organization>
@@ -19,6 +20,11 @@
 	<dependencyManagement>
 		<!-- ###### nightlabs ###### -->
 		<dependencies>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.base</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.config</artifactId>
@@ -36,7 +42,22 @@
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.jdo</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.progress</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.query</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.query.jdo</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -51,6 +72,11 @@
 			</dependency>
 
 			<!-- ###### 3rd party ###### -->
+			<dependency>
+				<groupId>javax.jdo</groupId>
+				<artifactId>jdo2-api</artifactId>
+				<version>2.3-ec</version>
+			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
@@ -106,6 +132,13 @@
 				<version>2.3.4</version>
 				<extensions>true</extensions>
 				<inherited>true</inherited>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${project.version}"</Export-Package>
+						<Private-Package>${bundle.namespace}.internal.*</Private-Package>
+					</instructions>
+				</configuration>
 			</plugin>
 		</plugins>
 		<pluginManagement>
