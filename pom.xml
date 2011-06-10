@@ -149,7 +149,7 @@
 						</configuration>
 						<executions>
 							<execution>
-								<phase>test</phase>
+								<phase>package</phase>
 								<goals>
 									<goal>cobertura</goal>
 								</goals>
@@ -162,7 +162,7 @@
 						<version>2.3.2</version>
 						<executions>
 							<execution>
-								<phase>test</phase>
+								<phase>package</phase>
 								<goals>
 									<goal>findbugs</goal>
 								</goals>
@@ -179,7 +179,7 @@
 						<version>2.0</version>
 						<executions>
 							<execution>
-								<phase>test</phase>
+								<phase>package</phase>
 								<goals>
 									<goal>report</goal>
 								</goals>
@@ -234,7 +234,6 @@
 						</executions>
 					</plugin>
  -->
-<!--  
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
@@ -247,24 +246,34 @@
 								</goals>
 								<configuration>
 									<target>
+										<!-- Hack for Projects which create no coverage.xml with cobertura, because there are no sources -->
+										<taskdef resource="net/sf/antcontrib/antlib.xml" />
 										<property name="nl.cobertura.dir" value="${project.build.directory}/site/cobertura" />
 										<property name="nl.cobertura.coverage.file" value="${nl.cobertura.dir}/coverage.xml" />
-										<mkdir dir="${nl.cobertura.dir}" />
-										<echoxml file="${nl.cobertura.coverage.file}">
-											<coverage>
-												<sources>
-													<source>src/main/java</source>
-												</sources>
-												<packages>
-												</packages>
-											</coverage>
-										</echoxml>
+										<if>
+											<not><available file="${nl.cobertura.coverage.file}"/></not>
+											<then>
+												<echo message="Creating dummy Cobertura file for Jenkins at ${nl.cobertura.coverage.file}" />
+												<mkdir dir="${nl.cobertura.dir}" />
+												<echoxml file="${nl.cobertura.coverage.file}">
+													<coverage>
+														<sources>
+															<source>src/main/java</source>
+														</sources>
+														<packages>
+														</packages>
+													</coverage>
+												</echoxml>
+											</then>
+											<else>
+												<echo>Cobertura file exists at ${nl.cobertura.coverage.file}</echo>
+											</else>
+										</if>
 									</target>
 								</configuration>
 							</execution>
 						</executions>
 					</plugin>
--->					
 				</plugins>
 			</build>
 		</profile>
