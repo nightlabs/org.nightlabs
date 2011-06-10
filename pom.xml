@@ -255,6 +255,7 @@
 										<if>
 											<not><available file="${nl.cobertura.coverage.file}"/></not>
 											<then>
+											-->
 												<echo message="Creating dummy Cobertura file for Jenkins at ${nl.cobertura.coverage.file}" />
 												<mkdir dir="${nl.cobertura.dir}" />
 												<echoxml file="${nl.cobertura.coverage.file}">
@@ -266,6 +267,7 @@
 														</packages>
 													</coverage>
 												</echoxml>
+												<!-- 
 											</then>
 											<else>
 												<echo>Cobertura file exists at ${nl.cobertura.coverage.file}</echo>
