@@ -21,32 +21,32 @@
 		<dependencies>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
-				<artifactId>config</artifactId>
+				<artifactId>org.nightlabs.config</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
-				<artifactId>concurrent</artifactId>
+				<artifactId>org.nightlabs.concurrent</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
-				<artifactId>i18n</artifactId>
+				<artifactId>org.nightlabs.i18n</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
-				<artifactId>progress</artifactId>
+				<artifactId>org.nightlabs.progress</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
-				<artifactId>util</artifactId>
+				<artifactId>org.nightlabs.util</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
-				<artifactId>xml</artifactId>
+				<artifactId>org.nightlabs.xml</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
@@ -157,6 +157,7 @@
 							</execution>
 						</executions>
 					</plugin>
+					-->
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>findbugs-maven-plugin</artifactId>
@@ -174,6 +175,7 @@
 							</execution>
 						</executions>
 					</plugin>
+					<!-- 
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>javancss-maven-plugin</artifactId>
