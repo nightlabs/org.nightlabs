@@ -118,7 +118,7 @@
 						<dependency>
 							<groupId>org.apache.ant</groupId>
 							<artifactId>ant</artifactId>
-							<version>1.8.1</version>
+							<version>1.8.2</version>
 						</dependency>
 						<dependency>
 							<groupId>ant-contrib</groupId>
@@ -136,7 +136,6 @@
 			<id>buildserver</id>
 			<build>
 				<plugins>
-					<!-- 
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>cobertura-maven-plugin</artifactId>
@@ -157,7 +156,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					-->
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>findbugs-maven-plugin</artifactId>
@@ -175,7 +173,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- 
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>javancss-maven-plugin</artifactId>
@@ -189,8 +186,7 @@
 							</execution>
 						</executions>
 					</plugin>
-					-->
-					<!-- 
+<!-- 					
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-pmd-plugin</artifactId>
@@ -211,7 +207,7 @@
 							</execution>
 						</executions>
 					</plugin>
-					-->
+-->					
 <!-- 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -238,44 +234,31 @@
 						</executions>
 					</plugin>
  -->
-					<!-- 
+<!--  
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
 						<version>1.6</version>
 						<executions>
 							<execution>
-								<phase>test</phase>
+								<phase>generate-test-resources</phase>
 								<goals>
 									<goal>run</goal>
 								</goals>
 								<configuration>
 									<target>
--->									
-										<!-- Hack for Projects which create no coverage.xml with cobertura, because there are no sources -->
-<!-- 										
-										<taskdef resource="net/sf/antcontrib/antlib.xml" />
 										<property name="nl.cobertura.dir" value="${project.build.directory}/site/cobertura" />
 										<property name="nl.cobertura.coverage.file" value="${nl.cobertura.dir}/coverage.xml" />
-										<available property="nl.cobertura.coverage.file.exists" file="${nl.cobertura.coverage.file}" />
-										<if>
-											<not>
-												<equals arg1="${nl.cobertura.coverage.file.exists}" arg2="true" />
-											</not>
-											<then>
-												<mkdir dir="${nl.cobertura.dir}" />
-												<echo message="create dummy cobertura ${nl.cobertura.coverage.file} for jenkins" />
-												<echoxml file="${nl.cobertura.coverage.file}">
-													<coverage>
-														<sources>
-															<source>src/main/java</source>
-														</sources>
-														<packages>
-														</packages>
-													</coverage>
-												</echoxml>
-											</then>
-										</if>
+										<mkdir dir="${nl.cobertura.dir}" />
+										<echoxml file="${nl.cobertura.coverage.file}">
+											<coverage>
+												<sources>
+													<source>src/main/java</source>
+												</sources>
+												<packages>
+												</packages>
+											</coverage>
+										</echoxml>
 									</target>
 								</configuration>
 							</execution>
