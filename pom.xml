@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.nightlabs</groupId>
-			<artifactId>progress</artifactId>
+			<artifactId>org.nightlabs.progress</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
