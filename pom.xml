@@ -17,7 +17,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.nightlabs</groupId>
-			<artifactId>util</artifactId>
+			<artifactId>org.nightlabs.util</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
