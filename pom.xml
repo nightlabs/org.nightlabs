@@ -140,7 +140,7 @@
 				<configuration>
 					<instructions>
 						<!-- the provide:=true instruction results in having Import-Package with version range 
-						     e.g. "[1.2,1.3)" instead of "[1.2,2)" which is the default for all org.nightlabs
+						     e.g. "[1.2,1.3)" instead of "[1.2,2)" which is the default. Applies to all org.nightlabs
 						     packages. See http://www.aqute.biz/Bnd/Versioning -->
 						<Import-Package>org.nightlabs.*;provide:=true,*</Import-Package>
 						<Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
