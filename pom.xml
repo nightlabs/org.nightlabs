@@ -240,13 +240,15 @@
 						<version>1.6</version>
 						<executions>
 							<execution>
-								<phase>generate-test-resources</phase>
+								<phase>package</phase>
 								<goals>
 									<goal>run</goal>
 								</goals>
 								<configuration>
 									<target>
+										<echo>Hello World!</echo>
 										<!-- Hack for Projects which create no coverage.xml with cobertura, because there are no sources -->
+										<!-- 
 										<taskdef resource="net/sf/antcontrib/antlib.xml" />
 										<property name="nl.cobertura.dir" value="${project.build.directory}/site/cobertura" />
 										<property name="nl.cobertura.coverage.file" value="${nl.cobertura.dir}/coverage.xml" />
@@ -269,6 +271,7 @@
 												<echo>Cobertura file exists at ${nl.cobertura.coverage.file}</echo>
 											</else>
 										</if>
+										-->
 									</target>
 								</configuration>
 							</execution>
