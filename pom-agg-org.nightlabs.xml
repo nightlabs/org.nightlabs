@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.nightlabs</groupId>
+	<artifactId>org.nightlabs.aggregator</artifactId>
+	<version>1.2.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>${project.artifactId}</name>
+
+	<modules>
+		<module>../org.nightlabs.parent</module> <!-- org.nightlabs:org.nightlabs.parent -->
+
+		<module>../org.nightlabs.base</module>
+		<module>../org.nightlabs.clientui</module>
+		<module>../org.nightlabs.concurrent</module>
+		<module>../org.nightlabs.config</module>
+		<module>../org.nightlabs.i18n</module>
+		<module>../org.nightlabs.jdo</module>
+		<module>../org.nightlabs.progress</module>
+		<module>../org.nightlabs.query</module>
+		<module>../org.nightlabs.query.jdo</module>
+		<module>../org.nightlabs.util</module>
+		<module>../org.nightlabs.xml</module>
+
+		<module>../DelegatingClassLoader</module> <!-- org.nightlabs:org.nightlabs.classloader.delegating -->
+		<module>../org.nightlabs.connection</module> <!-- org.nightlabs:org.nightlabs.connection -->
+		<!-- TODO add later - too many deps:
+		<module>../org.nightlabs.editor2d</module> --> <!-- org.nightlabs:org.nightlabs.editor2d -->
+		<module>../org.nightlabs.htmlcontent</module> <!-- org.nightlabs:org.nightlabs.htmlcontent -->
+		<module>../org.nightlabs.keyreader</module> <!-- org.nightlabs:org.nightlabs.keyreader -->
+		<!-- TODO add later: 
+		<module>../NightLabsRhino</module> --> <!-- org.nightlabs:org.nightlabs.rhino.XXX -->
+		<module>../org.nightlabs.singleton</module> <!-- org.nightlabs:org.nightlabs.singleton -->
+		<!--  TODO add later with JBoss dependencies
+		<module>../UnifiedEjbJndiJBoss</module> --> <!-- org.nightlabs:org.nightlabs.unifiedejbjndi.jboss -->
+		<!--  TODO add later with JBoss dependencies
+		<module>../org.nightlabs.unifiedjndi.jboss.client</module> --> <!-- org.nightlabs:org.nightlabs.unifiedjndi.jboss.client -->
+
+	</modules>
+</project>
