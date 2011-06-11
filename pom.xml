@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.nightlabs</groupId>
+	<artifactId>org.nightlabs.htmlcontent</artifactId>
+	<version>1.2.0-SNAPSHOT</version>
+	<packaging>bundle</packaging>
+	<name>${project.artifactId}</name>
+
+	<parent>
+		<groupId>org.nightlabs</groupId>
+		<artifactId>org.nightlabs.parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
+	</parent>
+
+	<!-- pretty sure, this is not needed:
+	<dependencies>
+		<dependency>
+			<groupId>org.nightlabs.jfire</groupId>
+			<artifactId>org.nightlabs.jfire.base.j2ee</artifactId>
+			<scope>provided</scope>
+		</dependency>		
+	</dependencies>
+	-->
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<outputDirectory>bin</outputDirectory>
+		<resources>
+			<resource>
+				<directory>src</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+	</build>
+</project>
