@@ -33,10 +33,7 @@
 		<!-- TODO add later: 
 		<module>../NightLabsRhino</module> --> <!-- org.nightlabs:org.nightlabs.rhino.XXX -->
 		<module>../org.nightlabs.singleton</module> <!-- org.nightlabs:org.nightlabs.singleton -->
-		<!--  TODO add later with JBoss dependencies
-		<module>../UnifiedEjbJndiJBoss</module> --> <!-- org.nightlabs:org.nightlabs.unifiedejbjndi.jboss -->
-		<!--  TODO add later with JBoss dependencies
-		<module>../org.nightlabs.unifiedjndi.jboss.client</module> --> <!-- org.nightlabs:org.nightlabs.unifiedjndi.jboss.client -->
-
+		<module>../UnifiedEjbJndiJBoss</module> <!-- org.nightlabs:org.nightlabs.unifiedejbjndi.jboss -->
+		<module>../org.nightlabs.unifiedjndi.jboss.client</module> <!-- org.nightlabs:org.nightlabs.unifiedjndi.jboss.client -->
 	</modules>
 </project>

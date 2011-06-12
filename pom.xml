@@ -33,10 +33,10 @@
 			<url>https://dev.nightlabs.org/maven-repository/libs-snapshots-local</url>
 		</snapshotRepository>
 	</distributionManagement>
-		
+
 	<dependencyManagement>
-		<!-- ###### nightlabs ###### -->
 		<dependencies>
+			<!-- ###### nightlabs ###### -->
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.base</artifactId>
@@ -93,11 +93,62 @@
 				<version>${project.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.classloader.delegating</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.connection</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.editor2d</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.htmlcontent</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.keyreader</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.rhino.XXX</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.singleton</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.unifiedejbjndi.jboss</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.unifiedjndi.jboss.client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
 			<!-- ###### 3rd party ###### -->
 			<dependency>
 				<groupId>javax.jdo</groupId>
 				<artifactId>jdo2-api</artifactId>
 				<version>2.3-ec</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.geronimo.specs</groupId>
+				<artifactId>geronimo-ejb_3.0_spec</artifactId>
+				<version>1.0.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -113,6 +164,12 @@
 				<groupId>log4j</groupId>
 				<artifactId>log4j</artifactId>
 				<version>1.2.16</version>
+			</dependency>
+			<!-- TODO not a bundle? -->
+			<dependency>
+				<groupId>xerces</groupId>
+				<artifactId>xercesImpl</artifactId>
+				<version>2.9.1</version>
 			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
@@ -156,9 +213,9 @@
 				<inherited>true</inherited>
 				<configuration>
 					<instructions>
-						<!-- the provide:=true instruction results in having Import-Package with version range 
-						     e.g. "[1.2,1.3)" instead of "[1.2,2)" which is the default. Applies to all org.nightlabs
-						     packages. See http://www.aqute.biz/Bnd/Versioning -->
+						<!-- the provide:=true instruction results in having Import-Package 
+							with version range e.g. "[1.2,1.3)" instead of "[1.2,2)" which is the default. 
+							Applies to all org.nightlabs packages. See http://www.aqute.biz/Bnd/Versioning -->
 						<Import-Package>org.nightlabs.*;provide:=true,*</Import-Package>
 						<Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
 						<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${project.version}"</Export-Package>
@@ -190,16 +247,17 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>buildserver</id>
-			<!-- "BUILD_NUMBER" is one of the environment variables set by Jenkins. This will activate this profile automatically. -->
+			<!-- "BUILD_NUMBER" is one of the environment variables set by Jenkins. 
+				This will activate this profile automatically. -->
 			<activation>
-                <property>
-                    <name>BUILD_NUMBER</name>
-                </property>
-            </activation>
+				<property>
+					<name>BUILD_NUMBER</name>
+				</property>
+			</activation>
 			<build>
 				<plugins>
 					<plugin>
@@ -252,54 +310,19 @@
 							</execution>
 						</executions>
 					</plugin>
-<!-- 					
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-pmd-plugin</artifactId>
-						<version>2.5</version>
-						<configuration>
-							<rulesets>
-								<ruleset>http://leodev.haufe-ep.de:9080/userContent/maven/plugin-config/haufe_pmd.xml</ruleset>
-							</rulesets>
-							<targetJdk>${targetJdk}</targetJdk>
-						</configuration>
-						<executions>
-							<execution>
-								<phase>test</phase>
-								<goals>
-									<goal>pmd</goal>
-									<goal>cpd</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
--->					
-<!-- 
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-checkstyle-plugin</artifactId>
-						<version>2.6</version>
-						<configuration>
-							<aggregate>true</aggregate>
-							<configLocation>http://leodev.haufe-ep.de:9080/userContent/maven/plugin-config/haufe_checkstyle.xml</configLocation>
-							<suppressionsLocation>http://leodev.haufe-ep.de:9080/userContent/maven/plugin-config/supressions.xml</suppressionsLocation>
--->							
-							<!-- bug http://jira.codehaus.org/browse/MCHECKSTYLE-134 -->
-<!-- 							
-							<suppressionsFileExpression>checkstyle.suppressions.file.donothing</suppressionsFileExpression>
-							<propertyExpansion>checkstyle.suppressions.file=http://leodev.haufe-ep.de:9080/userContent/maven/plugin-config/supressions.xml</propertyExpansion>
-
-						</configuration>
-						<executions>
-							<execution>
-								<phase>test</phase>
-								<goals>
-									<goal>checkstyle</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
- -->
+					<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-pmd-plugin</artifactId> 
+						<version>2.5</version> <configuration> <rulesets> <ruleset>http://leodev.haufe-ep.de:9080/userContent/maven/plugin-config/haufe_pmd.xml</ruleset> 
+						</rulesets> <targetJdk>${targetJdk}</targetJdk> </configuration> <executions> 
+						<execution> <phase>test</phase> <goals> <goal>pmd</goal> <goal>cpd</goal> 
+						</goals> </execution> </executions> </plugin> -->
+					<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-checkstyle-plugin</artifactId> 
+						<version>2.6</version> <configuration> <aggregate>true</aggregate> <configLocation>http://leodev.haufe-ep.de:9080/userContent/maven/plugin-config/haufe_checkstyle.xml</configLocation> 
+						<suppressionsLocation>http://leodev.haufe-ep.de:9080/userContent/maven/plugin-config/supressions.xml</suppressionsLocation> -->
+					<!-- bug http://jira.codehaus.org/browse/MCHECKSTYLE-134 -->
+					<!-- <suppressionsFileExpression>checkstyle.suppressions.file.donothing</suppressionsFileExpression> 
+						<propertyExpansion>checkstyle.suppressions.file=http://leodev.haufe-ep.de:9080/userContent/maven/plugin-config/supressions.xml</propertyExpansion> 
+						</configuration> <executions> <execution> <phase>test</phase> <goals> <goal>checkstyle</goal> 
+						</goals> </execution> </executions> </plugin> -->
 
 				</plugins>
 			</build>
