@@ -17,8 +17,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>xerces</groupId>
-			<artifactId>xercesImpl</artifactId>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.xerces</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
