@@ -16,10 +16,6 @@
 		<relativePath>../${project.parent.artifactId}/pom.xml</relativePath>
 	</parent>
 
-	<dependencies>
-		
-	</dependencies>
-
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<outputDirectory>bin</outputDirectory>
@@ -31,7 +27,5 @@
 				</excludes>
 			</resource>
 		</resources>
-
-
 	</build>
 </project>
