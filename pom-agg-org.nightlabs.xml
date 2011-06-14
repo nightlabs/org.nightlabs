@@ -9,6 +9,17 @@
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
 
+	<distributionManagement>
+		<repository>
+			<id>dev.nightlabs.org-libs-releases-local</id>
+			<url>https://dev.nightlabs.org/maven-repository/libs-releases-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>dev.nightlabs.org-libs-snapshots-local</id>
+			<url>https://dev.nightlabs.org/maven-repository/libs-snapshots-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<modules>
 		<module>../org.nightlabs.parent</module> <!-- org.nightlabs:org.nightlabs.parent -->
 
