@@ -302,7 +302,7 @@
 						<dependency>
 							<groupId>org.nightlabs</groupId>
 							<artifactId>org.nightlabs.datanucleusenhancer.log4jconfig</artifactId>
-							<version>${project.version}</version>
+							<version>1.0.0</version>
 						</dependency>
 						<dependency>
 							<groupId>org.datanucleus</groupId>

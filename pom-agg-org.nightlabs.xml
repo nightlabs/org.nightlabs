@@ -22,7 +22,6 @@
 
 	<modules>
 		<module>../org.nightlabs.parent</module> <!-- org.nightlabs:org.nightlabs.parent -->
-		<module>../org.nightlabs.datanucleusenhancer.log4jconfig</module>
 
 		<module>../org.nightlabs.base</module>
 		<module>../org.nightlabs.clientui</module>
