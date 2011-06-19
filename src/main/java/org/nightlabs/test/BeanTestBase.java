@@ -214,7 +214,7 @@ public class BeanTestBase<T> {
 		} else if (type == Object.class) {
 			return new Object();
 		}
-		throw new UnsupportedOperationException("Test " + getClass() + " must override createValue(Class<?> type) and return a value for type " + type + " for property " + propertyName);
+		throw new UnsupportedOperationException("Test " + getClass() + " must override createValue(final Type type, String propertyName) and return a value for type " + type + " for property " + propertyName);
 	}
 
 	private void addValuesToCollection(final Collection<Object> result, final ParameterizedType parameterizedType, String propertyName) {
