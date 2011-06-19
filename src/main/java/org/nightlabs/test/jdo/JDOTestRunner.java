@@ -1,6 +1,7 @@
 package org.nightlabs.test.jdo;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkField;
 import org.junit.runners.model.FrameworkMethod;
@@ -23,7 +25,6 @@ public class JDOTestRunner extends BlockJUnit4ClassRunner {
 
 	private static final Logger LOG = LoggerFactory.getLogger(JDOTestRunner.class);
 	private boolean classLevelDefaultRollback;
-	//private File derbyDir;
 	private PersistenceManager persistenceManager;
 	private Map<Field, Object> resources;
 
@@ -93,20 +94,44 @@ public class JDOTestRunner extends BlockJUnit4ClassRunner {
 	}
 
 	protected String getConnectionUrl() {
+		File derbyDir = createTmpDir();
+		System.setProperty("derby.system.home", derbyDir.getAbsolutePath());
 		if (useInMemoryDB()) {
 			return "jdbc:derby:memory:testDb;create=true";
 		} else {
-			File derbyDir;
-			File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-			int count = 1;
-			String rand = String.valueOf(Math.random()).substring(2);
-			do {
-				derbyDir = new File(tmpDir, "derby-test-" + rand + "-" + count);
-				count++;
-			} while(derbyDir.exists());
-			LOG.info("Derby database directory: " + derbyDir.getAbsolutePath());
-			return "jdbc:derby:" + derbyDir.getAbsolutePath() + ";create=true";
+			File dbDir = new File(derbyDir, "testDb");
+			LOG.info("Derby database directory: " + dbDir.getAbsolutePath());
+			return "jdbc:derby:" + dbDir.getAbsolutePath() + ";create=true";
 		}
+	}
+
+	private File createTmpDir() {
+		File tmpDir;
+		File systemTmpDir = new File(System.getProperty("java.io.tmpdir"));
+		int count = 1;
+		int maxTries = 1000;
+		String rand = String.valueOf(Math.random()).substring(2);
+		do {
+			tmpDir = new File(systemTmpDir, "derby-test-" + rand + "-" + count);
+			count++;
+			if (count > maxTries) {
+				throw new RuntimeException("Error creating tmp dir in " + systemTmpDir.getAbsolutePath());
+			}
+		} while(tmpDir.exists() || !tmpDir.mkdirs());
+		final File toDelete = tmpDir;
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				if (toDelete.exists()) {
+					try {
+						FileUtils.deleteDirectory(toDelete);
+					} catch (IOException e) {
+						LOG.error("Error deleting directory: " + toDelete.getAbsolutePath(), e);
+					}
+				}
+			}
+		});
+		return tmpDir;
 	}
 
 	private void injectResources(Object test) throws IllegalArgumentException, IllegalAccessException {
