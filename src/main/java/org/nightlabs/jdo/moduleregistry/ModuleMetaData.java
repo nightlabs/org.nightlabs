@@ -30,6 +30,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.jar.Manifest;
 
 import javax.jdo.JDOObjectNotFoundException;
@@ -86,6 +90,36 @@ public class ModuleMetaData
 		}
 		return mmd;
 	}
+	
+	/**
+	 * Get the ModuleMetaData for a certain module via direct SQL-connection.
+	 * 
+	 * @param connection The connection 
+	 * @param moduleID The ID of the module 
+	 * @return An instance (not Persistent) of ModuleMetaData, or <code>null</code>, if no object exists in the datastore.
+	 * @throws SQLException
+	 * @throws MalformedVersionException
+	 */
+	public static ModuleMetaData getModuleMetaData(Connection connection, String moduleID) throws SQLException, MalformedVersionException {
+		PreparedStatement preparedStatement = connection.prepareStatement(
+				"SELECT module_id, schema_version " +
+				"FROM nightlabsjdo_modulemetadata " +
+				"WHERE module_id = ?"
+		);
+		try {
+			preparedStatement.setString(1, moduleID);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			// If there is an entry
+			if (resultSet.next()) {
+				String schemaVersion = resultSet.getString("schema_version");
+				return new ModuleMetaData(moduleID, schemaVersion);
+			}
+			return null;
+		} finally {
+			preparedStatement.close();
+		}
+	}		
 
 	public static ModuleMetaData createModuleMetaDataFromManifest(String moduleID, Class<?> clazz)
 	throws IOException, MalformedVersionException
@@ -96,43 +130,62 @@ public class ModuleMetaData
 		if (clazz == null)
 			throw new IllegalArgumentException("clazz must not be null!");
 
-		Manifest manifest = new Manifest();
-
 		String referenceClassRelativePath = "/" + clazz.getName().replace('.', '/') + ".class";
 		URL referenceClassURL = clazz.getResource(referenceClassRelativePath);
-		String referenceClassURLBase = referenceClassURL.toExternalForm();
-		if (!referenceClassURLBase.endsWith(referenceClassRelativePath))
-			throw new IllegalStateException("referenceClassURL does not end on \"" + referenceClassRelativePath + "\": " + referenceClassURLBase);
+		
+		return createModuleMetaDataFromManifest(moduleID, referenceClassURL);
+	}
+	
+	/**
+	 * Reads the {@link ModuleMetaData} from the MANIFEST file of the Ear file the given Resource is in.
+	 * 
+	 * @param moduleID The expected moduleID to be read.
+	 * @param resourceURL The URL of the reference resource (must be part of the ear).
+	 * @return A new {@link ModuleMetaData} (not persistent).
+	 * @throws IOException If this method fails reading the MANIFEST
+	 * @throws MalformedVersionException ...
+	 */
+	public static ModuleMetaData createModuleMetaDataFromManifest(String moduleID, URL resourceURL)
+	throws IOException, MalformedVersionException
+	{
+		Manifest manifest = new Manifest();
+		String referenceResourceRelativePath = resourceURL.getPath();
+		if ("jar".equals(resourceURL.getProtocol())) {
+			referenceResourceRelativePath = referenceResourceRelativePath.substring(referenceResourceRelativePath.indexOf("!") + 1 );
+		}
+		String referenceResourceURLBase = resourceURL.toExternalForm();
+		if (!referenceResourceURLBase.endsWith(referenceResourceRelativePath))
+			throw new IllegalStateException("referenceClassURL does not end on \"" + referenceResourceRelativePath + "\": " + referenceResourceURLBase);
 
-		referenceClassURLBase = referenceClassURLBase.substring(0, referenceClassURLBase.length() - referenceClassRelativePath.length());
+		referenceResourceURLBase = referenceResourceURLBase.substring(0, referenceResourceURLBase.length() - referenceResourceRelativePath.length());
 
 		// strip the EJB-JAR-inside part of the URL ("jar:" at the beginning and "!" at the end)
 		String jarPrefix = "jar:";
-		if (referenceClassURLBase.startsWith(jarPrefix)) {
-			if (!referenceClassURLBase.endsWith("!"))
-				throw new IllegalStateException("referenceClassURLBase starts with \"" + jarPrefix + "\" but does not end with \"!\": " + referenceClassURLBase);
+		if (referenceResourceURLBase.startsWith(jarPrefix)) {
+			if (!referenceResourceURLBase.endsWith("!"))
+				throw new IllegalStateException("referenceClassURLBase starts with \"" + jarPrefix + "\" but does not end with \"!\": " + referenceResourceURLBase);
 
-			referenceClassURLBase = referenceClassURLBase.substring(jarPrefix.length(), referenceClassURLBase.length() - 1);
+			referenceResourceURLBase = referenceResourceURLBase.substring(jarPrefix.length(), referenceResourceURLBase.length() - 1);
 		}
 		else
 			throw new UnsupportedOperationException("referenceClassURL does not reference a class inside a JAR!");
 
 		// strip the name of the JAR at the end
-		if (referenceClassURLBase.endsWith("/") || referenceClassURLBase.endsWith(File.separator))
-			throw new IllegalStateException("Expected a normal character but found \"/\" at the end: " + referenceClassURLBase);
+		if (referenceResourceURLBase.endsWith("/") || referenceResourceURLBase.endsWith(File.separator))
+			throw new IllegalStateException("Expected a normal character but found \"/\" at the end: " + referenceResourceURLBase);
 
-		int lastSlashIdx = referenceClassURLBase.replace(File.separatorChar, '/').lastIndexOf('/'); // We find both, slashes and backslashes this way.
+		int lastSlashIdx = referenceResourceURLBase.replace(File.separatorChar, '/').lastIndexOf('/'); // We find both, slashes and backslashes this way.
 		if (lastSlashIdx < 0)
-			throw new IllegalStateException("referenceClassURLBase does not contain any EAR! Cannot find separator anymore: " + referenceClassURLBase);
+			throw new IllegalStateException("referenceClassURLBase does not contain any EAR! Cannot find separator anymore: " + referenceResourceURLBase);
 
-		String jarNameToBeCut = referenceClassURLBase.substring(lastSlashIdx);
+		String jarNameToBeCut = referenceResourceURLBase.substring(lastSlashIdx);
 		if (jarNameToBeCut.contains("!"))
-			throw new IllegalStateException("We have a JAR-separator (!) inside the part that we would cut (lastSlashIdx="+ lastSlashIdx +"): " + referenceClassURLBase);
+			throw new IllegalStateException("We have a JAR-separator (!) inside the part that we would cut (lastSlashIdx="+ lastSlashIdx +"): " + referenceResourceURLBase);
 
-		referenceClassURLBase = referenceClassURLBase.substring(0, lastSlashIdx);
+		referenceResourceURLBase = referenceResourceURLBase.substring(0, lastSlashIdx);
 
 		String manifestResourceName = "/META-INF/MANIFEST.MF";
-		URL manifestResourceUrl = new URL(referenceClassURLBase + manifestResourceName);
+		URL manifestResourceUrl = new URL(referenceResourceURLBase + manifestResourceName);
 
 		InputStream in = manifestResourceUrl.openStream();
 		try {
@@ -173,6 +226,7 @@ public class ModuleMetaData
 
 		return new ModuleMetaData(moduleID, earSchemaVersionValue);
 	}
+	
 
 	public ModuleMetaData() { }
 
