@@ -199,7 +199,7 @@ public class UpdateHistoryItemSQL {
 				preparedStatement.close();
 			}
 
-			connection.commit();
+			connection.rollback();
 			rollback = false;
 		} finally {
 			if (rollback)
