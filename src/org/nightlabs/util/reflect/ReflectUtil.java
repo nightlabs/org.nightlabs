@@ -34,8 +34,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -703,6 +705,27 @@ public class ReflectUtil
 	}
 
 	/**
+	 * Get the first Annotation of the given type (annotationClass) that is found in the type hierarchy 
+	 * of the given class (clazz).
+	 * 
+	 * @param <T> The annotation type.
+	 * @param clazz The class to search the annotation for. (Note that also the classes hierarchy will be taken into account).
+	 * @param annotationClass The type of annotation to search for.
+	 * @return The annotation found, or <code>null</code> if it could not be found in the type hierarchy.
+	 */
+	public static <T extends Annotation> T getAnnotation(Class<?> clazz, Class<T> annotationClass) {
+		List<Class<?>> typeHierarchy = ReflectUtil.collectTypeHierarchy(clazz);
+		for (Class<?> hierarchyClass : typeHierarchy) {
+			T annotation = hierarchyClass.getAnnotation(annotationClass);
+			if (annotation != null) {
+				return annotation;
+			}
+		}
+		return null;
+	}
+	
+
+	/**
 	 * Lists all (and of course loads all) the classes in the given package.
 	 * The {@link Thread#getContextClassLoader()} classloader will be
 	 * used to list the resources in the package, but to load the class
@@ -896,7 +919,222 @@ public class ReflectUtil
 		}
 		return resultClasses;
 	}
+	
+	
+	public interface ResourceFilter {
+		boolean accept(URL resourceURL);
+	}
+	
+	/**
+	 * Lists all (and of course loads all) the classes in the given package.
+	 * The given classloader will be used to list the resources in the package,
+	 * but to load the class {@link Class#forName(String)} is used without specifying the classloader.
+	 *
+	 * @param packageName The package name to search classes for.
+	 * @param cld The classloader to use.
+	 * @param recurse Whether this method should recurse in sub-packages.
+	 * @return A list of classes that exists within the given package.
+	 * @throws ClassNotFoundException If something went wrong.
+	 */
+	public static Collection<URL> listResourcesInPackage(final String packageName, final ClassLoader cld, final ResourceFilter filter, final boolean recurse)
+	throws ClassNotFoundException
+	{
+		final List<URL> result = new LinkedList<URL>();
+		_listResourcesOfPackage(packageName, cld, filter, result, recurse);
+		return result;
+	}
 
+	/**
+	 * Lists all (and of course loads all) the classes in the given package.
+	 * The {@link Thread#getContextClassLoader()} classloader will be
+	 * used to list the resources in the package, but to load the class
+	 * {@link Class#forName(String)} is used without specifying the classloader.
+	 *
+	 * @param packageName The package name to search classes for.
+	 * @param recurse Whether this method should recurse in sub-packages.
+	 * @return A list of classes that exists within the given package.
+	 * @throws ClassNotFoundException If something went wrong.
+	 */
+	public static Collection<URL> listResourcesInPackage(final String packageName, final ResourceFilter filter, final boolean recurse)
+	throws ClassNotFoundException
+	{
+		final List<URL> result = new LinkedList<URL>();
+		final ClassLoader cld = Thread.currentThread().getContextClassLoader();
+		if (cld == null) {
+			throw new ClassNotFoundException("Can't get class loader.");
+		}
+		_listResourcesOfPackage(packageName, cld, filter, result, recurse);
+		return result;
+	}
+
+	/**
+	 * Lists all (and of course loads all) the classes in the given package.
+	 * The {@link Thread#getContextClassLoader()} classloader will be
+	 * used to list the resources in the package, but to load the class
+	 * {@link Class#forName(String)} is used without specifying the classloader.
+	 * <p>
+	 * Some of the code here was taken from:
+	 * http://forum.java.sun.com/thread.jspa?threadID=341935&start=15
+	 * </p>
+	 * @param packageName The package name to search classes for.
+	 * @param resultClasses The colleciton where the (recursive) runs of this method stores the found classes.
+	 * @param recurse TODO
+	 * @throws ClassNotFoundException If something went wrong.
+	 */
+	protected static void _listResourcesOfPackage(final String packageName, final ClassLoader cld, ResourceFilter filter, final Collection<URL> resultURLs, final boolean recurse)
+		throws ClassNotFoundException
+	{
+		logger.debug("_listClassesOfPackage: Entered for package {}", packageName);
+
+		// list all resource-entries for the given package
+		final List<File> pathEntries = new LinkedList<File>();
+		final Map<URL, JarFile> jarEntries = new HashMap<URL, JarFile>();
+		String path = packageName.replace('.', '/');
+		if (! path.endsWith("/"))
+			path += '/';
+
+		SortedSet<URL> resourceURLs = null;
+		if (logger.isTraceEnabled())
+		{
+			resourceURLs = new TreeSet<URL>( new Comparator<URL>()
+					{
+
+				@Override
+				public int compare(final URL o1, final URL o2)
+				{
+					if (o1 != null) {
+						return o1.toString().compareTo(o2 == null ? "" : o2.toString());
+					}
+					else {
+						return o2 != null ? -1 : 0;
+					}
+				}
+					});
+		}
+
+		try {
+			// Ask for all resources for the path
+			final Enumeration<URL> resources = cld.getResources(path);
+			while (resources.hasMoreElements()) {
+				final URL resourceURL = resources.nextElement();
+				if (logger.isTraceEnabled())
+					resourceURLs.add(resourceURL);
+				if (resourceURL.getProtocol() == null || resourceURL.getProtocol().equalsIgnoreCase("file")) {
+					final File pathEntry = new File(URLDecoder.decode(resourceURL.getPath(), "UTF-8"));
+						pathEntries.add(pathEntry);
+				} else if (resourceURL.getProtocol().equalsIgnoreCase("jar")) {
+					String jarPath = resourceURL.getPath();
+					jarPath = jarPath.substring(0, jarPath.indexOf("!"));
+					if (jarPath.startsWith("file:"))
+						jarPath = jarPath.substring(5);
+
+					jarPath = URLDecoder.decode(jarPath, "UTF-8");
+					jarEntries.put(resourceURL, new JarFile(jarPath));
+				}
+			}
+		} catch (final NullPointerException x) {
+			throw new ClassNotFoundException(packageName + " does not appear to be a valid package (Null pointer exception)");
+		} catch (final UnsupportedEncodingException encex) {
+			throw new ClassNotFoundException(packageName + " does not appear to be a valid package (Unsupported encoding)");
+		} catch (final IOException ioex) {
+			throw new ClassNotFoundException("IOException was thrown when trying to get all resources for " + packageName, ioex);
+		}
+
+		logger.trace("=============================================================");
+		logger.trace("Found the following resources: \n {}", resourceURLs);
+		logger.trace("=============================================================");
+
+		// separate into classes and directories
+		// For every directory identified capture all the .class files
+		for (final File directory : pathEntries)
+		{
+			if (directory.exists()) {
+				recursivelyListResourcesOfDirectory(packageName, directory, cld, filter, resultURLs, recurse);
+			}
+		}
+
+		for (final Map.Entry<URL, JarFile> mapEntry : jarEntries.entrySet()) {
+			JarFile jarFile = mapEntry.getValue();
+			logger.debug("_listClassesOfPackage: Scanning JAR: {}", jarFile.getName());
+
+			for (final Enumeration<JarEntry> enumeration = jarFile.entries(); enumeration.hasMoreElements(); )
+			{
+				final JarEntry entry = enumeration.nextElement();
+				if (!(entry.getName().length() >= path.length() && entry.getName().substring(0, path.length()).equals(path))) {
+					continue;
+				}
+				if (!recurse && entry.getName().substring(path.length()).contains("/")) {
+					continue;
+				}
+				if (entry.isDirectory())
+					continue;
+				URL entryURL = null;
+				try {
+					entryURL = new URL(mapEntry.getKey().getProtocol(), mapEntry.getKey().getHost(), mapEntry.getKey().getPath() + entry.getName().substring(path.length()));
+				} catch (MalformedURLException e1) {
+					logger.error("Could not create URL for JarEntry " + entry.getName() + " will ignore this entry");
+					continue;
+				}
+				if (filter.accept(entryURL)) {
+					resultURLs.add(entryURL);
+				}
+			}
+		}
+	}
+	
+
+	/**
+	 * Searches for classes in the given directory (and its sub-directories if <code>recurse == true</code>), loads the
+	 * class object via the classloader and adds them to the resultClasses collection.
+	 * <p>
+	 *  Note: Borked classes (designed to not being loadable - see http://forums.java.net/jive/message.jspa?messageID=226931
+	 *  for an example) may result in ClassFormatError or NoClassDefFoundErrors that are suppressed.
+	 * </p>
+	 *
+	 * @param packageName The packageName corresponding to the given starting directory.
+	 * @param directory The directory from which to load all classes (any maybe the classes of its subdirs).
+	 * @param cld The classloader to user for loading the class objects.
+	 * @param resultClasses The collection of found classes.
+	 * @param recurse Whether to recursively search the subfolders of the given directory.
+	 * @return The collection of found class objects.
+	 * @throws ClassNotFoundException In case the classloader wasn't able to load a class object.
+	 */
+	private static Collection<URL> recursivelyListResourcesOfDirectory(
+			final String packageName, final File directory, final ClassLoader cld, ResourceFilter filter, final Collection<URL> resultURLs, final boolean recurse)
+		throws ClassNotFoundException
+	{
+		logger.debug("_listClassesOfPackage: Scanning directory: {}", directory.getAbsolutePath());
+		// Get the list of the files contained in the package
+		final File[] files = directory.listFiles();
+		if (files == null || files.length == 0)
+			return resultURLs;
+
+		for (final File file : files)
+		{
+			if (file.isDirectory() && recurse)
+				recursivelyListResourcesOfDirectory(packageName + "." + file.getName(), file, cld, filter, resultURLs, recurse);
+
+			// we are only interested in .class files
+			if (file.exists())
+			{
+				logger.trace("recursivelyListClassesOfDirectory: Trying to load resource from file '{}'.", file.getAbsolutePath());
+				URL url = null;
+				try {
+					url = new URL(URLEncoder.encode(file.getAbsolutePath(), "UTF-8"));
+				} catch (MalformedURLException e) {
+					logger.error("Could not create URL for resource " + file, e);
+					continue;
+				} catch (UnsupportedEncodingException e) {
+					logger.error("Could not create URL for resource " + file, e);
+					continue;
+				}
+				if (filter.accept(url))
+					resultURLs.add(url);
+			}
+		}
+		return resultURLs;
+	}
+	
 	/**
 	 * Gets the field specified by its name. In contrast to {@link Class#getDeclaredField(String)}, this
 	 * method steps up the class hierarchy and returns the first {@link Field} it finds. If there is no
