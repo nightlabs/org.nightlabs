@@ -384,7 +384,7 @@ public class Version implements Comparable<Version>, Serializable
 				&& minor == otherVersion.minor
 				&& release == otherVersion.release
 				&& patchLevel == otherVersion.patchLevel
-				&& suffix.equals(otherVersion.suffix);
+				&& Util.equals(suffix, otherVersion.suffix);
 	}
 
 	@Override
