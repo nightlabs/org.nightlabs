@@ -166,7 +166,7 @@ public class UpdateHistoryItemSQL {
 		return result;
 	}
 
-	public void endUpdate()
+	public void endUpdate(boolean doCommit)
 	throws SQLException
 	{
 		if (updateHistoryItemID_updateInProgress == null)
@@ -198,8 +198,12 @@ public class UpdateHistoryItemSQL {
 			} finally {
 				preparedStatement.close();
 			}
-
-			connection.rollback();
+			
+			if (doCommit) {
+				connection.commit();
+			} else {
+				connection.rollback();
+			}
 			rollback = false;
 		} finally {
 			if (rollback)
