@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.nightlabs.liquibase.datanucleus.LiquibaseDNConstants;
+
 import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
 import liquibase.executor.Executor;
@@ -22,9 +24,11 @@ import liquibase.statement.core.RawSqlStatement;
  */
 public class DNUtil {
 	
-	public static final String NUCLEUS_TABLES = "nucleus_tables";
-	public static final String TABLE_NAME_COL = "TABLE_NAME";
-	public static final String CLASS_NAME_COL = "CLASS_NAME";
+	private static final String NUCLEUS_TABLES = "NUCLEUS_TABLES";
+	private static final String TABLE_NAME_COL = "TABLE_NAME";
+	private static final String CLASS_NAME_COL = "CLASS_NAME";
+	
+	 
 
 	public static class DNClassTableIndex {
 		private Map<String, Class<?>> table2Class = new HashMap<String, Class<?>>();
@@ -66,7 +70,7 @@ public class DNUtil {
 		if (index == null) {
 			index = new DNClassTableIndex();
 			
-			String sql = String.format("SELECT " + CLASS_NAME_COL + " , " + TABLE_NAME_COL +", TYPE FROM "+ NUCLEUS_TABLES);
+			String sql = String.format("SELECT " + getIdentifierName(CLASS_NAME_COL) + " , " + getIdentifierName(TABLE_NAME_COL) +", TYPE FROM "+ getNucleusTablesName());
 			Log.debug(sql);
 			Executor executor = ExecutorService.getInstance().getExecutor(database);
 			List<Map> queryForList;
@@ -77,8 +81,8 @@ public class DNUtil {
 			}
 			
 			for (Map map : queryForList) {
-				String className = (String)map.get(CLASS_NAME_COL);
-				String table = (String)map.get(TABLE_NAME_COL);
+				String className = (String)map.get(getIdentifierName(CLASS_NAME_COL));
+				String table = (String)map.get(getIdentifierName(TABLE_NAME_COL));
 				index.add(className, table, "FCO".equals(map.get("TYPE")));
 			}
 			
@@ -163,5 +167,25 @@ public class DNUtil {
 		return null;
 	}
 	
+	public static String getNucleusTablesName() {
+		return getIdentifierName(NUCLEUS_TABLES);
+	}
 	
+	public static String getNucleusTableNameColumn() {
+		return getIdentifierName(TABLE_NAME_COL);
+	}
+	
+	public static String getNucleusClassNameColumn() {
+		return getIdentifierName(CLASS_NAME_COL);
+	}
+	
+	public static String getIdentifierName(String identifier) {
+		String identifierCase = System.getProperty(LiquibaseDNConstants.IDENTIFIER_CASE);
+		if ("lowercase".equalsIgnoreCase(identifierCase)) {
+			return identifier.toLowerCase();
+		} else if ("uppercase".equalsIgnoreCase(identifierCase)) {
+			return identifier.toUpperCase();
+		}
+		return identifier;
+	}
 }

@@ -20,8 +20,27 @@ import org.nightlabs.liquibase.datanucleus.update.JoinedUpdateStatement;
 import org.nightlabs.liquibase.datanucleus.util.DNUtil;
 
 /**
+ * A Change that changes introduces a discriminator-column for the given class.
+ * This applies only to the discriminator-strategy of 'CLASS_NAME'.
+ * <p>
+ * The change will add the discriminator column and then update all rows in the
+ * table according to the class name of that row.
+ * </p>
+ * <p>
+ * The change is used with the &lt;ext:dnIntroduceDiscriminator&gt; Tag its
+ * attributes are:
+ * <ul>
+ * <li>schemaName: Optional parameter, defaults to the current schemaName</li>
+ * <li>className: The fully qualified name of the class in whose table a
+ * discriminator should be introduced</li>
+ * <li>discriminatorStrategy: Optional parameter, If set currently only
+ * "CLASS_NAME" is supported.</li>
+ * <li>discriminatorColumn: Optional parameter. If set it defines the name of
+ * the discriminator column. Defaults to "DISCRIMINATOR"</li>
+ * <ul>
+ * </p>
+ * 
  * @author abieber
- *
  */
 public class IntroduceDiscriminatorChange extends AbstractDNChange {
 
@@ -128,15 +147,11 @@ public class IntroduceDiscriminatorChange extends AbstractDNChange {
 	
 	String getClassTableName() {
 		if (classTableName == null) {
-			classTableName = getClassTableName(getClassName());
+			classTableName = DNUtil.getTableName(getDb(), getClassName());
 		}
 		return classTableName;
 	}
 
-	private String getClassTableName(String classNameToRead) {
-		return (String) query("SELECT table_name FROM nucleus_tables WHERE class_name = '" + classNameToRead + "'");
-	}
-	
 	public String getClassName() {
 		return className;
 	}
@@ -155,9 +170,9 @@ public class IntroduceDiscriminatorChange extends AbstractDNChange {
 
 	public String getDiscriminatorColumn() {
 		if (discriminatorColumn == null) {
-			discriminatorColumn = "discriminator";
+			discriminatorColumn = "DISCRIMINATOR";
 		}
-		return discriminatorColumn;
+		return DNUtil.getIdentifierName(discriminatorColumn);
 	}
 
 	public void setDiscriminatorColumn(String discriminatorColumn) {

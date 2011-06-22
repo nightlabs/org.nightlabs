@@ -17,8 +17,28 @@ import org.nightlabs.liquibase.datanucleus.util.DNUtil;
 import org.nightlabs.liquibase.datanucleus.util.Log;
 
 /**
+ * A Change that changes the name of the table the data fof a persistent class
+ * is stored in.
+ * <p>
+ * Note that this can also be used to change the name of the table the data of a
+ * collection-type field inside a class is stored in (that is stored in an own
+ * table, for example for &#064;Join - collections).
+ * </p>
+ * <p>
+ * The change is used with the &lt;ext:dnChangeTableName&gt; Tag its attributes
+ * are:
+ * <ul>
+ * <li>schemaName: Optional parameter, defaults to the current schemaName</li>
+ * <li>className: The fully qualified name of the class (or) field to be changed
+ * </li>
+ * <li>renameTable: Optional parameter, defaults to <code>true</code>. Defines
+ * whether the table should be actually renamed. If set to <code>false</code>,
+ * only the reference in the datanucleus-index will be adapted.</li>
+ * <li>newTableName: The <b>new</b> name of the table</li>
+ * <ul>
+ * </p>
+ * 
  * @author abieber
- *
  */
 public class ChangeTableNameChange extends AbstractDNChange {
 
@@ -42,17 +62,11 @@ public class ChangeTableNameChange extends AbstractDNChange {
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see liquibase.change.Change#getConfirmationMessage()
-	 */
 	@Override
 	public String getConfirmationMessage() {
 		return getChangeMetaData().getName() + " successfully updated the tablename for " + getClassName() + " to " + getNewTableName();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.liquibase.datanucleus.change.AbstractDNChange#doGenerateStatements(liquibase.database.Database)
-	 */
 	@Override
 	protected SqlStatement[] doGenerateStatements(Database database) {
 		
@@ -68,9 +82,9 @@ public class ChangeTableNameChange extends AbstractDNChange {
 			}
 		}
 		
-		UpdateStatement update = new UpdateStatement(getSchemaName(), DNUtil.NUCLEUS_TABLES);
-		update.setWhereClause(DNUtil.CLASS_NAME_COL + " = '" + database.escapeStringForDatabase(getClassName()) + "'");
-		update.addNewColumnValue(DNUtil.TABLE_NAME_COL, getNewTableName());
+		UpdateStatement update = new UpdateStatement(getSchemaName(), DNUtil.getNucleusTablesName());
+		update.setWhereClause(DNUtil.getNucleusClassNameColumn() + " = '" + database.escapeStringForDatabase(getClassName()) + "'");
+		update.addNewColumnValue(DNUtil.getNucleusTableNameColumn(), getNewTableName());
 		
 		statements.add(update);
 		
@@ -86,7 +100,7 @@ public class ChangeTableNameChange extends AbstractDNChange {
 	}
 
 	public String getNewTableName() {
-		return newTableName;
+		return DNUtil.getIdentifierName(newTableName);
 	}
 
 	public void setNewTableName(String newTableName) {

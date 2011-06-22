@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.nightlabs.liquibase.datanucleus.util.DNUtil;
-
 import liquibase.change.ChangeMetaData;
 import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
@@ -17,15 +15,33 @@ import liquibase.exception.SetupException;
 import liquibase.statement.SqlStatement;
 import liquibase.statement.core.DropTableStatement;
 
+import org.nightlabs.liquibase.datanucleus.LiquibaseDNConstants;
+import org.nightlabs.liquibase.datanucleus.util.DNUtil;
+
 /**
+ * A change that rearranges the storage-data of a given persistent subclass in
+ * order to conform to a new inheritance-strategy.
+ * <p>
+ * The change is used with the &lt;ext:dnChangeInheritanceStrategy&gt; Tag its
+ * attributes are:
+ * <ul>
+ * <li>schemaName: Optional parameter, defaults to the current schemaName</li>
+ * <li>className: The fully qualified name of the class (subclass) whose
+ * inheritance strategy should be changed</li>
+ * <li>oldStrategy: The old inheritance-strategy of the class</li>
+ * <li>oldStrategy: The inheritance-strategy it should be changed to</li>
+ * </p>
+ * <p>
+ * Currently only changes from 'NEW_TABLE' to 'SUPERCLASS_TABLE' are supported.
+ * This change then assumes that the superclass uses a discriminator and will
+ * move all additional columns to the superclass-table and then drop the
+ * subclass table.
+ * </p>
+ * 
  * @author abieber
- *
  */
 public class ChangeInheritanceStrategyChange extends AbstractDNChange {
 	
-	private static final String NEW_TABLE = "NEW_TABLE";
-	private static final String SUPERCLASS_TABLE = "SUPERCLASS_TABLE";
-
 	private String className;
 	private String oldStrategy;
 	private String newStrategy;
@@ -39,31 +55,26 @@ public class ChangeInheritanceStrategyChange extends AbstractDNChange {
 		if (null == getClassName() || getClassName().isEmpty()) {
 			throw new SetupException(getChangeMetaData().getName() + " requires the 'className'-attribute to be set.");
 		}
-		if (null == getOldStrategy() || !NEW_TABLE.equals(getOldStrategy())) {
+		if (null == getOldStrategy() || !LiquibaseDNConstants.InheritanceStratey.NEW_TABLE.equals(getOldStrategy())) {
 			throw new SetupException(getChangeMetaData().getName() + " currently only supports 'NEW_TABLE' as oldStrategy.");
 		}
-		if (null == getNewStrategy() || !SUPERCLASS_TABLE.equals(getNewStrategy())) {
+		if (null == getNewStrategy() || !LiquibaseDNConstants.InheritanceStratey.SUPERCLASS_TABLE.equals(getNewStrategy())) {
 			throw new SetupException(getChangeMetaData().getName() + " currently only supports 'SUPERCLASS_TABLE' as oldStrategy.");
 		}
 		super.init();
 	}
 	
-	/* (non-Javadoc)
-	 * @see liquibase.change.Change#getConfirmationMessage()
-	 */
 	@Override
 	public String getConfirmationMessage() {
 		return getChangeMetaData().getName() + " successfully changed inheritance strategy of " + getClassName();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.liquibase.datanucleus.change.AbstractDNChange#doGenerateStatements(liquibase.database.Database)
-	 */
 	@Override
 	protected SqlStatement[] doGenerateStatements(Database database) {
 		List<SqlStatement> result = null;
 		try {
-			if (NEW_TABLE.equals(getOldStrategy()) && SUPERCLASS_TABLE.equals(getNewStrategy())) {
+			if (LiquibaseDNConstants.InheritanceStratey.NEW_TABLE.equals(getOldStrategy()) && 
+					LiquibaseDNConstants.InheritanceStratey.SUPERCLASS_TABLE.equals(getNewStrategy())) {
 				result = doChangeNewTableToSuperClassTable();
 			}
 		} catch (Exception e) {
@@ -126,13 +137,4 @@ public class ChangeInheritanceStrategyChange extends AbstractDNChange {
 	public void setNewStrategy(String newStrategy) {
 		this.newStrategy = newStrategy;
 	}
-
-
-	public static void main(String[] args) {
-		String path = "org/nightlabs/";
-		String entryName = "org/nightlabs/jfire/base/j2ee/DefaultMessageRenderer.class";
-		
-		System.out.println(entryName.substring(path.length()).contains("/"));
-	}
-	
 }

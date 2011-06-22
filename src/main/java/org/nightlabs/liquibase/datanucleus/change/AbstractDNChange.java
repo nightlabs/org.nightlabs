@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import liquibase.change.AbstractChange;
+import liquibase.change.Change;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.jvm.JdbcConnection;
@@ -20,13 +21,19 @@ import liquibase.statement.SqlStatement;
 import liquibase.statement.core.RawSqlStatement;
 
 /**
- * @author abieber
+ * Base class for {@link Change}-imlementations for datanucleus-changes.
  * 
+ * @author abieber
  */
 public abstract class AbstractDNChange extends AbstractChange {
-
+	
+	/** Will be accessible during {@link #doGenerateStatements(Database)} */
 	private transient Database db;
 	
+	/**
+	 * Common optional parameter for all changes, most Statements take this as
+	 * parameter but will support <code>null</code> as default, too.
+	 */
 	private String schemaName;
 	
 
@@ -39,6 +46,14 @@ public abstract class AbstractDNChange extends AbstractChange {
 		super(changeName, changeDescription, priority);
 	}
 
+	/**
+	 * Implements the super-class method by delegating to {@link #doGenerateStatements(Database)}.
+	 * While {@link #doGenerateStatements(Database)} runs the {@link #getDb()}-property will serve
+	 * the Database passed to this method.
+	 * <p>
+	 * {@inheritDoc}
+	 * </p>
+	 */
 	@Override
 	public SqlStatement[] generateStatements(Database database) {
 		this.db = database;
@@ -47,12 +62,31 @@ public abstract class AbstractDNChange extends AbstractChange {
 		return result;
 	}
 
+	/**
+	 * This method has to be implemented by subclasses and return the actual {@link SqlStatement}s 
+	 * to be performed to complete the specific change. 
+	 * 
+	 * @param database The database the changes should be applied to.
+	 * @return A list of {@link SqlStatement}s to be performed.
+	 */
 	protected abstract SqlStatement[] doGenerateStatements(Database database);
 
+	/**
+	 * @return The {@link Database} passed to
+	 *         {@link #generateStatements(Database)}, but only while
+	 *         {@link #doGenerateStatements(Database)} runs, <code>null</code>
+	 *         otherwise.
+	 */
 	protected Database getDb() {
 		return db;
 	}
 
+	/**
+	 * Executes the given Query using the current Liquibase Exectutor and Database.
+	 * 
+	 * @param sql The sql to execute.
+	 * @return The resulting single Object.
+	 */
 	protected Object query(String sql) {
 		try {
 			Executor executor = ExecutorService.getInstance().getExecutor(db);
@@ -63,6 +97,14 @@ public abstract class AbstractDNChange extends AbstractChange {
 		}
 	}
 
+	/**
+	 * Returns the names of the primary-key columns of the given table.
+	 * 
+	 * @param tableName The name of the table to find the primary-key columns for.
+	 * @return The names of the primary-key columns of the given table.
+	 * @throws DatabaseException ...
+	 * @throws SQLException ...
+	 */
 	protected Collection<String> getPKColumns(String tableName)
 			throws DatabaseException, SQLException {
 		Collection<String> pkColumns = new LinkedList<String>();
@@ -78,6 +120,14 @@ public abstract class AbstractDNChange extends AbstractChange {
 		return pkColumns;
 	}
 	
+	/**
+	 * Returns the names of all columns of the given table.
+	 * 
+	 * @param tableName The name of the table to find the column-names for.
+	 * @return The names of all columns of the given table.
+	 * @throws DatabaseException ...
+	 * @throws SQLException ...
+	 */
 	protected Collection<String> getColumnNames(String tableName) throws DatabaseException, SQLException {
 		Collection<String> columnNames = new LinkedList<String>();
 		DatabaseConnection connection = getDb().getConnection();
@@ -92,10 +142,20 @@ public abstract class AbstractDNChange extends AbstractChange {
 		return columnNames;
 	}
 
+	/**
+	 * The schemaName is a common optional parameter for all changes, most
+	 * Statements take this as parameter but will support <code>null</code> as
+	 * default, too.
+	 * 
+	 * @return The schemaName, might be <code>null</code>
+	 */
 	public String getSchemaName() {
 		return schemaName;
 	}
 	
+	/**
+	 * @param schemaName The schemaName
+	 */
 	public void setSchemaName(String schemaName) {
 		this.schemaName = schemaName;
 	}
