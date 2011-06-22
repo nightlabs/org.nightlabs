@@ -70,7 +70,7 @@ public class DNUtil {
 		if (index == null) {
 			index = new DNClassTableIndex();
 			
-			String sql = String.format("SELECT " + getIdentifierName(CLASS_NAME_COL) + " , " + getIdentifierName(TABLE_NAME_COL) +", TYPE FROM "+ getNucleusTablesName());
+			String sql = String.format("SELECT " + getIdentifierName(CLASS_NAME_COL) + " , " + getIdentifierName(TABLE_NAME_COL) +", " + getIdentifierName("TYPE") + " FROM "+ getNucleusTablesName());
 			Log.debug(sql);
 			Executor executor = ExecutorService.getInstance().getExecutor(database);
 			List<Map> queryForList;
@@ -81,9 +81,12 @@ public class DNUtil {
 			}
 			
 			for (Map map : queryForList) {
-				String className = (String)map.get(getIdentifierName(CLASS_NAME_COL));
-				String table = (String)map.get(getIdentifierName(TABLE_NAME_COL));
-				index.add(className, table, "FCO".equals(map.get("TYPE")));
+//				Log.debug(map.toString());
+				// omitted getIdentifierName in map.get() as somehow the columns always have capital-case?!?
+				String className = (String)map.get(CLASS_NAME_COL);
+				String table = (String)map.get(TABLE_NAME_COL);
+				String type = (String)map.get("TYPE");
+				index.add(className, table, "FCO".equals(type));
 			}
 			
 			tableIndex.put(database, index);
