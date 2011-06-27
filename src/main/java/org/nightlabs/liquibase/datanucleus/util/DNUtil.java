@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.nightlabs.liquibase.datanucleus.LiquibaseDNConstants;
+import org.nightlabs.liquibase.datanucleus.LiquibaseDNConstants.IdentifierCase;
 
 import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
@@ -193,6 +194,86 @@ public class DNUtil {
 	}
 	
 	public static String getFieldName(String fieldName) {
-		return getIdentifierName(fieldName);
+		return getIdentifierName(generateFieldName(fieldName));
+	}
+	
+	public static String generateFieldName(String javaName)
+    {
+		// TODO: Make generation strategy for field-names configurable: DN-property: name="datanucleus.identifierFactory" value="datanucleus"
+		String identCase = System.getProperty(LiquibaseDNConstants.IDENTIFIER_CASE);
+		IdentifierCase identifierCase = IdentifierCase.parse(identCase);
+		if (identifierCase == null) {
+			return null;
+		}
+        if (javaName == null)
+        {
+            return null;
+        }
+
+        StringBuffer s = new StringBuffer();
+        char prev = '\0';
+
+        for (int i = 0; i < javaName.length(); ++i)
+        {
+            char c = javaName.charAt(i);
+
+            if (c >= 'A' && c <= 'Z' &&
+                (identifierCase != IdentifierCase.MIXED_CASE && identifierCase != IdentifierCase.MIXED_CASE_QUOTED))
+            {
+                if (prev >= 'a' && prev <= 'z')
+                {
+                    s.append("_");
+                }
+
+                s.append(c);
+            }
+            else if (c >= 'A' && c <= 'Z' &&
+                (identifierCase == IdentifierCase.MIXED_CASE || identifierCase == IdentifierCase.MIXED_CASE_QUOTED))
+            {
+                s.append(c);
+            }
+            else if (c >= 'a' && c <= 'z' &&
+                (identifierCase == IdentifierCase.MIXED_CASE || identifierCase == IdentifierCase.MIXED_CASE_QUOTED))
+            {
+                s.append(c);
+            }
+            else if (c >= 'a' && c <= 'z' &&
+                (identifierCase != IdentifierCase.MIXED_CASE && identifierCase != IdentifierCase.MIXED_CASE_QUOTED))
+            {
+                s.append((char)(c - ('a' - 'A')));
+            }
+            else if (c >= '0' && c <= '9' || c=='_')
+            {
+                s.append(c);
+            }
+            else if (c == '.')
+            {
+                s.append("_");
+            }
+            else
+            {
+                String cval = "000" + Integer.toHexString(c);
+
+                s.append(cval.substring(cval.length() - (c > 0xff ? 4 : 2)));
+            }
+
+            prev = c;
+        }
+
+        // Remove leading and trailing underscores
+        while (s.length() > 0 && s.charAt(0) == '_')
+        {
+            s.deleteCharAt(0);
+        }
+        if (s.length() == 0)
+        {
+            throw new IllegalArgumentException("Illegal Java identifier: " + javaName);
+        }
+
+        return s.toString();
+    }
+	
+	public static void main(String[] args) {
+		System.out.println(getFieldName("primaryKey"));
 	}
 }

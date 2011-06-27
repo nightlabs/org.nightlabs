@@ -14,6 +14,7 @@ import liquibase.statement.core.DeleteStatement;
 import liquibase.statement.core.DropTableStatement;
 
 import org.nightlabs.liquibase.datanucleus.util.DNUtil;
+import org.nightlabs.liquibase.datanucleus.util.Log;
 
 /**
  * A Change that drops the table data for a persistent class was stored in.
@@ -58,14 +59,18 @@ public class DropClassTableChange extends AbstractDNChange {
 		
 		String tableName = DNUtil.getTableName(database, getClassName());
 		
-		DropTableStatement dropTable = new DropTableStatement(getSchemaName(), tableName, isCascadeConstraints());
+		if (tableName != null && !tableName.isEmpty()) {
+			
+			DropTableStatement dropTable = new DropTableStatement(getSchemaName(), tableName, isCascadeConstraints());
+			
+			DeleteStatement delete = new DeleteStatement(getSchemaName(), DNUtil.getNucleusTablesName());
+			delete.setWhereClause(DNUtil.getNucleusClassNameColumn() + " = ?");
+			delete.addWhereParameter(getClassName());
 		
-		DeleteStatement delete = new DeleteStatement(getSchemaName(), DNUtil.getNucleusTablesName());
-		delete.setWhereClause(DNUtil.getNucleusClassNameColumn() + " = ?");
-		delete.addWhereParameter(getClassName());
-		
-		
-		statements.add(dropTable);
+			statements.add(dropTable);
+		} else {
+			Log.warn("Could not find table for className %s in nucleus_tables. %s will abort.", getClassName(), getChangeMetaData().getName());
+		}
 		
 		return statements;
 	}

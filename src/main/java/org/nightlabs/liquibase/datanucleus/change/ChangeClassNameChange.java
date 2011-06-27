@@ -80,7 +80,7 @@ public class ChangeClassNameChange extends AbstractDNChange {
 		// We need the old table name to re-set the class_name
 		String oldTableName = DNUtil.getTableName(database, getClassName());
 		if (null == oldTableName || oldTableName.isEmpty()) {
-			Log.error(getChangeMetaData().getName() + " can't find the oldTableName, aborting");
+			Log.error(getChangeMetaData().getName() + " can't find the oldTableName for class %s, aborting", getClassName());
 			throw new RuntimeException(getChangeMetaData().getName() + " can't find the oldTableName, aborting.");
 		}		
 		
