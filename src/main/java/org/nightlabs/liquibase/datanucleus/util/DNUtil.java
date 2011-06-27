@@ -191,4 +191,8 @@ public class DNUtil {
 		}
 		return identifier;
 	}
+	
+	public static String getFieldName(String fieldName) {
+		return getIdentifierName(fieldName);
+	}
 }

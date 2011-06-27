@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import liquibase.change.AbstractChange;
 import liquibase.change.Change;
@@ -57,9 +58,12 @@ public abstract class AbstractDNChange extends AbstractChange {
 	@Override
 	public SqlStatement[] generateStatements(Database database) {
 		this.db = database;
-		SqlStatement[] result = doGenerateStatements(database);
+		List<SqlStatement> result = doGenerateStatements(database);
 		this.db = null;
-		return result;
+		if (result == null) {
+			return new SqlStatement[0];
+		}
+		return result.toArray(new SqlStatement[result.size()]);
 	}
 
 	/**
@@ -69,7 +73,7 @@ public abstract class AbstractDNChange extends AbstractChange {
 	 * @param database The database the changes should be applied to.
 	 * @return A list of {@link SqlStatement}s to be performed.
 	 */
-	protected abstract SqlStatement[] doGenerateStatements(Database database);
+	protected abstract List<SqlStatement> doGenerateStatements(Database database);
 
 	/**
 	 * @return The {@link Database} passed to

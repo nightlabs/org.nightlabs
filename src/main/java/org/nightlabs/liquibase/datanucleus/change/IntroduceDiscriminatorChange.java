@@ -80,7 +80,7 @@ public class IntroduceDiscriminatorChange extends AbstractDNChange {
 	/* (non-Javadoc)
 	 * @see liquibase.change.Change#generateStatements(liquibase.database.Database)
 	 */
-	public SqlStatement[] doGenerateStatements(Database database) {
+	public List<SqlStatement> doGenerateStatements(Database database) {
 		
 		List<SqlStatement> statements = new ArrayList<SqlStatement>();
 		
@@ -140,7 +140,7 @@ public class IntroduceDiscriminatorChange extends AbstractDNChange {
 		updateRemainingRows.addNewColumnValue(getDiscriminatorColumn(), getClassName());
 		statements.add(updateRemainingRows);
 		
-		return statements.toArray(new SqlStatement[statements.size()]);
+		return statements;
 	}
 	
 	private String classTableName = null;

@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>org.nightlabs.liquibase</groupId>
 	<artifactId>org.nightlabs.liquibase.datanucleus</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>org.nightlabs.liquibase.datanucleus</name>
 	<packaging>bundle</packaging>
 

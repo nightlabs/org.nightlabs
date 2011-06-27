@@ -70,7 +70,7 @@ public class ChangeInheritanceStrategyChange extends AbstractDNChange {
 	}
 
 	@Override
-	protected SqlStatement[] doGenerateStatements(Database database) {
+	protected List<SqlStatement> doGenerateStatements(Database database) {
 		List<SqlStatement> result = null;
 		try {
 			if (LiquibaseDNConstants.InheritanceStratey.NEW_TABLE.equals(getOldStrategy()) && 
@@ -81,7 +81,7 @@ public class ChangeInheritanceStrategyChange extends AbstractDNChange {
 			throw new RuntimeException(e);
 		}
 		if (result != null) {
-			return result.toArray(new SqlStatement[result.size()]);
+			return result;
 		}
 		return null;
 	}

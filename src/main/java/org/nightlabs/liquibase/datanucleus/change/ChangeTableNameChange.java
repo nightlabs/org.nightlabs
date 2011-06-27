@@ -68,7 +68,7 @@ public class ChangeTableNameChange extends AbstractDNChange {
 	}
 
 	@Override
-	protected SqlStatement[] doGenerateStatements(Database database) {
+	protected List<SqlStatement> doGenerateStatements(Database database) {
 		
 		List<SqlStatement> statements = new ArrayList<SqlStatement>(2);
 		
@@ -88,7 +88,7 @@ public class ChangeTableNameChange extends AbstractDNChange {
 		
 		statements.add(update);
 		
-		return statements.toArray(new SqlStatement[statements.size()]);
+		return statements;
 	}
 
 	public String getClassName() {
