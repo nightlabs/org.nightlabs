@@ -4,9 +4,11 @@
 package org.nightlabs.liquibase.datanucleus.change;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import liquibase.change.ChangeMetaData;
+import liquibase.change.core.DropAllForeignKeyConstraintsChange;
 import liquibase.database.Database;
 import liquibase.exception.SetupException;
 import liquibase.statement.SqlStatement;
@@ -60,6 +62,15 @@ public class DropClassTableChange extends AbstractDNChange {
 		String tableName = DNUtil.getTableName(database, getClassName());
 		
 		if (tableName != null && !tableName.isEmpty()) {
+			
+			DropAllForeignKeyConstraintsChange dropFK = new DropAllForeignKeyConstraintsChange();
+			dropFK.setBaseTableSchemaName(getSchemaName());
+			dropFK.setBaseTableName(tableName);
+			dropFK.setChangeSet(getChangeSet());
+			SqlStatement[] dropFKStatements = dropFK.generateStatements(getDb());
+			if (dropFKStatements != null) {
+				statements.addAll(Arrays.asList(dropFKStatements));
+			}
 			
 			DropTableStatement dropTable = new DropTableStatement(getSchemaName(), tableName, isCascadeConstraints());
 			
