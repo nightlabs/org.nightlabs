@@ -47,6 +47,7 @@ import javax.jdo.annotations.PersistenceModifier;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import org.apache.log4j.Logger;
 import org.nightlabs.jdo.moduleregistry.id.ModuleMetaDataID;
 import org.nightlabs.version.MalformedVersionException;
 import org.nightlabs.version.Version;
@@ -68,7 +69,7 @@ import org.nightlabs.version.Version;
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public class ModuleMetaData
 {
-//	private static final Logger logger = Logger.getLogger(ModuleMetaData.class);
+	private static final Logger logger = Logger.getLogger(ModuleMetaData.class);
 
 	/**
 	 * Get the ModuleMetaData for a certain module.
@@ -89,6 +90,39 @@ public class ModuleMetaData
 			mmd = null;
 		}
 		return mmd;
+	}
+
+	/**
+	 * Get or newly create and initialize from the ears manifest the
+	 * {@link ModuleMetaData} for the given moduleID.
+	 * 
+	 * @param pm
+	 *            The PersistenceManager to use.
+	 * @param moduleID
+	 *            The moduleID of the module to get/initialize the
+	 *            {@link ModuleMetaData} for.
+	 * @param clazz
+	 *            The class to use in order to relove the manifest if the
+	 *            ModuleMetaData needs to be written from there. See
+	 *            {@link #createModuleMetaDataFromManifest(String, Class)}.
+	 * @return A persistent instance of {@link ModuleMetaData}
+	 * @throws IOException
+	 *             ...
+	 * @throws MalformedVersionException
+	 *             ...
+	 */
+	public static ModuleMetaData initModuleMetadata(PersistenceManager pm, String moduleID, Class<?> clazz) throws IOException, MalformedVersionException {
+		// => We check if the ModuleMetaData was already persisted
+		ModuleMetaData moduleMetaData = getModuleMetaData(pm, moduleID);
+		if (moduleMetaData != null)
+			return moduleMetaData;
+
+		moduleMetaData = ModuleMetaData.createModuleMetaDataFromManifest(moduleID, clazz);
+		
+		if (logger.isInfoEnabled())
+			logger.info("Initializing ModuleMetaData of " + moduleID + " to Schema-Version " + moduleMetaData.getSchemaVersion());
+		
+		return pm.makePersistent(moduleMetaData);
 	}
 	
 	/**
