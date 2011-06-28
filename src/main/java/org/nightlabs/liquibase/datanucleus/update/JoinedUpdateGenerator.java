@@ -76,8 +76,10 @@ public class JoinedUpdateGenerator extends
 				}
 				String updateTableColumnName = joinColumns.getKey();
 				String joinTableColumnName = joinColumns.getValue();
+				joinWhere.append(database.escapeTableName(statement.getSchemaName(), statement.getTableName())).append(".");
 				joinWhere.append(database.escapeColumnName(statement.getSchemaName(), statement.getTableName(), updateTableColumnName));
 				joinWhere.append(" = ");
+				joinWhere.append(database.escapeTableName(statement.getSchemaName(), joinTableName)).append(".");
 				joinWhere.append(database.escapeColumnName(statement.getSchemaName(), joinTableName, joinTableColumnName));
 			}
 			where.append(joinWhere);
@@ -91,7 +93,7 @@ public class JoinedUpdateGenerator extends
 	        where.append(statement.getWhereClause().trim());
         }
         
-        if (statement.getWhereClause() != null) {
+        if (where.length() > 0) {
 			String fixedWhereClause = "WHERE " + where.toString();
             for (Object param : statement.getWhereParameters()) {
                 fixedWhereClause = fixedWhereClause.replaceFirst("\\?", convertToString(param, database));
