@@ -40,18 +40,16 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.nightlabs.progress.LoggerProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 import org.slf4j.Logger;
@@ -1326,6 +1324,17 @@ public class IOUtil
 	private static final String PROPERTY_KEY_ZIP_FILESIZE = "zip.size";
 
 	/**
+	 * Calls {@link #unzipArchiveIfModified(URL, File)} converting the File-parameter zipArchive to an url.
+	 * 
+	 * @see #unzipArchiveIfModified(URL, File).
+	 */
+	public static synchronized void unzipArchiveIfModified(File zipArchive, File unzipRootFolder)
+	throws IOException
+	{
+		unzipArchive(zipArchive.toURI().toURL(), unzipRootFolder);
+	}
+	
+	/**
 	 * Unzip the given archive into the given folder, if the archive was modified
 	 * after being unzipped the last time by this method.
 	 * <p>
@@ -1346,7 +1355,7 @@ public class IOUtil
 	 * @param unzipRootFolder The folder to unzip to.
 	 * @throws IOException in case of an I/O error.
 	 */
-	public static synchronized void unzipArchiveIfModified(File zipArchive, File unzipRootFolder)
+	public static synchronized void unzipArchiveIfModified(URL zipArchive, File unzipRootFolder)
 	throws IOException
 	{
 		File metaFile = new File(unzipRootFolder, ".archive.properties");
@@ -1381,11 +1390,22 @@ public class IOUtil
 			}
 		}
 
-		if (!unzipRootFolder.exists() || zipArchive.lastModified() != timestamp || zipArchive.length() != fileSize) {
+		boolean doUnzip = true;
+		long zipLength = -1;
+		long zipLastModified = System.currentTimeMillis();
+		
+		if ("file".equals(zipArchive.getProtocol())) {
+			File fileToCheck = new File(Util.urlToUri(zipArchive));
+			zipLastModified = fileToCheck.lastModified();
+			zipLength = fileToCheck.length();
+			doUnzip = !unzipRootFolder.exists() || zipLastModified != timestamp || zipLength != fileSize;
+		}
+		
+		if (doUnzip) {
 			IOUtil.deleteDirectoryRecursively(unzipRootFolder);
 			IOUtil.unzipArchive(zipArchive, unzipRootFolder);
-			properties.setProperty(PROPERTY_KEY_ZIP_FILESIZE, Long.toString(zipArchive.length(), 36));
-			properties.setProperty(PROPERTY_KEY_ZIP_TIMESTAMP, Long.toString(zipArchive.lastModified(), 36));
+			properties.setProperty(PROPERTY_KEY_ZIP_FILESIZE, Long.toString(zipLength, 36));
+			properties.setProperty(PROPERTY_KEY_ZIP_TIMESTAMP, Long.toString(zipLastModified, 36));
 			OutputStream out = new FileOutputStream(metaFile);
 			try {
 				properties.store(out, null);
@@ -1402,45 +1422,56 @@ public class IOUtil
 	 * @param unzipRootFolder The folder to unzip to.
 	 * @throws IOException in case of an I/O error.
 	 */
+	public static void unzipArchive(URL zipArchive, File unzipRootFolder)
+	throws IOException
+	{
+		ZipInputStream in = new ZipInputStream(zipArchive.openStream());
+		try {
+			ZipEntry entry = null;
+			while ((entry = in.getNextEntry()) != null) {
+				if(entry.isDirectory()) {
+					// create the directory
+					File dir = new File(unzipRootFolder, entry.getName());
+					if (!dir.exists() && !dir.mkdirs())
+						throw new IllegalStateException("Could not create directory entry, possibly permission issues.");
+				}
+				else {
+					File file = new File(unzipRootFolder, entry.getName());
+	
+					File dir = file.getParentFile();
+					if (dir.exists( )) {
+						assert (dir.isDirectory( ));
+					}
+					else {
+						dir.mkdirs( );
+					}
+	
+					BufferedOutputStream out = new BufferedOutputStream( new FileOutputStream(file) );
+	
+					int len;
+					byte[] buf = new byte[1024 * 5];
+					while( (len = in.read(buf)) > 0 )
+					{
+						out.write(buf, 0, len);
+					}
+					out.close();
+				}
+			}
+		} finally {
+			if (in != null)
+				in.close();
+		}
+	}	
+	
+	/**
+	 * Calls {@link #unzipArchive(URL, File)} converting the File-parameter zipArchive to an url.
+	 * 
+	 * @see #unzipArchive(URL, File).
+	 */
 	public static void unzipArchive(File zipArchive, File unzipRootFolder)
 	throws IOException
 	{
-		ZipFile zipFile = new ZipFile(zipArchive);
-
-		Enumeration<? extends ZipEntry> entries = zipFile.entries();
-		while(entries.hasMoreElements()) {
-			ZipEntry entry = entries.nextElement();
-			if(entry.isDirectory()) {
-				// create the directory
-				File dir = new File(unzipRootFolder, entry.getName());
-				if (!dir.exists() && !dir.mkdirs())
-					throw new IllegalStateException("Could not create directory entry, possibly permission issues.");
-			}
-			else {
-				InputStream in = zipFile.getInputStream(entry);
-				File file = new File(unzipRootFolder, entry.getName());
-
-				File dir = file.getParentFile();
-				if (dir.exists( )) {
-					assert (dir.isDirectory( ));
-				}
-				else {
-					dir.mkdirs( );
-				}
-
-				BufferedOutputStream out = new BufferedOutputStream( new FileOutputStream(file) );
-
-				int len;
-				byte[] buf = new byte[1024 * 5];
-				while( (len = in.read(buf)) > 0 )
-				{
-					out.write(buf, 0, len);
-				}
-				in.close();
-				out.close();
-			}
-		}
-		zipFile.close();
+		unzipArchive(zipArchive.toURI().toURL(), unzipRootFolder);
 	}
 
 	/**
