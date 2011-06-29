@@ -35,6 +35,7 @@
 		<module>../org.nightlabs.test</module>
 		<module>../org.nightlabs.util</module>
 		<module>../org.nightlabs.xml</module>
+		<module>../org.nightlabs.classloader.url</module>
 
 		<module>../DelegatingClassLoader</module> <!-- org.nightlabs:org.nightlabs.classloader.delegating -->
 		<module>../org.nightlabs.connection</module> <!-- org.nightlabs:org.nightlabs.connection -->

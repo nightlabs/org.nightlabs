@@ -147,6 +147,11 @@
 				<artifactId>org.nightlabs.unifiedjndi.jboss.client</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.nightlabs</groupId>
+				<artifactId>org.nightlabs.classloader.url</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<!-- ###### 3rd party ###### -->
 			<dependency>
