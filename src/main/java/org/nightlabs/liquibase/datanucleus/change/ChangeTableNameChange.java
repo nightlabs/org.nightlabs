@@ -9,12 +9,13 @@ import java.util.List;
 import liquibase.change.ChangeMetaData;
 import liquibase.database.Database;
 import liquibase.exception.SetupException;
+import liquibase.logging.LogFactory;
+import liquibase.logging.Logger;
 import liquibase.statement.SqlStatement;
 import liquibase.statement.core.RenameTableStatement;
 import liquibase.statement.core.UpdateStatement;
 
 import org.nightlabs.liquibase.datanucleus.util.DNUtil;
-import org.nightlabs.liquibase.datanucleus.util.Log;
 
 /**
  * A Change that changes the name of the table the data fof a persistent class
@@ -42,6 +43,8 @@ import org.nightlabs.liquibase.datanucleus.util.Log;
  */
 public class ChangeTableNameChange extends AbstractDNChange {
 
+	private static final Logger logger = LogFactory.getLogger();
+	
 	private String className;
 	private String newTableName;
 	private boolean renameTable = true;
@@ -76,7 +79,7 @@ public class ChangeTableNameChange extends AbstractDNChange {
 		if (isRenameTable()) {
 			oldTableName = DNUtil.getTableName(database, getClassName());
 			if (null == oldTableName || oldTableName.isEmpty()) {
-				Log.warn(getChangeMetaData().getName() + " have renameTable=\"true\" but could not find the old table name value in nulceus_tables");
+				logger.warning(getChangeMetaData().getName() + " have renameTable=\"true\" but could not find the old table name value in nulceus_tables");
 			} else {
 				statements.add(new RenameTableStatement(getSchemaName(), oldTableName, getNewTableName()));
 			}

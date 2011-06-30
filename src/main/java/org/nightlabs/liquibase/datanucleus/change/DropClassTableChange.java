@@ -11,12 +11,14 @@ import liquibase.change.ChangeMetaData;
 import liquibase.change.core.DropAllForeignKeyConstraintsChange;
 import liquibase.database.Database;
 import liquibase.exception.SetupException;
+import liquibase.logging.LogFactory;
+import liquibase.logging.Logger;
 import liquibase.statement.SqlStatement;
 import liquibase.statement.core.DeleteStatement;
 import liquibase.statement.core.DropTableStatement;
 
 import org.nightlabs.liquibase.datanucleus.util.DNUtil;
-import org.nightlabs.liquibase.datanucleus.util.Log;
+import org.nightlabs.liquibase.datanucleus.util.DNUtil.NucleusTablesStruct;
 
 /**
  * A Change that drops the table data for a persistent class was stored in.
@@ -34,6 +36,8 @@ import org.nightlabs.liquibase.datanucleus.util.Log;
  */
 public class DropClassTableChange extends AbstractDNChange {
 
+	private static final Logger logger = LogFactory.getLogger();
+	
 	private String className;
 	private boolean cascadeConstraints = true;
 	
@@ -59,28 +63,31 @@ public class DropClassTableChange extends AbstractDNChange {
 		
 		List<SqlStatement> statements = new ArrayList<SqlStatement>(2);
 		
-		String tableName = DNUtil.getTableName(database, getClassName());
-		
-		if (tableName != null && !tableName.isEmpty()) {
+		for (NucleusTablesStruct struct : DNUtil.getNucleusReferences(database, getClassName())) {
 			
-			DropAllForeignKeyConstraintsChange dropFK = new DropAllForeignKeyConstraintsChange();
-			dropFK.setBaseTableSchemaName(getSchemaName());
-			dropFK.setBaseTableName(tableName);
-			dropFK.setChangeSet(getChangeSet());
-			SqlStatement[] dropFKStatements = dropFK.generateStatements(getDb());
-			if (dropFKStatements != null) {
-				statements.addAll(Arrays.asList(dropFKStatements));
+			String tableName = DNUtil.getTableName(database, struct.getClassName());
+			
+			if (tableName != null && !tableName.isEmpty()) {
+				
+				DropAllForeignKeyConstraintsChange dropFK = new DropAllForeignKeyConstraintsChange();
+				dropFK.setBaseTableSchemaName(getSchemaName());
+				dropFK.setBaseTableName(tableName);
+				dropFK.setChangeSet(getChangeSet());
+				SqlStatement[] dropFKStatements = dropFK.generateStatements(getDb());
+				if (dropFKStatements != null) {
+					statements.addAll(Arrays.asList(dropFKStatements));
+				}
+				
+				DropTableStatement dropTable = new DropTableStatement(getSchemaName(), tableName, isCascadeConstraints());
+				
+				DeleteStatement delete = new DeleteStatement(getSchemaName(), DNUtil.getNucleusTablesName());
+				delete.setWhereClause(DNUtil.getNucleusClassNameColumn() + " = ?");
+				delete.addWhereParameter(struct.getClassName());
+			
+				statements.add(dropTable);
+			} else {
+				logger.warning("Could not find table for className " + getClassName() + " in nucleus_tables. " + getChangeMetaData().getName() + " will abort.");
 			}
-			
-			DropTableStatement dropTable = new DropTableStatement(getSchemaName(), tableName, isCascadeConstraints());
-			
-			DeleteStatement delete = new DeleteStatement(getSchemaName(), DNUtil.getNucleusTablesName());
-			delete.setWhereClause(DNUtil.getNucleusClassNameColumn() + " = ?");
-			delete.addWhereParameter(getClassName());
-		
-			statements.add(dropTable);
-		} else {
-			Log.warn("Could not find table for className %s in nucleus_tables. %s will abort.", getClassName(), getChangeMetaData().getName());
 		}
 		
 		return statements;

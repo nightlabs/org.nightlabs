@@ -9,12 +9,14 @@ import java.util.List;
 import liquibase.change.ChangeMetaData;
 import liquibase.database.Database;
 import liquibase.exception.SetupException;
+import liquibase.logging.LogFactory;
+import liquibase.logging.Logger;
 import liquibase.statement.SqlStatement;
 import liquibase.statement.core.RenameTableStatement;
 import liquibase.statement.core.UpdateStatement;
 
 import org.nightlabs.liquibase.datanucleus.util.DNUtil;
-import org.nightlabs.liquibase.datanucleus.util.Log;
+import org.nightlabs.liquibase.datanucleus.util.DNUtil.NucleusTablesStruct;
 
 /**
  * A Change that changes the className of a persistent class in the
@@ -47,6 +49,8 @@ import org.nightlabs.liquibase.datanucleus.util.Log;
  */
 public class ChangeClassNameChange extends AbstractDNChange {
 
+	private static final Logger logger = LogFactory.getLogger();
+	
 	private String className;
 	private String newClassName;
 	private String newTableName;
@@ -80,9 +84,20 @@ public class ChangeClassNameChange extends AbstractDNChange {
 		// We need the old table name to re-set the class_name
 		String oldTableName = DNUtil.getTableName(database, getClassName());
 		if (null == oldTableName || oldTableName.isEmpty()) {
-			Log.error(getChangeMetaData().getName() + " can't find the oldTableName for class %s, aborting", getClassName());
+			logger.severe(getChangeMetaData().getName() + " can't find the oldTableName for class " + getClassName() + ", aborting");
 			throw new RuntimeException(getChangeMetaData().getName() + " can't find the oldTableName, aborting.");
 		}		
+		
+		// For the class-entry itself but as well as for all collection-type fields we update the nucleus tables. 
+		for (NucleusTablesStruct struct : DNUtil.getNucleusReferences(getDb(), getClassName())) {
+			String newClassValue = getNewClassName() + struct.getClassName().replace(getClassName(), "");
+			// Update nucleus_tables to reference the new class-name
+			UpdateStatement update = new UpdateStatement(getSchemaName(), DNUtil.getNucleusTablesName());
+			update.setWhereClause(DNUtil.getNucleusClassNameColumn() + " = ?");
+			update.addWhereParameter(struct.getClassName());
+			update.addNewColumnValue(DNUtil.getNucleusClassNameColumn(), newClassValue);
+			statements.add(update);
+		}
 		
 		// Update nucleus_tables to reference the new class-name
 		UpdateStatement update = new UpdateStatement(getSchemaName(), DNUtil.getNucleusTablesName());
@@ -90,10 +105,11 @@ public class ChangeClassNameChange extends AbstractDNChange {
 		update.addNewColumnValue(DNUtil.getNucleusClassNameColumn(), getNewClassName());
 		statements.add(update);
 		
-		if (null != getNewTableName() && !getNewClassName().isEmpty()) {
+		if (null != getNewTableName() && !getNewTableName().isEmpty()) {
 			// The table name has changed also, re-reference and rename the table
 			update = new UpdateStatement(getSchemaName(), DNUtil.getNucleusTablesName());
-			update.setWhereClause(DNUtil.getNucleusClassNameColumn() + " = '" + database.escapeStringForDatabase(getNewClassName()) + "'");
+			update.setWhereClause(DNUtil.getNucleusClassNameColumn() + " = ?");
+			update.addWhereParameter(getNewClassName());
 			update.addNewColumnValue(DNUtil.getNucleusTableNameColumn(), getNewTableName());
 			statements.add(update);
 			

@@ -10,14 +10,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.nightlabs.liquibase.datanucleus.LiquibaseDNConstants;
-import org.nightlabs.liquibase.datanucleus.LiquibaseDNConstants.IdentifierCase;
-
 import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
 import liquibase.executor.Executor;
 import liquibase.executor.ExecutorService;
+import liquibase.logging.LogFactory;
+import liquibase.logging.Logger;
 import liquibase.statement.core.RawSqlStatement;
+
+import org.nightlabs.liquibase.datanucleus.LiquibaseDNConstants;
+import org.nightlabs.liquibase.datanucleus.LiquibaseDNConstants.IdentifierCase;
 
 /**
  * @author abieber
@@ -25,10 +27,52 @@ import liquibase.statement.core.RawSqlStatement;
  */
 public class DNUtil {
 	
+	private static final Logger logger = LogFactory.getLogger();
+	
 	private static final String NUCLEUS_TABLES = "NUCLEUS_TABLES";
 	private static final String TABLE_NAME_COL = "TABLE_NAME";
 	private static final String CLASS_NAME_COL = "CLASS_NAME";
 	
+	public static class NucleusTablesStruct {
+		private String className;
+		private String tableName;
+		private String type;
+		
+		public NucleusTablesStruct(String className, String tableName,
+				String type) {
+			super();
+			this.className = className;
+			this.tableName = tableName;
+			this.type = type;
+		}
+		
+		public NucleusTablesStruct() {
+		}
+
+		public String getClassName() {
+			return className;
+		}
+
+		public void setClassName(String className) {
+			this.className = className;
+		}
+
+		public String getTableName() {
+			return tableName;
+		}
+
+		public void setTableName(String tableName) {
+			this.tableName = tableName;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+	}
 	 
 
 	public static class DNClassTableIndex {
@@ -56,7 +100,7 @@ public class DNUtil {
 					class2Table.put(clazz, table);
 					table2Class.put(table, clazz);
 				} catch (ClassNotFoundException e) {
-					Log.error("Could not find class " + className + " when scanning nucleus_tables, will index only by className", e);
+					logger.severe("Could not find class " + className + " when scanning nucleus_tables, will index only by className", e);
 				}
 			}
 			className2Table.put(className, table);
@@ -72,7 +116,7 @@ public class DNUtil {
 			index = new DNClassTableIndex();
 			
 			String sql = String.format("SELECT " + getIdentifierName(CLASS_NAME_COL) + " , " + getIdentifierName(TABLE_NAME_COL) +", " + getIdentifierName("TYPE") + " FROM "+ getNucleusTablesName());
-			Log.debug(sql);
+			logger.debug("Executing sql " + sql);
 			Executor executor = ExecutorService.getInstance().getExecutor(database);
 			List<Map> queryForList;
 			try {
@@ -93,6 +137,11 @@ public class DNUtil {
 			tableIndex.put(database, index);
 		}
 		return index;
+	}
+	
+	public static void invalidateIndex(Database database, String className) {
+		// For the moment we simply remove the complete index for this database
+		tableIndex.remove(database);
 	}
 
 	public static Class<?> getClass(Database database, String tableName) {
@@ -170,6 +219,32 @@ public class DNUtil {
 		}
 		return null;
 	}
+
+	public static Collection<NucleusTablesStruct> getNucleusReferences(Database database, String className) {
+		Collection<NucleusTablesStruct> result = new LinkedList<DNUtil.NucleusTablesStruct>();
+		String sql = String.format("SELECT " + getIdentifierName(CLASS_NAME_COL) + " , " + getIdentifierName(TABLE_NAME_COL) +", " + getIdentifierName("TYPE") + " " +
+				"FROM " + getNucleusTablesName() + " " +
+				"WHERE " + getIdentifierName(CLASS_NAME_COL) + " LIKE '" + className + "%'");
+		logger.debug("Executing sql: " + sql);
+		Executor executor = ExecutorService.getInstance().getExecutor(database);
+		List<Map> queryForList;
+		try {
+			queryForList = executor.queryForList(new RawSqlStatement(sql));
+		} catch (DatabaseException e) {
+			throw new RuntimeException(e);
+		}
+		
+		for (Map map : queryForList) {
+//			Log.debug(map.toString());
+			// omitted getIdentifierName in map.get() as somehow the columns always have capital-case?!?
+			String name = (String)map.get(CLASS_NAME_COL);
+			String table = (String)map.get(TABLE_NAME_COL);
+			String type = (String)map.get("TYPE");
+			result.add(new NucleusTablesStruct(name, table, type));
+		}
+		return result;
+	}
+	
 	
 	public static String getNucleusTablesName() {
 		return getIdentifierName(NUCLEUS_TABLES);
