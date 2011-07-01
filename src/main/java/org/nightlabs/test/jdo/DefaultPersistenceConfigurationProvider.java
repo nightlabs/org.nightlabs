@@ -22,7 +22,7 @@ public class DefaultPersistenceConfigurationProvider implements PersistenceConfi
 		//    	See: http://www.jpox.org/servlet/forum/viewthread_thread,6052
 		//    	This is ignored by older DataNucleus versions before 2.1 (and not necessary at least for 1.1.3).
 		//    -->
-		//props.put("datanucleus.query.checkUnusedParameters", "false");
+		props.put("datanucleus.query.checkUnusedParameters", "true");
 
 		//    <!--
 		//    	*** NEW DN 2.1 ***
