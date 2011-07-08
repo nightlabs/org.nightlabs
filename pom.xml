@@ -26,16 +26,19 @@
 			<groupId>jboss</groupId>
 			<artifactId>jbosssx-client</artifactId>
 			<version>4.2.3.GA</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>jboss</groupId>
 			<artifactId>jnp-client</artifactId>
 			<version>4.2.2.GA</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.client</groupId>
 			<artifactId>jboss-client</artifactId>
 			<version>4.2.2.GA</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
