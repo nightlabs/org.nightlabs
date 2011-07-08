@@ -9,6 +9,7 @@ import org.junit.runners.model.InitializationError;
 import org.nightlabs.test.TestTestBase;
 
 public class PersistenceCapableTestBaseTest extends TestTestBase {
+	@Ignore("Manually invoked below.")
 	public static class MyPCSubtest extends PersistenceCapableTestBase<MyPC> {
 		public MyPCSubtest() {
 			super(MyPC.class);
@@ -20,6 +21,7 @@ public class PersistenceCapableTestBaseTest extends TestTestBase {
 		runTest(MyPCSubtest.class);
 	}
 
+	@Ignore("Manually invoked below.")
 	public static class MyPCNoPKSubtest extends PersistenceCapableTestBase<MyPCNoPK> {
 		public MyPCNoPKSubtest() {
 			super(MyPCNoPK.class);
@@ -31,6 +33,7 @@ public class PersistenceCapableTestBaseTest extends TestTestBase {
 		runTest(MyPCNoPKSubtest.class, "primaryKeyTest");
 	}
 
+	@Ignore("Manually invoked below.")
 	public static class MyPCNoPKOkSubtest extends PersistenceCapableTestBase<MyPCNoPK> {
 		public MyPCNoPKOkSubtest() {
 			super(MyPCNoPK.class);
@@ -47,6 +50,7 @@ public class PersistenceCapableTestBaseTest extends TestTestBase {
 		runTest(MyPCNoPKOkSubtest.class);
 	}
 
+	@Ignore("Manually invoked below.")
 	public static class MyPCWithBrokenQuerySubtest extends PersistenceCapableTestBase<MyPCWithBrokenQuery> {
 		public MyPCWithBrokenQuerySubtest() {
 			super(MyPCWithBrokenQuery.class);
@@ -58,6 +62,7 @@ public class PersistenceCapableTestBaseTest extends TestTestBase {
 		runTest(MyPCWithBrokenQuerySubtest.class, "namedQueriesTest");
 	}
 
+	@Ignore("Manually invoked below.")
 	public static class MyPCWithBrokenQueriesSubtest extends PersistenceCapableTestBase<MyPCWithBrokenQueries> {
 		public MyPCWithBrokenQueriesSubtest() {
 			super(MyPCWithBrokenQueries.class);
@@ -69,6 +74,7 @@ public class PersistenceCapableTestBaseTest extends TestTestBase {
 		runTest(MyPCWithBrokenQueriesSubtest.class, "namedQueriesTest");
 	}
 
+	@Ignore("Manually invoked below.")
 	public static class MyPCWithParamQueryMissingParamSubtest extends PersistenceCapableTestBase<MyPCWithParamQuery> {
 		public MyPCWithParamQueryMissingParamSubtest() {
 			super(MyPCWithParamQuery.class);
@@ -76,12 +82,12 @@ public class PersistenceCapableTestBaseTest extends TestTestBase {
 	}
 
 	@Test
-	@Ignore("This test should fail but it does not due to a DataNucleus bug. Reported by Marco 2011-07-01")
 	public void testMyPCWithParamQueryMissingParam() throws InitializationError {
 		// should fail as the test does not provide a parameter
 		runTest(MyPCWithParamQueryMissingParamSubtest.class, "namedQueriesTest");
 	}
 
+	@Ignore("Manually invoked below.")
 	public static class MyPCWithParamQuerySubtest extends PersistenceCapableTestBase<MyPCWithParamQuery> {
 		public MyPCWithParamQuerySubtest() {
 			super(MyPCWithParamQuery.class);
@@ -89,7 +95,7 @@ public class PersistenceCapableTestBaseTest extends TestTestBase {
 		
 		@Override
 		protected Map<String, Object> getNamedQueryParameters(String queryName) {
-			if ("".equals(queryName)) {
+			if ("queryWithParam".equals(queryName)) {
 				return Collections.singletonMap("myStringParam", (Object)"BLABLABLA");
 			}
 			return super.getNamedQueryParameters(queryName);

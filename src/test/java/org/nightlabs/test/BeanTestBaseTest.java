@@ -1,5 +1,6 @@
 package org.nightlabs.test;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.model.InitializationError;
 
@@ -9,6 +10,7 @@ import org.junit.runners.model.InitializationError;
  */
 public class BeanTestBaseTest extends TestTestBase {
 
+	@Ignore("Manually invoked below.")
 	public static class DisfunctGetterBeanSubtest extends BeanTestBase<DisfunctGetterBean> {
 		public DisfunctGetterBeanSubtest() {
 			super(DisfunctGetterBean.class);
@@ -20,6 +22,7 @@ public class BeanTestBaseTest extends TestTestBase {
 		runTest(DisfunctGetterBeanSubtest.class, "getterSetterTest");
 	}
 
+	@Ignore("Manually invoked below.")
 	public static class DisfunctSetterBeanSubtest extends BeanTestBase<DisfunctSetterBean> {
 		public DisfunctSetterBeanSubtest() {
 			super(DisfunctSetterBean.class);
@@ -31,6 +34,7 @@ public class BeanTestBaseTest extends TestTestBase {
 		runTest(DisfunctSetterBeanSubtest.class, "getterSetterTest");
 	}
 
+	@Ignore("Manually invoked below.")
 	public static class BeanSubtest extends BeanTestBase<Bean> {
 		public BeanSubtest() {
 			super(Bean.class);
