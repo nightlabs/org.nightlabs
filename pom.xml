@@ -141,6 +141,7 @@
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.unifiedejbjndi.jboss</artifactId>
 				<version>${project.version}</version>
+				<type>sar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
@@ -194,6 +195,12 @@
 				<groupId>org.datanucleus</groupId>
 				<artifactId>datanucleus-rdbms</artifactId>
 				<version>${datanucleus.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.datanucleus</groupId>
+				<artifactId>datanucleus-jca</artifactId>
+				<version>${datanucleus.version}</version>
+				<type>rar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.geronimo.specs</groupId>
@@ -304,9 +311,7 @@
 					<inherited>true</inherited>
 					<extensions>true</extensions>
 					<configuration>
-					<!-- 
-						<log4jConfiguration>${basedir}/log4j-enhancer.properties</log4jConfiguration>
-						-->
+						<!-- <log4jConfiguration>${basedir}/log4j-enhancer.properties</log4jConfiguration> -->
 						<verbose>true</verbose>
 					</configuration>
 					<executions>
