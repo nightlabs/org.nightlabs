@@ -311,8 +311,10 @@
 					<inherited>true</inherited>
 					<extensions>true</extensions>
 					<configuration>
-						<!-- <log4jConfiguration>${basedir}/log4j-enhancer.properties</log4jConfiguration> -->
 						<verbose>true</verbose>
+						<!-- TODO: fork:true is the default but does not work in windows as
+						     the command line gets too long. -->
+						<fork>false</fork>
 					</configuration>
 					<executions>
 						<execution>
