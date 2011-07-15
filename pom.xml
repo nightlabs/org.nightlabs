@@ -59,10 +59,8 @@
 			<plugin>
 				<groupId>org.datanucleus</groupId>
 				<artifactId>maven-datanucleus-plugin</artifactId>
-				<version>3.0.0-m2</version>
 				<configuration>
 					<metadataDirectory>${project.build.testOutputDirectory}</metadataDirectory>
-					<verbose>true</verbose>
 				</configuration>
 				<executions>
 					<execution>
