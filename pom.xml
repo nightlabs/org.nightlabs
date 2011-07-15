@@ -12,7 +12,7 @@
 		<bundle.namespace>${project.artifactId}</bundle.namespace>
 		<datanucleus.version>(2.9, )</datanucleus.version>
 		<jdo.version>[3.0, )</jdo.version>
-		<datanucleus.plugin.version>3.0.0-release</datanucleus.plugin.version>
+		<datanucleus.plugin.version>3.0.0-m2</datanucleus.plugin.version>
 		<log4j.version>1.2.16</log4j.version>
 	</properties>
 
