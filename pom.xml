@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs</groupId>
 	<artifactId>org.nightlabs.parent</artifactId>
@@ -10,11 +9,36 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<bundle.namespace>${project.artifactId}</bundle.namespace>
-		<datanucleus.version>(2.9, )</datanucleus.version>
+		<datanucleus.version>3.0.0-release-SNAPSHOT</datanucleus.version>
 		<jdo.version>[3.0, )</jdo.version>
-		<datanucleus.plugin.version>3.0.0-m2</datanucleus.plugin.version>
+		<datanucleus.plugin.version>3.0.0-release-SNAPSHOT</datanucleus.plugin.version>
 		<log4j.version>1.2.16</log4j.version>
 	</properties>
+
+	<repositories>
+		<repository>
+			<id>nl</id>
+			<url>https://dev.nightlabs.org/maven-repository/repo</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>nl</id>
+			<url>https://dev.nightlabs.org/maven-repository/repo</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<organization>
 		<name>NightLabs Consulting GmbH</name>
