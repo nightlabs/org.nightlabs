@@ -300,6 +300,7 @@ class DirectedGraphNode<T>
 	 */
 	public void removeEdge(DirectedGraph.SortingDirection feature, DirectedGraphNode<T> child)
 	{
+		// FIXME The child is manipulated in addOutgoingEdge and addIncomingEdge - why isn't it here? Marco :-)
 		if (DirectedGraph.SortingDirection.InDegree == feature)
 			getIncomingEdges().remove(child);
 		else
@@ -364,21 +365,22 @@ class DirectedGraphNode<T>
 	@Override
 	public String toString()
 	{
-		StringBuilder sb = new StringBuilder("( ");
-		sb.append(value.toString()).append(", outgoing edges = { ");
+		StringBuilder sb = new StringBuilder("\n( ");
+		sb.append(value.toString()).append(",\n\toutgoing edges = { ");
 		for (DirectedGraphNode<T> edge : getOutgoingEdges())
 		{
-			sb.append(edge.getElement()).append(", ");
+			sb.append("\n\t\t").append(edge.getElement()).append(", ");
 		}
 		sb.delete(sb.length()-2, sb.length());
 
-		sb.append(" }; incoming edges = { ");
+		sb.append("\n\t};\n\tincoming edges = { ");
 		for (DirectedGraphNode<T> edge : getIncomingEdges())
 		{
-			sb.append(edge.getElement()).append(", ");
+			sb.append("\n\t\t").append(edge.getElement()).append(", ");
 		}
 		sb.delete(sb.length()-2, sb.length());
-		sb.append(" }");
+		sb.append("\n\t}");
+		sb.append("\n)");
 
 		return sb.toString();
 	}
