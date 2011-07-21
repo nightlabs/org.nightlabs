@@ -3,6 +3,9 @@ package org.nightlabs.util;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * <p>
  * A benchmark &amp; performance testing tool. Use an instance of <code>Stopwatch</code> to find out
@@ -18,6 +21,8 @@ import java.util.TreeMap;
  */
 public class Stopwatch
 {
+	private static final Logger logger = LoggerFactory.getLogger(Stopwatch.class);
+
 	private static class TaskRecursion
 	{
 		public TaskRecursion(Task task, int recursionLevel) {
@@ -194,8 +199,11 @@ public class Stopwatch
 	public void stop(String taskIdentifier)
 	{
 		Task task = taskIdentifier2task.get(taskIdentifier);
-		if (task == null)
-			throw new IllegalArgumentException("There is no task with the taskIdentifier \"" + taskIdentifier + "\"! You must call start(...) before stop(...) with the same taskIdentifier!");
+		if (task == null) {
+			Exception x = new IllegalArgumentException("There is no task with the taskIdentifier \"" + taskIdentifier + "\"! You must call start(...) before stop(...) with the same taskIdentifier!");
+			logger.warn("stop: " + x, x);
+			return;
+		}
 
 		task.stop();
 	}
