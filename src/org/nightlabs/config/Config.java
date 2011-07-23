@@ -985,6 +985,16 @@ public class Config
 	public void save(String includeFileMidfix, boolean forceSaveAllModules)
 	throws ConfigException
 	{
+		// BEGIN temporary workaround
+		// TODO implement a clean way to get the Config running in RAP. Maybe use a user-dependent config-provider (pseudo-shared-instance).
+		String wsSysPropKey = "osgi.ws";
+		String wsSysPropVal = System.getProperty(wsSysPropKey);
+		if ("rap".equalsIgnoreCase(wsSysPropVal))
+			logger.warn("save: System property '" + wsSysPropKey + "' is '" + wsSysPropVal + "'. Skipping!!!");
+		else if (logger.isDebugEnabled())
+			logger.debug("save: System property '" + wsSysPropKey + "' is '" + wsSysPropVal + "'. Saving normally.");
+		// END temporary workaround
+		
 		String tempConfigFileSuffix = '.' + Long.toString(System.currentTimeMillis(), 36) + '-' + Integer.toString(System.identityHashCode(this), 36) + '-' + Integer.toString((int)(1296 * Math.random()), 36) + ".new";
 		List<File> temporaryFilesToCleanup = new LinkedList<File>();
 		synchronized (ioMutex) {
