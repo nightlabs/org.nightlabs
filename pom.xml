@@ -15,11 +15,13 @@
 	</parent>
 
 	<dependencies>
+<!-- This library now uses SLF4j. Marco :-)
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<scope>provided</scope>
 		</dependency>
+-->
 		<dependency>
 			<groupId>org.nightlabs</groupId>
 			<artifactId>org.nightlabs.concurrent</artifactId>
