@@ -4,8 +4,8 @@ Bundle-Name: NightLabs Config Plug-in
 Bundle-SymbolicName: org.nightlabs.config;singleton:=true
 Bundle-Version: 1.0.2.qualifier
 Bundle-Vendor: NightLabs.org
-Require-Bundle: org.apache.log4j,
- org.nightlabs.concurrent;visibility:=reexport
+Require-Bundle: org.nightlabs.concurrent;visibility:=reexport,
+ slf4j.api
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered

@@ -27,7 +27,8 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.beans.SimpleBeanInfo;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @version $Revision: 12386 $ - $Date: 2008-10-10 14:42:28 +0200 (Fr, 10 Okt 2008) $
@@ -35,35 +36,32 @@ import org.apache.log4j.Logger;
 public class ConfigModuleBeanInfo
 extends SimpleBeanInfo
 {
-	/**
-	 * LOG4J logger used by this class
-	 */
-	private static final Logger logger = Logger.getLogger(ConfigModuleBeanInfo.class);
+	private static final Logger logger = LoggerFactory.getLogger(ConfigModuleBeanInfo.class);
 
-  Class<?> beanClass = ConfigModule.class;
+	Class<?> beanClass = ConfigModule.class;
 
-  private static final int PROPERTY_identifier = 0;
-  private static final int PROPERTY_searchClass = 1;
+	private static final int PROPERTY_identifier = 0;
+	private static final int PROPERTY_searchClass = 1;
 
-  @Override
+	@Override
 	public PropertyDescriptor[] getPropertyDescriptors()
-  {
-  	PropertyDescriptor[] properties = new PropertyDescriptor[2];
+	{
+		PropertyDescriptor[] properties = new PropertyDescriptor[2];
 
-  	try {
+		try {
 //  		properties[PROPERTY_identifier] = new PropertyDescriptor ( "identifier", beanClass, "getIdentifier", "setIdentifier" );
 //  		properties[PROPERTY_identifier].setHidden(true);
 //  		properties[PROPERTY_searchClass] = new PropertyDescriptor ( "searchClass", beanClass, "getSearchClass", "setSearchClass" );
 //  		properties[PROPERTY_searchClass].setHidden(true);
-  		properties[PROPERTY_identifier] = new PropertyDescriptor ( "identifier", beanClass, null, null );
-  		properties[PROPERTY_searchClass] = new PropertyDescriptor ( "searchClass", beanClass, null, null );
-  	}
-  	catch( IntrospectionException e) {
-  		logger.error("", e);
-  	}
+			properties[PROPERTY_identifier] = new PropertyDescriptor ( "identifier", beanClass, null, null );
+			properties[PROPERTY_searchClass] = new PropertyDescriptor ( "searchClass", beanClass, null, null );
+		}
+		catch( IntrospectionException e) {
+			logger.error("", e);
+		}
 
-  	// Here you can add code for customizing the properties array.
-  	return properties;
-  }
+		// Here you can add code for customizing the properties array.
+		return properties;
+	}
 
 }

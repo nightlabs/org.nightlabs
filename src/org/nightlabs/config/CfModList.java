@@ -29,8 +29,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.apache.log4j.Logger;
 import org.nightlabs.concurrent.RWLockable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -58,7 +59,7 @@ public class CfModList<E> extends ArrayList<E> implements RWLockable
 	/**
 	 * LOG4J logger used by this class
 	 */
-	private static final Logger logger = Logger.getLogger(CfModList.class);
+	private static final Logger logger = LoggerFactory.getLogger(CfModList.class);
 
 	protected ConfigModule ownerCfMod = null;
 

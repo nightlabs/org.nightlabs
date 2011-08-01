@@ -40,7 +40,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The manager for config objects called ConfigModules. Each subsystem can
@@ -87,7 +88,7 @@ public class Config
 	/**
 	 * The logger for this class.
 	 */
-	private static final Logger logger = Logger.getLogger(Config.class);
+	private static final Logger logger = LoggerFactory.getLogger(Config.class);
 
 	/**
 	 * The character used to append a unique identifier to a config file name.
@@ -994,7 +995,7 @@ public class Config
 		else if (logger.isDebugEnabled())
 			logger.debug("save: System property '" + wsSysPropKey + "' is '" + wsSysPropVal + "'. Saving normally.");
 		// END temporary workaround
-		
+
 		String tempConfigFileSuffix = '.' + Long.toString(System.currentTimeMillis(), 36) + '-' + Integer.toString(System.identityHashCode(this), 36) + '-' + Integer.toString((int)(1296 * Math.random()), 36) + ".new";
 		List<File> temporaryFilesToCleanup = new LinkedList<File>();
 		synchronized (ioMutex) {
