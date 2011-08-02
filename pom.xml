@@ -58,6 +58,58 @@
 		</repository>
 
 		<repository>
+			<id>maven.eclipse.org-testing</id>
+			<url>http://maven.eclipse.org/nexus/content/repositories/testing/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>maven.eclipse.org-sonatype</id>
+			<url>http://maven.eclipse.org/nexus/content/repositories/Sonatype/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>repo1.maven.org-eclipse</id>
+			<url>http://repo1.maven.org/eclipse/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>oss.sonatype.org-snapshots</id>
+			<url>http://oss.sonatype.org/content/repositories/snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+
+		<repository>
+			<id>maven.glassfish.org-content-groups-glassfish</id>
+			<url>http://maven.glassfish.org/content/groups/glassfish</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
 			<id>dev.nightlabs.org-libs-releases-local</id>
 			<url>http://dev.nightlabs.org/maven-repository/libs-releases-local/</url>
 			<snapshots>
@@ -97,53 +149,12 @@
 				<enabled>false</enabled>
 			</releases>
 		</repository>
-
-		<repository>
-			<id>maven.glassfish.org-content-groups-glassfish</id>
-			<url>http://maven.glassfish.org/content/groups/glassfish</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-
-		<repository>
-			<id>repo1.maven.org-eclipse</id>
-			<url>http://repo1.maven.org/eclipse/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>maven.eclipse.org-testing</id>
-			<url>http://maven.eclipse.org/nexus/content/repositories/testing/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>maven.eclipse.org-sonatype</id>
-			<url>http://maven.eclipse.org/nexus/content/repositories/Sonatype/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
 	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>dev.nightlabs.org-repo</id>
-			<url>https://dev.nightlabs.org/maven-repository/repo</url>
+			<url>http://dev.nightlabs.org/maven-repository/repo</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
