@@ -3,7 +3,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs</groupId>
 	<artifactId>org.nightlabs.config</artifactId>
-	<version>1.2.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>${project.artifactId}</name>
 
@@ -11,7 +10,7 @@
 		<groupId>org.nightlabs</groupId>
 		<artifactId>org.nightlabs.parent</artifactId>
 		<version>1.2.0-SNAPSHOT</version>
-		<relativePath>../${project.parent.artifactId}/pom.xml</relativePath>
+		<relativePath>../org.nightlabs.parent/pom.xml</relativePath>
 	</parent>
 
 	<dependencies>
