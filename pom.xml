@@ -110,6 +110,16 @@
 		</repository>
 
 		<repository>
+			<id>repo1.maven.org-eclipse</id>
+			<url>http://repo1.maven.org/eclipse/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
 			<id>maven.eclipse.org-testing</id>
 			<url>http://maven.eclipse.org/nexus/content/repositories/testing/</url>
 			<releases>
