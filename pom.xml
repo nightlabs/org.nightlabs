@@ -16,9 +16,91 @@
 	</properties>
 
 	<repositories>
+		<!--
+		Here, we list all repositories that are usually used by NightLabs. It is urgently recommended,
+		that you declare a mirror in your local settings.xml and do not directly download from these
+		repositories. The reason is that 1st not all repositories are available at all times and 2nd
+		many repositories are pretty slow.
+
+		Example mirrors declaration in ~/.m2/settings.xml:
+
+			<mirrors>
+				<mirror>
+					<mirrorOf>*</mirrorOf>
+					<id>host.domain.tld-repo</id>
+					<url>http://host.domain.tld/maven-repository/repo</url>
+				</mirror>
+			</mirrors>
+
+		However, even without such a mirror, this pom.xml should build everywhere, if all used
+		repositories are online & available.
+		-->
 		<repository>
-			<id>nl</id>
-			<url>https://dev.nightlabs.org/maven-repository/repo</url>
+			<id>www.datanucleus.org-maven2</id>
+			<url>http://www.datanucleus.org/downloads/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+
+		<repository>
+			<id>www.datanucleus.org-maven2-nightly</id>
+			<url>http://www.datanucleus.org/downloads/maven2-nightly</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+
+		<repository>
+			<id>dev.nightlabs.org-libs-releases-local</id>
+			<url>http://dev.nightlabs.org/maven-repository/libs-releases-local/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>dev.nightlabs.org-libs-snapshots-local</id>
+			<url>http://dev.nightlabs.org/maven-repository/libs-snapshots-local/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>dev.nightlabs.org-ext-releases-local</id>
+			<url>http://dev.nightlabs.org/maven-repository/ext-releases-local/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>dev.nightlabs.org-ext-snapshots-local</id>
+			<url>http://dev.nightlabs.org/maven-repository/ext-snapshots-local/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+
+		<repository>
+			<id>maven.glassfish.org-content-groups-glassfish</id>
+			<url>http://maven.glassfish.org/content/groups/glassfish</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -26,10 +108,31 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+
+		<repository>
+			<id>maven.eclipse.org-testing</id>
+			<url>http://maven.eclipse.org/nexus/content/repositories/testing/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>maven.eclipse.org-sonatype</id>
+			<url>http://maven.eclipse.org/nexus/content/repositories/Sonatype/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>nl</id>
+			<id>dev.nightlabs.org-repo</id>
 			<url>https://dev.nightlabs.org/maven-repository/repo</url>
 			<releases>
 				<enabled>true</enabled>
