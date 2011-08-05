@@ -186,7 +186,13 @@ public class Stopwatch
 	 */
 	public void start(String taskIdentifier)
 	{
-		createTask(taskIdentifier).start();
+		try {
+			createTask(taskIdentifier).start();
+		} catch (Exception x) {
+			taskIdentifier2task.remove(taskIdentifier); // prevent corrupt data by removing it.
+			logger.warn("start(taskIdentifier='" + taskIdentifier + "'): " + x, x);
+			return;
+		}
 	}
 
 	/**
@@ -201,11 +207,17 @@ public class Stopwatch
 		Task task = taskIdentifier2task.get(taskIdentifier);
 		if (task == null) {
 			Exception x = new IllegalArgumentException("There is no task with the taskIdentifier \"" + taskIdentifier + "\"! You must call start(...) before stop(...) with the same taskIdentifier!");
-			logger.warn("stop: " + x, x);
+			logger.warn("stop(taskIdentifier='" + taskIdentifier + "'): " + x, x);
 			return;
 		}
 
-		task.stop();
+		try {
+			task.stop();
+		} catch (Exception x) {
+			taskIdentifier2task.remove(taskIdentifier); // prevent corrupt data by removing it.
+			logger.warn("stop(taskIdentifier='" + taskIdentifier + "'): " + x, x);
+			return;
+		}
 	}
 
 	/**
