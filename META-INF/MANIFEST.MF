@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.nightlabs.config;singleton:=true
 Bundle-Version: 1.0.2.qualifier
 Bundle-Vendor: NightLabs.org
 Require-Bundle: org.nightlabs.concurrent;visibility:=reexport,
- slf4j.api
+ slf4j.api,
+ org.eclipse.osgi;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered

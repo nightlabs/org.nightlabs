@@ -40,6 +40,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.nightlabs.config.internal.DefaultClassLoaderResolver;
+import org.nightlabs.config.internal.IClassLoaderResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -701,21 +703,37 @@ public class Config
 		} // synchronized (ioMutex) {
 	}
 
-	private ClassLoader classLoader;
+	private IClassLoaderResolver classLoaderResolver;
 
-	public ClassLoader getClassLoader() {
-		return classLoader;
-	}
 	public void setClassLoader(ClassLoader classLoader) {
-		this.classLoader = classLoader;
+		if (classLoader == null) {
+			classLoaderResolver = null;
+		} else {
+			classLoaderResolver = new DefaultClassLoaderResolver(classLoader);
+		}
 	}
 
-	private ClassLoader getDefaultClassLoader()
+	private ClassLoader getDefaultClassLoader(String className)
 	{
-		if (classLoader == null)
-			return Config.class.getClassLoader();
-		else
-			return classLoader;
+		if (classLoaderResolver == null) {
+			// First try to load the OSGI-resolver
+			try {
+				@SuppressWarnings("unchecked")
+				Class<? extends IClassLoaderResolver> resolverClass = (Class<? extends IClassLoaderResolver>) Class.forName("org.nightlabs.config.internal.osgi.OSGIClassLoaderResolver");
+				classLoaderResolver = resolverClass.newInstance();
+			} catch (ClassNotFoundException e) {
+				// Might happen in non OSGI-environment
+			} catch (InstantiationException e) {
+				// Might happen in non OSGI-environment
+			} catch (IllegalAccessException e) {
+				// Might happen in non OSGI-environment
+			}
+			if (classLoaderResolver == null) {
+				// Not in OSGi-environment, use default resolver
+				classLoaderResolver = new DefaultClassLoaderResolver(null);
+			}
+		}
+		return classLoaderResolver.getClassLoader(className);
 	}
 
 	private XMLDecoder createXMLDecoder(InputStream in, ExceptionListener exceptionListener, ClassLoader classLoader)
@@ -724,7 +742,7 @@ public class Config
 				in,
 				null,
 				exceptionListener,
-				classLoader == null ? getDefaultClassLoader() : classLoader
+				classLoader == null ? getDefaultClassLoader(Config.class.getName()) : classLoader
 		);
 	}
 
@@ -742,7 +760,7 @@ public class Config
 			configModuleClassName = configModuleClass.getName();
 		else {
 			try {
-				configModuleClass = (Class<? extends ConfigModule>) getDefaultClassLoader().loadClass(configModuleClassName);
+				configModuleClass = (Class<? extends ConfigModule>) getDefaultClassLoader(configModuleClassName).loadClass(configModuleClassName);
 			} catch (ClassNotFoundException e) {
 				configModuleClass = null;
 				logger.warn("Loading ConfigModule-class " + configModuleClassName + " failed.", e);
@@ -1103,8 +1121,16 @@ public class Config
 
 										if(logger.isDebugEnabled())
 											logger.debug("opened file for configModule \"" + includedConfigModuleFilename + "\". writing object...");
-										encoder.writeObject(includedConfigModule);
-										includedConfigModule.setChanged(false);
+										
+										// Unfortunately I found no other way of setting the classloader the xmlEncoder should use, Alex :-(
+										ClassLoader ctxCl = Thread.currentThread().getContextClassLoader();
+										try {
+											Thread.currentThread().setContextClassLoader(includedConfigModule.getClass().getClassLoader());
+											encoder.writeObject(includedConfigModule);
+											includedConfigModule.setChanged(false);
+										} finally {
+											Thread.currentThread().setContextClassLoader(ctxCl);
+										}
 									} finally {
 										encoder.close();
 									}
@@ -1459,7 +1485,7 @@ public class Config
 	 */
 	public <T extends ConfigModule> T getConfigModule(Class<T> configModuleClass)
 	{
-		return configModuleClass.cast(getConfigModule(configModuleClass.getName(), null, true));
+		return configModuleClass.cast(getConfigModule(configModuleClass, null, true));
 	}
 
 	/**
@@ -1491,7 +1517,7 @@ public class Config
 	 */
 	public <T extends ConfigModule> T getConfigModule(Class<T> configModuleClass, String identifier)
 	{
-		return configModuleClass.cast(getConfigModule(configModuleClass.getName(), identifier, true));
+		return configModuleClass.cast(getConfigModule(configModuleClass, identifier, true));
 	}
 
 	/**
@@ -1521,7 +1547,7 @@ public class Config
 	 */
 	public <T extends ConfigModule> T getConfigModule(Class<T> configModuleClass, boolean throwExceptionIfNotExistent)
 	{
-		return configModuleClass.cast(getConfigModule(configModuleClass.getName(), null, throwExceptionIfNotExistent));
+		return configModuleClass.cast(getConfigModule(configModuleClass, null, throwExceptionIfNotExistent));
 	}
 
 	/**
@@ -1555,7 +1581,11 @@ public class Config
 	 */
 	public <T extends ConfigModule> T getConfigModule(Class<T> configModuleClass, String identifier, boolean throwExceptionIfNotExistent)
 	{
-		return configModuleClass.cast(getConfigModule(configModuleClass.getName(), identifier, throwExceptionIfNotExistent));
+		loadConfigModulesForClass(configModuleClass, null);
+		ConfigModule cfMod = configModules.get(getConfigModuleIdentifyingName(configModuleClass.getName(), identifier));
+		if (cfMod == null && throwExceptionIfNotExistent)
+			throw new ConfigModuleNotFoundException("No ConfigModule of type \""+configModuleClass.getName()+"\" existent!");
+		return configModuleClass.cast(cfMod);
 	}
 
 	/**

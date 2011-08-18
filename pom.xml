@@ -26,6 +26,14 @@
 			<artifactId>org.nightlabs.concurrent</artifactId>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.osgi</groupId>
+			<artifactId>org.eclipse.osgi</artifactId>
+        	<version>3.6.2</version>
+			<optional>true</optional>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
