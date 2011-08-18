@@ -73,8 +73,30 @@
 				<inherited>true</inherited>
 				<configuration>
 					<instructions>
-						<!-- SPECIAL CASE HERE as the bundle name does not correspond to the base package name. -->						
-						<Export-Package>org.nightlabs.*;version="${project.version}"</Export-Package>
+						<!-- SPECIAL CASE HERE as the bundle name does not correspond to the base package name. -->
+						<Export-Package>
+						org.nightlabs;version="${project.version}",
+						org.nightlabs.annotation;version="${project.version}",
+						org.nightlabs.datastructure;version="${project.version}",
+						org.nightlabs.db;version="${project.version}",
+						org.nightlabs.environment;version="${project.version}",
+						org.nightlabs.inheritance;version="${project.version}",
+						org.nightlabs.io;version="${project.version}",
+						org.nightlabs.io.pcx;version="${project.version}",
+						org.nightlabs.j2ee;version="${project.version}",
+						org.nightlabs.jdo;version="${project.version}",
+						org.nightlabs.job;version="${project.version}",
+						org.nightlabs.l10n;version="${project.version}",
+						org.nightlabs.language;version="${project.version}",
+						org.nightlabs.math;version="${project.version}",
+						org.nightlabs.notification;version="${project.version}",
+						org.nightlabs.print;version="${project.version}",
+						org.nightlabs.print.page;version="${project.version}",
+						org.nightlabs.script;version="${project.version}",
+						org.nightlabs.timepattern;version="${project.version}",
+						org.nightlabs.version;version="${project.version}",
+						org.nightlabs.webapp;version="${project.version}"					
+						</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
