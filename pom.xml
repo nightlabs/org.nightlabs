@@ -13,6 +13,7 @@
 		<datanucleus.version>3.0.0-m6</datanucleus.version>
 		<datanucleus.plugin.version>3.0.0-release-SNAPSHOT</datanucleus.plugin.version>
 		<log4j.version>1.2.16</log4j.version>
+		<nightlabs.version>1.2.0-SNAPSHOT</nightlabs.version>
 	</properties>
 
 	<repositories>
@@ -192,114 +193,114 @@
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.base</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.clientui</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.concurrent</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.config</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.i18n</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.jdo</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.progress</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.query</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.query.jdo</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.test</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.util</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.xml</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.classloader.delegating</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.connection</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.editor2d</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.htmlcontent</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.keyreader</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.rhino.XXX</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.singleton</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.unifiedejbjndi.jboss</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 				<type>sar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.unifiedjndi.jboss.client</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs</groupId>
 				<artifactId>org.nightlabs.classloader.url</artifactId>
-				<version>${project.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 
 			<!-- ###### 3rd party ###### -->
