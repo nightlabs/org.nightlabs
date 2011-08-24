@@ -10,8 +10,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<bundle.namespace>${project.artifactId}</bundle.namespace>
 		<jdo.version>[3.0, )</jdo.version>
-		<datanucleus.version>3.0.0-m6</datanucleus.version>
-		<datanucleus.plugin.version>3.0.0-release-SNAPSHOT</datanucleus.plugin.version>
+		<datanucleus.version>3.0.0-release</datanucleus.version>
+		<datanucleus.plugin.version>3.0.0-release</datanucleus.plugin.version>
 		<log4j.version>1.2.16</log4j.version>
 		<nightlabs.version>1.2.0-SNAPSHOT</nightlabs.version>
 	</properties>
