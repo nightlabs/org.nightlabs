@@ -15,6 +15,8 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.nightlabs.util.reflect.ReflectUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -73,6 +75,8 @@ import org.nightlabs.util.reflect.ReflectUtil;
  * @author Marco หงุ่ยตระกูล-Schulze - marco at nightlabs dot de
  */
 public class Canonicaliser {
+
+	private static final Logger logger = LoggerFactory.getLogger(Canonicaliser.class);
 
 	private Map<Object, Object> replacementMap = new WeakHashMap<Object, Object>();
 
@@ -285,6 +289,11 @@ public class Canonicaliser {
 
 		processed.put(object, object);
 
+		long startTimestamp;
+		if (logger.isTraceEnabled())
+			startTimestamp = System.nanoTime();
+		else
+			startTimestamp = Long.MIN_VALUE;
 
 		Class<? extends Object> type = object.getClass();
 
@@ -333,7 +342,7 @@ public class Canonicaliser {
 				if (!type.getComponentType().isPrimitive()) {
 					Object[] array = (Object[]) object;
 					for (int i = 0; i < array.length; ++i)
-						array[i] = internalCanonicalise(array[i], processed);					
+						array[i] = internalCanonicalise(array[i], processed);
 				}
 			}
 			else {
@@ -359,6 +368,15 @@ public class Canonicaliser {
 					throw new RuntimeException(e);
 				}
 			}
+		}
+
+		if (startTimestamp != Long.MIN_VALUE) {
+			logger.trace(
+					"internalCanonicalise: Took {} nanosec. replaced={} class={} result={}",
+					new Object[] {
+							System.nanoTime() - startTimestamp, object != result, object.getClass().getName(), result
+					}
+			);
 		}
 
 		return result;
