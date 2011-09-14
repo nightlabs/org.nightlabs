@@ -78,6 +78,8 @@ public class Canonicaliser {
 
 	private static final Logger logger = LoggerFactory.getLogger(Canonicaliser.class);
 
+	private final String instanceID = Integer.toHexString(System.identityHashCode(this));
+
 	private Map<Object, Object> replacementMap = new WeakHashMap<Object, Object>();
 
 	/**
@@ -372,9 +374,9 @@ public class Canonicaliser {
 
 		if (startTimestamp != Long.MIN_VALUE) {
 			logger.trace(
-					"internalCanonicalise: Took {} nanosec. replaced={} class={} result={}",
+					"[{}]internalCanonicalise: Took {} nanosec. replaced={} class={} result={}",
 					new Object[] {
-							System.nanoTime() - startTimestamp, object != result, object.getClass().getName(), result
+							instanceID, System.nanoTime() - startTimestamp, object != result, object.getClass().getName(), result
 					}
 			);
 		}
