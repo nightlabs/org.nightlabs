@@ -249,8 +249,8 @@ public class MultiLanguagePropertiesBundle {
 	 * Retrieves all keys corresponding to one given {@link Locale}.
 	 *
 	 * @param locale {@link Locale}.
-	 * @return Will return an empty {@link Set} if no keys are saved for this {@link Locale}.
-	 * Otherwise the keys of this Locale will be returned as {@link Set}.
+	 * @return Will return an unmodifiable empty {@link Set} if no keys are saved for this {@link Locale}.
+	 * Otherwise the keys of this Locale will be returned as unmodifiable {@link Set}.
 	 */
 	public Set<String> getKeys(Locale locale)
 	{
