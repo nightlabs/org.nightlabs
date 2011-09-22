@@ -306,7 +306,7 @@ implements Serializable, SearchQuery
 	 *
 	 * @param groupID the ID of the UI group for which the active states of all contained elements
 	 * 	shall be retrieved.
-	 * @return a backup of the fields' enable states that belong the a group with a unique ID.
+	 * @return a backup of the fields' enable states that belong the a group with a unique ID or an empty unmodifiable Map.
 	 */
 	public Map<String, Boolean> getBackupOfGroupFields(String groupID)
 	{
@@ -650,7 +650,7 @@ implements Serializable, SearchQuery
 	 * @param fieldNames The names of the fields for which to return the values via reflection.
 	 * @param fieldName2Field A mapping to all valid query properties by their names.
 	 * @return a list of {@link FieldChangeCarrier}s containing all values corresponding to
-	 * 	the fields given as <code>fieldNames</code>.
+	 * 	the fields given as <code>fieldNames</code> or an empty unmodifiable List if there's no mapping.
 	 */
 	private List<FieldChangeCarrier> getFieldValues(
 			Set<String> fieldNames,
