@@ -9,6 +9,7 @@ import java.util.List;
 
 import liquibase.change.ChangeMetaData;
 import liquibase.change.core.DropAllForeignKeyConstraintsChange;
+import liquibase.changelog.ChangeSet;
 import liquibase.database.Database;
 import liquibase.exception.SetupException;
 import liquibase.logging.LogFactory;
@@ -19,6 +20,7 @@ import liquibase.statement.core.DropTableStatement;
 
 import org.nightlabs.liquibase.datanucleus.util.DNUtil;
 import org.nightlabs.liquibase.datanucleus.util.DNUtil.NucleusTablesStruct;
+import org.nightlabs.liquibase.datanucleus.util.LiquibaseUtil;
 
 /**
  * A Change that drops the table data for a persistent class was stored in.
@@ -69,14 +71,7 @@ public class DropClassTableChange extends AbstractDNChange {
 			
 			if (tableName != null && !tableName.isEmpty()) {
 				
-				DropAllForeignKeyConstraintsChange dropFK = new DropAllForeignKeyConstraintsChange();
-				dropFK.setBaseTableSchemaName(getSchemaName());
-				dropFK.setBaseTableName(tableName);
-				dropFK.setChangeSet(getChangeSet());
-				SqlStatement[] dropFKStatements = dropFK.generateStatements(getDb());
-				if (dropFKStatements != null) {
-					statements.addAll(Arrays.asList(dropFKStatements));
-				}
+				LiquibaseUtil.addDropConstraintsStatements(getDb(), getChangeSet(), statements, getSchemaName(), tableName);
 				
 				DropTableStatement dropTable = new DropTableStatement(getSchemaName(), tableName, isCascadeConstraints());
 				
@@ -92,7 +87,7 @@ public class DropClassTableChange extends AbstractDNChange {
 		
 		return statements;
 	}
-	
+
 	public String getClassName() {
 		return className;
 	}

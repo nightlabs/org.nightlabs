@@ -16,6 +16,7 @@ import liquibase.statement.core.RenameTableStatement;
 import liquibase.statement.core.UpdateStatement;
 
 import org.nightlabs.liquibase.datanucleus.util.DNUtil;
+import org.nightlabs.liquibase.datanucleus.util.LiquibaseUtil;
 
 /**
  * A Change that changes the name of the table the data fof a persistent class
@@ -36,6 +37,9 @@ import org.nightlabs.liquibase.datanucleus.util.DNUtil;
  * whether the table should be actually renamed. If set to <code>false</code>,
  * only the reference in the datanucleus-index will be adapted.</li>
  * <li>newTableName: The <b>new</b> name of the table</li>
+ * <li>dropContraints: Optional parameter, defaults to <code>true</code>.
+ * Defines whether the contraints of the table should be dropped (assuming that
+ * they will be recreated by datanucleus)</li>
  * <ul>
  * </p>
  * 
@@ -48,6 +52,7 @@ public class ChangeTableNameChange extends AbstractDNChange {
 	private String className;
 	private String newTableName;
 	private boolean renameTable = true;
+	private boolean dropConstraints = true;
 	
 	public ChangeTableNameChange() {
 		super("dnChangeTableName", "Change the name of a table objects of a class are stored in", ChangeMetaData.PRIORITY_DEFAULT);
@@ -82,6 +87,9 @@ public class ChangeTableNameChange extends AbstractDNChange {
 				logger.warning(getChangeMetaData().getName() + " have renameTable=\"true\" but could not find the old table name value in nulceus_tables");
 			} else {
 				statements.add(new RenameTableStatement(getSchemaName(), oldTableName, getNewTableName()));
+				if (isDropConstraints()) {
+					LiquibaseUtil.addDropConstraintsStatements(getDb(), getChangeSet(), statements, getSchemaName(), getNewTableName());
+				}
 			}
 		}
 		
@@ -116,5 +124,13 @@ public class ChangeTableNameChange extends AbstractDNChange {
 
 	public void setRenameTable(boolean renameTable) {
 		this.renameTable = renameTable;
+	}
+	
+	public void setDropConstraints(boolean dropConstraints) {
+		this.dropConstraints = dropConstraints;
+	}
+	
+	public boolean isDropConstraints() {
+		return dropConstraints;
 	}
 }

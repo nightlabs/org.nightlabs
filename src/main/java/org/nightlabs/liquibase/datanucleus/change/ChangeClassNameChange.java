@@ -17,6 +17,7 @@ import liquibase.statement.core.UpdateStatement;
 
 import org.nightlabs.liquibase.datanucleus.util.DNUtil;
 import org.nightlabs.liquibase.datanucleus.util.DNUtil.NucleusTablesStruct;
+import org.nightlabs.liquibase.datanucleus.util.LiquibaseUtil;
 
 /**
  * A Change that changes the className of a persistent class in the
@@ -55,6 +56,7 @@ public class ChangeClassNameChange extends AbstractDNChange {
 	private String newClassName;
 	private String newTableName;
 	private boolean renameTable = true;
+	private boolean dropConstraints = true;
 	
 	public ChangeClassNameChange() {
 		super("dnChangeClassName", "Change the name of a class and re-refernce that for datanulceus", ChangeMetaData.PRIORITY_DEFAULT);
@@ -115,6 +117,9 @@ public class ChangeClassNameChange extends AbstractDNChange {
 			
 			if (isRenameTable()) {
 				statements.add(new RenameTableStatement(getSchemaName(), oldTableName, getNewTableName()));
+				if (isDropConstraints()) {
+					LiquibaseUtil.addDropConstraintsStatements(getDb(), getChangeSet(), statements, getSchemaName(), getNewTableName());
+				}
 			}
 		}
 		
@@ -152,4 +157,12 @@ public class ChangeClassNameChange extends AbstractDNChange {
 	public void setNewClassName(String newClassName) {
 		this.newClassName = newClassName;
 	}
+	
+	public void setDropConstraints(boolean dropConstraints) {
+		this.dropConstraints = dropConstraints;
+	}
+	public boolean isDropConstraints() {
+		return dropConstraints;
+	}
 }
+

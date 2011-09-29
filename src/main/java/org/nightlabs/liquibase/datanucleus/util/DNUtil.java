@@ -100,7 +100,7 @@ public class DNUtil {
 					class2Table.put(clazz, table);
 					table2Class.put(table, clazz);
 				} catch (ClassNotFoundException e) {
-					logger.severe("Could not find class " + className + " when scanning nucleus_tables, will index only by className", e);
+					logger.warning("Could not find class " + className + " when scanning nucleus_tables (class probably deleted), will index only by className");
 				}
 			}
 			className2Table.put(className, table);
@@ -222,9 +222,9 @@ public class DNUtil {
 
 	public static Collection<NucleusTablesStruct> getNucleusReferences(Database database, String className) {
 		Collection<NucleusTablesStruct> result = new LinkedList<DNUtil.NucleusTablesStruct>();
-		String sql = String.format("SELECT " + getIdentifierName(CLASS_NAME_COL) + " , " + getIdentifierName(TABLE_NAME_COL) +", " + getIdentifierName("TYPE") + " " +
+		String sql = "SELECT " + getIdentifierName(CLASS_NAME_COL) + " , " + getIdentifierName(TABLE_NAME_COL) +", " + getIdentifierName("TYPE") + " " +
 				"FROM " + getNucleusTablesName() + " " +
-				"WHERE " + getIdentifierName(CLASS_NAME_COL) + " LIKE '" + className + "%'");
+				"WHERE " + getIdentifierName(CLASS_NAME_COL) + " LIKE '" + className + "%'";
 		logger.debug("Executing sql: " + sql);
 		Executor executor = ExecutorService.getInstance().getExecutor(database);
 		List<Map> queryForList;
