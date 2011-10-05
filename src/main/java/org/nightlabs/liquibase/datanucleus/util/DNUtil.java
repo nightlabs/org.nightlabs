@@ -222,9 +222,20 @@ public class DNUtil {
 
 	public static Collection<NucleusTablesStruct> getNucleusReferences(Database database, String className) {
 		Collection<NucleusTablesStruct> result = new LinkedList<DNUtil.NucleusTablesStruct>();
+		result.addAll(getNucleusReferences(database, className, true));
+		result.addAll(getNucleusReferences(database, className, false));
+		return result;
+	}
+	
+	private static Collection<NucleusTablesStruct> getNucleusReferences(Database database, String className, boolean fields) {
+		Collection<NucleusTablesStruct> result = new LinkedList<DNUtil.NucleusTablesStruct>();
 		String sql = "SELECT " + getIdentifierName(CLASS_NAME_COL) + " , " + getIdentifierName(TABLE_NAME_COL) +", " + getIdentifierName("TYPE") + " " +
 				"FROM " + getNucleusTablesName() + " " +
-				"WHERE " + getIdentifierName(CLASS_NAME_COL) + " LIKE '" + className + "%'";
+				"WHERE " + getIdentifierName(CLASS_NAME_COL) + " LIKE '" + className;
+		if (fields) {
+			sql = sql + ".%";
+		}
+		sql = sql + "'";
 		logger.debug("Executing sql: " + sql);
 		Executor executor = ExecutorService.getInstance().getExecutor(database);
 		List<Map> queryForList;
