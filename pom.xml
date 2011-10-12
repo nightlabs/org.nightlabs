@@ -2,6 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs</groupId>
 	<artifactId>org.nightlabs.query</artifactId>
+	<!-- TODO FIXME XXX rename to org.nightlabs.jdo.query (Sebl, 2011-10-12) -->
 	<name>${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
