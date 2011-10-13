@@ -23,6 +23,7 @@
 	<modules>
 		<module>../org.nightlabs.parent</module> <!-- org.nightlabs:org.nightlabs.parent -->
 
+		<module>../com.essiembre.eclipse.i18n.resourcebundle</module>
 		<module>../org.nightlabs.base</module>
 		<module>../org.nightlabs.clientui</module>
 		<module>../org.nightlabs.concurrent</module>
