@@ -39,7 +39,6 @@
 
 		<module>../DelegatingClassLoader</module> <!-- org.nightlabs:org.nightlabs.classloader.delegating -->
 		<module>../org.nightlabs.connection</module> <!-- org.nightlabs:org.nightlabs.connection -->
-		<module>../org.nightlabs.editor2d</module> <!-- org.nightlabs:org.nightlabs.editor2d -->
 		<module>../org.nightlabs.htmlcontent</module> <!-- org.nightlabs:org.nightlabs.htmlcontent -->
 		<module>../org.nightlabs.keyreader</module> <!-- org.nightlabs:org.nightlabs.keyreader -->
 		<!-- TODO add later: 
