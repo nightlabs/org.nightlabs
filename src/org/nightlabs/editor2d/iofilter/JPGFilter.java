@@ -25,6 +25,8 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.iofilter;
 
+import java.awt.image.BufferedImage;
+
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -47,6 +49,11 @@ extends AbstractImageFilter
 	@Override
 	protected String initName() {
 		return "JPG Filter";
+	}
+
+	@Override
+	protected int initImageType() {
+		return BufferedImage.TYPE_INT_RGB;
 	}
 
 }

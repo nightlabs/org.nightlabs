@@ -25,12 +25,13 @@
  ******************************************************************************/
 package org.nightlabs.editor2d.iofilter;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.util.ImageGenerator;
+import org.nightlabs.editor2d.util.ImageCreator;
 import org.nightlabs.io.AbstractSingleFileExtensionIOFilter;
 
 /**
@@ -40,29 +41,56 @@ import org.nightlabs.io.AbstractSingleFileExtensionIOFilter;
 public abstract class AbstractImageFilter
 extends AbstractSingleFileExtensionIOFilter
 {
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected boolean supportsRead() {
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected boolean supportsWrite() {
 		return true;
 	}
+	
+	/**
+	 * Default type would support alpha filter (A in ARGB), but some formats (BMP, JPEG) are not correctly rendered with such a type.
+	 * So this method should be overriden for formats that do not support the default type.
+	 * 
+	 * @return type of {@link BufferedImage}
+	 */
+	protected int initImageType(){
+		return BufferedImage.TYPE_INT_ARGB;
+	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Object read(InputStream in) throws IOException {
-//		return null;
 		throw new UnsupportedOperationException("ImageFilter can only write; NOT read!");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void write(Object o, OutputStream out) throws IOException
 	{
 		DrawComponent dc = (DrawComponent) o;
 		dc.clearBounds();
 		int width = dc.getWidth();
 		int height = dc.getHeight();
-		ImageGenerator.writeModelAsImage(dc, width, height, initFileExtension(), out,
-				dc.getRenderMode(), dc.getRenderModeManager());
+		
+		ImageCreator imgCreator = new ImageCreator(dc, width, height);
+		imgCreator.setImageType(initImageType());
+		imgCreator.setRenderMode(dc.getRenderMode());
+		imgCreator.setRenderModeManager(dc.getRenderModeManager());
+		imgCreator.writeImage(initFileExtension(), out);
 	}
 
 }
