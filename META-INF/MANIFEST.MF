@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: NightLabsJDO
 Bundle-SymbolicName: org.nightlabs.jdo
-Bundle-Version: 1.0.12.qualifier
+Bundle-Version: 1.0.13.qualifier
 Export-Package: org.nightlabs.jdo,
  org.nightlabs.jdo.callbacks,
  org.nightlabs.jdo.inheritance,
