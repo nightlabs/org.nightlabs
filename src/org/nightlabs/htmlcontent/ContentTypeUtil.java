@@ -71,6 +71,7 @@ public abstract class ContentTypeUtil
 						return pair[1];
 			}
 		}
+		System.out.println("test");
 		return ".bin";
 	}
 
