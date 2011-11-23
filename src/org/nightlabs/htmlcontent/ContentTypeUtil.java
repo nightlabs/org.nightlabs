@@ -59,7 +59,6 @@ public abstract class ContentTypeUtil
 		{ "application/octet-stream",  ".exe" },
 		{ "application/octet-stream",  ".class" },
 		{ "application/unknown",       ".bin" },
-		{ "application/unknown",       ".test" },	// just for testing conflict recognition, will be removed later
 	};
 
 	public static String getFileExtension(String contentType)
@@ -71,7 +70,6 @@ public abstract class ContentTypeUtil
 						return pair[1];
 			}
 		}
-		System.out.println("test");
 		return ".bin";
 	}
 
