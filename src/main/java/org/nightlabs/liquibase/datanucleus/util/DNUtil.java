@@ -172,7 +172,7 @@ public class DNUtil {
 	}
 	
 	public static Collection<Class<?>> getKnownSubClasses(Database database, String className) {
-		Collection<Class<?>> result = new LinkedList<Class<?>>();
+		List<Class<?>> result = new LinkedList<Class<?>>();
 		try {
 //			Class<?> baseClass = DNClassesLoader.sharedInstance().loadClass(className);
 			Class<?> baseClass = loadClass(className);
@@ -186,7 +186,6 @@ public class DNUtil {
 					result.add(entry.getKey());
 				}
 			}
-			
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
@@ -358,8 +357,4 @@ public class DNUtil {
 
         return s.toString();
     }
-	
-	public static void main(String[] args) {
-		System.out.println(getFieldName("primaryKey"));
-	}
 }

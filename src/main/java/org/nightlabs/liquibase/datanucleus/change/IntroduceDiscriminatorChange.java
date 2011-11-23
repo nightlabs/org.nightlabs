@@ -5,7 +5,10 @@ package org.nightlabs.liquibase.datanucleus.change;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +92,20 @@ public class IntroduceDiscriminatorChange extends AbstractDNChange {
 						getSchemaName(), getClassTableName(), getDiscriminatorColumn(), "VARCHAR(255)", null));
 		
 		
-		Collection<Class<?>> knownSubClasses = DNUtil.getKnownSubClasses(database, getClassName());
+		List<Class<?>> knownSubClasses = new LinkedList<Class<?>>(DNUtil.getKnownSubClasses(database, getClassName()));
+		// We put the subclasses of found classes behind them so they will be processed after the super-class
+		Collections.sort(knownSubClasses, new Comparator<Class<?>>() {
+			@Override
+			public int compare(Class<?> o1, Class<?> o2) {
+				if (o1.isAssignableFrom(o2))
+					return -1;
+				if (o2.isAssignableFrom(o1))
+					return 1;
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		
+		
 		Map<String, String> pkColumnMapping = new HashMap<String, String>();
 		if (knownSubClasses.size() > 0) {
 			try {
