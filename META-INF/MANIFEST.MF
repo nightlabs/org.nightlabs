@@ -11,3 +11,4 @@ Export-Package: org.nightlabs.jdo,
 Require-Bundle: org.apache.log4j;bundle-version="1.2.13",
  javax.jdo,
  org.nightlabs.base;bundle-version="1.0.0"
+Import-Package: org.slf4j
