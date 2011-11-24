@@ -176,7 +176,7 @@ implements Serializable
 	}
 	public String getText(Locale locale, boolean intelligentLookupStrategy)
 	{
-		return getText(locale.getLanguage(), intelligentLookupStrategy);
+		return getText(locale != null ? locale.getLanguage() : null, intelligentLookupStrategy);
 	}
 	/**
 	 * @param languageID Language to find the String for
