@@ -133,6 +133,10 @@ public class SourceEditor {
         }
     }
     
+    /**
+     * 
+     * @return Returns <code>null</code> if no selection could be found in this line.
+     */
     public String getCurrentKey() {
         ITextEditor textEditor = getEditor();
         if (textEditor.getSelectionProvider().getSelection() instanceof TextSelection) {
@@ -145,8 +149,11 @@ public class SourceEditor {
             for (start = selectionStart; start > 0 && content.charAt(start-1) != '\n'; start--);
             for (end = start; end < content.length()-1 && content.charAt(end+1) != '=' && content.charAt(end+1) != '\n'; end++);
             
+            if (start == end)
+            	return null; // no selection available
+
             String line = content.substring(start, end+1).trim();
-            return line;
+        	return line;
         }
         return null;
     }
