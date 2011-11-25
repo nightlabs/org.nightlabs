@@ -153,7 +153,31 @@ public class ModuleMetaData
 		} finally {
 			preparedStatement.close();
 		}
-	}		
+	}
+	
+	/**
+	 * Update the schemaVersion for the given moduleID.
+	 * 
+	 * @param connection The connection 
+	 * @param moduleID The ID of the module
+	 * @param schemaVersion The schemaVersion to set. 
+	 * @throws SQLException
+	 */
+	public static void setSchemaVersion(Connection connection, String moduleID, String schemaVersion) throws SQLException {
+		PreparedStatement preparedStatement = connection.prepareStatement(
+				"UPDATE nightlabsjdo_modulemetadata " +
+				"SET schema_version = ?" +
+				"WHERE module_id = ?"
+		);
+		try {
+			preparedStatement.setString(1, schemaVersion);
+			preparedStatement.setString(2, moduleID);
+			preparedStatement.executeUpdate();
+			
+		} finally {
+			preparedStatement.close();
+		}
+	}	
 
 	public static ModuleMetaData createModuleMetaDataFromManifest(String moduleID, Class<?> clazz)
 	throws IOException, MalformedVersionException
