@@ -87,7 +87,8 @@ public class ChangeClassNameChange extends AbstractDNChange {
 		String oldTableName = DNUtil.getTableName(database, getClassName());
 		if (null == oldTableName || oldTableName.isEmpty()) {
 			logger.severe(getChangeMetaData().getName() + " can't find the oldTableName for class " + getClassName() + ", aborting");
-			throw new RuntimeException(getChangeMetaData().getName() + " can't find the oldTableName, aborting.");
+			return statements;
+//			throw new RuntimeException(getChangeMetaData().getName() + " can't find the oldTableName, aborting.");
 		}		
 		
 		// For the class-entry itself but as well as for all collection-type fields we update the nucleus tables. 
