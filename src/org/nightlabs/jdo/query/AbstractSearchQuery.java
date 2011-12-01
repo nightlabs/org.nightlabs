@@ -120,7 +120,7 @@ implements Serializable, SearchQuery
 			}
 			else
 			{
-				logger.error("Cannot reset a query field value, since it is of primitive type! Query class: "+
+				logger.warn("Cannot reset a query field value, since it is of primitive type! Query class: "+
 						getClass().getName() + ", fieldName='"+fieldName+"'.");
 			}
 		}
