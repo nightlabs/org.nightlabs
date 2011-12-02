@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.base
 Bundle-Version: 1.1.2.qualifier
 Export-Package: org.nightlabs,
  org.nightlabs.annotation,
+ org.nightlabs.clone,
  org.nightlabs.datastructure,
  org.nightlabs.db,
  org.nightlabs.environment,
