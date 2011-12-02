@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -64,14 +65,71 @@ import org.slf4j.LoggerFactory;
  * @author Marc Klinger - marc at nightlabs dot de (API documentation fixes)
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DT] de -->
  */
-public class ReflectUtil
+public final class ReflectUtil
 {
 	private static final Logger logger = LoggerFactory.getLogger(ReflectUtil.class);
 
-	public ReflectUtil()
+	private ReflectUtil() {}
+	
+	public static <T> T newInstanceNoExceptions(Class<T> clazz)
 	{
-		super();
+		try
+		{
+			return newInstance(clazz);
+		}
+		catch (Exception e)
+		{
+			logger.debug(
+					"Couldn't create new instance via default constructor of type '{}'! Supressing exception.",
+					clazz.getName(), e
+			);
+			return null;
+		}
 	}
+	
+	public static <T> T newInstanceRuntimeException(Class<T> clazz)
+	{
+		try
+		{
+			return newInstance(clazz);
+		}
+		catch (Exception e)
+		{
+			logger.trace(
+					"Couldn't create new instance via default constructor of type '{}'! Throwing runtime exception.",
+					clazz.getName(), e
+			);
+			throw new IllegalStateException("Couldn't create new instance via default constructor of type '" + 
+					clazz.getName()+"'!", e);
+		}
+	}
+	
+	public static <T> T newInstance(Class<T> clazz)
+		throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, 
+		       IllegalAccessException, InvocationTargetException
+	{
+		Constructor<? extends T> defaultConstructor = null;
+		@SuppressWarnings("unchecked")
+		Constructor<? extends T>[] constructors = (Constructor<? extends T>[]) clazz.getDeclaredConstructors();
+		for (Constructor<? extends T> constructor : constructors)
+		{
+			if (constructor.getParameterTypes().length == 0)
+			{
+				defaultConstructor = constructor;
+				break;
+			}
+		}
+		
+		if (defaultConstructor == null)
+			throw new IllegalArgumentException("The given Class doesn not define a default constructor! class=" + 
+					clazz.getName());
+		
+		if (! defaultConstructor.isAccessible())
+			defaultConstructor.setAccessible(true);
+		
+		return defaultConstructor.newInstance();
+	}
+	
 
 	/**
 	 * Does the same as {@link org.nightlabs.util.reflect.ReflectUtil#clone(Object original, Class stopClass)}
@@ -552,6 +610,7 @@ public class ReflectUtil
 	public static boolean findContainedObjectsByClass(final Object checkObject, final Class<?> clazz, final boolean filter) {
 		final ObjectFoundResult result = new ObjectFoundResult();
 		findContainedObjectsByClass(checkObject, clazz, filter, true, new IObjectFoundHandler() {
+			@Override
 			public void objectFound(final String path, final Object object) {
 				result.found = true;
 			}
