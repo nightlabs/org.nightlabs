@@ -79,6 +79,7 @@
 						org.nightlabs.annotation;version="${project.version}",
 						org.nightlabs.datastructure;version="${project.version}",
 						org.nightlabs.db;version="${project.version}",
+						org.nightlabs.clone;version="${project.version}",
 						org.nightlabs.environment;version="${project.version}",
 						org.nightlabs.inheritance;version="${project.version}",
 						org.nightlabs.io;version="${project.version}",
