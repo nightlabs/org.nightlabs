@@ -3,6 +3,7 @@ package org.nightlabs.liquibase.datanucleus.change;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import liquibase.change.ChangeMetaData;
@@ -114,7 +115,9 @@ public class ChangeClassNameChange extends AbstractDNChange {
 		}		
 		
 		statements.addAll(updateDNClassInformation(oldTableName));
-		statements.addAll(updateDiscriminatorColumn(oldTableName));
+		
+		String persistentRootClassTableName = getPersistentRootClassTableName(database, newClassName);
+		statements.addAll(updateDiscriminatorColumn(persistentRootClassTableName));
 		
 		if (isTableNameUpdateNeeded(oldTableName)) {
 			statements.addAll(updateTableName(oldTableName));
@@ -148,10 +151,20 @@ public class ChangeClassNameChange extends AbstractDNChange {
 		return statements;
 	}
 	
-	private List<SqlStatement> updateDiscriminatorColumn(String oldTableName)
+	private String getPersistentRootClassTableName(Database database, String childClassName)
 	{
+		Class<?> persistentRootClass = DNUtil.findSuperClass(className);
+		return DNUtil.getTableName(database, persistentRootClass); 
+	}
+	
+	private List<SqlStatement> updateDiscriminatorColumn(String rootTableName)
+	{
+		if (rootTableName == null) {
+			return Collections.emptyList();
+		}
+		
 		try {
-			return doUpdateDiscriminatorColumn(oldTableName);
+			return doUpdateDiscriminatorColumn(rootTableName);
 		} catch (Exception e) {
 			if (e instanceof RuntimeException) {
 				throw (RuntimeException) e;
@@ -162,28 +175,17 @@ public class ChangeClassNameChange extends AbstractDNChange {
 	
 	/**
 	 * Update the discriminator column if existing.
-	 * <p>                                                                   
-	 * This method assumes two things:
-	 * 	<ol>                                                                               
-	 *   <li>The discriminator column is always existing under the default name 'discriminator'</li>                       
-	 *   <li>The discrimator strategy is classname OR if another strategy is used, that strategy does NEVER enter the 
-	 *       classname (the old classname). <br/>
-	 *       Otherwise the name is now replaced with the new classname altough the discriminator is not correct. </li>
-	 *  </ol>       
-	 * </p>
-	 * @param statements
-	 * @param oldTableName
-	 * @throws DatabaseException
-	 * @throws SQLException
+	 * 
+	 * @param rootTableName The old class's table name.
 	 */
-	private List<SqlStatement> doUpdateDiscriminatorColumn(String oldTableName)
+	private List<SqlStatement> doUpdateDiscriminatorColumn(String rootTableName)
 		throws DatabaseException, SQLException
 	{
 		List<SqlStatement> statements = new ArrayList<SqlStatement>(1);
-		Collection<String> columnNames = getColumnNames(oldTableName);
+		Collection<String> columnNames = getColumnNames(rootTableName);
 		if (columnNames.contains(getDiscriminatorColumn())) {
 			// always assumes that the default discriminator column name is used and no other. 
-			UpdateStatement discriminatorUpdate = new UpdateStatement(getSchemaName(), DNUtil.getNucleusTablesName());
+			UpdateStatement discriminatorUpdate = new UpdateStatement(getSchemaName(), rootTableName);
 			discriminatorUpdate.setWhereClause(getDiscriminatorColumn() + " = ?");
 			discriminatorUpdate.addWhereParameter(getOldDiscriminatorValue());
 			discriminatorUpdate.addNewColumnValue(getDiscriminatorColumn(), getNewDiscriminatorValue());
