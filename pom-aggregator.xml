@@ -26,6 +26,12 @@
 			<url>https://dev.nightlabs.org/maven-repository/libs-snapshots-local</url>
 		</snapshotRepository>
 	</distributionManagement>
+	
+    <scm>
+	<connection>scm:svn:https://dev.nightlabs.org/svn/public/main/trunk</connection>
+	<developerConnection>scm:svn:https://dev.nightlabs.org/svn/public/main/trunk</developerConnection>
+	<url>https://dev.nightlabs.org/svn/public/main/trunk</url>
+    </scm>
 
 	<modules>
 		<module>../org.nightlabs.parent</module> <!-- org.nightlabs:org.nightlabs.parent -->
