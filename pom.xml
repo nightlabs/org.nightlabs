@@ -175,9 +175,7 @@
 	</organization>
 
 	<scm>
-		<connection>scm:svn:https://dev.nightlabs.org/svn/public/main/trunk/org.nightlabs.parent</connection>
-		<developerConnection>scm:svn:https://dev.nightlabs.org/svn/public/main/trunk/org.nightlabs.parent</developerConnection>
-		<url>https://https://dev.nightlabs.org/svn/public/main/trunk/org.nightlabs.parent</url>
+		<connection>scm:svn:https://dev.nightlabs.org/svn/public/main/trunk</connection>
 	</scm>
 
 	<distributionManagement>
