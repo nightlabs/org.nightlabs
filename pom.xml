@@ -176,6 +176,8 @@
 
 	<scm>
 		<connection>scm:svn:https://dev.nightlabs.org/svn/public/main/trunk</connection>
+		<developerConnection>scm:svn:https://dev.nightlabs.org/svn/public/main/trunk</developerConnection>
+		<url>https://dev.nightlabs.org/svn/public/main/trunk</url>
 	</scm>
 
 	<distributionManagement>
