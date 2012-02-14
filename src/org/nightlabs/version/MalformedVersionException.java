@@ -27,11 +27,16 @@ package org.nightlabs.version;
 /**
  * @author marco
  * @author Marc Klinger - marc[at]nightlabs[dot]de
+ * @deprecated Moved to separate artifact "org.nightlabs.version". The package "org.nightlabs.version" should
+ * be removed from artifact "org.nightlabs.base" and a dependency onto artifact "org.nightlabs.version" should
+ * be introduced instead. Or even better we should check if we can migrate to the version-handling-classes from OSGI
+ * (e.g. org.osgi.framework.Version and org.eclipse.osgi.service.resolver.VersionRange). Marco :-)
  */
-public class MalformedVersionException extends Exception 
+@Deprecated
+public class MalformedVersionException extends Exception
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Constructs a new exception with <code>null</code> as its detail message.
 	 * The cause is not initialized, and may subsequently be initialized by a

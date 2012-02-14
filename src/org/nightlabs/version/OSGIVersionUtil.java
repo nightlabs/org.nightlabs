@@ -33,7 +33,12 @@ import org.nightlabs.version.VersionRangeEndPoint.EndPointLocation;
  * NightLabs classes.
  *
  * @author Marius Heinzmann -- Marius[at]NightLabs[dot]de
+ * @deprecated Moved to separate artifact "org.nightlabs.version". The package "org.nightlabs.version" should
+ * be removed from artifact "org.nightlabs.base" and a dependency onto artifact "org.nightlabs.version" should
+ * be introduced instead. Or even better we should check if we can migrate to the version-handling-classes from OSGI
+ * (e.g. org.osgi.framework.Version and org.eclipse.osgi.service.resolver.VersionRange). Marco :-)
  */
+@Deprecated
 public final class OSGIVersionUtil
 {
 

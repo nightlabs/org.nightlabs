@@ -25,15 +25,19 @@ package org.nightlabs.version;
 
 /**
  * @author Marius Heinzmann -- Marius[at]NightLabs[dot]de
- *
+ * @deprecated Moved to separate artifact "org.nightlabs.version". The package "org.nightlabs.version" should
+ * be removed from artifact "org.nightlabs.base" and a dependency onto artifact "org.nightlabs.version" should
+ * be introduced instead. Or even better we should check if we can migrate to the version-handling-classes from OSGI
+ * (e.g. org.osgi.framework.Version and org.eclipse.osgi.service.resolver.VersionRange). Marco :-)
  */
+@Deprecated
 public class VersionRangeEndPoint
 	implements Comparable<VersionRangeEndPoint>
 {
 	private Version endPoint;
 	private boolean inclusive;
 	private EndPointLocation location;
-	
+
 	public enum EndPointLocation {
 		LOWER, UPPER
 	}
@@ -43,11 +47,11 @@ public class VersionRangeEndPoint
 		this.inclusive = inclusive;
 		this.location = location;
 	}
-	
+
 	public VersionRangeEndPoint(String rangePointString) throws MalformedVersionException {
 		parseRangeString(rangePointString);
 	}
-	
+
 	public char getInclusiveChar() {
 		char[] symbols = inclusive ? INCLUSIVE_BRACKETS : EXCLUSIVE_BRACKETS;
 		if (EndPointLocation.LOWER.equals(location))
@@ -55,7 +59,7 @@ public class VersionRangeEndPoint
 		else
 			return symbols[1];
 	}
-	
+
 	public Version getEndPoint() {
 		return endPoint;
 	}
@@ -71,35 +75,36 @@ public class VersionRangeEndPoint
 	public VersionRangeEndPoint changeVersion(Version newEndPoint) {
 		return new VersionRangeEndPoint(newEndPoint, isInclusive(), location);
 	}
-	
+
 	public VersionRangeEndPoint changeInclusive(boolean inclusive) {
 		return new VersionRangeEndPoint(endPoint, inclusive, location);
 	}
-	
+
 	public VersionRangeEndPoint changeLocation(EndPointLocation location) {
 		return new VersionRangeEndPoint(endPoint, inclusive, location);
 	}
-	
+
+	@Override
 	public int compareTo(VersionRangeEndPoint other) {
 		return endPoint.compareTo(other.endPoint);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
-		if (this == obj) 
+		if (this == obj)
 			return true;
 		if (! (getClass().equals(obj.getClass())) )
 			return false;
-		
+
 		final VersionRangeEndPoint other = (VersionRangeEndPoint) obj;
-		
+
 		return endPoint.equals(other.endPoint) &&
 					 inclusive == other.inclusive &&
 					 location.equals(other.location);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int PRIME = 31;
@@ -109,7 +114,7 @@ public class VersionRangeEndPoint
 		result = result * PRIME + location.hashCode();
 		return result;
 	}
-	
+
 	public static final char[] INCLUSIVE_BRACKETS = new char[] { '[', ']' };
 	public static final char[] EXCLUSIVE_BRACKETS = new char[] { '(', ')' };
 
@@ -117,7 +122,7 @@ public class VersionRangeEndPoint
 		if (rangePointString == null || rangePointString.trim().length() == 0)
 			throw new IllegalArgumentException("The given string of an encoded VersionRangeEndPoint " +
 					"must NOT be null or empty!");
-		
+
 		rangePointString = rangePointString.trim();
 		if (rangePointString.startsWith(String.valueOf(INCLUSIVE_BRACKETS[0])) ||
 				rangePointString.endsWith(String.valueOf(INCLUSIVE_BRACKETS[1])) )
@@ -130,7 +135,7 @@ public class VersionRangeEndPoint
 					"does not start/end with a valid inclusion/exclusion symbol! Valid Symbols:"+
 					String.valueOf(INCLUSIVE_BRACKETS)+" or "+String.valueOf(EXCLUSIVE_BRACKETS)
 					+". Given String: "+	rangePointString);
-		
+
 		if (rangePointString.startsWith(String.valueOf(INCLUSIVE_BRACKETS[0])) ||
 				rangePointString.startsWith(String.valueOf(EXCLUSIVE_BRACKETS[0])) )
 			location = EndPointLocation.LOWER;
@@ -141,10 +146,10 @@ public class VersionRangeEndPoint
 		String versionString = rangePointString.replaceAll(
 				"[\\"+INCLUSIVE_BRACKETS[0]+"\\"+INCLUSIVE_BRACKETS[1]
 		    +"\\"+EXCLUSIVE_BRACKETS[0]+"\\"+EXCLUSIVE_BRACKETS[1]+"]", "");
-		
+
 		endPoint = new Version(versionString);
 	}
-	
+
 	@Override
 	public String toString() {
 		return toString(true);
@@ -152,7 +157,7 @@ public class VersionRangeEndPoint
 
 	public String toString(boolean printInclusiveChar) {
 		StringBuffer buffer = new StringBuffer();
-		
+
 		if (printInclusiveChar && EndPointLocation.LOWER.equals(location)) {
 			if (inclusive)
 				buffer.append(INCLUSIVE_BRACKETS[0]);
@@ -161,14 +166,14 @@ public class VersionRangeEndPoint
 		}
 
 		buffer.append(endPoint.toString());
-		
+
 		if (printInclusiveChar && EndPointLocation.UPPER.equals(location)) {
 			if (inclusive)
 				buffer.append(INCLUSIVE_BRACKETS[1]);
 			else
 				buffer.append(EXCLUSIVE_BRACKETS[1]);
 		}
-		
+
 		return buffer.toString();
 	}
 }

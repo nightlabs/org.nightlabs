@@ -34,28 +34,33 @@ import org.nightlabs.version.VersionRangeEndPoint.EndPointLocation;
  * <code>min</code> has to be smaller than <code>max</code>. Additionally it is possible to define
  * if <code>min</code> and <code>max</code> belong to this interval of valid versions by setting
  * <code>minInclusive = true</code>, <code>maxInclusive = true</code> respectively.
- * 
+ *
  *  <p>Note: This class is immutable!</p>
- * 
+ *
  * @author Marius Heinzmann -- Marius[at]NightLabs[dot]de
- * 
+ *
  *	old JDO-Tags:
  *
  * 	identity-type="application"
  *	objectid-class="org.nightlabs.version.VersionPatternID"
- * 
+ *
  * @!jdo.create-objectid-class
  * 	field-order="min, max, minInclusive, maxInclusive"
- * 
+ *
  * jdo.persistence-capable
  *	embedded-only="true"
  * 	detachable="true"
  *
+ * @deprecated Moved to separate artifact "org.nightlabs.version". The package "org.nightlabs.version" should
+ * be removed from artifact "org.nightlabs.base" and a dependency onto artifact "org.nightlabs.version" should
+ * be introduced instead. Or even better we should check if we can migrate to the version-handling-classes from OSGI
+ * (e.g. org.osgi.framework.Version and org.eclipse.osgi.service.resolver.VersionRange). Marco :-)
  */
+@Deprecated
 public class VersionPattern implements Serializable, IVersionFilter {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * This pattern matches all possible Versions.
 	 */
@@ -63,17 +68,17 @@ public class VersionPattern implements Serializable, IVersionFilter {
 			new VersionRangeEndPoint(Version.MIN_VERSION, true, EndPointLocation.LOWER),
 			new VersionRangeEndPoint(Version.MAX_VERSION, true, EndPointLocation.UPPER)
 			);
-	
+
 	/**
 	 * The lower end point of this interval of {@link Version}s.
 	 */
 	private VersionRangeEndPoint min;
-	
+
 	/**
 	 * The upper end point of this interval of {@link Version}s.
 	 */
 	private VersionRangeEndPoint max;
-	
+
 	/**
 	 * Describes rules which easily allow defining ranges given the lower bound (<code>min</code>).
 	 */
@@ -82,7 +87,7 @@ public class VersionPattern implements Serializable, IVersionFilter {
 		 * Only the given Version is valid
 		 */
 		Perfect("perfect"),
-		
+
 		/**
 		 * Describes a pattern, in which all versions starting from given <code>min</code>
 		 * (e.g. 1.0.3-6-test) to max 1.0.MAX_INT_VALUE-MAX_INT_VALUE .
@@ -90,7 +95,7 @@ public class VersionPattern implements Serializable, IVersionFilter {
 		 * or minor are valid.
 		 */
 		Equivalent("equivalent"),
-		
+
 		/**
 		 * Describes a pattern, in which all versions starting from given <code>min</code>
 		 * (e.g. 1.0.3-6-test) to max 1.MAX_INT_VALUE.MAX_INT_VALUE-MAX_INT_VALUE .
@@ -98,7 +103,7 @@ public class VersionPattern implements Serializable, IVersionFilter {
 		 * are valid.
 		 */
 		Compatible("compatible"),
-		
+
 		/**
 		 * Describes a patter, in which all versions greater or equal the given <code>min</code> version
 		 * are valid.
@@ -106,15 +111,15 @@ public class VersionPattern implements Serializable, IVersionFilter {
 		GreaterOrEqual("greaterOrEqual");
 
 		private String featureXMLString;
-		
+
 		private MatchRule(String featureXMLString) {
 			this.featureXMLString = featureXMLString;
 		}
-		
+
 		public static MatchRule getMatchRuleFromString(String matchRule) {
 			if (matchRule == null || matchRule.length() == 0)
 				return Compatible; // is default value
-			
+
 			if (Perfect.featureXMLString.equals(matchRule))
 				return Perfect;
 			else if (Equivalent.featureXMLString.equalsIgnoreCase(matchRule))
@@ -128,7 +133,7 @@ public class VersionPattern implements Serializable, IVersionFilter {
 						"as a MatchRule in the Eclipse Feature Manifest!");
 		}
 	}
-	
+
 	/**
 	 * Creates a new VersionPattern with the interval from <code>min</code> to <code>max</code>, where
 	 * <code>min</code> and <code>max</code> are part of the valid versions interval if
@@ -155,7 +160,7 @@ public class VersionPattern implements Serializable, IVersionFilter {
 	/**
 	 * Creates a new VersionPattern by giving the lower (valid) end point (<code>min</code>) and
 	 * specifying one of the {@link MatchRule}s, which defines how the upper end point is defined.
-	 * 
+	 *
 	 * @param min the lower end point of the valid versions interval.
 	 * @param rule the {@link MatchRule} to use for defining the upper end point of the valid versions
 	 * 		interval.
@@ -167,10 +172,10 @@ public class VersionPattern implements Serializable, IVersionFilter {
 	public VersionPattern(String versionPatternString) {
 		parsePatternString(versionPatternString);
 	}
-	
+
 	/**
 	 * Returns the upper bound of valid versions given a minimum version and a {@link MatchRule}.
-	 * 
+	 *
 	 * @param min the minimum Version, the lower bound of the valid version range.
 	 * @param rule the {@link MatchRule} to use for determining the upper bound (<code>max</code>).
 	 * @return the upper bound of valid versions given a minimum version and a {@link MatchRule}.
@@ -179,7 +184,7 @@ public class VersionPattern implements Serializable, IVersionFilter {
 		VersionRangeEndPoint max = min.changeLocation(EndPointLocation.UPPER);
 		if (! max.isInclusive())
 			max = max.changeInclusive(true);
-		
+
 		Version upperEndPoint = max.getEndPoint();
 		boolean changed = false;
 		switch (rule) {
@@ -195,7 +200,7 @@ public class VersionPattern implements Serializable, IVersionFilter {
 			if (changed)
 				max = max.changeVersion(upperEndPoint);
 			return max;
-			
+
 		default:
 			throw new RuntimeException("The MatchRule enum has been extended but the " +
 					"'getUpperBoundForRule' method hasn't been updated!");
@@ -205,22 +210,23 @@ public class VersionPattern implements Serializable, IVersionFilter {
 	/**
 	 * Returns <code>true</code> if the given <code>version</code> is in the range of valid versions,
 	 * <code>false</code> otherwise.
-	 * 
+	 *
 	 * @param version the version to check for validity.
 	 * @return <code>true</code> if the given <code>version</code> is in the range of valid versions,
 	 * <code>false</code> otherwise.
 	 */
+	@Override
 	public boolean matches(Version version) {
 		boolean lowerBoundHolds = false;
 		if (min.getEndPoint().compareTo(version) < 0 || min.getEndPoint().compareTo(version) == 0
 				&& min.isInclusive())
 			lowerBoundHolds = true;
-		
+
 		boolean upperBoundHolds = false;
 		if (max.getEndPoint().compareTo(version) > 0 || max.getEndPoint().compareTo(version) == 0
 				&& max.isInclusive())
 			upperBoundHolds = true;
-		
+
 		return lowerBoundHolds & upperBoundHolds;
 	}
 
@@ -230,7 +236,7 @@ public class VersionPattern implements Serializable, IVersionFilter {
 	public VersionRangeEndPoint getMin() {
 		return min;
 	}
-	
+
 	/**
 	 * @param max the new upper end point of the valid version interval.
 	 * @return a Duplicate of the current VersionPattern with the new upper end point.
@@ -238,7 +244,7 @@ public class VersionPattern implements Serializable, IVersionFilter {
 	public VersionPattern changeMax(VersionRangeEndPoint max) {
 		return new VersionPattern(min, max);
 	}
-	
+
 	/**
 	 * @param min the new lower end point of the valid version interval.
 	 * @return a Duplicate of the current VersionPattern with the new lower end point.
@@ -248,7 +254,7 @@ public class VersionPattern implements Serializable, IVersionFilter {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param rule
 	 * @return
 	 */
@@ -274,7 +280,7 @@ public class VersionPattern implements Serializable, IVersionFilter {
 	public char getMinInclusiveChar() {
 		return min.getInclusiveChar();
 	}
-	
+
 	/**
 	 * @return <code>true</code> if the maximum version (<code>max</code>) is part of the valid
 	 * 		versions of this pattern, <code>false</code> otherwise (<code>max</code> is a supremum).
@@ -282,31 +288,31 @@ public class VersionPattern implements Serializable, IVersionFilter {
 	public boolean isMaxInclusive() {
 		return max.isInclusive();
 	}
-	
+
 	public char getMaxInclusiveChar() {
 		return max.getInclusiveChar();
 	}
-	
+
 	/**
 	 * sets this VersionPattern to the one corresponding to the string representation in the given
 	 * <code>patternString</code>. The given string has to be in the format described in
 	 * {@link #toString()}.
-	 * 
+	 *
 	 * @param patternString the string to parse.
 	 */
 	private void parsePatternString(String patternString) {
 		if (patternString == null || patternString.trim().length() == 0)
 			throw new IllegalArgumentException("The given VersionPattern string must not " +
 					"be null or empty!");
-		
+
 		patternString = patternString.trim();
-		
+
 		StringTokenizer tokenizer = new StringTokenizer(patternString, String.valueOf(VERSION_SEPARATOR));
 		if (tokenizer.countTokens() != 2)
 			throw new IllegalArgumentException("The given patternString is unparseable, since the " +
 					"separator char '"+VERSION_SEPARATOR+"' is encountered more than once in the given " +
 					"String");
-		
+
 		try {
 			min = new VersionRangeEndPoint(tokenizer.nextToken());
 			max = new VersionRangeEndPoint(tokenizer.nextToken());
@@ -315,9 +321,9 @@ public class VersionPattern implements Serializable, IVersionFilter {
 					" are invalid!", e);
 		}
 	}
-	
+
 	public static final char VERSION_SEPARATOR = ',';
-	
+
 	/**
 	 * @return A String representation of this filter / pattern, which follows this convention:
 	 * 	{@link #min} + {@value #VERSION_SEPARATOR} + {@link #max}

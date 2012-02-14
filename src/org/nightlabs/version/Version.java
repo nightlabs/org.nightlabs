@@ -68,7 +68,12 @@ import org.nightlabs.util.Util;
  *	embedded-only="true"
  * 	detachable="true"
  *
+ * @deprecated Moved to separate artifact "org.nightlabs.version". The package "org.nightlabs.version" should
+ * be removed from artifact "org.nightlabs.base" and a dependency onto artifact "org.nightlabs.version" should
+ * be introduced instead. Or even better we should check if we can migrate to the version-handling-classes from OSGI
+ * (e.g. org.osgi.framework.Version and org.eclipse.osgi.service.resolver.VersionRange). Marco :-)
  */
+@Deprecated
 public class Version implements Comparable<Version>, Serializable
 {
 	private static final long serialVersionUID = 1L;
@@ -424,6 +429,7 @@ public class Version implements Comparable<Version>, Serializable
 	 *         less than, equal to, or greater than the specified
 	 *         <code>Version</code> object.
 	 */
+	@Override
 	public int compareTo(Version other) {
 		if (this == other)
 			return 0;
