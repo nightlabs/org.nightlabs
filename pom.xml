@@ -64,6 +64,16 @@
 		
 		<!-- FIXME the package name should be fixed (?). Collides with org.nightlabs.jdo -->
 		<plugins>
+			<!-- plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<archive>
+						<manifestFile>META-INF/MANIFEST.MF</manifestFile>
+					</archive>
+				</configuration>
+			</plugin-->
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
@@ -72,7 +82,6 @@
 				<inherited>true</inherited>
 				<configuration>
 					<instructions>
-						<!-- SPECIAL CASE HERE as the bundle name does not correspond to the base package name. -->
 						<Export-Package>
 						org.nightlabs;version="${project.version}",
 						org.nightlabs.annotation;version="${project.version}",
