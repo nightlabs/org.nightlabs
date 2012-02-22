@@ -64,6 +64,7 @@
 					<instructions>
 						<!-- SPECIAL CASE HERE as the bundle name does not correspond to the base package name. -->						
 						<Export-Package>org.nightlabs.jdo.query.*;version="${project.version}",org.nightlabs.jdo.search.*;version="${project.version}"</Export-Package>
+						<Import-Package>!javax.jdo.*,*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
