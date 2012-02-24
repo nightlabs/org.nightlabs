@@ -116,13 +116,23 @@ public class ChangeClassNameChange extends AbstractDNChange {
 		
 		statements.addAll(updateDNClassInformation(oldTableName));
 		
-		String persistentRootClassTableName = getPersistentRootClassTableName(database, newClassName);
-		statements.addAll(updateDiscriminatorColumn(persistentRootClassTableName));
+		updateDiscriminatorColumns(database, statements);
 		
 		if (isTableNameUpdateNeeded(oldTableName)) {
 			statements.addAll(updateTableName(oldTableName));
 		}
 		return statements;
+	}
+
+	private void updateDiscriminatorColumns(Database database, List<SqlStatement> statements)
+	{
+		Class<?> parentClass = DNUtil.findSuperClass(newClassName);
+		while (parentClass != null)
+		{
+			String parentClassTableName = DNUtil.getTableName(database, parentClass); 
+			statements.addAll(updateDiscriminatorColumn(parentClassTableName));
+			parentClass = DNUtil.findSuperClass(parentClass);
+		}
 	}
 
 	private List<SqlStatement> updateDNClassInformation(String oldTableName)
@@ -149,12 +159,6 @@ public class ChangeClassNameChange extends AbstractDNChange {
 		statements.add(update);
 		
 		return statements;
-	}
-	
-	private String getPersistentRootClassTableName(Database database, String childClassName)
-	{
-		Class<?> persistentRootClass = DNUtil.findSuperClass(className);
-		return DNUtil.getTableName(database, persistentRootClass); 
 	}
 	
 	private List<SqlStatement> updateDiscriminatorColumn(String rootTableName)
@@ -202,7 +206,7 @@ public class ChangeClassNameChange extends AbstractDNChange {
 	 */
 	private boolean isTableNameUpdateNeeded(String oldTableName)
 	{
-		return null != getNewTableName() && !getNewTableName().isEmpty() && !getNewClassName().equals(oldTableName);
+		return null != getNewTableName() && !getNewTableName().isEmpty() && !getNewTableName().equals(oldTableName);
 	}
 	
 	/**
