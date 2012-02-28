@@ -195,8 +195,19 @@
 				<configuration>
 					<instructions>
 						<Export-Package>com.essiembre.eclipse.rbe.*</Export-Package>
-						<Import-Package>!org.eclipse.core.runtime,*;version="0.0.0"</Import-Package>
-						<Require-Bundle>org.eclipse.core.runtime</Require-Bundle>
+						<Import-Package>
+							!org.eclipse.core.runtime,
+							!org.eclipse.ui,
+							!org.eclipse.ui.part,
+							!org.eclipse.jface.text,
+							*;version="0.0.0"</Import-Package>
+						<Require-Bundle>
+							org.eclipse.core.runtime,
+							org.eclipse.ui.ide,
+							org.eclipse.ui,
+							org.eclipse.equinox.common,
+							org.eclipse.jface.text
+						</Require-Bundle>
 						<Bundle-Activator>com.essiembre.eclipse.rbe.RBEPlugin</Bundle-Activator>
 						<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
 						<Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
