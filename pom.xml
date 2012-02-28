@@ -199,6 +199,7 @@
 						<Require-Bundle>org.eclipse.core.runtime</Require-Bundle>
 						<Bundle-Activator>com.essiembre.eclipse.rbe.RBEPlugin</Bundle-Activator>
 						<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+						<Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
 					</instructions>
 				</configuration>
 			</plugin>
