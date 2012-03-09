@@ -223,8 +223,8 @@ public class PropertiesUtil
 			String key = me.getKey() == null ? null : me.getKey().toString();
 			String value = me.getValue() == null ? null : me.getValue().toString();
 
-			if (isMetaPropertyKeyNullValue(key)) {
-				if (Boolean.parseBoolean(value)) {
+			if (isMetaPropertyKey(key)) {
+				if (isMetaPropertyKeyNullValue(key) && Boolean.parseBoolean(value)) {
 					String refKey = getReferencedPropertyKeyForMetaPropertyKey(key);
 					filteredProperties.put(refKey, null);
 				}
@@ -280,6 +280,7 @@ public class PropertiesUtil
 	 * @param key the property-key to check.
 	 * @return <code>true</code>, if the given key references a property that is a <code>null</code>-indicating
 	 * meta-property for another property.
+	 * @see #isMetaPropertyKey(String)
 	 */
 	public static boolean isMetaPropertyKeyNullValue(String key)
 	{
@@ -287,6 +288,20 @@ public class PropertiesUtil
 			return false;
 
 		return key.endsWith(SUFFIX_NULL_VALUE);
+	}
+
+	/**
+	 * Determine, if the given property-key is a meta-property for another property.
+	 * <p>
+	 * Currently, this is equivalent to {@link #isMetaPropertyKeyNullValue(String)}, but other
+	 * meta-properties might be introduced later.
+	 * @param key the property-key to check.
+	 * @return <code>true</code>, if the given key references a property that is a meta-property
+	 * for another property.
+	 */
+	public static boolean isMetaPropertyKey(String key)
+	{
+		return isMetaPropertyKeyNullValue(key);
 	}
 
 	/**
