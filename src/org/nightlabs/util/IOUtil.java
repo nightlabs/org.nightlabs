@@ -957,7 +957,7 @@ public class IOUtil
 //////		monitor.setLogMinPercentageDifference(0);
 //////		monitor.setLogMinPeriodMSec(Long.MAX_VALUE);
 ////		IOUtil.zipFolder(zip, new File("/home/marco/temp"), monitor);
-//		
+//
 //		Map<String, String> variables = new HashMap<String, String>();
 //		variables.put("gaga", "_____________");
 //		System.out.println(IOUtil.replaceTemplateVariables("<y{{xc${{vbnm,.-${gaga}as{df}gh${\n}jk${aaa}löä#+üpoiuz$}trewq^12234567890ß'", variables ));
@@ -1325,7 +1325,7 @@ public class IOUtil
 
 	/**
 	 * Calls {@link #unzipArchiveIfModified(URL, File)} converting the File-parameter zipArchive to an url.
-	 * 
+	 *
 	 * @see #unzipArchiveIfModified(URL, File).
 	 */
 	public static synchronized void unzipArchiveIfModified(File zipArchive, File unzipRootFolder)
@@ -1333,7 +1333,7 @@ public class IOUtil
 	{
 		unzipArchive(zipArchive.toURI().toURL(), unzipRootFolder);
 	}
-	
+
 	/**
 	 * Unzip the given archive into the given folder, if the archive was modified
 	 * after being unzipped the last time by this method.
@@ -1393,14 +1393,14 @@ public class IOUtil
 		boolean doUnzip = true;
 		long zipLength = -1;
 		long zipLastModified = System.currentTimeMillis();
-		
+
 		if ("file".equals(zipArchive.getProtocol())) {
 			File fileToCheck = new File(Util.urlToUri(zipArchive));
 			zipLastModified = fileToCheck.lastModified();
 			zipLength = fileToCheck.length();
 			doUnzip = !unzipRootFolder.exists() || zipLastModified != timestamp || zipLength != fileSize;
 		}
-		
+
 		if (doUnzip) {
 			IOUtil.deleteDirectoryRecursively(unzipRootFolder);
 			IOUtil.unzipArchive(zipArchive, unzipRootFolder);
@@ -1437,7 +1437,7 @@ public class IOUtil
 				}
 				else {
 					File file = new File(unzipRootFolder, entry.getName());
-	
+
 					File dir = file.getParentFile();
 					if (dir.exists( )) {
 						assert (dir.isDirectory( ));
@@ -1445,9 +1445,9 @@ public class IOUtil
 					else {
 						dir.mkdirs( );
 					}
-	
+
 					BufferedOutputStream out = new BufferedOutputStream( new FileOutputStream(file) );
-	
+
 					int len;
 					byte[] buf = new byte[1024 * 5];
 					while( (len = in.read(buf)) > 0 )
@@ -1461,11 +1461,11 @@ public class IOUtil
 			if (in != null)
 				in.close();
 		}
-	}	
-	
+	}
+
 	/**
 	 * Calls {@link #unzipArchive(URL, File)} converting the File-parameter zipArchive to an url.
-	 * 
+	 *
 	 * @see #unzipArchive(URL, File).
 	 */
 	public static void unzipArchive(File zipArchive, File unzipRootFolder)
@@ -1690,10 +1690,14 @@ public class IOUtil
 	 * @param templateFile The template file to use. Must not be <code>null</code>.
 	 * @param characterSet The charset to use for the input and output file. Use <code>null</code> for the default charset.
 	 * @param variables This map defines what variable has to be replaced by what value. The
-	 *		  key is the variable name (without '$' and brackets '{', '}'!) and the value is the
-	 *		  value for the variable to replace. This must not be <code>null</code>.
+	 * key is the variable name (without '$' and brackets '{', '}'!) and the value is the
+	 * value that will replace the variable in the output. This argument must not be <code>null</code>.
+	 * In order to allow passing {@link Properties} directly, this has been redefined as <code>Map&lt;?,?&gt;</code>
+	 * from version 1.3.0 on. Map entries with a key that is not of type <code>String</code> or with a <code>null</code>
+	 * value are ignored. Values that are not of type <code>String</code> are converted using the
+	 * {@link Object#toString() toString()} method.
 	 */
-	public static void replaceTemplateVariables(File destinationFile, File templateFile, String characterSet, Map<String, String> variables)
+	public static void replaceTemplateVariables(File destinationFile, File templateFile, String characterSet, Map<?, ?> variables)
 		throws IOException
 	{
 		if (!destinationFile.isAbsolute())
@@ -1751,11 +1755,15 @@ public class IOUtil
 	 *
 	 * @param template the input text containing variables (or not).
 	 * @param variables This map defines what variable has to be replaced by what value. The
-	 *		  key is the variable name (without '$' and brackets '{', '}'!) and the value is the
-	 *		  value for the variable to replace. This must not be <code>null</code>.
+	 * key is the variable name (without '$' and brackets '{', '}'!) and the value is the
+	 * value that will replace the variable in the output. This argument must not be <code>null</code>.
+	 * In order to allow passing {@link Properties} directly, this has been redefined as <code>Map&lt;?,?&gt;</code>
+	 * from version 1.3.0 on. Map entries with a key that is not of type <code>String</code> or with a <code>null</code>
+	 * value are ignored. Values that are not of type <code>String</code> are converted using the
+	 * {@link Object#toString() toString()} method.
 	 * @return the processed text (i.e. the same as the template, but all known variables replaced by their values).
 	 */
-	public static String replaceTemplateVariables(String template, Map<String, String> variables)
+	public static String replaceTemplateVariables(String template, Map<?, ?> variables)
 	{
 		try {
 			StringReader r = new StringReader(template);
@@ -1802,10 +1810,14 @@ public class IOUtil
 	 * @param writer The writer to write the output to.
 	 * @param reader The template file to use. Must not be <code>null</code>.
 	 * @param variables This map defines what variable has to be replaced by what value. The
-	 *		  key is the variable name (without '$' and brackets '{', '}'!) and the value is the
-	 *		  value for the variable to replace. This must not be <code>null</code>.
+	 * key is the variable name (without '$' and brackets '{', '}'!) and the value is the
+	 * value that will replace the variable in the output. This argument must not be <code>null</code>.
+	 * In order to allow passing {@link Properties} directly, this has been redefined as <code>Map&lt;?,?&gt;</code>
+	 * from version 1.3.0 on. Map entries with a key that is not of type <code>String</code> or with a <code>null</code>
+	 * value are ignored. Values that are not of type <code>String</code> are converted using the
+	 * {@link Object#toString() toString()} method.
 	 */
-	public static void replaceTemplateVariables(Writer writer, Reader reader, Map<String, String> variables)
+	public static void replaceTemplateVariables(Writer writer, Reader reader, Map<?, ?> variables)
 		throws IOException
 	{
 		StreamTokenizer stk = new StreamTokenizer(reader);
@@ -1893,7 +1905,8 @@ public class IOUtil
 					if (variableName == null)
 						throw new IllegalStateException("variableName is null!!!");
 
-					stringToWrite = variables.get(variableName);
+					Object variableValue = variables.get(variableName);
+					stringToWrite = variableValue == null ? null : variableValue.toString();
 					if (stringToWrite == null) {
 						logger.warn("Variable " + tmpBuf.toString() + " occuring in template is unknown!");
 						stringToWrite = tmpBuf.toString();
