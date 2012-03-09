@@ -190,9 +190,11 @@ public class PropertiesUtil
 			String key = me.getKey() == null ? null : me.getKey().toString();
 			String value = me.getValue() == null ? null : me.getValue().toString();
 
-			if (isMetaPropertyKeyNullValue(key) && Boolean.parseBoolean(value)) {
-				String refKey = getReferencedPropertyKeyForMetaPropertyKey(key);
-				filteredProperties.put(refKey, null);
+			if (isMetaPropertyKeyNullValue(key)) {
+				if (Boolean.parseBoolean(value)) {
+					String refKey = getReferencedPropertyKeyForMetaPropertyKey(key);
+					filteredProperties.put(refKey, null);
+				}
 				continue;
 			}
 
