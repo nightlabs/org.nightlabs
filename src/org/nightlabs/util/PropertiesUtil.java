@@ -23,6 +23,39 @@ public class PropertiesUtil
 	/**
 	 * Suffix appended to the real property-key to store the boolean flag whether
 	 * the real property represents the <code>null</code> value.
+	 * <p>
+	 * It is not possible to store a <code>null</code> value in a {@link Properties} instance (and neither it is
+	 * in a properties file). But sometimes it is necessary to explicitly formulate a <code>null</code> value,
+	 * for example when overriding a property in a way as if it had not been specified in the overridden properties.
+	 * <p>
+	 * For example, let there be these properties declared in a persistence unit:
+	 * <pre>
+	 * javax.jdo.option.ConnectionFactoryName = jdbc/someDataSource
+	 * javax.jdo.option.TransactionType = JTA
+	 * javax.persistence.jtaDataSource = jdbc/someDataSource
+	 * javax.persistence.transactionType = JTA
+	 * </pre>
+	 * <p>
+	 * If the transaction type is to be overridden by "RESOURCE_LOCAL", this is straight-forward:
+	 * <p>
+	 * <pre>
+	 * javax.jdo.option.TransactionType = RESOURCE_LOCAL
+	 * javax.persistence.transactionType = RESOURCE_LOCAL
+	 * </pre>
+	 * <p>
+	 * But to override the datasource properties to be null, is not possible by simply writing
+	 * "javax.jdo.option.ConnectionFactoryName = = " as this would
+	 * be interpreted as empty string. Therefore it is possible to declare the <code>null</code> value using an additional
+	 * key:
+	 * <pre>
+	 * javax.jdo.option.ConnectionFactoryName = jdbc/someDataSource
+	 * javax.jdo.option.ConnectionFactoryName.null = true
+	 * javax.persistence.jtaDataSource.null = true
+	 * </pre>
+	 * It is not necessary to quote the referenced key as shown in the 2nd example ("javax.persistence.jtaDataSource" is
+	 * not present). However, if it is present ("javax.jdo.option.ConnectionFactoryName" above), the
+	 * null-indicating meta-property "javax.jdo.option.ConnectionFactoryName.null" overrides the value "jdbc/someDataSource".
+	 *
 	 * @see #getMetaPropertyKeyNullValue(String)
 	 * @see #filterProperties(Map, Map)
 	 */
@@ -261,6 +294,7 @@ public class PropertiesUtil
 	 * @param key a meta-property's key - for example the <code>null</code>-indicating property-key
 	 * "some.prop.null".
 	 * @return the referenced property-key - for example "some.prop".
+	 * @see #SUFFIX_NULL_VALUE
 	 * @see #getMetaPropertyKeyNullValue(String)
 	 */
 	public static String getReferencedPropertyKeyForMetaPropertyKey(String key)
@@ -275,6 +309,7 @@ public class PropertiesUtil
 	 * Get the <code>null</code>-indicating meta-property's key for the given real property's key.
 	 * @param key a property-key - for example "some.prop".
 	 * @return the <code>null</code>-indicating meta-property's key - for example "some.prop.null".
+	 * @see #SUFFIX_NULL_VALUE
 	 * @see #getReferencedPropertyKeyForMetaPropertyKey(String)
 	 */
 	public static String getMetaPropertyKeyNullValue(String key)
