@@ -47,7 +47,14 @@ public class ManifestReader
 	protected XmlPullParser xpp;
 	protected InputStreamReader reader;
 	protected boolean debug = false;
-	
+
+	/**
+	 * Class name for default implementation of XmlPullParserFactory. 
+	 * We specify it here since we do not use org.xmlpull bundle and /META-INF/services/org.xmlpull.v1.XmlPullParserFactory file respectively
+	 * in built with maven version of jfire rcp client - it has xpp3 lib from 3rd party maven repositories. 
+	 */
+	private static final String DEFAULT_XMLPULL_PARSER_FACTORY = "org.xmlpull.mxp1.MXParserFactory";
+
 	protected String charset;
 //	public ManifestReader(InputStream in)
 	public ManifestReader(InputStream in, String charset)
@@ -55,9 +62,9 @@ public class ManifestReader
 		super();
 		try {
 			this.charset = charset;
-			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance(DEFAULT_XMLPULL_PARSER_FACTORY, null);
 			factory.setNamespaceAware(true);
-      xpp = factory.newPullParser();
+			xpp = factory.newPullParser();
 			reader = new InputStreamReader(in, charset);
 			xpp.setInput(reader);
 		} catch (Exception e) {
