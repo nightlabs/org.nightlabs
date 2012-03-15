@@ -26,7 +26,7 @@ package org.nightlabs.progress;
 /**
  * Interface to report the progress of an activity.
  * This is used like org.eclipse.core.runtime.IProgressMonitor.
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
 public interface ProgressMonitor {
@@ -34,7 +34,7 @@ public interface ProgressMonitor {
 	/**
 	 * Notifies that the main task is beginning.  This must only be called once
 	 * on a given progress monitor instance.
-	 * 
+	 *
 	 * @param name the name (or description) of the main task
 	 * @param totalWork the total number of work units into which
 	 *  the main task is been subdivided. If the value is <code>UNKNOWN</code>
@@ -49,35 +49,39 @@ public interface ProgressMonitor {
 	 * (implementations should be prepared to handle this case).
 	 */
 	public void done();
-	
+
 	/**
 	 * Returns whether cancelation of current operation has been requested.
 	 * Long-running operations should poll to see if cancelation
 	 * has been requested.
+	 * <p>
+	 * If this is <code>true</code>, the long-running operation should
+	 * throw an {@link OperationCanceledException}.
+	 * </p>
 	 *
 	 * @return <code>true</code> if cancellation has been requested,
 	 *    and <code>false</code> otherwise
 	 * @see #setCanceled(boolean)
 	 */
 	public boolean isCanceled();
-	
+
 	/**
 	 * Sets the cancel state to the given value.
-	 * 
+	 *
 	 * @param canceled <code>true</code> indicates that cancelation has
 	 *     been requested (but not necessarily acknowledged);
 	 *     <code>false</code> clears this flag
 	 * @see #isCanceled()
 	 */
 	public void setCanceled(boolean canceled);
-	
+
 	/**
 	 * Internal method to handle scaling correctly. This method
 	 * must not be called by a client. Clients should
 	 * always use the method </code>worked(int)</code>.
 	 * <p>
 	 * Note: EclipseRCP is strange!
-	 * 
+	 *
 	 * @param worked the amount of work done
 	 */
 	public void internalWorked(double worked);
