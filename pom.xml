@@ -205,6 +205,27 @@ http://java.net/projects/glassfish/lists/dev/archive/2012-02/message/118
 				<enabled>true</enabled>
 			</snapshots>
 		</pluginRepository>
+
+		<pluginRepository>
+			<id>www.datanucleus.org-maven2</id>
+			<url>http://www.datanucleus.org/downloads/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</pluginRepository>
+		<pluginRepository>
+			<id>www.datanucleus.org-maven2-nightly</id>
+			<url>http://www.datanucleus.org/downloads/maven2-nightly</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
 	</pluginRepositories>
 
 	<organization>
