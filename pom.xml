@@ -83,6 +83,46 @@
 			</snapshots>
 		</repository>
 		<repository>
+			<id>maven.eclipse.org-groups-public</id>
+			<url>http://maven.eclipse.org/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>maven.eclipse.org-groups-public</id>
+			<url>http://maven.eclipse.org/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>build.eclipse.org-xtend</id>
+			<url>http://build.eclipse.org/common/xtend/maven/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>build.eclipse.org-xtext-maven-snapshot-final</id>
+			<url>http://build.eclipse.org/common/xtext/maven/maven-snapshot/final/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
 			<id>repo1.maven.org-eclipse</id>
 			<url>http://repo1.maven.org/eclipse/</url>
 			<releases>
