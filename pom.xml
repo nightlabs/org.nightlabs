@@ -187,9 +187,19 @@ http://java.net/projects/glassfish/lists/dev/archive/2012-02/message/118
 	<pluginRepositories>
 		<pluginRepository>
 			<id>dev.nightlabs.org-repo</id>
-			<url>http://dev.nightlabs.org/maven-repository/repo</url>
+			<url>http://dev.nightlabs.org/maven-repository/plugins-releases-local</url>
 			<releases>
 				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>dev.nightlabs.org-repo</id>
+			<url>http://dev.nightlabs.org/maven-repository/plugins-snapshots-local</url>
+			<releases>
+				<enabled>false</enabled>
 			</releases>
 			<snapshots>
 				<enabled>true</enabled>
