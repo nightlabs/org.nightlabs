@@ -122,6 +122,16 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+	    <repository>
+			<id>repo1.maven.org-central</id>
+			<url>http://repo1.maven.org/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+	    </repository>		
 		<repository>
 			<id>oss.sonatype.org-snapshots</id>
 			<url>http://oss.sonatype.org/content/repositories/snapshots/</url>
@@ -132,7 +142,16 @@
 				<enabled>false</enabled>
 			</releases>
 		</repository>
-
+		<repository>
+			<id>repository.jboss.org-jboss</id>
+			<url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
 <!--
 This Maven repository does not exist anymore. But it seems the artifacts are in the maven-central now, anyway. Marco :-)
 http://java.net/projects/glassfish/lists/dev/archive/2012-02/message/118
