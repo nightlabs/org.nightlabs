@@ -75,12 +75,12 @@
 		</dependency>
 		<dependency>
 			<groupId>javax.media</groupId>
-			<artifactId>jai-core</artifactId>
+			<artifactId>jai_core</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.media</groupId>
-			<artifactId>jai-codec</artifactId>
+			<artifactId>jai_codec</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
