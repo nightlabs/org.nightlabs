@@ -178,12 +178,13 @@
 				<directory>.</directory>
 				<includes>
 					<include>plugin.xml</include>
-					<include>plugin*.properties</include>
-					<include>LICENSE.txt</include>
-					<include>schema/**/*</include>
+					<include>*.properties</include>
+					<include>LICENSE</include>
+					<include>CHANGES</include>
+					<include>CONTRIBUTORS</include>
+					<include>README</include>
 					<include>icons/**/*</include>
-					<include>lib/**/*</include>
-					<include>splash.bmp</include>
+					<include>nl/**/*</include>
 				</includes>
 			</resource>
 		</resources>
