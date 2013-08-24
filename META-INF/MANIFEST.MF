@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: HTML Content Plug-in
 Bundle-SymbolicName: org.nightlabs.htmlcontent
-Bundle-Version: 1.3.2.SNAPSHOT
+Bundle-Version: 1.3.2
 Bundle-Vendor: NightLabs.org
 Export-Package: org.nightlabs.htmlcontent
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
