@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.nightlabs</groupId>
+	<artifactId>org.nightlabs.aggregator</artifactId>
+	<version>1.3.3-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>${project.artifactId}</name>
+	
+	<scm>
+		<connection>scm:svn:https://dev.nightlabs.org/svn/public/main/trunk</connection>
+		<developerConnection>scm:svn:https://dev.nightlabs.org/svn/public/main/trunk</developerConnection>
+		<url>https://dev.nightlabs.org/svn/public/main/trunk</url>
+	</scm>
+	
+	<distributionManagement>
+		<repository>
+			<id>dev.nightlabs.org-libs-releases-local</id>
+			<url>https://dev.nightlabs.org/maven-repository/libs-releases-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>dev.nightlabs.org-libs-snapshots-local</id>
+			<url>https://dev.nightlabs.org/maven-repository/libs-snapshots-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<modules>
+		<module>../org.nightlabs.parent</module> <!-- org.nightlabs:org.nightlabs.parent -->
+
+		<module>../com.essiembre.eclipse.i18n.resourcebundle</module>
+		<module>../org.nightlabs.base</module>
+		<module>../org.nightlabs.clientui</module>
+		<module>../org.nightlabs.concurrent</module>
+		<module>../org.nightlabs.config</module>
+		<module>../org.nightlabs.i18n</module>
+		<module>../org.nightlabs.jdo</module>
+		<module>../org.nightlabs.progress</module>
+		<module>../org.nightlabs.query</module>
+		<module>../org.nightlabs.query.jdo</module>
+		<module>../org.nightlabs.test</module>
+		<module>../org.nightlabs.test.selenium</module>
+		<module>../org.nightlabs.util</module>
+		<module>../org.nightlabs.xml</module>
+		<module>../org.nightlabs.version</module>
+		<module>../org.nightlabs.classloader.url</module>
+		<module>../org.nightlabs.liquibase.datanucleus</module>
+
+		<module>../DelegatingClassLoader</module> <!-- org.nightlabs:org.nightlabs.classloader.delegating -->
+		<module>../org.nightlabs.connection</module> <!-- org.nightlabs:org.nightlabs.connection -->
+		<module>../org.nightlabs.htmlcontent</module> <!-- org.nightlabs:org.nightlabs.htmlcontent -->
+		<module>../org.nightlabs.keyreader</module> <!-- org.nightlabs:org.nightlabs.keyreader -->
+		<module>../org.nightlabs.editor2d</module> <!-- org.nightlabs:org.nightlabs.editor2d -->
+		<!-- TODO add later: 
+		<module>../NightLabsRhino</module> --> <!-- org.nightlabs:org.nightlabs.rhino.XXX -->
+		<module>../org.nightlabs.singleton</module> <!-- org.nightlabs:org.nightlabs.singleton -->
+		<module>../UnifiedEjbJndiJBoss</module> <!-- org.nightlabs:org.nightlabs.unifiedejbjndi.jboss -->
+		<module>../org.nightlabs.unifiedjndi.jboss.client</module> <!-- org.nightlabs:org.nightlabs.unifiedjndi.jboss.client -->
+	</modules>
+</project>
