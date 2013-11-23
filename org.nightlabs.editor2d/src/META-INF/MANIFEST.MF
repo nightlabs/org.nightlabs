@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: org.nightlabs.editor2d
+Bundle-Version: 1.3.3.SNAPSHOT
