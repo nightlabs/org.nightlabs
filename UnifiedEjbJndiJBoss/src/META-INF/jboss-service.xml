@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classloader-repository
+PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
+"http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd">
+
+<server>
+   <mbean code="org.nightlabs.unifiedejbjndi.jboss.UnifiedEjbJndiDeployer"
+          name="jboss.ejb3:service=UnifiedEjbJndiDeployer">
+      <depends>jboss.ejb3:service=EJB3Deployer</depends>
+   </mbean>
+   <mbean code="org.nightlabs.unifiedejbjndi.jboss.UnifiedEjbJndiHttpProxyDeployer"
+          name="jboss.ejb3:service=UnifiedEjbJndiHttpProxyDeployer">
+      <depends>jboss.ejb3:service=EJB3Deployer</depends>
+   </mbean>
+</server>
