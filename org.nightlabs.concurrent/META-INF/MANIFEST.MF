@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: NightLabs Concurrent Plug-in
+Bundle-SymbolicName: org.nightlabs.concurrent
+Bundle-Version: 1.3.3.SNAPSHOT
+Bundle-Vendor: NightLabs.org
+Import-Package: org.apache.log4j
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.nightlabs.concurrent
