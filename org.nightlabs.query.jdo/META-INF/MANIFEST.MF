@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: NightLabsQueryJDO
+Bundle-SymbolicName: org.nightlabs.query.jdo
+Bundle-Version: 1.3.3.SNAPSHOT
+Export-Package: org.nightlabs.jdo.query,
+ org.nightlabs.jdo.search
+Require-Bundle: org.apache.log4j,
+ org.nightlabs.jdo,
+ org.nightlabs.query
+Bundle-Vendor: NightLabs.org
