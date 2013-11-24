@@ -62,6 +62,7 @@
 			</releases>
 		</repository>
 
+<!--
 		<repository>
 			<id>maven.eclipse.org-testing</id>
 			<url>http://maven.eclipse.org/nexus/content/repositories/testing/</url>
@@ -92,6 +93,8 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		
+-->
 		<repository>
 			<id>build.eclipse.org-xtend</id>
 			<url>http://build.eclipse.org/common/xtend/maven/</url>
@@ -290,12 +293,12 @@ http://java.net/projects/glassfish/lists/dev/archive/2012-02/message/118
 
 	<distributionManagement>
 		<repository>
-			<id>dev.nightlabs.org-libs-releases-local</id>
-			<url>https://repository-nightlabs.forge.cloudbees.com/release/</url>
+			<id>cloudbees.nightlabs.release</id>
+			<url>dav:https://repository-nightlabs.forge.cloudbees.com/release/</url>
 		</repository>
 		<snapshotRepository>
-			<id>dev.nightlabs.org-libs-snapshots-local</id>
-			<url>https://repository-nightlabs.forge.cloudbees.com/snapshot/</url>
+			<id>cloudbees.nightlabs.snapshot</id>
+			<url>dav:https://repository-nightlabs.forge.cloudbees.com/snapshot/</url>
 		</snapshotRepository>
 	</distributionManagement>
 
@@ -595,6 +598,14 @@ http://java.net/projects/glassfish/lists/dev/archive/2012-02/message/118
 	</dependencies>
 
 	<build>
+		<extensions>
+			 <extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav-jackrabbit</artifactId>
+				<version>2.2</version>
+			</extension>
+		</extensions>
+
 		<!-- Resources can be in java and resources directory -->
 		<resources>
 			<resource>
