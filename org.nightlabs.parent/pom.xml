@@ -291,11 +291,11 @@ http://java.net/projects/glassfish/lists/dev/archive/2012-02/message/118
 	<distributionManagement>
 		<repository>
 			<id>dev.nightlabs.org-libs-releases-local</id>
-			<url>https://dev.nightlabs.org/maven-repository/libs-releases-local</url>
+			<url>https://repository-nightlabs.forge.cloudbees.com/release/</url>
 		</repository>
 		<snapshotRepository>
 			<id>dev.nightlabs.org-libs-snapshots-local</id>
-			<url>https://dev.nightlabs.org/maven-repository/libs-snapshots-local</url>
+			<url>https://repository-nightlabs.forge.cloudbees.com/snapshot/</url>
 		</snapshotRepository>
 	</distributionManagement>
 
