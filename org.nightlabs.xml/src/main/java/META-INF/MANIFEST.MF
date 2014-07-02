@@ -1,3 +1,9 @@
 Manifest-Version: 1.0
-Class-Path: 
-
+Bundle-ManifestVersion: 2
+Bundle-Name: Xml Plug-in
+Bundle-SymbolicName: org.nightlabs.xml
+Bundle-Version: 1.3.4.SNAPSHOT
+Bundle-Vendor: nightlabs.org
+Export-Package: org.nightlabs.xml
+Require-Bundle: org.apache.xerces
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
