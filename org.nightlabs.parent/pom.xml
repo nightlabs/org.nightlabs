@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs</groupId>
 	<artifactId>org.nightlabs.parent</artifactId>
-	<version>1.3.4-SNAPSHOT</version>
+	<version>1.3.4</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
 
@@ -14,7 +14,7 @@
 		<datanucleus.plugin.version>3.0.0-release</datanucleus.plugin.version>
 		<log4j.version>1.2.16</log4j.version>
 		<slf4j.version>1.6.1</slf4j.version>
-		<nightlabs.version>1.3.4-SNAPSHOT</nightlabs.version>
+		<nightlabs.version>1.3.4</nightlabs.version>
 
 		<bastik.group>batik</bastik.group>
 		<bastik.version>1.6</bastik.version>
